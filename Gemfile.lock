@@ -223,7 +223,7 @@ DEPENDENCIES
   ruby-prof
   sass-rails (~> 4.0.1)
   select2-rails (~> 3.5.2)
-  sentry-raven
+  sentry-raven (~> 0.7.1)
   spring
   state_machine (~> 1.2.0)
   thor
