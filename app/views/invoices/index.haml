@@ -1,0 +1,35 @@
+.row#invoices
+  .col-xs-12.col-md-12
+
+    .row
+      .col-xs-12.col-md-8
+        %h2
+          = I18n.t(:"headlines.invoice.index")
+          %small
+            - sum = 0
+            - @invoices.each do |invoice|
+              - sum = sum + invoice.value
+            = I18n.t(:"headlines.invoice.sum", sum: number_to_currency(sum))
+
+      .col-xs-12.col-md-4
+        .btn-group.pull-right.resource-nav
+          %a.btn.btn-default{href: new_invoice_path, class: ("disabled" if invoice_limit_reached?)}
+            = I18n.t(:"nav.subnav.new_invoice")
+
+    .row
+      .col-xs-12.col-md-6
+        = render "layouts/tables/filter", resource: "invoice", name: "state", filters: Invoice.state_machine.states, translateable: true
+        = render "layouts/tables/filter", resource: "invoice", name: "year", filters: current_years
+      .col-xs-12.col-md-6
+        .pull-right
+          = paginate @invoices
+
+    = render partial: "invoices/table", :@invoices => @invoices
+
+    .row
+      .col-xs-12.col-md-6
+        .pull-right
+          = paginate @invoices
+
+
+

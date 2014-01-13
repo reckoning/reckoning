@@ -1,0 +1,17 @@
+- asset_host = ActionController::Base.asset_host
+!!!
+%html
+  %head
+    %meta{charset: 'utf-8' }
+
+    %link{href: "#{asset_host}#{asset_path('pdf.css')}", media:"all", rel: "stylesheet", type: "text/css"}
+
+    :css
+      @page {
+        @bottom-right {
+          content: "#{I18n.t(:"pdf.page")} " counter(page) " #{I18n.t(:"pdf.page_from")} " counter(pages);
+        }
+      }
+
+  %body
+    != yield

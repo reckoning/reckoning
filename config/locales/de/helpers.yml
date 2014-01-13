@@ -1,0 +1,74 @@
+de:
+  helpers:
+    label:
+      project:
+        rate: "Stundensatz"
+      user:
+        email: "E-Mail"
+        password: "Passwort"
+        password_confirmation: "Passwort-Bestätigung"
+        current_password: "aktuelles Passwort"
+        remember_me: "Angemeldet bleiben"
+      position:
+        rate: "€/Std."
+        hours: "Stunden"
+        value: "€"
+      user_setting:
+        tax: "Steuern"
+      invoice:
+        date: "Datum"
+        delivery_date: "Lieferdatum"
+        payment_due_date: "Zahlungsziel"
+        ref: "Rechnungsnummer"
+      setting:
+        base:
+          registration: "Registrierung aktiv?"
+    placeholder:
+      project:
+        name: "Name"
+      position:
+        description: "Beschreibung"
+        rate: "0"
+        hours: "0.0"
+        value: "Betrag in"
+      user_setting:
+        tax_ref: "Steuernummer"
+      bank_account:
+        bank: "Bank"
+        bank_code: "BLZ"
+        account_number: "Konto"
+        iban: "IBAN"
+        bic: "BIC"
+      user:
+        email: "E-Mail"
+        password: "Passwort"
+        password_confirmation: "Passwort-Bestätigung"
+        current_password: "Aktuelles Passwort"
+        remember_me: "Angemeldet bleiben"
+        gravatar: "Gravatar E-Mail Adresse"
+      address:
+        company: "Firma"
+        name: "Name"
+        firstname: "Vorname"
+        lastname: "Nachname"
+        address: "Adresse"
+        country: "Land"
+        telefon: "Telefon"
+        fax: "Fax"
+        website: "Homepage"
+        email: "E-Mail"
+      customer:
+        payment_due: "Zahlungsziel (Tage)"
+      setting:
+        mailer:
+          host: "SMTP Host"
+          port: "SMTP Port"
+          user: "SMTP Benutzer"
+          password: "SMTP Passwort oder Token"
+    prompt:
+      project:
+        customer_id: "Bitte wähle einen Kunden"
+      invoice:
+        project_id: "Bitte wähle ein Projekt"
+      address:
+        country: "Bitte wähle ein Land"

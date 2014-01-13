@@ -1,0 +1,59 @@
+de:
+  unauthorized:
+    default: "Zugriff verweigert!"
+  resources:
+    messages:
+      bank_account: "Bankdaten"
+      user_data: "Daten"
+      password: "Passwort"
+      user: "Benutzer"
+      invoice: "Rechnung"
+      project: "Projekt"
+      customer: "Kunde"
+      setting: "Einstellung"
+  messages:
+    demo_active: "Anwendung befindet sich im Demo-Modus, Sie dürfen nur eine Rechnung anlegen."
+    confirm:
+      form:
+        cancel: "Sind Sie sich sicher? Ungespeicherte Änderungen gehen verloren."
+      delete: "Sind Sie sich sicher, dass Sie den Eintrag löschen wollen?"
+    setting:
+      not_found: "Keinen Eintrag gefunden"
+    customer:
+      confirm:
+        delete: "Sind Sie sich sicher, dass Sie den Kunden löschen wollen? Alle zugehörigen Projekte werden ebenfalls gelöscht."
+    invoice:
+      not_editable: "Diese Rechnung kann nicht mehr verändert werden."
+      missing_address: "Bitte vervollständigen Sie zuerst Ihre Daten"
+    create:
+      success: "%{resource} erfolgreich erstellt."
+      failure: "%{resource} konnte nicht erstellt werden."
+    update:
+      success: "%{resource} erfolgreich bearbeitet."
+      failure: "%{resource} konnte nicht bearbeitet werden."
+    destroy:
+      success: "%{resource} erfolgreich gelöscht."
+      failure: "%{resource} konnte nicht gelöscht werden."
+      setting:
+        success: "%{resource} erfolgreich zurückgesetzt."
+        failure: "%{resource} konnte nicht zurückgesetzt werden."
+      customer:
+        failure_dependency: "Bitte löschen Sie zuerst alle Rechnungen für diesen Kunden"
+      project:
+        failure_dependency: "Bitte löschen Sie zuerst alle Rechnungen für dieses Projekt"
+    lock:
+      user:
+        success: "Benutzer erfolgreich gesperrt."
+        failure: "Benutzer konnte nicht gesperrt werden."
+    unlock:
+      user:
+        success: "Benutzer erfolgreich freigeschaltet."
+        failure: "Benutzer konnte nicht freigeschaltet werden."
+    pay:
+      invoice:
+        success: "Rechnung erfolgreich als bezahlt markiert."
+        failure: "Rechnung konnte nicht als bezahlt markiert werden."
+    charge:
+      invoice:
+        success: "Rechnung erfolgreich in Rechnung gestellt."
+        failure: "Rechnung konnte nicht in Rechnung gestellt werden."

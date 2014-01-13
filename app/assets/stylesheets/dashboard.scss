@@ -1,0 +1,13 @@
+#dashboard {
+  .invoices-list {
+    .list-group-item {
+      position: relative;
+
+      .due-label {
+        position: absolute;
+        bottom: 10px;
+        left: 15px;
+      }
+    }
+  }
+}

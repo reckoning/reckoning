@@ -1,0 +1,46 @@
+de:
+  headlines:
+    sign_up: "Neuen Account erstellen"
+    sign_in: "Anmelden"
+    forgot_password: "Passwort vergessen?"
+    change_password: "Passwort ändern"
+    unlock: "Account entsperren"
+    confirm: "Account bestätigen"
+    account: "Meine Daten"
+    impressum: "Impressum"
+    privacy: "Datenschutz"
+    welcome: "Rechnungen schreiben einfach gemacht."
+
+    project:
+      new: "Neues Projekt"
+      edit: "Projekt bearbeiten"
+      index: "Projekte"
+
+    invoice:
+      new: "Neue Rechnung"
+      show: "Vorschau für Rechung %{invoice_ref}"
+      edit: "Rechnung bearbeiten"
+      index: "Aktuelle Rechnungen"
+      sum: "Gesamt: %{sum}"
+
+    customer:
+      new: "Neuer Kunde"
+      edit: "Kunde bearbeiten"
+      index: "Kunden"
+
+    bank_account:
+      edit: "Bankdaten berbeiten"
+
+    user:
+      edit: "Account bearbeiten"
+
+    backend:
+      user:
+        index: "Benutzer"
+        edit: 'Benutzer "%{user}" bearbeiten'
+        new: 'Neuen Benutzer anlegen'
+      setting:
+        edit: 'Einstellung bearbeiten'
+
+  sublines:
+    welcome: "Vereinfache das Erstellen von Rechnungen und konzentriere dich auf die wichtigen Dinge!"

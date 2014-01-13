@@ -1,0 +1,24 @@
+- translateable ||= false
+.dropdown.filter-menu
+  %a.btn.btn-default{href: '#', data: {toggle: 'dropdown'}}
+    = "#{I18n.t(:"filter.name.#{resource}_#{name}")}:"
+    - current_value = I18n.t(:"filter.defaults.all")
+    - if params.fetch(name, nil)
+      - if translateable
+        - current_value = I18n.t(:"filter.#{resource}_#{name}.#{params.fetch(name, nil)}")
+      - else
+        - current_value = params.fetch(name, nil)
+    = current_value
+    %span.caret
+  %ul.dropdown-menu{role: 'menu'}
+    %li{class: ("active" unless params.fetch(name, nil))}
+      - reset_params = params.dup
+      - reset_params.delete(name)
+      = link_to I18n.t(:"filter.defaults.all"), url_for(reset_params)
+    - filters.each do |filter|
+      - if filter.is_a?(Hash)
+        - filter = OpenStruct.new filter
+      %li{class: ("active" if params.fetch(name, nil) == filter.name.to_s)}
+        - link = filter.link if defined?(filter.link)
+        - link ||= I18n.t(:"filter.#{resource}_#{name}.#{filter.name}")
+        = link_to link, plumb(name.to_s => filter.name)

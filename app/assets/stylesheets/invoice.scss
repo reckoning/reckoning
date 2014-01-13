@@ -1,0 +1,34 @@
+#invoice {
+  #preview {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    height: 1060px;
+    width: 100%;
+    border-radius: 5px;
+    @include box-shadow(rgba(#000, 0.3) 0 0 15px);
+    padding: 1px;
+    margin-bottom: 10px;
+    position: relative;
+    background-color: white;
+  }
+
+  #preview-image {
+    position: absolute;
+    top: 0;
+    max-width: 100%;
+    min-width: 748px;
+  }
+
+  #preview-info {
+    text-align: center;
+    padding: 50px;
+  }
+
+  .preview-paginator {
+    text-align: center;
+  }
+
+  .due-label {
+    vertical-align: text-top;
+  }
+}

@@ -1,0 +1,32 @@
+%ul.nav.navbar-nav.navbar-right
+  - if user_signed_in?
+    %li.dropdown{class: get_active_nav('users') || get_active_nav('bank_accounts')}
+      %a.dropdown-toggle{href: '#', data: {toggle: 'dropdown'}}
+        %img.gravatar{src: gravatar_path, alt: "avatar", with: 20, height: 20}
+        %span.user-email
+          = current_user.email
+        /%i.glyphicon.glyphicon-user
+        %b.caret
+      %ul.dropdown-menu.navbar-right
+        %li{class: get_active_nav('users')}
+          = link_to I18n.t(:"nav.header.settings"), edit_user_registration_path
+        - unless backend?
+          %li{class: get_active_nav('bank_accounts')}
+            = link_to I18n.t(:"nav.header.bank_account"), edit_bank_account_path
+        - if current_user.admin?
+          %li.divider
+          - if backend?
+            %li
+              = link_to I18n.t(:"nav.footer.frontend"), root_path
+          - else
+            %li
+              = link_to I18n.t(:"nav.footer.backend.root"), backend_root_path
+        %li.divider
+        %li
+          = link_to I18n.t(:"actions.sign_out"), destroy_user_session_path, method: :delete
+  - else
+    - if registration_enabled?
+      %li{class: get_active_nav('registration')}
+        = link_to I18n.t(:"actions.sign_up"), new_registration_path
+    %li{class: get_active_nav('sessions') || get_active_nav('users')}
+      = link_to I18n.t(:"actions.sign_in"), new_user_session_path

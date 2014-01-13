@@ -1,0 +1,18 @@
+de:
+  pdf:
+    page: "Seite"
+    page_from: "von"
+    not_generated: "PDF noch nicht erstellt oder veraltet."
+    please_regenerate: 'Bitte klicke auf "%{generate}” oder auf "%{regenerate}".'
+    invoice:
+      subject:
+        project: "Projekt:"
+        date: "Rechnungsdatum:"
+        delivery_date: "Lieferdatum:"
+        payment_due: "Zahlbar bis:"
+        tax: "Steuernummer:"
+      headline: "Rechnung"
+      tax: "USt. (%{value} %)"
+      net: "Netto"
+      gross: "Brutto"
+      sum: "Summe"

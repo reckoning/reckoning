@@ -1,0 +1,26 @@
+%tr
+  %td
+    = invoice.ref_number
+  %td
+    = invoice.title
+  %td
+    = I18n.l invoice.date, format: :month
+  %td.value
+    = number_to_currency invoice.value
+  %td
+    %span{class: "label label-" + invoice_label(invoice)}
+      = I18n.t(:"activerecord.attributes.invoice.states.#{invoice.state}")
+  %td
+    .btn-group
+      %a.btn.btn-default.btn-sm{href: invoice_path(invoice.ref), title: I18n.t(:"actions.show")}
+        %i.glyphicon.glyphicon-file
+      - unless invoice.state?(:charged) || invoice.state?(:paid)
+        %a.btn.btn-default.btn-sm{href: edit_invoice_path(invoice.ref), title: I18n.t(:"actions.edit")}
+          %i.glyphicon.glyphicon-edit
+        = link_to charge_invoice_path(invoice.ref), title: I18n.t(:"actions.charge"), method: :put, class: "btn btn-primary btn-sm" do
+          %i.glyphicon.glyphicon-envelope
+      - if invoice.state?(:charged) && !invoice.state?(:paid)
+        = link_to pay_invoice_path(invoice.ref), title: I18n.t(:"actions.pay"), method: :put, class: "btn btn-success btn-sm" do
+          %i.glyphicon.glyphicon-ok
+      = confirm_link_to invoice_path(invoice.ref), data: {notyConfirm: I18n.t(:"messages.confirm.delete")}, title: I18n.t(:"actions.delete"), method: :delete, class: "btn btn-danger btn-sm" do
+        %i.glyphicon.glyphicon-trash

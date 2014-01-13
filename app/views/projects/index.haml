@@ -1,0 +1,22 @@
+- content_for :title do
+  = I18n.t(:"meta.title.project.index")
+
+.row#projects
+  .col-xs-12.col-md-12
+
+    .row
+      .col-xs-12.col-md-8
+        %h2
+          = I18n.t(:"headlines.project.index")
+
+      .col-xs-12.col-md-4
+        .btn-group.pull-right.resource-nav
+          = link_to I18n.t(:"nav.subnav.new_project"), new_project_path, class: "btn btn-default"
+
+    .pull-right
+      = paginate @projects
+
+    = render partial: "table", :@projects => @projects
+
+    .pull-right
+      = paginate @projects

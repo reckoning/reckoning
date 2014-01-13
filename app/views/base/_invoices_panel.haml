@@ -1,0 +1,21 @@
+- context ||= 'info'
+.panel{class: "panel-#{context}"}
+  .panel-heading
+    .panel-title
+      %strong
+        = title
+  .list-group.invoices-list
+    - invoices.each do |invoice|
+      %a.list-group-item{href: invoice_path(invoice.ref)}
+        = invoice.ref_number
+        = " | "
+        = invoice.title
+        .text-right
+          %em
+            = I18n.l invoice.date, format: :month
+        - if invoice.charged? && invoice.payment_due_date < Time.now
+          %span.label.label-danger.due-label
+            = I18n.t(:"labels.invoice.due", date: time_ago_in_words(invoice.payment_due_date))
+    - if invoices.empty?
+      %span.list-group-item
+        = I18n.t(:"table.blank.invoice")

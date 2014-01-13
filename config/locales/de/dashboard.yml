@@ -1,0 +1,7 @@
+de:
+  dashboard:
+    panels:
+      summary: "Zusammenfassung"
+      charged_invoices: "Offene Rechnungen"
+      paid_invoices: "Bezahlte Rechnungen"
+      last_invoices: "Letztes Jahr"

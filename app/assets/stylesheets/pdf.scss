@@ -1,0 +1,130 @@
+@import "pdf_normalize";
+
+@page {
+  size: a4 portrait;
+  margin: 30mm 10mm 35mm 10mm;
+  counter-increment: page;
+  @bottom-right {
+    margin-top: -105px;
+  }
+}
+
+body {
+  font-family: 'Droid Sans', verdana;
+  font-size: 1.6em;
+  color: #333333 !important;
+
+  @import "partials/table";
+
+  table {
+    border: 1px solid #cacaca !important;
+    thead, tfoot  {
+      th {
+        padding: 2px 6px;
+        background: #cacaca;
+
+        &.align-right {
+          text-align: right;
+        }
+      }
+    }
+    td {
+      border-top: 1px solid #cacaca;
+    }
+    tr.tax {
+      td {
+        background: #cacaca;
+      }
+    }
+  }
+
+  address {
+    font-style: normal;
+
+    &#company {
+      font-size: 90%;
+      margin-bottom: 10px;
+      margin-top: 62px;
+      border-bottom: 1px solid #999;
+      display: inline-block;
+    }
+  }
+
+  #subject {
+    margin: 50px 0 60px;
+    position: relative;
+
+    .info-wrapper {
+      position: absolute;
+      right: 0;
+      top: -20px;
+
+      #infomartion, #date, #delivery-date, #tax, #payment-due {
+        float: right;
+        clear: both;
+        font-size: 90%;
+        margin-bottom: 5px;
+        text-align: right;
+      }
+    }
+
+    h1 {
+      font-size: 140%;
+      font-weight: bold;
+    }
+  }
+}
+
+#pdf-header {
+  position: fixed;
+  margin-top: -70px;
+  top: 0;
+  width: 100%;
+  text-align: right;
+  border-bottom: 1px solid #999;
+  font-size: 30px;
+  font-weight: 900;
+  font-style: italic;
+  color: #2ba6cb !important;
+  font-family: 'Orbitron', sans-serif !important;
+}
+
+#pdf-footer {
+  border-top: 1px solid #999;
+  position: fixed;
+  margin-bottom: -100px;
+  bottom: 0;
+  width: 100%;
+  padding-top: 5px;
+
+  address, .contact-information, .bank-information {
+    display: inline-block;
+    font-size: 90%;
+    line-height: 1.2em;
+
+    p {
+      font-size: 100%;
+      line-height: 1.2em;
+    }
+  }
+
+  address {
+    width: 25%;
+  }
+
+  .contact-information{
+    width: 25%;
+    margin-top: 1.2em;
+  }
+
+  .bank-information {
+    width: 50%;
+  }
+}
+
+#pdf-header, #pdf-footer {
+  &.preview {
+    position: relative;
+    margin-top: 0;
+  }
+}

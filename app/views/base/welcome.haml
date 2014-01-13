@@ -1,0 +1,47 @@
+- image_prefix = ''
+#welcome
+  %a#github-link{href: "https://github.com/reckoning/app"}
+    %img{src: image_path("github.png"), alt: "Fork it on GitHub"}
+  .row
+    %a.anchor#intro
+    .col-xs-12.col-md-12
+      .page-header
+        %h2
+          = I18n.t(:"headlines.welcome")
+          %br
+          %small
+            = I18n.t(:"sublines.welcome")
+
+  .row
+    %a.anchor#features
+    .col-xs-12.col-md-12
+      %h3
+        Aktuelle Features
+      .row
+        .col-xs-12.col-md-4
+          %a.thumbnail{href: image_path("#{image_prefix}example-1.png")}
+            = image_tag "#{image_prefix}example-1-small.png"
+          %h4.text-center
+            Rechnungen erstellen (inkl. PDF)
+          %hr.visible-xs
+        .col-xs-12.col-md-4
+          %a.thumbnail{href: image_path("#{image_prefix}example-2.png")}
+            = image_tag "#{image_prefix}example-2-small.png"
+          %h4.text-center
+            Rechnungsstatus erfassen
+          %hr.visible-xs
+        .col-xs-12.col-md-4
+          %a.thumbnail{href: image_path("#{image_prefix}example-3.png")}
+            = image_tag "#{image_prefix}example-3-small.png"
+          %h4.text-center
+            Datenbank für Kunden & Projekte
+
+  #image-modal.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{type: "button", data: {dismiss: "modal"}, aria: {hidden: "true"}}
+            &times;
+          %h4
+        .modal-body
+          %img{src: "", alt: "example-image"}

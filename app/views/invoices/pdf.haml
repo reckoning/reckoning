@@ -1,0 +1,134 @@
+#pdf-header{class: ("preview" if defined?(@preview))}><
+  - if @resource.user.company.present?
+    = @resource.user.company
+  - else
+    = @resource.user.name
+#pdf-body
+  .row
+    %address#company
+      - if @resource.user.company.present?
+        = "#{@resource.user.company},"
+      - else
+        = "#{@resource.user.name},"
+      = @resource.user.address.address_as_one_line
+
+  .row
+    %address#customer
+      = @resource.customer.company
+      %br
+      %br
+      = simple_format(@resource.customer.address.address)
+
+  .row
+    #subject
+      .info-wrapper
+        #infomartion
+          = I18n.t(:"pdf.invoice.subject.project")
+          = @resource.project.name
+        #date
+          = I18n.t(:"pdf.invoice.subject.date")
+          = I18n.l @resource.date
+        - if @resource.delivery_date.present?
+          #delivery-date
+            = I18n.t(:"pdf.invoice.subject.delivery_date")
+            = I18n.l @resource.delivery_date
+
+        - if @resource.payment_due_date.present?
+          #payment-due
+            = I18n.t(:"pdf.invoice.subject.payment_due")
+            = I18n.l @resource.payment_due_date
+
+        - if @resource.user.tax_ref.present?
+          #tax
+            = I18n.t(:"pdf.invoice.subject.tax")
+            = @resource.user.tax_ref
+      %h1
+        = I18n.t(:"pdf.invoice.headline")
+        = @resource.ref_number
+
+    %br
+
+    %table.table.table-condensed
+      %thead
+        %th=I18n.t(:"table.labels.defaults.description")
+        %th.align-right=I18n.t(:"table.labels.defaults.hours")
+        %th.align-right=I18n.t(:"table.labels.defaults.rate")
+        %th.align-right=I18n.t(:"table.labels.defaults.value")
+      %tbody
+        - @resource.positions.each do |position|
+          %tr
+            %td
+              = position.description
+            %td.hours
+              = number_to_currency position.hours, unit: ""
+            %td.rate
+              - if position.rate.present?
+                = number_to_currency position.rate
+              - elsif position.hours.present?
+                = number_to_currency @resource.rate
+            %td.value
+              = number_to_currency position.value
+        - if @resource.user.tax.present?
+          %tr.step-sum.border
+            %td{colspan: 3}
+              = I18n.t(:"pdf.invoice.net")
+            %td.value
+              = number_to_currency @resource.value
+          %tr.tax
+            %td{colspan: 3}
+              = I18n.t(:"pdf.invoice.tax", value: @resource.user.tax)
+            %td.value
+              - taxes = (@resource.value * @resource.user.tax.to_d) / 100
+              = number_to_currency taxes
+          - value = @resource.value + taxes
+          - value_label = I18n.t(:"pdf.invoice.gross")
+        - else
+          %tr.tax.border
+            %td{colspan: 4}
+              = I18n.t(:"small_business")
+          - value = @resource.value
+          - value_label = I18n.t(:"pdf.invoice.sum")
+        %tr.sum
+          %td{colspan: 3}
+            = value_label
+          %td.value
+            %strong
+              = number_to_currency(value)
+
+#pdf-footer{class: ("preview" if defined?(@preview))}><
+  %address><
+    - if @resource.user.company.present?
+      %strong
+        = @resource.user.company
+      %br
+      = @resource.user.name
+    - else
+      %strong
+        = @resource.user.name
+      %br
+    %br
+    = simple_format(@resource.user.address.address)
+  .contact-information><
+    - if @resource.user.address.telefon.present?
+      Tel:
+      = @resource.user.address.telefon
+      %br
+    - if @resource.user.address.fax.present?
+      Fax:
+      = @resource.user.address.fax
+      %br
+    - if @resource.user.email.present?
+      = @resource.user.email
+      %br
+    - if @resource.user.address.website.present?
+      = @resource.user.address.website
+  .bank-information><
+    - if @resource.user.bank.present?
+      = @resource.user.bank
+      %br
+    = "IBAN: #{@resource.user.iban}"
+    %br
+    = "BIC: #{@resource.user.bic}"
+    %br
+    = "Konto: #{@resource.user.account_number} | BLZ: #{@resource.user.bank_code}"
+

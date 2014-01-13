@@ -1,0 +1,17 @@
+- content_for :title do
+  = I18n.t(:"meta.title.invoice.new")
+
+.row#new-invoice
+
+  .col-xs-12.col-md-12
+
+    .row
+      .col-xs-12.col-md-8
+        %h1
+          = I18n.t(:"headlines.invoice.new")
+
+      .col-xs-12.col-md-4
+        .btn-group.pull-right.resource-nav
+          = link_to I18n.t(:"nav.subnav.back"), invoices_path, class: "btn btn-default"
+
+    = render "form"

@@ -1,0 +1,78 @@
+- content_for :title do
+  = I18n.t(:"meta.title.invoice.show", invoice_ref: @invoice.ref_number)
+
+.row#invoice{data: {id: @invoice.ref}}
+
+  .col-xs-12.col-md-12
+
+    .row
+      .col-xs-12.col-md-9
+        %h2
+          = I18n.t(:"headlines.invoice.show", invoice_ref: @invoice.ref_number)
+          - if @invoice.charged? && @invoice.payment_due_date < Time.now
+            %small
+              %span.label.label-danger.due-label
+                = I18n.t(:"labels.invoice.due", date: time_ago_in_words(@invoice.payment_due_date))
+
+      .col-xs-12.col-md-3
+        .btn-group.pull-right.resource-nav
+          = link_to I18n.t(:"nav.subnav.back"), invoices_path, class: "btn btn-default"
+
+    .row
+      .col-xs-12.col-md-8
+        #preview
+          %img#preview-image{src: invoice_png_path(@invoice.ref, @invoice.filename('png')), class: ('hide' unless @invoice.pdf_present_and_up_to_date?)}
+
+          #preview-info{class: ('hide' if @invoice.pdf_present_and_up_to_date?)}
+            .panel.panel-default
+              .panel-heading
+                .panel-title
+                  = I18n.t(:"pdf.not_generated")
+              .panel-body
+                = I18n.t(:"pdf.please_regenerate", generate: I18n.t(:"actions.generate"), regenerate: I18n.t(:"actions.regenerate"))
+
+        = render 'kaminari/pdf_paginator'
+
+      .col-xs-12.col-md-4
+        .row
+          .col-xs-12.col-md-12
+            .btn-group.pull-right
+              = link_to invoice_pdf_path(@invoice.ref, @invoice.filename), target: "_blank", title: I18n.t(:"actions.download"), class: "save-invoice btn btn-primary#{(" disabled" if @invoice.pdf_not_present_or_generating?)}" do
+                %i.glyphicon.glyphicon-download-alt
+              %button.ladda-button.btn.btn-primary.generate-invoice{data: {style: "expand-right", action: regenerate_pdf_invoice_path(@invoice.ref)}, onclick: "App.Invoice.generate($(this)); return false;", class: ('generating' if @invoice.pdf_generating)}
+                .span.generate{class: ('hide' if @invoice.pdf_present_or_generating? )}
+                  %i.glyphicon.glyphicon-download-alt
+                  = I18n.t(:"actions.generate")
+                .span.regenerate{class: ('hide' if @invoice.pdf_not_present_and_not_generating?)}
+                  %i.glyphicon.glyphicon-refresh
+                  = I18n.t(:"actions.regenerate")
+              = confirm_link_to invoice_path(@invoice.ref), data: {notyConfirm: I18n.t(:"messages.confirm.delete")}, method: :delete, class: "btn btn-danger" do
+                %i.glyphicon.glyphicon-trash
+                = I18n.t(:"actions.delete")
+
+        .row
+          .col-xs-12.col-md-12
+            .loading.hide
+
+        - unless @invoice.state?(:paid)
+
+          %br
+          .row
+            .col-xs-12.col-md-12
+              .panel.panel-default
+                .panel-heading
+                  .panel-title
+                    %strong
+                      = I18n.t(:"panels.title.default")
+                .list-group
+                  - if @invoice.state?(:charged)
+                    = link_to pay_invoice_path(@invoice.ref), method: :put, class: "list-group-item" do
+                      %i.glyphicon.glyphicon-ok
+                      = I18n.t(:"actions.pay")
+                  - else
+                    %a.list-group-item{href: edit_invoice_path(@invoice.ref)}
+                      %i.glyphicon.glyphicon-edit
+                      = I18n.t(:"actions.edit")
+                    = link_to charge_invoice_path(@invoice.ref), method: :put, class: "list-group-item" do
+                      %i.glyphicon.glyphicon-envelope
+                      = I18n.t(:"actions.charge")

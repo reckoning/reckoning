@@ -1,0 +1,43 @@
+= form_for @invoice, url: (@invoice.new_record? ? invoices_path : invoice_path(@ref)), html: {id: 'invoice-form' } do |form|
+  .row
+    .col-xs-12.col-md-6.form-group{class: form_error?(@invoice, :project_id)}
+      .select2
+        %select{name: "invoice[project_id]", id: "invoice_project_id", data: {placeholder: I18n.t(:"helpers.prompt.invoice.project_id"), empty: I18n.t(:"select2.empty")}}
+          %option
+          - projects.each do |project|
+            %option{value: project.id, selected: (true if project.id == @invoice.project_id), data: {rate: project.rate}}
+              = project.name_with_customer
+      = form_errors @invoice, :project_id
+    .col-xs-12.col-md-6.form-group{class: form_error?(@invoice, :date)}
+      .input-group
+        = form.label :date, class: "input-group-addon"
+        = form.date_field :date, class: 'form-control'
+      = form_errors @invoice, :date
+  .row
+    .col-xs-12.col-md-4.form-group{class: form_error?(@invoice, :ref)}
+      .input-group
+        = form.label :ref, class: "input-group-addon"
+        = form.text_field :ref, value: (@invoice.ref_number unless @invoice.ref.blank?), class: 'form-control'
+      = form_errors @invoice, :ref
+    .col-xs-12.col-md-4.form-group
+      .input-group
+        = form.label :payment_due_date, class: "input-group-addon"
+        = form.date_field :payment_due_date, class: 'form-control'
+    .col-xs-12.col-md-4.form-group
+      .input-group
+        = form.label :delivery_date, class: "input-group-addon"
+        = form.date_field :delivery_date, class: 'form-control'
+
+  %fieldset
+    %legend
+      Positionen:
+
+    #positions
+      = form.fields_for :positions, @invoice.positions do |builder|
+        = render 'position_fields', fields: builder
+
+      = link_to_add_fields form, :positions, name: I18n.t(:"actions.add"), class: "btn btn-default pull-right" do
+        %i.glyphicon.glyphicon-plus
+        = I18n.t(:"actions.add_position")
+
+  = render "layouts/forms/submit", path: root_path

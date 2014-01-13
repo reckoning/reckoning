@@ -1,0 +1,19 @@
+= form_for project do |form|
+  .row
+    .col-xs-12.col-md-6.form-group.select2{class: form_error?(project, :customer_id)}
+      = form.collection_select :customer_id, customers, :id, :fullname, {include_blank: ""}, {"data-placeholder" => I18n.t(:"helpers.prompt.project.customer_id"), "data-empty" => I18n.t(:"select2.empty")}
+      %small
+        = form_errors project, :customer_id
+    .col-xs-12.col-md-6.form-group{class: form_error?(project, :name)}
+      = form.text_field :name, placeholder: I18n.t(:"helpers.placeholder.project.name"), class: 'form-control'
+      %small
+        = form_errors project, :name
+
+  .row
+    .col-xs-4.col-md-2.form-group{class: form_error?(project, :rate)}
+      = form.label :rate
+      = form.text_field :rate, class: 'form-control'
+      %small
+        = form_errors project, :rate
+
+  = render "layouts/forms/submit", path: projects_path

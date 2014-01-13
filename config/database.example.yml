@@ -1,0 +1,14 @@
+production:
+  adapter: postgresql
+  database: reckoning
+  host: localhost
+
+development:
+  adapter: postgresql
+  database: reckoning_dev
+  host: localhost
+
+test:
+  adapter: postgresql
+  database: reckoning_test
+  host: localhost
