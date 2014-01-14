@@ -47,8 +47,10 @@ class Setup < Thor
 
   desc "dev_env", "Copy files for local Dev-Enviroment"
   def dev_env
-    run "cp config/database.example.yml config/database.yml"
-    run "cp config/secrets.example.yml config/secrets.yml"
-    run "cp config/settings.example.yml config/settings.yml"
+    app_dir = File.join(File.dirname(__FILE__), '..', '..')
+    run "mkdir #{app_dir}/files"
+    run "cp #{app_dir}/config/database.example.yml #{app_dir}/config/database.yml"
+    run "cp #{app_dir}/config/secrets.example.yml #{app_dir}/config/secrets.yml"
+    run "cp #{app_dir}/config/settings.example.yml #{app_dir}/config/settings.yml"
   end
 end
