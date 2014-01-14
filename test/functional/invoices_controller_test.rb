@@ -51,7 +51,7 @@ class InvoicesControllerTest < ActionController::TestCase
     post :create, {invoice: {project_id: @project.id, date: Date.today}}
 
     assert_response :found
-    assert_equal I18n.t(:"messages.create.invoice.success"), flash[:notice]
+    assert_equal I18n.t(:"messages.create.success", resource: I18n.t(:"resources.messages.invoice")), flash[:notice]
   end
 
   test "Unauthrized user cant create new invoice" do
@@ -81,7 +81,7 @@ class InvoicesControllerTest < ActionController::TestCase
     put :update, {ref: @invoice.ref, invoice: {project_id: @project.id, date: Date.today - 1}}
 
     assert_response :found
-    assert_equal I18n.t(:"messages.update.invoice.success"), flash[:notice]
+    assert_equal I18n.t(:"messages.update.success", resource: I18n.t(:"resources.messages.invoice")), flash[:notice]
   end
 
   test "Unauthrized user cant update invoice" do
@@ -97,7 +97,7 @@ class InvoicesControllerTest < ActionController::TestCase
     delete :destroy, {ref: @invoice.ref}
 
     assert_response :found
-    assert_equal I18n.t(:"messages.destroy.invoice.success"), flash[:notice]
+    assert_equal I18n.t(:"messages.destroy.success", resource: I18n.t(:"resources.messages.invoice")), flash[:notice]
 
     assert_not_equal @invoice, Invoice.where(id: @invoice.id).first
   end
