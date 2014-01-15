@@ -26,5 +26,4 @@ class User < ActiveRecord::Base
     end
     self.gravatar_hash = hash
   end
-
 end
