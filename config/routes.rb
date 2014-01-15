@@ -25,8 +25,6 @@ Reckoning::Application.routes.draw do
   resource :bank_account, only: [:edit, :update]
   resource :password, only: [:edit, :update]
 
-  get 'harvest/times' => 'harvest#times'
-
   resources :invoices, param: :ref do
     member do
       put :regenerate_pdf
@@ -43,10 +41,6 @@ Reckoning::Application.routes.draw do
 
   resources :customers, except: [:show]
   resources :projects, except: [:show]
-
-  get 'upgrade' => 'base#upgrade', as: :upgrade
-
-  get 'impressum' => 'base#impressum'
 
   root to: 'base#index'
 end

@@ -1,5 +1,5 @@
-# encoding: utf-8
 module FormHelper
+
   def form_error?(obj, method)
     obj.errors[method].empty? ? '' : 'has-error'
   end
