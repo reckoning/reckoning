@@ -19,7 +19,6 @@ gem 'cache_digests', '~> 0.3.1'
 gem 'turbolinks', '~> 2.0.0'
 
 gem 'url_plumber', '~> 0.1.2'
-gem 'select2-rails', '~> 3.5.2'
 gem 'kaminari', '~> 0.15.0'
 
 gem 'dynamic_fields_for_rails', '~> 0.5.0'
@@ -30,7 +29,7 @@ gem 'sass-rails', '~> 4.0.1'
 gem 'coffee-rails', '~> 4.0.1'
 gem 'bourbon', '~> 3.1.8'
 
-gem 'bootstrap-sass', '~> 3.0.3.0'
+gem 'bootstrap-sass'
 
 gem 'jquery-rails', '~> 3.0.4'
 gem 'jquery-turbolinks', '~> 2.0.1'
@@ -45,10 +44,12 @@ gem 'puma', '~> 2.7.0'
 
 gem 'sentry-raven', '~> 0.7.1'
 
-gem 'i18n-js', github: "fnando/i18n-js", branch: :rewrite
+gem 'rails-asset-localization', git: 'git@github.com:nicolai86/rails-asset-localization.git', branch: :master
 
 gem 'thor'
 gem 'highline'
+
+gem "bower-rails", github: '42dev/bower-rails'
 
 group :test do
   gem 'rails-perftest'

@@ -1,5 +1,6 @@
 de:
   actions:
+    loading: "Bitte warten..."
     ok: 'OK'
     reset: "Auf Standard zurücksetzen"
     cancel: "Abbrechen"
@@ -11,6 +12,8 @@ de:
     save: "Speichern"
     add: "Hinzufügen"
     add_position: "Position hinzufügen"
+    add_task: "Aufgabe hinzufügen"
+    add_timer: "Neuer Timer"
     show: "Anzeigen"
     download: "Speichern"
     regenerate: "Neu generieren"
@@ -28,3 +31,4 @@ de:
     admin: 'Backend'
     enable: "Aktivieren"
     disable: "Deaktivieren"
+    close: Schließen

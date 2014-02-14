@@ -10,6 +10,8 @@ class User < ActiveRecord::Base
   has_many :invoices, dependent: :destroy
   has_many :customers, dependent: :destroy
   has_many :projects, through: :customers, dependent: :destroy
+  has_many :tasks, through: :projects, dependent: :destroy
+  has_many :weeks, dependent: :destroy
 
   accepts_nested_attributes_for :address
 

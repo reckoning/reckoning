@@ -1,0 +1,35 @@
+{
+  "name": "Reckoning.io",
+  "version": "1.0.0",
+  "description": "[![Build Status](https://travis-ci.org/Reckoning/app.png?branch=master)](https://travis-ci.org/Reckoning/app)",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc",
+    "test": "test"
+  },
+  "dependencies": {
+    "karma-chrome-launcher": "~0.0.2",
+    "karma-coffee-preprocessor": "~0.0.2",
+    "karma-jasmine": "~0.0.2",
+    "karma-phantomjs-launcher": "~0.0.2",
+    "karma-html2js-preprocessor": "~0.0.2",
+    "karma-script-launcher": "~0.0.2",
+    "karma-requirejs": "~0.0.2",
+    "karma-firefox-launcher": "~0.0.3",
+    "bower": "~1.2.8"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Reckoning/app.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Reckoning/app/issues"
+  },
+  "homepage": "https://reckoning.io"
+}

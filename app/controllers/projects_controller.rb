@@ -68,7 +68,17 @@ class ProjectsController < ApplicationController
   end
 
   def project_params
-    @project_params ||= params.require(:project).permit(:customer_id, :name, :rate)
+    @project_params ||= params.require(:project).permit(
+      :customer_id,
+      :name,
+      :rate,
+      tasks_attributes: [
+        :id,
+        :name,
+        :project_id,
+        :_destroy
+      ]
+    )
   end
 
   def project

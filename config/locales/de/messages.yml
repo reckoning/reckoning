@@ -12,6 +12,14 @@ de:
       customer: "Kunde"
       setting: "Einstellung"
   messages:
+    timesheet:
+      add_task:
+        success: "Augabe erfolgreich hinzugefügt."
+        warning: "Bitte wähle eine Aufgabe aus."
+        failure: "Die Aufgabe konnte nicht hinzugefügt werden."
+      remove_task:
+        success: "Augabe erfolgreich entfernt."
+        failure: "Die Aufgabe konnte nicht entfernt werden."
     demo_active: "Anwendung befindet sich im Demo-Modus, Sie dürfen nur eine Rechnung anlegen."
     confirm:
       form:

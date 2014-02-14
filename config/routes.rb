@@ -1,6 +1,8 @@
 require 'resque/server'
 
 Reckoning::Application.routes.draw do
+  mount RailsAssetLocalization::Engine => "/locales"
+
   devise_for :users, skip: [:sessions], controllers: { registrations: "registrations" }
 
   namespace :backend do
@@ -40,7 +42,24 @@ Reckoning::Application.routes.draw do
   resources :positions, only: [:new, :destroy]
 
   resources :customers, except: [:show]
-  resources :projects, except: [:show]
+  resources :projects, except: [:show] do
+    resources :tasks, only: [:index, :create]
+  end
+
+  resources :timers, only: [:index] do
+    collection do
+      get :day
+    end
+  end
+
+  resources :weeks, only: [:create, :update] do
+    collection do
+      post :add_task
+    end
+    member do
+      put 'remove_task/:task_id' => 'weeks#remove_task', as: :remove_task
+    end
+  end
 
   root to: 'base#index'
 end

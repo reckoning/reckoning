@@ -1,0 +1,3 @@
+= fields.hidden_field :date
+= fields.hidden_field :task_id
+= fields.text_field :value, value: (decimal_to_time(fields.object.value) unless fields.object.value.blank?), class: 'form-control'

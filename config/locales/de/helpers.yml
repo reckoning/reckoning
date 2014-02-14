@@ -26,6 +26,8 @@ de:
     placeholder:
       project:
         name: "Name"
+      task:
+        name: "Name"
       position:
         description: "Beschreibung"
         rate: "0"
