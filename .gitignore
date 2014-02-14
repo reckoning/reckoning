@@ -20,3 +20,7 @@ coverage/*
 # app files
 files/*
 
+# js dependencies
+vendor/assets/bower_components/*
+vendor/assets/.bowerrc
+vendor/assets/bower.json
