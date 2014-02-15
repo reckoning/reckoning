@@ -8,8 +8,23 @@ class Project < ActiveRecord::Base
 
   accepts_nested_attributes_for :tasks, allow_destroy: true
 
+  def self.with_budget
+    where("budget != ?", 0)
+  end
+
   def name_with_customer
     "#{self.customer.fullname} - #{self.name}"
   end
 
+  def timer_values
+    values = 0.0
+    timers.each do |timer|
+      values += timer.value.to_d
+    end
+    values
+  end
+
+  def budget_percent
+    timer_values / budget * 100
+  end
 end

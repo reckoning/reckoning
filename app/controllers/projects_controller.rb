@@ -72,6 +72,7 @@ class ProjectsController < ApplicationController
       :customer_id,
       :name,
       :rate,
+      :budget,
       tasks_attributes: [
         :id,
         :name,

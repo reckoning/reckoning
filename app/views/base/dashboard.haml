@@ -23,6 +23,24 @@
               = I18n.t(:"dashboard.panels.last_invoices")
               %strong.pull-right
                 = number_to_currency(invoices_sum(@last_invoices))
+        .panel.panel-default
+          .panel-heading
+            .panel-title
+              %strong
+                = I18n.t(:"dashboard.panels.budgets")
+          .list-group
+            - current_user.projects.with_budget.each do |project|
+              .list-group-item
+                = project.name_with_customer
+
+                .row
+                  .col-md-10
+                    .progress.progress-striped.text-center
+                      .progress-bar{class: budget_progress(project), role: "progressbar", aria: {valuenow: "40", valuemin: "0", valuemax: "100"}, style: "width: #{project.budget_percent}%"}
+                        = number_to_currency project.timer_values, unit: "", precision: 0
+                      = number_to_currency (project.budget - project.timer_values), unit: "", precision: 0
+                  .col-md-2
+                    = number_to_currency project.budget, unit: "", precision: 0
 
       .col-xs-12.col-md-8
         = render "invoices_panel", title: I18n.t(:"dashboard.panels.charged_invoices"), invoices: @charged_invoices, context: 'warning'

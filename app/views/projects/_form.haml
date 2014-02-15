@@ -16,6 +16,12 @@
       %small
         = form_errors project, :rate
 
+    .col-xs-4.col-md-2.form-group{class: form_error?(project, :budget)}
+      = form.label :budget
+      = form.text_field :budget, class: 'form-control'
+      %small
+        = form_errors project, :budget
+
   %fieldset
     %legend
       Aufgaben:
