@@ -16,4 +16,6 @@ $ ->
   if warning = $('body').attr('data-warning')
     displayWarning warning
 
-  $('select.js-selectize').selectize({plugins: ['remove_button']})
+  $('select.js-selectize').selectize
+    plugins: ['remove_button']
+    dataAttr: 'data-data'

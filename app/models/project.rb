@@ -2,8 +2,8 @@ class Project < ActiveRecord::Base
   validates_presence_of :customer_id, :name, :rate
 
   belongs_to :customer
-  has_many :invoices
-  has_many :tasks
+  has_many :invoices, dependent: :destroy
+  has_many :tasks, dependent: :destroy
   has_many :timers, through: :tasks
 
   accepts_nested_attributes_for :tasks, allow_destroy: true

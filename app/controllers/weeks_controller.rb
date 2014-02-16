@@ -11,6 +11,7 @@ class WeeksController < ApplicationController
 
   def update
     authorize! :update, week
+    week_params[:timers_attributes].reject! {|index, timer| timer[:value].empty? }
     if week.update(week_params)
       redirect_to timers_path(date: week.start_date)
     else
@@ -20,13 +21,20 @@ class WeeksController < ApplicationController
 
   def add_task
     authorize! :add_task, week
-    task = current_user.tasks.where(id: params.fetch(:task_id, nil)).first
-    if task.present? && !week.tasks.include?(task)
-      week.tasks << task
-      week.save
-      flash[:notice] = I18n.t(:"messages.timesheet.add_task.success")
+    respond_to do |format|
+      format.js {
+        task = current_user.tasks.where(id: params.fetch(:task_id, nil)).first
+        if task.present? && !week.tasks.include?(task)
+          week.tasks << task
+          week.save
+          flash[:notice] = I18n.t(:"messages.timesheet.add_task.success")
+        end
+        render json: task
+      }
+      format.html {
+        redirect_to timers_path
+      }
     end
-    render json: week
   end
 
   def remove_task
@@ -57,6 +65,7 @@ class WeeksController < ApplicationController
   private def week
     @week ||= current_user.weeks.where(id: params.fetch(:id, nil)).first
     @week ||= current_user.weeks.where(start_date: params.fetch(:week, {}).fetch(:start_date, nil)).first
+    week_params.fetch(:timers_attributes, {}).reject! {|index, timer| timer[:value].empty? } unless @week.present?
     @week ||= current_user.weeks.new week_params
   end
 end

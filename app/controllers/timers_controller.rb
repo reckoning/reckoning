@@ -2,7 +2,7 @@ class TimersController < ApplicationController
   before_filter :set_active_nav
 
   def index
-    authorize! :index, :timers
+    authorize! :index, Timer
     @date = date
   end
 
@@ -17,6 +17,6 @@ class TimersController < ApplicationController
   helper_method :week
 
   private def date
-    params[:date] ? Date.parse(params[:date]) : Date.today
+    @date ||= (params[:date].present? ? Date.parse(params.fetch(:date, nil)) : Date.today)
   end
 end

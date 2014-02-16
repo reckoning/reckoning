@@ -1,3 +1,7 @@
+# Selectize
+window.selectizeCreateTemplate = (data, escape) ->
+  return "<div class='create'><strong>#{escape(data.input)}</strong>&hellip; #{i18n.t("actions.create")}</div>"
+
 # Noty
 window.displayNoty = (text, timeout, type) ->
   noty
@@ -48,7 +52,7 @@ window.toggleCheckbox = ($element) ->
   activeClass = $element.data('activeclass')
   $checkbox = $(target) unless target is undefined
   $checkbox ||= $element.find('input[type=checkbox]')
-  $element.toggleClass(activeClass)
+  $element.toggleClass(activeClass) unless activeClass is undefined
   $checkbox.prop("checked", !$checkbox.prop("checked"))
 
 window.pad = (d) ->

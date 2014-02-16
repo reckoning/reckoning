@@ -1,6 +1,4 @@
 class InvoicesController < ApplicationController
-  before_action :set_invoice, only: [:show, :pdf, :png,
-    :regenerate_pdf, :charge, :pay, :check_pdf, :edit, :update, :destroy]
   before_action :set_active_nav
   before_action :check_limit, only: [:new, :create]
 
@@ -22,26 +20,26 @@ class InvoicesController < ApplicationController
   end
 
   def show
-    authorize! :read, @invoice
+    authorize! :read, invoice
     if current_user.address.blank?
       redirect_to edit_user_registration_path, alert: I18n.t(:"messages.invoice.missing_address")
     end
   end
 
   def pdf
-    authorize! :read, @invoice
+    authorize! :read, invoice
     respond_to do |format|
       format.pdf {
-        if File.exists?(@invoice.pdf_path)
-          send_file @invoice.pdf_path, type: 'application/pdf', disposition: 'inline'
+        if File.exists?(invoice.pdf_path)
+          send_file invoice.pdf_path, type: 'application/pdf', disposition: 'inline'
         else
-          @invoice.generate_pdf
-          redirect_to invoice_path(@invoice.ref)
+          invoice.generate_pdf
+          redirect_to invoice_path(invoice.ref)
         end
       }
       unless Rails.env.production?
         format.html {
-          @resource = @invoice
+          @resource = invoice
           render 'pdf', layout: 'pdf'
         }
       end
@@ -49,43 +47,48 @@ class InvoicesController < ApplicationController
   end
 
   def png
-    authorize! :read, @invoice
-    if File.exists?(@invoice.png_path)
-      send_file @invoice.png_path, type: 'image/png', disposition: 'inline'
+    authorize! :read, invoice
+    if File.exists?(invoice.png_path)
+      send_file invoice.png_path, type: 'image/png', disposition: 'inline'
     else
       render file: 'public/404.html', status: 404, layout: false
     end
   end
 
   def regenerate_pdf
-    authorize! :read, @invoice
+    authorize! :read, invoice
     respond_to do |format|
       format.js {
-        render json: @invoice.generate_pdf
+        render json: invoice.generate_pdf
       }
       format.html {
-        @invoice.generate_pdf
-        redirect_to invoice_path(@invoice.ref)
+        invoice.generate_pdf
+        redirect_to invoice_path(invoice.ref)
       }
     end
+  end
+
+  def generate_positions
+    authorize! :update, invoice
+    raise params.inspect
   end
 
   def new
     authorize! :create, Invoice
     @invoice = Invoice.new
-    @invoice.positions << Position.new
+    invoice.positions << Position.new
   end
 
   def edit
-    authorize! :update, @invoice
-    @ref = @invoice.ref
-    redirect_to invoices_path, alert: I18n.t(:"messages.invoice.not_editable") unless @invoice.editable?
+    authorize! :update, invoice
+    @ref = invoice.ref
+    redirect_to invoices_path, alert: I18n.t(:"messages.invoice.not_editable") unless invoice.editable?
   end
 
   def create
     @invoice = current_user.invoices.new(invoice_params)
-    authorize! :create, @invoice
-    if @invoice.save
+    authorize! :create, invoice
+    if invoice.save
       redirect_to invoices_path, notice: I18n.t(:"messages.create.success", resource: I18n.t(:"resources.messages.invoice"))
     else
       render "new", error: I18n.t(:"messages.create.failure", resource: I18n.t(:"resources.messages.invoice"))
@@ -93,9 +96,9 @@ class InvoicesController < ApplicationController
   end
 
   def update
-    @ref = @invoice.ref
-    authorize! :update, @invoice
-    if @invoice.update(invoice_params)
+    @ref = invoice.ref
+    authorize! :update, invoice
+    if invoice.update(invoice_params)
       redirect_to invoices_path, notice: I18n.t(:"messages.update.success", resource: I18n.t(:"resources.messages.invoice"))
     else
       render "edit", error: I18n.t(:"messages.update.failure", resource: I18n.t(:"resources.messages.invoice"))
@@ -103,8 +106,8 @@ class InvoicesController < ApplicationController
   end
 
   def charge
-    authorize! :update, @invoice
-    if @invoice.charge
+    authorize! :update, invoice
+    if invoice.charge
       redirect_to :back, notice: I18n.t(:'messages.charge.invoice.success')
     else
       redirect_to :back, error: I18n.t(:'messages.charge.invoice.failure')
@@ -112,8 +115,8 @@ class InvoicesController < ApplicationController
   end
 
   def pay
-    authorize! :update, @invoice
-    if @invoice.pay
+    authorize! :update, invoice
+    if invoice.pay
       redirect_to :back, notice: I18n.t(:'messages.pay.invoice.success')
     else
       redirect_to :back, error: I18n.t(:'messages.pay.invoice.failure')
@@ -121,11 +124,11 @@ class InvoicesController < ApplicationController
   end
 
   def check_pdf
-    authorize! :update, @invoice
+    authorize! :update, invoice
     respond_to do |format|
       format.js {
-        if @invoice.present?
-          render json: @invoice.pdf_generating, status: :ok
+        if invoice.present?
+          render json: invoice.pdf_generating, status: :ok
         else
           render json: {}, status: :ok
         end
@@ -137,9 +140,9 @@ class InvoicesController < ApplicationController
   end
 
   def destroy
-    authorize! :destroy, @invoice
-    if @invoice.destroy
-      File.delete(@invoice.pdf_path) if File.exists?(@invoice.pdf_path)
+    authorize! :destroy, invoice
+    if invoice.destroy
+      File.delete(invoice.pdf_path) if File.exists?(invoice.pdf_path)
       redirect_to invoices_path, notice: I18n.t(:"messages.destroy.success", resource: I18n.t(:"resources.messages.invoice"))
     else
       redirect_to invoices_path, error: I18n.t(:"messages.destroy.failure", resource: I18n.t(:"resources.messages.invoice"))
@@ -187,9 +190,10 @@ class InvoicesController < ApplicationController
     )
   end
 
-  private def set_invoice
-    @invoice = current_user.invoices.where(ref: params.fetch(:ref){ nil }).first
+  private def invoice
+    @invoice ||= current_user.invoices.where(ref: params.fetch(:ref){ nil }).first
   end
+  helper_method :invoice
 
   private def check_limit
     if invoice_limit_reached?

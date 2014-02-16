@@ -11,22 +11,23 @@ window.App.Timesheet.enableSubmit = ->
 
 window.App.Timesheet.addTask = ($element, week_date) ->
   task_id = $('#select-task').val()
-  if task_id.length
-    xhr.abort() if xhr
-    xhr = $.ajax
-      url: r(add_task_weeks_path)
-      data: {week: {start_date: week_date}, task_id: task_id}
-      method: 'POST'
-      success: (result) ->
-        $element.closest('.modal').modal('hide')
-        window.location.reload()
-      error: ->
-        displayError i18n.t("messages.timesheet.add_task.failure")
-  else
-    setTimeout ->
-      displayWarning i18n.t("messages.timesheet.add_task.warning")
-      $element.button('reset')
-    , 250
+  unless task_id.length
+    displayWarning i18n.t("messages.timesheet.add_task.warning")
+    return
+
+  $element.button('loading')
+
+  xhr.abort() if xhr
+  xhr = $.ajax
+    url: r(add_task_weeks_path)
+    data: {week: {start_date: week_date}, task_id: task_id}
+    method: 'POST'
+    dataType: 'json'
+    success: (result) ->
+      $element.closest('.modal').modal('hide')
+      window.location.reload()
+    error: ->
+      displayError i18n.t("messages.timesheet.add_task.failure")
 
 $(document).on 'change', '.timesheet-day input[type=text]', App.Timesheet.enableSubmit
 
@@ -71,7 +72,8 @@ $ ->
         select_task.load (callback) ->
           xhr.abort() if xhr
           xhr = $.ajax
-            url: r(project_tasks_path, value),
+            url: r(project_tasks_path, value)
+            dataType: 'json'
             success: (results) ->
               select_task.enable()
               callback(results)
@@ -82,6 +84,8 @@ $ ->
       valueField: 'id'
       labelField: 'name'
       searchField: ['name']
+      render:
+        option_create: selectizeCreateTemplate
       create: (input, callback) ->
         project_id = $('#select-project').val()
         xhr.abort() if xhr
@@ -89,6 +93,7 @@ $ ->
           url: r(project_tasks_path, project_id)
           data: {task: {name: input}}
           method: 'POST'
+          dataType: 'json'
           success: (result) =>
             data = {id: result.id, name: result.name}
             callback(data)

@@ -3,7 +3,7 @@
 - plan = params[:plan] || 'free'
 .row
   .col-xs-12.col-md-5.col-md-offset-2
-    %h2=I18n.t(:"headlines.sign_up")
+    %h1=I18n.t(:"headlines.sign_up")
 
     = form_for @user, url: user_registration_path do |form|
       = form.hidden_field :plan, value: plan

@@ -2,15 +2,46 @@ class TasksController < ApplicationController
 
   def index
     authorize! :index, :tasks
-    render json: project.tasks
+    respond_to do |format|
+      format.js {
+        render json: project.tasks
+      }
+      format.html {
+        redirect_to root_path
+      }
+    end
+  end
+
+  def index_for_date
+    authorize! :index, :tasks
+    respond_to do |format|
+      format.js {
+        project = current_user.projects.where(id: project_id).first
+        tasks = project.tasks.includes(:timers)
+          .where("timers.date BETWEEN ? AND ?", date.beginning_of_month, date.end_of_month)
+          .to_a
+        render json: {body: render_to_string(partial: "list", locals: {tasks: tasks})}
+      }
+      format.html {
+        redirect_to root_path
+      }
+    end
   end
 
   def create
     authorize! :create, task
-    if task.save
-      render json: task
-    else
-      render json: task.errors
+    respond_to do |format|
+      format.js {
+
+        if task.save
+          render json: task
+        else
+          render json: task.errors
+        end
+      }
+      format.html {
+        redirect_to root_path
+      }
     end
   end
 
@@ -24,5 +55,13 @@ class TasksController < ApplicationController
 
   private def project
     @project ||= current_user.projects.where(id: params.fetch(:project_id, nil)).first
+  end
+
+  private def date
+    @date ||= (params[:date].present? ? Date.parse(params.fetch(:date, nil)) : Date.today)
+  end
+
+  private def project_id
+    @project_id ||= params.fetch(:project_id, nil)
   end
 end

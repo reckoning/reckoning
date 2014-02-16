@@ -29,6 +29,7 @@ Reckoning::Application.routes.draw do
 
   resources :invoices, param: :ref do
     member do
+      put :generate_positions
       put :regenerate_pdf
       put :charge
       put :pay
@@ -43,7 +44,9 @@ Reckoning::Application.routes.draw do
 
   resources :customers, except: [:show]
   resources :projects, except: [:show] do
-    resources :tasks, only: [:index, :create]
+    resources :tasks, only: [:index, :create] do
+      get ':date/date' => 'tasks#index_for_date', as: :date, on: :collection
+    end
   end
 
   resources :timers, only: [:index] do

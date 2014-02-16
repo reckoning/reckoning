@@ -1,5 +1,5 @@
 class Timer < ActiveRecord::Base
-  belongs_to :task
+  belongs_to :task, touch: true
   belongs_to :week
 
   before_save :convert_value

@@ -5,6 +5,7 @@ window.App.Invoice.previewPageHeight = 1060
 window.App.Invoice.previewPageMax = 1
 window.App.Invoice.currentPreviewPage = 1
 window.App.Invoice.projectRate = 0
+window.App.Invoice.oldProjectRate = 0
 
 window.laddaButton ?= {}
 
@@ -16,7 +17,7 @@ window.App.Invoice.generate = ($element) ->
   $.ajax
     url: $element.attr('data-action')
     type: 'PUT'
-    dataType: "JSON"
+    dataType: 'json'
     success: ->
       displayAlert "PDF wird generiert"
       App.Invoice.pdfInterval = setInterval App.Invoice.checkPdfStatus, 1000
@@ -25,7 +26,7 @@ window.App.Invoice.checkPdfStatus = ->
   id = $('#invoice').attr('data-id')
   $.ajax
     url: r(check_pdf_invoice_path, id)
-    dataType: "JSON"
+    dataType: 'json'
     success: (data) ->
       return if data
       laddaButton.stop() if laddaButton
@@ -94,30 +95,65 @@ window.App.Invoice.updatePagination = ->
   else
     $prevEl.parent().removeClass('disabled')
 
-window.App.Invoice.updateValues = (ev, $fields, oldRate) ->
+window.App.Invoice.updateValues = (ev, $fields) ->
   $fields.each (i, field) ->
-    App.Invoice.updateValue(ev, $(field), oldRate)
+    App.Invoice.updateValue(ev, $(field))
 
-window.App.Invoice.updateValue = (ev, $field, oldRate) ->
+window.App.Invoice.updateValue = (ev, $field) ->
   $field ||= $(ev.target).closest('.fields')
   $valueInput = $field.find('.invoice-position-value')
   $rateInput = $field.find('.invoice-position-rate')
   hours = $field.find('.invoice-position-hours').val()
   rate = $rateInput.val()
   if hours.length
-    if !rate.length || rate is oldRate
+    if !rate.length || rate is App.Invoice.oldProjectRate
       rate = App.Invoice.projectRate
       $rateInput.val(rate)
     if rate.length
       value = hours * rate
       $valueInput.val(value)
 
-
 window.App.Invoice.updateRate = (ev) ->
-  $select = $(ev.target)
-  App.Invoice.projectRate = $select.find('option:selected').data('rate')
-  App.Invoice.updateValues ev, $('form#invoice-form').find('.fields'), $select.data('pre')
-  $select.data('pre', App.Invoice.projectRate)
+  $target = $(ev.target)
+  project_id = $target.val()
+  if project_id.length
+    project_select = $target[0].selectize
+    App.Invoice.projectRate = project_select.options[project_id].rate
+    App.Invoice.updateValues ev, $('form#invoice-form').find('.fields')
+    App.Invoice.oldProjectRate = App.Invoice.projectRate
+
+window.App.Invoice.loadPositions = ($element) ->
+  date = $('#invoice_date').val()
+  project_id = $('#invoice_project_id').val()
+  unless date.length && project_id.length
+    displayWarning "Bitte gib ein Datum ein"
+    return
+
+  xhr.abort() if xhr
+  xhr = $.ajax
+    url: r(date_project_tasks_path, project_id, date)
+    dataType: 'json'
+    context: $('#add-positions-modal')
+    success: (result) ->
+      $(@).find('#add-positions').html(result.body)
+      $(@).modal('show')
+    error: ->
+      displayError i18n.t("messages.invoice.load_positions.failure")
+
+window.App.Invoice.addPositions = ($form) ->
+  fields = $form.serializeArray()
+  $positions = $('#positions')
+  $.each fields, (i, field) ->
+  fields = $form.serializeArray()
+  $positions = $('#positions')
+  $.each fields, (i, field) ->
+    data = JSON.parse(field.value)
+    $('.add_fields').click()
+    $fields = $positions.find('.fields:last')
+    $fields.find('input[name*=description]').val(data.name)
+    $fields.find('input[name*=hours]').val(Math.round(data.value))
+    App.Invoice.updateValue({}, $fields, 0)
+  $('#add-positions-modal').modal('hide')
 
 $(document).on 'change', ".invoice-position-hours", App.Invoice.updateValue
 $(document).on 'change', ".invoice-position-rate", App.Invoice.updateValue
@@ -142,7 +178,10 @@ $ ->
       App.Invoice.updatePagination()
 
   if $('#invoice-form').length
-    App.Invoice.projectRate = $('#invoice_project_id').find('option:selected').data('rate')
+    project_select = $('#invoice_project_id')[0].selectize
+    project_id = $('#invoice_project_id').val()
+    if project_id.length
+      App.Invoice.projectRate = project_select.options[project_id].rate
 
     $('#invoice_project_id').data('pre', App.Invoice.projectRate)
 
