@@ -1,13 +1,13 @@
 .panel.panel-default
   .panel-heading
     %h3.panel-title
-      = I18n.t(:"panels.title.latest_users")
+      = I18n.t(:"labels.panels.title.latest_users")
   .panel-body
     %table.table.table-bordered.table-striped.table-condensed
       %thead
         %tr
-          %th= I18n.t(:"table.labels.user.email")
-          %th= I18n.t(:"table.labels.user.created_at")
+          %th= I18n.t(:"labels.user.email")
+          %th= I18n.t(:"labels.user.created_at")
           %th.actions.one
       %tbody
         - User.order('created_at DESC').each do |user|
