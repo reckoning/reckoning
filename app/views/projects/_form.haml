@@ -1,7 +1,7 @@
 = form_for project do |form|
   .row
-    .col-xs-12.col-md-6.form-group.select2{class: form_error?(project, :customer_id)}
-      = form.collection_select :customer_id, customers, :id, :fullname, {include_blank: ""}, {"data-placeholder" => I18n.t(:"helpers.prompt.project.customer_id"), "data-empty" => I18n.t(:"select2.empty")}
+    .col-xs-12.col-md-6.form-group{class: form_error?(project, :customer_id)}
+      = form.collection_select :customer_id, customers, :id, :fullname, {include_blank: ""}, {placeholder: I18n.t(:"helpers.prompt.project.customer_id"), class: "js-selectize"}
       %small
         = form_errors project, :customer_id
     .col-xs-12.col-md-6.form-group{class: form_error?(project, :name)}
@@ -15,5 +15,23 @@
       = form.text_field :rate, class: 'form-control'
       %small
         = form_errors project, :rate
+
+    .col-xs-4.col-md-2.form-group{class: form_error?(project, :budget)}
+      = form.label :budget
+      = form.text_field :budget, class: 'form-control'
+      %small
+        = form_errors project, :budget
+
+  %fieldset
+    %legend
+      Aufgaben:
+
+    .row#tasks
+      = form.fields_for :tasks, project.tasks do |builder|
+        = render 'task_fields', fields: builder
+
+      = link_to_add_fields form, :tasks, name: I18n.t(:"actions.add"), class: "btn btn-default pull-right" do
+        %i.glyphicon.glyphicon-plus
+        = I18n.t(:"actions.add_task")
 
   = render "layouts/forms/submit", path: projects_path

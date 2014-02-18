@@ -17,7 +17,7 @@
       - unless invoice.state?(:charged) || invoice.state?(:paid)
         %a.btn.btn-default.btn-sm{href: edit_invoice_path(invoice.ref), title: I18n.t(:"actions.edit")}
           %i.glyphicon.glyphicon-edit
-        = link_to charge_invoice_path(invoice.ref), title: I18n.t(:"actions.charge"), method: :put, class: "btn btn-primary btn-sm" do
+        = confirm_link_to charge_invoice_path(invoice.ref), data: {notyConfirm: I18n.t(:"messages.confirm.charge")}, title: I18n.t(:"actions.charge"), method: :put, class: "btn btn-primary btn-sm" do
           %i.glyphicon.glyphicon-envelope
       - if invoice.state?(:charged) && !invoice.state?(:paid)
         = link_to pay_invoice_path(invoice.ref), title: I18n.t(:"actions.pay"), method: :put, class: "btn btn-success btn-sm" do

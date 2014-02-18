@@ -19,4 +19,6 @@
             = link_to I18n.t(:"nav.header.customers"), customers_path
           %li{class: get_active_nav('projects')}
             = link_to I18n.t(:"nav.header.projects"), projects_path
+          %li{class: get_active_nav('timers')}
+            = link_to I18n.t(:"nav.header.timers"), timers_path
       = render "layouts/user_nav"

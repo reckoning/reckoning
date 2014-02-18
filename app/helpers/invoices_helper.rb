@@ -7,5 +7,4 @@ module InvoicesHelper
     end
     sum
   end
-
 end

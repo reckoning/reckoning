@@ -1,8 +1,0 @@
-de:
-  panels:
-    title:
-      default: "Aktionen"
-      latest_users: "Neue Benutzer"
-      settings:
-        base: "Allgemeine Eisntellungen"
-        mailer: "E-Mail Einstellungen"

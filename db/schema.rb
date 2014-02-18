@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140113225155) do
+ActiveRecord::Schema.define(version: 20140217081255) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(version: 20140113225155) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.decimal  "rate",        precision: 10, scale: 2, default: 0.0, null: false
+    t.decimal  "budget",      precision: 10, scale: 2, default: 0.0, null: false
   end
 
   add_index "projects", ["customer_id"], name: "index_projects_on_customer_id", using: :btree
@@ -96,6 +97,37 @@ ActiveRecord::Schema.define(version: 20140113225155) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "tasks", force: true do |t|
+    t.integer  "project_id"
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "tasks", ["project_id"], name: "index_tasks_on_project_id", using: :btree
+
+  create_table "tasks_weeks", id: false, force: true do |t|
+    t.integer "task_id"
+    t.integer "week_id"
+  end
+
+  add_index "tasks_weeks", ["task_id", "week_id"], name: "index_tasks_weeks_on_task_id_and_week_id", using: :btree
+  add_index "tasks_weeks", ["week_id"], name: "index_tasks_weeks_on_week_id", using: :btree
+
+  create_table "timers", force: true do |t|
+    t.date     "date"
+    t.string   "value"
+    t.integer  "task_id"
+    t.integer  "week_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "position_id"
+  end
+
+  add_index "timers", ["position_id"], name: "index_timers_on_position_id", using: :btree
+  add_index "timers", ["task_id"], name: "index_timers_on_task_id", using: :btree
+  add_index "timers", ["week_id"], name: "index_timers_on_week_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "",    null: false
@@ -135,5 +167,14 @@ ActiveRecord::Schema.define(version: 20140113225155) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["settings"], name: "users_gin_settings", using: :gin
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
+
+  create_table "weeks", force: true do |t|
+    t.date     "start_date"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "weeks", ["user_id"], name: "index_weeks_on_user_id", using: :btree
 
 end

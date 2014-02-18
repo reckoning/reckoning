@@ -1,24 +1,23 @@
-= form_for @invoice, url: (@invoice.new_record? ? invoices_path : invoice_path(@ref)), html: {id: 'invoice-form' } do |form|
+= form_for invoice, url: (invoice.new_record? ? invoices_path : invoice_path(@ref)), html: {id: 'invoice-form' } do |form|
   .row
-    .col-xs-12.col-md-6.form-group{class: form_error?(@invoice, :project_id)}
-      .select2
-        %select{name: "invoice[project_id]", id: "invoice_project_id", data: {placeholder: I18n.t(:"helpers.prompt.invoice.project_id"), empty: I18n.t(:"select2.empty")}}
-          %option
-          - projects.each do |project|
-            %option{value: project.id, selected: (true if project.id == @invoice.project_id), data: {rate: project.rate}}
-              = project.name_with_customer
-      = form_errors @invoice, :project_id
-    .col-xs-12.col-md-6.form-group{class: form_error?(@invoice, :date)}
+    .col-xs-12.col-md-6.form-group{class: form_error?(invoice, :project_id)}
+      %select.js-selectize{name: "invoice[project_id]", id: "invoice_project_id", placeholder: I18n.t(:"helpers.prompt.invoice.project_id")}
+        %option
+        - projects.each do |project|
+          %option{value: project.id, selected: (true if project.id == @invoice.project_id), data: {data: project.to_json}}
+            = project.name_with_customer
+      = form_errors invoice, :project_id
+    .col-xs-12.col-md-6.form-group{class: form_error?(invoice, :date)}
       .input-group
         = form.label :date, class: "input-group-addon"
         = form.date_field :date, class: 'form-control'
-      = form_errors @invoice, :date
+      = form_errors invoice, :date
   .row
-    .col-xs-12.col-md-4.form-group{class: form_error?(@invoice, :ref)}
+    .col-xs-12.col-md-4.form-group{class: form_error?(invoice, :ref)}
       .input-group
         = form.label :ref, class: "input-group-addon"
-        = form.text_field :ref, value: (@invoice.ref_number unless @invoice.ref.blank?), class: 'form-control'
-      = form_errors @invoice, :ref
+        = form.text_field :ref, value: (invoice.ref_number unless invoice.ref.blank?), class: 'form-control'
+      = form_errors invoice, :ref
     .col-xs-12.col-md-4.form-group
       .input-group
         = form.label :payment_due_date, class: "input-group-addon"
@@ -33,11 +32,33 @@
       Positionen:
 
     #positions
-      = form.fields_for :positions, @invoice.positions do |builder|
+      = form.fields_for :positions, invoice.positions do |builder|
         = render 'position_fields', fields: builder
 
-      = link_to_add_fields form, :positions, name: I18n.t(:"actions.add"), class: "btn btn-default pull-right" do
+    .btn-group.pull-right
+      = link_to_add_fields form, :positions, name: I18n.t(:"actions.add"), class: "btn btn-default", target: "#positions" do
         %i.glyphicon.glyphicon-plus
         = I18n.t(:"actions.add_position")
 
+      %button.ladda-button.btn.btn-default{type: "button", onclick: "App.Invoice.loadPositions($(this)); return false;", data: {style: "expand-right"}}
+        %i.glyphicon.glyphicon-plus
+        = I18n.t(:"actions.generate_position")
+
   = render "layouts/forms/submit", path: root_path
+
+
+.modal.fade#add-positions-modal{tabindex: "-1", role: "dialog", aria: {hidden: "true"}}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{type: "button", data: {dismiss: "modal"}, aria: {hidden: "true"}}
+          &times;
+        %h4.modal-title
+          = I18n.t(:"labels.modals.title.positions")
+      .modal-body
+        %form#add-positions{onsubmit: "App.Invoice.addPositions($(this)); return false;"}
+      .modal-footer
+        %button.btn.btn-default{type: "button", data: {dismiss: "modal"}}
+          = I18n.t(:"actions.close")
+        %button.btn.btn-primary{form: "add-positions", data: {loading: {text: I18n.t(:"actions.loading")}}}
+          = I18n.t(:"actions.add")

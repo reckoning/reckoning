@@ -2,7 +2,7 @@
   = I18n.t(:"meta.title.password.edit")
 .row
   .col-xs-12.col-md-5.col-md-offset-2
-    %h2
+    %h1
       = I18n.t(:"headlines.change_password")
 
     = form_for(resource, as: resource_name, url: user_password_path, html: { method: :put }) do |form|

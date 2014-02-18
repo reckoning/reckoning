@@ -1,0 +1,17 @@
+.panel.panel-default#budgets-panel
+  .panel-heading
+    .panel-title
+      %strong
+        = I18n.t(:"dashboard.panels.budgets")
+  .list-group
+    - budgets.each do |project|
+      .list-group-item
+        .row
+          .col-md-6
+            = number_to_currency project.timer_values, unit: "h", precision: 0
+          .col-md-6.text-right
+            = number_to_currency (project.budget - project.timer_values), unit: "h", precision: 0
+        .progress.progress-striped.text-center
+          .progress-bar{class: budget_progress(project), role: "progressbar", aria: {valuenow: "40", valuemin: "0", valuemax: "100"}, style: "width: #{project.budget_percent}%"}
+        .project-name.text-right
+          = project.name_with_customer

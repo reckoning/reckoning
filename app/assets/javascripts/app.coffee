@@ -16,6 +16,8 @@ $ ->
   if warning = $('body').attr('data-warning')
     displayWarning warning
 
-  $('.select2 select').select2
-    formatNoMatches: (term) ->
-      @element.attr('data-empty')
+  $('select.js-selectize').selectize
+    plugins: ['remove_button']
+    dataAttr: 'data-data'
+
+  $('[data-toggle=tooltip]').tooltip()

@@ -1,6 +1,8 @@
 require 'resque/server'
 
 Reckoning::Application.routes.draw do
+  mount RailsAssetLocalization::Engine => "/locales"
+
   devise_for :users, skip: [:sessions], controllers: { registrations: "registrations" }
 
   namespace :backend do
@@ -25,10 +27,9 @@ Reckoning::Application.routes.draw do
   resource :bank_account, only: [:edit, :update]
   resource :password, only: [:edit, :update]
 
-  get 'harvest/times' => 'harvest#times'
-
   resources :invoices, param: :ref do
     member do
+      put :generate_positions
       put :regenerate_pdf
       put :charge
       put :pay
@@ -42,11 +43,26 @@ Reckoning::Application.routes.draw do
   resources :positions, only: [:new, :destroy]
 
   resources :customers, except: [:show]
-  resources :projects, except: [:show]
+  resources :projects, except: [:show] do
+    resources :tasks, only: [:index, :create] do
+      get ':date/date' => 'tasks#index_for_date', as: :date, on: :collection
+    end
+  end
 
-  get 'upgrade' => 'base#upgrade', as: :upgrade
+  resources :timers, only: [:index] do
+    collection do
+      get :day
+    end
+  end
 
-  get 'impressum' => 'base#impressum'
+  resources :weeks, only: [:create, :update] do
+    collection do
+      post :add_task
+    end
+    member do
+      put 'remove_task/:task_id' => 'weeks#remove_task', as: :remove_task
+    end
+  end
 
   root to: 'base#index'
 end

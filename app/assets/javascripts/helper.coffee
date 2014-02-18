@@ -1,3 +1,7 @@
+# Selectize
+window.selectizeCreateTemplate = (data, escape) ->
+  return "<div class='create'><strong>#{escape(data.input)}</strong>&hellip; #{i18n.t("actions.create")}</div>"
+
 # Noty
 window.displayNoty = (text, timeout, type) ->
   noty
@@ -9,7 +13,7 @@ window.displayNoty = (text, timeout, type) ->
 window.displayConfirm = (ev, $element) ->
   okButton =
     addClass: 'btn btn-primary'
-    text: I18n.t('actions.ok')
+    text: i18n.t('actions.ok')
     onClick: ($noty) ->
       $noty.close()
       if $element.find('form').length
@@ -20,7 +24,7 @@ window.displayConfirm = (ev, $element) ->
 
   cancelButton =
     addClass: 'btn btn-danger'
-    text: I18n.t('actions.cancel')
+    text: i18n.t('actions.cancel')
     onClick: ($noty) ->
       $noty.close()
       return false
@@ -42,6 +46,29 @@ window.displayError = (text, timeout = false) ->
 
 window.displayWarning = (text, timeout = 3000) ->
   displayNoty text, timeout, 'warning'
+
+window.toggleCheckbox = ($element) ->
+  target = $element.data('target')
+  activeClass = $element.data('activeclass')
+  $checkbox = $(target) unless target is undefined
+  $checkbox ||= $element.find('input[type=checkbox]')
+  $element.toggleClass(activeClass) unless activeClass is undefined
+  $checkbox.prop("checked", !$checkbox.prop("checked"))
+
+window.pad = (d) ->
+  return if (d < 10) then '0' + d.toString() else d.toString()
+
+window.timeToDecimal = (val) ->
+  parts = val.split(':')
+  time = parseInt(parts[0], 10) + (parseInt(parts[1], 10) / 60)
+  parseFloat(time)
+
+window.decimalToTime = (val) ->
+  hours = Math.floor(val)
+  minutes = Math.round((val % 1) * 60)
+
+  if hours isnt 0 || minutes isnt 0
+    return "#{hours}:#{pad(minutes)}"
 
 $ ->
   $("[data-notyConfirm]").click (ev) ->

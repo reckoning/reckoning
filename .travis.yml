@@ -1,0 +1,7 @@
+language: ruby
+rvm:
+  - 2.1.0
+before_script: bundle exec thor setup:dev_env
+branches:
+  only:
+    - master

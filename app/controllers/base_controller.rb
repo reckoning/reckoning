@@ -14,6 +14,7 @@ class BaseController < ApplicationController
     @charged_invoices = current_user.invoices.order('date DESC').charged
     @paid_invoices = current_user.invoices.order('date DESC').paid.year(Time.now.year)
     @last_invoices = current_user.invoices.order('date DESC').paid.year(Time.now.year - 1)
+    @budgets = current_user.projects.with_budget.includes(:tasks).order('tasks.updated_at DESC')
 
     render 'dashboard'
   end

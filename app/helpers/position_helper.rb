@@ -1,4 +1,5 @@
 module PositionHelper
+
   def positions_for_select
   	positions = Position.all
   	if positions.present?

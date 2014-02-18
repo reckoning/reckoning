@@ -1,0 +1,53 @@
+de:
+  labels:
+    defaults:
+      actions: "Aktionen"
+      value: "Betrag"
+      date: "Monat/Jahr"
+      name: "Name"
+      customer: "Kunde"
+      company: "Firma"
+      ref: "R.-Nr."
+      state: "Status"
+      hours: "Stunden"
+      rate: "€/Std."
+      value: "Betrag"
+      description: "Beschreibung"
+      contact: "Kontaktinformationen"
+      address: "Adresse"
+      id: "ID"
+      role: "Benutzergruppe"
+      email: "E-Mail"
+      enabled: "Status"
+    timesheet:
+      current_week: "Diese Woche"
+      on_invoice: "Zeiten wurden bereits abgerechnet."
+    invoice:
+      customer: "Kunde/Projekt"
+    user:
+      current_sign_in_at: "Letzte Aktivität vor"
+      admin: "Admin?"
+      email: "E-Mail"
+      created_at: "Erstellt"
+    setting:
+      key: "Bezeichnung"
+      value: "Wert"
+
+    table:
+      blank:
+        customer: "Keine Kunden vorhanden"
+        invoice: "Keine Rechnungen vorhanden"
+        project: "Keine Projekte vorhanden"
+
+    modals:
+      title:
+        timesheet: "Timer hinzufügen"
+        positions: "Position aus Zeiten erstellen"
+
+    panels:
+      title:
+        default: "Aktionen"
+        latest_users: "Neue Benutzer"
+        settings:
+          base: "Allgemeine Eisntellungen"
+          mailer: "E-Mail Einstellungen"

@@ -1,9 +1,9 @@
-%footer#footer
+.version
+  = I18n.t(:"version", version: Reckoning::CODENAME, version_number: Reckoning::VERSION)
+%footer#main-footer
   .container
-    .pull-left
-      &copy; 2014
-      = link_to "Marten Klitzke - mortik.", "mailto:info@mortik.de", target: "_blank", data: { no_turbolink: 'true'}
-    .pull-right
-      .version
-        = I18n.t(:"version", version: Reckoning::CODENAME, version_number: Reckoning::VERSION)
-
+    .row
+      .col-xs-12.col-md-8.col-md-offset-2.text-center#disclaimer
+        %p.copyright
+          Copyright &copy; 2014
+          = link_to "Marten Klitzke - mortik.", "mailto:info@mortik.de", target: "_blank", data: { no_turbolink: 'true'}

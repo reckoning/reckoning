@@ -26,6 +26,8 @@ de:
     placeholder:
       project:
         name: "Name"
+      task:
+        name: "Name"
       position:
         description: "Beschreibung"
         rate: "0"
@@ -72,3 +74,6 @@ de:
         project_id: "Bitte wähle ein Projekt"
       address:
         country: "Bitte wähle ein Land"
+      timer:
+        project: "Bitte wähle ein Projekt"
+        task: "Bitte wähle eine Aufgabe"

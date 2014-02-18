@@ -2,10 +2,10 @@
   %table.table.table-condensed.table-hover.table-bordered.table-striped
     %thead
       %tr
-        %th=sortable "name", I18n.t(:"table.labels.defaults.name")
-        %th=sortable "rate", I18n.t(:"table.labels.defaults.rate")
-        %th=sortable "customers.company", I18n.t(:"table.labels.defaults.customer")
-        %th.actions.two=I18n.t(:"table.labels.defaults.actions")
+        %th=sortable "name", I18n.t(:"labels.defaults.name")
+        %th=sortable "rate", I18n.t(:"labels.defaults.rate")
+        %th=sortable "customers.company", I18n.t(:"labels.defaults.customer")
+        %th.actions.two=I18n.t(:"labels.defaults.actions")
 
     %tbody
       = render partial: "projects/show", collection: @projects, as: :project

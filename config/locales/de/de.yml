@@ -15,6 +15,7 @@ de:
       home: "Rechnungen"
       customers: "Kunden"
       projects: "Projekte"
+      timers: "Zeiten"
       settings: "Einstellungen"
       bank_account: "Bankdaten"
       upgrade: "Upgrade auf Pro"
@@ -51,6 +52,8 @@ de:
 
   meta:
     title:
+      timer:
+        index: "Zeiten"
       customer:
         index: "Kunden"
         new: "Neuer Kunde"

@@ -8,8 +8,12 @@ class User < ActiveRecord::Base
 
   has_one :address, as: :resource, dependent: :destroy
   has_many :invoices, dependent: :destroy
+  has_many :positions, through: :invoices
+  has_many :weeks, dependent: :destroy
   has_many :customers, dependent: :destroy
-  has_many :projects, through: :customers, dependent: :destroy
+  has_many :projects, through: :customers
+  has_many :tasks, through: :projects
+  has_many :timers, through: :tasks
 
   accepts_nested_attributes_for :address
 
@@ -26,5 +30,4 @@ class User < ActiveRecord::Base
     end
     self.gravatar_hash = hash
   end
-
 end

@@ -1,6 +1,6 @@
 .row#dashboard
   .col-xs-12.col-md-12
-    %h2
+    %h1
       Dashboard
 
     .row
@@ -23,6 +23,8 @@
               = I18n.t(:"dashboard.panels.last_invoices")
               %strong.pull-right
                 = number_to_currency(invoices_sum(@last_invoices))
+
+        = render "budgets_panel", budgets: @budgets
 
       .col-xs-12.col-md-8
         = render "invoices_panel", title: I18n.t(:"dashboard.panels.charged_invoices"), invoices: @charged_invoices, context: 'warning'

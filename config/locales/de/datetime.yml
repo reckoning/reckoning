@@ -5,10 +5,12 @@ de:
       short: "%e. %b"
       long: "%e. %B %Y"
       only_day: "%e"
+      day_number: "%d"
       datepicker: "dd.mm.yy"
       month: "%B %Y"
       pdf: "%B-%Y"
       year: "%Y"
+      day: "%a"
 
     first_day_of_week: 1
 
