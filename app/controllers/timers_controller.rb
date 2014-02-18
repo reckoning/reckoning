@@ -6,6 +6,10 @@ class TimersController < ApplicationController
     @date = date
   end
 
+  def import
+    authorize! :import, Timer
+  end
+
   private def set_active_nav
     @active_nav = 'timers'
   end

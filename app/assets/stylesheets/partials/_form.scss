@@ -4,6 +4,12 @@ $input-error-bg-color: rgba(198, 15, 19, 0.1);
 form {
   .selectize-control {
     height: 34px;
+
+    .selectize-input.has-items {
+      input {
+        max-width: 100px !important;
+      }
+    }
   }
 
   .has-error {
