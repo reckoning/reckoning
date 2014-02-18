@@ -21,6 +21,7 @@ de:
       enabled: "Status"
     timesheet:
       current_week: "Diese Woche"
+      on_invoice: "Zeiten wurden bereits abgerechnet."
     invoice:
       customer: "Kunde/Projekt"
     user:
@@ -41,6 +42,7 @@ de:
     modals:
       title:
         timesheet: "Timer hinzufügen"
+        positions: "Position aus Zeiten erstellen"
 
     panels:
       title:

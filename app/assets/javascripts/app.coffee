@@ -19,3 +19,5 @@ $ ->
   $('select.js-selectize').selectize
     plugins: ['remove_button']
     dataAttr: 'data-data'
+
+  $('[data-toggle=tooltip]').tooltip()

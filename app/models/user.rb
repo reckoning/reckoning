@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
 
   has_one :address, as: :resource, dependent: :destroy
   has_many :invoices, dependent: :destroy
+  has_many :positions, through: :invoices
   has_many :weeks, dependent: :destroy
   has_many :customers, dependent: :destroy
   has_many :projects, through: :customers

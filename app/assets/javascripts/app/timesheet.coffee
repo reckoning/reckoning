@@ -43,7 +43,7 @@ $ ->
     col_sum = 0.0
     $("table.timesheet tbody tr").each ->
       value = $(@).find("td:eq(#{col}) input[type=text]").val()
-      col_sum += timeToDecimal(value) if value.length
+      col_sum += timeToDecimal(value) if value isnt undefined && value.length
       if $(@)[0] isnt $input.closest('tr')[0]
         value = $(@).find('td.timesheet-row-sum').text()
         sum += timeToDecimal(value) if value && parseInt(value, 10) isnt 0
@@ -54,7 +54,7 @@ $ ->
     row_sum = 0.0
     $input.closest('tr').find('td.timesheet-day').each ->
       value = $(@).find("input[type=text]").val()
-      row_sum += timeToDecimal(value) if value.length
+      row_sum += timeToDecimal(value) if value isnt undefined && value.length
 
     row_sum = decimalToTime(row_sum) || 0
     $input.closest('tr').find("td.timesheet-row-sum").text(row_sum)

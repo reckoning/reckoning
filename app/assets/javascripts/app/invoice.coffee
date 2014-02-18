@@ -152,6 +152,7 @@ window.App.Invoice.addPositions = ($form) ->
     $fields = $positions.find('.fields:last')
     $fields.find('input[name*=description]').val(data.name)
     $fields.find('input[name*=hours]').val(Math.round(data.value))
+    $fields.find('select[name*=timer_ids]').val(data.timer_ids)
     App.Invoice.updateValue({}, $fields, 0)
   $('#add-positions-modal').modal('hide')
 

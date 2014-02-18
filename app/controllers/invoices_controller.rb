@@ -13,7 +13,7 @@ class InvoicesController < ApplicationController
     if year.present? && year =~ /\d{4}/
       @invoices = @invoices.year(year)
     end
-    @invoices = @invoices.includes(customer: [:address])
+    @invoices = @invoices.includes(customer: [:address]).references(:customers)
       .order(sort_column + " " + sort_direction)
       .page(params.fetch(:page){nil})
       .per(20)
@@ -185,6 +185,9 @@ class InvoicesController < ApplicationController
         :rate,
         :value,
         :invoice_id,
+        {
+          timer_ids: []
+        },
         :_destroy
       ]
     )

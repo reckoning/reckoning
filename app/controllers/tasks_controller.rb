@@ -18,7 +18,8 @@ class TasksController < ApplicationController
       format.js {
         project = current_user.projects.where(id: project_id).first
         tasks = project.tasks.includes(:timers)
-          .where("timers.date BETWEEN ? AND ?", date.beginning_of_month, date.end_of_month)
+          .where("timers.date BETWEEN ? AND ?", date.beginning_of_month, date.end_of_month).references(:timers)
+          .where("timers.position_id is ?", nil).references(:timers)
           .to_a
         render json: {body: render_to_string(partial: "list", locals: {tasks: tasks})}
       }
