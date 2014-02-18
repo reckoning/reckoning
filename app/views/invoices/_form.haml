@@ -40,7 +40,7 @@
         %i.glyphicon.glyphicon-plus
         = I18n.t(:"actions.add_position")
 
-      %button.btn.btn-default{type: "button", onclick: "App.Invoice.loadPositions($(this)); return false;"}
+      %button.ladda-button.btn.btn-default{type: "button", onclick: "App.Invoice.loadPositions($(this)); return false;", data: {style: "expand-right"}}
         %i.glyphicon.glyphicon-plus
         = I18n.t(:"actions.generate_position")
 

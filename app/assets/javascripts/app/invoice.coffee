@@ -123,10 +123,11 @@ window.App.Invoice.updateRate = (ev) ->
     App.Invoice.oldProjectRate = App.Invoice.projectRate
 
 window.App.Invoice.loadPositions = ($element) ->
+  laddaButton.start() if laddaButton
   date = $('#invoice_date').val()
   project_id = $('#invoice_project_id').val()
   unless date.length && project_id.length
-    displayWarning "Bitte gib ein Datum ein"
+    displayWarning i18n.t("messages.invoice.load_positions.missing")
     return
 
   xhr.abort() if xhr
@@ -138,7 +139,9 @@ window.App.Invoice.loadPositions = ($element) ->
       $(@).find('#add-positions').html(result.body)
       $(@).modal('show')
     error: ->
-      displayError i18n.t("messages.invoice.load_positions.failure")
+      displayError i18n.t("messages.error")
+    complete: ->
+      laddaButton.stop() if laddaButton
 
 window.App.Invoice.addPositions = ($form) ->
   fields = $form.serializeArray()
@@ -185,5 +188,9 @@ $ ->
       App.Invoice.projectRate = project_select.options[project_id].rate
 
     $('#invoice_project_id').data('pre', App.Invoice.projectRate)
+
+    button = document.querySelector('.ladda-button')
+    if button
+      window.laddaButton = Ladda.create(button)
 
 

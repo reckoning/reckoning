@@ -12,6 +12,7 @@ de:
       customer: "Kunde"
       setting: "Einstellung"
   messages:
+    error: "Es ist ein Fehler aufgetreten."
     timesheet:
       add_task:
         success: "Augabe erfolgreich hinzugefügt."
@@ -25,6 +26,7 @@ de:
       form:
         cancel: "Sind Sie sich sicher? Ungespeicherte Änderungen gehen verloren."
       delete: "Sind Sie sich sicher, dass Sie den Eintrag löschen wollen?"
+      charge: "Sind Sie sich sicher, dass Sie die Rechnung absenden wollen? Die Rechnung und die damit verbundenen Zeiten können dann nicht mehr verändert werden."
     setting:
       not_found: "Keinen Eintrag gefunden"
     customer:
@@ -33,6 +35,8 @@ de:
     invoice:
       not_editable: "Diese Rechnung kann nicht mehr verändert werden."
       missing_address: "Bitte vervollständigen Sie zuerst Ihre Daten"
+      load_positions:
+        missing: "Bitte wählen Sie zunächst ein Projekt und geben Sie ein Datum an."
     create:
       success: "%{resource} erfolgreich erstellt."
       failure: "%{resource} konnte nicht erstellt werden."
