@@ -54,6 +54,7 @@ de:
     title:
       timer:
         index: "Zeiten"
+        import: "Zeiten importieren"
       customer:
         index: "Kunden"
         new: "Neuer Kunde"

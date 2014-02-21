@@ -51,6 +51,8 @@ gem 'highline'
 
 gem "bower-rails", github: '42dev/bower-rails'
 
+gem 'roo'
+
 group :test do
   gem 'rails-perftest'
   gem 'ruby-prof'
