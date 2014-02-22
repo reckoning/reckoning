@@ -8,6 +8,9 @@
     "test": "test"
   },
   "dependencies": {
+    "bower": "~1.2.8"
+  },
+  "devDependencies": {
     "karma-chrome-launcher": "~0.0.2",
     "karma-coffee-preprocessor": "~0.0.2",
     "karma-jasmine": "~0.0.2",
@@ -16,9 +19,7 @@
     "karma-script-launcher": "~0.0.2",
     "karma-requirejs": "~0.0.2",
     "karma-firefox-launcher": "~0.0.3",
-    "bower": "~1.2.8"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
