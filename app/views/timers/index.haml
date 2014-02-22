@@ -32,7 +32,7 @@
               %th.text-right.timesheet-row-sum
               %th
           %tbody
-            - week.tasks.each do |task|
+            - week.tasks.order('id ASC').each do |task|
               - sum = 0
               %tr
                 %td
@@ -74,7 +74,7 @@
               %td.text-right.timesheet-sum
                 %span
                   = (row_sum.zero? ? row_sum : decimal_to_time(row_sum))
-
+              %td
     .row
       .col-xs-12.col-md-8
       .col-xs-12.col-md-4

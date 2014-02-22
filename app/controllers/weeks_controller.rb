@@ -46,7 +46,6 @@ class WeeksController < ApplicationController
         redirect_to timers_path(date: week.start_date), notice: I18n.t(:"messages.timesheet.remove_task.success")
       else
         redirect_to timers_path(date: week.start_date), warning: I18n.t(:"messages.timesheet.remove_task.warning")
-
       end
     else
       redirect_to timers_path(date: week.start_date), error: I18n.t(:"messages.timesheet.remove_task.failure")
