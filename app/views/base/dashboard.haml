@@ -27,6 +27,11 @@
         = render "budgets_panel", budgets: @budgets
 
       .col-xs-12.col-md-8
+        :javascript
+          window.chartData = #{@chart_data.to_json}
+        #timers-chart
+          %svg{style: "height: 250px;"}
+
         = render "invoices_panel", title: I18n.t(:"dashboard.panels.charged_invoices"), invoices: @charged_invoices, context: 'warning'
 
         = render "invoices_panel", title: I18n.t(:"dashboard.panels.paid_invoices"), invoices: @paid_invoices, context: 'success'

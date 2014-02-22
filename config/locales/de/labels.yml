@@ -19,6 +19,9 @@ de:
       role: "Benutzergruppe"
       email: "E-Mail"
       enabled: "Status"
+    chart:
+      on_date: am
+      timers: "Erfasste Stunden im letzten Monat"
     timesheet:
       current_week: "Diese Woche"
       on_invoice: "Zeiten wurden bereits abgerechnet."
