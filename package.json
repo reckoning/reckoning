@@ -18,7 +18,7 @@
     "karma-html2js-preprocessor": "~0.0.2",
     "karma-script-launcher": "~0.0.2",
     "karma-requirejs": "~0.0.2",
-    "karma-firefox-launcher": "~0.0.3",
+    "karma-firefox-launcher": "~0.0.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
