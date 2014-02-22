@@ -1,3 +1,5 @@
 asset "ladda", "~0.9.2"
 asset "noty", "~2.2.2"
 asset "selectize"
+asset "nvd3"
+asset "moment"

@@ -13,6 +13,10 @@
 #= require i18n/translations
 #= require i18n_init
 #= require helper
+#= require moment/moment
+#= require moment_init
+#= require d3/d3
+#= require nvd3/nv.d3
 #= require app
 #= require_tree ./app
 #
