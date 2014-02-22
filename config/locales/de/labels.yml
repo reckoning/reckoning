@@ -35,7 +35,8 @@ de:
     setting:
       key: "Bezeichnung"
       value: "Wert"
-
+    budget:
+      limit: "Gesamt: %{hours}h"
     table:
       blank:
         customer: "Keine Kunden vorhanden"
