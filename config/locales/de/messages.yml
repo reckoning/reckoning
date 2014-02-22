@@ -20,6 +20,7 @@ de:
         failure: "Die Aufgabe konnte nicht hinzugefügt werden."
       remove_task:
         success: "Augabe erfolgreich entfernt."
+        warning: "Aufgabe konnte nicht gelöscht werden da schon Zeiten in dieser Aufgabe zu einer Rechnung hinzugefügt wurden."
         failure: "Die Aufgabe konnte nicht entfernt werden."
     demo_active: "Anwendung befindet sich im Demo-Modus, Sie dürfen nur eine Rechnung anlegen."
     confirm:

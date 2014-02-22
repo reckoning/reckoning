@@ -128,6 +128,7 @@ window.App.Invoice.loadPositions = ($element) ->
   project_id = $('#invoice_project_id').val()
   unless date.length && project_id.length
     displayWarning i18n.t("messages.invoice.load_positions.missing")
+    laddaButton.stop() if laddaButton
     return
 
   xhr.abort() if xhr

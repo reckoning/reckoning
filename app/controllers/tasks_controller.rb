@@ -1,7 +1,7 @@
 class TasksController < ApplicationController
 
   def index
-    authorize! :index, :tasks
+    authorize! :index, Task
     respond_to do |format|
       format.js {
         render json: project.tasks
@@ -13,7 +13,7 @@ class TasksController < ApplicationController
   end
 
   def index_for_date
-    authorize! :index, :tasks
+    authorize! :index, Task
     respond_to do |format|
       format.js {
         project = current_user.projects.where(id: project_id).first

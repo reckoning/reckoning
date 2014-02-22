@@ -42,5 +42,8 @@ de:
       setting:
         edit: 'Einstellung bearbeiten'
 
+    timer:
+      import: "Zeiten importieren"
+
   sublines:
     welcome: "Vereinfache das Erstellen von Rechnungen und konzentriere dich auf die wichtigen Dinge!"

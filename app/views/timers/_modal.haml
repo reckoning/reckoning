@@ -10,7 +10,7 @@
         %select#select-project{placeholder: I18n.t(:"helpers.prompt.timer.project")}
           %option{value: ""}
             Bitte Wählen
-          - current_user.projects.all.each do |project|
+          - current_user.projects.where("projects.id not in (?)", week.projects.map(&:id)).all.each do |project|
             %option{value: project.id}
               = project.name_with_customer
 
@@ -20,5 +20,5 @@
       .modal-footer
         %button.btn.btn-default{type: "button", data: {dismiss: "modal"}}
           = I18n.t(:"actions.close")
-        %button.btn.btn-primary{type: "button", onclick: "App.Timesheet.addTask($(this), '#{week.start_date || @date.beginning_of_week}'); return false;", data: {loading: {text: I18n.t(:"actions.loading")}}}
+        %button.btn.btn-primary{type: "button", onclick: "App.Timesheet.addTask($(this), '#{@date.beginning_of_week}'); return false;", data: {loading: {text: I18n.t(:"actions.loading")}}}
           = I18n.t(:"actions.add")

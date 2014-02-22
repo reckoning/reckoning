@@ -32,7 +32,7 @@
               %th.text-right.timesheet-row-sum
               %th
           %tbody
-            - week.tasks.each do |task|
+            - week.tasks.order('id ASC').each do |task|
               - sum = 0
               %tr
                 %td
@@ -69,11 +69,17 @@
                     - sum = 0
                     - if all_timers_by_date[date]
                       - all_timers_by_date[date].map { |timer| sum += timer.value.to_d unless timer.value.blank? }
-                    = (sum == 0 ? sum : decimal_to_time(sum))
+                    = (sum.zero? ? sum : decimal_to_time(sum))
                     - row_sum += sum
               %td.text-right.timesheet-sum
                 %span
-                  = (row_sum == 0 ? row_sum : decimal_to_time(row_sum))
+                  = (row_sum.zero? ? row_sum : decimal_to_time(row_sum))
               %td
+    .row
+      .col-xs-12.col-md-8
+      .col-xs-12.col-md-4
+        .btn-group.pull-right.resource-nav
+          %a.btn.btn-primary{href: new_import_timers_path}
+            = I18n.t(:"actions.timer_import")
 
 = render "modal"

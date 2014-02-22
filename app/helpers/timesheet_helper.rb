@@ -8,6 +8,8 @@ module TimesheetHelper
   end
 
   def decimal_to_time value
-    "#{value.to_i}:#{'%02d' % ((value.to_d % 1) * 60).round}"
+    hours = value.to_i
+    minutes = format('%02d', ((value.to_d % 1) * 60).round)
+    "#{hours}:#{minutes}"
   end
 end

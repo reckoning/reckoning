@@ -1,0 +1,27 @@
+- content_for :title do
+  = I18n.t(:"meta.title.timer.import")
+.row#import-timers
+  .col-xs-12.col-md-12
+    .row
+      .col-xs-12.col-md-8
+        %h1
+          = I18n.t(:"headlines.timer.import")
+      .col-xs-12.col-md-4
+        .btn-group.pull-right.resource-nav
+          = link_to I18n.t(:"nav.subnav.back"), timers_path, class: "btn btn-default"
+
+
+    = form_for "timer", url: csv_import_timers_path, method: :post do |form|
+      .row
+        .col-xs-12.col-md-6.form-group
+          = form.file_field :file
+      .row
+        .col-xs-12.col-md-6.form-group
+          %select.js-selectize{name: "timer[project_id]", id: "timer_project_id", placeholder: I18n.t(:"helpers.prompt.timer.project_id")}
+            %option
+            - current_user.projects.each do |project|
+              %option{value: project.id}
+                = project.name_with_customer
+
+
+      = render "layouts/forms/submit", path: timers_path

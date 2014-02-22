@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '2.1.0'
 
-gem 'rails', '~> 4.0.2'
+gem 'rails', '~> 4.0.3'
 
 gem 'pg', '~> 0.17.0'
 
@@ -44,12 +44,14 @@ gem 'puma', '~> 2.7.0'
 
 gem 'sentry-raven', '~> 0.7.1'
 
-gem 'rails-asset-localization', git: 'git@github.com:nicolai86/rails-asset-localization.git', branch: :master
+gem 'rails-asset-localization'
 
 gem 'thor'
 gem 'highline'
 
 gem "bower-rails", github: '42dev/bower-rails'
+
+gem 'roo'
 
 group :test do
   gem 'rails-perftest'

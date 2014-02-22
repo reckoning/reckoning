@@ -19,7 +19,7 @@ class Project < ActiveRecord::Base
   def timer_values
     values = 0.0
     timers.each do |timer|
-      values += timer.value.to_d
+      values += timer.value.to_d unless timer.value.blank?
     end
     values
   end

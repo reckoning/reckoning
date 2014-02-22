@@ -11,7 +11,6 @@ class WeeksController < ApplicationController
 
   def update
     authorize! :update, week
-    week_params[:timers_attributes].reject! {|index, timer| timer[:value].empty? }
     if week.update(week_params)
       redirect_to timers_path(date: week.start_date)
     else
@@ -41,10 +40,13 @@ class WeeksController < ApplicationController
     authorize! :remove_task, week
     task = current_user.tasks.where(id: params.fetch(:task_id, nil)).first
     if task.present? && week.tasks.include?(task)
-      week.tasks.delete task
-      week.timers.where(task_id: task.id).destroy_all
-      week.save
-      redirect_to timers_path(date: week.start_date), notice: I18n.t(:"messages.timesheet.remove_task.success")
+      week.timers.where(task_id: task.id, position_id: nil).destroy_all
+      if task.timers.with_positions.empty?
+        week.tasks.delete(task)
+        redirect_to timers_path(date: week.start_date), notice: I18n.t(:"messages.timesheet.remove_task.success")
+      else
+        redirect_to timers_path(date: week.start_date), warning: I18n.t(:"messages.timesheet.remove_task.warning")
+      end
     else
       redirect_to timers_path(date: week.start_date), error: I18n.t(:"messages.timesheet.remove_task.failure")
     end

@@ -12,6 +12,7 @@ de:
     save: "Speichern"
     create: "erstellen"
     add: "Hinzufügen"
+    timer_import: "Zeiten importieren"
     add_position: "Position hinzufügen"
     generate_position: "Position aus Zeiten generieren"
     add_task: "Aufgabe hinzufügen"

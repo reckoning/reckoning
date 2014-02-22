@@ -52,6 +52,14 @@ Reckoning::Application.routes.draw do
   resources :timers, only: [:index] do
     collection do
       get :day
+      get :new_import
+      post :csv_import
+    end
+  end
+
+  resource :harvest, only: [:new] do
+    collection do
+      post :import
     end
   end
 

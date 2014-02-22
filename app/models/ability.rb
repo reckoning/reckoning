@@ -13,5 +13,8 @@ class Ability
     can :manage, Invoice, user_id: user.id
     can :manage, Customer, user_id: user.id
     can :manage, Project, customer: { user_id: user.id }
+    can :manage, Week, user_id: user.id
+    can :manage, Task, project: { customer: { user_id: user.id } }
+    can :manage, Timer, week: { user_id: user.id }
   end
 end
