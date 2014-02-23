@@ -1,6 +1,10 @@
 $input-error-border-color: #c60f13;
 $input-error-bg-color: rgba(198, 15, 19, 0.1);
 
+.input-group-addon {
+  color: inherit;
+}
+
 form {
   .selectize-control {
     height: 34px;

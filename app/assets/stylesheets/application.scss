@@ -16,9 +16,7 @@ $font-size-h5: floor(($font-size-base * 0.85));
 $font-size-h6: floor(($font-size-base * 0.85));
 
 @import "bourbon";
-//@import "colors/slate";
 @import "bootstrap";
-@import "colors/slate_overrides";
 @import "partials";
 @import "invoice";
 @import "dashboard";
@@ -30,7 +28,6 @@ html {
 
 body {
   font-family: 'Droid Sans', verdana;
-  padding: 70px 0 0;
   min-height: 100%;
   height: auto;
   position: relative;

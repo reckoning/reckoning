@@ -23,8 +23,9 @@
 #= require turbolinks
 
 window.setMinHeight = ->
-  offset = $('footer#main-footer').outerHeight() + $('nav#main-nav').outerHeight() - 50
+  offset = $('footer#main-footer').outerHeight() + $('nav#main-nav').outerHeight() + 20
   $('body > .container').css('min-height', $('body').height() - offset)
+
 
 $(document).on 'click', 'a.disabled', (evt) ->
   false
