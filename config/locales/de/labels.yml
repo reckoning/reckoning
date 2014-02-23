@@ -27,6 +27,7 @@ de:
       on_invoice: "Zeiten wurden bereits abgerechnet."
     invoice:
       customer: "Kunde/Projekt"
+      due: "Fällig seit %{date}"
     user:
       current_sign_in_at: "Letzte Aktivität vor"
       admin: "Admin?"
