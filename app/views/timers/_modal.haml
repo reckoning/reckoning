@@ -10,7 +10,7 @@
         %select#select-project{placeholder: I18n.t(:"helpers.prompt.timer.project")}
           %option{value: ""}
             Bitte Wählen
-          - current_user.projects.where("projects.id not in (?)", week.projects.map(&:id)).all.each do |project|
+          - @projects.each do |project|
             %option{value: project.id}
               = project.name_with_customer
 
