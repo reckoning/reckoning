@@ -17,8 +17,11 @@ class TimersController < ApplicationController
 
   def csv_import
     authorize! :csv_import, Timer
-    Timer.import(params[:timer][:file], params[:timer][:project_id])
-    redirect_to timers_path, notice: "Import"
+    if Timer.import(params[:timer][:file], params[:timer][:project_id])
+      redirect_to timers_path, notice: I18n.t(:"messages.import.success", resource: I18n.t(:"resources.messages.timers"))
+    else
+      redirect_to timers_path, error: I18n.t(:"messages.import.failure", resource: I18n.t(:"resources.messages.timers"))
+    end
   end
 
   private def set_active_nav
