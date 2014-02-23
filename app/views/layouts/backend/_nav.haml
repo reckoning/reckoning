@@ -14,9 +14,9 @@
       - if user_signed_in?
         %ul.nav.navbar-nav
           %li{class: get_active_nav('backend_dashboard')}
-            = link_to I18n.t(:"nav.header.backend.dashboard"), backend_root_path
+            = link_to I18n.t(:"nav.header.dashboard"), backend_root_path
           %li{class: get_active_nav('backend_users')}
-            = link_to I18n.t(:"nav.header.backend.users"), backend_users_path
+            = link_to I18n.t(:"nav.header.users"), backend_users_path
 
       = render 'layouts/user_nav'
 
