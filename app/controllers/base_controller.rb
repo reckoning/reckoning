@@ -29,13 +29,19 @@ class BaseController < ApplicationController
     result = []
     start_date = Date.today - 1.month
     end_date = Date.today
-    (start_date..end_date).each do |date|
-      timers = current_user.timers.where(date: date).all
-      value = 0.0
-      timers.each do |timer|
-        value += timer.value.to_d
+    current_user.projects.each do |project|
+      chart = {key: project.name, values: []}
+      if project.timers.present?
+        (start_date..end_date).each do |date|
+          timers = current_user.timers.includes(:task).where(date: date, "tasks.project_id" => project.id).references(:task).all
+          value = 0.0
+          timers.each do |timer|
+            value += timer.value.to_d
+          end
+          chart[:values] << {x: I18n.l(date, format: :db), y: value.to_f}
+        end
+        result << chart
       end
-      result << {x: I18n.l(date, format: :db), y: value.to_f}
     end
     return result
   end

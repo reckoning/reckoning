@@ -12,8 +12,9 @@ $ ->
         .margin({top: 20, right: 0, bottom: 40, left: 15})
         .noData(i18n.t("labels.chart.no_data"))
         .showControls(false)
+        .stacked(true)
         .tooltip (key, x, y, e, graph) ->
-          return "<h3>#{decimalToTime(e.value)}h</h3><p>#{i18n.t('labels.chart.on_date')} #{x}</p>"
+          return "<h3>#{key}</h3><p>#{decimalToTime(e.value) || "0:00"}h #{i18n.t('labels.chart.on_date')} #{x}</p>"
 
       chart.xAxis
         .showMaxMin(false)
@@ -26,7 +27,7 @@ $ ->
           return d3.format('d')(d || 0)
 
       d3.select('#timers-chart svg')
-        .datum(data)
+        .datum(chartData)
         .transition().duration(500).call(chart)
 
       nv.utils.windowResize(chart.update)
