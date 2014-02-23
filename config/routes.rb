@@ -17,6 +17,11 @@ Reckoning::Application.routes.draw do
     root to: 'base#dashboard'
   end
 
+  namespace :api do
+    resources :timers
+    resources :tasks
+  end
+
   as :user do
     get 'signup' => 'registrations#new', as: :new_registration
     get 'signin' => 'sessions#new', as: :new_user_session
@@ -54,12 +59,6 @@ Reckoning::Application.routes.draw do
       get :day
       get :new_import
       post :csv_import
-    end
-  end
-
-  resource :harvest, only: [:new] do
-    collection do
-      post :import
     end
   end
 

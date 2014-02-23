@@ -21,6 +21,7 @@ class User < ActiveRecord::Base
     to: :address, prefix: false, allow_nil: true
 
   before_save :update_gravatar_hash
+  before_save :ensure_authentication_token
 
   def update_gravatar_hash
     if gravatar.blank?
@@ -29,5 +30,20 @@ class User < ActiveRecord::Base
       hash = Digest::MD5.hexdigest(gravatar.downcase.strip)
     end
     self.gravatar_hash = hash
+  end
+
+  def ensure_authentication_token
+    if authentication_token.blank?
+      self.authentication_token = generate_authentication_token
+    end
+  end
+
+  private
+
+  def generate_authentication_token
+    loop do
+      token = Devise.friendly_token
+      break token unless User.where(authentication_token: token).first
+    end
   end
 end
