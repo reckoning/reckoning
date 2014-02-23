@@ -8,8 +8,6 @@ de:
   default_country: "Deutschland"
   default_country_code: "DE"
   small_business: "umsatzsteuerbefreit nach § 19 UStG"
-  select2:
-    empty: "Keine Einträge gefunden"
   nav:
     header:
       home: "Rechnungen"
@@ -34,13 +32,6 @@ de:
       new_project: "Neues Projekt"
       new_user: "Neuer Benutzer"
       update_password: "Passwort ändern"
-    footer:
-      contact: "Kontakt"
-      frontend: "Frontend"
-      impressum: "Impressum"
-      status: "Status"
-      backend:
-        root: "Backend"
 
   views:
     pagination:
@@ -101,25 +92,6 @@ de:
     invoice:
       pdf: "PDF wird neu generiert."
 
-  mailto:
-    contact:
-      email: "info@reckoning.io"
-      subject: "Kontaktanfrage"
-
   user:
     current_sign_in_at:
       empty: "Noch nie eingeloggt"
-
-  labels:
-    invoice:
-      due: "Fällig seit %{date}"
-
-
-  prices:
-    price:
-      free: "kostenlos"
-      all: "5 Euro / Monat"
-    desc:
-      free: "Eine Rechnung / Kunde / Monat"
-      all: "&infin; Rechnungen / Kunde / Monat"
-    ctab: "Anmelden"
