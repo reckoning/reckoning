@@ -63,7 +63,7 @@
                 .panel-heading
                   .panel-title
                     %strong
-                      = I18n.t(:"panels.title.default")
+                      = I18n.t(:"labels.panels.title.default")
                 .list-group
                   - if invoice.state?(:charged)
                     = link_to pay_invoice_path(invoice.ref), method: :put, class: "list-group-item" do

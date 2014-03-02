@@ -21,9 +21,10 @@ de:
       intro: "Home"
       features: "Features"
       pricing: "Pricing"
-      backend:
-        dashboard: "Dashboard"
-        users: "Benutzer"
+      backend: "Backend"
+      frontend: "Frontend"
+      dashboard: "Dashboard"
+      users: "Benutzer"
     subnav:
       back: "Zurück"
       new_invoice: "Neue Rechnung"

@@ -11,6 +11,7 @@ de:
       project: "Projekt"
       customer: "Kunde"
       setting: "Einstellung"
+      timers: "Zeiten"
   messages:
     error: "Es ist ein Fehler aufgetreten."
     timesheet:
@@ -54,6 +55,9 @@ de:
         failure_dependency: "Bitte löschen Sie zuerst alle Rechnungen für diesen Kunden"
       project:
         failure_dependency: "Bitte löschen Sie zuerst alle Rechnungen für dieses Projekt"
+    import:
+      success: "%{resource} erfolgreich importiert."
+      failure: "%{resource} konnten nicht importiert werden."
     lock:
       user:
         success: "Benutzer erfolgreich gesperrt."

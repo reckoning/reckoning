@@ -54,6 +54,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def generate_pdf
+    self.set_payment_due_date
     self.update_attributes({pdf_generating: true})
     Resque.enqueue InvoiceWorker, self.id
   end
@@ -92,7 +93,6 @@ class Invoice < ActiveRecord::Base
   end
 
   def generate
-    self.set_payment_due_date
     pdf_generator = PdfGenerator.new self
     pdf_generator.generate
   end

@@ -20,14 +20,24 @@ class Timer < ActiveRecord::Base
   def self.import(file, project_id)
     spreadsheet = open_spreadsheet(file)
     header = spreadsheet.row(1)
-    (2..spreadsheet.last_row).each do |i|
-      row = Hash[[header, spreadsheet.row(i)].transpose]
-      date = Date.parse(row['date'])
-      task = Task.where(project_id: project_id, name: row['task']).first_or_create
-      week = Week.where(user_id: task.project.customer.user_id, start_date: date.beginning_of_week).first_or_create
-      week.tasks << task unless week.tasks.include?(task)
-      self.where(date: row['date'], value: row['value'].gsub(',', '.'), task_id: task.id, week_id: week.id).first_or_create
+    project = Project.where(id: project_id).first
+    if project.present? && valid_csv?(header)
+      (2..spreadsheet.last_row).each do |i|
+        row = Hash[[header, spreadsheet.row(i)].transpose]
+        date = Date.parse(row['date'])
+        task = Task.where(project_id: project.id, name: row['task']).first_or_create
+        week = Week.where(user_id: project.customer.user_id, start_date: date.beginning_of_week).first_or_create
+        week.tasks << task unless week.tasks.include?(task)
+        self.where(date: row['date'], value: row['value'].gsub(',', '.'), task_id: task.id, week_id: week.id).first_or_create
+      end
+      return true
+    else
+      return false
     end
+  end
+
+  def self.valid_csv?(header)
+    %w(date value task).reject { |h| header.include?(h) }.empty?
   end
 
   def self.open_spreadsheet(file)
@@ -38,7 +48,7 @@ class Timer < ActiveRecord::Base
   end
 
   def convert_value
-    return if value.blank? || value.match(':').blank?
+    return if value.blank? || !value.is_a?(String) || value.match(':').blank?
     parts = value.split(':')
     self.value = parts[0].to_d + (parts[1].to_d / 60)
   end
