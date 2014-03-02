@@ -4,7 +4,7 @@ class TasksController < ApplicationController
     authorize! :index, Task
     respond_to do |format|
       format.js {
-        render json: project.tasks
+        render json: project.tasks, root: false
       }
       format.html {
         redirect_to root_path

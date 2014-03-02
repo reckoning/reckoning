@@ -48,7 +48,7 @@ class Timer < ActiveRecord::Base
   end
 
   def convert_value
-    return if value.blank? || value.match(':').blank?
+    return if value.blank? || !value.is_a?(String) || value.match(':').blank?
     parts = value.split(':')
     self.value = parts[0].to_d + (parts[1].to_d / 60)
   end
