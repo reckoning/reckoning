@@ -18,7 +18,6 @@
           = form.password_field :current_password, autocomplete: "off", placeholder: I18n.t(:"helpers.placeholder.user.current_password"), class: 'form-control'
           %small
             = form_errors @user, :current_password
-
       .row
         .col-xs-12.col-md-6.form-group{class: form_error?(@user, :password)}
           = form.password_field :password, autocomplete: "off", placeholder: I18n.t(:"helpers.placeholder.user.password"), class: 'form-control'

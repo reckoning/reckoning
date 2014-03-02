@@ -3,28 +3,28 @@ module Api
     respond_to :json
 
     def index
-      render json: current_user.tasks, root: "tasks"
+      render json: current_user.tasks.order('id desc'), root: false
     end
 
     def show
-      render json: task
+      render json: task, root: false
     end
 
     def create
       authorize! :create, task
       if task.save
-        render json: task
+        render json: task, root: false
       else
-        render json: task.errors
+        render json: task.errors, root: false
       end
     end
 
     def update
       authorize! :create, task
       if task.update task_params
-        render json: task
+        render json: task, root: false
       else
-        render json: task.errors
+        render json: task.errors, root: false
       end
     end
 
