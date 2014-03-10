@@ -1,4 +1,4 @@
-$ ->
+window.initMoment = ->
   moment.lang locale,
     months: i18n.t('date.dp_month_names').split('\n')
     monthsShort: i18n.t('date.dp_abbr_month_names').split('\n')

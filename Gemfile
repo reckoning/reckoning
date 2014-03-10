@@ -53,8 +53,6 @@ gem "bower-rails", github: '42dev/bower-rails'
 
 gem 'roo'
 
-gem 'active_model_serializers'
-
 gem 'rack-cors', require: 'rack/cors'
 
 group :test do
