@@ -36,6 +36,8 @@ $(document).on 'show.bs.collapse', '.navbar-collapse', (ev) ->
 $(window).on 'orientationchange', setMinHeight
 $(window).on 'resize', setMinHeight
 
+$(document).on 'i18n'
+
 $ ->
   $('.btn.btn-loading').click ->
     $(@).button('loading')
@@ -43,3 +45,4 @@ $ ->
   $('#blueimp-gallery').data('useBootstrapModal', false)
 
   setMinHeight()
+

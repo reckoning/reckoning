@@ -1,4 +1,4 @@
-$ ->
+window.loadChart = ->
   if $('#timers-chart').length && chartData
     data = [
       {

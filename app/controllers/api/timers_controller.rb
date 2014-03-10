@@ -3,37 +3,47 @@ module Api
     respond_to :json
 
     def index
-      render json: current_user.timers, root: false
+      timers = current_user.timers
+      task_id = params.fetch(:task_id, nil)
+      if task_id
+        timers.where(task_id: task_id)
+      end
+      date = params.fetch(:date, nil)
+      if date
+        date = Date.parse(date)
+        timers.where("date BETWEEN ? AND ?", date.beginning_of_week, date.end_of_week)
+      end
+      render json: timers
     end
 
     def show
-      render json: timer, root: false
+      render json: timer
     end
 
     def create
       authorize! :create, timer
       if timer.save
-        render json: timer, root: false
+        render json: timer
       else
-        render json: timer.errors, root: false
+        render json: timer.errors
       end
     end
 
     def update
       authorize! :create, timer
       if timer.update timer_params
-        render json: timer, root: false
+        render json: timer
       else
-        render json: timer.errors, root: false
+        render json: timer.errors
       end
     end
 
     def destroy
       authorize! :destroy, timer
       if timer.destroy
-        render json: timer, root: false
+        render json: timer
       else
-        render json: timer.errors, root: false
+        render json: timer.errors
       end
     end
 
@@ -42,12 +52,8 @@ module Api
     end
 
     private def timer
-      @timer ||= task.timers.where(id: params.fetch(:id, nil)).first
-      @timer ||= task.timers.new timer_params
-    end
-
-    private def task
-      @task ||= current_user.tasks.where(id: params.fetch(:task_id, nil)).first
+      @timer ||= current_user.timers.where(id: params.fetch(:id, nil)).first
+      @timer ||= current_user.timers.new timer_params
     end
   end
 end

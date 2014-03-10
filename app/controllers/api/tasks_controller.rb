@@ -3,28 +3,37 @@ module Api
     respond_to :json
 
     def index
-      render json: current_user.tasks.order('id desc'), root: false
+      date = params.fetch(:date, nil)
+      if date
+        date = Date.parse(date)
+        timers = current_user.timers
+          .where("date BETWEEN ? AND ?", date.beginning_of_week, date.end_of_week)
+        tasks = Task.where(id: timers.map(&:task_id))
+      else
+        tasks = current_user.tasks
+      end
+      render json: tasks.order('id desc').to_json(include: :timers, methods: :project_name)
     end
 
     def show
-      render json: task, root: false
+      render json: task
     end
 
     def create
       authorize! :create, task
       if task.save
-        render json: task, root: false
+        render json: task
       else
-        render json: task.errors, root: false
+        render json: task.errors
       end
     end
 
     def update
       authorize! :create, task
       if task.update task_params
-        render json: task, root: false
+        render json: task
       else
-        render json: task.errors, root: false
+        render json: task.errors
       end
     end
 

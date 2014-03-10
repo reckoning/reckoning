@@ -18,9 +18,8 @@ Reckoning::Application.routes.draw do
   end
 
   namespace :api do
-    resources :tasks do
-      resources :timers
-    end
+    resources :tasks
+    resources :timers
   end
 
   as :user do
