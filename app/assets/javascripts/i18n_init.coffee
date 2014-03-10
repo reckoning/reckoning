@@ -6,7 +6,7 @@ $ ->
       object[bundledLocale] = bundledLocales[bundledLocale]
       i18n.sync._storeLocal object
 
-  i18n.init({
+  i18n.init
     # change default interpolation from __VARIABLE__ to rails-style %{VARIABLE}
     interpolationPrefix: '%{'
     interpolationSuffix: '}'
@@ -21,4 +21,6 @@ $ ->
     # store locales for 1 day in localStorage
     useLocalStorage: true
     localStorageExpirationTime: 60 * 60 * 24 * 1000
-  })
+  , ->
+    initMoment()
+    loadChart()
