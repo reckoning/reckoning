@@ -5,13 +5,4 @@
         = I18n.t(:"dashboard.panels.budgets")
   .list-group
     - budgets.each do |project|
-      .list-group-item
-        .row
-          .col-xs-6.col-sm-6.col-md-6
-            = number_to_currency project.timer_values, unit: "h", precision: 0
-          .col-xs-6.col-sm-6.col-md-6.text-right
-            = number_to_currency (project.budget - project.timer_values), unit: "h", precision: 0
-        .progress.progress-striped.text-center{title: I18n.t(:"labels.budget.limit", hours: project.budget.to_i), data: {toggle: "tooltip"}}
-          .progress-bar{class: budget_progress(project), role: "progressbar", aria: {valuenow: "40", valuemin: "0", valuemax: "100"}, style: "width: #{project.budget_percent}%"}
-        .project-name.text-right
-          = project.name_with_customer
+      = render 'budget_item', project: project

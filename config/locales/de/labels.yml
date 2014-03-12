@@ -37,6 +37,7 @@ de:
       key: "Bezeichnung"
       value: "Wert"
     budget:
+      uninvoiced: "Noch nicht in Rechnung gestellt"
       limit: "Gesamt: %{hours}h"
     table:
       blank:
