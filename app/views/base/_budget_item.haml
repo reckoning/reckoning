@@ -1,0 +1,15 @@
+.list-group-item
+  .row.budget-label
+    .col-xs-6.col-sm-6.col-md-6
+      = number_to_currency project.timer_values, unit: "h", precision: 0
+      - unless project.timer_values.zero?
+        %span.label.label-default{data: {toggle: 'tooltip'}, title: I18n.t(:"labels.budget.uninvoiced")}
+          = number_to_currency project.timer_values_uninvoiced, unit: "h", precision: 0
+    .col-xs-6.col-sm-6.col-md-6.text-right
+      = number_to_currency (project.budget - project.timer_values), unit: "h", precision: 0
+  .progress.progress-striped.text-center{title: I18n.t(:"labels.budget.limit", hours: project.budget.to_i), data: {toggle: "tooltip"}}
+
+    .progress-bar{class: budget_progress(project), role: "progressbar", aria: {valuemin: "0", valuemax: "100"},style: "width: #{project.budget_percent_invoiced}%"}
+    .progress-bar{class: "progress-bar-info", role: "progressbar", aria: {valuemin: "0", valuemax: "100"}, style: "width: #{project.budget_percent_uninvoiced}%"}
+  .project-name.text-right
+    = project.name_with_customer
