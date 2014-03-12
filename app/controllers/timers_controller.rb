@@ -5,9 +5,6 @@ class TimersController < ApplicationController
     authorize! :index, Timer
     @date = date
     projects = current_user.projects
-    if week.projects.present?
-      projects = projects.where("projects.id not in (?)", week.projects.map(&:id))
-    end
     @projects = projects.all
   end
 
