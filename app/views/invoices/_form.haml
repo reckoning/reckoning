@@ -31,9 +31,12 @@
     %legend
       Positionen:
 
-    #positions
+    #positions{data: timer_position_fields(form)}
       = form.fields_for :positions, invoice.positions do |builder|
-        = render 'position_fields', fields: builder
+        - if builder.object.timer_ids.blank?
+          = render 'position_fields', fields: builder
+        - else
+          = render 'timer_position_fields', fields: builder
 
     .btn-group.pull-right
       = link_to_add_fields form, :positions, name: I18n.t(:"actions.add"), class: "btn btn-default", target: "#positions" do

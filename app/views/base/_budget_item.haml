@@ -2,7 +2,7 @@
   .row.budget-label
     .col-xs-6.col-sm-6.col-md-6
       = number_to_currency project.timer_values, unit: "h", precision: 2
-      - unless project.timer_values.zero?
+      - unless project.timer_values.zero? || project.timer_values_uninvoiced.zero?
         %span.label.label-default{data: {toggle: 'tooltip'}, title: I18n.t(:"labels.budget.uninvoiced")}
           = number_to_currency project.timer_values_uninvoiced, unit: "h", precision: 2
     .col-xs-6.col-sm-6.col-md-6.text-right

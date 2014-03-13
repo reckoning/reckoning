@@ -140,10 +140,12 @@ class Invoice < ActiveRecord::Base
   def set_value
     value = 0.0
     self.positions.each do |position|
-      if position.value.present?
-        value = value + position.value
-      elsif position.hours && position.rate
-        value = value + (position.rate * position.hours)
+      unless position.marked_for_destruction?
+        if position.value.present?
+          value = value + position.value
+        elsif position.hours && position.rate
+          value = value + (position.rate * position.hours)
+        end
       end
     end
     self.value = value
