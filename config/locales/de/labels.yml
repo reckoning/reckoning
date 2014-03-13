@@ -38,7 +38,7 @@ de:
       value: "Wert"
     budget:
       uninvoiced: "Noch nicht in Rechnung gestellt"
-      limit: "Gesamt: %{hours}h"
+      limit: "Gesamt: %{hours} h"
     table:
       blank:
         customer: "Keine Kunden vorhanden"
