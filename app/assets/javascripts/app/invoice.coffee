@@ -101,8 +101,9 @@ window.App.Invoice.updateValues = (ev, $fields) ->
 
 window.App.Invoice.updateValue = (ev, $field) ->
   $field ||= $(ev.target).closest('.fields')
-  $valueInput = $field.find('.invoice-position-value')
-  $rateInput = $field.find('.invoice-position-rate')
+  $valueInput = $field.find('input.invoice-position-value')
+  $valueSpan = $field.find('span.invoice-position-value')
+  $rateInput = $field.find('input.invoice-position-rate')
   hours = $field.find('.invoice-position-hours').val()
   rate = $rateInput.val()
   if hours.length
@@ -112,6 +113,7 @@ window.App.Invoice.updateValue = (ev, $field) ->
     if rate.length
       value = hours * rate
       $valueInput.val(value)
+      $valueSpan.text(value)
 
 window.App.Invoice.updateRate = (ev) ->
   $target = $(ev.target)
@@ -152,12 +154,18 @@ window.App.Invoice.addPositions = ($form) ->
   $positions = $('#positions')
   $.each fields, (i, field) ->
     data = JSON.parse(field.value)
-    $('.add_fields').click()
-    $fields = $positions.find('.fields:last')
+
+    time = new Date().getTime()
+    regexp = new RegExp($positions.data('id'), 'g')
+    $fields = $($positions.data('fields').replace(regexp, time))
+    $positions.append($fields)
+
     $fields.find('input[name*=description]').val(data.name)
-    $fields.find('input[name*=hours]').val(Math.round(data.value))
+    $fields.find('input[name*=hours]').val(data.value.toFixed(2))
+    $fields.find('span.invoice-position-hours').text(data.value.toFixed(2))
     $fields.find('select[name*=timer_ids]').val(data.timer_ids)
     App.Invoice.updateValue({}, $fields, 0)
+
   $('#add-positions-modal').modal('hide')
 
 $(document).on 'change', ".invoice-position-hours", App.Invoice.updateValue
