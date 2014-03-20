@@ -1,5 +1,5 @@
 # Reckoning
-[![Build Status](https://travis-ci.org/Reckoning/app.png?branch=master)](https://travis-ci.org/Reckoning/app)
+[![Build Status](https://travis-ci.org/reckoning/app.png?branch=master)](https://travis-ci.org/reckoning/app)
 
 Reckoning is a simple tool for invoicing
 
@@ -11,7 +11,7 @@ Reckoning is a simple tool for invoicing
 
 ## Setup
 
-See [provisioning Repo](https://github.com/Reckoning/provisioning) for a basic Setup.
+See [provisioning Repo](https://github.com/reckoning/provisioning) for a basic Setup.
 
 To run Reckoning on your local machine you need to install:
 
