@@ -55,8 +55,6 @@ gem 'roo'
 
 gem 'rack-cors', require: 'rack/cors'
 
-gem 'rack-cors', require: 'rack/cors'
-
 group :test do
   gem 'rails-perftest'
   gem 'ruby-prof'
