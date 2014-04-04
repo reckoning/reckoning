@@ -15,8 +15,11 @@
   #preview-image {
     position: absolute;
     top: 0;
-    max-width: 100%;
-    min-width: 748px;
+
+    img {
+      max-width: 100%;
+      min-width: 748px;
+    }
   }
 
   #preview-info {

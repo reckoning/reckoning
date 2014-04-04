@@ -40,7 +40,29 @@ class InvoicesController < ApplicationController
       unless Rails.env.production?
         format.html {
           @resource = invoice
+          @preview = true
           render 'pdf', layout: 'pdf'
+        }
+      end
+    end
+  end
+
+  def timesheet
+    authorize! :read, invoice
+    respond_to do |format|
+      format.pdf {
+        if File.exists?(invoice.timesheet_path)
+          send_file invoice.timesheet_path, type: 'application/pdf', disposition: 'inline'
+        else
+          invoice.generate_pdf
+          redirect_to invoice_path(invoice.ref)
+        end
+      }
+      unless Rails.env.production?
+        format.html {
+          @resource = invoice
+          @preview = true
+          render 'timesheet_pdf', layout: 'pdf'
         }
       end
     end
@@ -48,8 +70,17 @@ class InvoicesController < ApplicationController
 
   def png
     authorize! :read, invoice
-    if File.exists?(invoice.png_path)
-      send_file invoice.png_path, type: 'image/png', disposition: 'inline'
+    if File.exists?(invoice.pdf_path('png'))
+      send_file invoice.pdf_path('png'), type: 'image/png', disposition: 'inline'
+    else
+      render file: 'public/404.html', status: 404, layout: false
+    end
+  end
+
+  def timesheet_png
+    authorize! :read, invoice
+    if File.exists?(invoice.timesheet_path('png'))
+      send_file invoice.timesheet_path('png'), type: 'image/png', disposition: 'inline'
     else
       render file: 'public/404.html', status: 404, layout: false
     end
@@ -107,7 +138,9 @@ class InvoicesController < ApplicationController
 
   def charge
     authorize! :update, invoice
+
     if invoice.charge
+      Resque.enqueue InvoiceMailerJob, invoice.id
       redirect_to :back, notice: I18n.t(:'messages.charge.invoice.success')
     else
       redirect_to :back, error: I18n.t(:'messages.charge.invoice.failure')
@@ -128,7 +161,7 @@ class InvoicesController < ApplicationController
     respond_to do |format|
       format.js {
         if invoice.present?
-          render json: invoice.pdf_generating, status: :ok
+          render json: invoice.pdf_generating?, status: :ok
         else
           render json: {}, status: :ok
         end
@@ -142,7 +175,8 @@ class InvoicesController < ApplicationController
   def destroy
     authorize! :destroy, invoice
     if invoice.destroy
-      File.delete(invoice.pdf_path) if File.exists?(invoice.pdf_path)
+      File.delete(path(invoice.invoice_file)) if File.exists?(path(invoice.invoice_file))
+      File.delete(path(invoice.invoice_file('png'))) if File.exists?(path(invoice.invoice_file('png')))
       redirect_to invoices_path, notice: I18n.t(:"messages.destroy.success", resource: I18n.t(:"resources.messages.invoice"))
     else
       redirect_to invoices_path, error: I18n.t(:"messages.destroy.failure", resource: I18n.t(:"resources.messages.invoice"))

@@ -1,0 +1,5 @@
+#pdf-header{class: ("preview" if defined?(@preview))}><
+  - if resource.user.company.present?
+    = resource.user.company
+  - else
+    = resource.user.name

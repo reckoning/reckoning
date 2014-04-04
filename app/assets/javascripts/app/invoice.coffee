@@ -30,7 +30,7 @@ window.App.Invoice.checkPdfStatus = ->
     success: (data) ->
       return if data
       laddaButton.stop() if laddaButton
-      $('.save-invoice').removeClass('disabled')
+      $('.save-invoice, .save-timesheet').removeClass('disabled')
       clearInterval App.Invoice.pdfInterval
       displaySuccess "PDF wurde erfolgreich erstellt."
       App.Invoice.reloadPreview()
@@ -41,12 +41,17 @@ window.App.Invoice.showPreview = ->
   $(".preview-paginator").removeClass('hide')
 
 window.App.Invoice.reloadPreview = ->
-  $previewImage = $("#preview-image")
+  $previewImage = $("#preview-image img:first")
+  $previewTimesheet = $("#preview-image img:last")
 
   App.Invoice.showPreview() if $previewImage.is(':hidden')
 
   previewImageSrc = "#{$previewImage.attr("src")}?timestamp=#{new Date().getTime()}"
   $previewImage.attr("src", previewImageSrc)
+
+  if $previewTimesheet isnt undefined
+    previewTimesheetSrc = "#{$previewTimesheet.attr("src")}?timestamp=#{new Date().getTime()}"
+    $previewTimesheet.attr("src", previewTimesheetSrc)
 
   App.Invoice.updatePagination()
 
@@ -78,8 +83,10 @@ window.App.Invoice.initPagination = ->
 
 window.App.Invoice.updatePagination = ->
   $previewPaginator = $('.preview-paginator')
-
-  App.Invoice.previewPageMax = Math.round($("#preview-image").height() / App.Invoice.previewPageHeight)
+  height = $("#preview-image img:first").height()
+  if $("#preview-image img").length > 1
+    height = height + $("#preview-image img:last").height()
+  App.Invoice.previewPageMax = Math.round(height / App.Invoice.previewPageHeight)
 
   $previewPaginator.addClass('hide') if App.Invoice.previewPageMax == 1
 
@@ -174,7 +181,7 @@ $(document).on 'change', "#invoice_project_id", App.Invoice.updateRate
 
 $ ->
   if $('#invoice').length
-    $("#preview-image").load ->
+    $("#preview-image img:first").load ->
       App.Invoice.initPagination()
 
     button = document.querySelector('.ladda-button')

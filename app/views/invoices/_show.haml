@@ -4,7 +4,7 @@
   %td
     = invoice.title
   %td
-    = I18n.l invoice.date, format: :month
+    = I18n.l invoice.date, format: :month_year
   %td.value
     = number_to_currency invoice.value
   %td
@@ -17,7 +17,10 @@
       - unless invoice.state?(:charged) || invoice.state?(:paid)
         %a.btn.btn-default.btn-sm{href: edit_invoice_path(invoice.ref), title: I18n.t(:"actions.edit")}
           %i.glyphicon.glyphicon-edit
-        = confirm_link_to charge_invoice_path(invoice.ref), data: {notyConfirm: I18n.t(:"messages.confirm.charge")}, title: I18n.t(:"actions.charge"), method: :put, class: "btn btn-primary btn-sm" do
+        - charge_confirm = I18n.t(:"messages.confirm.charge")
+        - if invoice.send_via_mail?
+          - charge_confirm = I18n.t(:"messages.confirm.charge_mail")
+        = confirm_link_to charge_invoice_path(invoice.ref), data: {notyConfirm: charge_confirm}, title: I18n.t(:"actions.charge"), method: :put, class: "btn btn-primary btn-sm" do
           %i.glyphicon.glyphicon-envelope
       - if invoice.state?(:charged) && !invoice.state?(:paid)
         = link_to pay_invoice_path(invoice.ref), title: I18n.t(:"actions.pay"), method: :put, class: "btn btn-success btn-sm" do
