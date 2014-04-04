@@ -8,13 +8,16 @@ class PdfGenerator < AbstractController::Base
   include ActionController::RequestForgeryProtection
   include ActionView::Helpers::AssetTagHelper
 
-  attr_accessor :resource
+  attr_accessor :resource, :tempfile, :pdf_path, :png_path
 
   self.view_paths = "app/views"
   def session; {}; end
 
-  def initialize resource
+  def initialize resource, options
     @resource = resource
+    @pdf_path = options.fetch(:pdf_path)
+    @png_path = options.fetch(:png_path)
+    @tempfile = options.fetch(:tempfile)
   end
 
   def generate
@@ -23,22 +26,16 @@ class PdfGenerator < AbstractController::Base
   end
 
   def generate_html_template
-    content = render({
-      template: "#{resource.class.name.underscore.pluralize}/pdf",
-      layout: 'pdf',
-      locals: {
-        resource: resource
-      }
-    })
+    raise NotImplementedError.new
   end
 
   def call_weasyprint html
-    file = Tempfile.new('reckoning-pdf')
+    file = Tempfile.new(tempfile)
     file.open
     file.write(html)
     file.close
-    system "#{Settings.app.py_env}weasyprint #{file.path} #{resource.pdf_path}" # generate pdf
-    system "#{Settings.app.py_env}weasyprint #{file.path} #{resource.png_path} -f png" # generate png for preview
+    system "#{Settings.app.py_env}weasyprint #{file.path} #{@pdf_path}" # generate pdf
+    system "#{Settings.app.py_env}weasyprint #{file.path} #{@png_path} -f png" # generate png for preview
     file.unlink
   end
 end

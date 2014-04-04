@@ -1,0 +1,37 @@
+#pdf-footer{class: ("preview" if defined?(@preview))}><
+  %address><
+    - if resource.user.company.present?
+      %strong
+        = resource.user.company
+      %br
+      = resource.user.name
+    - else
+      %strong
+        = resource.user.name
+      %br
+    %br
+    = simple_format(resource.user.address.address)
+  .contact-information><
+    - if resource.user.address.telefon.present?
+      Tel:
+      = resource.user.address.telefon
+      %br
+    - if resource.user.address.fax.present?
+      Fax:
+      = resource.user.address.fax
+      %br
+    - if resource.user.email.present?
+      = resource.user.email
+      %br
+    - if resource.user.address.website.present?
+      = resource.user.address.website
+  .bank-information><
+    - if resource.user.bank.present?
+      = resource.user.bank
+      %br
+    = "IBAN: #{resource.user.iban}"
+    %br
+    = "BIC: #{resource.user.bic}"
+    %br
+    = "Konto: #{resource.user.account_number} | BLZ: #{resource.user.bank_code}"
+

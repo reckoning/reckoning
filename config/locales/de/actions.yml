@@ -35,3 +35,5 @@ de:
     enable: "Aktivieren"
     disable: "Deaktivieren"
     close: Schließen
+    download_invoice: "Rechnung speichern"
+    download_timesheet: "Stundenzettel speichern"

@@ -46,4 +46,9 @@ form {
   .invoice-position-value {
     text-align: right;
   }
+
+  textarea {
+    max-width: 100%;
+    min-height: 150px;
+  }
 }

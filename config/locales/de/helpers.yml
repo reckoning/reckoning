@@ -61,6 +61,8 @@ de:
         email: "E-Mail"
       customer:
         payment_due: "Zahlungsziel (Tage)"
+        email_template: "E-Mail Inhalt"
+        invoice_email: "E-Mail Adresse"
       setting:
         mailer:
           host: "SMTP Host"

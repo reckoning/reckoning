@@ -23,6 +23,8 @@ de:
       on_date: am
       timers: "Erfasste Stunden im letzten Monat"
     timesheet:
+      date: Datum
+      task: Aufgabe
       current_week: "Diese Woche"
       on_invoice: "Zeiten wurden bereits abgerechnet."
     invoice:
@@ -53,6 +55,7 @@ de:
     panels:
       title:
         default: "Aktionen"
+        downloads: "Downloads"
         latest_users: "Neue Benutzer"
         settings:
           base: "Allgemeine Eisntellungen"

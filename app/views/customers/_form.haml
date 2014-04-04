@@ -7,5 +7,37 @@
       = form.text_field :payment_due, placeholder: I18n.t(:"helpers.placeholder.customer.payment_due"), class: 'form-control'
       %small
         = form_errors customer, :payment_due
+  %fieldset
+    %legend
+      E-Mail Setup für Rechnungen:
+
+    .row
+      .col-xs-12.col-md-6.form-group{class: form_error?(customer, :invoice_email)}
+        = form.text_field :invoice_email, placeholder: I18n.t(:"helpers.placeholder.customer.invoice_email"), class: 'form-control'
+        %small
+          = form_errors customer, :invoice_email
+    .row
+      .col-xs-12.col-md-6.form-group{class: form_error?(customer, :email_template)}
+        = form.text_area :email_template, placeholder: I18n.t(:"helpers.placeholder.customer.email_template"), class: 'form-control'
+        %small
+          = form_errors customer, :email_template
+      .col-xs-12.col-md-6
+        .panel.panel-default
+          .panel-heading
+            %h3.panel-title
+              Formatierung
+          .list-group
+            .list-group-item
+              %code
+                {date}
+              Rechnungsdatum
+            .list-group-item
+              %code
+                {month}
+              Rechnungsmonat
+            .list-group-item
+              %code
+                {company}
+              Name des Kunden
 
   = render "layouts/forms/submit", path: customers_path

@@ -44,6 +44,8 @@ Reckoning::Application.routes.draw do
 
   get 'invoices/:ref/pdf/:pdf' => 'invoices#pdf', as: :invoice_pdf
   get 'invoices/:ref/png/:png' => 'invoices#png', as: :invoice_png
+  get 'timesheets/:ref/pdf/:pdf' => 'invoices#timesheet', as: :timesheet_pdf
+  get 'timesheets/:ref/png/:png' => 'invoices#timesheet_png', as: :timesheet_png
 
   resources :positions, only: [:new, :destroy]
 

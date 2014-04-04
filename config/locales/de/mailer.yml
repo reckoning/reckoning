@@ -1,0 +1,5 @@
+de:
+  mailer:
+    invoice:
+      customer_mail:
+        subject: "%{name}Rechnung %{date}"
