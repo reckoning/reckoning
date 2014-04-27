@@ -24,6 +24,17 @@ class InvoicesController < ApplicationController
     if current_user.address.blank?
       redirect_to edit_user_registration_path, alert: I18n.t(:"messages.invoice.missing_address")
     end
+    if invoice.pdf_not_present_and_not_generating? || !invoice.pdf_present_and_up_to_date?
+      invoice.generate_pdf
+    end
+  end
+
+  def archive
+    authorize! :read, invoice
+    if current_user.has_gdrive?
+      Resque.enqueue InvoiceGdriveJob, invoice.id
+    end
+    redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.archive.success", resource: I18n.t(:"resources.messages.invoice"))
   end
 
   def pdf
@@ -138,9 +149,7 @@ class InvoicesController < ApplicationController
 
   def charge
     authorize! :update, invoice
-
     if invoice.charge
-      Resque.enqueue InvoiceMailerJob, invoice.id
       redirect_to :back, notice: I18n.t(:'messages.charge.invoice.success')
     else
       redirect_to :back, error: I18n.t(:'messages.charge.invoice.failure')
@@ -161,7 +170,16 @@ class InvoicesController < ApplicationController
     respond_to do |format|
       format.js {
         if invoice.present?
-          render json: invoice.pdf_generating?, status: :ok
+          if invoice.pdf_generating?
+            data = false
+          else
+            data = {}
+            data[:invoice] = invoice_png_path(invoice.ref, invoice.invoice_file('png'))
+            if invoice.timers.present?
+              data[:timesheet] = timesheet_png_path(invoice.ref, invoice.timesheet_file('png'))
+            end
+          end
+          render json: data, status: :ok
         else
           render json: {}, status: :ok
         end
@@ -175,8 +193,10 @@ class InvoicesController < ApplicationController
   def destroy
     authorize! :destroy, invoice
     if invoice.destroy
-      File.delete(path(invoice.invoice_file)) if File.exists?(path(invoice.invoice_file))
-      File.delete(path(invoice.invoice_file('png'))) if File.exists?(path(invoice.invoice_file('png')))
+      File.delete(invoice.pdf_path) if File.exists?(invoice.pdf_path)
+      File.delete(invoice.pdf_path('png')) if File.exists?(invoice.pdf_path('png'))
+      File.delete(invoice.timesheet_path) if File.exists?(invoice.timesheet_path)
+      File.delete(invoice.timesheet_path('png')) if File.exists?(invoice.timesheet_path('png'))
       redirect_to invoices_path, notice: I18n.t(:"messages.destroy.success", resource: I18n.t(:"resources.messages.invoice"))
     else
       redirect_to invoices_path, error: I18n.t(:"messages.destroy.failure", resource: I18n.t(:"resources.messages.invoice"))

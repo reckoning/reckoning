@@ -12,4 +12,4 @@
       = render partial: "invoices/show", collection: @invoices, as: :invoice
 
       - if @invoices.blank?
-        = render "layouts/tables/blank", count: 6, resource: "invoice"
+        = render "shared/tables/blank", count: 6, resource: "invoice"

@@ -32,6 +32,8 @@ module Reckoning
         resource '*', :headers => :any, :methods => [:get, :post, :put, :patch, :delete, :options]
       end
     end
+
+    config.exceptions_app = self.routes
   end
 end
 

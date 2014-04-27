@@ -3,7 +3,7 @@ include HstoreAccessor
 class User < ActiveRecord::Base
   devise :database_authenticatable, :confirmable, :lockable, :recoverable, :registerable, :rememberable, :trackable, :validatable
 
-  store_accessor :settings, :tax, :tax_ref
+  store_accessor :settings, :tax, :tax_ref, :provision, :gdrive_email, :gdrive_password, :gdrive_collection
 	store_accessor :bank_account, :bank, :account_number, :bank_code, :iban, :bic
 
   has_one :address, as: :resource, dependent: :destroy
@@ -36,6 +36,10 @@ class User < ActiveRecord::Base
     if authentication_token.blank?
       self.authentication_token = generate_authentication_token
     end
+  end
+
+  def has_gdrive?
+    self.gdrive_password.present? && self.gdrive_email.present?
   end
 
   private

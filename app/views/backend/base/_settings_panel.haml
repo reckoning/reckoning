@@ -4,32 +4,26 @@
       .panel-heading
         %h3.panel-title
           = I18n.t(:"labels.panels.title.settings.#{keypath}")
-      .panel-body
-        %table.table.table-bordered.table-striped.table-condensed
-          %thead
+      %table.table.table-bordered.table-striped.table-condensed
+        %tbody
+          - values.each do |key, value|
+            - path = "#{keypath}.#{key}"
+            - setting = Setting.find_by_keypath(path)
+            - value = setting.value if setting.present?
             %tr
-              %th= I18n.t(:"labels.setting.key")
-              %th= I18n.t(:"labels.setting.value")
-              %th.actions.one
-          %tbody
-            - values.each do |key, value|
-              - path = "#{keypath}.#{key}"
-              - setting = Setting.find_by_keypath(path)
-              - value = setting.value if setting.present?
-              %tr
-                %td
-                  = I18n.t(:"activerecord.attributes.setting.#{path}")
-                %td
-                  - if [TrueClass, FalseClass].include?(value.to_s.to_bool.class)
-                    = I18n.t(value.to_s.to_bool.to_s)
+              %td
+                = I18n.t(:"activerecord.attributes.setting.#{path}")
+              %td
+                - if [TrueClass, FalseClass].include?(value.to_s.to_bool.class)
+                  = I18n.t(value.to_s.to_bool.to_s)
+                - else
+                  = value
+              %td
+                .btn-group
+                  - if setting.present?
+                    %a.btn.btn-default.btn-sm{href: edit_backend_setting_path(setting), title: I18n.t(:"actions.edit")}
+                      %i.glyphicon.glyphicon-edit
                   - else
-                    = value
-                %td
-                  .btn-group
-                    - if setting.present?
-                      %a.btn.btn-default.btn-sm{href: edit_backend_setting_path(setting), title: I18n.t(:"actions.edit")}
-                        %i.glyphicon.glyphicon-edit
-                    - else
-                      %a.btn.btn-default.btn-sm{href: new_backend_setting_path(keypath: path), title: I18n.t(:"actions.edit")}
-                        %i.glyphicon.glyphicon-edit
+                    %a.btn.btn-default.btn-sm{href: new_backend_setting_path(keypath: path), title: I18n.t(:"actions.edit")}
+                      %i.glyphicon.glyphicon-edit
 

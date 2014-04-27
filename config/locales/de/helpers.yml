@@ -9,12 +9,12 @@ de:
         password_confirmation: "Passwort-Bestätigung"
         current_password: "aktuelles Passwort"
         remember_me: "Angemeldet bleiben"
+        settings:
+          tax: "Steuern"
       position:
         rate: "€/Std."
         hours: "Stunden"
         value: "€"
-      user_setting:
-        tax: "Steuern"
       invoice:
         date: "Datum"
         delivery_date: "Lieferdatum"
@@ -33,14 +33,6 @@ de:
         rate: "0"
         hours: "0.0"
         value: "Betrag in"
-      user_setting:
-        tax_ref: "Steuernummer"
-      bank_account:
-        bank: "Bank"
-        bank_code: "BLZ"
-        account_number: "Konto"
-        iban: "IBAN"
-        bic: "BIC"
       user:
         email: "E-Mail"
         password: "Passwort"
@@ -48,6 +40,17 @@ de:
         current_password: "Aktuelles Passwort"
         remember_me: "Angemeldet bleiben"
         gravatar: "Gravatar E-Mail Adresse"
+        bank_account:
+          bank: "Bank"
+          bank_code: "BLZ"
+          account_number: "Konto"
+          iban: "IBAN"
+          bic: "BIC"
+        settings:
+          tax_ref: "Steuernummer"
+          gdrive_password: "Google Drive Passwort"
+          gdrive_email: "Google Drive E-Mail"
+          gdrive_collection: "Google Drive Ordner"
       address:
         company: "Firma"
         name: "Name"

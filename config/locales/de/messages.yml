@@ -43,6 +43,8 @@ de:
     create:
       success: "%{resource} erfolgreich erstellt."
       failure: "%{resource} konnte nicht erstellt werden."
+    archive:
+      success: "%{resource} wurde erfolgreich archiviert."
     update:
       success: "%{resource} erfolgreich bearbeitet."
       failure: "%{resource} konnte nicht bearbeitet werden."

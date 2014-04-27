@@ -11,4 +11,4 @@
       = render partial: "backend/users/show", collection: @users, as: :user
 
       - if @users.blank?
-        = render "layouts/tables/blank", count: 3, resource: "user"
+        = render "shared/tables/blank", count: 3, resource: "user"

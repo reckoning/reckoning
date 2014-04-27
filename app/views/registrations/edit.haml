@@ -12,43 +12,57 @@
         .btn-group.pull-right.resource-nav
           = link_to I18n.t(:"nav.subnav.back"), root_path, class: "btn btn-default"
 
-    = form_for @user, url: user_registration_path do |form|
-      .row
-        .col-xs-12.col-md-6.form-group{class: form_error?(@user, :email)}
-          = form.email_field :email, placeholder: I18n.t(:"helpers.placeholder.user.email"), class: 'form-control', type: :email
-          %small
-            = form_errors @user, :email
-        .col-xs-12.col-md-6.form-group
-          = link_to I18n.t(:"nav.subnav.update_password"), edit_password_path, class: "btn btn-warning"
-      .row
-        .col-xs-12.col-md-6.form-group{class: form_error?(@user, :gravatar)}
-          = form.email_field :gravatar, placeholder: I18n.t(:"helpers.placeholder.user.gravatar"), class: 'form-control'
-          %small
-            = form_errors @user, :gravatar
-      %fieldset
-        %legend
-          Adressdaten
-        = render "addresses/fields", resource: @user
+    .row
+      .col-xs-12.col-lg-2.col-md-3.col-sm-3
+        %ul.nav.nav-vertical-tabs
+          %li.active
+            %a{href: "#basic", data: {toggle: "tab"}}
+              = I18n.t("nav.subnav.user.basic")
+              %i.glyphicon.glyphicon-user
+          %li
+            %a{href: "#address", data: {toggle: "tab"}}
+              = I18n.t("nav.subnav.user.address")
+              %i.glyphicon.glyphicon-globe
+          %li
+            %a{href: "#banking", data: {toggle: "tab"}}
+              = I18n.t("nav.subnav.user.banking")
+              %i.glyphicon.glyphicon-credit-card
+          %li
+            %a{href: "#settings", data: {toggle: "tab"}}
+              = I18n.t("nav.subnav.user.settings")
+              %i.glyphicon.glyphicon-cog
+          %li
+            %a{href: "#services", data: {toggle: "tab"}}
+              = I18n.t("nav.subnav.user.services")
+              %i.glyphicon.glyphicon-cloud-upload
 
-      %fieldset
-        %legend
-          Steuern
-        .row
-          .col-xs-12.col-md-6.form-group
-            .row.form-horizontal
-              .col-xs-8.col-md-8
-                %label{for: "setting_tax", class: "pull-right control-label"}
-                  = I18n.t(:"activerecord.attributes.user_setting.tax")
-              .col-xs-4.col-md-4
-                .input-group{class: form_error?(@user, :tax_ref)}
-                  = form.text_field :tax, class: 'form-control'
-                  %small
-                    = form_errors @user, :tax
-                  %span.input-group-addon
-                    = "%"
-          .col-xs-12.col-md-6.form-group{class: form_error?(@user, :tax_ref)}
-            = form.text_field :tax_ref, placeholder: I18n.t(:"helpers.placeholder.user_setting.tax_ref"), class: 'form-control'
-            %small
-              = form_errors @user, :tax_ref
+      .col-xs-12.col-lg-10.col-md-9.col-sm-9
+        = form_for @user, url: user_registration_path do |form|
+          .tab-content
+            .tab-pane.active#basic
+              %fieldset
+                %legend
+                  = I18n.t(:"labels.user.settings.basic")
+                = render "users/basic", form: form, resource: @user
+            .tab-pane#address
+              %fieldset
+                %legend
+                  = I18n.t(:"labels.user.settings.address")
+                = render "addresses/fields", resource: @user
+            .tab-pane#banking
+              %fieldset
+                %legend
+                  = I18n.t(:"labels.user.settings.banking")
+                = render "users/banking", form: form, resource: @user
+            .tab-pane#settings
+              %fieldset
+                %legend
+                  = I18n.t(:"labels.user.settings.taxes")
+                = render "users/settings", form: form, resource: @user
+            .tab-pane#services
+              %fieldset
+                %legend
+                  = I18n.t(:"labels.user.settings.gdrive")
+                = render "users/gdrive_service", form: form, resource: @user
 
-      = render "layouts/forms/submit", path: root_path
+          = render "shared/forms/submit", path: root_path

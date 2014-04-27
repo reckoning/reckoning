@@ -1,7 +1,12 @@
 window.App ?= {}
 
-$(document).on 'click', 'a.disabled', (evt) ->
+$(document).on 'click', 'a.disabled', (ev) ->
   false
+
+$(document).on 'click', 'code[data-target]', (ev) ->
+  $element = $(ev.target)
+  $target = $($element.data('target'))
+  $target.val($target.val() + $element.text())
 
 $ ->
   if success = $('body').attr('data-success')
