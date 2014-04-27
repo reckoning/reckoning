@@ -10,9 +10,6 @@
       %ul.dropdown-menu.navbar-right
         %li{class: get_active_nav('users')}
           = link_to I18n.t(:"nav.header.settings"), edit_user_registration_path
-        - unless backend?
-          %li{class: get_active_nav('bank_accounts')}
-            = link_to I18n.t(:"nav.header.bank_account"), edit_bank_account_path
         - if current_user.admin?
           %li.divider
           - if backend?

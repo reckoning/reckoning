@@ -21,9 +21,10 @@
       .col-xs-12.col-md-8
         #preview
           #preview-image{class: ('hide' unless invoice.pdf_present_and_up_to_date?)}
-            %img{src: invoice_png_path(invoice.ref, invoice.invoice_file('png'))}
-
-            %img{src: timesheet_png_path(invoice.ref, invoice.timesheet_file('png'))}
+            - if invoice.pdf_present_and_up_to_date?
+              %img{src: invoice_png_path(invoice.ref, invoice.invoice_file('png'))}
+            - if invoice.timesheet_present_and_up_to_date?
+              %img{src: timesheet_png_path(invoice.ref, invoice.timesheet_file('png'))}
 
           #preview-info{class: ('hide' if invoice.pdf_present_and_up_to_date?)}
             .panel.panel-default
@@ -97,3 +98,7 @@
                     = confirm_link_to charge_invoice_path(invoice.ref), data: {notyConfirm: charge_confirm}, title: I18n.t(:"actions.charge"), method: :put, class: "list-group-item" do
                       %i.glyphicon.glyphicon-envelope
                       = I18n.t(:"actions.charge")
+                  - if invoice.state?(:charged) || invoice.state?(:paid)
+                    = link_to archive_invoice_path(invoice.ref), method: :put, class: "list-group-item" do
+                      %i.glyphicon.glyphicon-cloud-upload
+                      = I18n.t(:"actions.archive")

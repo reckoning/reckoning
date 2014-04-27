@@ -22,9 +22,6 @@
 #
 #= require turbolinks
 
-$(document).on 'click', 'a.disabled', (evt) ->
-  false
-
 $(document).on 'show.bs.collapse', '.navbar-collapse', (ev) ->
   $('.navbar-collapse.in').not(@).collapse('hide')
 

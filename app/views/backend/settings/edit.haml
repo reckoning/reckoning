@@ -29,5 +29,5 @@
               = form.label :value, I18n.t(:"activerecord.attributes.setting.#{@keypath}"), class: "input-group-addon"
               = form.text_field :value, placeholder: @default_setting, class: 'form-control'
 
-      = render "layouts/forms/submit", path: backend_root_path
+      = render "shared/forms/submit", path: backend_root_path
 

@@ -29,7 +29,6 @@ Reckoning::Application.routes.draw do
     delete 'signout' => 'sessions#destroy', as: :destroy_user_session
   end
 
-  resource :bank_account, only: [:edit, :update]
   resource :password, only: [:edit, :update]
 
   resources :invoices, param: :ref do
@@ -39,6 +38,7 @@ Reckoning::Application.routes.draw do
       put :charge
       put :pay
       get :check_pdf
+      put :archive
     end
   end
 
@@ -72,6 +72,10 @@ Reckoning::Application.routes.draw do
       put 'remove_task/:task_id' => 'weeks#remove_task', as: :remove_task
     end
   end
+
+  get '404' => 'errors#not_found'
+  get '422' => 'errors#server_error'
+  get '500' => 'errors#server_error'
 
   root to: 'base#index'
 end

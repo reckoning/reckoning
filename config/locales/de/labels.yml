@@ -35,6 +35,15 @@ de:
       admin: "Admin?"
       email: "E-Mail"
       created_at: "Erstellt"
+      settings:
+        basic: "Account Informationen"
+        address: "Adressdaten"
+        banking: "Bank Informationen"
+        taxes: "Steuern"
+        gdrive: "Google Drive"
+    customer:
+      basic: "Allgemeine Informationen"
+      email: "E-Mail Setup für Rechnungen"
     setting:
       key: "Bezeichnung"
       value: "Wert"
@@ -46,6 +55,7 @@ de:
         customer: "Keine Kunden vorhanden"
         invoice: "Keine Rechnungen vorhanden"
         project: "Keine Projekte vorhanden"
+
 
     modals:
       title:

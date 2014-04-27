@@ -93,7 +93,7 @@ class Invoice < ActiveRecord::Base
     pdf_generator = InvoicePdfGenerator.new self, {
       pdf_path: pdf_path,
       png_path: pdf_path('png'),
-      tempfile: 'reckoning-invoice-pdf'
+      tempfile: "reckoning-invoice-pdf-#{self.id}"
     }
     pdf_generator.generate
   end
@@ -102,7 +102,7 @@ class Invoice < ActiveRecord::Base
     pdf_generator = TimesheetPdfGenerator.new self, {
       pdf_path: timesheet_path,
       png_path: timesheet_path('png'),
-      tempfile: 'reckoning-timesheet-pdf'
+      tempfile: "reckoning-timesheet-pdf-#{self.id}"
     }
     pdf_generator.generate
   end
@@ -133,6 +133,10 @@ class Invoice < ActiveRecord::Base
 
   def pdf_present_and_up_to_date?
     self.pdf_present? && (self.pdf_up_to_date? || self.paid?)
+  end
+
+  def timesheet_present_and_up_to_date?
+    self.timesheet_present? && (self.pdf_up_to_date? || self.paid?)
   end
 
   def pdf_up_to_date?

@@ -11,14 +11,18 @@ de:
           archived: "Archiviert"
       invoice_position:
         description: "Beschreibung"
-      user_setting:
-        tax: "Steuern"
       user:
         enabled: "Aktiv?"
         admin: "Admin?"
         confirmation_token: "Token"
         gravatar: "Gravatar E-Mail Adresse"
         created_at: "vor %{time}"
+        settings:
+          tax: "Steuern"
+          provision: "Rückstellung"
+          gdrive_password: "Google Drive Passwort"
+          gdrive_email: "Google Drive E-Mail"
+          gdrive_collection: "Google Drive Ordner"
       setting:
         base:
           registration: "Registrierung aktiv?"
@@ -37,6 +41,8 @@ de:
           attributes:
             confirmation_token:
               invalid: "ist ungültig"
+            email:
+              taken: "Die E-Mail Adresse ist bereits vergeben."
             password:
               too_short: "Bitte geben Sie ein Passwort mit mindestens 8 Zeichen ein."
             password_confirmation:

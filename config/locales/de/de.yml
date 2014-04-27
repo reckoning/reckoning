@@ -15,7 +15,6 @@ de:
       projects: "Projekte"
       timers: "Zeiten"
       settings: "Einstellungen"
-      bank_account: "Bankdaten"
       upgrade: "Upgrade auf Pro"
       toggle: "Navigation aufklappen"
       intro: "Home"
@@ -33,6 +32,15 @@ de:
       new_project: "Neues Projekt"
       new_user: "Neuer Benutzer"
       update_password: "Passwort ändern"
+      user:
+        basic: Account
+        address: Adresse
+        banking: Bankdaten
+        settings: Einstellungen
+        services: Externe Dienste
+      customer:
+        basic: Allgemein
+        email: "E-Mail Setup"
 
   views:
     pagination:
@@ -64,8 +72,6 @@ de:
       password:
         new: "Passwort zurücksetzen"
         edit: "Passwort ändern"
-      bank_account:
-        edit: "Bankdaten bearbeiten"
       backend:
         user: "Benutzer"
         setting: "Einstellungen"
