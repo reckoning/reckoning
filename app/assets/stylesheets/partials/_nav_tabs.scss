@@ -30,7 +30,6 @@
         transition: opacity $nav-transition-speed;
         color: $text-color;
         opacity: .5;
-        vertical-align: text-top;
       }
 
       &:hover {
@@ -52,7 +51,6 @@
 
         i {
           opacity: 1;
-          margin-top: 1px;
         }
 
         &:before, &:after {

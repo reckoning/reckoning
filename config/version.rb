@@ -1,4 +1,4 @@
 module Reckoning
   CODENAME = "constellation"
-  VERSION = "v1.3.2"
+  VERSION = "v1.3.3"
 end
