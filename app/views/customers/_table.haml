@@ -11,4 +11,4 @@
       = render partial: "customers/show", collection: @customers, as: :customer
 
       - if @customers.blank?
-        = render "layouts/tables/blank", count: 4, resource: "customer"
+        = render "shared/tables/blank", count: 4, resource: "customer"

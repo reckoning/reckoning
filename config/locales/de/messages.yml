@@ -28,7 +28,8 @@ de:
       form:
         cancel: "Sind Sie sich sicher? Ungespeicherte Änderungen gehen verloren."
       delete: "Sind Sie sich sicher, dass Sie den Eintrag löschen wollen?"
-      charge: "Sind Sie sich sicher, dass Sie die Rechnung absenden wollen? Die Rechnung und die damit verbundenen Zeiten können dann nicht mehr verändert werden."
+      charge: "Sind Sie sich sicher, dass Sie die Rechnung absenden wollen?<br>Die Rechnung und die damit verbundenen Zeiten können dann nicht mehr verändert werden."
+      charge_mail: "Sind Sie sich sicher, dass Sie die Rechnung absenden wollen?<br>Die Rechnung und die damit verbundenen Zeiten können dann nicht mehr verändert werden.<br><br>Die Rechnung und der Studenzettel werden per E-Mail an den Kunden geschickt."
     setting:
       not_found: "Keinen Eintrag gefunden"
     customer:
@@ -42,6 +43,8 @@ de:
     create:
       success: "%{resource} erfolgreich erstellt."
       failure: "%{resource} konnte nicht erstellt werden."
+    archive:
+      success: "%{resource} wurde erfolgreich archiviert."
     update:
       success: "%{resource} erfolgreich bearbeitet."
       failure: "%{resource} konnte nicht bearbeitet werden."

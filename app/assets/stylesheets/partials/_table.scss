@@ -39,7 +39,10 @@ table {
       width: 100px;
       min-width: 100px;
     }
-
+    &.date {
+      width: 125px;
+      min-width: 125px;
+    }
     &.rate {
       width: 80px;
       min-width: 80px;
