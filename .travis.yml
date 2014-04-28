@@ -8,3 +8,6 @@ before_script:
 branches:
   only:
     - master
+    - develop
+notifications:
+  webhooks: https://mortik.slack.com/services/hooks/travis?token=aqp1ZDxk4YATzbB2XC8b36kn
