@@ -20,14 +20,14 @@
   }
 
   li {
-    border-color: transparent;
-    border-width: 1px 0;
-    border-style: solid;
-
     > a {
-      //transition: all $nav-transition-speed;
+      padding: 8px 15px;
+      margin: 5px 0;
+      border: 1px solid transparent;
+      transition: box-shadow $nav-transition-speed, color $nav-transition-speed;
 
       i {
+        transition: opacity $nav-transition-speed;
         color: $text-color;
         opacity: .5;
         vertical-align: text-top;
@@ -44,17 +44,24 @@
 
     &.active {
       background-color: white;
-      border-color: $gray-lighter;
-      border-width: 1px 0;
-      border-style: solid;
 
       > a {
         color: $text-color;
         font-weight: bold;
+        border: 1px solid $gray-lighter;
 
         i {
           opacity: 1;
           margin-top: 1px;
+        }
+
+        &:before, &:after {
+          position: absolute;
+          width: 3px;
+          top: -1px;
+          height: 38px;
+          content: "";
+          display: block;
         }
       }
     }
@@ -68,21 +75,25 @@ div:first-child > .nav-vertical-tabs {
 
   li {
     > a {
-      border-radius: 2px 0 0 2px;
       text-align: right;
-      border-right: 3px solid transparent;
 
       &:hover {
-        border-right: 3px solid rgba($gray-light, .7);
+        box-shadow: inset -2px 0 0 rgba($gray-light, .7);
       }
     }
 
     &.active {
       box-shadow: -1px 1px 2px $gray-lighter;
 
-      a {
-        border-left: 4px solid $navbar-active;
-        border-right-color: transparent;
+      > a {
+        box-shadow: none;
+        border-right: 1px solid transparent;
+
+        &:before {
+          left: -1px;
+          border-radius: 2px 0 0 2px;
+          background-color: $navbar-active;
+        }
       }
     }
   }
@@ -94,21 +105,25 @@ div:last-child > .nav-vertical-tabs {
 
   li {
     > a {
-      border-radius: 0 2px 2px 0;
       text-align: left;
-      border-left: 3px solid transparent;
 
       &:hover {
-        border-left: 3px solid rgba($gray-light, .7);
+        box-shadow: inset 2px 0 0 rgba($gray-light, .7);
       }
     }
 
     &.active {
       box-shadow: 1px 1px 2px $gray-lighter;
 
-      a {
-        border-right: 4px solid $navbar-active;
-        border-left-color: transparent;
+      > a {
+        box-shadow: none;
+        border-left: 1px solid transparent;
+
+        &:after {
+          right: -1px;
+          border-radius: 0 2px 2px 0;
+          background-color: $navbar-active;
+        }
       }
     }
   }
