@@ -10,7 +10,17 @@ class Ability
 
     can :update, User, id: user.id
 
-    can :manage, Invoice, user_id: user.id
+    can [:read, :create, :destroy, :check], Invoice, user_id: user.id
+    can :update, Invoice do |invoice|
+      %w(created charged).include?(invoice.state) && invoice.user_id == user.id
+    end
+    can :pay, Invoice do |invoice|
+      %w(charged).include?(invoice.state) && invoice.user_id == user.id
+    end
+    can :charge, Invoice do |invoice|
+      %w(created).include?(invoice.state) && invoice.user_id == user.id
+    end
+
     can :manage, Customer, user_id: user.id
     can :manage, Project, customer: { user_id: user.id }
     can :manage, Week, user_id: user.id
