@@ -11,6 +11,7 @@ production:
   app:
     url: "http://reckoning.dev"
     domain: "reckoning.dev"
+    gdrive_collection: "Reckoning.io"
     py_env:
 development:
   base:
@@ -25,6 +26,7 @@ development:
   app:
     url: "http://reckoning.dev"
     domain: "reckoning.dev"
+    gdrive_collection: "Reckoning.io"
     py_env:
 test:
   base:
@@ -38,4 +40,5 @@ test:
   app:
     url: "http://reckoning.dev"
     domain: "reckoning.dev"
+    gdrive_collection: "Reckoning.io"
     py_env:
