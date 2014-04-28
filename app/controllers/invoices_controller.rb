@@ -110,11 +110,6 @@ class InvoicesController < ApplicationController
     end
   end
 
-  def generate_positions
-    authorize! :update, invoice
-    raise params.inspect
-  end
-
   def new
     authorize! :create, Invoice
     @invoice = Invoice.new
@@ -124,7 +119,6 @@ class InvoicesController < ApplicationController
   def edit
     authorize! :update, invoice
     @ref = invoice.ref
-    redirect_to invoices_path, alert: I18n.t(:"messages.invoice.not_editable") unless invoice.editable?
   end
 
   def create
@@ -148,7 +142,7 @@ class InvoicesController < ApplicationController
   end
 
   def charge
-    authorize! :update, invoice
+    authorize! :charge, invoice
     if invoice.charge
       redirect_to :back, notice: I18n.t(:'messages.charge.invoice.success')
     else
@@ -157,7 +151,7 @@ class InvoicesController < ApplicationController
   end
 
   def pay
-    authorize! :update, invoice
+    authorize! :pay, invoice
     if invoice.pay
       redirect_to :back, notice: I18n.t(:'messages.pay.invoice.success')
     else
@@ -166,7 +160,7 @@ class InvoicesController < ApplicationController
   end
 
   def check_pdf
-    authorize! :update, invoice
+    authorize! :check, invoice
     respond_to do |format|
       format.js {
         if invoice.present?

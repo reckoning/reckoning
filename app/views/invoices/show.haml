@@ -72,33 +72,33 @@
                   %i.glyphicon.glyphicon-download-alt
                   = I18n.t(:"actions.download_timesheet")
 
-        - unless invoice.state?(:paid)
+        %br
+        .row
+          .col-xs-12.col-md-12
+            .panel.panel-default
+              .panel-heading
+                .panel-title
+                  %strong
+                    = I18n.t(:"labels.panels.title.default")
+              .list-group
+                - if can? :update, invoice
+                  %a.list-group-item{href: edit_invoice_path(invoice.ref)}
+                    %i.glyphicon.glyphicon-edit
+                    = I18n.t(:"actions.edit")
 
-          %br
-          .row
-            .col-xs-12.col-md-12
-              .panel.panel-default
-                .panel-heading
-                  .panel-title
-                    %strong
-                      = I18n.t(:"labels.panels.title.default")
-                .list-group
-                  - if invoice.state?(:charged)
-                    = link_to pay_invoice_path(invoice.ref), method: :put, class: "list-group-item" do
-                      %i.glyphicon.glyphicon-ok
-                      = I18n.t(:"actions.pay")
-                  - else
-                    %a.list-group-item{href: edit_invoice_path(invoice.ref)}
-                      %i.glyphicon.glyphicon-edit
-                      = I18n.t(:"actions.edit")
+                - if can? :charge, invoice
+                  - charge_confirm = I18n.t(:"messages.confirm.charge")
+                  - if invoice.send_via_mail?
+                    - charge_confirm = I18n.t(:"messages.confirm.charge_mail")
+                  = confirm_link_to charge_invoice_path(invoice.ref), data: {notyConfirm: charge_confirm}, title: I18n.t(:"actions.charge"), method: :put, class: "list-group-item" do
+                    %i.glyphicon.glyphicon-envelope
+                    = I18n.t(:"actions.charge")
 
-                    - charge_confirm = I18n.t(:"messages.confirm.charge")
-                    - if invoice.send_via_mail?
-                      - charge_confirm = I18n.t(:"messages.confirm.charge_mail")
-                    = confirm_link_to charge_invoice_path(invoice.ref), data: {notyConfirm: charge_confirm}, title: I18n.t(:"actions.charge"), method: :put, class: "list-group-item" do
-                      %i.glyphicon.glyphicon-envelope
-                      = I18n.t(:"actions.charge")
-                  - if invoice.state?(:charged) || invoice.state?(:paid)
-                    = link_to archive_invoice_path(invoice.ref), method: :put, class: "list-group-item" do
-                      %i.glyphicon.glyphicon-cloud-upload
-                      = I18n.t(:"actions.archive")
+                - if can? :pay, invoice
+                  = link_to pay_invoice_path(invoice.ref), method: :put, class: "list-group-item" do
+                    %i.glyphicon.glyphicon-ok
+                    = I18n.t(:"actions.pay")
+
+                = link_to archive_invoice_path(invoice.ref), method: :put, class: "list-group-item" do
+                  %i.glyphicon.glyphicon-cloud-upload
+                  = I18n.t(:"actions.archive")
