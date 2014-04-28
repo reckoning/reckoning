@@ -9,26 +9,23 @@ $nav-transition-speed: .3s;
 
       > li {
         > a {
-          border-color: $navbar-default-bg;
           transition: all $nav-transition-speed;
         }
 
         &.active > a,
         > a:hover,
         &.open > a {
-          border-bottom: 4px solid $navbar-active;
-          padding-bottom: 11px;
+          box-shadow: inset 0 -4px 0 $navbar-active;
         }
 
         .dropdown-menu {
           li {
             > a {
-              border-color: $navbar-default-bg;
               transition: all $nav-transition-speed;
             }
             &.active > a,
             &:hover > a {
-              border-right: 4px solid $navbar-active;
+              box-shadow: inset 4px 0 0 $navbar-active;
             }
           }
         }
@@ -44,16 +41,14 @@ $nav-transition-speed: .3s;
           &.active > a,
           > a:hover,
           &.open > a {
-            border: none;
-            border-right: 4px solid $navbar-active;
-            padding-bottom: 10px;
+            box-shadow: inset 4px 0 0 $navbar-active;
           }
 
           .dropdown-menu {
             li {
               &.active > a,
               &:hover > a {
-                border-right: 4px solid $navbar-active;
+                box-shadow: inset 4px 0 0 $navbar-active;
               }
             }
           }
