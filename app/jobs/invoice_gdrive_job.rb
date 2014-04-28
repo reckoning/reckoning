@@ -20,7 +20,7 @@ class InvoiceGdriveJob
       session.root_collection.remove invoice_file
 
       if File.exists?(invoice.timesheet_path)
-        timesheet_file = customer_collection.files(title: invoice.timesheet_file)
+        timesheet_file = collection.files(title: invoice.timesheet_file)
         if timesheet_file.present?
           timesheet_file.first.delete(true)
         end
