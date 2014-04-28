@@ -1,0 +1,14 @@
+.row
+  .col-xs-12.col-md-6.form-group{class: form_error?(resource, :gdrive_email)}
+    = form.text_field :gdrive_email, placeholder: I18n.t(:"helpers.placeholder.user.settings.gdrive_email"), class: 'form-control'
+    %small
+      = form_errors resource, :gdrive_email
+  .col-xs-12.col-md-6.form-group{class: form_error?(resource, :gdrive_password)}
+    = form.password_field :gdrive_password, placeholder: I18n.t(:"helpers.placeholder.user.settings.gdrive_password"), class: 'form-control', value: form.object.gdrive_password
+    %small
+      = form_errors resource, :gdrive_password
+.row
+  .col-xs-12.col-md-6.form-group{class: form_error?(resource, :gdrive_collection)}
+    = form.text_field :gdrive_collection, placeholder: I18n.t(:"helpers.placeholder.user.settings.gdrive_collection"), class: 'form-control'
+    %small
+      = form_errors resource, :gdrive_collection

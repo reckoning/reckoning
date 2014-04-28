@@ -29,9 +29,6 @@ de:
       edit: "Kunde bearbeiten"
       index: "Kunden"
 
-    bank_account:
-      edit: "Bankdaten berbeiten"
-
     user:
       edit: "Account bearbeiten"
 

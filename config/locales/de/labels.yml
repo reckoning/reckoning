@@ -23,6 +23,8 @@ de:
       on_date: am
       timers: "Erfasste Stunden im letzten Monat"
     timesheet:
+      date: Datum
+      task: Aufgabe
       current_week: "Diese Woche"
       on_invoice: "Zeiten wurden bereits abgerechnet."
     invoice:
@@ -33,6 +35,15 @@ de:
       admin: "Admin?"
       email: "E-Mail"
       created_at: "Erstellt"
+      settings:
+        basic: "Account Informationen"
+        address: "Adressdaten"
+        banking: "Bank Informationen"
+        taxes: "Steuern"
+        gdrive: "Google Drive"
+    customer:
+      basic: "Allgemeine Informationen"
+      email: "E-Mail Setup für Rechnungen"
     setting:
       key: "Bezeichnung"
       value: "Wert"
@@ -45,6 +56,7 @@ de:
         invoice: "Keine Rechnungen vorhanden"
         project: "Keine Projekte vorhanden"
 
+
     modals:
       title:
         timesheet: "Timer hinzufügen"
@@ -53,6 +65,7 @@ de:
     panels:
       title:
         default: "Aktionen"
+        downloads: "Downloads"
         latest_users: "Neue Benutzer"
         settings:
           base: "Allgemeine Eisntellungen"

@@ -1,0 +1,56 @@
+= render "shared/pdf_header", resource: @resource
+#pdf-body
+  .row
+    #subject
+      .info-wrapper
+        #infomartion
+          = I18n.t(:"pdf.invoice.subject.project")
+          = @resource.project.name
+        #date
+          = I18n.t(:"pdf.invoice.subject.date")
+          = I18n.l @resource.date
+      %h1
+        = I18n.t(:"pdf.timesheet.headline")
+        = I18n.l(@resource.date.beginning_of_month)
+        = " - "
+        = I18n.l(@resource.date.end_of_month)
+
+    %br
+
+    %table.table.table-condensed
+      %thead
+        %th=I18n.t(:"labels.timesheet.date")
+        %th=I18n.t(:"labels.timesheet.task")
+        %th.align-right=I18n.t(:"labels.defaults.hours")
+      %tbody
+        - value = 0
+        - timers_by_date = @resource.timers.order(:date).group_by(&:date)
+        - timers_by_date.each do |date, timers|
+          %tr
+            %td.date
+              %strong
+                = I18n.l(date, format: :long)
+            %td
+            %td.hours
+              %strong
+                - date_value = timers.sum {|t| t.value.to_d }
+                - hours = date_value.to_i
+                - minutes = format('%02d', ((date_value.to_d % 1) * 60).round)
+                = "#{hours}:#{minutes}"
+          - timers.each do |timer|
+            - value = value + timer.value.to_d
+            %tr
+              %td
+              %td
+                = timer.task.name
+              %td.hours
+                = timer.value_as_time
+        %tr.sum.border
+          %td{colspan: 2}
+            = I18n.t(:"pdf.timesheet.sum")
+          %td.value
+            %strong
+              - hours = value.to_i
+              - minutes = format('%02d', ((value.to_d % 1) * 60).round)
+              = "#{hours}:#{minutes}"
+= render "shared/pdf_footer", resource: @resource

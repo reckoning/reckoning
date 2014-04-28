@@ -23,6 +23,7 @@ de:
     generate: "Erstellen"
     charge: "In Rechnung stellen"
     pay: "Rechnung als bezahlt markieren"
+    archive: "Archivieren"
     sign_in: "Anmelden"
     sign_out: "Abmelden"
     sign_up: "Registrieren"
@@ -35,3 +36,6 @@ de:
     enable: "Aktivieren"
     disable: "Deaktivieren"
     close: Schließen
+    paste: Einfügen
+    download_invoice: "Rechnung speichern"
+    download_timesheet: "Stundenzettel speichern"

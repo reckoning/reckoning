@@ -52,4 +52,10 @@ class Timer < ActiveRecord::Base
     parts = value.split(':')
     self.value = parts[0].to_d + (parts[1].to_d / 60)
   end
+
+  def value_as_time
+    hours = value.to_i
+    minutes = format('%02d', ((value.to_d % 1) * 60).round)
+    "#{hours}:#{minutes}"
+  end
 end

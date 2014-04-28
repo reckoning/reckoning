@@ -32,13 +32,16 @@ module Reckoning
         resource '*', :headers => :any, :methods => [:get, :post, :put, :patch, :delete, :options]
       end
     end
+
+    config.exceptions_app = self.routes
   end
 end
 
 I18n.config.enforce_available_locales = true
 
 require 'hstore_accessor'
-require 'pdf_generator'
+require 'invoice_pdf_generator'
+require 'timesheet_pdf_generator'
 require 'awesome_open_struct'
 require_relative 'initializers/settings'
 require_relative 'version'

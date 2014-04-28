@@ -55,7 +55,9 @@ gem 'roo'
 
 gem 'rack-cors', require: 'rack/cors'
 
-gem 'skylight'
+gem "skylight"
+
+gem 'google_drive'
 
 group :test do
   gem 'rails-perftest'

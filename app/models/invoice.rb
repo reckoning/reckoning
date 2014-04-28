@@ -5,6 +5,7 @@ class Invoice < ActiveRecord::Base
   belongs_to :customer
   belongs_to :project
   has_many :positions, dependent: :destroy, inverse_of: :invoice
+  has_many :timers, through: :positions
 
   validates_presence_of :customer_id, :project_id, :date
   validates_uniqueness_of :ref, scope: :user_id
@@ -56,7 +57,7 @@ class Invoice < ActiveRecord::Base
   def generate_pdf
     self.set_payment_due_date
     self.update_attributes({pdf_generating: true})
-    Resque.enqueue InvoiceWorker, self.id
+    Resque.enqueue InvoicePdfJob, self.id
   end
 
   def ref_number
@@ -72,28 +73,37 @@ class Invoice < ActiveRecord::Base
     ].join('').html_safe
   end
 
-  def filename(filetype = 'pdf')
-    "rechnung-#{self.ref}-#{I18n.l(self.date.to_date, format: :pdf).downcase}.#{filetype}"
+  def invoice_file(filetype = 'pdf')
+    "rechnung-#{self.ref}-#{I18n.l(self.date.to_date, format: :file).downcase}.#{filetype}"
   end
 
-  def pdf_path
-    path(self.filename)
+  def timesheet_file(filetype = 'pdf')
+    "stunden-rechnung-#{self.ref}-#{I18n.l(self.date.to_date, format: :file).downcase}.#{filetype}"
   end
 
-  def png_path
-    path(self.filename('png'))
+  def pdf_path(filetype = 'pdf')
+    path(invoice_file(filetype))
   end
 
-  def path(filename)
-    dir = Rails.root.join('files', 'invoices')
-    Dir.mkdir(dir) unless File.exists?(dir)
-    pdf_dir = dir.join(self.customer.id.to_s)
-    Dir.mkdir(pdf_dir) unless File.exists?(pdf_dir)
-    Rails.root.join(pdf_dir, filename).to_s
+  def timesheet_path(filetype = 'pdf')
+    path(timesheet_file(filetype))
   end
 
   def generate
-    pdf_generator = PdfGenerator.new self
+    pdf_generator = InvoicePdfGenerator.new self, {
+      pdf_path: pdf_path,
+      png_path: pdf_path('png'),
+      tempfile: "reckoning-invoice-pdf-#{self.id}"
+    }
+    pdf_generator.generate
+  end
+
+  def generate_timesheet
+    pdf_generator = TimesheetPdfGenerator.new self, {
+      pdf_path: timesheet_path,
+      png_path: timesheet_path('png'),
+      tempfile: "reckoning-timesheet-pdf-#{self.id}"
+    }
     pdf_generator.generate
   end
 
@@ -113,6 +123,10 @@ class Invoice < ActiveRecord::Base
     !self.pdf_present? && !self.pdf_generating?
   end
 
+  def timesheet_not_present_or_generating?
+    !self.timesheet_present? || self.pdf_generating?
+  end
+
   def pdf_not_present_or_generating?
     !self.pdf_present? || self.pdf_generating?
   end
@@ -121,12 +135,20 @@ class Invoice < ActiveRecord::Base
     self.pdf_present? && (self.pdf_up_to_date? || self.paid?)
   end
 
+  def timesheet_present_and_up_to_date?
+    self.timesheet_present? && (self.pdf_up_to_date? || self.paid?)
+  end
+
   def pdf_up_to_date?
     Time.at(self.pdf_generated_at.to_i) == Time.at(self.updated_at.to_i)
   end
 
   def pdf_present?
-    File.exists?(self.pdf_path)
+    File.exists?(pdf_path)
+  end
+
+  def timesheet_present?
+    File.exists?(timesheet_path)
   end
 
   def pdf_generating?
@@ -151,7 +173,19 @@ class Invoice < ActiveRecord::Base
     self.value = value
   end
 
+  def send_via_mail?
+    customer.email_template.present? && customer.invoice_email.present?
+  end
+
   private
+
+  def path(filename)
+    dir = Rails.root.join('files', 'invoices')
+    Dir.mkdir(dir) unless File.exists?(dir)
+    pdf_dir = dir.join(self.customer.id.to_s)
+    Dir.mkdir(pdf_dir) unless File.exists?(pdf_dir)
+    Rails.root.join(pdf_dir, filename).to_s
+  end
 
   def set_customer
     project = Project.where(id: project_id).first

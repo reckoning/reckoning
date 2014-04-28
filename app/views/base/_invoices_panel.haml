@@ -12,7 +12,7 @@
         = invoice.title
         .text-right
           %em
-            = I18n.l invoice.date, format: :month
+            = I18n.l invoice.date, format: :month_year
         - if invoice.charged? && invoice.payment_due_date < Time.now
           %span.label.label-danger.due-label
             = I18n.t(:"labels.invoice.due", date: time_ago_in_words(invoice.payment_due_date))

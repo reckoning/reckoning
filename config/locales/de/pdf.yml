@@ -16,3 +16,7 @@ de:
       net: "Netto"
       gross: "Brutto"
       sum: "Summe"
+
+    timesheet:
+      headline: "Stunden"
+      sum: "Gesamt"

@@ -11,4 +11,4 @@
       = render partial: "projects/show", collection: @projects, as: :project
 
       - if @projects.blank?
-        = render "layouts/tables/blank", count: 4, resource: "project"
+        = render "shared/tables/blank", count: 4, resource: "project"

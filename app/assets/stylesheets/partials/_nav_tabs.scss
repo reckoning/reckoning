@@ -1,0 +1,130 @@
+.nav-vertical-tabs {
+  position: relative;
+  padding: 15px 0 20px;
+
+  &:before, &:after {
+    height: 15px;
+    width: 100%;
+    left: 0;
+    position: absolute;
+  }
+
+  &:before {
+    @include background-image(linear-gradient($body-bg, rgba($body-bg, 0)));
+    top: 0;
+  }
+
+  &:after {
+    @include background-image(linear-gradient(rgba($body-bg, 0), $body-bg));
+    bottom: 0;
+  }
+
+  li {
+    > a {
+      padding: 8px 15px;
+      margin: 5px 0;
+      border: 1px solid transparent;
+      transition: box-shadow $nav-transition-speed, color $nav-transition-speed;
+
+      i {
+        transition: opacity $nav-transition-speed;
+        color: $text-color;
+        opacity: .5;
+        vertical-align: text-top;
+      }
+
+      &:hover {
+        background-color: transparent;
+
+        i {
+          opacity: 1;
+        }
+      }
+    }
+
+    &.active {
+      background-color: white;
+
+      > a {
+        color: $text-color;
+        font-weight: bold;
+        border: 1px solid $gray-lighter;
+
+        i {
+          opacity: 1;
+          margin-top: 1px;
+        }
+
+        &:before, &:after {
+          position: absolute;
+          width: 3px;
+          top: -1px;
+          height: 38px;
+          content: "";
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+div:first-child > .nav-vertical-tabs {
+  box-shadow: inset -1px 0 0 $gray-lighter;
+  color: lighten(#000, 60%);
+  @include background-image(linear-gradient(to left, #f6f6f6 0%, $body-bg 8px));
+
+  li {
+    > a {
+      text-align: right;
+
+      &:hover {
+        box-shadow: inset -2px 0 0 rgba($gray-light, .7);
+      }
+    }
+
+    &.active {
+      box-shadow: -1px 1px 2px $gray-lighter;
+
+      > a {
+        box-shadow: none;
+        border-right: 1px solid transparent;
+
+        &:before {
+          left: -1px;
+          border-radius: 2px 0 0 2px;
+          background-color: $navbar-active;
+        }
+      }
+    }
+  }
+}
+
+div:last-child > .nav-vertical-tabs {
+  box-shadow: inset 1px 0 0 $gray-lighter;
+  @include background-image(linear-gradient(to right, #f6f6f6 0%, $body-bg 8px));
+
+  li {
+    > a {
+      text-align: left;
+
+      &:hover {
+        box-shadow: inset 2px 0 0 rgba($gray-light, .7);
+      }
+    }
+
+    &.active {
+      box-shadow: 1px 1px 2px $gray-lighter;
+
+      > a {
+        box-shadow: none;
+        border-left: 1px solid transparent;
+
+        &:after {
+          right: -1px;
+          border-radius: 0 2px 2px 0;
+          background-color: $navbar-active;
+        }
+      }
+    }
+  }
+}
