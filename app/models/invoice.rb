@@ -174,7 +174,15 @@ class Invoice < ActiveRecord::Base
   end
 
   def send_via_mail?
-    customer.email_template.present? && customer.invoice_email.present?
+    customer.email_template.present? && customer.invoice_email.present? && files_present?
+  end
+
+  def can_be_archived?
+    files_present?
+  end
+
+  def files_present?
+    !pdf_not_present_or_generating? && (!timesheet_not_present_or_generating? || timers.blank?)
   end
 
   private

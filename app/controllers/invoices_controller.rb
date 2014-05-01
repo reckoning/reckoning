@@ -30,19 +30,24 @@ class InvoicesController < ApplicationController
   end
 
   def archive
-    authorize! :read, invoice
-    if current_user.has_gdrive?
+    authorize! :archive, invoice
+    if invoice.can_be_archived? && current_user.has_gdrive?
       Resque.enqueue InvoiceGdriveJob, invoice.id
+      redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.invoice.archive.success", resource: I18n.t(:"resources.messages.invoice"))
+    else
+      redirect_to invoice_path(invoice.ref), warning: I18n.t(:"messages.invoice.archive.failure", resource: I18n.t(:"resources.messages.invoice"))
     end
-    redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.archive.success", resource: I18n.t(:"resources.messages.invoice"))
   end
 
   def send_mail
-    authorize! :read, invoice
-    if invoice.send_via_mail? && invoice.charged?
+    authorize! :send, invoice
+
+    if invoice.send_via_mail?
       Resque.enqueue InvoiceMailerJob, invoice.id
+      redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.invoice.send.success", resource: I18n.t(:"resources.messages.invoice"))
+    else
+      redirect_to invoice_path(invoice.ref), warning: I18n.t(:"messages.invoice.send.failure", resource: I18n.t(:"resources.messages.invoice"))
     end
-    redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.send.success", resource: I18n.t(:"resources.messages.invoice"))
   end
 
   def pdf

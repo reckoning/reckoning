@@ -16,30 +16,35 @@ form {
     }
   }
 
+  .form-control-feedback:nth-child(2) {
+    top: 0;
+  }
+
+  .selectize {
+    .form-control-feedback {
+      top: 0;
+      right: 30px;
+      z-index: 1;
+    }
+  }
+
   .has-error {
-    input, textarea, .selectize-input {
-      border-color: $input-error-border-color;
-      background-color: $input-error-bg-color;
-      border-radius: $border-radius-base $border-radius-base 0 0;
-
-      &:focus {
-        background: #fafafa;
-        border-color: #999999;
-      }
+    input, textarea, .selectize-control .selectize-input, .selectize-control .selectize-input.input-active {
+      border-color: #c60f13;
+      background-color: rgba(red, 0.1);
     }
 
-    .input-group-addon:first-child {
-      border-radius: $border-radius-base 0 0 0;
+    ::-webkit-input-placeholder {
+      color: $state-danger-text;
     }
-
-    small {
-      display: block;
-      padding: 0.375em 0.25em;
-      font-size: 90%;
-      font-weight: bold;
-      background: #c60f13;
-      color: white;
-      border-radius: 0 0 $border-radius-base $border-radius-base;
+    :-moz-placeholder {
+      color: $state-danger-text;
+    }
+    ::-moz-placeholder {
+      color: $state-danger-text;
+    }
+    :-ms-input-placeholder {
+      color: $state-danger-text;
     }
   }
 

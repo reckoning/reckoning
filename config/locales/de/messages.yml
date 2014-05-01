@@ -29,7 +29,7 @@ de:
         cancel: "Sind Sie sich sicher? Ungespeicherte Änderungen gehen verloren."
       delete: "Sind Sie sich sicher, dass Sie den Eintrag löschen wollen?"
       charge: "Sind Sie sich sicher, dass Sie die Rechnung absenden wollen?<br>Die Rechnung und die damit verbundenen Zeiten können dann nicht mehr verändert werden."
-      charge_mail: "Sind Sie sich sicher, dass Sie die Rechnung absenden wollen?<br>Die Rechnung und die damit verbundenen Zeiten können dann nicht mehr verändert werden.<br><br>Die Rechnung und der Studenzettel werden per E-Mail an den Kunden geschickt."
+      charge_mail: "Sind Sie sich sicher, dass Sie die Rechnung absenden wollen?<br>Die Rechnung und die damit verbundenen Zeiten können dann nicht mehr verändert werden.<br><br>Die Rechnung und der Stundenzettel werden per E-Mail an den Kunden geschickt."
     setting:
       not_found: "Keinen Eintrag gefunden"
     customer:
@@ -40,13 +40,15 @@ de:
       missing_address: "Bitte vervollständigen Sie zuerst Ihre Daten"
       load_positions:
         missing: "Bitte wählen Sie zunächst ein Projekt und geben Sie ein Datum an."
+      archive:
+        success: "Rechnung wurde erfolgreich archiviert."
+        failure: "Rechnung konnte nicht archiviert werden. Bitte überprüfen Sie Ihre Einstellungen für Externe Services."
+      send:
+        success: "Rechnung wurde erfolgreich versendet."
+        failure: "Rechnung konnte nicht versandt werden. Bitte Überprüfen Sie Ihre E-Mail Einstellungen und die des betreffenden Kunden."
     create:
       success: "%{resource} erfolgreich erstellt."
       failure: "%{resource} konnte nicht erstellt werden."
-    archive:
-      success: "%{resource} wurde erfolgreich archiviert."
-    send:
-      success: "%{resource} wurde erfolgreich versendet."
     update:
       success: "%{resource} erfolgreich bearbeitet."
       failure: "%{resource} konnte nicht bearbeitet werden."

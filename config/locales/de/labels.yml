@@ -36,6 +36,7 @@ de:
       admin: "Admin?"
       email: "E-Mail"
       created_at: "Erstellt"
+      last_sign_in: "Letzte Aktivität"
       settings:
         basic: "Account Informationen"
         address: "Adressdaten"

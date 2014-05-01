@@ -1,26 +1,24 @@
 = form_for project do |form|
   .row
-    .col-xs-12.col-md-6.form-group{class: form_error?(project, :customer_id)}
-      = form.collection_select :customer_id, customers, :id, :fullname, {include_blank: ""}, {placeholder: I18n.t(:"helpers.prompt.project.customer_id"), class: "js-selectize"}
-      %small
+    .col-xs-12.col-md-6
+      .form-group.selectize{class: form_error?(project, :customer_id)}
+        = form.collection_select :customer_id, customers, :id, :fullname, {include_blank: ""}, {placeholder: I18n.t(:"helpers.prompt.project.customer_id"), class: "js-selectize"}
         = form_errors project, :customer_id
-    .col-xs-12.col-md-6.form-group{class: form_error?(project, :name)}
-      = form.text_field :name, placeholder: I18n.t(:"helpers.placeholder.project.name"), class: 'form-control'
-      %small
+    .col-xs-12.col-md-6
+      .form-group{class: form_error?(project, :name)}
+        = form.text_field :name, placeholder: I18n.t(:"helpers.placeholder.project.name"), class: 'form-control'
         = form_errors project, :name
 
   .row
     .col-xs-4.col-md-2.form-group{class: form_error?(project, :rate)}
       = form.label :rate
       = form.text_field :rate, class: 'form-control'
-      %small
-        = form_errors project, :rate
+      = form_errors project, :rate
 
     .col-xs-4.col-md-2.form-group{class: form_error?(project, :budget)}
       = form.label :budget
       = form.text_field :budget, class: 'form-control'
-      %small
-        = form_errors project, :budget
+      = form_errors project, :budget
 
   %fieldset
     %legend
