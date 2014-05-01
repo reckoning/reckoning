@@ -38,6 +38,7 @@ de:
     invoice:
       not_editable: "Diese Rechnung kann nicht mehr verändert werden."
       missing_address: "Bitte vervollständigen Sie zuerst Ihre Daten"
+      files_missing: "Bitte warten Sie bis die Rechnung erstellt wurde oder stoßen Sie die Erstellung erneut an."
       load_positions:
         missing: "Bitte wählen Sie zunächst ein Projekt und geben Sie ein Datum an."
       archive:
@@ -46,6 +47,9 @@ de:
       send:
         success: "Rechnung wurde erfolgreich versendet."
         failure: "Rechnung konnte nicht versandt werden. Bitte Überprüfen Sie Ihre E-Mail Einstellungen und die des betreffenden Kunden."
+      send_test_mail:
+        success: "Test E-Mail wurde erfolgreich versendet."
+        failure: "Test E-Mail konnte nicht versandt werden."
     create:
       success: "%{resource} erfolgreich erstellt."
       failure: "%{resource} konnte nicht erstellt werden."

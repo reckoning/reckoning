@@ -174,11 +174,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def send_via_mail?
-    customer.email_template.present? && customer.invoice_email.present? && files_present?
-  end
-
-  def can_be_archived?
-    files_present?
+    customer.email_template.present? && customer.invoice_email.present?
   end
 
   def files_present?

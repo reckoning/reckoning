@@ -25,8 +25,8 @@ class CustomersController < ApplicationController
     if customer.save
       redirect_to customers_path, notice: I18n.t(:"messages.create.success", resource: I18n.t(:"resources.messages.customer"))
     else
-      Rails.logger.debug customer.to_yaml
-      render "new", error: I18n.t(:"messages.create.failure", resource: I18n.t(:"resources.messages.customer"))
+      flash[:warning] = I18n.t(:"messages.create.failure", resource: I18n.t(:"resources.messages.customer"))
+      render "new"
     end
   end
 
@@ -35,7 +35,8 @@ class CustomersController < ApplicationController
     if customer.update_attributes(customer_params)
       redirect_to customers_path, notice: I18n.t(:"messages.update.success", resource: I18n.t(:"resources.messages.customer"))
     else
-      render "edit", error: I18n.t(:"messages.update.failure", resource: I18n.t(:"resources.messages.customer"))
+      flash[:warning] = I18n.t(:"messages.update.failure", resource: I18n.t(:"resources.messages.customer"))
+      render "edit"
     end
   end
 

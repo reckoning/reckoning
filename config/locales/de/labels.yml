@@ -71,6 +71,7 @@ de:
         default: "Aktionen"
         downloads: "Downloads"
         latest_users: "Neue Benutzer"
+        test_mail: "Test E-Mail versenden"
         settings:
           base: "Allgemeine Eisntellungen"
           mailer: "E-Mail Einstellungen"

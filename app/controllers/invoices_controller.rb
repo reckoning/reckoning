@@ -31,22 +31,42 @@ class InvoicesController < ApplicationController
 
   def archive
     authorize! :archive, invoice
-    if invoice.can_be_archived? && current_user.has_gdrive?
-      Resque.enqueue InvoiceGdriveJob, invoice.id
-      redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.invoice.archive.success", resource: I18n.t(:"resources.messages.invoice"))
+    if current_user.has_gdrive?
+      if invoice.files_present?
+        Resque.enqueue InvoiceGdriveJob, invoice.id
+        redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.invoice.archive.success")
+      else
+        redirect_to invoice_path(invoice.ref), warning: I18n.t(:"messages.invoice.files_missing")
+      end
     else
-      redirect_to invoice_path(invoice.ref), warning: I18n.t(:"messages.invoice.archive.failure", resource: I18n.t(:"resources.messages.invoice"))
+      redirect_to invoice_path(invoice.ref), warning: I18n.t(:"messages.invoice.archive.failure")
     end
   end
 
   def send_mail
     authorize! :send, invoice
-
     if invoice.send_via_mail?
-      Resque.enqueue InvoiceMailerJob, invoice.id
-      redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.invoice.send.success", resource: I18n.t(:"resources.messages.invoice"))
+      if invoice.files_present?
+        Resque.enqueue InvoiceMailerJob, invoice.id
+        redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.invoice.send.success")
+      else
+        redirect_to invoice_path(invoice.ref), warning: I18n.t(:"messages.invoice.files_missing")
+      end
     else
-      redirect_to invoice_path(invoice.ref), warning: I18n.t(:"messages.invoice.send.failure", resource: I18n.t(:"resources.messages.invoice"))
+      redirect_to invoice_path(invoice.ref), warning: I18n.t(:"messages.invoice.send.failure")
+    end
+  end
+
+  def send_test_mail
+    authorize! :send, invoice
+
+    @test_mail = TestMail.new(test_mail_params)
+    if test_mail.valid?
+      Resque.enqueue InvoiceTestMailerJob, invoice.id, test_mail.email
+      redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.invoice.send_test_mail.success")
+    else
+      flash[:warning] = I18n.t(:"messages.invoice.send_test_mail.failure")
+      render "show"
     end
   end
 
@@ -140,7 +160,8 @@ class InvoicesController < ApplicationController
     if invoice.save
       redirect_to invoices_path, notice: I18n.t(:"messages.create.success", resource: I18n.t(:"resources.messages.invoice"))
     else
-      render "new", error: I18n.t(:"messages.create.failure", resource: I18n.t(:"resources.messages.invoice"))
+      flash[:warning] = I18n.t(:"messages.create.failure", resource: I18n.t(:"resources.messages.invoice"))
+      render "new"
     end
   end
 
@@ -150,7 +171,8 @@ class InvoicesController < ApplicationController
     if invoice.update(invoice_params)
       redirect_to invoices_path, notice: I18n.t(:"messages.update.success", resource: I18n.t(:"resources.messages.invoice"))
     else
-      render "edit", error: I18n.t(:"messages.update.failure", resource: I18n.t(:"resources.messages.invoice"))
+      flash[:warning] = I18n.t(:"messages.update.failure", resource: I18n.t(:"resources.messages.invoice"))
+      render "edit"
     end
   end
 
@@ -263,5 +285,14 @@ class InvoicesController < ApplicationController
     if invoice_limit_reached?
       redirect_to invoices_path, alert: I18n.t(:"messages.demo_active")
     end
+  end
+
+  private def test_mail
+    @test_mail ||= TestMail.new
+  end
+  helper_method :test_mail
+
+  private def test_mail_params
+    params.require(:test_mail).permit(:email)
   end
 end

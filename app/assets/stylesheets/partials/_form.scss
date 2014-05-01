@@ -16,8 +16,12 @@ form {
     }
   }
 
-  .form-control-feedback:nth-child(2) {
-    top: 0;
+  .form-control-feedback {
+    z-index: 3;
+
+    &:nth-child(2) {
+      top: 0;
+    }
   }
 
   .selectize {
@@ -56,4 +60,12 @@ form {
     max-width: 100%;
     min-height: 150px;
   }
+
+  &#test_mail-form {
+    .form-group {
+      margin-bottom: 0;
+    }
+  }
+
 }
+
