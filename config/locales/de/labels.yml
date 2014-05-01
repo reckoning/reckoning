@@ -22,6 +22,7 @@ de:
     chart:
       on_date: am
       timers: "Erfasste Stunden im letzten Monat"
+      no_data: "Keine Rechnungen vorhanden"
     timesheet:
       date: Datum
       task: Aufgabe
