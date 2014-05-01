@@ -1,0 +1,12 @@
+= form_for test_mail, url: send_test_mail_invoice_path(invoice.ref), method: :post, html: {id: 'test_mail-form' } do |form|
+  .panel.panel-default
+    .panel-heading
+      .panel-title
+        %strong
+          = I18n.t(:"labels.panels.title.test_mail")
+    .panel-body
+      .form-group{class: form_error?(test_mail, :email)}
+        = form.email_field :email, placeholder: I18n.t(:"helpers.placeholder.test_mail.email"), class: 'form-control'
+        = form_errors test_mail, :email
+    .panel-footer.text-right
+      = form.submit class: "btn btn-default"

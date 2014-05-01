@@ -177,6 +177,10 @@ class Invoice < ActiveRecord::Base
     customer.email_template.present? && customer.invoice_email.present?
   end
 
+  def files_present?
+    !pdf_not_present_or_generating? && (!timesheet_not_present_or_generating? || timers.blank?)
+  end
+
   private
 
   def path(filename)

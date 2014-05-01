@@ -17,6 +17,7 @@ de:
         confirmation_token: "Token"
         gravatar: "Gravatar E-Mail Adresse"
         created_at: "vor %{time}"
+        last_sign_in: "vor %{time}"
         settings:
           tax: "Steuern"
           provision: "Rückstellung"

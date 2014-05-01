@@ -6,7 +6,6 @@
     width: 100%;
     border-radius: 5px;
     @include box-shadow(rgba(#000, 0.3) 0 0 15px);
-    padding: 1px;
     margin-bottom: 10px;
     position: relative;
     background-color: white;
@@ -15,10 +14,12 @@
   #preview-image {
     position: absolute;
     top: 0;
+    width: 100%;
+    text-align: center;
 
     img {
       max-width: 100%;
-      min-width: 748px;
+      max-height: 100%;
     }
   }
 

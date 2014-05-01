@@ -1,13 +1,26 @@
 window.App.Invoice ?= {}
 
 window.App.Invoice.pdfInterval = false
-window.App.Invoice.previewPageHeight = 1059
+window.App.Invoice.previewPageHeight = 1060
+window.App.Invoice.previewPageWidth = 750
+window.App.Invoice.previewPageDefaultHeight = 1060
+window.App.Invoice.previewPageDefaultWidth = 750
 window.App.Invoice.previewPageMax = 1
 window.App.Invoice.currentPreviewPage = 1
 window.App.Invoice.projectRate = 0
 window.App.Invoice.oldProjectRate = 0
 
 window.laddaButton ?= {}
+
+window.App.Invoice.updatePreviewHeight = ->
+  $preview = $('#preview')
+  $invoice = $preview.find('img:first')
+  $timesheet = $preview.find('img:last') unless $preview.find('img').length < 2
+
+  newWidth = ((App.Invoice.previewPageWidth / App.Invoice.previewPageHeight ) * $invoice.height())
+  App.Invoice.previewPageHeight = $invoice.height()
+  App.Invoice.previewPageWidth = newWidth
+  $preview.css("height", App.Invoice.previewPageHeight)
 
 window.App.Invoice.generate = ($element) ->
   laddaButton.start() if laddaButton
@@ -169,10 +182,14 @@ $(document).on 'change', ".invoice-position-hours", App.Invoice.updateValue
 $(document).on 'change', ".invoice-position-rate", App.Invoice.updateValue
 $(document).on 'change', "#invoice_project_id", App.Invoice.updateRate
 
+$(window).on 'resize', App.Invoice.updatePreviewHeight
+
 $ ->
   if $('#invoice').length
     $("#preview-image img:first").load ->
+      App.Invoice.updatePreviewHeight()
       App.Invoice.initPagination()
+      App.Invoice.updatePagination()
 
     button = document.querySelector('.ladda-button')
     if button

@@ -1,17 +1,19 @@
 = form_for invoice, url: (invoice.new_record? ? invoices_path : invoice_path(@ref)), html: {id: 'invoice-form' } do |form|
   .row
-    .col-xs-12.col-md-6.form-group{class: form_error?(invoice, :project_id)}
-      %select.js-selectize{name: "invoice[project_id]", id: "invoice_project_id", placeholder: I18n.t(:"helpers.prompt.invoice.project_id")}
-        %option
-        - projects.each do |project|
-          %option{value: project.id, selected: (true if project.id == @invoice.project_id), data: {data: project.to_json}}
-            = project.name_with_customer
-      = form_errors invoice, :project_id
-    .col-xs-12.col-md-6.form-group{class: form_error?(invoice, :date)}
-      .input-group
-        = form.label :date, class: "input-group-addon"
-        = form.date_field :date, class: 'form-control'
-      = form_errors invoice, :date
+    .col-xs-12.col-md-6
+      .form-group.selectize{class: form_error?(invoice, :project_id)}
+        %select.js-selectize{name: "invoice[project_id]", id: "invoice_project_id", placeholder: I18n.t(:"helpers.prompt.invoice.project_id")}
+          %option
+          - projects.each do |project|
+            %option{value: project.id, selected: (true if project.id == @invoice.project_id), data: {data: project.to_json}}
+              = project.name_with_customer
+        = form_errors invoice, :project_id
+    .col-xs-12.col-md-6
+      .form-group{class: form_error?(invoice, :date)}
+        .input-group
+          = form.label :date, class: "input-group-addon"
+          = form.date_field :date, class: 'form-control'
+        = form_errors invoice, :date
   .row
     .col-xs-12.col-md-4.form-group{class: form_error?(invoice, :ref)}
       .input-group
