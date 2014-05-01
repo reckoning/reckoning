@@ -1,1 +1,3 @@
 = simple_format(@body)
+
+= simple_format("--\n" + @signature) unless @signature.blank?

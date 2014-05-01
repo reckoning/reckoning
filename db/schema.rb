@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140404195728) do
+ActiveRecord::Schema.define(version: 20140501090806) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 20140404195728) do
     t.integer  "user_id"
     t.text     "email_template"
     t.string   "invoice_email"
+    t.string   "default_from"
   end
 
   create_table "invoices", force: true do |t|
@@ -160,6 +161,8 @@ ActiveRecord::Schema.define(version: 20140404195728) do
     t.string   "gravatar"
     t.string   "gravatar_hash"
     t.string   "plan"
+    t.hstore   "services"
+    t.hstore   "mailing"
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree

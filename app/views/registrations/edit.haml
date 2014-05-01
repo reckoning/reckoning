@@ -32,6 +32,10 @@
               = I18n.t("nav.subnav.user.settings")
               %i.glyphicon.glyphicon-cog
           %li
+            %a{href: "#mailing", data: {toggle: "tab"}}
+              = I18n.t("nav.subnav.user.mailing")
+              %i.glyphicon.glyphicon-send
+          %li
             %a{href: "#services", data: {toggle: "tab"}}
               = I18n.t("nav.subnav.user.services")
               %i.glyphicon.glyphicon-cloud-upload
@@ -59,10 +63,15 @@
                 %legend
                   = I18n.t(:"labels.user.settings.taxes")
                 = render "users/settings", form: form, resource: @user
+            .tab-pane#mailing
+              %fieldset
+                %legend
+                  = I18n.t(:"labels.user.mailing")
+                = render "users/mailing", form: form, resource: @user
             .tab-pane#services
               %fieldset
                 %legend
-                  = I18n.t(:"labels.user.settings.gdrive")
+                  = I18n.t(:"labels.user.services.gdrive")
                 = render "users/gdrive_service", form: form, resource: @user
 
           = render "shared/forms/submit", path: root_path
