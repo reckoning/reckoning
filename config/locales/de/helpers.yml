@@ -24,6 +24,8 @@ de:
         base:
           registration: "Registrierung aktiv?"
     placeholder:
+      test_mail:
+        email: "E-Mail Adresse"
       project:
         name: "Name"
       task:
@@ -88,3 +90,6 @@ de:
       timer:
         project: "Bitte wähle ein Projekt"
         task: "Bitte wähle eine Aufgabe"
+    help:
+      customer:
+        default_from: "Absender für diesen Kunden festlegen, alternativ kann global in Ihrem Benutzerkonto ein Absender definiert werden."

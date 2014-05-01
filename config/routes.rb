@@ -40,6 +40,7 @@ Reckoning::Application.routes.draw do
       get :check_pdf
       put :archive
       put :send_mail
+      post :send_test_mail
     end
   end
 
