@@ -66,7 +66,7 @@ class CustomersController < ApplicationController
 
   def customer_params
     @customer_params ||= params.require(:customer).permit(
-      :payment_due, :email_template, :invoice_email,
+      :payment_due, :email_template, :invoice_email, :default_from,
       :address_attributes => [:company, :name, :address, :country, :email, :telefon, :fax, :website]
     )
   end
