@@ -64,63 +64,63 @@
       }
     }
   }
-}
 
-div:first-child > .nav-vertical-tabs {
-  box-shadow: inset -1px 0 0 $gray-lighter;
-  color: lighten(#000, 60%);
-  @include background-image(linear-gradient(to left, #f6f6f6 0%, $body-bg 8px));
+  div:first-child > & {
+    box-shadow: inset -1px 0 0 $gray-lighter;
+    color: lighten(#000, 60%);
+    @include background-image(linear-gradient(to left, #f6f6f6 0%, $body-bg 8px));
 
-  li {
-    > a {
-      text-align: right;
-
-      &:hover {
-        box-shadow: inset -2px 0 0 rgba($gray-light, .7);
-      }
-    }
-
-    &.active {
-      box-shadow: -1px 1px 2px $gray-lighter;
-
+    li {
       > a {
-        box-shadow: none;
-        border-right: 1px solid transparent;
+        text-align: right;
 
-        &:before {
-          left: -1px;
-          border-radius: 2px 0 0 2px;
-          background-color: $navbar-active;
+        &:hover {
+          box-shadow: inset -2px 0 0 rgba($gray-light, .7);
+        }
+      }
+
+      &.active {
+        box-shadow: -1px 1px 2px $gray-lighter;
+
+        > a {
+          box-shadow: none;
+          border-right: 1px solid transparent;
+
+          &:before {
+            left: -1px;
+            border-radius: 2px 0 0 2px;
+            background-color: $navbar-active;
+          }
         }
       }
     }
   }
-}
 
-div:last-child > .nav-vertical-tabs {
-  box-shadow: inset 1px 0 0 $gray-lighter;
-  @include background-image(linear-gradient(to right, #f6f6f6 0%, $body-bg 8px));
+  div:last-child > & {
+    box-shadow: inset 1px 0 0 $gray-lighter;
+    @include background-image(linear-gradient(to right, #f6f6f6 0%, $body-bg 8px));
 
-  li {
-    > a {
-      text-align: left;
-
-      &:hover {
-        box-shadow: inset 2px 0 0 rgba($gray-light, .7);
-      }
-    }
-
-    &.active {
-      box-shadow: 1px 1px 2px $gray-lighter;
-
+    li {
       > a {
-        box-shadow: none;
-        border-left: 1px solid transparent;
+        text-align: left;
 
-        &:after {
-          right: -1px;
-          border-radius: 0 2px 2px 0;
-          background-color: $navbar-active;
+        &:hover {
+          box-shadow: inset 2px 0 0 rgba($gray-light, .7);
+        }
+      }
+
+      &.active {
+        box-shadow: 1px 1px 2px $gray-lighter;
+
+        > a {
+          box-shadow: none;
+          border-left: 1px solid transparent;
+
+          &:after {
+            right: -1px;
+            border-radius: 0 2px 2px 0;
+            background-color: $navbar-active;
+          }
         }
       }
     }
