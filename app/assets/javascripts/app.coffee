@@ -1,7 +1,7 @@
 window.App ?= {}
 
 $(document).on 'click', 'a.disabled', (ev) ->
-  false
+  ev.preventDefault()
 
 $(document).on 'click', 'code[data-target]', (ev) ->
   $element = $(ev.target)

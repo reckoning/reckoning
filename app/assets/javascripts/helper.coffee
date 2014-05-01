@@ -35,16 +35,16 @@ window.displayConfirm = (ev, $element) ->
     type: 'warning'
     layout: 'top'
 
-window.displaySuccess = (text, timeout = 2000) ->
+window.displaySuccess = (text, timeout = 3000) ->
   displayNoty text, timeout, 'success'
 
-window.displayAlert = (text, timeout = 3000) ->
+window.displayAlert = (text, timeout = false) ->
   displayNoty text, timeout, 'alert'
 
 window.displayError = (text, timeout = false) ->
   displayNoty text, timeout, 'error'
 
-window.displayWarning = (text, timeout = 3000) ->
+window.displayWarning = (text, timeout = false) ->
   displayNoty text, timeout, 'warning'
 
 window.toggleCheckbox = ($element) ->
