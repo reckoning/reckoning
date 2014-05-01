@@ -37,6 +37,7 @@ de:
         address: Adresse
         banking: Bankdaten
         settings: Einstellungen
+        mailing: E-Mail
         services: Externe Dienste
       customer:
         basic: Allgemein

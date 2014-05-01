@@ -3,8 +3,10 @@ include HstoreAccessor
 class User < ActiveRecord::Base
   devise :database_authenticatable, :confirmable, :lockable, :recoverable, :registerable, :rememberable, :trackable, :validatable
 
-  store_accessor :settings, :tax, :tax_ref, :provision, :gdrive_email, :gdrive_password, :gdrive_collection
+  store_accessor :settings, :tax, :tax_ref, :provision
 	store_accessor :bank_account, :bank, :account_number, :bank_code, :iban, :bic
+  store_accessor :services, :gdrive_email, :gdrive_password, :gdrive_collection, :dropbox_user, :dropbox_token
+  store_accessor :mailing, :default_from, :signature
 
   has_one :address, as: :resource, dependent: :destroy
   has_many :invoices, dependent: :destroy

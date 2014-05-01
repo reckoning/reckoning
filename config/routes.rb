@@ -39,6 +39,7 @@ Reckoning::Application.routes.draw do
       put :pay
       get :check_pdf
       put :archive
+      put :send_mail
     end
   end
 

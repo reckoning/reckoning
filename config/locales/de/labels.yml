@@ -40,7 +40,9 @@ de:
         address: "Adressdaten"
         banking: "Bank Informationen"
         taxes: "Steuern"
+      services:
         gdrive: "Google Drive"
+      mailing: "E-Mail Einstellungen"
     customer:
       basic: "Allgemeine Informationen"
       email: "E-Mail Setup für Rechnungen"

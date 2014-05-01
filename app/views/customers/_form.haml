@@ -23,6 +23,10 @@
             = form.text_field :invoice_email, placeholder: I18n.t(:"helpers.placeholder.customer.invoice_email"), class: 'form-control'
             %small
               = form_errors customer, :invoice_email
+          .col-xs-12.col-md-6.form-group{class: form_error?(customer, :default_from)}
+            = form.text_field :default_from, placeholder: I18n.t(:"helpers.placeholder.customer.default_from"), class: 'form-control'
+            %small
+              = form_errors customer, :default_from
         .row
           .col-xs-12.col-md-6.form-group{class: form_error?(customer, :email_template)}
             = form.text_area :email_template, placeholder: I18n.t(:"helpers.placeholder.customer.email_template"), class: 'form-control'

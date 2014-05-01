@@ -102,3 +102,7 @@
                 = link_to archive_invoice_path(invoice.ref), method: :put, class: "list-group-item" do
                   %i.glyphicon.glyphicon-cloud-upload
                   = I18n.t(:"actions.archive")
+
+                = link_to send_mail_invoice_path(invoice.ref), method: :put, class: "list-group-item" do
+                  %i.glyphicon.glyphicon-send
+                  = I18n.t(:"actions.send_invoice")

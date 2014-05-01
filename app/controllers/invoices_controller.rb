@@ -37,6 +37,14 @@ class InvoicesController < ApplicationController
     redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.archive.success", resource: I18n.t(:"resources.messages.invoice"))
   end
 
+  def send_mail
+    authorize! :read, invoice
+    if invoice.send_via_mail? && invoice.charged?
+      Resque.enqueue InvoiceMailerJob, invoice.id
+    end
+    redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.send.success", resource: I18n.t(:"resources.messages.invoice"))
+  end
+
   def pdf
     authorize! :read, invoice
     respond_to do |format|

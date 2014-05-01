@@ -48,9 +48,14 @@ de:
           bic: "BIC"
         settings:
           tax_ref: "Steuernummer"
+        services:
           gdrive_password: "Google Drive Passwort"
           gdrive_email: "Google Drive E-Mail"
           gdrive_collection: "Google Drive Ordner"
+        mailing:
+          default_from: "Absender Für Rechnungs E-Mails"
+          signature: "Signatur"
+
       address:
         company: "Firma"
         name: "Name"
@@ -64,8 +69,9 @@ de:
         email: "E-Mail"
       customer:
         payment_due: "Zahlungsziel (Tage)"
-        email_template: "E-Mail Inhalt"
-        invoice_email: "E-Mail Adresse"
+        email_template: "Inhalt"
+        invoice_email: "Empfänger"
+        default_from: "Absender"
       setting:
         mailer:
           host: "SMTP Host"

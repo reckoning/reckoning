@@ -37,5 +37,6 @@ de:
     disable: "Deaktivieren"
     close: Schließen
     paste: Einfügen
+    send_invoice: "Rechnung versenden"
     download_invoice: "Rechnung speichern"
     download_timesheet: "Stundenzettel speichern"
