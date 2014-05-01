@@ -3,6 +3,14 @@ class InvoiceMailer < ActionMailer::Base
   default from: "#{Settings.mailer.default_from}"
 
   def customer_mail invoice
+    send_mail invoice, invoice.customer.invoice_email
+  end
+
+  def test_mail invoice, test_mail
+    send_mail invoice, test_mail
+  end
+
+  private def send_mail invoice, to
     month = I18n.l(invoice.date, format: :month)
     date = I18n.l(invoice.date, format: :month_year)
 
@@ -25,9 +33,9 @@ class InvoiceMailer < ActionMailer::Base
 
     mail(
       from: (invoice.customer.default_from || invoice.user.default_from || Settings.mailer.default_from),
-      to: invoice.customer.invoice_email,
-      bcc: invoice.user.email,
-      subject: I18n.t(:"mailer.invoice.customer_mail.subject", name: "#{name}: ", date: date)
+      to: to,
+      subject: I18n.t(:"mailer.invoice.customer_mail.subject", name: "#{name}: ", date: date),
+      template_name: 'customer_mail'
     )
   end
 end

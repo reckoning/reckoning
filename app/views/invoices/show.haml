@@ -19,22 +19,7 @@
 
     .row
       .col-xs-12.col-md-8
-        #preview
-          #preview-image{class: ('hide' unless invoice.pdf_present_and_up_to_date?)}
-            - if invoice.pdf_present_and_up_to_date?
-              %img{src: invoice_png_path(invoice.ref, invoice.invoice_file('png'))}
-            - if invoice.timesheet_present_and_up_to_date?
-              %img{src: timesheet_png_path(invoice.ref, invoice.timesheet_file('png'))}
-
-          #preview-info{class: ('hide' if invoice.pdf_present_and_up_to_date?)}
-            .panel.panel-default
-              .panel-heading
-                .panel-title
-                  = I18n.t(:"pdf.not_generated")
-              .panel-body
-                = I18n.t(:"pdf.please_regenerate", generate: I18n.t(:"actions.generate"), regenerate: I18n.t(:"actions.regenerate"))
-
-        = render 'kaminari/pdf_paginator'
+        = render "preview"
 
       .col-xs-12.col-md-4
         .row
@@ -50,10 +35,6 @@
               = confirm_link_to invoice_path(invoice.ref), data: {notyConfirm: I18n.t(:"messages.confirm.delete")}, method: :delete, class: "btn btn-danger" do
                 %i.glyphicon.glyphicon-trash
                 = I18n.t(:"actions.delete")
-
-        .row
-          .col-xs-12.col-md-12
-            .loading.hide
 
         %br
 
@@ -73,36 +54,15 @@
                   = I18n.t(:"actions.download_timesheet")
 
         %br
+
         .row
           .col-xs-12.col-md-12
-            .panel.panel-default
-              .panel-heading
-                .panel-title
-                  %strong
-                    = I18n.t(:"labels.panels.title.default")
-              .list-group
-                - if can? :update, invoice
-                  %a.list-group-item{href: edit_invoice_path(invoice.ref)}
-                    %i.glyphicon.glyphicon-edit
-                    = I18n.t(:"actions.edit")
+            = render "show_actions"
 
-                - if can? :charge, invoice
-                  - charge_confirm = I18n.t(:"messages.confirm.charge")
-                  - if invoice.send_via_mail?
-                    - charge_confirm = I18n.t(:"messages.confirm.charge_mail")
-                  = confirm_link_to charge_invoice_path(invoice.ref), data: {notyConfirm: charge_confirm}, title: I18n.t(:"actions.charge"), method: :put, class: "list-group-item" do
-                    %i.glyphicon.glyphicon-envelope
-                    = I18n.t(:"actions.charge")
+        - if invoice.send_via_mail?
+          %br
 
-                - if can? :pay, invoice
-                  = link_to pay_invoice_path(invoice.ref), method: :put, class: "list-group-item" do
-                    %i.glyphicon.glyphicon-ok
-                    = I18n.t(:"actions.pay")
+          .row
+            .col-xs-12.col-md-12
+              = render "test_mail_form"
 
-                = link_to archive_invoice_path(invoice.ref), method: :put, class: "list-group-item" do
-                  %i.glyphicon.glyphicon-cloud-upload
-                  = I18n.t(:"actions.archive")
-
-                = link_to send_mail_invoice_path(invoice.ref), method: :put, class: "list-group-item" do
-                  %i.glyphicon.glyphicon-send
-                  = I18n.t(:"actions.send_invoice")

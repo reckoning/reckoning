@@ -7,6 +7,7 @@
       %tr
         %th= I18n.t(:"labels.user.email")
         %th= I18n.t(:"labels.user.created_at")
+        %th= I18n.t(:"labels.user.last_sign_in")
         %th.actions.one
     %tbody
       - User.order('created_at DESC').each do |user|
@@ -15,6 +16,8 @@
             = user.email
           %td
             = I18n.t(:"activerecord.attributes.user.created_at", time: time_ago_in_words(user.created_at))
+          %td
+            = I18n.t(:"activerecord.attributes.user.last_sign_in", time: time_ago_in_words(user.current_sign_in_at))
           %td
             .btn-group
               = link_to edit_backend_user_path(user), title: I18n.t(:"actions.edit"), class: "btn btn-default btn-sm" do

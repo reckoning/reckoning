@@ -1,0 +1,33 @@
+.panel.panel-default
+  .panel-heading
+    .panel-title
+      %strong
+        = I18n.t(:"labels.panels.title.default")
+  .list-group
+    - if can? :update, invoice
+      %a.list-group-item{href: edit_invoice_path(invoice.ref)}
+        %i.glyphicon.glyphicon-edit
+        = I18n.t(:"actions.edit")
+
+    - if can? :charge, invoice
+      - charge_confirm = I18n.t(:"messages.confirm.charge")
+      - if invoice.send_via_mail?
+        - charge_confirm = I18n.t(:"messages.confirm.charge_mail")
+      = confirm_link_to charge_invoice_path(invoice.ref), data: {notyConfirm: charge_confirm}, title: I18n.t(:"actions.charge"), method: :put, class: "list-group-item" do
+        %i.glyphicon.glyphicon-envelope
+        = I18n.t(:"actions.charge")
+
+    - if can? :pay, invoice
+      = link_to pay_invoice_path(invoice.ref), method: :put, class: "list-group-item" do
+        %i.glyphicon.glyphicon-ok
+        = I18n.t(:"actions.pay")
+
+    - if current_user.has_gdrive?
+      = link_to archive_invoice_path(invoice.ref), method: :put, class: "list-group-item" do
+        %i.glyphicon.glyphicon-cloud-upload
+        = I18n.t(:"actions.archive")
+
+    - if invoice.send_via_mail?
+      = link_to send_mail_invoice_path(invoice.ref), method: :put, class: "list-group-item" do
+        %i.glyphicon.glyphicon-send
+        = I18n.t(:"actions.send_invoice")

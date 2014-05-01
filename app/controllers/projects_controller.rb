@@ -23,7 +23,8 @@ class ProjectsController < ApplicationController
     if project.save
       redirect_to projects_path, notice: I18n.t(:"messages.create.success", resource: I18n.t(:"resources.messages.project"))
     else
-      render "new", error: I18n.t(:"messages.create.failure", resource: I18n.t(:"resources.messages.project"))
+      flash[:warning] = I18n.t(:"messages.create.failure", resource: I18n.t(:"resources.messages.project"))
+      render "new"
     end
   end
 
@@ -32,7 +33,8 @@ class ProjectsController < ApplicationController
     if project.update_attributes(project_params)
       redirect_to projects_path, notice: I18n.t(:"messages.update.success", resource: I18n.t(:"resources.messages.project"))
     else
-      render "edit", error: I18n.t(:"messages.update.failure", resource: I18n.t(:"resources.messages.project"))
+      flash[:warning] = I18n.t(:"messages.update.failure", resource: I18n.t(:"resources.messages.project"))
+      render "edit"
     end
   end
 

@@ -6,7 +6,7 @@ class Ability
 
     can :update, User, id: user.id
 
-    can [:read, :create, :destroy, :check], Invoice, user_id: user.id
+    can [:read, :create, :destroy, :check, :archive, :send], Invoice, user_id: user.id
     can :update, Invoice do |invoice|
       %w(created charged).include?(invoice.state) && invoice.user_id == user.id
     end
