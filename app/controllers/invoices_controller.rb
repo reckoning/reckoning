@@ -236,7 +236,9 @@ class InvoicesController < ApplicationController
     "customers.company" => "addresses.company"
   }
 
-  private def sort_column
+  private
+
+  def sort_column
     @sort_column ||= begin
       column = (Invoice.column_names + %w[customers.company]).include?(params[:sort]) ? params[:sort] : "ref"
       column = SORT_COLUMN_MAPPING.fetch(column){column}
@@ -244,16 +246,16 @@ class InvoicesController < ApplicationController
   end
   helper_method :sort_column
 
-  private def set_active_nav
+  def set_active_nav
     @active_nav = 'invoices'
   end
 
-  private def projects
+  def projects
     @projects ||= current_user.projects
   end
   helper_method :projects
 
-  private def invoice_params
+  def invoice_params
     params.require(:invoice).permit(
       :customer_id,
       :date,
@@ -276,23 +278,23 @@ class InvoicesController < ApplicationController
     )
   end
 
-  private def invoice
+  def invoice
     @invoice ||= current_user.invoices.where(ref: params.fetch(:ref){ nil }).first
   end
   helper_method :invoice
 
-  private def check_limit
+  def check_limit
     if invoice_limit_reached?
       redirect_to invoices_path, alert: I18n.t(:"messages.demo_active")
     end
   end
 
-  private def test_mail
+  def test_mail
     @test_mail ||= TestMail.new
   end
   helper_method :test_mail
 
-  private def test_mail_params
+  def test_mail_params
     params.require(:test_mail).permit(:email)
   end
 end
