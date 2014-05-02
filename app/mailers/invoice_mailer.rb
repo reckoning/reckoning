@@ -10,7 +10,9 @@ class InvoiceMailer < ActionMailer::Base
     send_mail invoice, test_mail
   end
 
-  private def send_mail invoice, to
+  private
+
+  def send_mail invoice, to
     month = I18n.l(invoice.date, format: :month)
     date = I18n.l(invoice.date, format: :month_year)
 
