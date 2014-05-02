@@ -24,7 +24,7 @@ class RegistrationsController < Devise::RegistrationsController
 
   private
 
-  private def user_params
+  def user_params
     @user_params ||= params.require(:user).permit(
       :plan,
       :email,
@@ -48,11 +48,11 @@ class RegistrationsController < Devise::RegistrationsController
     )
   end
 
-  private def set_user
+  def set_user
     @user = current_user
   end
 
-  private def check_registration_setting
+  def check_registration_setting
     unless registration_enabled?
       redirect_to root_path
     end
