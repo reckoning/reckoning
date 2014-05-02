@@ -21,17 +21,19 @@ class TimersController < ApplicationController
     end
   end
 
-  private def set_active_nav
+  private
+
+  def set_active_nav
     @active_nav = 'timers'
   end
 
-  private def week
+  def week
     @week ||= current_user.weeks.where(start_date: date.beginning_of_week).first
     @week ||= current_user.weeks.new
   end
   helper_method :week
 
-  private def date
+  def date
     @date ||= (params[:date].present? ? Date.parse(params.fetch(:date, nil)) : Date.today)
   end
 end

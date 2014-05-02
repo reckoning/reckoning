@@ -17,15 +17,15 @@ class PasswordsController < ApplicationController
 
   private
 
-    def set_active_nav
-      @active_nav = 'users'
-    end
+  def set_active_nav
+    @active_nav = 'users'
+  end
 
-    def password_params
-      @password_params ||= params.require(:user).permit(:password, :password_confirmation, :current_password)
-    end
+  def password_params
+    @password_params ||= params.require(:user).permit(:password, :password_confirmation, :current_password)
+  end
 
-    def set_user
-      @user = current_user
-    end
+  def set_user
+    @user = current_user
+  end
 end

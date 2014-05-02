@@ -41,11 +41,13 @@ module Backend
       end
     end
 
-    private def setting_params
+    private
+
+    def setting_params
       params.require(:setting).permit(:keypath, :value)
     end
 
-    private def set_keypath
+    def set_keypath
       @keypath = params.fetch(:keypath, nil)
       @keypath ||= params.fetch(:setting, {}).fetch(:keypath, nil)
       @keypath ||= @setting.keypath if @setting.present?
@@ -55,11 +57,11 @@ module Backend
       end
     end
 
-    private def set_setting
+    def set_setting
       @setting = Setting.find(params[:id])
     end
 
-    private def set_default_setting
+    def set_default_setting
       @default_setting = DefaultSettings.find(@keypath) if @keypath.present?
       @default_setting ||= DefaultSettings.find(@setting.keypath) if @setting.present?
     end
