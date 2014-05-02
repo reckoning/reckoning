@@ -6,7 +6,10 @@
           = I18n.t(:"labels.panels.title.test_mail")
     .panel-body
       .form-group{class: form_error?(test_mail, :email)}
-        = form.email_field :email, placeholder: I18n.t(:"helpers.placeholder.test_mail.email"), class: 'form-control'
-        = form_errors test_mail, :email
-    .panel-footer.text-right
-      = form.submit class: "btn btn-default"
+        .input-group
+          %span.input-group-fields
+            = form.email_field :email, placeholder: I18n.t(:"helpers.placeholder.test_mail.email"), class: 'form-control'
+            = form_errors test_mail, :email
+          %span.input-group-btn
+            %button.btn.btn-default
+              = I18n.t(:"actions.send")

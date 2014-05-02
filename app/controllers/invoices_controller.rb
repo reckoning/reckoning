@@ -65,7 +65,7 @@ class InvoicesController < ApplicationController
       Resque.enqueue InvoiceTestMailerJob, invoice.id, test_mail.email
       redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.invoice.send_test_mail.success")
     else
-      flash[:warning] = I18n.t(:"messages.invoice.send_test_mail.failure")
+      flash.now[:warning] = I18n.t(:"messages.invoice.send_test_mail.failure")
       render "show"
     end
   end
@@ -160,7 +160,7 @@ class InvoicesController < ApplicationController
     if invoice.save
       redirect_to invoices_path, notice: I18n.t(:"messages.create.success", resource: I18n.t(:"resources.messages.invoice"))
     else
-      flash[:warning] = I18n.t(:"messages.create.failure", resource: I18n.t(:"resources.messages.invoice"))
+      flash.now[:warning] = I18n.t(:"messages.create.failure", resource: I18n.t(:"resources.messages.invoice"))
       render "new"
     end
   end
@@ -171,7 +171,7 @@ class InvoicesController < ApplicationController
     if invoice.update(invoice_params)
       redirect_to invoices_path, notice: I18n.t(:"messages.update.success", resource: I18n.t(:"resources.messages.invoice"))
     else
-      flash[:warning] = I18n.t(:"messages.update.failure", resource: I18n.t(:"resources.messages.invoice"))
+      flash.now[:warning] = I18n.t(:"messages.update.failure", resource: I18n.t(:"resources.messages.invoice"))
       render "edit"
     end
   end
