@@ -47,11 +47,13 @@ module Api
       end
     end
 
-    private def timer_params
+    private
+
+    def timer_params
       @timer_params ||= params.require(:timer).permit(:date, :value, :task_id)
     end
 
-    private def timer
+    def timer
       @timer ||= current_user.timers.where(id: params.fetch(:id, nil)).first
       @timer ||= current_user.timers.new timer_params
     end

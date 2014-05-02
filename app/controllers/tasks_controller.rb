@@ -46,23 +46,25 @@ class TasksController < ApplicationController
     end
   end
 
-  private def task_params
+  private
+
+  def task_params
     @task_params ||= params.require(:task).permit(:name)
   end
 
-  private def task
+  def task
     @task ||= project.tasks.new task_params
   end
 
-  private def project
+  def project
     @project ||= current_user.projects.where(id: params.fetch(:project_id, nil)).first
   end
 
-  private def date
+  def date
     @date ||= (params[:date].present? ? Date.parse(params.fetch(:date, nil)) : Date.today)
   end
 
-  private def project_id
+  def project_id
     @project_id ||= params.fetch(:project_id, nil)
   end
 end

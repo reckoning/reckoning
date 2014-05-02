@@ -37,11 +37,13 @@ module Api
       end
     end
 
-    private def task_params
+    private
+
+    def task_params
       @task_params ||= params.require(:task).permit(:name)
     end
 
-    private def task
+    def task
       @task ||= current_user.tasks.where(id: params.fetch(:id, nil)).first
       @task ||= current_user.tasks.new task_params
     end
