@@ -10,4 +10,5 @@ class TestMail < ActiveRecord::Base
   column :email, :string
 
   validates_presence_of :email
+  validates_with EmailValidator
 end

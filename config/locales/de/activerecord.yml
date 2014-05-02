@@ -38,6 +38,10 @@ de:
         record_invalid: "Ungültige Daten"
         blank: "Bitte füllen Sie das Feld aus"
       models:
+        test_mail:
+          attributes:
+            email:
+              invalid: "Ungültiges Format"
         user:
           attributes:
             confirmation_token:
