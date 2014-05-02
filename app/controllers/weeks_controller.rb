@@ -52,7 +52,9 @@ class WeeksController < ApplicationController
     end
   end
 
-  private def week_params
+  private
+
+  def week_params
     @week_params ||= params.require(:week).permit(
       :start_date,
       timers_attributes: [
@@ -64,7 +66,7 @@ class WeeksController < ApplicationController
     )
   end
 
-  private def week
+  def week
     @week ||= current_user.weeks.where(id: params.fetch(:id, nil)).first
     @week ||= current_user.weeks.where(start_date: params.fetch(:week, {}).fetch(:start_date, nil)).first
     week_params.fetch(:timers_attributes, {}).reject! {|index, timer| timer[:value].empty? } unless @week.present?
