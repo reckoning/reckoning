@@ -33,10 +33,7 @@
             %td
             %td.hours
               %strong
-                - date_value = timers.sum {|t| t.value.to_d }
-                - hours = date_value.to_i
-                - minutes = format('%02d', ((date_value.to_d % 1) * 60).round)
-                = "#{hours}:#{minutes}"
+                = number_to_currency(timers.sum {|t| t.value.to_d }, unit: "")
           - timers.each do |timer|
             - value = value + timer.value.to_d
             %tr
@@ -44,13 +41,11 @@
               %td
                 = timer.task.name
               %td.hours
-                = timer.value_as_time
+                = number_to_currency(timer.value, unit: "")
         %tr.sum.border
           %td{colspan: 2}
             = I18n.t(:"pdf.timesheet.sum")
           %td.value
             %strong
-              - hours = value.to_i
-              - minutes = format('%02d', ((value.to_d % 1) * 60).round)
-              = "#{hours}:#{minutes}"
+              = number_to_currency(value, unit: "")
 = render "shared/pdf_footer", resource: @resource
