@@ -21,8 +21,15 @@ de:
       enabled: "Status"
     chart:
       on_date: am
-      timers: "Erfasste Stunden im letzten Monat"
-      no_data: "Keine Rechnungen vorhanden"
+      in_month: im
+      timers:
+        headline: "Erfasste Stunden im letzten Monat"
+        no_data: "Keine Zeiten erfasst."
+      invoices:
+        headline: "Rechnungen im aktuellen Jahr"
+        no_data: "Keine Rechnungen vorhanden."
+        sum: "Kumulativ"
+        month: "Monat"
     timesheet:
       date: Datum
       task: Aufgabe

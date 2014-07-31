@@ -279,7 +279,7 @@ class InvoicesController < ApplicationController
   end
 
   def invoice
-    @invoice ||= current_user.invoices.where(ref: params.fetch(:ref){ nil }).first
+    @invoice ||= current_user.invoices.where(ref: params.fetch(:ref, nil)).first
   end
   helper_method :invoice
 

@@ -1,0 +1,10 @@
+- context ||= 'default'
+- id ||= 'chart'
+.panel{class: "panel-#{context}"}
+  .panel-heading
+    .panel-title
+      %strong
+        = title
+  .panel-body
+    %div{id: id}
+      %svg{style: "height: 250px;"}

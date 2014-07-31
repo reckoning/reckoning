@@ -1,8 +1,6 @@
 require 'resque/server'
 
 Reckoning::Application.routes.draw do
-  mount RailsAssetLocalization::Engine => "/locales"
-
   devise_for :users, skip: [:sessions], controllers: { registrations: "registrations" }
 
   namespace :backend do
