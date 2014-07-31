@@ -1,4 +1,9 @@
 table {
+
+  &.table-outer-bordered {
+    border: 1px solid #dddddd;
+  }
+
   th {
     &.actions {
       &.one {

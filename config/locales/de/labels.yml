@@ -25,11 +25,13 @@ de:
       timers:
         headline: "Erfasste Stunden im letzten Monat"
         no_data: "Keine Zeiten erfasst."
+        title: "Zeiten"
       invoices:
         headline: "Rechnungen im aktuellen Jahr"
         no_data: "Keine Rechnungen vorhanden."
         sum: "Kumulativ"
         month: "Monat"
+        title: "Rechnungen"
     timesheet:
       date: Datum
       task: Aufgabe
