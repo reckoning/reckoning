@@ -44,7 +44,7 @@ gem 'puma', '~> 2.7.0'
 
 gem 'sentry-raven', '~> 0.7.1'
 
-gem 'rails-asset-localization'
+gem "i18n-js"
 
 gem 'thor'
 gem 'highline'
