@@ -7,3 +7,5 @@ de:
       last_invoices: "Letztes Jahr"
       budgets: "Budget"
       provision: "Steuer-Rückstellung"
+      timers_chart: "Stunden in den letzten 30 Tagen"
+      invoices_chart: "Rechnungen in %{year}"

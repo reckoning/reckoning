@@ -26,3 +26,7 @@ $ ->
     dataAttr: 'data-data'
 
   $('[data-toggle=tooltip]').tooltip()
+
+  initMoment()
+  loadTimersChart()
+  loadInvoicesChart()
