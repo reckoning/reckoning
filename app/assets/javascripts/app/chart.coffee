@@ -1,9 +1,13 @@
+window.reloadCharts = ->
+  d3.select('#invoices-chart svg').call(invoicesChart)
+  d3.select('#timers-chart svg').call(timersChart)
+
 window.loadInvoicesChart = ->
   if $('#invoices-chart').length && invoicesChartData
     data = invoicesChartData
 
     nv.addGraph ->
-      chart = nv.models.lineChart()
+      window.invoicesChart = nv.models.lineChart()
         .margin({top: 20, right: 10, bottom: 40, left: 70})
         .noData(I18n.t("labels.chart.no_data"))
         .x (d) ->
@@ -13,23 +17,23 @@ window.loadInvoicesChart = ->
         .useInteractiveGuideline(true)
         .transitionDuration(500)
 
-      chart.xAxis
+      invoicesChart.xAxis
         .showMaxMin(false)
         .staggerLabels(true)
         .tickFormat (d) ->
           return moment(d).startOf('month').format("MMMM")
 
-      chart.yAxis
+      invoicesChart.yAxis
         .tickFormat (d) ->
           return accounting.formatMoney(d, {symbol: "€", format: "%v %s", decimal: ',', thousand: '.'})
 
       d3.select('#invoices-chart svg')
         .datum(invoicesChartData)
-        .transition().duration(500).call(chart)
+        .transition().duration(500).call(invoicesChart)
 
-      nv.utils.windowResize(chart.update)
+      nv.utils.windowResize(invoicesChart.update)
 
-      return chart
+      return invoicesChart
 
 window.loadTimersChart = ->
   if $('#timers-chart').length && timersChartData
@@ -41,7 +45,7 @@ window.loadTimersChart = ->
     ]
 
     nv.addGraph ->
-      chart = nv.models.multiBarChart()
+      window.timersChart = nv.models.multiBarChart()
         .margin({top: 20, right: 10, bottom: 40, left: 15})
         .noData(I18n.t("labels.chart.no_data"))
         .showControls(false)
@@ -49,20 +53,20 @@ window.loadTimersChart = ->
         .tooltip (key, x, y, e, graph) ->
           return "<h3>#{key}</h3><p>#{decimalToTime(e.value) || "0:00"}h #{I18n.t('labels.chart.on_date')} #{x}</p>"
 
-      chart.xAxis
+      timersChart.xAxis
         .showMaxMin(false)
         .scale(d3.time.scale())
         .tickFormat (d) ->
           return moment(d).format("D. MMM YY")
 
-      chart.yAxis
+      timersChart.yAxis
         .tickFormat (d) ->
           return d3.format('d')(d || 0)
 
       d3.select('#timers-chart svg')
         .datum(timersChartData)
-        .transition().duration(500).call(chart)
+        .transition().duration(500).call(timersChart)
 
-      nv.utils.windowResize(chart.update)
+      nv.utils.windowResize(timersChart.update)
 
-      return chart
+      return timersChart
