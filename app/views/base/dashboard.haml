@@ -33,23 +33,13 @@
       .col-xs-12.col-md-8
         = render "invoices_panel", title: I18n.t(:"dashboard.panels.charged_invoices"), invoices: @charged_invoices, context: 'warning'
 
-        %ul.nav.nav-tabs#chart-tabs
-          %li.active
-            %a{href: "#invoices", data: {toggle: "tab"}}
-              = I18n.t(:"labels.chart.invoices.title")
-          %li
-            %a{href: "#timers", data: {toggle: "tab"}}
-              = I18n.t(:"labels.chart.timers.title")
+        :javascript
+          window.invoicesChartData = #{@invoices_chart_data.to_json}
+        = render "chart_panel", title: I18n.t(:"dashboard.panels.invoices_chart", year: I18n.l(Date.today, format: :year)), id: 'invoices-chart'
 
-        .tab-content
-          .tab-pane.active#invoices
-            :javascript
-              window.invoicesChartData = #{@invoices_chart_data.to_json}
-            = render "chart_panel", title: I18n.t(:"dashboard.panels.invoices_chart", year: I18n.l(Date.today, format: :year)), id: 'invoices-chart'
-          .tab-pane#timers
-            :javascript
-              window.timersChartData = #{@timers_chart_data.to_json}
-            = render "chart_panel", title: I18n.t(:"dashboard.panels.timers_chart"), id: 'timers-chart'
+        :javascript
+          window.timersChartData = #{@timers_chart_data.to_json}
+        = render "chart_panel", title: I18n.t(:"dashboard.panels.timers_chart"), id: 'timers-chart'
 
         = render "invoices_panel", title: I18n.t(:"dashboard.panels.paid_invoices"), invoices: @paid_invoices, context: 'success'
 
