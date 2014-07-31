@@ -73,6 +73,10 @@ Reckoning::Application.routes.draw do
     end
   end
 
+  get 'dropbox' => 'services#dropbox'
+  get 'dropbox/activate' => 'services#activate_dropbox', as: :activate_dropbox
+  get 'drive' => 'services#dropbox'
+
   get '404' => 'errors#not_found'
   get '422' => 'errors#server_error'
   get '500' => 'errors#server_error'
