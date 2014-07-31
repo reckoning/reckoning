@@ -26,9 +26,6 @@
 $(document).on 'show.bs.collapse', '.navbar-collapse', (ev) ->
   $('.navbar-collapse.in').not(@).collapse('hide')
 
-$(document).on 'shown.bs.tab', '#chart-tabs a', (ev) ->
-  reloadCharts()
-
 $ ->
   $('.btn.btn-loading').click ->
     $(@).button('loading')

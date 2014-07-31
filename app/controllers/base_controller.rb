@@ -78,7 +78,7 @@ class BaseController < ApplicationController
         value += invoice.value.to_d
       end
 
-      month[:values] << [(start_date.to_time.to_i * 1000), value] unless value.zero?
+      month[:values] << [(start_date.to_time.to_i * 1000), value]
 
       value = (last_value + value.to_f)
       last_value = value
