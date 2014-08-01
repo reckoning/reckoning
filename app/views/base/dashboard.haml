@@ -35,7 +35,7 @@
 
         :javascript
           window.invoicesChartData = #{@invoices_chart_data.to_json}
-        = render "chart_panel", title: I18n.t(:"dashboard.panels.invoices_chart", year: I18n.l(Date.today, format: :year)), id: 'invoices-chart'
+        = render "chart_panel", title: I18n.t(:"dashboard.panels.invoices_chart", year: I18n.l(Date.today, format: :year)), id: 'invoices-chart', data: {"axis-max" => round_to_k(@invoices_max_value.to_i)}
 
         :javascript
           window.timersChartData = #{@timers_chart_data.to_json}
