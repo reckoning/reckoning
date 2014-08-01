@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.0.0'
+ruby '2.1.2'
 
 gem 'rails', '~> 4.0.3'
 
@@ -69,4 +69,5 @@ end
 
 group :development do
   gem 'foreman', '~> 0.63.0'
+  gem 'byebug'
 end
