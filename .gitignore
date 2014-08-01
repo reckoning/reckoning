@@ -24,3 +24,6 @@ files/*
 vendor/assets/bower_components/*
 vendor/assets/.bowerrc
 vendor/assets/bower.json
+
+# js translations
+public/javascripts/translations.js

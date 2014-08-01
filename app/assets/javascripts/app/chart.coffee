@@ -9,23 +9,24 @@ window.loadInvoicesChart = ->
     nv.addGraph ->
       window.invoicesChart = nv.models.lineChart()
         .margin({top: 20, right: 10, bottom: 40, left: 70})
-        .noData(I18n.t("labels.chart.no_data"))
+        .noData(I18n.t('labels.chart.no_data'))
         .x (d) ->
           return d[0]
         .y (d) ->
           return d[1]
         .useInteractiveGuideline(true)
         .transitionDuration(500)
+        .forceY([0, parseInt($('#invoices-chart').data('axis-max'))])
 
       invoicesChart.xAxis
         .showMaxMin(false)
         .staggerLabels(true)
         .tickFormat (d) ->
-          return moment(d).startOf('month').format("MMMM")
+          return moment(d).startOf('month').format('MMMM')
 
       invoicesChart.yAxis
         .tickFormat (d) ->
-          return accounting.formatMoney(d, {symbol: "€", format: "%v %s", decimal: ',', thousand: '.'})
+          return accounting.formatMoney(d, {symbol: '€', format: '%v %s', decimal: ',', thousand: '.'})
 
       d3.select('#invoices-chart svg')
         .datum(invoicesChartData)
@@ -39,7 +40,7 @@ window.loadTimersChart = ->
   if $('#timers-chart').length && timersChartData
     data = [
       {
-        key: I18n.t("labels.chart.timers.headline"),
+        key: I18n.t('labels.chart.timers.headline'),
         values: timersChartData
       }
     ]
@@ -47,7 +48,7 @@ window.loadTimersChart = ->
     nv.addGraph ->
       window.timersChart = nv.models.multiBarChart()
         .margin({top: 20, right: 10, bottom: 40, left: 15})
-        .noData(I18n.t("labels.chart.no_data"))
+        .noData(I18n.t('labels.chart.no_data'))
         .showControls(false)
         .stacked(true)
         .tooltip (key, x, y, e, graph) ->
@@ -57,7 +58,7 @@ window.loadTimersChart = ->
         .showMaxMin(false)
         .scale(d3.time.scale())
         .tickFormat (d) ->
-          return moment(d).format("D. MMM YY")
+          return moment(d).format('D. MMM YY')
 
       timersChart.yAxis
         .tickFormat (d) ->
