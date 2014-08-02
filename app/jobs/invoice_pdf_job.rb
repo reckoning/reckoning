@@ -10,9 +10,6 @@ class InvoicePdfJob
 
       invoice.update_attributes(pdf_generated_at: Time.now)
 
-      if invoice.send_via_mail? && invoice.charged?
-        Resque.enqueue InvoiceMailerJob, invoice_id
-      end
       if invoice.user.has_gdrive?
         Resque.enqueue InvoiceGdriveJob, invoice.id
       end
