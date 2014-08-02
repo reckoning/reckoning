@@ -34,8 +34,8 @@ class PdfGenerator < AbstractController::Base
     file.open
     file.write(html)
     file.close
-    system "#{Settings.app.py_env}weasyprint #{file.path} #{@pdf_path}" # generate pdf
-    system "#{Settings.app.py_env}weasyprint #{file.path} #{@png_path} -f png" # generate png for preview
+    system "weasyprint #{file.path} #{@pdf_path}" # generate pdf
+    system "weasyprint #{file.path} #{@png_path} -f png" # generate png for preview
     file.unlink
   end
 end
