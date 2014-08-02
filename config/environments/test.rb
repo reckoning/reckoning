@@ -35,4 +35,6 @@ Reckoning::Application.configure do
   config.active_support.deprecation = :stderr
 
   config.action_mailer.default_url_options = { :host => 'reckoning.dev' }
+
+  config.assets.initialize_on_precompile = true
 end
