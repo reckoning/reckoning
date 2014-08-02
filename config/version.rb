@@ -1,4 +1,4 @@
 module Reckoning
   CODENAME = "constellation"
-  VERSION = "v1.3.10"
+  VERSION = `git describe --abbrev=0 --tags`.strip.gsub(/(\-.*)/, "") unless defined? VERSION
 end
