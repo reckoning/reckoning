@@ -16,7 +16,7 @@ class BaseController < ApplicationController
     @last_invoices = current_user.invoices.order('date DESC').paid.year(Time.now.year - 1)
     @budgets = current_user.projects.with_budget.includes(:tasks).order('tasks.updated_at DESC')
     @timers_chart_data = generate_timers_chart_data
-    @invoices_chart_data, @invoices_max_value = generate_invoices_chart_data
+    @invoices_chart_data, @invoices_max_value, @invoices_max_month_value = generate_invoices_chart_data
     render 'dashboard'
   end
 
@@ -51,6 +51,7 @@ class BaseController < ApplicationController
     sum = {key: I18n.t(:"labels.chart.invoices.sum"), values: []}
     month = {key: I18n.t(:"labels.chart.invoices.month"), values: []}
     last_value = 0.0
+    max_month_value = 0.0
     (1..12).each do |month_id|
       start_date = Date.parse("#{Date.today.year}-#{month_id}-1").at_beginning_of_month
       end_date = Date.parse("#{Date.today.year}-#{month_id}-1").at_end_of_month
@@ -69,9 +70,13 @@ class BaseController < ApplicationController
 
       month[:values] << [(start_date.to_time.to_i * 1000), month_value]
       sum[:values] << [(start_date.to_time.to_i * 1000), sum_value]
+
+      if max_month_value < value.to_f
+        max_month_value = value.to_f
+      end
     end
     result << month
     result << sum
-    return result, last_value
+    return result, last_value, max_month_value
   end
 end
