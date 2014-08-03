@@ -1,16 +1,7 @@
 window.loadInvoicesChart = function() {
   if ($('#invoices-chart').length && invoicesChartData) {
     var data = invoicesChartData;
-
-    if ($('#invoices-chart').data('overall-max')) {
-      var overallMax = parseInt($('#invoices-chart').data('overall-max'), 10);
-    }
-    if ($('#invoices-chart').data('sum-max')) {
-      var sumMax = parseInt($('#invoices-chart').data('sum-max'), 10);
-    }
-    if ($('#invoices-chart').data('month-max')) {
-      var monthMax = parseInt($('#invoices-chart').data('month-max'), 10);
-    }
+    var maxValues = invoicesMaxValues;
 
     nv.addGraph(function() {
       chart = nv.models.lineChart()
@@ -24,7 +15,7 @@ window.loadInvoicesChart = function() {
         })
         .useInteractiveGuideline(true)
         .transitionDuration(500)
-        .forceY([0, overallMax]);
+        .forceY([0, maxValues[0]]);
 
       chart.xAxis
         .showMaxMin(false)
@@ -40,11 +31,16 @@ window.loadInvoicesChart = function() {
         });
 
       chart.dispatch.on('stateChange', function() {
-        if (!chart.state().disabled[1]) {
-          chart.forceY([0, sumMax]);
-        } else {
-          chart.forceY([0, monthMax]);
-        }
+        var maxValue = 0;
+        $.each(maxValues, function(index, value) {
+          if (!chart.state().disabled[index]) {
+            if (maxValue < value) {
+              maxValue = value;
+            }
+          }
+        });
+
+        chart.forceY([0, maxValue]);
       });
 
       d3.select('#invoices-chart svg')
