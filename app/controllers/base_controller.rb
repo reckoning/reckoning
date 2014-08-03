@@ -1,4 +1,5 @@
 class BaseController < ApplicationController
+  include NumberHelper
   skip_authorization_check
   before_filter :authenticate_user!, :only => [:fail]
 
@@ -16,7 +17,7 @@ class BaseController < ApplicationController
     @last_invoices = current_user.invoices.order('date DESC').paid.year(Time.now.year - 1)
     @budgets = current_user.projects.with_budget.includes(:tasks).order('tasks.updated_at DESC')
     @timers_chart_data = generate_timers_chart_data
-    @invoices_chart_data, @invoices_max_value, @invoices_max_month_value = generate_invoices_chart_data
+    @invoices_chart_data, @invoices_max_values = generate_invoices_chart_data
     render 'dashboard'
   end
 
@@ -48,24 +49,43 @@ class BaseController < ApplicationController
 
   def generate_invoices_chart_data
     result = []
-    sum = {key: I18n.t(:"labels.chart.invoices.sum"), values: []}
-    month = {key: I18n.t(:"labels.chart.invoices.month"), values: []}
+
+    result, max_values_current = values_for_year(result, Date.today.year)
+    result, max_values_last = values_for_year(result, (Date.today - 1.year).year, "last")
+
+    return result, (max_values_current + max_values_last)
+  end
+
+  def values_for_year result, year, label = "current"
+    sum = {key: I18n.t(:"labels.chart.invoices.sum", year: year), values: []}
+    month = {key: I18n.t(:"labels.chart.invoices.month", year: year), values: []}
+
     last_value = 0.0
     max_month_value = 0.0
     (1..12).each do |month_id|
-      start_date = Date.parse("#{Date.today.year}-#{month_id}-1").at_beginning_of_month
-      end_date = Date.parse("#{Date.today.year}-#{month_id}-1").at_end_of_month
+      start_date = Date.parse("#{year}-#{month_id}-1").at_beginning_of_month
+      end_date = Date.parse("#{year}-#{month_id}-1").at_end_of_month
 
       value = 0.0
       current_user.invoices.where(date: start_date..end_date).all.each do |invoice|
         value += invoice.value.to_d
       end
 
-      if value.zero?
+      if value.zero? && end_date > Date.today
         month_value = sum_value = nil
+      elsif value.zero? && end_date < Date.today
+        month_value = 0.0
+        sum_value = last_value
       else
         month_value = value
         last_value = sum_value = (last_value + value.to_f)
+      end
+
+      if start_date.year != Date.today.year
+        start_date = start_date + 1.year
+      end
+      if end_date.year != Date.today.year
+        end_date = end_date + 1.year
       end
 
       month[:values] << [(start_date.to_time.to_i * 1000), month_value]
@@ -75,8 +95,10 @@ class BaseController < ApplicationController
         max_month_value = value.to_f
       end
     end
-    result << month
+    max_values = [round_to_k(last_value), round_to_k(max_month_value)]
+
     result << sum
-    return result, last_value, max_month_value
+    result << month
+    return result, max_values
   end
 end

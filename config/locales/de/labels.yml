@@ -29,8 +29,8 @@ de:
       invoices:
         headline: "Rechnungen im aktuellen Jahr"
         no_data: "Keine Rechnungen vorhanden."
-        sum: "Kumulativ"
-        month: "Monat"
+        sum: "Kumulativ %{year}"
+        month: "Monat %{year}"
         title: "Rechnungen"
     timesheet:
       date: Datum
