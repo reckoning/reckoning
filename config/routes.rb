@@ -1,4 +1,4 @@
-require 'resque/server'
+require 'sidekiq/web'
 
 Reckoning::Application.routes.draw do
   devise_for :users, skip: [:sessions], controllers: { registrations: "registrations" }
@@ -9,7 +9,7 @@ Reckoning::Application.routes.draw do
     resources :settings, except: [:index, :show]
 
     authenticate :user, lambda {|u| u.admin? } do
-      mount Resque::Server.new, :at => "/workers"
+      mount Sidekiq::Web => '/workers'
     end
 
     root to: 'base#dashboard'

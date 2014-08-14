@@ -1,8 +1,9 @@
 # encoding: utf-8
-class InvoiceGdriveJob
-  @queue = (ENV['ARCHIVE_QUEUE'] || '').to_sym
+class InvoiceGdriveWorker
+  include Sidekiq::Worker
+  sidekiq_options queue: (ENV['ARCHIVE_QUEUE'] || 'reckoning-archive').to_sym
 
-  def self.perform invoice_id
+  def perform invoice_id
     invoice = Invoice.find invoice_id
 
     if invoice.present?
@@ -35,7 +36,7 @@ class InvoiceGdriveJob
 
   protected
 
-  def self.build_collection_path invoice, session
+  def build_collection_path invoice, session
     default_collection = Settings.app.gdrive_collection
     default_collection = invoice.user.gdrive_collection unless invoice.user.gdrive_collection.blank?
 

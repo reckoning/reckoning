@@ -12,7 +12,7 @@ window.App.Timesheet.enableSubmit = ->
 window.App.Timesheet.addTask = ($element, week_date) ->
   task_id = $('#select-task').val()
   unless task_id.length
-    displayWarning i18n.t("messages.timesheet.add_task.warning")
+    displayWarning I18n.t("messages.timesheet.add_task.warning")
     return
 
   $element.button('loading')
@@ -27,7 +27,7 @@ window.App.Timesheet.addTask = ($element, week_date) ->
       $element.closest('.modal').modal('hide')
       window.location.reload()
     error: ->
-      displayError i18n.t("messages.timesheet.add_task.failure")
+      displayError I18n.t("messages.timesheet.add_task.failure")
 
 $(document).on 'change', '.timesheet-day input[type=text]', App.Timesheet.enableSubmit
 

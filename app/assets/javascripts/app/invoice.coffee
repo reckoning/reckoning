@@ -32,7 +32,7 @@ window.App.Invoice.generate = ($element) ->
     type: 'PUT'
     dataType: 'json'
     success: ->
-      displayAlert "PDF wird generiert"
+      displayAlert I18n.t("messages.invoice.pdf_generating")
       App.Invoice.pdfInterval = setInterval App.Invoice.checkPdfStatus, 1000
 
 window.App.Invoice.checkPdfStatus = ->
@@ -43,67 +43,19 @@ window.App.Invoice.checkPdfStatus = ->
     success: (data) ->
       return unless data
       laddaButton.stop() if laddaButton
-      $previewImage = $("#preview-image")
-      $invoice = $('<img/>').attr('src', "#{data.invoice}?timestamp=#{new Date().getTime()}")
-      $previewImage.empty().append($invoice)
+      $("#invoice-preview iframe").attr('src', "#{data.invoice}?timestamp=#{new Date().getTime()}#view=FitB")
       $('.save-invoice').removeClass('disabled')
       if data.timesheet
-        $timesheet = $('<img/>').attr('src', "#{data.timesheet}?timestamp=#{new Date().getTime()}")
-        $previewImage.append($timesheet)
+        $previewTimesheet = $("#timesheet-preview")
+        $('#timesheet-preview iframe').attr('src', "#{data.timesheet}?timestamp=#{new Date().getTime()}#view=FitB")
         $('.save-timesheet').removeClass('disabled')
       clearInterval App.Invoice.pdfInterval
-      displaySuccess "PDF wurde erfolgreich erstellt."
-      $invoice.load ->
-        App.Invoice.showPreview()
-        App.Invoice.initPagination()
-        App.Invoice.updatePagination()
+      displaySuccess I18n.t("messages.invoice.pdf_generated")
+      App.Invoice.showPreview()
 
 window.App.Invoice.showPreview = ->
   $('#preview-info').addClass('hide')
-  $("#preview-image").removeClass('hide')
-  $(".preview-paginator").removeClass('hide')
-
-window.App.Invoice.changePreviewPage = ($el) ->
-  $previewImage = $("#preview-image")
-
-  type = $el.data('type')
-  if type == 'next'
-    App.Invoice.currentPreviewPage += 1
-    $previewImage.css('top', "-=#{App.Invoice.previewPageHeight}")
-
-  else if type == 'prev'
-    App.Invoice.currentPreviewPage -= 1
-    $previewImage.css('top', "+=#{App.Invoice.previewPageHeight}")
-
-  App.Invoice.updatePagination()
-
-window.App.Invoice.initPagination = ->
-  $('.preview-paginator').find('li a').each (i, el) ->
-    $(el).unbind().click (ev) ->
-      ev.preventDefault()
-      return if $(@).parent().hasClass('disabled')
-      App.Invoice.changePreviewPage($(@))
-
-window.App.Invoice.updatePagination = ->
-  $previewPaginator = $('.preview-paginator')
-  height = $("#preview-image img:first").height()
-  if $("#preview-image img").length > 1
-    height = height + $("#preview-image img:last").height()
-  App.Invoice.previewPageMax = Math.round(height / App.Invoice.previewPageHeight)
-
-  $previewPaginator.addClass('hide') if App.Invoice.previewPageMax is 1
-
-  $nextEl = $previewPaginator.find('li a[data-type="next"]')
-  $prevEl = $previewPaginator.find('li a[data-type="prev"]')
-
-  if App.Invoice.currentPreviewPage >= App.Invoice.previewPageMax
-    $nextEl.parent().addClass('disabled')
-  else
-    $nextEl.parent().removeClass('disabled')
-  if App.Invoice.currentPreviewPage <= 1
-    $prevEl.parent().addClass('disabled')
-  else
-    $prevEl.parent().removeClass('disabled')
+  $("iframe.preview").parent().removeClass('hide')
 
 window.App.Invoice.updateValues = (ev, $fields) ->
   $fields.each (i, field) ->
@@ -139,7 +91,7 @@ window.App.Invoice.loadPositions = ($element) ->
   date = $('#invoice_date').val()
   project_id = $('#invoice_project_id').val()
   unless date.length && project_id.length
-    displayWarning i18n.t("messages.invoice.load_positions.missing")
+    displayWarning I18n.t("messages.invoice.load_positions.missing")
     laddaButton.stop() if laddaButton
     return
 
@@ -152,7 +104,7 @@ window.App.Invoice.loadPositions = ($element) ->
       $(@).find('#add-positions').html(result.body)
       $(@).modal('show')
     error: ->
-      displayError i18n.t("messages.error")
+      displayError I18n.t("messages.error")
     complete: ->
       laddaButton.stop() if laddaButton
 

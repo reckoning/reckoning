@@ -16,18 +16,13 @@ class Invoice < ActiveRecord::Base
   before_save :set_rate, :set_value
   before_create :set_ref
 
-  # created -> charged -> paid
-  state_machine :state, initial: :created do
-    after_transition on: :charge, do: :generate_pdf
-    after_transition on: :pay, do: :set_pay_date
-    event :charge do
-      transition created: :charged
-    end
+  include ::SimpleStates
 
-    event :pay do
-      transition charged: :paid
-    end
-  end
+  # created -> charged -> paid
+  states :created, :charged, :paid
+
+  event :charge,  from: :created, to: :charged, after: :generate_pdf
+  event :pay,  from: :charged, to: :paid, after: :set_pay_date
 
   def self.paid
     where state: :paid
@@ -57,7 +52,7 @@ class Invoice < ActiveRecord::Base
   def generate_pdf
     self.set_payment_due_date
     self.update_attributes({pdf_generating: true})
-    Resque.enqueue InvoicePdfJob, self.id
+    InvoicePdfWorker.perform_async self.id
   end
 
   def ref_number

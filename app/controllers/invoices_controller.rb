@@ -33,7 +33,7 @@ class InvoicesController < ApplicationController
     authorize! :archive, invoice
     if current_user.has_gdrive?
       if invoice.files_present?
-        Resque.enqueue InvoiceGdriveJob, invoice.id
+        InvoiceGdriveWorker.perform_async invoice.id
         redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.invoice.archive.success")
       else
         redirect_to invoice_path(invoice.ref), warning: I18n.t(:"messages.invoice.files_missing")
@@ -47,7 +47,7 @@ class InvoicesController < ApplicationController
     authorize! :send, invoice
     if invoice.send_via_mail?
       if invoice.files_present?
-        Resque.enqueue InvoiceMailerJob, invoice.id
+        InvoiceMailerWorker.perform_async invoice.id
         redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.invoice.send.success")
       else
         redirect_to invoice_path(invoice.ref), warning: I18n.t(:"messages.invoice.files_missing")
@@ -62,7 +62,7 @@ class InvoicesController < ApplicationController
 
     @test_mail = TestMail.new(test_mail_params)
     if test_mail.valid?
-      Resque.enqueue InvoiceTestMailerJob, invoice.id, test_mail.email
+      InvoiceTestMailerWorker.perform_async invoice.id, test_mail.email
       redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.invoice.send_test_mail.success")
     else
       flash.now[:warning] = I18n.t(:"messages.invoice.send_test_mail.failure")
@@ -134,7 +134,7 @@ class InvoicesController < ApplicationController
     authorize! :read, invoice
     respond_to do |format|
       format.js {
-        render json: invoice.generate_pdf
+        render json: invoice.generate_pdf.to_json
       }
       format.html {
         invoice.generate_pdf
@@ -203,9 +203,9 @@ class InvoicesController < ApplicationController
             data = false
           else
             data = {}
-            data[:invoice] = invoice_png_path(invoice.ref, invoice.invoice_file('png'))
+            data[:invoice] = invoice_pdf_path(invoice.ref, invoice.invoice_file)
             if invoice.timers.present?
-              data[:timesheet] = timesheet_png_path(invoice.ref, invoice.timesheet_file('png'))
+              data[:timesheet] = timesheet_pdf_path(invoice.ref, invoice.timesheet_file)
             end
           end
           render json: data, status: :ok

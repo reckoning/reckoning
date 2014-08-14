@@ -1,0 +1,25 @@
+{
+  "name": "Reckoning.io",
+  "version": "1.4.0-constellation",
+  "homepage": "https://github.com/Reckoning/app",
+  "authors": [
+    "Marten Klitzke <m.klitzke@gmail.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ladda": "~0.9.4",
+    "noty": "~2.2.5",
+    "selectize": "~0.11.0",
+    "nvd3": "~1.1.15-beta",
+    "moment": "~2.8.1",
+    "accounting": "~0.3.2"
+  }
+}

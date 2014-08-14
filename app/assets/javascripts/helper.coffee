@@ -1,6 +1,6 @@
 # Selectize
 window.selectizeCreateTemplate = (data, escape) ->
-  return "<div class='create'><strong>#{escape(data.input)}</strong>&hellip; #{i18n.t("actions.create")}</div>"
+  return "<div class='create'><strong>#{escape(data.input)}</strong>&hellip; #{I18n.t("actions.create")}</div>"
 
 # Noty
 window.displayNoty = (text, timeout, type) ->
@@ -13,7 +13,7 @@ window.displayNoty = (text, timeout, type) ->
 window.displayConfirm = (ev, $element) ->
   okButton =
     addClass: 'btn btn-primary'
-    text: i18n.t('actions.ok')
+    text: I18n.t('actions.ok')
     onClick: ($noty) ->
       $noty.close()
       if $element.find('form').length
@@ -24,7 +24,7 @@ window.displayConfirm = (ev, $element) ->
 
   cancelButton =
     addClass: 'btn btn-danger'
-    text: i18n.t('actions.cancel')
+    text: I18n.t('actions.cancel')
     onClick: ($noty) ->
       $noty.close()
       return false
