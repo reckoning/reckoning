@@ -2,49 +2,49 @@ source 'https://rubygems.org'
 
 ruby '2.1.2'
 
-gem 'rails', '~> 4.0.3'
+gem 'rails'
 
-gem 'pg', '~> 0.17.0'
+gem 'pg'
 
-gem 'resque', '~> 1.25.0'
+gem 'sidekiq'
 
-gem 'haml', '~> 4.0.4'
-gem 'haml-rails', '~> 0.5.2'
+gem 'haml'
+gem 'haml-rails'
 
-gem 'devise', '~> 3.2.2'
-gem 'cancan', '~> 1.6.10'
+gem 'devise'
+gem 'cancan'
 
-gem 'dalli', '~> 2.6.4'
-gem 'cache_digests', '~> 0.3.1'
-gem 'turbolinks', '~> 2.0.0'
+gem 'dalli'
+gem 'cache_digests'
+gem 'turbolinks'
 
-gem 'url_plumber', '~> 0.1.2'
-gem 'kaminari', '~> 0.15.0'
+gem 'url_plumber'
+gem 'kaminari'
 
-gem 'dynamic_fields_for_rails', '~> 0.5.0'
+gem 'dynamic_fields_for_rails'
 
-gem 'state_machine', '~> 1.2.0'
+gem 'simple_states'
 
-gem 'sass-rails', '~> 4.0.1'
-gem 'coffee-rails', '~> 4.0.1'
-gem 'bourbon', '~> 3.1.8'
+gem 'sass-rails'
+gem 'coffee-rails'
+gem 'bourbon'
 
 gem 'bootstrap-sass'
 
-gem 'jquery-rails', '~> 3.0.4'
-gem 'jquery-turbolinks', '~> 2.0.1'
+gem 'jquery-rails'
+gem 'jquery-turbolinks'
 
-gem 'asset_pipeline_routes', '~> 0.2.1'
+gem 'asset_pipeline_routes'
 
-gem 'uglifier', '~> 2.3.3'
+gem 'uglifier'
 
-gem 'redcarpet', '~> 3.0.0'
+gem 'redcarpet'
 
-gem 'puma', '~> 2.7.0'
+gem 'puma'
 
-gem 'sentry-raven', '~> 0.7.1'
+gem 'sentry-raven'
 
-gem "i18n-js"
+gem "i18n-js", github: "fnando/i18n-js", branch: :master
 
 gem 'thor'
 gem 'highline'
@@ -68,6 +68,7 @@ group :test do
 end
 
 group :development do
-  gem 'foreman', '~> 0.63.0'
+  gem 'mailcatcher'
+  gem 'foreman'
   gem 'byebug'
 end

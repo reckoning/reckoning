@@ -19,6 +19,8 @@ de:
       role: "Benutzergruppe"
       email: "E-Mail"
       enabled: "Status"
+      invoice: Rechnung
+      timesheet: Stundenzettel
     chart:
       on_date: am
       in_month: im

@@ -31,4 +31,3 @@ $ ->
     $(@).button('loading')
 
   $('#blueimp-gallery').data('useBootstrapModal', false)
-

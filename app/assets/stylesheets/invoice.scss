@@ -1,35 +1,66 @@
 #invoice {
-  #preview {
-    overflow-x: scroll;
-    overflow-y: hidden;
-    height: 1060px;
-    width: 100%;
-    border-radius: 5px;
-    @include box-shadow(rgba(#000, 0.3) 0 0 15px);
-    margin-bottom: 10px;
-    position: relative;
-    background-color: white;
+  #preview-wrapper {
+    border: 1px solid #dddddd;
+    border-top: 0;
+    height: 1053px;
+    margin-bottom: 15px;
   }
 
-  #preview-image {
-    position: absolute;
-    top: 0;
+  iframe.preview {
     width: 100%;
-    text-align: center;
+    height: 1052px;
+    border: none;
+  }
 
-    img {
-      max-width: 100%;
-      max-height: 100%;
+  @media (max-width: $screen-lg-min) {
+    iframe.preview {
+      height: 865px;
+    }
+    #preview-wrapper {
+      height: 866px;
+    }
+  }
+
+  @media (max-width: $screen-md-min) {
+    iframe.preview {
+      height: 1010px;
+    }
+    #preview-wrapper {
+      height: 1011px;
+    }
+  }
+
+  @media (max-width: $screen-sm-min) {
+    iframe.preview {
+      height: 675px;
+      width: 480px;
+    }
+    #preview-wrapper {
+      height: 676px;
+      width: 480px;
+    }
+    #preview-nav {
+      width: 480px;
+    }
+  }
+
+  @media (max-width: $screen-xs-min) {
+    iframe.preview {
+      height: 520px;
+      width: 370px;
+    }
+    #preview-wrapper {
+      height: 521px;
+      width: 370px;
+    }
+    #preview-nav {
+      width: 370px;
     }
   }
 
   #preview-info {
     text-align: center;
     padding: 50px;
-  }
-
-  .preview-paginator {
-    text-align: center;
   }
 
   .due-label {
