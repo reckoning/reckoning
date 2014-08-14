@@ -2,6 +2,7 @@ language: ruby
 rvm:
   - 2.1.2
 before_script:
+  - bundle exec rake db:create db:migrate
   - bundle exec thor setup:dev_env
   - npm install bower
   - bundle exec rake bower:install
