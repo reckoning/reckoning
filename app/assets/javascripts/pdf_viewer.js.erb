@@ -1,6 +1,6 @@
-window.App.PdfViewer = {};
+window.PdfViewer = {};
 
-window.App.PdfViewer.renderPage = function($viewer, $promise, callback) {
+window.PdfViewer.renderPage = function($viewer, $promise, callback) {
   $promise.then(function(page) {
     var $canvas = $('<canvas/>');
     $canvas.hide();
@@ -25,63 +25,63 @@ window.App.PdfViewer.renderPage = function($viewer, $promise, callback) {
   });
 };
 
-window.App.PdfViewer.renderPages = function($viewer, pdf, callback, index) {
+window.PdfViewer.renderPages = function($viewer, pdf, callback, index) {
   if (index === undefined) {
     index = 1;
   }
-  App.PdfViewer.renderPage($viewer, pdf.getPage(index), function() {
+  PdfViewer.renderPage($viewer, pdf.getPage(index), function() {
     index++;
     if (index <= pdf.pdfInfo.numPages) {
-      App.PdfViewer.renderPages($viewer, pdf, callback, index);
+      PdfViewer.renderPages($viewer, pdf, callback, index);
     } else {
       callback();
     }
   });
 };
 
-window.App.PdfViewer.initViewer = function(index, viewers, callback) {
+window.PdfViewer.initViewer = function(index, viewers, callback) {
   var $viewer = $(viewers[index]);
-  App.PdfViewer.loading($viewer);
+  PdfViewer.loading($viewer);
   $viewer.find('canvas').fadeOut('slow', function() {
     $(this).remove();
   });
   var pdfPath = $viewer.data('pdfPath');
   if (pdfPath !== undefined) {
     PDFJS.getDocument(pdfPath).then(function(pdf) {
-      App.PdfViewer.renderPages($viewer, pdf, function() {
-        App.PdfViewer.finish($viewer);
+      PdfViewer.renderPages($viewer, pdf, function() {
+        PdfViewer.finish($viewer);
         index++
         if (index < viewers.length) {
-          App.PdfViewer.initViewer(index, viewers);
+          PdfViewer.initViewer(index, viewers);
         }
       });
     });
   }
 };
 
-window.App.PdfViewer.loading = function($viewer) {
+window.PdfViewer.loading = function($viewer) {
   var $loader = $("<div/>")
   $loader.addClass('loader').hide();
   $viewer.append($loader);
   $loader.fadeIn('slow');
 };
 
-window.App.PdfViewer.finish = function($viewer) {
+window.PdfViewer.finish = function($viewer) {
   $viewer.find('.loader').fadeOut('slow', function() {
     $(this).remove();
   });
 };
 
-window.App.PdfViewer.load = function() {
+window.PdfViewer.load = function() {
   var viewers = $('.pdf-viewer')
   if (viewers.length > 0) {
-    PDFJS.workerSrc = "<%= asset_path('pdf.worker.js') %>";
-    App.PdfViewer.initViewer(0, viewers);
+    PDFJS.workerSrc = "<%= asset_path('pdf.js/build/pdf.worker.js') %>";
+    PdfViewer.initViewer(0, viewers);
   }
 };
 
 (function() {
   $(function() {
-    App.PdfViewer.load();
+    PdfViewer.load();
   });
 }).call(this);
