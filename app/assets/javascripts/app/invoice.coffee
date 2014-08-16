@@ -34,7 +34,7 @@ window.App.Invoice.checkPdfStatus = ->
         $('.save-timesheet').removeClass('disabled')
       clearInterval App.Invoice.pdfInterval
       displaySuccess I18n.t("messages.invoice.pdf_generated")
-      App.PdfViewer.load()
+      PdfViewer.load()
       App.Invoice.showPreview()
 
 window.App.Invoice.showPreview = ->

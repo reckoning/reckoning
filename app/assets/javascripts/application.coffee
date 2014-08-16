@@ -17,7 +17,7 @@
 #= require d3/d3
 #= require nvd3/nv.d3
 #= require accounting/accounting
-#= require pdf
+#= require pdf.js/build/pdf
 #= require pdf_viewer
 #= require app
 #= require_tree ./app
