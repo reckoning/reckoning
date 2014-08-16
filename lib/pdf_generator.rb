@@ -8,7 +8,7 @@ class PdfGenerator < AbstractController::Base
   include ActionController::RequestForgeryProtection
   include ActionView::Helpers::AssetTagHelper
 
-  attr_accessor :resource, :tempfile, :pdf_path, :png_path
+  attr_accessor :resource, :tempfile, :pdf_path
 
   self.view_paths = "app/views"
   def session; {}; end
@@ -16,7 +16,6 @@ class PdfGenerator < AbstractController::Base
   def initialize resource, options
     @resource = resource
     @pdf_path = options.fetch(:pdf_path)
-    @png_path = options.fetch(:png_path)
     @tempfile = options.fetch(:tempfile)
   end
 
@@ -35,7 +34,6 @@ class PdfGenerator < AbstractController::Base
     file.write(html)
     file.close
     system "weasyprint #{file.path} #{@pdf_path}" # generate pdf
-    system "weasyprint #{file.path} #{@png_path} -f png" # generate png for preview
     file.unlink
   end
 end
