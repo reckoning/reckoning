@@ -68,26 +68,25 @@ class Invoice < ActiveRecord::Base
     ].join('').html_safe
   end
 
-  def invoice_file(filetype = 'pdf')
-    "rechnung-#{self.ref}-#{I18n.l(self.date.to_date, format: :file).downcase}.#{filetype}"
+  def invoice_file
+    "rechnung-#{self.ref}-#{I18n.l(self.date.to_date, format: :file).downcase}.pdf"
   end
 
-  def timesheet_file(filetype = 'pdf')
-    "stunden-rechnung-#{self.ref}-#{I18n.l(self.date.to_date, format: :file).downcase}.#{filetype}"
+  def timesheet_file
+    "stunden-rechnung-#{self.ref}-#{I18n.l(self.date.to_date, format: :file).downcase}.pdf"
   end
 
-  def pdf_path(filetype = 'pdf')
-    path(invoice_file(filetype))
+  def pdf_path
+    path(invoice_file)
   end
 
-  def timesheet_path(filetype = 'pdf')
-    path(timesheet_file(filetype))
+  def timesheet_path
+    path(timesheet_file)
   end
 
   def generate
     pdf_generator = InvoicePdfGenerator.new self, {
       pdf_path: pdf_path,
-      png_path: pdf_path('png'),
       tempfile: "reckoning-invoice-pdf-#{self.id}"
     }
     pdf_generator.generate
@@ -96,7 +95,6 @@ class Invoice < ActiveRecord::Base
   def generate_timesheet
     pdf_generator = TimesheetPdfGenerator.new self, {
       pdf_path: timesheet_path,
-      png_path: timesheet_path('png'),
       tempfile: "reckoning-timesheet-pdf-#{self.id}"
     }
     pdf_generator.generate

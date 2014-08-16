@@ -1,26 +1,10 @@
 window.App.Invoice ?= {}
 
 window.App.Invoice.pdfInterval = false
-window.App.Invoice.previewPageHeight = 1060
-window.App.Invoice.previewPageWidth = 750
-window.App.Invoice.previewPageDefaultHeight = 1060
-window.App.Invoice.previewPageDefaultWidth = 750
-window.App.Invoice.previewPageMax = 1
-window.App.Invoice.currentPreviewPage = 1
 window.App.Invoice.projectRate = 0
 window.App.Invoice.oldProjectRate = 0
 
 window.laddaButton ?= {}
-
-window.App.Invoice.updatePreviewHeight = ->
-  $preview = $('#preview')
-  $invoice = $preview.find('img:first')
-  $timesheet = $preview.find('img:last') unless $preview.find('img').length < 2
-
-  newWidth = ((App.Invoice.previewPageWidth / App.Invoice.previewPageHeight ) * $invoice.height())
-  App.Invoice.previewPageHeight = $invoice.height()
-  App.Invoice.previewPageWidth = newWidth
-  $preview.css("height", App.Invoice.previewPageHeight)
 
 window.App.Invoice.generate = ($element) ->
   laddaButton.start() if laddaButton
@@ -43,19 +27,19 @@ window.App.Invoice.checkPdfStatus = ->
     success: (data) ->
       return unless data
       laddaButton.stop() if laddaButton
-      $("#invoice-preview iframe").attr('src', "#{data.invoice}?timestamp=#{new Date().getTime()}#view=FitB")
+      $("#invoice-preview .pdf-viewer").data('pdfPath', data.invoice)
       $('.save-invoice').removeClass('disabled')
       if data.timesheet
-        $previewTimesheet = $("#timesheet-preview")
-        $('#timesheet-preview iframe').attr('src', "#{data.timesheet}?timestamp=#{new Date().getTime()}#view=FitB")
+        $('#timesheet-preview .pdf-viewer').data('pdfPath', data.timesheet)
         $('.save-timesheet').removeClass('disabled')
       clearInterval App.Invoice.pdfInterval
       displaySuccess I18n.t("messages.invoice.pdf_generated")
+      App.PdfViewer.load()
       App.Invoice.showPreview()
 
 window.App.Invoice.showPreview = ->
   $('#preview-info').addClass('hide')
-  $("iframe.preview").parent().removeClass('hide')
+  $(".pdf-viewer").parent().removeClass('hide')
 
 window.App.Invoice.updateValues = (ev, $fields) ->
   $fields.each (i, field) ->
@@ -134,15 +118,8 @@ $(document).on 'change', ".invoice-position-hours", App.Invoice.updateValue
 $(document).on 'change', ".invoice-position-rate", App.Invoice.updateValue
 $(document).on 'change', "#invoice_project_id", App.Invoice.updateRate
 
-$(window).on 'resize', App.Invoice.updatePreviewHeight
-
 $ ->
   if $('#invoice').length
-    $("#preview-image img:first").load ->
-      App.Invoice.updatePreviewHeight()
-      App.Invoice.initPagination()
-      App.Invoice.updatePagination()
-
     button = document.querySelector('.ladda-button')
     if button
       window.laddaButton = Ladda.create(button)
@@ -151,10 +128,6 @@ $ ->
       laddaButton.start() if laddaButton
       $('.generate-invoice').removeClass('generating')
       App.Invoice.pdfInterval = setInterval App.Invoice.checkPdfStatus, 1000
-
-    $(document).on 'page:load', ->
-      App.Invoice.currentPreviewPage = 1
-      App.Invoice.updatePagination()
 
   if $('#invoice-form').length
     project_select = $('#invoice_project_id')[0].selectize

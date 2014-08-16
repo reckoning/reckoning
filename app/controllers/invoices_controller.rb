@@ -112,24 +112,6 @@ class InvoicesController < ApplicationController
     end
   end
 
-  def png
-    authorize! :read, invoice
-    if File.exists?(invoice.pdf_path('png'))
-      send_file invoice.pdf_path('png'), type: 'image/png', disposition: 'inline'
-    else
-      render file: 'public/404.html', status: 404, layout: false
-    end
-  end
-
-  def timesheet_png
-    authorize! :read, invoice
-    if File.exists?(invoice.timesheet_path('png'))
-      send_file invoice.timesheet_path('png'), type: 'image/png', disposition: 'inline'
-    else
-      render file: 'public/404.html', status: 404, layout: false
-    end
-  end
-
   def regenerate_pdf
     authorize! :read, invoice
     respond_to do |format|
@@ -223,9 +205,7 @@ class InvoicesController < ApplicationController
     authorize! :destroy, invoice
     if invoice.destroy
       File.delete(invoice.pdf_path) if File.exists?(invoice.pdf_path)
-      File.delete(invoice.pdf_path('png')) if File.exists?(invoice.pdf_path('png'))
       File.delete(invoice.timesheet_path) if File.exists?(invoice.timesheet_path)
-      File.delete(invoice.timesheet_path('png')) if File.exists?(invoice.timesheet_path('png'))
       redirect_to invoices_path, notice: I18n.t(:"messages.destroy.success", resource: I18n.t(:"resources.messages.invoice"))
     else
       redirect_to invoices_path, error: I18n.t(:"messages.destroy.failure", resource: I18n.t(:"resources.messages.invoice"))
