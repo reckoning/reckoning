@@ -21,8 +21,8 @@ class Invoice < ActiveRecord::Base
   # created -> charged -> paid
   states :created, :charged, :paid
 
-  event :charge,  from: :created, to: :charged, after: :generate_pdf
-  event :pay,  from: :charged, to: :paid, after: :set_pay_date
+  event :charge, from: :created, to: :charged, after: :generate_pdf
+  event :pay, from: :charged, to: :paid, after: :set_pay_date
 
   def self.paid
     where state: :paid
