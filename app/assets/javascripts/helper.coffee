@@ -16,10 +16,14 @@ window.displayConfirm = (ev, $element) ->
     text: I18n.t('actions.ok')
     onClick: ($noty) ->
       $noty.close()
-      if $element.find('form').length
-        $element.find('form').submit()
+      if $element.data('method') is undefined
+        Turbolinks.visit($element.attr('href'))
       else
-        window.location = $element.attr('href')
+        $.ajax
+          url: $element.attr('href')
+          method: $element.data('method')
+          complete: (result) ->
+            Turbolinks.visit(window.location)
       return false
 
   cancelButton =

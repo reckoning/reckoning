@@ -32,7 +32,8 @@
                 .span.regenerate{class: ('hide' if invoice.pdf_not_present_and_not_generating?)}
                   %i.glyphicon.glyphicon-refresh
                   = I18n.t(:"actions.regenerate")
-              = confirm_link_to invoice_path(invoice.ref), data: {notyConfirm: I18n.t(:"messages.confirm.delete")}, method: :delete, class: "btn btn-danger" do
+
+              %a.btn.btn-danger{href: invoice_path(invoice.ref), data: { method: "DELETE", notyConfirm: I18n.t(:"messages.confirm.delete") } }
                 %i.glyphicon.glyphicon-trash
                 = I18n.t(:"actions.delete")
 

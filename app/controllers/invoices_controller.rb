@@ -160,16 +160,34 @@ class InvoicesController < ApplicationController
 
   def charge
     authorize! :charge, invoice
-    if invoice.charge
-      redirect_to :back, notice: I18n.t(:'messages.charge.invoice.success')
+    invoice.charge
+    if invoice.charged?
+      flash[:notice] = I18n.t(:'messages.charge.invoice.success')
+      respond_to do |format|
+        format.js {
+          render json: {}, status: :ok
+        }
+        format.html {
+          redirect_to :back
+        }
+      end
     else
-      redirect_to :back, error: I18n.t(:'messages.charge.invoice.failure')
+      flash[:error] = I18n.t(:'messages.charge.invoice.failure')
+      respond_to do |format|
+        format.js {
+          render json: {}, status: :ok
+        }
+        format.html {
+          redirect_to :back
+        }
+      end
     end
   end
 
   def pay
     authorize! :pay, invoice
-    if invoice.pay
+    invoice.pay
+    if invoice.paid?
       redirect_to :back, notice: I18n.t(:'messages.pay.invoice.success')
     else
       redirect_to :back, error: I18n.t(:'messages.pay.invoice.failure')
@@ -206,9 +224,26 @@ class InvoicesController < ApplicationController
     if invoice.destroy
       File.delete(invoice.pdf_path) if File.exists?(invoice.pdf_path)
       File.delete(invoice.timesheet_path) if File.exists?(invoice.timesheet_path)
-      redirect_to invoices_path, notice: I18n.t(:"messages.destroy.success", resource: I18n.t(:"resources.messages.invoice"))
+
+      flash[:notice] = I18n.t(:"messages.destroy.success", resource: I18n.t(:"resources.messages.invoice"))
+      respond_to do |format|
+        format.js {
+          render json: {}, status: :ok
+        }
+        format.html {
+          redirect_to invoices_path
+        }
+      end
     else
-      redirect_to invoices_path, error: I18n.t(:"messages.destroy.failure", resource: I18n.t(:"resources.messages.invoice"))
+      flash[:error] = I18n.t(:"messages.destroy.failure", resource: I18n.t(:"resources.messages.invoice"))
+      respond_to do |format|
+        format.js {
+          render json: {}, status: :ok
+        }
+        format.html {
+          redirect_to invoices_path
+        }
+      end
     end
   end
 
