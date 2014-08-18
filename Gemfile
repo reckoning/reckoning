@@ -9,7 +9,7 @@ gem 'pg'
 gem 'sidekiq'
 
 gem 'haml'
-gem 'haml-rails', github: "indirect/haml-rails", branch: :master
+gem 'haml-rails'
 
 gem 'devise'
 gem 'cancan'
@@ -26,7 +26,7 @@ gem 'dynamic_fields_for_rails'
 gem 'simple_states'
 
 gem 'sass-rails', github: "rails/sass-rails", branch: :master
-gem 'coffee-rails', github: "rails/coffee-rails", branch: :master
+gem 'coffee-rails'
 gem 'bourbon'
 
 gem 'bootstrap-sass'
@@ -49,7 +49,7 @@ gem "i18n-js", github: "fnando/i18n-js", branch: :master
 gem 'thor'
 gem 'highline'
 
-gem "bower-rails", github: '42dev/bower-rails', branch: :master
+gem "bower-rails"
 
 gem 'roo'
 
