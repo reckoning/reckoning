@@ -14,28 +14,12 @@ GIT
       thin (~> 1.5.0)
 
 GIT
-  remote: git://github.com/42dev/bower-rails.git
-  revision: c8b598dda2592dabaf555b74b578b7e7dd4a6b5e
-  branch: master
-  specs:
-    bower-rails (0.8.3)
-
-GIT
   remote: git://github.com/fnando/i18n-js.git
   revision: 9fd4cc6de4601dc496e676521fcde78532a63ccf
   branch: master
   specs:
     i18n-js (3.0.0.rc6)
       i18n (~> 0.6)
-
-GIT
-  remote: git://github.com/rails/coffee-rails.git
-  revision: 044d0d683b436128dedf45f780b8fca138d005e2
-  branch: master
-  specs:
-    coffee-rails (4.0.1)
-      coffee-script (>= 2.2.0)
-      railties (>= 4.0.0, < 5.0)
 
 GIT
   remote: git://github.com/rails/sass-rails.git
@@ -47,17 +31,6 @@ GIT
       sass (~> 3.2)
       sprockets (~> 2.12)
       sprockets-rails (~> 2.0)
-
-GIT
-  remote: git://github.com/indirect/haml-rails.git
-  revision: 4860cab594236a7d51d77f42cc153a874f31fbb1
-  branch: master
-  specs:
-    haml-rails (0.5.3)
-      actionpack (>= 4.0.1)
-      activesupport (>= 4.0.1)
-      haml (>= 3.1, < 5.0)
-      railties (>= 4.0.1)
 
 GEM
   remote: https://rubygems.org/
@@ -96,6 +69,7 @@ GEM
     bourbon (4.0.2)
       sass (~> 3.3)
       thor
+    bower-rails (0.8.3)
     builder (3.2.2)
     byebug (3.2.0)
       columnize (~> 0.8)
@@ -106,6 +80,9 @@ GEM
     cancan (1.6.10)
     celluloid (0.15.2)
       timers (~> 1.1.0)
+    coffee-rails (4.0.1)
+      coffee-script (>= 2.2.0)
+      railties (>= 4.0.0, < 5.0)
     coffee-script (2.3.0)
       coffee-script-source
       execjs
@@ -145,6 +122,11 @@ GEM
       oauth2 (>= 0.5.0)
     haml (4.0.5)
       tilt
+    haml-rails (0.5.3)
+      actionpack (>= 4.0.1)
+      activesupport (>= 4.0.1)
+      haml (>= 3.1, < 5.0)
+      railties (>= 4.0.1)
     hashie (3.2.0)
     hashr (0.0.22)
     highline (1.6.21)
@@ -338,11 +320,11 @@ DEPENDENCIES
   asset_pipeline_routes
   bootstrap-sass
   bourbon
-  bower-rails!
+  bower-rails
   byebug
   cache_digests
   cancan
-  coffee-rails!
+  coffee-rails
   dalli
   devise
   dynamic_fields_for_rails
@@ -350,7 +332,7 @@ DEPENDENCIES
   foreman
   google_drive
   haml
-  haml-rails!
+  haml-rails
   highline
   i18n-js!
   jquery-rails
