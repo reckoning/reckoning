@@ -33,7 +33,6 @@ class TasksController < ApplicationController
     authorize! :create, task
     respond_to do |format|
       format.js {
-
         if task.save
           render json: task
         else

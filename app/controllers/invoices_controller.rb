@@ -161,19 +161,17 @@ class InvoicesController < ApplicationController
   def charge
     authorize! :charge, invoice
     invoice.charge
-    if invoice.charged?
-      flash[:notice] = I18n.t(:'messages.charge.invoice.success')
-      respond_to do |format|
+    respond_to do |format|
+      if invoice.charged?
+        flash[:notice] = I18n.t(:'messages.charge.invoice.success')
         format.js {
           render json: {}, status: :ok
         }
         format.html {
           redirect_to :back
         }
-      end
-    else
-      flash[:error] = I18n.t(:'messages.charge.invoice.failure')
-      respond_to do |format|
+      else
+        flash[:error] = I18n.t(:'messages.charge.invoice.failure')
         format.js {
           render json: {}, status: :ok
         }
