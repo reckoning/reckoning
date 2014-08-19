@@ -25,8 +25,9 @@ window.App.Timesheet.addTask = ($element, week_date) ->
     dataType: 'json'
     success: (result) ->
       $element.closest('.modal').modal('hide')
-      window.location.reload()
+      Turbolinks.visit(window.location)
     error: ->
+      $element.button('reset')
       displayError I18n.t("messages.timesheet.add_task.failure")
 
 $(document).on 'change', '.timesheet-day input[type=text]', App.Timesheet.enableSubmit
