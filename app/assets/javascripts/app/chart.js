@@ -6,7 +6,7 @@ window.loadInvoicesChart = function() {
     nv.addGraph(function() {
       chart = nv.models.lineChart()
         .margin({top: 20, right: 10, bottom: 40, left: 70})
-        .noData(I18n.t('labels.chart.no_data'))
+        .noData(I18n.t('labels.chart.invoices.no_data'))
         .x(function(d) {
           return d[0];
         })
@@ -66,7 +66,7 @@ window.loadTimersChart = function() {
     nv.addGraph(function() {
       chart = nv.models.multiBarChart()
         .margin({top: 20, right: 10, bottom: 40, left: 15})
-        .noData(I18n.t('labels.chart.no_data'))
+        .noData(I18n.t('labels.chart.timers.no_data'))
         .showControls(false)
         .stacked(true)
         .tooltip(function(key, x, y, e, graph) {
