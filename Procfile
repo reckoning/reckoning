@@ -1,3 +1,3 @@
 app: bundle exec puma
 sidekiq: bundle exec sidekiq
-mailcatcher: bundle exec mailcatcher
+mailcatcher: bundle exec mailcatcher -f
