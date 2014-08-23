@@ -1,6 +1,6 @@
 # encoding: utf-8
 class InvoiceMailer < ActionMailer::Base
-  default from: "#{Settings.mailer.default_from}"
+  default from: "#{Rails.application.secrets[:mailer][:default_from]}"
 
   def customer_mail invoice
     send_mail invoice, invoice.customer.invoice_email
@@ -34,7 +34,7 @@ class InvoiceMailer < ActionMailer::Base
     end
 
     mail(
-      from: (invoice.customer.default_from || invoice.user.default_from || Settings.mailer.default_from),
+      from: (invoice.customer.default_from || invoice.user.default_from || Rails.application.secrets[:mailer][:default_from]),
       to: to,
       subject: I18n.t(:"mailer.invoice.customer_mail.subject", name: "#{name}: ", date: date),
       template_name: 'customer_mail'

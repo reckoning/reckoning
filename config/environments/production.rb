@@ -56,7 +56,7 @@ Reckoning::Application.configure do
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   config.assets.prefix = "/assets"
-  config.action_controller.asset_host = Settings.app.url
+  config.action_controller.asset_host = Rails.application.secrets[:url]
 
   # Precompile additional assets.
   # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
@@ -82,14 +82,14 @@ Reckoning::Application.configure do
   config.log_formatter = ::Logger::Formatter.new
 
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.default_url_options = { host: Settings.app.domain }
+  config.action_mailer.default_url_options = { host: Rails.application.secrets[:domain] }
   config.action_mailer.smtp_settings = {
-    address: Settings.mailer.host,
-    port: Settings.mailer.port,
+    address: Rails.application.secrets[:mailer]["host"],
+    port: Rails.application.secrets[:mailer]["port"],
     enable_starttls_auto: true,
-    user_name: Settings.mailer.user,
-    password: Settings.mailer.password,
+    user_name: Rails.application.secrets[:mailer]["user"],
+    password: Rails.application.secrets[:mailer]["password"],
     authentication: 'login',
-    domain: Settings.app.domain
+    domain: Rails.application.secrets[:domain]
   }
 end

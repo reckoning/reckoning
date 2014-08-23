@@ -11,7 +11,7 @@ class PasswordsController < ApplicationController
     if @user.update_with_password(password_params)
       redirect_to edit_user_registration_path, notice: I18n.t(:"messages.update.success", resource: I18n.t(:"resources.messages.password"))
     else
-      render "edit", error: I18n.t(:"messages.update.failure", resource: I18n.t(:"resources.messages.password"))
+      render "edit", alert: I18n.t(:"messages.update.failure", resource: I18n.t(:"resources.messages.password"))
     end
   end
 

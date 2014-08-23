@@ -51,7 +51,10 @@ class BaseController < ApplicationController
     result = []
 
     result, max_values_current = values_for_year(result, Date.today.year)
-    result, max_values_last = values_for_year(result, (Date.today - 1.year).year, "last")
+    max_values_last = []
+    if current_user.invoices.where("date < ?", (Date.today - 1.year).end_of_year).count > 0
+      result, max_values_last = values_for_year(result, (Date.today - 1.year).year, "last")
+    end
 
     return result, (max_values_current + max_values_last)
   end
