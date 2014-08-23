@@ -64,7 +64,7 @@ class WeeksController < ApplicationController
           render json: {code: "task.not_found"}, status: :bad_request
         }
         format.html {
-          redirect_to timers_path(date: week.start_date), error: I18n.t(:"messages.timesheet.remove_task.failure")
+          redirect_to timers_path(date: week.start_date), alert: I18n.t(:"messages.timesheet.remove_task.failure")
         }
       end
     end

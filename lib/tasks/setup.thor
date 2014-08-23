@@ -51,6 +51,5 @@ class Setup < Thor
     run "mkdir #{app_dir}/files"
     run "cp #{app_dir}/config/database.example.yml #{app_dir}/config/database.yml"
     run "cp #{app_dir}/config/secrets.example.yml #{app_dir}/config/secrets.yml"
-    run "cp #{app_dir}/config/settings.example.yml #{app_dir}/config/settings.yml"
   end
 end
