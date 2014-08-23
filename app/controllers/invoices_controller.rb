@@ -171,7 +171,7 @@ class InvoicesController < ApplicationController
           redirect_to :back
         }
       else
-        flash[:error] = I18n.t(:'messages.charge.invoice.failure')
+        flash[:alert] = I18n.t(:'messages.charge.invoice.failure')
         format.js {
           render json: {}, status: :ok
         }
@@ -188,7 +188,7 @@ class InvoicesController < ApplicationController
     if invoice.paid?
       redirect_to :back, notice: I18n.t(:'messages.pay.invoice.success')
     else
-      redirect_to :back, error: I18n.t(:'messages.pay.invoice.failure')
+      redirect_to :back, alert: I18n.t(:'messages.pay.invoice.failure')
     end
   end
 
@@ -233,7 +233,7 @@ class InvoicesController < ApplicationController
         }
       end
     else
-      flash[:error] = I18n.t(:"messages.destroy.failure", resource: I18n.t(:"resources.messages.invoice"))
+      flash[:alert] = I18n.t(:"messages.destroy.failure", resource: I18n.t(:"resources.messages.invoice"))
       respond_to do |format|
         format.js {
           render json: {}, status: :ok

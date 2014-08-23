@@ -42,8 +42,11 @@ window.displayConfirm = (ev, $element) ->
 window.displaySuccess = (text, timeout = 3000) ->
   displayNoty text, timeout, 'success'
 
-window.displayAlert = (text, timeout = 3000) ->
+window.displayNotice = (text, timeout = 3000) ->
   displayNoty text, timeout, 'alert'
+
+window.displayAlert = (text, timeout = 3000) ->
+  displayNoty text, timeout, 'error'
 
 window.displayError = (text, timeout = false) ->
   displayNoty text, timeout, 'error'

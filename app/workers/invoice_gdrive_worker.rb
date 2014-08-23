@@ -37,7 +37,7 @@ class InvoiceGdriveWorker
   protected
 
   def build_collection_path invoice, session
-    default_collection = Settings.app.gdrive_collection
+    default_collection = Rails.application.secrets[:gdrive_collection]
     default_collection = invoice.user.gdrive_collection unless invoice.user.gdrive_collection.blank?
 
     start_collection = session.collection_by_title(default_collection)
