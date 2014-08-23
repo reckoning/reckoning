@@ -11,7 +11,6 @@ pids/*
 config/database.yml
 config/resque.yml
 config/secrets.yml
-config/settings.yml
 .env
 
 # test files
