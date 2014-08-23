@@ -24,6 +24,10 @@ de:
       frontend: "Frontend"
       dashboard: "Dashboard"
       users: "Benutzer"
+    footer:
+      impressum: impressum
+      privacy: Datenschutz
+      contact: Kontakt
     subnav:
       back: "Zurück"
       new_invoice: "Neue Rechnung"
@@ -103,3 +107,14 @@ de:
   user:
     current_sign_in_at:
       empty: "Noch nie eingeloggt"
+
+  prices:
+    price:
+      free: "0 € <small>/ Monat</small>"
+      basic: "2 € <small>/ Monat</small>"
+      premium: "6 € <small>/ Monat</small>"
+    desc:
+      free: "1 aktives Projekt"
+      basic: "10 aktive Projekte"
+      premium: "unbegrenzt aktive Projekte"
+    ctab: "Anmelden"

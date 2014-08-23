@@ -6,8 +6,6 @@ Reckoning::Application.routes.draw do
   namespace :backend do
     resources :users, except: [:show]
 
-    resources :settings, except: [:index, :show]
-
     authenticate :user, lambda {|u| u.admin? } do
       mount Sidekiq::Web => '/workers'
     end
@@ -70,6 +68,10 @@ Reckoning::Application.routes.draw do
       put 'remove_task/:task_id' => 'weeks#remove_task', as: :remove_task
     end
   end
+
+  get 'impressum' => 'base#impressum'
+  get 'privacy' => 'base#privacy'
+  get 'terms' => 'base#terms'
 
   get '404' => 'errors#not_found'
   get '422' => 'errors#server_error'

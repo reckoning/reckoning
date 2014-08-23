@@ -4,6 +4,8 @@ ruby '2.1.2'
 
 gem 'rails', '4.1.5'
 
+gem 'stripe', github: 'stripe/stripe-ruby'
+
 gem 'pg'
 
 gem 'sidekiq'

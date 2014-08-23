@@ -3,6 +3,17 @@
 %footer#main-footer
   .container
     .row
+      .col-xs-12.col-md-6#links
+        %p
+          %a{href: "mailto:info@reckoning.io", target: "_blank", data: {no: {turbolink: "true"}}}
+            = I18n.t(:"nav.footer.contact")
+          = " | "
+          %a{href: impressum_path, class: get_active_nav('impressum')}
+            = I18n.t(:"nav.footer.impressum")
+          = " | "
+          %a{href: privacy_path, class: get_active_nav('privacy')}
+            = I18n.t(:"nav.footer.privacy")
+
       .col-xs-12.col-md-8.col-md-offset-2.text-center#disclaimer
         %p.copyright
           Copyright &copy; 2014

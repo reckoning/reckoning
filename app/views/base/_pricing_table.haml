@@ -1,0 +1,14 @@
+- active ||= false
+- type ||= nil
+- hide_ctab ||= false
+%ul.pricing-table{class: ("hide" if active && active != type)}
+  %li.price
+    = I18n.t(:"prices.price.#{type}").html_safe
+  %li.title
+    = type.capitalize
+  %li
+    = I18n.t(:"prices.desc.#{type}").html_safe
+  - unless hide_ctab
+    %li.cta-button
+      %a.btn.btn-primary.btn-lg{href: new_registration_path(plan: type)}
+        = I18n.t(:"prices.ctab")

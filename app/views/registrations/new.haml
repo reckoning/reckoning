@@ -3,7 +3,8 @@
 - plan = params[:plan] || 'free'
 .row
   .col-xs-12
-    .cbox.cbox-signup
+    .col-md-3
+    .col-xs-12.col-md-6
       .well
         %h1=I18n.t(:"headlines.sign_up")
 
@@ -32,3 +33,7 @@
             %button.visible-xs.btn-block.btn.btn-primary.btn-lg.btn-loading{data: {loading: {text: I18n.t(:"actions.loading")}}}
               = I18n.t(:"actions.sign_up")
           .clearfix
+    .col-xs-12.col-md-3
+      = render 'base/pricing_table', active: plan, type: 'free', hide_ctab: true
+      = render 'base/pricing_table', active: plan, type: 'basic', hide_ctab: true
+      = render 'base/pricing_table', active: plan, type: 'premium', hide_ctab: true
