@@ -32,6 +32,18 @@ GIT
       sprockets (~> 2.12)
       sprockets-rails (~> 2.0)
 
+GIT
+  remote: git://github.com/mperham/sidekiq.git
+  revision: 102f999122d5b3312166f28ce424ab480a521601
+  branch: master
+  specs:
+    sidekiq (3.2.2)
+      celluloid (>= 0.15.2)
+      connection_pool (>= 2.0.0)
+      json
+      redis (>= 3.0.6)
+      redis-namespace (>= 1.3.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -208,12 +220,6 @@ GEM
       faraday (>= 0.7.6)
       hashie (>= 1.1.0)
       uuidtools
-    sidekiq (3.2.2)
-      celluloid (>= 0.15.2)
-      connection_pool (>= 2.0.0)
-      json
-      redis (>= 3.0.6)
-      redis-namespace (>= 1.3.1)
     simple_states (1.0.1)
       activesupport
       hashr (~> 0.0.10)
@@ -224,8 +230,6 @@ GEM
     skinny (0.2.3)
       eventmachine (~> 1.0.0)
       thin (~> 1.5.0)
-    skylight (0.3.19)
-      activesupport (>= 3.0.0)
     spreadsheet (0.9.7)
       ruby-ole (>= 1.0)
     spring (1.1.3)
@@ -300,9 +304,8 @@ DEPENDENCIES
   ruby-prof
   sass-rails!
   sentry-raven
-  sidekiq
+  sidekiq!
   simple_states
-  skylight
   spring
   thor
   turbolinks
