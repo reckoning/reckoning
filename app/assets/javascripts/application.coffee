@@ -19,11 +19,11 @@
 #= require accounting/accounting
 #= require pdf.js/build/pdf
 #= require pdf_viewer
+#= require tabs
 #= require app
 #= require_tree ./app
 #
 #= require turbolinks
-
 
 $(document).on 'show.bs.collapse', '.navbar-collapse', (ev) ->
   $('.navbar-collapse.in').not(@).collapse('hide')
