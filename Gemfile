@@ -43,8 +43,6 @@ gem "redcarpet"
 
 gem "puma"
 
-gem "sentry-raven"
-
 gem "i18n-js", github: "fnando/i18n-js", branch: :master
 
 gem "thor"
@@ -56,9 +54,6 @@ gem "roo"
 
 gem "rack-cors", require: "rack/cors"
 
-gem "skylight"
-
-gem 'google_drive'
 gem 'dropbox-sdk'
 
 group :test do
