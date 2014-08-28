@@ -24,7 +24,7 @@
 
     - if current_user.has_dropbox?
       = link_to archive_invoice_path(invoice.ref), method: :put, class: "list-group-item" do
-        %i.fa.fa-cloud-upload
+        %i.fa.fa-dropbox
         = I18n.t(:"actions.archive")
 
     - if invoice.send_via_mail?
