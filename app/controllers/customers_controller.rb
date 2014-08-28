@@ -48,7 +48,7 @@ class CustomersController < ApplicationController
       if customer.destroy
         redirect_to customers_path, notice: I18n.t(:"messages.destroy.success", resource: I18n.t(:"resources.messages.customer"))
       else
-        redirect_to customers_path, error: I18n.t(:"messages.destroy.failure", resource: I18n.t(:"resources.messages.customer"))
+        redirect_to customers_path, alert: I18n.t(:"messages.destroy.failure", resource: I18n.t(:"resources.messages.customer"))
       end
     end
   end

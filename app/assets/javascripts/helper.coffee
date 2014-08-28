@@ -1,6 +1,6 @@
 # Selectize
 window.selectizeCreateTemplate = (data, escape) ->
-  return "<div class='create'><strong>#{escape(data.input)}</strong>&hellip; #{i18n.t("actions.create")}</div>"
+  return "<div class='create'><strong>#{escape(data.input)}</strong>&hellip; #{I18n.t("actions.create")}</div>"
 
 # Noty
 window.displayNoty = (text, timeout, type) ->
@@ -13,18 +13,22 @@ window.displayNoty = (text, timeout, type) ->
 window.displayConfirm = (ev, $element) ->
   okButton =
     addClass: 'btn btn-primary'
-    text: i18n.t('actions.ok')
+    text: I18n.t('actions.ok')
     onClick: ($noty) ->
       $noty.close()
-      if $element.find('form').length
-        $element.find('form').submit()
+      if $element.data('method') is undefined
+        Turbolinks.visit($element.attr('href'))
       else
-        window.location = $element.attr('href')
+        $.ajax
+          url: $element.attr('href')
+          method: $element.data('method')
+          complete: (result) ->
+            Turbolinks.visit(window.location)
       return false
 
   cancelButton =
     addClass: 'btn btn-danger'
-    text: i18n.t('actions.cancel')
+    text: I18n.t('actions.cancel')
     onClick: ($noty) ->
       $noty.close()
       return false
@@ -38,8 +42,11 @@ window.displayConfirm = (ev, $element) ->
 window.displaySuccess = (text, timeout = 3000) ->
   displayNoty text, timeout, 'success'
 
-window.displayAlert = (text, timeout = 3000) ->
+window.displayNotice = (text, timeout = 3000) ->
   displayNoty text, timeout, 'alert'
+
+window.displayAlert = (text, timeout = 3000) ->
+  displayNoty text, timeout, 'error'
 
 window.displayError = (text, timeout = false) ->
   displayNoty text, timeout, 'error'

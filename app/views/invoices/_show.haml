@@ -22,11 +22,11 @@
         - charge_confirm = I18n.t(:"messages.confirm.charge")
         - if invoice.send_via_mail?
           - charge_confirm = I18n.t(:"messages.confirm.charge_mail")
-        = confirm_link_to charge_invoice_path(invoice.ref), data: {notyConfirm: charge_confirm}, title: I18n.t(:"actions.charge"), method: :put, class: "btn btn-primary btn-sm" do
+        %a.btn.btn-primary.btn-sm{href: charge_invoice_path(invoice.ref), title: I18n.t(:"actions.charge"), data: { method: "PUT", notyConfirm: charge_confirm } }
           %i.glyphicon.glyphicon-envelope
       - if can? :pay, invoice
         = link_to pay_invoice_path(invoice.ref), title: I18n.t(:"actions.pay"), method: :put, class: "btn btn-success btn-sm" do
           %i.glyphicon.glyphicon-ok
       - if can? :destroy, invoice
-        = confirm_link_to invoice_path(invoice.ref), data: {notyConfirm: I18n.t(:"messages.confirm.delete")}, title: I18n.t(:"actions.delete"), method: :delete, class: "btn btn-danger btn-sm" do
+        %a.btn.btn-danger.btn-sm{href: invoice_path(invoice.ref), title: I18n.t(:"actions.delete"), data: { method: "DELETE", notyConfirm: I18n.t(:"messages.confirm.delete") } }
           %i.glyphicon.glyphicon-trash

@@ -1,5 +1,5 @@
 window.initMoment = ->
-  moment.lang I18n.locale,
+  moment.locale I18n.locale,
     months: I18n.t('date.dp_month_names')
     monthsShort: I18n.t('date.dp_abbr_month_names')
     weekdays: I18n.t('date.day_names')

@@ -6,22 +6,25 @@ table.timesheet {
 
     &:first-child {
       border-left: 1px solid $table-border-color;
-      border-top-left-radius: $border-radius-base;
     }
 
     &:last-child {
       border-right: 1px solid $table-border-color;
-      border-top-right-radius: $border-radius-base;
     }
   }
 
-  tbody > tr > td {
-    &:first-child {
-      border-left: 1px solid $table-border-color;
+  tbody > tr {
+    &:first-child > td {
+      border-top: none;
     }
+    > td {
+      &:first-child {
+        border-left: 1px solid $table-border-color;
+      }
 
-    &:last-child {
-      border-right: 1px solid $table-border-color;
+      &:last-child {
+        border-right: 1px solid $table-border-color;
+      }
     }
   }
 
@@ -30,14 +33,13 @@ table.timesheet {
 
     &:first-child {
       border-left: 1px solid $table-border-color;
-      border-bottom-left-radius: $border-radius-base;
     }
 
     &:last-child {
       border-right: 1px solid $table-border-color;
-      border-bottom-right-radius: $border-radius-base;
     }
   }
+
   .timesheet-day {
     width: 80px;
     input {

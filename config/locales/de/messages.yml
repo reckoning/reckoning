@@ -16,11 +16,11 @@ de:
     error: "Es ist ein Fehler aufgetreten."
     timesheet:
       add_task:
-        success: "Augabe erfolgreich hinzugefügt."
+        success: "Aufgabe erfolgreich hinzugefügt."
         warning: "Bitte wähle eine Aufgabe aus."
         failure: "Die Aufgabe konnte nicht hinzugefügt werden."
       remove_task:
-        success: "Augabe erfolgreich entfernt."
+        success: "Aufgabe erfolgreich entfernt."
         warning: "Aufgabe konnte nicht gelöscht werden da schon Zeiten in dieser Aufgabe zu einer Rechnung hinzugefügt wurden."
         failure: "Die Aufgabe konnte nicht entfernt werden."
     demo_active: "Anwendung befindet sich im Demo-Modus, Sie dürfen nur eine Rechnung anlegen."
@@ -36,6 +36,8 @@ de:
       confirm:
         delete: "Sind Sie sich sicher, dass Sie den Kunden löschen wollen? Alle zugehörigen Projekte werden ebenfalls gelöscht."
     invoice:
+      pdf_generating: "PDF wird generiert"
+      pdf_generated: "PDF wurde erfolgreich erstellt."
       not_editable: "Diese Rechnung kann nicht mehr verändert werden."
       missing_address: "Bitte vervollständigen Sie zuerst Ihre Daten"
       files_missing: "Bitte warten Sie bis die Rechnung erstellt wurde oder stoßen Sie die Erstellung erneut an."

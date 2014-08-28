@@ -16,6 +16,7 @@ $font-size-h5: floor(($font-size-base * 0.85));
 $font-size-h6: floor(($font-size-base * 0.85));
 
 @import "bourbon";
+@import "bootstrap-sprockets";
 @import "bootstrap";
 @import "partials";
 @import "invoice";

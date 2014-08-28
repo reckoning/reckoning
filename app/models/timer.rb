@@ -7,6 +7,11 @@ class Timer < ActiveRecord::Base
 
   before_save :convert_value
 
+  validates_presence_of :week
+  validates_presence_of :date
+  validates_presence_of :value
+  validates_presence_of :task_id
+
   def self.week_for date
     week_start = date.beginning_of_week
     week_end = date.end_of_week

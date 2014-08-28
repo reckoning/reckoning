@@ -13,7 +13,7 @@
       - charge_confirm = I18n.t(:"messages.confirm.charge")
       - if invoice.send_via_mail?
         - charge_confirm = I18n.t(:"messages.confirm.charge_mail")
-      = confirm_link_to charge_invoice_path(invoice.ref), data: {notyConfirm: charge_confirm}, title: I18n.t(:"actions.charge"), method: :put, class: "list-group-item" do
+      %a.list-group-item{href: charge_invoice_path(invoice.ref), data: { method: "PUT", notyConfirm: charge_confirm } }
         %i.glyphicon.glyphicon-envelope
         = I18n.t(:"actions.charge")
 

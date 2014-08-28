@@ -1,35 +1,51 @@
 #invoice {
-  #preview {
-    overflow-x: scroll;
-    overflow-y: hidden;
-    height: 1060px;
-    width: 100%;
-    border-radius: 5px;
-    @include box-shadow(rgba(#000, 0.3) 0 0 15px);
-    margin-bottom: 10px;
-    position: relative;
-    background-color: white;
+  #preview-wrapper {
+    margin-bottom: 15px;
+    padding-top: 15px;
+    min-height: 1000px;
   }
 
-  #preview-image {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    text-align: center;
+  .pdf-viewer {
+    canvas {
+      width: 100%;
+      @include box-shadow(rgba(#000, .3) 0 0 15px);
+      border-radius: 5px;
+      overflow: hidden;
+      margin-bottom: 20px;
 
-    img {
-      max-width: 100%;
-      max-height: 100%;
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  @media (max-width: $screen-lg-min) {
+    #preview-wrapper {
+      min-height: 800px;
+    }
+  }
+
+  @media (max-width: $screen-md-min) {
+    #preview-wrapper {
+      min-height: 1000px;
+    }
+  }
+
+  @media (max-width: $screen-sm-min) {
+    #preview-wrapper {
+      min-height: 600px;
+    }
+  }
+
+  @media (max-width: $screen-xs-min) {
+    #preview-wrapper {
+      min-height: 500px;
     }
   }
 
   #preview-info {
     text-align: center;
     padding: 50px;
-  }
-
-  .preview-paginator {
-    text-align: center;
   }
 
   .due-label {

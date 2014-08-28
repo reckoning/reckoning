@@ -33,7 +33,7 @@ class InvoicesController < ApplicationController
     authorize! :archive, invoice
     if current_user.has_gdrive?
       if invoice.files_present?
-        Resque.enqueue InvoiceGdriveJob, invoice.id
+        InvoiceGdriveWorker.perform_async invoice.id
         redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.invoice.archive.success")
       else
         redirect_to invoice_path(invoice.ref), warning: I18n.t(:"messages.invoice.files_missing")
@@ -47,7 +47,7 @@ class InvoicesController < ApplicationController
     authorize! :send, invoice
     if invoice.send_via_mail?
       if invoice.files_present?
-        Resque.enqueue InvoiceMailerJob, invoice.id
+        InvoiceMailerWorker.perform_async invoice.id
         redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.invoice.send.success")
       else
         redirect_to invoice_path(invoice.ref), warning: I18n.t(:"messages.invoice.files_missing")
@@ -62,7 +62,7 @@ class InvoicesController < ApplicationController
 
     @test_mail = TestMail.new(test_mail_params)
     if test_mail.valid?
-      Resque.enqueue InvoiceTestMailerJob, invoice.id, test_mail.email
+      InvoiceTestMailerWorker.perform_async invoice.id, test_mail.email
       redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.invoice.send_test_mail.success")
     else
       flash.now[:warning] = I18n.t(:"messages.invoice.send_test_mail.failure")
@@ -112,29 +112,11 @@ class InvoicesController < ApplicationController
     end
   end
 
-  def png
-    authorize! :read, invoice
-    if File.exists?(invoice.pdf_path('png'))
-      send_file invoice.pdf_path('png'), type: 'image/png', disposition: 'inline'
-    else
-      render file: 'public/404.html', status: 404, layout: false
-    end
-  end
-
-  def timesheet_png
-    authorize! :read, invoice
-    if File.exists?(invoice.timesheet_path('png'))
-      send_file invoice.timesheet_path('png'), type: 'image/png', disposition: 'inline'
-    else
-      render file: 'public/404.html', status: 404, layout: false
-    end
-  end
-
   def regenerate_pdf
     authorize! :read, invoice
     respond_to do |format|
       format.js {
-        render json: invoice.generate_pdf
+        render json: invoice.generate_pdf.to_json
       }
       format.html {
         invoice.generate_pdf
@@ -178,19 +160,35 @@ class InvoicesController < ApplicationController
 
   def charge
     authorize! :charge, invoice
-    if invoice.charge
-      redirect_to :back, notice: I18n.t(:'messages.charge.invoice.success')
-    else
-      redirect_to :back, error: I18n.t(:'messages.charge.invoice.failure')
+    invoice.charge
+    respond_to do |format|
+      if invoice.charged?
+        flash[:notice] = I18n.t(:'messages.charge.invoice.success')
+        format.js {
+          render json: {}, status: :ok
+        }
+        format.html {
+          redirect_to :back
+        }
+      else
+        flash[:alert] = I18n.t(:'messages.charge.invoice.failure')
+        format.js {
+          render json: {}, status: :ok
+        }
+        format.html {
+          redirect_to :back
+        }
+      end
     end
   end
 
   def pay
     authorize! :pay, invoice
-    if invoice.pay
+    invoice.pay
+    if invoice.paid?
       redirect_to :back, notice: I18n.t(:'messages.pay.invoice.success')
     else
-      redirect_to :back, error: I18n.t(:'messages.pay.invoice.failure')
+      redirect_to :back, alert: I18n.t(:'messages.pay.invoice.failure')
     end
   end
 
@@ -203,9 +201,9 @@ class InvoicesController < ApplicationController
             data = false
           else
             data = {}
-            data[:invoice] = invoice_png_path(invoice.ref, invoice.invoice_file('png'))
+            data[:invoice] = invoice_pdf_path(invoice.ref, invoice.invoice_file)
             if invoice.timers.present?
-              data[:timesheet] = timesheet_png_path(invoice.ref, invoice.timesheet_file('png'))
+              data[:timesheet] = timesheet_pdf_path(invoice.ref, invoice.timesheet_file)
             end
           end
           render json: data, status: :ok
@@ -223,12 +221,27 @@ class InvoicesController < ApplicationController
     authorize! :destroy, invoice
     if invoice.destroy
       File.delete(invoice.pdf_path) if File.exists?(invoice.pdf_path)
-      File.delete(invoice.pdf_path('png')) if File.exists?(invoice.pdf_path('png'))
       File.delete(invoice.timesheet_path) if File.exists?(invoice.timesheet_path)
-      File.delete(invoice.timesheet_path('png')) if File.exists?(invoice.timesheet_path('png'))
-      redirect_to invoices_path, notice: I18n.t(:"messages.destroy.success", resource: I18n.t(:"resources.messages.invoice"))
+
+      flash[:notice] = I18n.t(:"messages.destroy.success", resource: I18n.t(:"resources.messages.invoice"))
+      respond_to do |format|
+        format.js {
+          render json: {}, status: :ok
+        }
+        format.html {
+          redirect_to invoices_path
+        }
+      end
     else
-      redirect_to invoices_path, error: I18n.t(:"messages.destroy.failure", resource: I18n.t(:"resources.messages.invoice"))
+      flash[:alert] = I18n.t(:"messages.destroy.failure", resource: I18n.t(:"resources.messages.invoice"))
+      respond_to do |format|
+        format.js {
+          render json: {}, status: :ok
+        }
+        format.html {
+          redirect_to invoices_path
+        }
+      end
     end
   end
 

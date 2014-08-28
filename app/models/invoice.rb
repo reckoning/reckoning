@@ -16,18 +16,13 @@ class Invoice < ActiveRecord::Base
   before_save :set_rate, :set_value
   before_create :set_ref
 
-  # created -> charged -> paid
-  state_machine :state, initial: :created do
-    after_transition on: :charge, do: :generate_pdf
-    after_transition on: :pay, do: :set_pay_date
-    event :charge do
-      transition created: :charged
-    end
+  include ::SimpleStates
 
-    event :pay do
-      transition charged: :paid
-    end
-  end
+  # created -> charged -> paid
+  states :created, :charged, :paid
+
+  event :charge, from: :created, to: :charged, after: :generate_pdf
+  event :pay, from: :charged, to: :paid, after: :set_pay_date
 
   def self.paid
     where state: :paid
@@ -57,7 +52,7 @@ class Invoice < ActiveRecord::Base
   def generate_pdf
     self.set_payment_due_date
     self.update_attributes({pdf_generating: true})
-    Resque.enqueue InvoicePdfJob, self.id
+    InvoicePdfWorker.perform_async self.id
   end
 
   def ref_number
@@ -73,26 +68,25 @@ class Invoice < ActiveRecord::Base
     ].join('').html_safe
   end
 
-  def invoice_file(filetype = 'pdf')
-    "rechnung-#{self.ref}-#{I18n.l(self.date.to_date, format: :file).downcase}.#{filetype}"
+  def invoice_file
+    "rechnung-#{self.ref}-#{I18n.l(self.date.to_date, format: :file).downcase}.pdf"
   end
 
-  def timesheet_file(filetype = 'pdf')
-    "stunden-rechnung-#{self.ref}-#{I18n.l(self.date.to_date, format: :file).downcase}.#{filetype}"
+  def timesheet_file
+    "stunden-rechnung-#{self.ref}-#{I18n.l(self.date.to_date, format: :file).downcase}.pdf"
   end
 
-  def pdf_path(filetype = 'pdf')
-    path(invoice_file(filetype))
+  def pdf_path
+    path(invoice_file)
   end
 
-  def timesheet_path(filetype = 'pdf')
-    path(timesheet_file(filetype))
+  def timesheet_path
+    path(timesheet_file)
   end
 
   def generate
     pdf_generator = InvoicePdfGenerator.new self, {
       pdf_path: pdf_path,
-      png_path: pdf_path('png'),
       tempfile: "reckoning-invoice-pdf-#{self.id}"
     }
     pdf_generator.generate
@@ -101,7 +95,6 @@ class Invoice < ActiveRecord::Base
   def generate_timesheet
     pdf_generator = TimesheetPdfGenerator.new self, {
       pdf_path: timesheet_path,
-      png_path: timesheet_path('png'),
       tempfile: "reckoning-timesheet-pdf-#{self.id}"
     }
     pdf_generator.generate

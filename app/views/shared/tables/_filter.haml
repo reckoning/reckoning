@@ -18,7 +18,7 @@
     - filters.each do |filter|
       - if filter.is_a?(Hash)
         - filter = OpenStruct.new filter
-      %li{class: ("active" if params.fetch(name, nil) == filter.name.to_s)}
+      %li{class: ("active" if params.fetch(name, nil) == filter.to_s)}
         - link = filter.link if defined?(filter.link)
-        - link ||= I18n.t(:"filter.#{resource}_#{name}.#{filter.name}")
-        = link_to link, plumb(name.to_s => filter.name)
+        - link ||= I18n.t(:"filter.#{resource}_#{name}.#{filter}")
+        = link_to link, plumb(name.to_s => filter)

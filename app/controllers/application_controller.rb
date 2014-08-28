@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
-  add_flash_types :error, :warning
+  add_flash_types :info, :warning
 
   check_authorization unless: :unauthorized_controllers
 
@@ -36,12 +36,12 @@ class ApplicationController < ActionController::Base
   helper_method :backend?
 
   def registration_enabled?
-    Settings.base.registration.to_s.to_bool
+    Rails.application.secrets[:base]["registration"]
   end
   helper_method :registration_enabled?
 
   def invoice_limit_reached?
-    !current_user.admin? && Settings.demo && Invoice.count >= 2
+    !current_user.admin? && Rails.application.secrets[:base]["demo"] && current_user.invoices.count >= 2
   end
   helper_method :invoice_limit_reached?
 end
