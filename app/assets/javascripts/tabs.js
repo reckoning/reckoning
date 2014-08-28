@@ -4,14 +4,12 @@ window.showTab = function(hash, popped) {
   }
 
   if (hash) {
-    $('.nav-tabs a[href=' + hash + ']').tab('show');
-  }
-  else {
-    $('.nav-tabs a:first').tab('show');
+    $('.nav-tabs a[href=' + hash + '], .nav-vertical-tabs a[href=' + hash + ']').tab('show');
+  } else {
+    $('.nav-tabs a:first, .nav-vertical-tabs a:first').tab('show');
   }
 
   if (!popped) {
-    console.log('push');
     history.pushState(null, null, hash);
   }
 };
@@ -25,7 +23,12 @@ $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function(e) {
 });
 
 window.tabsLoad = function() {
-  showTab($('.nav-tabs a:first').attr('href'));
+  hash = window.location.hash;
+  if (hash !== undefined) {
+    showTab(hash);
+  } else {
+    showTab($('.nav-tabs a:first, .nav-vertical-tabs a:first').attr('href'));
+  }
 };
 
 $(document).on('page:load', function() {
