@@ -31,9 +31,9 @@ class InvoicesController < ApplicationController
 
   def archive
     authorize! :archive, invoice
-    if current_user.has_gdrive?
+    if current_user.has_dropbox?
       if invoice.files_present?
-        InvoiceGdriveWorker.perform_async invoice.id
+        InvoiceDropboxWorker.perform_async invoice.id
         redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.invoice.archive.success")
       else
         redirect_to invoice_path(invoice.ref), warning: I18n.t(:"messages.invoice.files_missing")
