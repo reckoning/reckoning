@@ -1,2 +1,3 @@
-app: bundle exec puma -p $PORT
-worker: bundle exec rake environment resque:work
+app: bundle exec puma
+sidekiq: bundle exec sidekiq
+mailcatcher: bundle exec mailcatcher -f

@@ -46,7 +46,7 @@ class ProjectsController < ApplicationController
       if project.destroy
         redirect_to projects_path, notice: I18n.t(:"messages.destroy.success", resource: I18n.t(:"resources.messages.project"))
       else
-        redirect_to projects_path, error: I18n.t(:"messages.destroy.failure", resource: I18n.t(:"resources.messages.project"))
+        redirect_to projects_path, alert: I18n.t(:"messages.destroy.failure", resource: I18n.t(:"resources.messages.project"))
       end
     end
   end

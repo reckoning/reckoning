@@ -17,11 +17,13 @@
 #= require d3/d3
 #= require nvd3/nv.d3
 #= require accounting/accounting
+#= require pdf.js/build/pdf
+#= require pdf_viewer
+#= require tabs
 #= require app
 #= require_tree ./app
 #
 #= require turbolinks
-
 
 $(document).on 'show.bs.collapse', '.navbar-collapse', (ev) ->
   $('.navbar-collapse.in').not(@).collapse('hide')
@@ -31,4 +33,3 @@ $ ->
     $(@).button('loading')
 
   $('#blueimp-gallery').data('useBootstrapModal', false)
-

@@ -1,14 +1,14 @@
 class PdfGenerator < AbstractController::Base
   include AbstractController::Logger
   include AbstractController::Rendering
-  include AbstractController::Layouts
+  include ActionView::Layouts
   include AbstractController::Helpers
   include AbstractController::Translation
   include AbstractController::AssetPaths
   include ActionController::RequestForgeryProtection
   include ActionView::Helpers::AssetTagHelper
 
-  attr_accessor :resource, :tempfile, :pdf_path, :png_path
+  attr_accessor :resource, :tempfile, :pdf_path
 
   self.view_paths = "app/views"
   def session; {}; end
@@ -16,7 +16,6 @@ class PdfGenerator < AbstractController::Base
   def initialize resource, options
     @resource = resource
     @pdf_path = options.fetch(:pdf_path)
-    @png_path = options.fetch(:png_path)
     @tempfile = options.fetch(:tempfile)
   end
 
@@ -34,8 +33,7 @@ class PdfGenerator < AbstractController::Base
     file.open
     file.write(html)
     file.close
-    system "#{Settings.app.py_env}weasyprint #{file.path} #{@pdf_path}" # generate pdf
-    system "#{Settings.app.py_env}weasyprint #{file.path} #{@png_path} -f png" # generate png for preview
+    system "weasyprint #{file.path} #{@pdf_path}" # generate pdf
     file.unlink
   end
 end

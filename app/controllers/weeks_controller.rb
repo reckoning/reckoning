@@ -28,7 +28,7 @@ class WeeksController < ApplicationController
           week.save
           flash[:notice] = I18n.t(:"messages.timesheet.add_task.success")
         end
-        render json: task
+        render json: task, status: :ok
       }
       format.html {
         redirect_to timers_path
@@ -38,17 +38,35 @@ class WeeksController < ApplicationController
 
   def remove_task
     authorize! :remove_task, week
-    task = current_user.tasks.where(id: params.fetch(:task_id, nil)).first
-    if task.present? && week.tasks.include?(task)
-      week.timers.where(task_id: task.id, position_id: nil).destroy_all
-      if task.timers.with_positions.empty?
-        week.tasks.delete(task)
-        redirect_to timers_path(date: week.start_date), notice: I18n.t(:"messages.timesheet.remove_task.success")
+
+    respond_to do |format|
+      task = current_user.tasks.where(id: params.fetch(:task_id, nil)).first
+      if task.present? && week.tasks.include?(task)
+        week.timers.where(task_id: task.id, position_id: nil).destroy_all
+        if task.timers.with_positions.empty?
+          week.tasks.delete(task)
+          format.js {
+            render json: {code: :ok}, status: :ok
+          }
+          format.html {
+            redirect_to timers_path(date: week.start_date), notice: I18n.t(:"messages.timesheet.remove_task.success")
+          }
+        else
+          format.js {
+            render json: {code: "validations.timers_with_positions.present"}, status: :bad_request
+          }
+          format.html {
+            redirect_to timers_path(date: week.start_date), warning: I18n.t(:"messages.timesheet.remove_task.warning")
+          }
+        end
       else
-        redirect_to timers_path(date: week.start_date), warning: I18n.t(:"messages.timesheet.remove_task.warning")
+        format.js {
+          render json: {code: "task.not_found"}, status: :bad_request
+        }
+        format.html {
+          redirect_to timers_path(date: week.start_date), alert: I18n.t(:"messages.timesheet.remove_task.failure")
+        }
       end
-    else
-      redirect_to timers_path(date: week.start_date), error: I18n.t(:"messages.timesheet.remove_task.failure")
     end
   end
 

@@ -52,8 +52,8 @@
                   %span
                     = (sum == 0 ? sum : decimal_to_time(sum))
                 %td.timesheet-actions
-                  = link_to remove_task_week_path(week, task), method: :put, class: "btn btn-default" do
-                    &times;
+                  %a.btn.btn-danger.btn-sm{href: remove_task_week_path(week, task), title: I18n.t(:"actions.delete"), data: { method: "PUT", notyConfirm: I18n.t(:"messages.confirm.delete") } }
+                    %i.glyphicon.glyphicon-trash
           %tfoot
             - all_timers_by_date = week.timers.where(task_id: week.tasks.map(&:id)).group_by(&:date)
             %tr

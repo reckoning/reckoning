@@ -7,7 +7,7 @@ module Backend
 
     def dashboard
       @active_nav = 'backend_dashboard'
-      @settings = Setting.all.to_h
+      @settings = Rails.application.secrets
     end
 
     private

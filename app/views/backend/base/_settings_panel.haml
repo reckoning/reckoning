@@ -1,29 +1,17 @@
-- Settings.each do |keypath, values|
-  - if %i(base mailer).include?(keypath)
+- @settings.each do |root, values|
+  - if %i(base mailer).include?(root)
     .panel.panel-default
       .panel-heading
         %h3.panel-title
-          = I18n.t(:"labels.panels.title.settings.#{keypath}")
+          = I18n.t(:"labels.panels.title.settings.#{root}")
       %table.table.table-bordered.table-striped.table-condensed
         %tbody
           - values.each do |key, value|
-            - path = "#{keypath}.#{key}"
-            - setting = Setting.find_by_keypath(path)
-            - value = setting.value if setting.present?
             %tr
               %td
-                = I18n.t(:"activerecord.attributes.setting.#{path}")
+                = I18n.t(:"activerecord.attributes.setting.#{root}.#{key}")
               %td
-                - if [TrueClass, FalseClass].include?(value.to_s.to_bool.class)
-                  = I18n.t(value.to_s.to_bool.to_s)
+                - if value.is_a?(TrueClass)
+                  = I18n.t(:"#{value}")
                 - else
                   = value
-              %td
-                .btn-group
-                  - if setting.present?
-                    %a.btn.btn-default.btn-sm{href: edit_backend_setting_path(setting), title: I18n.t(:"actions.edit")}
-                      %i.glyphicon.glyphicon-edit
-                  - else
-                    %a.btn.btn-default.btn-sm{href: new_backend_setting_path(keypath: path), title: I18n.t(:"actions.edit")}
-                      %i.glyphicon.glyphicon-edit
-

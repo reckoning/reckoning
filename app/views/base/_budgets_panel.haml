@@ -1,8 +1,9 @@
-.panel.panel-default#budgets-panel
-  .panel-heading
-    .panel-title
-      %strong
-        = I18n.t(:"dashboard.panels.budgets")
-  .list-group
-    - budgets.each do |project|
-      = render 'budget_item', project: project
+- unless budgets.blank?
+  .panel.panel-default#budgets-panel
+    .panel-heading
+      .panel-title
+        %strong
+          = I18n.t(:"dashboard.panels.budgets")
+    .list-group
+      - budgets.each do |project|
+        = render 'budget_item', project: project

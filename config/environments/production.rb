@@ -56,12 +56,13 @@ Reckoning::Application.configure do
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   config.assets.prefix = "/assets"
-  config.action_controller.asset_host = Settings.app.url
+  config.action_controller.asset_host = Rails.application.secrets[:url]
 
   # Precompile additional assets.
   # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
-  config.assets.precompile += %w( pdf.css pdf.js )
+  config.assets.precompile += %w( pdf.css pdf.js/build/pdf.worker.js )
   config.assets.precompile += Dir[Rails.root.join('vendor', 'assets', 'bower_components', '**', 'img', '*')]
+  config.assets.initialize_on_precompile = true
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
@@ -81,14 +82,14 @@ Reckoning::Application.configure do
   config.log_formatter = ::Logger::Formatter.new
 
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.default_url_options = { host: Settings.app.domain }
+  config.action_mailer.default_url_options = { host: Rails.application.secrets[:domain] }
   config.action_mailer.smtp_settings = {
-    address: Settings.mailer.host,
-    port: Settings.mailer.port,
+    address: Rails.application.secrets[:mailer]["host"],
+    port: Rails.application.secrets[:mailer]["port"],
     enable_starttls_auto: true,
-    user_name: Settings.mailer.user,
-    password: Settings.mailer.password,
+    user_name: Rails.application.secrets[:mailer]["user"],
+    password: Rails.application.secrets[:mailer]["password"],
     authentication: 'login',
-    domain: Settings.app.domain
+    domain: Rails.application.secrets[:domain]
   }
 end

@@ -27,6 +27,7 @@ de:
       setting:
         base:
           registration: "Registrierung aktiv?"
+          demo: "Demo aktiv?"
         mailer:
           default_from: "Standard Absender"
           host: "SMTP Host"
