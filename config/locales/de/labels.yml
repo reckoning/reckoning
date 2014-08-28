@@ -23,17 +23,13 @@ de:
       timesheet: Stundenzettel
     chart:
       on_date: am
-      in_month: im
       timers:
         headline: "Erfasste Stunden im letzten Monat"
         no_data: "Keine Zeiten erfasst."
-        title: "Zeiten"
       invoices:
-        headline: "Rechnungen im aktuellen Jahr"
         no_data: "Keine Rechnungen vorhanden."
         sum: "Kumulativ %{year}"
         month: "Monat %{year}"
-        title: "Rechnungen"
     timesheet:
       date: Datum
       task: Aufgabe
@@ -53,15 +49,10 @@ de:
         address: "Adressdaten"
         banking: "Bank Informationen"
         taxes: "Steuern"
-      services:
-        gdrive: "Google Drive"
       mailing: "E-Mail Einstellungen"
     customer:
       basic: "Allgemeine Informationen"
       email: "E-Mail Setup für Rechnungen"
-    setting:
-      key: "Bezeichnung"
-      value: "Wert"
     budget:
       uninvoiced: "Noch nicht in Rechnung gestellt"
       limit: "Gesamt: %{hours} h"

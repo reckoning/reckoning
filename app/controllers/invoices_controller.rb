@@ -140,9 +140,9 @@ class InvoicesController < ApplicationController
     @invoice = current_user.invoices.new(invoice_params)
     authorize! :create, invoice
     if invoice.save
-      redirect_to invoices_path, notice: I18n.t(:"messages.create.success", resource: I18n.t(:"resources.messages.invoice"))
+      redirect_to invoices_path, notice: I18n.t(:"messages.invoice.create.success")
     else
-      flash.now[:warning] = I18n.t(:"messages.create.failure", resource: I18n.t(:"resources.messages.invoice"))
+      flash.now[:warning] = I18n.t(:"messages.invoice.create.failure")
       render "new"
     end
   end
@@ -151,9 +151,9 @@ class InvoicesController < ApplicationController
     @ref = invoice.ref
     authorize! :update, invoice
     if invoice.update(invoice_params)
-      redirect_to invoices_path, notice: I18n.t(:"messages.update.success", resource: I18n.t(:"resources.messages.invoice"))
+      redirect_to invoices_path, notice: I18n.t(:"messages.invoice.update.success")
     else
-      flash.now[:warning] = I18n.t(:"messages.update.failure", resource: I18n.t(:"resources.messages.invoice"))
+      flash.now[:warning] = I18n.t(:"messages.invoice.update.failure")
       render "edit"
     end
   end
@@ -163,7 +163,7 @@ class InvoicesController < ApplicationController
     invoice.charge
     respond_to do |format|
       if invoice.charged?
-        flash[:notice] = I18n.t(:'messages.charge.invoice.success')
+        flash[:notice] = I18n.t(:'messages.invoice.charge.success')
         format.js {
           render json: {}, status: :ok
         }
@@ -171,7 +171,7 @@ class InvoicesController < ApplicationController
           redirect_to :back
         }
       else
-        flash[:alert] = I18n.t(:'messages.charge.invoice.failure')
+        flash[:alert] = I18n.t(:'messages.invoice.charge.failure')
         format.js {
           render json: {}, status: :ok
         }
@@ -186,9 +186,9 @@ class InvoicesController < ApplicationController
     authorize! :pay, invoice
     invoice.pay
     if invoice.paid?
-      redirect_to :back, notice: I18n.t(:'messages.pay.invoice.success')
+      redirect_to :back, notice: I18n.t(:'messages.invoice.pay.success')
     else
-      redirect_to :back, alert: I18n.t(:'messages.pay.invoice.failure')
+      redirect_to :back, alert: I18n.t(:'messages.invoice.pay.failure')
     end
   end
 
@@ -223,7 +223,7 @@ class InvoicesController < ApplicationController
       File.delete(invoice.pdf_path) if File.exists?(invoice.pdf_path)
       File.delete(invoice.timesheet_path) if File.exists?(invoice.timesheet_path)
 
-      flash[:notice] = I18n.t(:"messages.destroy.success", resource: I18n.t(:"resources.messages.invoice"))
+      flash[:notice] = I18n.t(:"messages.invoice.destroy.success")
       respond_to do |format|
         format.js {
           render json: {}, status: :ok
@@ -233,7 +233,7 @@ class InvoicesController < ApplicationController
         }
       end
     else
-      flash[:alert] = I18n.t(:"messages.destroy.failure", resource: I18n.t(:"resources.messages.invoice"))
+      flash[:alert] = I18n.t(:"messages.invoice.destroy.failure")
       respond_to do |format|
         format.js {
           render json: {}, status: :ok

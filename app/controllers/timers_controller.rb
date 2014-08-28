@@ -15,9 +15,9 @@ class TimersController < ApplicationController
   def csv_import
     authorize! :csv_import, Timer
     if Timer.import(params[:timer][:file], params[:timer][:project_id])
-      redirect_to timers_path, notice: I18n.t(:"messages.import.success", resource: I18n.t(:"resources.messages.timers"))
+      redirect_to timers_path, notice: I18n.t(:"messages.timer.import.success")
     else
-      redirect_to timers_path, alert: I18n.t(:"messages.import.failure", resource: I18n.t(:"resources.messages.timers"))
+      redirect_to timers_path, alert: I18n.t(:"messages.timer.import.failure")
     end
   end
 

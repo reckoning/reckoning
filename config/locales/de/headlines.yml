@@ -29,9 +29,6 @@ de:
       edit: "Kunde bearbeiten"
       index: "Kunden"
 
-    user:
-      edit: "Account bearbeiten"
-
     backend:
       user:
         index: "Benutzer"

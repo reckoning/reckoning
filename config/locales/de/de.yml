@@ -5,8 +5,6 @@ de:
   title:
     default: "Reckoning.io"
     backend: "Reckoning.io Backend"
-  default_country: "Deutschland"
-  default_country_code: "DE"
   small_business: "umsatzsteuerbefreit nach § 19 UStG"
   nav:
     header:
@@ -15,11 +13,8 @@ de:
       projects: "Projekte"
       timers: "Zeiten"
       settings: "Einstellungen"
-      upgrade: "Upgrade auf Pro"
       toggle: "Navigation aufklappen"
       intro: "Home"
-      features: "Features"
-      pricing: "Pricing"
       backend: "Backend"
       frontend: "Frontend"
       dashboard: "Dashboard"
@@ -27,7 +22,6 @@ de:
     subnav:
       back: "Zurück"
       new_invoice: "Neue Rechnung"
-      new_offer: "Neues Angebot"
       new_customer: "Neuer Kunde"
       new_project: "Neues Projekt"
       new_user: "Neuer Benutzer"
@@ -38,7 +32,6 @@ de:
         banking: Bankdaten
         settings: Einstellungen
         mailing: E-Mail
-        services: Externe Dienste
       customer:
         basic: Allgemein
         email: "E-Mail Setup"
@@ -75,7 +68,6 @@ de:
         edit: "Passwort ändern"
       backend:
         user: "Benutzer"
-        setting: "Einstellungen"
       sign_in: "Anmelden"
       sign_up: "Registrieren"
       unlock: "Account entsperren"
@@ -91,14 +83,6 @@ de:
       created: "Neu"
       charged: "In Rechnung gestellt"
       paid: "Bezahlt"
-
-  legends:
-    setting:
-      bank: "Bankinformationen"
-
-  loading:
-    invoice:
-      pdf: "PDF wird neu generiert."
 
   user:
     current_sign_in_at:
