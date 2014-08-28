@@ -18,27 +18,23 @@
           %li.active
             %a{href: "#basic", data: {toggle: "tab"}}
               = I18n.t("nav.subnav.user.basic")
-              %i.glyphicon.glyphicon-user
+              %i.fa.fa-user
           %li
             %a{href: "#address", data: {toggle: "tab"}}
               = I18n.t("nav.subnav.user.address")
-              %i.glyphicon.glyphicon-globe
+              %i.fa.fa-globe
           %li
             %a{href: "#banking", data: {toggle: "tab"}}
               = I18n.t("nav.subnav.user.banking")
-              %i.glyphicon.glyphicon-credit-card
+              %i.fa.fa-credit-card
           %li
             %a{href: "#settings", data: {toggle: "tab"}}
               = I18n.t("nav.subnav.user.settings")
-              %i.glyphicon.glyphicon-cog
+              %i.fa.fa-cog
           %li
             %a{href: "#mailing", data: {toggle: "tab"}}
               = I18n.t("nav.subnav.user.mailing")
-              %i.glyphicon.glyphicon-send
-          %li
-            %a{href: "#services", data: {toggle: "tab"}}
-              = I18n.t("nav.subnav.user.services")
-              %i.glyphicon.glyphicon-cloud-upload
+              %i.fa.fa-send
 
       .col-xs-12.col-lg-10.col-md-9.col-sm-9
         = form_for @user, url: user_registration_path do |form|

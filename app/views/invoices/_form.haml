@@ -42,11 +42,11 @@
 
     .btn-group.pull-right
       = link_to_add_fields form, :positions, name: I18n.t(:"actions.add"), class: "btn btn-default", target: "#positions" do
-        %i.glyphicon.glyphicon-plus
+        %i.fa.fa-plus
         = I18n.t(:"actions.add_position")
 
       %button.ladda-button.btn.btn-default{type: "button", onclick: "App.Invoice.loadPositions($(this)); return false;", data: {style: "expand-right"}}
-        %i.glyphicon.glyphicon-plus
+        %i.fa.fa-plus
         = I18n.t(:"actions.generate_position")
 
   = render "shared/forms/submit", path: invoices_path

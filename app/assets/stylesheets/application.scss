@@ -1,7 +1,7 @@
-//= require_self
 //= require ladda/css/ladda
 //= require nvd3/nv.d3
 //= require selectize/dist/css/selectize.bootstrap3
+//= require_self
 
 $footer-border-color: #ccc;
 $footer-bg-color: #ddd;
@@ -17,7 +17,9 @@ $font-size-h6: floor(($font-size-base * 0.85));
 
 @import "bourbon";
 @import "bootstrap-sprockets";
-@import "bootstrap";
+@import 'bootstrap-custom';
+@import "font-awesome-sprockets";
+@import "font-awesome";
 @import "partials";
 @import "invoice";
 @import "dashboard";
