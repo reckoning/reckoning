@@ -4,13 +4,7 @@ de:
       project:
         rate: "Stundensatz"
       user:
-        email: "E-Mail"
-        password: "Passwort"
-        password_confirmation: "Passwort-Bestätigung"
-        current_password: "aktuelles Passwort"
         remember_me: "Angemeldet bleiben"
-        settings:
-          tax: "Steuern"
       position:
         rate: "€/Std."
         hours: "Stunden"
@@ -23,6 +17,11 @@ de:
       setting:
         base:
           registration: "Registrierung aktiv?"
+        mailer:
+          host: "SMTP Host"
+          port: "SMTP Port"
+          user: "SMTP Benutzer"
+          password: "SMTP Passwort oder Token"
     placeholder:
       test_mail:
         email: "E-Mail Adresse"
@@ -40,7 +39,6 @@ de:
         password: "Passwort"
         password_confirmation: "Passwort-Bestätigung"
         current_password: "Aktuelles Passwort"
-        remember_me: "Angemeldet bleiben"
         gravatar: "Gravatar E-Mail Adresse"
         bank_account:
           bank: "Bank"
@@ -50,10 +48,6 @@ de:
           bic: "BIC"
         settings:
           tax_ref: "Steuernummer"
-        services:
-          gdrive_password: "Google Drive Passwort"
-          gdrive_email: "Google Drive E-Mail"
-          gdrive_collection: "Google Drive Ordner"
         mailing:
           default_from: "Absender Für Rechnungs E-Mails"
           signature: "Signatur"
@@ -61,10 +55,7 @@ de:
       address:
         company: "Firma"
         name: "Name"
-        firstname: "Vorname"
-        lastname: "Nachname"
         address: "Adresse"
-        country: "Land"
         telefon: "Telefon"
         fax: "Fax"
         website: "Homepage"
@@ -74,12 +65,6 @@ de:
         email_template: "Inhalt"
         invoice_email: "Empfänger"
         default_from: "Absender"
-      setting:
-        mailer:
-          host: "SMTP Host"
-          port: "SMTP Port"
-          user: "SMTP Benutzer"
-          password: "SMTP Passwort oder Token"
     prompt:
       project:
         customer_id: "Bitte wähle einen Kunden"

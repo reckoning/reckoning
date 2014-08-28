@@ -4,7 +4,6 @@ en:
     cancel: "Cancel"
     edit: "Edit"
     delete: "Delete"
-    remove: "Remove"
     cancel: "Cancel"
     save: "Save"
     add: "Add"
@@ -16,4 +15,3 @@ en:
     forgot_password: "Forgot your password?"
     reset_password: 'Reset password'
     save_password: 'Save password'
-    admin: 'Backend'

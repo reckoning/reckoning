@@ -20,9 +20,9 @@ module Backend
     def create
       @user = User.new(user_params)
       if @user.save
-        redirect_to backend_users_path, notice: I18n.t(:"messages.create.success", resource: I18n.t(:"resources.messages.user"))
+        redirect_to backend_users_path, notice: I18n.t(:"messages.user.create.success")
       else
-        render 'new', error: I18n.t(:"messages.create.failure", resource: I18n.t(:"resources.messages.user"))
+        render 'new', error: I18n.t(:"messages.user.create.failure")
       end
     end
 
@@ -33,17 +33,17 @@ module Backend
     # patch: /backend/users/:id
     def update
       if @user.update(user_params)
-        redirect_to backend_users_path, notice: I18n.t(:"messages.create.success", resource: I18n.t(:"resources.messages.user"))
+        redirect_to backend_users_path, notice: I18n.t(:"messages.user.create.success")
       else
-        render "edit", error: I18n.t(:"messages.update.failure", resource: I18n.t(:"resources.messages.user"))
+        render "edit", error: I18n.t(:"messages.user.update.failure")
       end
     end
 
     def destroy
       if @user.destroy
-        redirect_to backend_users_path, notice: I18n.t(:"messages.destroy.success", resource: I18n.t(:"resources.messages.user"))
+        redirect_to backend_users_path, notice: I18n.t(:"messages.user.destroy.success")
       else
-        redirect_to backend_users_path, error: I18n.t(:"messages.destroy.failure", resource: I18n.t(:"resources.messages.user"))
+        redirect_to backend_users_path, error: I18n.t(:"messages.user.destroy.failure")
       end
     end
 
