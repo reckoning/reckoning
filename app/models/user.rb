@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
 
   store_accessor :settings, :tax, :tax_ref, :provision
 	store_accessor :bank_account, :bank, :account_number, :bank_code, :iban, :bic
-  store_accessor :services, :gdrive_email, :gdrive_password, :gdrive_collection, :dropbox_user, :dropbox_token
+  store_accessor :services, :dropbox_user, :dropbox_token
   store_accessor :mailing, :default_from, :signature
 
   has_one :address, as: :resource, dependent: :destroy
@@ -40,8 +40,8 @@ class User < ActiveRecord::Base
     end
   end
 
-  def has_gdrive?
-    self.gdrive_password.present? && self.gdrive_email.present?
+  def has_dropbox?
+    self.dropbox_token.present?
   end
 
   private
