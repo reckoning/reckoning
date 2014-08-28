@@ -29,7 +29,7 @@
         = render 'task_fields', fields: builder
 
       = link_to_add_fields form, :tasks, name: I18n.t(:"actions.add"), class: "btn btn-default pull-right" do
-        %i.glyphicon.glyphicon-plus
+        %i.fa.fa-plus
         = I18n.t(:"actions.add_task")
 
   = render "shared/forms/submit", path: projects_path
