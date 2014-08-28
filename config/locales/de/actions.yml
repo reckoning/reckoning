@@ -41,3 +41,5 @@ de:
     send_invoice: "Rechnung versenden"
     download_invoice: "Rechnung speichern"
     download_timesheet: "Stundenzettel speichern"
+    dropbox_link: "Dropbox verbinden"
+    dropbox_unlink: "Dropbox trennen"
