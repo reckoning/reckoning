@@ -34,7 +34,7 @@
           %li
             %a{href: "#mailing", data: {toggle: "tab"}}
               = I18n.t("nav.subnav.user.mailing")
-              %i.fa.fa-send
+              %i.glyphicon.glyphicon-send
 
       .col-xs-12.col-lg-10.col-md-9.col-sm-9
         = form_for @user, url: user_registration_path do |form|
@@ -64,10 +64,5 @@
                 %legend
                   = I18n.t(:"labels.user.mailing")
                 = render "users/mailing", form: form, resource: @user
-            .tab-pane#services
-              %fieldset
-                %legend
-                  = I18n.t(:"labels.user.services.gdrive")
-                = render "users/gdrive_service", form: form, resource: @user
 
           = render "shared/forms/submit", path: root_path

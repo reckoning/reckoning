@@ -56,7 +56,10 @@ gem "roo"
 
 gem "rack-cors", require: "rack/cors"
 
-gem "google_drive"
+gem "skylight"
+
+gem 'google_drive'
+gem 'dropbox-sdk'
 
 group :test do
   gem "rails-perftest"
