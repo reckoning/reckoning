@@ -3,10 +3,10 @@ class ErrorsController < ApplicationController
   before_filter :authenticate_user!, only: []
 
   def not_found
-    render :status => 404, :formats => [:html]
+    render status: 404
   end
 
   def server_error
-    render :status => 500, :formats => [:html], layout: "error"
+    render file: "public/500.html", status: 500, layout: false
   end
 end

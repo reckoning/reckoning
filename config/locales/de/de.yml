@@ -72,6 +72,7 @@ de:
       sign_up: "Registrieren"
       unlock: "Account entsperren"
       confirm: "Account bestätigen"
+      not_found: 404
 
   filter:
     name:
@@ -87,3 +88,6 @@ de:
   user:
     current_sign_in_at:
       empty: "Noch nie eingeloggt"
+
+  error_pages:
+    not_found: 'Die Seite "%{page}" konnte nicht gefunden werden.'
