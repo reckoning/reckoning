@@ -1,8 +1,7 @@
 - content_for(:title) do
-  404
+  = I18n.t(:"meta.title.not_found")
 .cbox.cbox-error.cbox-large
   .well
-    %h1 Navigation Error
+    %h1= I18n.t(:"headlines.not_found")
 
-    %p
-      You are currently venturing unknown space. In the event you are lost, the UEE highly recommends plotting a new destination back towards home-space.
+    %p= I18n.t(:"error_pages.not_found", page: request.env["REQUEST_PATH"])

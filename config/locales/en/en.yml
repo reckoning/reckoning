@@ -70,6 +70,7 @@ en:
       sign_up: ~
       unlock: ~
       confirm: ~
+      404: 404
   filter:
     name:
       invoice_state: ~
@@ -83,3 +84,5 @@ en:
   user:
     current_sign_in_at:
       empty: ~
+  error_pages:
+    404: "The Page you are looking for does not exist."
