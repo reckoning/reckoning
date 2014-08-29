@@ -1,6 +1,7 @@
 class InvoicesController < ApplicationController
   before_action :set_active_nav
   before_action :check_limit, only: [:new, :create]
+  before_action :check_depedencies, only: [:new]
 
   def index
     authorize! :read, Invoice
@@ -21,9 +22,6 @@ class InvoicesController < ApplicationController
 
   def show
     authorize! :read, invoice
-    if current_user.address.blank?
-      redirect_to edit_user_registration_path, alert: I18n.t(:"messages.invoice.missing_address")
-    end
     if invoice.pdf_not_present_and_not_generating? || !invoice.pdf_present_and_up_to_date?
       invoice.generate_pdf
     end
@@ -127,6 +125,7 @@ class InvoicesController < ApplicationController
 
   def new
     authorize! :create, Invoice
+
     @invoice = Invoice.new
     invoice.positions << Position.new
   end
@@ -309,5 +308,11 @@ class InvoicesController < ApplicationController
 
   def test_mail_params
     params.require(:test_mail).permit(:email)
+  end
+
+  def check_dependencies
+    if current_user.address.blank?
+      redirect_to "#{edit_user_registration_path}#address", alert: I18n.t(:"messages.invoice.missing_address")
+    end
   end
 end

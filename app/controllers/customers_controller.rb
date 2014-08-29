@@ -1,5 +1,5 @@
 class CustomersController < ApplicationController
-  before_filter :set_active_nav
+  before_action :set_active_nav
   helper_method :customer, :sort_column
 
   def index

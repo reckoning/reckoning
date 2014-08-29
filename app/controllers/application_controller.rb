@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
     redirect_to root_url, warning: exception.message
   end
 
-  before_filter :authenticate_user!, :set_default_nav
+  before_action :authenticate_user!, :set_default_nav
 
   private
 

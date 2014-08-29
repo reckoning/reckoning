@@ -1,7 +1,7 @@
 class BaseController < ApplicationController
   include NumberHelper
   skip_authorization_check
-  before_filter :authenticate_user!, :only => [:fail]
+  before_action :authenticate_user!, :only => [:fail]
 
   def index
     if user_signed_in?
