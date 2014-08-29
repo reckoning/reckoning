@@ -1,0 +1,36 @@
+en:
+  date:
+    formats:
+      default: ~
+      short: ~
+      long: ~
+      only_day: ~
+      day_number: ~
+      datepicker: ~
+      month_year: ~
+      month: ~
+      file: ~
+      year: ~
+      day: ~
+      db: ~
+    first_day_of_week: ~
+    day_names: ~
+    abbr_day_names: ~
+    month_names: ~
+    abbr_month_names: ~
+    dp_month_names: ~
+    dp_abbr_month_names: ~
+    order: ~
+  datetime:
+    distance_in_words:
+      half_a_minute: ~
+  time:
+    formats:
+      default: ~
+      short: ~
+      long: ~
+      dt_default: ~
+      dt_short: ~
+      dt_long: ~
+    am: ~
+    pm: ~

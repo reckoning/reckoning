@@ -1,0 +1,5 @@
+en:
+  mailer:
+    invoice:
+      customer_mail:
+        subject: ~

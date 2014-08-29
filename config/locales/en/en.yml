@@ -1,6 +1,85 @@
 en:
   "true": Yes
   "false": No
+  version: ~
   title:
     default: "Reckoning.io"
     backend: "Reckoning.io Backend"
+  small_business: ~
+  nav:
+    header:
+      home: ~
+      customers: ~
+      projects: ~
+      timers: ~
+      settings: ~
+      toggle: ~
+      intro: ~
+      backend: ~
+      frontend: ~
+      dashboard: ~
+      users: ~
+    subnav:
+      back: ~
+      new_invoice: ~
+      new_customer: ~
+      new_project: ~
+      new_user: ~
+      update_password: ~
+      user:
+        basic: ~
+        address: ~
+        banking: ~
+        settings: ~
+        mailing: ~
+      customer:
+        basic: ~
+        email: ~
+  views:
+    pagination:
+      next: ~
+      previous: ~
+      first: ~
+      last: ~
+      truncate: ~
+  meta:
+    title:
+      timer:
+        index: ~
+        import: ~
+      customer:
+        index: ~
+        new: ~
+        edit: ~
+      project:
+        index: ~
+        new: ~
+        edit: ~
+      invoice:
+        show: ~
+        new: ~
+        edit: ~
+      user:
+        edit: ~
+      password:
+        new: ~
+        edit: ~
+      backend:
+        user: ~
+      sign_in: ~
+      sign_up: ~
+      unlock: ~
+      confirm: ~
+  filter:
+    name:
+      invoice_state: ~
+      invoice_year: ~
+    defaults:
+      all: ~
+    invoice_state:
+      created: ~
+      charged: ~
+      paid: ~
+  user:
+    current_sign_in_at:
+      empty: ~

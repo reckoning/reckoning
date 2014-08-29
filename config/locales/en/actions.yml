@@ -1,17 +1,38 @@
 en:
   actions:
+    loading: ~
     ok: "OK"
     cancel: "Cancel"
     edit: "Edit"
     delete: "Delete"
-    cancel: "Cancel"
     save: "Save"
+    create: ~
     add: "Add"
+    timer_import: ~
     add_position: "Add Position"
+    generate_position: ~
+    add_task: ~
+    add_timer: ~
+    show: ~
+    download: ~
+    regenerate: ~
+    generate: ~
     charge: "Charge"
     pay: "Mark as paid"
+    archive: ~
     sign_in: "Login"
     sign_out: "Logout"
+    sign_up: ~
+    confirm: ~
+    unlock: ~
     forgot_password: "Forgot your password?"
     reset_password: 'Reset password'
     save_password: 'Save password'
+    close: ~
+    paste: ~
+    send: ~
+    send_invoice: ~
+    download_invoice: ~
+    download_timesheet: ~
+    dropbox_link: ~
+    dropbox_unlink: ~

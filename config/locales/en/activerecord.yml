@@ -1,0 +1,69 @@
+en:
+  activerecord:
+    attributes:
+      invoice:
+        project_id: ~
+        states:
+          created: ~
+          charged: ~
+          cancelled: ~
+          paid: ~
+          archived: ~
+      invoice_position:
+        description: ~
+      user:
+        enabled: ~
+        admin: ~
+        confirmation_token: ~
+        gravatar: ~
+        created_at: ~
+        last_sign_in: ~
+        settings:
+          tax: ~
+          provision: ~
+          gdrive_password: ~
+          gdrive_email: ~
+          gdrive_collection: ~
+      setting:
+        base:
+          registration: ~
+          demo: ~
+        mailer:
+          default_from: ~
+          host: ~
+          port: ~
+          user: ~
+          password: ~
+    errors:
+      messages:
+        record_invalid: ~
+        blank: ~
+      models:
+        test_mail:
+          attributes:
+            email:
+              invalid: ~
+        user:
+          attributes:
+            confirmation_token:
+              invalid: ~
+            email:
+              taken: ~
+            password:
+              too_short: ~
+            password_confirmation:
+              confirmation: ~
+            current_password:
+              invalid: ~
+            reset_password_token:
+              invalid: ~
+        invoice:
+          attributes:
+            ref:
+              taken: ~
+            company_name:
+              empty: ~
+        position:
+          attributes:
+            hours_value:
+              empty: ~

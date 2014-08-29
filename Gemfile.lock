@@ -161,6 +161,7 @@ GEM
     mocha (1.1.0)
       metaclass (~> 0.0.1)
     multi_json (1.10.1)
+    multipart-post (2.0.0)
     nokogiri (1.6.3.1)
       mini_portile (= 0.6.0)
     orm_adapter (0.5.0)
@@ -237,6 +238,7 @@ GEM
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
+    trollop (2.0)
     turbolinks (2.2.2)
       coffee-rails
     tzinfo (1.2.2)
@@ -248,6 +250,10 @@ GEM
       activesupport (>= 3.0.0)
     warden (1.2.3)
       rack (>= 1.0)
+    web_translate_it (2.3.4)
+      multi_json
+      multipart-post (~> 2.0)
+      trollop (~> 2.0)
 
 PLATFORMS
   ruby
@@ -293,3 +299,4 @@ DEPENDENCIES
   turbolinks
   uglifier
   url_plumber
+  web_translate_it

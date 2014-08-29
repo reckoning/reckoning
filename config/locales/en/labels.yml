@@ -1,0 +1,75 @@
+en:
+  labels:
+    defaults:
+      actions: ~
+      value: ~
+      date: ~
+      name: ~
+      customer: ~
+      company: ~
+      ref: ~
+      state: ~
+      hours: ~
+      rate: ~
+      description: ~
+      contact: ~
+      address: ~
+      id: ~
+      role: ~
+      email: ~
+      enabled: ~
+      invoice: ~
+      timesheet: ~
+    chart:
+      on_date: ~
+      timers:
+        headline: ~
+        no_data: ~
+      invoices:
+        no_data: ~
+        sum: ~
+        month: ~
+    timesheet:
+      date: ~
+      task: ~
+      current_week: ~
+      on_invoice: ~
+    invoice:
+      customer: ~
+      due: ~
+    user:
+      current_sign_in_at: ~
+      admin: ~
+      email: ~
+      created_at: ~
+      last_sign_in: ~
+      settings:
+        basic: ~
+        address: ~
+        banking: ~
+        taxes: ~
+      mailing: ~
+    customer:
+      basic: ~
+      email: ~
+    budget:
+      uninvoiced: ~
+      limit: ~
+    table:
+      blank:
+        customer: ~
+        invoice: ~
+        project: ~
+    modals:
+      title:
+        timesheet: ~
+        positions: ~
+    panels:
+      title:
+        default: ~
+        downloads: ~
+        latest_users: ~
+        test_mail: ~
+        settings:
+          base: ~
+          mailer: ~

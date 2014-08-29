@@ -1,5 +1,38 @@
 en:
   headlines:
+    sign_up: ~
+    sign_in: ~
+    forgot_password: ~
+    change_password: ~
+    unlock: ~
+    confirm: ~
+    account: ~
+    dashboard: ~
+    impressum: ~
+    privacy: ~
+    welcome: ~
+    project:
+      new: ~
+      edit: ~
+      index: ~
+    invoice:
+      new: ~
+      show: ~
+      edit: ~
+      index: ~
+      sum: ~
+    customer:
+      new: ~
+      edit: ~
+      index: ~
     backend:
       user:
         index: "Users"
+        edit: ~
+        new: ~
+      setting:
+        edit: ~
+    timer:
+      import: ~
+  sublines:
+    welcome: ~

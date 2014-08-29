@@ -1,0 +1,79 @@
+en:
+  helpers:
+    label:
+      project:
+        rate: ~
+      user:
+        remember_me: ~
+      position:
+        rate: ~
+        hours: ~
+        value: ~
+      invoice:
+        date: ~
+        delivery_date: ~
+        payment_due_date: ~
+        ref: ~
+      setting:
+        base:
+          registration: ~
+        mailer:
+          host: ~
+          port: ~
+          user: ~
+          password: ~
+    placeholder:
+      test_mail:
+        email: ~
+      project:
+        name: ~
+      task:
+        name: ~
+      position:
+        description: ~
+        rate: ~
+        hours: ~
+        value: ~
+      user:
+        email: ~
+        password: ~
+        password_confirmation: ~
+        current_password: ~
+        gravatar: ~
+        bank_account:
+          bank: ~
+          bank_code: ~
+          account_number: ~
+          iban: ~
+          bic: ~
+        settings:
+          tax_ref: ~
+        mailing:
+          default_from: ~
+          signature: ~
+      address:
+        company: ~
+        name: ~
+        address: ~
+        telefon: ~
+        fax: ~
+        website: ~
+        email: ~
+      customer:
+        payment_due: ~
+        email_template: ~
+        invoice_email: ~
+        default_from: ~
+    prompt:
+      project:
+        customer_id: ~
+      invoice:
+        project_id: ~
+      address:
+        country: ~
+      timer:
+        project: ~
+        task: ~
+    help:
+      customer:
+        default_from: ~
