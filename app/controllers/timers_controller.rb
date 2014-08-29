@@ -1,5 +1,5 @@
 class TimersController < ApplicationController
-  before_filter :set_active_nav
+  before_action :set_active_nav
 
   def index
     authorize! :index, Timer

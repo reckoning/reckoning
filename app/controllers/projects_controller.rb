@@ -1,5 +1,6 @@
 class ProjectsController < ApplicationController
-  before_filter :set_active_nav
+  before_action :set_active_nav
+  before_action :check_depedencies, only: [:new]
 
   def index
     authorize! :read, Project
@@ -87,5 +88,11 @@ class ProjectsController < ApplicationController
   def project
     @project ||= Project.where(id: params.fetch(:id){nil}).first
     @project ||= current_user.projects.new project_params
+  end
+
+  def check_dependencies
+    if current_user.customers.blank?
+      redirect_to new_customer_path, alert: I18n.t(:"messages.project.missing_customer")
+    end
   end
 end
