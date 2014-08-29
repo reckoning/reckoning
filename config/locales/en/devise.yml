@@ -1,0 +1,63 @@
+en:
+  errors:
+    messages:
+      expired: ~
+      not_found: ~
+      already_confirmed: ~
+      not_locked: ~
+  devise:
+    failure:
+      already_authenticated: ~
+      unauthenticated: ~
+      unconfirmed: ~
+      locked: ~
+      invalid: ~
+      invalid_token: ~
+      timeout: ~
+      inactive: ~
+      user:
+        not_found_in_database: ~
+    sessions:
+      signed_in: ~
+      signed_out: ~
+    passwords:
+      send_instructions: ~
+      updated: ~
+      updated_not_active: ~
+      send_paranoid_instructions: ~
+    confirmations:
+      send_instructions: ~
+      send_paranoid_instructions: ~
+      confirmed: ~
+    registrations:
+      signed_up: ~
+      signed_up_but_unconfirmed: ~
+      signed_up_but_inactive: ~
+      signed_up_but_locked: ~
+      updated: ~
+      update_needs_confirmation: ~
+      destroyed: ~
+    unlocks:
+      send_instructions: ~
+      unlocked: ~
+      send_paranoid_instructions: ~
+    omniauth_callbacks:
+      success: ~
+      failure: ~
+    mailer:
+      confirmation_instructions:
+        subject: ~
+        content:
+          welcome: ~
+          confirm_text: ~
+          confirm_link: ~
+      reset_password_instructions:
+        subject: ~
+        content:
+          hello: ~
+          change_link: ~
+          first_text: ~
+          second_text: ~
+          third_text: ~
+      unlock_instructions:
+        subject: ~

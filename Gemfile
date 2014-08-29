@@ -54,7 +54,9 @@ gem "roo"
 
 gem "rack-cors", require: "rack/cors"
 
-gem 'dropbox-sdk'
+gem "dropbox-sdk"
+
+gem "web_translate_it"
 
 group :test do
   gem "rails-perftest"

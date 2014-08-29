@@ -1,0 +1,111 @@
+en:
+  unauthorized:
+    default: ~
+  messages:
+    error: ~
+    timesheet:
+      add_task:
+        success: ~
+        warning: ~
+        failure: ~
+      remove_task:
+        success: ~
+        warning: ~
+        failure: ~
+    project:
+      create:
+        success: ~
+        failure: ~
+      update:
+        success: ~
+        failure: ~
+      destroy:
+        success: ~
+        failure: ~
+        failure_dependency: ~
+    customer:
+      create:
+        success: ~
+        failure: ~
+      update:
+        success: ~
+        failure: ~
+      destroy:
+        success: ~
+        failure: ~
+        failure_dependency: ~
+      confirm:
+        delete: ~
+    user:
+      create:
+        success: ~
+        failure: ~
+      update:
+        success: ~
+        failure: ~
+      destroy:
+        success: ~
+        failure: ~
+      lock:
+        success: ~
+        failure: ~
+      unlock:
+        success: ~
+        failure: ~
+    invoice:
+      create:
+        success: ~
+        failure: ~
+      update:
+        success: ~
+        failure: ~
+      destroy:
+        success: ~
+        failure: ~
+      pay:
+        success: ~
+        failure: ~
+      charge:
+        success: ~
+        failure: ~
+      pdf_generating: ~
+      pdf_generated: ~
+      missing_address: ~
+      files_missing: ~
+      load_positions:
+        missing: ~
+      archive:
+        success: ~
+        failure: ~
+      send:
+        success: ~
+        failure: ~
+      send_test_mail:
+        success: ~
+        failure: ~
+    registration:
+      update:
+        success: ~
+        failure: ~
+    password:
+      update:
+        success: ~
+        failure: ~
+    timer:
+      import:
+        success: ~
+        failure: ~
+    dropbox:
+      activate:
+        success: ~
+        failure: ~
+      deactivate:
+        success: ~
+        failure: ~
+    demo_active: ~
+    confirm:
+      form:
+        cancel: ~
+      delete: ~
+      charge: ~
+      charge_mail: ~
