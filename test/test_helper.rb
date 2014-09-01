@@ -23,8 +23,8 @@ class ActiveSupport::TestCase
 end
 
 class ActionController::TestCase
-  include Devise::TestHelpers
   include FactoryGirl::Syntax::Methods
+  include Devise::TestHelpers
 
   before do
     DatabaseCleaner.start

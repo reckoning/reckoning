@@ -26,7 +26,7 @@
           %i.fa.fa-envelope
       - if can? :pay, invoice
         = link_to pay_invoice_path(invoice.ref), title: I18n.t(:"actions.pay"), method: :put, class: "btn btn-success btn-sm" do
-          %i.fa.fa-ok
+          %i.fa.fa-check-square-o
       - if can? :destroy, invoice
         %a.btn.btn-danger.btn-sm{href: invoice_path(invoice.ref), title: I18n.t(:"actions.delete"), data: { method: "DELETE", notyConfirm: I18n.t(:"messages.confirm.delete") } }
           %i.fa.fa-trash
