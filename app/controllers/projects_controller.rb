@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   before_action :set_active_nav
-  before_action :check_depedencies, only: [:new]
+  before_action :check_dependencies, only: [:new]
 
   def index
     authorize! :read, Project
