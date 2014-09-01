@@ -60,13 +60,15 @@ gem "web_translate_it"
 
 group :test do
   gem "rails-perftest"
+  gem "minitest-rails"
   gem "ruby-prof"
-  gem "factory_girl_rails"
+  gem "database_cleaner"
+  gem "factory_girl"
   gem "mocha", require: false
   gem "spring"
 end
 
-group :development do
+group :development, :test do
   gem "mailcatcher", github: "sj26/mailcatcher", branch: :master
   gem "foreman"
   gem "byebug"
