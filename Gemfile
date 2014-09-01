@@ -26,6 +26,7 @@ gem "dynamic_fields_for_rails"
 gem "simple_states"
 
 gem "sass-rails", github: "rails/sass-rails", branch: :master
+gem "sass", "3.3.14"
 gem "coffee-rails"
 gem "bourbon"
 
