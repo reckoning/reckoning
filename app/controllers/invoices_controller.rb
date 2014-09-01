@@ -1,7 +1,7 @@
 class InvoicesController < ApplicationController
   before_action :set_active_nav
   before_action :check_limit, only: [:new, :create]
-  before_action :check_depedencies, only: [:new]
+  before_action :check_dependencies, only: [:new]
 
   def index
     authorize! :read, Invoice
@@ -313,6 +313,7 @@ class InvoicesController < ApplicationController
   def check_dependencies
     if current_user.address.blank?
       redirect_to "#{edit_user_registration_path}#address", alert: I18n.t(:"messages.invoice.missing_address")
+      return
     end
   end
 end
