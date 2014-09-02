@@ -20,6 +20,7 @@
 #= require pdf.js/build/pdf
 #= require pdf_viewer
 #= require tabs
+#= require location
 #= require app
 #= require_tree ./app
 #
