@@ -11,6 +11,12 @@ class BaseController < ApplicationController
     end
   end
 
+  def location
+    authorize! :manage, :location
+  end
+
+  private
+
   def dashboard
     @charged_invoices = current_user.invoices.order('date DESC').charged
     @paid_invoices = current_user.invoices.order('date DESC').paid.year(Time.now.year)
