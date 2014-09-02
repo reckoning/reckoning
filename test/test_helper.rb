@@ -25,6 +25,7 @@ end
 class ActionController::TestCase
   include FactoryGirl::Syntax::Methods
   include Devise::TestHelpers
+  ActiveRecord::Migration.check_pending!
 
   before do
     DatabaseCleaner.start

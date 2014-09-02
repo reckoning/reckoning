@@ -19,7 +19,7 @@
 
     - if can? :pay, invoice
       = link_to pay_invoice_path(invoice.ref), method: :put, class: "list-group-item" do
-        %i.fa.fa-ok
+        %i.fa.fa-check-square-o
         = I18n.t(:"actions.pay")
 
     - if current_user.has_dropbox?
