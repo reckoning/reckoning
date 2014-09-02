@@ -21,7 +21,7 @@ class Invoice < ActiveRecord::Base
   # created -> charged -> paid
   states :created, :charged, :paid
 
-  event :charge, from: :created, to: :charged, before: :generate_pdf, after: :send
+  event :charge, from: :created, to: :charged, before: :generate_pdf, after: :send_via_mail
   event :pay, from: :charged, to: :paid, after: :set_pay_date
 
   def self.paid
@@ -49,7 +49,7 @@ class Invoice < ActiveRecord::Base
     self.save
   end
 
-  def send
+  def send_via_mail
     if self.files_present? && self.send_via_mail?
       InvoiceMailerWorker.perform_async self.id
     end
