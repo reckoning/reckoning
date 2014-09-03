@@ -17,7 +17,6 @@ class Ability
       %w(created).include?(invoice.state) && invoice.user_id == user.id
     end
 
-    can :manage, :location
     can :manage, Customer, user_id: user.id
     can :manage, Project, customer: { user_id: user.id }
     can :manage, Week, user_id: user.id
