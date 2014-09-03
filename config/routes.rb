@@ -79,8 +79,6 @@ Reckoning::Application.routes.draw do
     end
   end
 
-  get 'location' => 'base#location'
-
   get '404' => 'errors#not_found'
   get '422' => 'errors#server_error'
   get '500' => 'errors#server_error'
