@@ -45,7 +45,12 @@ de:
       truncate: "&hellip;"
 
   meta:
+    description:
+      default: "Reckoning ist ein simples Tool mit dem Rechnungen für Software-Dienstleistungen erstellt werden können."
+    keywords:
+      default: "Rechnungen, Fakturierung, Abrechnung, Software-Dienstleistungen, Freelancer, Tools für Softwareentwickler, Rechnungs-Tools"
     title:
+      default: "Reckoning.io"
       timer:
         index: "Zeiten"
         import: "Zeiten importieren"
@@ -73,6 +78,7 @@ de:
       unlock: "Account entsperren"
       confirm: "Account bestätigen"
       not_found: 404
+      server_error: Fehler
 
   filter:
     name:
@@ -91,3 +97,4 @@ de:
 
   error_pages:
     not_found: 'Die Seite "%{page}" konnte nicht gefunden werden.'
+    server_error: "Die Seite ist zur Zeit nicht verfügbar. Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut."

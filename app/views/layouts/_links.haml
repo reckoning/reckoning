@@ -1,0 +1,10 @@
+- if user_signed_in?
+  %ul.nav.navbar-nav
+    %li{class: get_active_nav('invoices')}
+      = link_to I18n.t(:"nav.header.home"), invoices_path
+    %li{class: get_active_nav('customers')}
+      = link_to I18n.t(:"nav.header.customers"), customers_path
+    %li{class: get_active_nav('projects')}
+      = link_to I18n.t(:"nav.header.projects"), projects_path
+    %li{class: get_active_nav('timers')}
+      = link_to I18n.t(:"nav.header.timers"), timers_path

@@ -1,12 +1,10 @@
-class ErrorsController < ApplicationController
-  skip_authorization_check
-  before_action :authenticate_user!, only: []
-
+class ErrorsController < ActionController::Base
   def not_found
-    render status: 404
+    render status: 404, layout: "error"
   end
 
   def server_error
-    render file: "public/500.html", status: 500, layout: false
+    @without_links = true
+    render status: 500, layout: "error"
   end
 end
