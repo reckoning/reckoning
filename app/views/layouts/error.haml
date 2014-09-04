@@ -25,22 +25,17 @@
     != stylesheet_link_tag "https://fonts.googleapis.com/css?family=Orbitron:400,500,700,900"
     != stylesheet_link_tag "application"
 
-    != javascript_include_tag "application"
-    :javascript
-      I18n.defaultLocale = "#{I18n.default_locale}";
-      I18n.locale = "#{I18n.locale}";
-
     != csrf_meta_tags
 
-  %body{data: {success: notice, info: info, error: alert, warning: flash[:warning], spy: ("scroll" unless user_signed_in?), target: ".scrollspy-nav"}}
-    - if backend?
-      = render "layouts/backend/navigation"
-    - else
-      = render "layouts/navigation"
+  %body
+    %nav#main-nav.navbar.navbar-default{role: "navigation"}
+      .container
+        = render "layouts/brand"
+        - unless defined?(@without_links)
+          .collapse.navbar-collapse.navbar-ex1-collapse
+            = render "layouts/links"
 
     .container
       != yield
 
     = render "layouts/footer"
-    - if Rails.env.production? && !backend?
-      = render "layouts/google_analytics"
