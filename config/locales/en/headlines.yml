@@ -11,7 +11,8 @@ en:
     impressum: ~
     privacy: ~
     welcome: ~
-    404: "Not found"
+    not_found: "Not found"
+    server_error: "Server Error"
     project:
       new: ~
       edit: ~

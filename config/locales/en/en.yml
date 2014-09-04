@@ -70,7 +70,8 @@ en:
       sign_up: ~
       unlock: ~
       confirm: ~
-      404: 404
+      not_found: 404
+      server_error: Error
   filter:
     name:
       invoice_state: ~
@@ -85,4 +86,5 @@ en:
     current_sign_in_at:
       empty: ~
   error_pages:
-    404: "The Page you are looking for does not exist."
+    not_found: "The Page you are looking for does not exist."
+    server_error: "The page you are looking for is temporarily unavailable. Please try again later"

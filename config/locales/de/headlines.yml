@@ -12,6 +12,7 @@ de:
     privacy: "Datenschutz"
     welcome: "Rechnungen schreiben einfach gemacht."
     not_found: "Seite nicht vorhanden"
+    server_error: "Server Fehler"
 
     project:
       new: "Neues Projekt"
