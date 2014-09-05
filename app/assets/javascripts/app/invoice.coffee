@@ -9,6 +9,7 @@ window.laddaButton ?= {}
 window.App.Invoice.generate = ($element) ->
   laddaButton.start() if laddaButton
   $('.save-invoice').addClass('disabled')
+  $('.save-timesheet').addClass('disabled')
   $element.find('.generate').addClass('hide')
   $element.find('.regenerate').removeClass('hide')
   $.ajax
@@ -16,7 +17,7 @@ window.App.Invoice.generate = ($element) ->
     type: 'PUT'
     dataType: 'json'
     success: ->
-      displayAlert I18n.t("messages.invoice.pdf_generating")
+      displayNotice I18n.t("messages.invoice.pdf_generating")
       App.Invoice.pdfInterval = setInterval App.Invoice.checkPdfStatus, 1000
 
 window.App.Invoice.checkPdfStatus = ->

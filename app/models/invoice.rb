@@ -57,7 +57,7 @@ class Invoice < ActiveRecord::Base
 
   def generate_pdf
     self.set_payment_due_date
-    unless self.pdf_present_and_up_to_date? && self.timesheet_present_and_up_to_date
+    unless self.pdf_present_and_up_to_date? && self.timesheet_present_and_up_to_date?
       self.update_attributes({pdf_generating: true})
       InvoicePdfWorker.perform_async self.id
     end
