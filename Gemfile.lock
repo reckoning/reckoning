@@ -1,19 +1,4 @@
 GIT
-  remote: git://github.com/sj26/mailcatcher.git
-  revision: eff638f9205fe67359dc23e98e801d90f43beb9a
-  branch: master
-  specs:
-    mailcatcher (0.6.0)
-      activesupport (>= 4.0.0, < 5)
-      eventmachine (~> 1.0.0)
-      haml (>= 3.1, < 4.1)
-      mail (~> 2.3)
-      sinatra (~> 1.2)
-      skinny (~> 0.2.3)
-      sqlite3 (~> 1.3)
-      thin (~> 1.5.0)
-
-GIT
   remote: git://github.com/fnando/i18n-js.git
   revision: 9fd4cc6de4601dc496e676521fcde78532a63ccf
   branch: master
@@ -285,7 +270,6 @@ DEPENDENCIES
   jquery-rails
   jquery-turbolinks
   kaminari
-  mailcatcher!
   minitest-rails
   mocha
   pg
