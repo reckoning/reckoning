@@ -4,7 +4,11 @@ Reckoning::Application.routes.draw do
   devise_for :users, skip: [:sessions], controllers: { registrations: "registrations" }
 
   namespace :backend do
-    resources :users, except: [:show]
+    resources :users, except: [:show] do
+      member do
+        put 'send_welcome'
+      end
+    end
 
     resources :settings, except: [:index, :show]
 
