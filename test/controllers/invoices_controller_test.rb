@@ -1,12 +1,11 @@
 require 'test_helper'
 
 class InvoicesControllerTest < ActionController::TestCase
+  fixtures :all
+
   tests ::InvoicesController
 
-  let(:user) { create :user }
-  let(:customer) { create :customer, user: user }
-  let(:project) { create :project, customer: customer }
-  let(:invoice) { create :invoice, project: project, customer: customer, user: user }
+  let(:invoice) { invoices :january }
 
   describe "unauthorized" do
     it "Unauthrized user cant view invoices index" do
@@ -31,14 +30,14 @@ class InvoicesControllerTest < ActionController::TestCase
     end
 
     it "Unauthrized user cant view invoice edit" do
-      get :edit, {ref: invoice.ref}
+      get :edit, {id: invoice.id}
 
       assert_response :found
       assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
     end
 
     it "Unauthrized user cant destroy invoice" do
-      delete :destroy, {ref: invoice.ref}
+      delete :destroy, {id: invoice.id}
 
       assert_response :found
       assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
@@ -47,7 +46,7 @@ class InvoicesControllerTest < ActionController::TestCase
     end
 
     it "Unauthrized user cant update invoice" do
-      put :update, {ref: invoice.ref, invoice: {date: Date.today - 1}}
+      put :update, {id: invoice.id, invoice: {date: Date.today - 1}}
 
       assert_response :found
       assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
@@ -55,10 +54,10 @@ class InvoicesControllerTest < ActionController::TestCase
   end
 
   describe "missing dependencies" do
-    let(:user_without_address) { create :user, :without_address }
+    let(:user) { users :data }
 
     it "redirects to user edit if address is missing" do
-      sign_in user_without_address
+      sign_in user
 
       get :new
 
@@ -70,7 +69,7 @@ class InvoicesControllerTest < ActionController::TestCase
 
   describe "happy path" do
     before do
-      sign_in user
+      sign_in invoice.user
     end
 
     it "User can view the invoice list" do
@@ -86,27 +85,27 @@ class InvoicesControllerTest < ActionController::TestCase
     end
 
     it "User can view the edit invoice page" do
-      get :edit, {ref: invoice.ref}
+      get :edit, {id: invoice.id}
 
       assert_response :ok
     end
 
     it "User can create a new invoice" do
-      post :create, {invoice: {project_id: project.id, date: Date.today}}
+      post :create, {invoice: {project_id: invoice.project.id, date: Date.today}}
 
       assert_response :found
       assert_equal I18n.t(:"messages.invoice.create.success"), flash[:notice]
     end
 
     it "User can update invoice" do
-      put :update, {ref: invoice.ref, invoice: {project_id: project.id, date: Date.today - 1}}
+      put :update, {id: invoice.id, invoice: {project_id: invoice.project.id, date: Date.today - 1}}
 
       assert_response :found
       assert_equal I18n.t(:"messages.invoice.update.success"), flash[:notice]
     end
 
     it "User can destroy invoice" do
-      delete :destroy, {ref: invoice.ref}
+      delete :destroy, {id: invoice.id}
 
       assert_response :found
       assert_equal I18n.t(:"messages.invoice.destroy.success"), flash[:notice]

@@ -1,56 +1,41 @@
 require 'test_helper'
 
 class InvoiceTest < ActiveSupport::TestCase
+  fixtures :projects
 
-  def teardown
-    Customer.destroy_all
-    Project.destroy_all
-    Invoice.destroy_all
-  end
-
-  test "should not be valid without project" do
-    invoice = build(:invoice, project_id: nil)
+  it "should not be valid without project" do
+    invoice = Invoice.new(customer_id: "foo", project_id: nil)
     assert !invoice.valid?, "#{invoice.inspect} should be invalid"
   end
 
-  test "should not be valid without date" do
-    invoice = build(:invoice, date: nil)
+  it "should not be valid without date" do
+    invoice = Invoice.new(date: nil)
     assert !invoice.valid?, "#{invoice.inspect} should be invalid"
   end
 
-  test "should not be valid without customer" do
-    invoice = build(:invoice, customer_id: nil, project_id: nil)
+  it "should not be valid without customer" do
+    invoice = Invoice.new(customer_id: nil)
     assert !invoice.valid?, "#{invoice.inspect} should be invalid"
   end
 
-  test "should create invoice if date and valid project present" do
-    project = create(:project)
-    invoice = build(:invoice, project_id: project.id, date: Time.now)
-    assert invoice.save, "#{invoice.inspect} should be created"
+  it "should create invoice if date and valid project present" do
+    project = projects :enterprise
+    invoice = Invoice.new(project_id: project.id, date: Time.now)
+    assert invoice.valid?, "#{invoice.inspect} should be created"
   end
 
-  test "should have a unique ref scoped by user" do
-    skip("needs to be tested!")
-  end
+  it "should have a unique ref scoped by user"
 
-  test "before_create set_ref" do
-    skip("needs to be tested!")
-  end
+  it "before_create set_ref"
 
-  test "before_save set_rate" do
-    skip("needs to be tested!")
-  end
+  it "before_save set_rate"
 
-  test "before_save set_value" do
-    skip("needs to be tested!")
-  end
+  it "before_save set_value"
 
-  test "should only set set_payment_due_date if payment_due_date empty" do
-    skip("needs to be tested!")
-  end
+  it "should only set set_payment_due_date if payment_due_date empty"
 
-  test "should respond to defined associations" do
-    invoice = build(:invoice)
+  it "should respond to defined associations" do
+    invoice = Invoice.new
     assert_respond_to invoice, :user
     assert_respond_to invoice, :customer
     assert_respond_to invoice, :project

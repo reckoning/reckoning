@@ -1,10 +1,11 @@
 require 'test_helper'
 
 class CustomersControllerTest < ActionController::TestCase
+  fixtures :customers
+
   tests ::CustomersController
 
-  let(:user) { create :user }
-  let(:customer) { create :customer, user: user }
+  let(:customer) { customers :starfleet }
 
   describe "unauthorized" do
     it "Unauthrized user cant view customers index" do
@@ -54,7 +55,7 @@ class CustomersControllerTest < ActionController::TestCase
 
   describe "happy path" do
     before do
-      sign_in user
+      sign_in customer.user
     end
 
     it "User can view the customer list" do
@@ -90,12 +91,14 @@ class CustomersControllerTest < ActionController::TestCase
     end
 
     it "User can destroy customer" do
-      delete :destroy, {id: customer.id}
+      klingon = customers :klingon
+      delete :destroy, {id: klingon.id}
 
       assert_response :found
+
       assert_equal I18n.t(:"messages.customer.destroy.success"), flash[:notice]
 
-      assert_not_equal customer, Customer.where(id: customer.id).first
+      assert_not_equal klingon, Customer.where(id: klingon.id).first
     end
   end
 
