@@ -32,12 +32,12 @@ class InvoicesController < ApplicationController
     if current_user.has_dropbox?
       if invoice.files_present?
         InvoiceDropboxWorker.perform_async invoice.id
-        redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.invoice.archive.success")
+        redirect_to invoice_path(invoice), notice: I18n.t(:"messages.invoice.archive.success")
       else
-        redirect_to invoice_path(invoice.ref), warning: I18n.t(:"messages.invoice.files_missing")
+        redirect_to invoice_path(invoice), warning: I18n.t(:"messages.invoice.files_missing")
       end
     else
-      redirect_to invoice_path(invoice.ref), warning: I18n.t(:"messages.invoice.archive.failure")
+      redirect_to invoice_path(invoice), warning: I18n.t(:"messages.invoice.archive.failure")
     end
   end
 
@@ -46,12 +46,12 @@ class InvoicesController < ApplicationController
     if invoice.send_via_mail?
       if invoice.files_present?
         InvoiceMailerWorker.perform_async invoice.id
-        redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.invoice.send.success")
+        redirect_to invoice_path(invoice), notice: I18n.t(:"messages.invoice.send.success")
       else
-        redirect_to invoice_path(invoice.ref), warning: I18n.t(:"messages.invoice.files_missing")
+        redirect_to invoice_path(invoice), warning: I18n.t(:"messages.invoice.files_missing")
       end
     else
-      redirect_to invoice_path(invoice.ref), warning: I18n.t(:"messages.invoice.send.failure")
+      redirect_to invoice_path(invoice), warning: I18n.t(:"messages.invoice.send.failure")
     end
   end
 
@@ -61,7 +61,7 @@ class InvoicesController < ApplicationController
     @test_mail = TestMail.new(test_mail_params)
     if test_mail.valid?
       InvoiceTestMailerWorker.perform_async invoice.id, test_mail.email
-      redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.invoice.send_test_mail.success")
+      redirect_to invoice_path(invoice), notice: I18n.t(:"messages.invoice.send_test_mail.success")
     else
       flash.now[:warning] = I18n.t(:"messages.invoice.send_test_mail.failure")
       render "show"
@@ -76,7 +76,7 @@ class InvoicesController < ApplicationController
           send_file invoice.pdf_path, type: 'application/pdf', disposition: 'inline'
         else
           invoice.generate_pdf
-          redirect_to invoice_path(invoice.ref)
+          redirect_to invoice_path(invoice)
         end
       }
       unless Rails.env.production?
@@ -97,7 +97,7 @@ class InvoicesController < ApplicationController
           send_file invoice.timesheet_path, type: 'application/pdf', disposition: 'inline'
         else
           invoice.generate_pdf
-          redirect_to invoice_path(invoice.ref)
+          redirect_to invoice_path(invoice)
         end
       }
       unless Rails.env.production?
@@ -118,21 +118,18 @@ class InvoicesController < ApplicationController
       }
       format.html {
         invoice.generate_pdf
-        redirect_to invoice_path(invoice.ref)
+        redirect_to invoice_path(invoice)
       }
     end
   end
 
   def new
     authorize! :create, Invoice
-
-    @invoice = Invoice.new
     invoice.positions << Position.new
   end
 
   def edit
     authorize! :update, invoice
-    @ref = invoice.ref
   end
 
   def create
@@ -147,7 +144,6 @@ class InvoicesController < ApplicationController
   end
 
   def update
-    @ref = invoice.ref
     authorize! :update, invoice
     if invoice.update(invoice_params)
       redirect_to invoices_path, notice: I18n.t(:"messages.invoice.update.success")
@@ -200,9 +196,9 @@ class InvoicesController < ApplicationController
             data = false
           else
             data = {}
-            data[:invoice] = invoice_pdf_path(invoice.ref, invoice.invoice_file)
+            data[:invoice] = invoice_pdf_path(invoice, invoice.invoice_file)
             if invoice.timers.present?
-              data[:timesheet] = timesheet_pdf_path(invoice.ref, invoice.timesheet_file)
+              data[:timesheet] = timesheet_pdf_path(invoice, invoice.timesheet_file)
             end
           end
           render json: data, status: :ok
@@ -291,7 +287,8 @@ class InvoicesController < ApplicationController
   end
 
   def invoice
-    @invoice ||= current_user.invoices.where(ref: params.fetch(:ref, nil)).first
+    @invoice ||= current_user.invoices.where(id: params.fetch(:id, nil)).first
+    @invoice ||= current_user.invoices.new
   end
   helper_method :invoice
 

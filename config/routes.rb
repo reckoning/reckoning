@@ -29,7 +29,7 @@ Reckoning::Application.routes.draw do
 
   resource :password, only: [:edit, :update]
 
-  resources :invoices, param: :ref do
+  resources :invoices do
     member do
       put :generate_positions
       put :regenerate_pdf
@@ -42,8 +42,8 @@ Reckoning::Application.routes.draw do
     end
   end
 
-  get 'invoices/:ref/pdf/:pdf' => 'invoices#pdf', as: :invoice_pdf
-  get 'timesheets/:ref/pdf/:pdf' => 'invoices#timesheet', as: :timesheet_pdf
+  get 'invoices/:id/pdf/:pdf' => 'invoices#pdf', as: :invoice_pdf
+  get 'timesheets/:id/pdf/:pdf' => 'invoices#timesheet', as: :timesheet_pdf
 
   resources :positions, only: [:new, :destroy]
 
