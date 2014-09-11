@@ -1,4 +1,4 @@
-#pdf-footer{class: ("preview" if defined?(@preview))}><
+#pdf-footer><
   %address><
     - if resource.user.company.present?
       %strong
@@ -20,9 +20,11 @@
       Fax:
       = resource.user.address.fax
       %br
-    - if resource.user.email.present?
+    - if resource.user.address.email.present?
+      = resource.user.address.email
+    - else
       = resource.user.email
-      %br
+    %br
     - if resource.user.address.website.present?
       = resource.user.address.website
   .bank-information><
