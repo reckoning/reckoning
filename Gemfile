@@ -70,7 +70,6 @@ group :test do
 end
 
 group :development, :test do
-  gem "mailcatcher", github: "sj26/mailcatcher", branch: :master
   gem "foreman"
   gem "byebug"
 end
