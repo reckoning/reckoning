@@ -47,6 +47,9 @@ de:
       destroy:
         success: "Benutzer erfolgreich gelöscht."
         failure: "Benutzer konnte nicht gelöscht werden."
+      send_welcome:
+        success: "Nachricht erfolgreich verschickt."
+        failure: "Nachricht konnte nicht verschickt werden."
       lock:
         success: "Benutzer erfolgreich gesperrt."
         failure: "Benutzer konnte nicht gesperrt werden."

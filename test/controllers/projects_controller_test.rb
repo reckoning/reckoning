@@ -1,11 +1,11 @@
 require 'test_helper'
 
 class ProjectsControllerTest < ActionController::TestCase
+  fixtures :all
+
   tests ::ProjectsController
 
-  let(:user) { create :user }
-  let(:customer) { create :customer, user: user }
-  let(:project) { create :project, customer: customer }
+  let(:project) { projects :enterprise }
 
   describe "unauthorized" do
     it "Unauthrized user cant view projects index" do
@@ -54,10 +54,10 @@ class ProjectsControllerTest < ActionController::TestCase
   end
 
   describe "missing dependencies" do
-    let(:user_without_customer) { create :user }
+    let(:user) { users :data }
 
     it "redirects to user edit if address is missing" do
-      sign_in user_without_customer
+      sign_in user
 
       get :new
 
@@ -68,9 +68,10 @@ class ProjectsControllerTest < ActionController::TestCase
   end
 
   describe "happy path" do
+    let(:voyager) { projects :voyager }
+
     before do
-      sign_in user
-      customer
+      sign_in project.customer.user
     end
 
     it "User can view the project list" do
@@ -92,7 +93,7 @@ class ProjectsControllerTest < ActionController::TestCase
     end
 
     it "User can create a new project" do
-      post :create, {project: {customer_id: customer.id, name: "foo"}}
+      post :create, {project: {customer_id: project.customer.id, name: "foo"}}
 
       assert_response :found
       assert_equal I18n.t(:"messages.project.create.success"), flash[:notice]
@@ -106,12 +107,12 @@ class ProjectsControllerTest < ActionController::TestCase
     end
 
     it "User can destroy project" do
-      delete :destroy, {id: project.id}
+      delete :destroy, {id: voyager.id}
 
       assert_response :found
       assert_equal I18n.t(:"messages.project.destroy.success"), flash[:notice]
 
-      assert_not_equal project, Project.where(id: project.id).first
+      assert_not_equal voyager, Project.where(id: voyager.id).first
     end
   end
 

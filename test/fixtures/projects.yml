@@ -1,0 +1,11 @@
+enterprise:
+  id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a79"
+  customer_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a76"
+  name: "USS Enterprise"
+  rate: 99.0
+
+voyager:
+  id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a80"
+  customer_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a76"
+  name: "USS Voyager"
+  rate: 79.0

@@ -1,0 +1,7 @@
+january:
+  id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a77"
+  project_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a79"
+  customer_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a76"
+  user_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+  date: <%= Time.now %>
+  ref: "00001"

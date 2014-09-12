@@ -44,6 +44,11 @@ class User < ActiveRecord::Base
     self.dropbox_token.present?
   end
 
+  def send_welcome
+    token = set_reset_password_token
+    UserMailer.welcome_mail(self, token).deliver
+  end
+
   private
 
   def generate_authentication_token

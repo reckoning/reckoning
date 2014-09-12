@@ -112,18 +112,11 @@ body {
   }
 
   .contact-information{
-    width: 25%;
+    width: 40%;
     margin-top: 1.2em;
   }
 
   .bank-information {
-    width: 50%;
-  }
-}
-
-#pdf-header, #pdf-footer {
-  &.preview {
-    position: relative;
-    margin-top: 0;
+    width: 35%;
   }
 }

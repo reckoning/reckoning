@@ -9,10 +9,10 @@
 #preview-wrapper
   .tab-content
     .tab-pane.active#invoice-preview{class: ('hide' unless invoice.pdf_present_and_up_to_date?)}
-      .pdf-viewer{ data: { pdf: { path: (invoice_pdf_path(invoice.ref, invoice.invoice_file) if invoice.pdf_present_and_up_to_date?) } } }
+      .pdf-viewer{ data: { pdf: { path: (invoice_pdf_path(invoice, invoice.invoice_file) if invoice.pdf_present_and_up_to_date?) } } }
     - if invoice.timers.present?
       .tab-pane#timesheet-preview{class: ("hide" unless invoice.timesheet_present_and_up_to_date?)}
-        .pdf-viewer{ data: { pdf: { path: (timesheet_pdf_path(invoice.ref, invoice.invoice_file) if invoice.timesheet_present_and_up_to_date?) } } }
+        .pdf-viewer{ data: { pdf: { path: (timesheet_pdf_path(invoice, invoice.invoice_file) if invoice.timesheet_present_and_up_to_date?) } } }
 
   #preview-info{class: ('hide' if invoice.pdf_present_and_up_to_date?)}
     .panel.panel-default

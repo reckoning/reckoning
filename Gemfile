@@ -6,7 +6,7 @@ gem "rails", "4.1.5"
 
 gem "pg"
 
-gem "sidekiq", github: "mperham/sidekiq", branch: :master
+gem "sidekiq"
 
 gem "haml"
 gem "haml-rails"
@@ -59,6 +59,9 @@ gem "dropbox-sdk"
 
 gem "web_translate_it"
 
+# for sidekiq web
+gem "sinatra", ">= 1.3.0", require: nil
+
 group :test do
   gem "rails-perftest"
   gem "minitest-rails"
@@ -70,7 +73,6 @@ group :test do
 end
 
 group :development, :test do
-  gem "mailcatcher", github: "sj26/mailcatcher", branch: :master
   gem "foreman"
   gem "byebug"
 end
