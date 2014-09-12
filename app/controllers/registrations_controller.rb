@@ -16,9 +16,9 @@ class RegistrationsController < Devise::RegistrationsController
     @active_nav = 'users'
     authorize! :update, @user
     if @user.update_without_password(user_params)
-      redirect_to edit_user_registration_path, notice: I18n.t(:"messages.registration.update.success")
+      redirect_to "#{edit_user_registration_path}#{hash}", notice: I18n.t(:"messages.registration.update.success")
     else
-      render "edit", alert: I18n.t(:"messages.registration.update.failure")
+      render "edit#{hash}", alert: I18n.t(:"messages.registration.update.failure")
     end
   end
 
@@ -26,15 +26,9 @@ class RegistrationsController < Devise::RegistrationsController
 
   def user_params
     @user_params ||= params.require(:user).permit(
-      :plan,
-      :email,
-      :gravatar,
-      :remember_me,
-      :tax, :tax_ref,
-      :provision,
-      :gdrive_email, :gdrive_password, :gdrive_collection,
-      :bank, :account_number, :bank_code, :bic, :iban,
-      :default_from, :signature,
+      :plan, :email, :gravatar, :remember_me,
+      :tax, :tax_ref, :provision, :bank, :account_number,
+      :bank_code, :bic, :iban, :default_from, :signature,
       :company, :name, :address, :country, :email,
       :telefon, :fax, :website
     )
@@ -48,5 +42,9 @@ class RegistrationsController < Devise::RegistrationsController
     unless registration_enabled?
       redirect_to root_path
     end
+  end
+
+  def hash
+    params.fetch(:hash, "")
   end
 end
