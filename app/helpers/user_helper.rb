@@ -8,6 +8,6 @@ module UserHelper
       result << time_ago_in_words(user.current_sign_in_at)
       result << "(#{l(user.current_sign_in_at, format: :dt_default)})"
     end
-    result.join("")
+    result.join(" ")
   end
 end
