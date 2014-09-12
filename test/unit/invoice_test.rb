@@ -21,7 +21,7 @@ class InvoiceTest < ActiveSupport::TestCase
   it "should create invoice if date and valid project present" do
     project = projects :enterprise
     invoice = Invoice.new(project_id: project.id, date: Time.now)
-    assert invoice.valid?, "#{invoice.inspect} should be created"
+    assert invoice.valid?, "#{invoice.inspect} should be valid"
   end
 
   it "should have a unique ref scoped by user"
