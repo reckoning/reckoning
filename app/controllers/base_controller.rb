@@ -6,10 +6,26 @@ class BaseController < ApplicationController
   def index
     if user_signed_in?
       dashboard
+      render 'dashboard'
     else
-      welcome
+      @active_nav = 'welcome'
+      render 'welcome'
     end
   end
+
+  def impressum
+    @active_nav = 'impressum'
+  end
+
+  def privacy
+    @active_nav = 'privacy'
+  end
+
+  def terms
+    @active_nav = 'terms'
+  end
+
+  private
 
   def dashboard
     @charged_invoices = current_user.invoices.order('date DESC').charged
@@ -18,12 +34,6 @@ class BaseController < ApplicationController
     @budgets = current_user.projects.with_budget.includes(:tasks).order('tasks.updated_at DESC')
     @timers_chart_data = generate_timers_chart_data
     @invoices_chart_data, @invoices_max_values = generate_invoices_chart_data
-    render 'dashboard'
-  end
-
-  def welcome
-    @active_nav = 'welcome'
-    render 'welcome'
   end
 
   def generate_timers_chart_data

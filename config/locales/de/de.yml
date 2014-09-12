@@ -25,9 +25,10 @@ de:
       dashboard: "Dashboard"
       users: "Benutzer"
     footer:
-      impressum: impressum
+      impressum: Impressum
       privacy: Datenschutz
       contact: Kontakt
+      terms: AGBs
     subnav:
       back: "Zurück"
       new_invoice: "Neue Rechnung"

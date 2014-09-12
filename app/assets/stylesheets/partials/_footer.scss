@@ -39,3 +39,14 @@ footer#main-footer {
   right: 10px;
   bottom: 10px;
 }
+
+.footer-links {
+  a {
+    &.active, &:active {
+      color: $text-color;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}
