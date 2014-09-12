@@ -6,6 +6,8 @@ gem "rails", "4.1.5"
 
 gem "pg"
 
+gem 'stripe', github: 'stripe/stripe-ruby'
+
 gem "sidekiq"
 
 gem "haml"

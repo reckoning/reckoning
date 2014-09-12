@@ -10,5 +10,5 @@
     = I18n.t(:"prices.desc.#{type}").html_safe
   - unless hide_ctab
     %li.cta-button
-      %a.btn.btn-primary.btn-lg{href: new_registration_path(plan: type)}
+      %a.btn.btn-primary.btn-lg{href: new_user_registration_path(plan: type)}
         = I18n.t(:"prices.ctab")

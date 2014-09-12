@@ -58,14 +58,10 @@
 
   .row
     %a.anchor#pricing
-    .col-xs-12.col-md-12
-      .col-md-10.col-md-push-1
-        .col-xs-12.col-md-4
-          = render 'base/pricing_table', type: 'free'
-        .col-xs-12.col-md-4
-          = render 'base/pricing_table', type: 'basic'
-        .col-xs-12.col-md-4
-          = render 'base/pricing_table', type: 'premium'
+    .col-xs-12.col-md-4.col-md-offset-2
+      = render 'base/pricing_table', type: 'basic'
+    .col-xs-12.col-md-4
+      = render 'base/pricing_table', type: 'premium'
 
   #image-modal.modal.fade
     .modal-dialog
