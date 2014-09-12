@@ -8,13 +8,13 @@ class Ability
 
     can [:read, :create, :destroy, :check, :archive, :send], Invoice, user_id: user.id
     can :update, Invoice do |invoice|
-      %w(created charged).include?(invoice.state.to_s) && invoice.user_id == user.id
+      %i(created charged).include?(invoice.state.to_sym) && invoice.user_id == user.id
     end
     can :pay, Invoice do |invoice|
-      %w(charged).include?(invoice.state.to_s) && invoice.user_id == user.id
+      %i(charged).include?(invoice.state.to_sym) && invoice.user_id == user.id
     end
     can :charge, Invoice do |invoice|
-      %w(created).include?(invoice.state.to_s) && invoice.user_id == user.id
+      %i(created).include?(invoice.state.to_sym) && invoice.user_id == user.id
     end
 
     can :manage, Customer, user_id: user.id

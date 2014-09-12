@@ -72,7 +72,10 @@ de:
         new: "Passwort zurücksetzen"
         edit: "Passwort ändern"
       backend:
-        user: "Benutzer"
+        user:
+          index: "Benutzer"
+          new: "Neuer Benutzer"
+          edit: "Benutzer bearbeiten"
       sign_in: "Anmelden"
       sign_up: "Registrieren"
       unlock: "Account entsperren"

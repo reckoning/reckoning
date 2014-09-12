@@ -40,6 +40,10 @@ body {
   }
 }
 
+a.plain {
+  color: $text-color;
+}
+
 .filter-menu {
   margin: 0 0 20px;
   display: inline-block;
