@@ -54,7 +54,9 @@ Reckoning::Application.routes.draw do
   resources :customers, except: [:show]
   resources :projects, except: [:show] do
     resources :tasks, only: [:index, :create] do
-      get ':date/date' => 'tasks#index_for_date', as: :date, on: :collection
+      collection do
+        get 'uninvoiced'
+      end
     end
   end
 
