@@ -5,6 +5,9 @@ window.showTab = function(hash, popped) {
 
   if (hash) {
     $('.nav-tabs a[href=' + hash + '], .nav-vertical-tabs a[href=' + hash + ']').tab('show');
+    if ($('form').length) {
+      $('form input[name=hash]').val(hash)
+    }
   } else {
     $('.nav-tabs a:first, .nav-vertical-tabs a:first').tab('show');
   }
