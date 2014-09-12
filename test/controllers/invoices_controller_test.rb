@@ -112,6 +112,14 @@ class InvoicesControllerTest < ActionController::TestCase
 
       assert_not_equal invoice, Invoice.where(id: invoice.id).first
     end
+
+    it "User can charge an invoice" do
+      request.env["HTTP_REFERER"] = "where_i_came_from"
+      put :charge, {id: invoice.id}
+
+      assert_redirected_to "where_i_came_from"
+      assert invoice.reload.charged?, invoice.inspect
+    end
   end
 
 end
