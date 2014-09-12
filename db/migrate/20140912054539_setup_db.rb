@@ -4,24 +4,6 @@ class SetupDb < ActiveRecord::Migration
     enable_extension "hstore"
     enable_extension "uuid-ossp"
 
-    create_table "addresses", force: true do |t|
-      t.string   "firstname"
-      t.string   "lastname"
-      t.string   "country"
-      t.string   "email"
-      t.string   "telefon"
-      t.string   "fax"
-      t.datetime "created_at"
-      t.datetime "updated_at"
-      t.string   "website"
-      t.string   "company"
-      t.string   "name"
-      t.text     "address"
-      t.text     "contact"
-      t.string   "resource_type"
-      t.uuid     "resource_id"
-    end
-
     create_table "customers", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
       t.string   "name"
       t.datetime "created_at"
@@ -32,6 +14,7 @@ class SetupDb < ActiveRecord::Migration
       t.string   "invoice_email"
       t.string   "default_from"
       t.uuid     "user_id"
+      t.hstore   "contact_information"
     end
 
     create_table "invoices", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
@@ -127,6 +110,7 @@ class SetupDb < ActiveRecord::Migration
       t.string   "plan"
       t.hstore   "services"
       t.hstore   "mailing"
+      t.hstore   "contact_information"
     end
 
     add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
