@@ -6,8 +6,4 @@ module AddressHelper
     com << resource.fax.to_s unless resource.fax.blank?
     com.join(" | ")
   end
-
-  def address_as_one_line resource
-    resource.address.gsub("\r\n", ", ").gsub("\n", ", ").gsub("\r", ", ")
-  end
 end
