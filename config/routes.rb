@@ -1,7 +1,9 @@
 require 'sidekiq/web'
 
 Reckoning::Application.routes.draw do
-  devise_for :users, skip: [:sessions], controllers: { registrations: "registrations" }
+  devise_for :users,
+    skip: [:sessions, :registrations],
+    controllers: { registrations: "registrations" }
 
   namespace :backend do
     resources :users, except: [:show] do
@@ -25,7 +27,8 @@ Reckoning::Application.routes.draw do
   end
 
   as :user do
-    get 'signup' => 'registrations#new', as: :new_registration
+    get 'signup' => 'registrations#new', as: :new_user_registration
+    post 'signup' => 'registrations#create', as: :user_registration
     get 'signin' => 'sessions#new', as: :new_user_session
     post 'signin' => 'sessions#create', as: :user_session
     delete 'signout' => 'sessions#destroy', as: :destroy_user_session
