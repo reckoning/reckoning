@@ -11,10 +11,18 @@ data:
 will:
   id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
   email: "will@star.fleet"
+  contact_information:
+    company: "User"
+    name: "Name"
+    address: "Foo"
   <<: *DEFAULTS
 
 jeanluc:
   id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a74"
   email: "jeanluc@star.fleet"
   admin: true
+  contact_information:
+    company: "User"
+    name: "Name"
+    address: "Foo"
   <<: *DEFAULTS
