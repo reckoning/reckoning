@@ -27,6 +27,8 @@ Reckoning::Application.routes.draw do
   as :user do
     get 'signup' => 'registrations#new', as: :new_user_registration
     post 'signup' => 'registrations#create', as: :user_registration
+    get 'settings' => 'registrations#edit', as: :edit_user_registration
+    patch 'settings' => 'registrations#update', as: :update_user_registration
     get 'signin' => 'sessions#new', as: :new_user_session
     post 'signin' => 'sessions#create', as: :user_session
     delete 'signout' => 'sessions#destroy', as: :destroy_user_session
