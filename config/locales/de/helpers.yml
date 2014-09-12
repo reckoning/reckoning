@@ -23,6 +23,13 @@ de:
           user: "SMTP Benutzer"
           password: "SMTP Passwort oder Token"
     placeholder:
+      company: "Firma"
+      name: "Name"
+      address: "Adresse"
+      telefon: "Telefon"
+      fax: "Fax"
+      website: "Homepage"
+      email: "E-Mail"
       test_mail:
         email: "E-Mail Adresse"
       project:
@@ -51,27 +58,17 @@ de:
         mailing:
           default_from: "Absender Für Rechnungs E-Mails"
           signature: "Signatur"
-
-      address:
-        company: "Firma"
-        name: "Name"
-        address: "Adresse"
-        telefon: "Telefon"
-        fax: "Fax"
-        website: "Homepage"
-        email: "E-Mail"
       customer:
         payment_due: "Zahlungsziel (Tage)"
         email_template: "Inhalt"
         invoice_email: "Empfänger"
         default_from: "Absender"
     prompt:
+      country: "Bitte wähle ein Land"
       project:
         customer_id: "Bitte wähle einen Kunden"
       invoice:
         project_id: "Bitte wähle ein Projekt"
-      address:
-        country: "Bitte wähle ein Land"
       timer:
         project: "Bitte wähle ein Projekt"
         task: "Bitte wähle eine Aufgabe"

@@ -1,7 +1,7 @@
 %tr
   %td=customer.fullname
-  %td=simple_format(customer.address.address)
-  %td=customer.contact
+  %td=simple_format(customer.address)
+  %td=communications(customer)
   %td
     .btn-group
       = link_to edit_customer_path(customer), title: I18n.t(:"actions.edit"), class: "btn btn-default btn-sm" do
