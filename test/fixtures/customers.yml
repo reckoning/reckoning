@@ -1,7 +1,15 @@
 starfleet:
   id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a76"
   user_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+  contact_information:
+    company: "User"
+    name: "Name"
+    address: "Foo"
 
 klingon:
   id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a81"
   user_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+  contact_information:
+    company: "User"
+    name: "Name"
+    address: "Foo"

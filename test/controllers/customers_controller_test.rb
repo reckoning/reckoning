@@ -77,7 +77,7 @@ class CustomersControllerTest < ActionController::TestCase
     end
 
     it "User can create a new customer" do
-      post :create, {customer: {address_attributes: {name: "foo"}}}
+      post :create, {customer: {name: "foo"}}
 
       assert_response :found
       assert_equal I18n.t(:"messages.customer.create.success"), flash[:notice]
