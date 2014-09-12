@@ -48,7 +48,7 @@
               %fieldset
                 %legend
                   = I18n.t(:"labels.user.settings.address")
-                = render "addresses/fields", resource: @user
+                = render "users/address", form: form, resource: @user
             .tab-pane#banking
               %fieldset
                 %legend

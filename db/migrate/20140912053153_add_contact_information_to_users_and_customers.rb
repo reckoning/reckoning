@@ -1,10 +1,14 @@
+class Address < ActiveRecord::Base
+  belongs_to :resource, polymorphic: true
+end
+
 class AddContactInformationToUsersAndCustomers < ActiveRecord::Migration
   def up
     add_column :users, :contact_information, :hstore
     add_column :customers, :contact_information, :hstore
 
     Address.all.each do |address|
-      resource = address.resource
+      resource = address.resource_type.classify.constantize.find(address.resource_id)
       resource.company = address.company
       resource.name = address.name
       resource.address = address.address
