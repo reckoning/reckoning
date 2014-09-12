@@ -37,7 +37,8 @@
               %i.fa.fa-send
 
       .col-xs-12.col-lg-10.col-md-9.col-sm-9
-        = form_for @user, url: user_registration_path do |form|
+        = form_for @user, url: update_user_registration_path do |form|
+          %input{name: "hash", value: "", type: :hidden}
           .tab-content
             .tab-pane.active#basic
               %fieldset
