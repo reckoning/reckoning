@@ -4,7 +4,11 @@ Reckoning::Application.routes.draw do
   devise_for :users, skip: [:sessions], controllers: { registrations: "registrations" }
 
   namespace :backend do
-    resources :users, except: [:show]
+    resources :users, except: [:show] do
+      member do
+        put 'send_welcome'
+      end
+    end
 
     resources :settings, except: [:index, :show]
 
@@ -29,7 +33,7 @@ Reckoning::Application.routes.draw do
 
   resource :password, only: [:edit, :update]
 
-  resources :invoices, param: :ref do
+  resources :invoices do
     member do
       put :generate_positions
       put :regenerate_pdf
@@ -42,15 +46,17 @@ Reckoning::Application.routes.draw do
     end
   end
 
-  get 'invoices/:ref/pdf/:pdf' => 'invoices#pdf', as: :invoice_pdf
-  get 'timesheets/:ref/pdf/:pdf' => 'invoices#timesheet', as: :timesheet_pdf
+  get 'invoices/:id/pdf/:pdf' => 'invoices#pdf', as: :invoice_pdf
+  get 'timesheets/:id/pdf/:pdf' => 'invoices#timesheet', as: :timesheet_pdf
 
   resources :positions, only: [:new, :destroy]
 
   resources :customers, except: [:show]
   resources :projects, except: [:show] do
     resources :tasks, only: [:index, :create] do
-      get ':date/date' => 'tasks#index_for_date', as: :date, on: :collection
+      collection do
+        get 'uninvoiced'
+      end
     end
   end
 
