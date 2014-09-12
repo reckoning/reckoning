@@ -6,7 +6,7 @@
         = "#{@resource.user.company},"
       - else
         = "#{@resource.user.name},"
-      = @resource.user.address.gsub("\r\n", ", ").gsub("\n", ", ").gsub("\r", ", ")
+      = @resource.user.address.gsub("\r\n", ", ").gsub("\n", ", ").gsub("\r", ", ") unless @resource.user.address.blank?
 
   .row
     %address#customer
