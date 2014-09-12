@@ -11,6 +11,8 @@ de:
     impressum: "Impressum"
     privacy: "Datenschutz"
     welcome: "Rechnungen schreiben einfach gemacht."
+    not_found: "Seite nicht vorhanden"
+    server_error: "Server Fehler"
 
     project:
       new: "Neues Projekt"
@@ -28,9 +30,6 @@ de:
       new: "Neuer Kunde"
       edit: "Kunde bearbeiten"
       index: "Kunden"
-
-    user:
-      edit: "Account bearbeiten"
 
     backend:
       user:

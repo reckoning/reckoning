@@ -1,31 +1,40 @@
 en:
   headlines:
-    sign_in: "Anmelden"
-    forgot_password: "Passwort vergessen?"
-    change_password: "Passwort ändern"
-    account: "Meine Daten"
-
+    sign_up: ~
+    sign_in: ~
+    forgot_password: ~
+    change_password: ~
+    unlock: ~
+    confirm: ~
+    account: ~
+    dashboard: ~
+    impressum: ~
+    privacy: ~
+    welcome: ~
+    not_found: "Not found"
+    server_error: "Server Error"
     project:
-      new: "Neues Projekt"
-      edit: "Projekt bearbeiten"
-      index: "Projekte"
-
+      new: ~
+      edit: ~
+      index: ~
     invoice:
-      new: "Neue Rechnung"
-      edit: "Rechnung bearbeiten"
-      index: "Aktuelle Rechnungen (Gesamt: %{sum})"
-
+      new: ~
+      show: ~
+      edit: ~
+      index: ~
+      sum: ~
     customer:
-      new: "Neuer Kunde"
-      edit: "Kunde bearbeiten"
-      index: "Kunden"
-
-    setting:
-      edit: "Einstellungen berbeiten"
-
-    user:
-      edit: "Account bearbeiten"
-
+      new: ~
+      edit: ~
+      index: ~
     backend:
-      users:
+      user:
         index: "Users"
+        edit: ~
+        new: ~
+      setting:
+        edit: ~
+    timer:
+      import: ~
+  sublines:
+    welcome: ~

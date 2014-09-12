@@ -62,7 +62,7 @@ de:
             ref:
               taken: "Rechnungsnummer muss eindeutig sein."
             company_name:
-              empty: "Bitte geben Sie zumindest einen Namen oder ein Firma an"
+              empty: "Bitte geben Sie zumindest einen Namen oder eine Firma an"
         position:
           attributes:
             hours_value:

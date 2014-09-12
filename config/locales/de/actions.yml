@@ -2,19 +2,16 @@ de:
   actions:
     loading: "Bitte warten..."
     ok: 'OK'
-    reset: "Auf Standard zurücksetzen"
     cancel: "Abbrechen"
     edit: "Bearbeiten"
     delete: "Löschen"
-    remove: "Entfernen"
     cancel: "Abbrechen"
-    back: "Zurück"
     save: "Speichern"
-    create: "erstellen"
+    create: "Erstellen"
     add: "Hinzufügen"
     timer_import: "Zeiten importieren"
     add_position: "Position hinzufügen"
-    generate_position: "Position aus Zeiten generieren"
+    generate_position: "Positionen aus Zeiten generieren"
     add_task: "Aufgabe hinzufügen"
     add_timer: "Neuer Timer"
     show: "Anzeigen"
@@ -32,12 +29,11 @@ de:
     forgot_password: "Passwort vergessen?"
     reset_password: 'Passwort zurücksetzen'
     save_password: 'Passwort speichern'
-    admin: 'Backend'
-    enable: "Aktivieren"
-    disable: "Deaktivieren"
     close: Schließen
     paste: Einfügen
     send: Absenden
     send_invoice: "Rechnung versenden"
     download_invoice: "Rechnung speichern"
     download_timesheet: "Stundenzettel speichern"
+    dropbox_link: "Dropbox verbinden"
+    dropbox_unlink: "Dropbox trennen"

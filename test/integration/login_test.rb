@@ -1,15 +1,11 @@
 require 'test_helper'
 
 class LoginTest < ActionDispatch::IntegrationTest
-  def setup
-    @user = create(:user)
-  end
+  fixtures :all
 
-  def tear_down
-    User.delete_all
-  end
+  let(:user) { users(:will) }
 
-  test "login with valid credentials redirects and gives correct success message" do
+  it "login with valid credentials redirects and gives correct success message" do
     get "/signin"
 
     assert_select "#new_user"
@@ -17,20 +13,20 @@ class LoginTest < ActionDispatch::IntegrationTest
 
     post_via_redirect "/signin", {
       user: {
-        email: @user.email,
-        password: @user.password
+        email: user.email,
+        password: "enterprise"
       }
     }
     assert_equal nil, flash[:alert]
 
     assert_equal root_path, path
 
-    assert_select ".user-email", "#{@user.email}"
+    assert_select ".user-email", "#{user.email}"
 
     assert_equal I18n.t(:"devise.sessions.signed_in"), flash[:notice]
   end
 
-  test "login with invalid credentials redirects and gives correct alert message" do
+  it "login with invalid credentials redirects and gives correct alert message" do
     get "/signin"
 
     assert_select "#new_user"
@@ -38,7 +34,7 @@ class LoginTest < ActionDispatch::IntegrationTest
     # user submits form
     post "/signin", {
       user: {
-        email: @user.email,
+        email: user.email,
         password: "foo"
       }
     }

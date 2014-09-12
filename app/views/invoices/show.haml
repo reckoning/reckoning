@@ -1,7 +1,7 @@
 - content_for :title do
   = I18n.t(:"meta.title.invoice.show", invoice_ref: invoice.ref_number)
 
-.row#invoice{data: {id: invoice.ref}}
+.row#invoice{data: {id: invoice.id}}
 
   .col-xs-12.col-md-12
     .row
@@ -25,16 +25,16 @@
         .row
           .col-xs-12.col-md-12
             .btn-group.pull-right
-              %button.ladda-button.btn.btn-primary.generate-invoice{data: {style: "expand-right", action: regenerate_pdf_invoice_path(invoice.ref)}, onclick: "App.Invoice.generate($(this)); return false;", class: ('generating' if invoice.pdf_generating)}
+              %button.ladda-button.btn.btn-primary.generate-invoice{data: {style: "expand-right", action: regenerate_pdf_invoice_path(invoice)}, onclick: "App.Invoice.generate($(this)); return false;", class: ('generating' if invoice.pdf_generating)}
                 .span.generate{class: ('hide' if invoice.pdf_present_or_generating? )}
-                  %i.glyphicon.glyphicon-download-alt
+                  %i.fa.fa-download
                   = I18n.t(:"actions.generate")
                 .span.regenerate{class: ('hide' if invoice.pdf_not_present_and_not_generating?)}
-                  %i.glyphicon.glyphicon-refresh
+                  %i.fa.fa-refresh
                   = I18n.t(:"actions.regenerate")
 
-              %a.btn.btn-danger{href: invoice_path(invoice.ref), data: { method: "DELETE", notyConfirm: I18n.t(:"messages.confirm.delete") } }
-                %i.glyphicon.glyphicon-trash
+              %a.btn.btn-danger{href: invoice_path(invoice), data: { method: "DELETE", notyConfirm: I18n.t(:"messages.confirm.delete") } }
+                %i.fa.fa-trash
                 = I18n.t(:"actions.delete")
 
         %br
@@ -47,11 +47,11 @@
                   %strong
                     = I18n.t(:"labels.panels.title.downloads")
               .list-group
-                = link_to invoice_pdf_path(invoice.ref, invoice.invoice_file), target: "_blank", title: I18n.t(:"actions.download"), class: "save-invoice list-group-item#{(" disabled" if invoice.pdf_not_present_or_generating?)}" do
-                  %i.glyphicon.glyphicon-download-alt
+                = link_to invoice_pdf_path(invoice, invoice.invoice_file), target: "_blank", title: I18n.t(:"actions.download"), class: "save-invoice list-group-item#{(" disabled" if invoice.pdf_not_present_or_generating?)}" do
+                  %i.fa.fa-download
                   = I18n.t(:"actions.download_invoice")
-                = link_to timesheet_pdf_path(invoice.ref, invoice.timesheet_file), target: "_blank", title: I18n.t(:"actions.download"), class: "save-timesheet list-group-item#{(" disabled" if invoice.timesheet_not_present_or_generating?)}#{(" hide" if invoice.timers.blank?)}" do
-                  %i.glyphicon.glyphicon-download-alt
+                = link_to timesheet_pdf_path(invoice, invoice.timesheet_file), target: "_blank", title: I18n.t(:"actions.download"), class: "save-timesheet list-group-item#{(" disabled" if invoice.timesheet_not_present_or_generating?)}#{(" hide" if invoice.timers.blank?)}" do
+                  %i.fa.fa-download
                   = I18n.t(:"actions.download_timesheet")
 
         %br

@@ -1,13 +1,9 @@
 class Customer < ActiveRecord::Base
   belongs_to :user
-  has_one :address, as: :resource, dependent: :destroy
   has_many :projects, dependent: :destroy
   has_many :invoices, dependent: :destroy
 
-  accepts_nested_attributes_for :address
-
-  delegate :company, :name, :contact,
-    to: :address, prefix: false, allow_nil: true
+  store_accessor :contact_information, :name, :company, :address, :country, :email, :telefon, :fax, :website
 
   validate :at_least_one_name
 

@@ -1,38 +1,75 @@
 en:
   labels:
     defaults:
-      actions: "Aktionen"
-      value: "Betrag"
-      date: "Monat/Jahr"
-      name: "Name"
-      customer: "Kunde"
-      company: "Firma"
-      ref: "R.-Nr."
-      state: "Status"
-      hours: "Stunden"
-      rate: "€/Std."
-      value: "Betrag"
-      description: "Beschreibung"
-      contact: "Kontaktinformationen"
-      address: "Adresse"
-      id: "ID"
-      role: "Benutzergruppe"
-      email: "E-Mail"
-      enabled: "Status"
-
+      actions: ~
+      value: ~
+      date: ~
+      name: ~
+      customer: ~
+      company: ~
+      ref: ~
+      state: ~
+      hours: ~
+      rate: ~
+      description: ~
+      contact: ~
+      address: ~
+      id: ~
+      role: ~
+      email: ~
+      enabled: ~
+      invoice: ~
+      timesheet: ~
+    chart:
+      on_date: ~
+      timers:
+        headline: ~
+        no_data: ~
+      invoices:
+        no_data: ~
+        sum: ~
+        month: ~
+    timesheet:
+      date: ~
+      task: ~
+      current_week: ~
+      on_invoice: ~
     invoice:
-      customer: "Kunde/Projekt"
-
+      customer: ~
+      due: ~
+    user:
+      current_sign_in_at: ~
+      admin: ~
+      email: ~
+      created_at: ~
+      last_sign_in: ~
+      settings:
+        basic: ~
+        address: ~
+        banking: ~
+        taxes: ~
+      mailing: ~
+    customer:
+      basic: ~
+      email: ~
+    budget:
+      uninvoiced: ~
+      limit: ~
     table:
       blank:
-        customer: "Keine Kunden vorhanden"
-        invoice: "Keine Rechnungen vorhanden"
-        project: "Keine Projekte vorhanden"
-
+        customer: ~
+        invoice: ~
+        project: ~
+    modals:
+      title:
+        timesheet: ~
+        positions: ~
     panels:
       title:
-        default: "Aktionen"
-        latest_users: "Neue Benutzer"
+        default: ~
+        downloads: ~
+        latest_users: ~
+        test_mail: ~
         settings:
-          base: "Allgemeine Eisntellungen"
-          mailer: "E-Mail Einstellungen"
+          base: ~
+          mailer: ~

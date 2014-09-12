@@ -17,7 +17,9 @@ $font-size-h6: floor(($font-size-base * 0.85));
 
 @import "bourbon";
 @import "bootstrap-sprockets";
-@import "bootstrap";
+@import 'bootstrap-custom';
+@import "font-awesome-sprockets";
+@import "font-awesome";
 @import "partials";
 @import "invoice";
 @import "dashboard";
@@ -36,6 +38,10 @@ body {
   > .container {
     padding-bottom: 20px;
   }
+}
+
+a.plain {
+  color: $text-color;
 }
 
 .filter-menu {

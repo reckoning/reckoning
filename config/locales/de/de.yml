@@ -31,7 +31,6 @@ de:
     subnav:
       back: "Zurück"
       new_invoice: "Neue Rechnung"
-      new_offer: "Neues Angebot"
       new_customer: "Neuer Kunde"
       new_project: "Neues Projekt"
       new_user: "Neuer Benutzer"
@@ -42,7 +41,6 @@ de:
         banking: Bankdaten
         settings: Einstellungen
         mailing: E-Mail
-        services: Externe Dienste
       customer:
         basic: Allgemein
         email: "E-Mail Setup"
@@ -56,7 +54,12 @@ de:
       truncate: "&hellip;"
 
   meta:
+    description:
+      default: "Reckoning ist ein simples Tool mit dem Rechnungen für Software-Dienstleistungen erstellt werden können."
+    keywords:
+      default: "Rechnungen, Fakturierung, Abrechnung, Software-Dienstleistungen, Freelancer, Tools für Softwareentwickler, Rechnungs-Tools"
     title:
+      default: "Reckoning.io"
       timer:
         index: "Zeiten"
         import: "Zeiten importieren"
@@ -78,12 +81,16 @@ de:
         new: "Passwort zurücksetzen"
         edit: "Passwort ändern"
       backend:
-        user: "Benutzer"
-        setting: "Einstellungen"
+        user:
+          index: "Benutzer"
+          new: "Neuer Benutzer"
+          edit: "Benutzer bearbeiten"
       sign_in: "Anmelden"
       sign_up: "Registrieren"
       unlock: "Account entsperren"
       confirm: "Account bestätigen"
+      not_found: 404
+      server_error: Fehler
 
   filter:
     name:
@@ -95,14 +102,6 @@ de:
       created: "Neu"
       charged: "In Rechnung gestellt"
       paid: "Bezahlt"
-
-  legends:
-    setting:
-      bank: "Bankinformationen"
-
-  loading:
-    invoice:
-      pdf: "PDF wird neu generiert."
 
   user:
     current_sign_in_at:
@@ -118,3 +117,7 @@ de:
       basic: "10 aktive Projekte"
       premium: "unbegrenzt aktive Projekte"
     ctab: "Anmelden"
+
+  error_pages:
+    not_found: 'Die Seite "%{page}" konnte nicht gefunden werden.'
+    server_error: "Die Seite ist zur Zeit nicht verfügbar. Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut."

@@ -1,71 +1,90 @@
 en:
   "true": Yes
   "false": No
+  version: ~
   title:
     default: "Reckoning.io"
     backend: "Reckoning.io Backend"
-  small_business: "umsatzsteuerbefreit nach § 19 UStG"
+  small_business: ~
   nav:
     header:
-      home: "Home"
-      new_invoice: "Neue Rechnung"
-      customers: "Kunden"
-      new_customer: "Neuer Kunde"
-      projects: "Projekte"
-      new_project: "Neues Projekt"
-      account: "Account"
-      settings: "Einstellungen"
-      toggle: "Toggle navigation"
-      backend:
-        dashboard: "Dashboard"
-        users: "Users"
-    footer:
-      contact: "Contact"
-      frontend: "Frontend"
-      impressum: "Impressum"
-      backend:
-        root: "Backend"
-
+      home: ~
+      customers: ~
+      projects: ~
+      timers: ~
+      settings: ~
+      toggle: ~
+      intro: ~
+      backend: ~
+      frontend: ~
+      dashboard: ~
+      users: ~
+    subnav:
+      back: ~
+      new_invoice: ~
+      new_customer: ~
+      new_project: ~
+      new_user: ~
+      update_password: ~
+      user:
+        basic: ~
+        address: ~
+        banking: ~
+        settings: ~
+        mailing: ~
+      customer:
+        basic: ~
+        email: ~
   views:
     pagination:
-      next: "&rsaquo;"
-      previous: "&lsaquo;"
-      first: "&laquo;"
-      last: "&raquo;"
-      truncate: "&hellip;"
-
+      next: ~
+      previous: ~
+      first: ~
+      last: ~
+      truncate: ~
   meta:
     title:
+      timer:
+        index: ~
+        import: ~
       customer:
-        index: "Kunden"
-        new: "Neuer Kunde"
-        edit: "Kunde bearbeiten"
+        index: ~
+        new: ~
+        edit: ~
       project:
-        index: "Projekte"
-        new: "Neues Projekt"
-        edit: "Projekt bearbeiten"
+        index: ~
+        new: ~
+        edit: ~
       invoice:
-        new: "Neue Rechnung"
-        edit: "Rechnung bearbeiten"
-      setting:
-        edit: "Einstellungen bearbeiten"
+        show: ~
+        new: ~
+        edit: ~
       user:
-        edit: "Account bearbeiten"
-
+        edit: ~
+      password:
+        new: ~
+        edit: ~
+      backend:
+        user: ~
+      sign_in: ~
+      sign_up: ~
+      unlock: ~
+      confirm: ~
+      not_found: 404
+      server_error: Error
   filter:
     name:
-      invoice_state: "Filter"
-      invoice_year: "Jahr"
+      invoice_state: ~
+      invoice_year: ~
     defaults:
-      all: "Alle"
+      all: ~
     invoice_state:
-      created: "Neu"
-      charged: "In Rechnung gestellt"
-      paid: "Bezahlt"
-
-  legends:
-    setting:
-      bank: "Bankinformationen"
-
-  mailto_subject:
-    contact: "Contact request"
+      created: ~
+      charged: ~
+      paid: ~
+  user:
+    current_sign_in_at:
+      empty: ~
+  error_pages:
+    not_found: "The Page you are looking for does not exist."
+    server_error: "The page you are looking for is temporarily unavailable. Please try again later"

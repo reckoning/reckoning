@@ -1,0 +1,11 @@
+en:
+  dashboard:
+    panels:
+      summary: ~
+      charged_invoices: ~
+      paid_invoices: ~
+      last_invoices: ~
+      budgets: ~
+      provision: ~
+      timers_chart: ~
+      invoices_chart: ~

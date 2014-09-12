@@ -1,6 +1,7 @@
 class InvoicesController < ApplicationController
   before_action :set_active_nav
   before_action :check_limit, only: [:new, :create]
+  before_action :check_dependencies, only: [:new]
 
   def index
     authorize! :read, Invoice
@@ -13,7 +14,7 @@ class InvoicesController < ApplicationController
     if year.present? && year =~ /\d{4}/
       @invoices = @invoices.year(year)
     end
-    @invoices = @invoices.includes(customer: [:address]).references(:customers)
+    @invoices = @invoices.includes(:customer).references(:customers)
       .order(sort_column + " " + sort_direction)
       .page(params.fetch(:page){nil})
       .per(20)
@@ -21,9 +22,6 @@ class InvoicesController < ApplicationController
 
   def show
     authorize! :read, invoice
-    if current_user.address.blank?
-      redirect_to edit_user_registration_path, alert: I18n.t(:"messages.invoice.missing_address")
-    end
     if invoice.pdf_not_present_and_not_generating? || !invoice.pdf_present_and_up_to_date?
       invoice.generate_pdf
     end
@@ -31,15 +29,15 @@ class InvoicesController < ApplicationController
 
   def archive
     authorize! :archive, invoice
-    if current_user.has_gdrive?
+    if current_user.has_dropbox?
       if invoice.files_present?
-        InvoiceGdriveWorker.perform_async invoice.id
-        redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.invoice.archive.success")
+        InvoiceDropboxWorker.perform_async invoice.id
+        redirect_to invoice_path(invoice), notice: I18n.t(:"messages.invoice.archive.success")
       else
-        redirect_to invoice_path(invoice.ref), warning: I18n.t(:"messages.invoice.files_missing")
+        redirect_to invoice_path(invoice), warning: I18n.t(:"messages.invoice.files_missing")
       end
     else
-      redirect_to invoice_path(invoice.ref), warning: I18n.t(:"messages.invoice.archive.failure")
+      redirect_to invoice_path(invoice), warning: I18n.t(:"messages.invoice.archive.failure")
     end
   end
 
@@ -48,12 +46,12 @@ class InvoicesController < ApplicationController
     if invoice.send_via_mail?
       if invoice.files_present?
         InvoiceMailerWorker.perform_async invoice.id
-        redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.invoice.send.success")
+        redirect_to invoice_path(invoice), notice: I18n.t(:"messages.invoice.send.success")
       else
-        redirect_to invoice_path(invoice.ref), warning: I18n.t(:"messages.invoice.files_missing")
+        redirect_to invoice_path(invoice), warning: I18n.t(:"messages.invoice.files_missing")
       end
     else
-      redirect_to invoice_path(invoice.ref), warning: I18n.t(:"messages.invoice.send.failure")
+      redirect_to invoice_path(invoice), warning: I18n.t(:"messages.invoice.send.failure")
     end
   end
 
@@ -63,7 +61,7 @@ class InvoicesController < ApplicationController
     @test_mail = TestMail.new(test_mail_params)
     if test_mail.valid?
       InvoiceTestMailerWorker.perform_async invoice.id, test_mail.email
-      redirect_to invoice_path(invoice.ref), notice: I18n.t(:"messages.invoice.send_test_mail.success")
+      redirect_to invoice_path(invoice), notice: I18n.t(:"messages.invoice.send_test_mail.success")
     else
       flash.now[:warning] = I18n.t(:"messages.invoice.send_test_mail.failure")
       render "show"
@@ -78,7 +76,7 @@ class InvoicesController < ApplicationController
           send_file invoice.pdf_path, type: 'application/pdf', disposition: 'inline'
         else
           invoice.generate_pdf
-          redirect_to invoice_path(invoice.ref)
+          redirect_to invoice_path(invoice)
         end
       }
       unless Rails.env.production?
@@ -99,7 +97,7 @@ class InvoicesController < ApplicationController
           send_file invoice.timesheet_path, type: 'application/pdf', disposition: 'inline'
         else
           invoice.generate_pdf
-          redirect_to invoice_path(invoice.ref)
+          redirect_to invoice_path(invoice)
         end
       }
       unless Rails.env.production?
@@ -120,40 +118,37 @@ class InvoicesController < ApplicationController
       }
       format.html {
         invoice.generate_pdf
-        redirect_to invoice_path(invoice.ref)
+        redirect_to invoice_path(invoice)
       }
     end
   end
 
   def new
     authorize! :create, Invoice
-    @invoice = Invoice.new
     invoice.positions << Position.new
   end
 
   def edit
     authorize! :update, invoice
-    @ref = invoice.ref
   end
 
   def create
     @invoice = current_user.invoices.new(invoice_params)
     authorize! :create, invoice
     if invoice.save
-      redirect_to invoices_path, notice: I18n.t(:"messages.create.success", resource: I18n.t(:"resources.messages.invoice"))
+      redirect_to invoices_path, notice: I18n.t(:"messages.invoice.create.success")
     else
-      flash.now[:warning] = I18n.t(:"messages.create.failure", resource: I18n.t(:"resources.messages.invoice"))
+      flash.now[:warning] = I18n.t(:"messages.invoice.create.failure")
       render "new"
     end
   end
 
   def update
-    @ref = invoice.ref
     authorize! :update, invoice
     if invoice.update(invoice_params)
-      redirect_to invoices_path, notice: I18n.t(:"messages.update.success", resource: I18n.t(:"resources.messages.invoice"))
+      redirect_to invoices_path, notice: I18n.t(:"messages.invoice.update.success")
     else
-      flash.now[:warning] = I18n.t(:"messages.update.failure", resource: I18n.t(:"resources.messages.invoice"))
+      flash.now[:warning] = I18n.t(:"messages.invoice.update.failure")
       render "edit"
     end
   end
@@ -161,9 +156,10 @@ class InvoicesController < ApplicationController
   def charge
     authorize! :charge, invoice
     invoice.charge
+    invoice.save
     respond_to do |format|
-      if invoice.charged?
-        flash[:notice] = I18n.t(:'messages.charge.invoice.success')
+      if invoice.reload.charged?
+        flash[:notice] = I18n.t(:'messages.invoice.charge.success')
         format.js {
           render json: {}, status: :ok
         }
@@ -171,7 +167,7 @@ class InvoicesController < ApplicationController
           redirect_to :back
         }
       else
-        flash[:alert] = I18n.t(:'messages.charge.invoice.failure')
+        flash[:alert] = I18n.t(:'messages.invoice.charge.failure')
         format.js {
           render json: {}, status: :ok
         }
@@ -185,10 +181,11 @@ class InvoicesController < ApplicationController
   def pay
     authorize! :pay, invoice
     invoice.pay
-    if invoice.paid?
-      redirect_to :back, notice: I18n.t(:'messages.pay.invoice.success')
+    invoice.save
+    if invoice.reload.paid?
+      redirect_to :back, notice: I18n.t(:'messages.invoice.pay.success')
     else
-      redirect_to :back, alert: I18n.t(:'messages.pay.invoice.failure')
+      redirect_to :back, alert: I18n.t(:'messages.invoice.pay.failure')
     end
   end
 
@@ -201,9 +198,9 @@ class InvoicesController < ApplicationController
             data = false
           else
             data = {}
-            data[:invoice] = invoice_pdf_path(invoice.ref, invoice.invoice_file)
+            data[:invoice] = invoice_pdf_path(invoice, invoice.invoice_file)
             if invoice.timers.present?
-              data[:timesheet] = timesheet_pdf_path(invoice.ref, invoice.timesheet_file)
+              data[:timesheet] = timesheet_pdf_path(invoice, invoice.timesheet_file)
             end
           end
           render json: data, status: :ok
@@ -223,7 +220,7 @@ class InvoicesController < ApplicationController
       File.delete(invoice.pdf_path) if File.exists?(invoice.pdf_path)
       File.delete(invoice.timesheet_path) if File.exists?(invoice.timesheet_path)
 
-      flash[:notice] = I18n.t(:"messages.destroy.success", resource: I18n.t(:"resources.messages.invoice"))
+      flash[:notice] = I18n.t(:"messages.invoice.destroy.success")
       respond_to do |format|
         format.js {
           render json: {}, status: :ok
@@ -233,7 +230,7 @@ class InvoicesController < ApplicationController
         }
       end
     else
-      flash[:alert] = I18n.t(:"messages.destroy.failure", resource: I18n.t(:"resources.messages.invoice"))
+      flash[:alert] = I18n.t(:"messages.invoice.destroy.failure")
       respond_to do |format|
         format.js {
           render json: {}, status: :ok
@@ -292,7 +289,8 @@ class InvoicesController < ApplicationController
   end
 
   def invoice
-    @invoice ||= current_user.invoices.where(ref: params.fetch(:ref, nil)).first
+    @invoice ||= current_user.invoices.where(id: params.fetch(:id, nil)).first
+    @invoice ||= current_user.invoices.new
   end
   helper_method :invoice
 
@@ -309,5 +307,12 @@ class InvoicesController < ApplicationController
 
   def test_mail_params
     params.require(:test_mail).permit(:email)
+  end
+
+  def check_dependencies
+    if current_user.address.blank?
+      redirect_to "#{edit_user_registration_path}#address", alert: I18n.t(:"messages.invoice.missing_address")
+      return
+    end
   end
 end

@@ -5,7 +5,6 @@
         %img.gravatar{src: gravatar_path, alt: "avatar", with: 20, height: 20}
         %span.user-email
           = current_user.email
-        /%i.glyphicon.glyphicon-user
         %b.caret
       %ul.dropdown-menu.navbar-right
         %li{class: get_active_nav('users')}
@@ -24,6 +23,6 @@
   - else
     - if registration_enabled?
       %li{class: get_active_nav('registration')}
-        = link_to I18n.t(:"actions.sign_up"), new_registration_path
+        = link_to I18n.t(:"actions.sign_up"), new_user_registration_path
     %li{class: get_active_nav('sessions') || get_active_nav('users')}
       = link_to I18n.t(:"actions.sign_in"), new_user_session_path

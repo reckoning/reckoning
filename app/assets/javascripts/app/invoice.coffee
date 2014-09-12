@@ -9,6 +9,7 @@ window.laddaButton ?= {}
 window.App.Invoice.generate = ($element) ->
   laddaButton.start() if laddaButton
   $('.save-invoice').addClass('disabled')
+  $('.save-timesheet').addClass('disabled')
   $element.find('.generate').addClass('hide')
   $element.find('.regenerate').removeClass('hide')
   $.ajax
@@ -16,7 +17,7 @@ window.App.Invoice.generate = ($element) ->
     type: 'PUT'
     dataType: 'json'
     success: ->
-      displayAlert I18n.t("messages.invoice.pdf_generating")
+      displayNotice I18n.t("messages.invoice.pdf_generating")
       App.Invoice.pdfInterval = setInterval App.Invoice.checkPdfStatus, 1000
 
 window.App.Invoice.checkPdfStatus = ->
@@ -72,16 +73,15 @@ window.App.Invoice.updateRate = (ev) ->
 
 window.App.Invoice.loadPositions = ($element) ->
   laddaButton.start() if laddaButton
-  date = $('#invoice_date').val()
   project_id = $('#invoice_project_id').val()
-  unless date.length && project_id.length
+  unless project_id.length
     displayWarning I18n.t("messages.invoice.load_positions.missing")
     laddaButton.stop() if laddaButton
     return
 
   xhr.abort() if xhr
   xhr = $.ajax
-    url: r(date_project_tasks_path, project_id, date)
+    url: r(uninvoiced_project_tasks_path, project_id)
     dataType: 'json'
     context: $('#add-positions-modal')
     success: (result) ->

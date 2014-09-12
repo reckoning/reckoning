@@ -6,14 +6,14 @@
         = "#{@resource.user.company},"
       - else
         = "#{@resource.user.name},"
-      = @resource.user.address.address_as_one_line
+      = @resource.user.address.gsub("\r\n", ", ").gsub("\n", ", ").gsub("\r", ", ") unless @resource.user.address.blank?
 
   .row
     %address#customer
       = @resource.customer.company
       %br
       %br
-      = simple_format(@resource.customer.address.address)
+      = simple_format(@resource.customer.address)
 
   .row
     #subject

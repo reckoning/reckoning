@@ -1,5 +1,6 @@
 class ProjectsController < ApplicationController
-  before_filter :set_active_nav
+  before_action :set_active_nav
+  before_action :check_dependencies, only: [:new]
 
   def index
     authorize! :read, Project
@@ -21,9 +22,9 @@ class ProjectsController < ApplicationController
   def create
     authorize! :create, Project
     if project.save
-      redirect_to projects_path, notice: I18n.t(:"messages.create.success", resource: I18n.t(:"resources.messages.project"))
+      redirect_to projects_path, notice: I18n.t(:"messages.project.create.success")
     else
-      flash.now[:warning] = I18n.t(:"messages.create.failure", resource: I18n.t(:"resources.messages.project"))
+      flash.now[:warning] = I18n.t(:"messages.project.create.failure")
       render "new"
     end
   end
@@ -31,9 +32,9 @@ class ProjectsController < ApplicationController
   def update
     authorize! :update, project
     if project.update_attributes(project_params)
-      redirect_to projects_path, notice: I18n.t(:"messages.update.success", resource: I18n.t(:"resources.messages.project"))
+      redirect_to projects_path, notice: I18n.t(:"messages.project.update.success")
     else
-      flash.now[:warning] = I18n.t(:"messages.update.failure", resource: I18n.t(:"resources.messages.project"))
+      flash.now[:warning] = I18n.t(:"messages.project.update.failure")
       render "edit"
     end
   end
@@ -41,12 +42,12 @@ class ProjectsController < ApplicationController
   def destroy
     authorize! :destroy, project
     if project.invoices.present?
-      redirect_to projects_path, alert: I18n.t(:"messages.destroy.project.failure_dependency")
+      redirect_to projects_path, alert: I18n.t(:"messages.project.destroy.failure_dependency")
     else
       if project.destroy
-        redirect_to projects_path, notice: I18n.t(:"messages.destroy.success", resource: I18n.t(:"resources.messages.project"))
+        redirect_to projects_path, notice: I18n.t(:"messages.project.destroy.success")
       else
-        redirect_to projects_path, alert: I18n.t(:"messages.destroy.failure", resource: I18n.t(:"resources.messages.project"))
+        redirect_to projects_path, alert: I18n.t(:"messages.project.destroy.failure")
       end
     end
   end
@@ -87,5 +88,11 @@ class ProjectsController < ApplicationController
   def project
     @project ||= Project.where(id: params.fetch(:id){nil}).first
     @project ||= current_user.projects.new project_params
+  end
+
+  def check_dependencies
+    if current_user.customers.blank?
+      redirect_to new_customer_path, alert: I18n.t(:"messages.project.missing_customer")
+    end
   end
 end

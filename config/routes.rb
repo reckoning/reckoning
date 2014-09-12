@@ -1,10 +1,16 @@
 require 'sidekiq/web'
 
 Reckoning::Application.routes.draw do
-  devise_for :users, skip: [:sessions], controllers: { registrations: "registrations" }
+  devise_for :users,
+    skip: [:sessions, :registrations],
+    controllers: { registrations: "registrations" }
 
   namespace :backend do
-    resources :users, except: [:show]
+    resources :users, except: [:show] do
+      member do
+        put 'send_welcome'
+      end
+    end
 
     authenticate :user, lambda {|u| u.admin? } do
       mount Sidekiq::Web => '/workers'
@@ -19,7 +25,8 @@ Reckoning::Application.routes.draw do
   end
 
   as :user do
-    get 'signup' => 'registrations#new', as: :new_registration
+    get 'signup' => 'registrations#new', as: :new_user_registration
+    post 'signup' => 'registrations#create', as: :user_registration
     get 'signin' => 'sessions#new', as: :new_user_session
     post 'signin' => 'sessions#create', as: :user_session
     delete 'signout' => 'sessions#destroy', as: :destroy_user_session
@@ -27,7 +34,7 @@ Reckoning::Application.routes.draw do
 
   resource :password, only: [:edit, :update]
 
-  resources :invoices, param: :ref do
+  resources :invoices do
     member do
       put :generate_positions
       put :regenerate_pdf
@@ -40,15 +47,17 @@ Reckoning::Application.routes.draw do
     end
   end
 
-  get 'invoices/:ref/pdf/:pdf' => 'invoices#pdf', as: :invoice_pdf
-  get 'timesheets/:ref/pdf/:pdf' => 'invoices#timesheet', as: :timesheet_pdf
+  get 'invoices/:id/pdf/:pdf' => 'invoices#pdf', as: :invoice_pdf
+  get 'timesheets/:id/pdf/:pdf' => 'invoices#timesheet', as: :timesheet_pdf
 
   resources :positions, only: [:new, :destroy]
 
   resources :customers, except: [:show]
   resources :projects, except: [:show] do
     resources :tasks, only: [:index, :create] do
-      get ':date/date' => 'tasks#index_for_date', as: :date, on: :collection
+      collection do
+        get 'uninvoiced'
+      end
     end
   end
 
@@ -66,6 +75,14 @@ Reckoning::Application.routes.draw do
     end
     member do
       put 'remove_task/:task_id' => 'weeks#remove_task', as: :remove_task
+    end
+  end
+
+  resource :dropbox, controller: "dropbox", only: [] do
+    collection do
+      get :start
+      get :activate
+      get :deactivate
     end
   end
 

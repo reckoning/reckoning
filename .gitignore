@@ -1,4 +1,5 @@
 .bundle
+.wti
 
 # logfiles and tempfiles.
 log/*

@@ -1,8 +1,7 @@
 - content_for(:title) do
-  Error
+  = I18n.t(:"meta.title.server_error")
 .cbox.cbox-error.cbox-large
   .well
-    %h1 We're sorry, but something went wrong.
+    %h1= I18n.t(:"headlines.server_error")
 
-    %p
-      If you are the application owner check the logs for more information.
+    %p= I18n.t(:"error_pages.server_error")

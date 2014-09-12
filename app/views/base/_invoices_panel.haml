@@ -6,7 +6,7 @@
         = title
   .list-group.invoices-list
     - invoices.each do |invoice|
-      %a.list-group-item{href: invoice_path(invoice.ref)}
+      %a.list-group-item{href: invoice_path(invoice)}
         = invoice.ref_number
         = " | "
         = invoice.title
