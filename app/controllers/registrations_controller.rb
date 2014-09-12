@@ -35,16 +35,8 @@ class RegistrationsController < Devise::RegistrationsController
       :gdrive_email, :gdrive_password, :gdrive_collection,
       :bank, :account_number, :bank_code, :bic, :iban,
       :default_from, :signature,
-      address_attributes: [
-        :company,
-        :name,
-        :address,
-        :country,
-        :email,
-        :telefon,
-        :fax,
-        :website
-      ]
+      :company, :name, :address, :country, :email,
+      :telefon, :fax, :website
     )
   end
 
