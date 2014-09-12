@@ -10,23 +10,23 @@
         = resource.user.name
       %br
     %br
-    = simple_format(resource.user.address.address)
+    = simple_format(resource.user.address)
   .contact-information><
-    - if resource.user.address.telefon.present?
+    - if resource.user.telefon.present?
       Tel:
-      = resource.user.address.telefon
+      = resource.user.telefon
       %br
-    - if resource.user.address.fax.present?
+    - if resource.user.fax.present?
       Fax:
-      = resource.user.address.fax
+      = resource.user.fax
       %br
-    - if resource.user.address.email.present?
-      = resource.user.address.email
+    - if resource.user.public_email.present?
+      = resource.user.public_email
     - else
       = resource.user.email
     %br
-    - if resource.user.address.website.present?
-      = resource.user.address.website
+    - if resource.user.website.present?
+      = resource.user.website
   .bank-information><
     - if resource.user.bank.present?
       = resource.user.bank
