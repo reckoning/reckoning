@@ -2,7 +2,6 @@ class BaseController < ApplicationController
   include NumberHelper
   skip_authorization_check
   before_action :authenticate_user!, :only => [:fail]
-  before_action :check_contact
 
   def index
     if user_signed_in?
@@ -121,12 +120,17 @@ class BaseController < ApplicationController
   end
   helper_method :contact
 
-  def check_contact
-    if cookies[:contact].present?
-      contact = Contact.where(email: cookies.signed[:contact]).first
+  def contact_cookie
+    if cookies[:_reckoning_contact].present?
+      contact = Contact.where(email: cookies.signed[:_reckoning_contact]).first
       if contact.blank?
-        cookies.delete :contact
+        cookies.delete :_reckoning_contact
+        false
+      else
+        true
       end
     end
   end
+  helper_method :contact_cookie
+
 end

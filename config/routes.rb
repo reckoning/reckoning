@@ -12,6 +12,8 @@ Reckoning::Application.routes.draw do
       end
     end
 
+    resources :contacts, only: [:index]
+
     authenticate :user, lambda {|u| u.admin? } do
       mount Sidekiq::Web => '/workers'
     end

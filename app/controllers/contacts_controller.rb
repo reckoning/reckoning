@@ -4,7 +4,7 @@ class ContactsController < ApplicationController
 
   def create
     Contact.new(contact_params).save
-    cookies.permanent.signed[:contact] = contact_params[:email]
+    cookies.permanent.signed[:_reckoning_contact] = contact_params[:email]
     redirect_to "#{root_path}#contact", notice: I18n.t(:"messages.contact.create.success")
   end
 

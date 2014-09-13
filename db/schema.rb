@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 20140913070626) do
   enable_extension "hstore"
   enable_extension "uuid-ossp"
 
-  create_table "contacts", force: true do |t|
+  create_table "contacts", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.string   "email"
     t.datetime "created_at"
     t.datetime "updated_at"

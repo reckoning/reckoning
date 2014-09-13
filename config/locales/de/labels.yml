@@ -21,6 +21,7 @@ de:
       enabled: "Status"
       invoice: Rechnung
       timesheet: Stundenzettel
+      created_at: "Erstellt"
     welcome:
       contact_form: Haben Sie weitere Fragen?
     chart:
@@ -40,6 +41,9 @@ de:
     invoice:
       customer: "Kunde/Projekt"
       due: "Fällig seit %{date}"
+    contact:
+      email: "E-Mail"
+      created_at: "Empfangen"
     user:
       current_sign_in_at: "Letzte Aktivität vor"
       admin: "Admin?"
@@ -63,6 +67,7 @@ de:
         customer: "Keine Kunden vorhanden"
         invoice: "Keine Rechnungen vorhanden"
         project: "Keine Projekte vorhanden"
+        contact: "Keine Anfragen vorhanden"
 
 
     modals:
@@ -74,7 +79,8 @@ de:
       title:
         default: "Aktionen"
         downloads: "Downloads"
-        latest_users: "Neue Benutzer"
+        latest_users: "Neue Benutzer (Insgesamt: %{count})"
+        latest_contacts: "Neue Anfragen (Insgesamt: %{count})"
         test_mail: "Test E-Mail versenden"
         settings:
           base: "Allgemeine Eisntellungen"

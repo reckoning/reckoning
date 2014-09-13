@@ -24,6 +24,7 @@ de:
       frontend: "Frontend"
       dashboard: "Dashboard"
       users: "Benutzer"
+      contacts: "Anfragen"
     footer:
       impressum: Impressum
       privacy: Datenschutz
@@ -86,6 +87,8 @@ de:
           index: "Benutzer"
           new: "Neuer Benutzer"
           edit: "Benutzer bearbeiten"
+        contact:
+          index: Anfragen
       sign_in: "Anmelden"
       sign_up: "Registrieren"
       unlock: "Account entsperren"
