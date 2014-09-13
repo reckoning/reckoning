@@ -110,13 +110,19 @@ de:
 
   prices:
     price:
-      free: "0 € <small>/ Monat</small>"
-      basic: "2 € <small>/ Monat</small>"
-      premium: "6 € <small>/ Monat</small>"
+      free: "<sup>€</sup> 0 <small>pro Monat</small>"
+      basic: "<sup>€</sup> 5 <small>pro Monat</small>"
+      premium: "<sup>€</sup> 10 <small>pro Monat</small>"
     desc:
-      free: "1 aktives Projekt"
-      basic: "10 aktive Projekte"
-      premium: "unbegrenzt aktive Projekte"
+      free:
+        projects: "<strong>1</strong> aktive Projekte"
+        invoices: "<strong>1</strong> Rechnungen pro Monat"
+      basic:
+        projects: "<strong>10</strong> aktive Projekte"
+        invoices: "<strong>2</strong> Rechnungen pro Monat pro Projekt"
+      premium:
+        projects: "<strong>&infin;</strong>aktive Projekte"
+        invoices: "<strong>&infin;</strong>Rechnungen pro Monat"
     ctab: "Anmelden"
 
   error_pages:

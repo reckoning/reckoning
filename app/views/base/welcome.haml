@@ -7,7 +7,7 @@
     .col-xs-12.col-md-12
       .page-header
         %h1
-          = I18n.t(:"headlines.welcome")
+          = I18n.t(:"headlines.welcome.base")
           %br
           %small
             = I18n.t(:"sublines.welcome")
@@ -15,8 +15,8 @@
   .row
     %a.anchor#features
     .col-xs-12.col-md-12
-      %h3
-        Aktuelle Features
+      %h2.hide
+        = I18n.t(:"headlines.welcome.screenshots")
       .row
         .col-xs-12.col-md-4
           %a.thumbnail{href: image_path("#{image_prefix}example-1.png")}
@@ -41,8 +41,8 @@
   .row
     %a.anchor#features
     .col-xs-12.col-md-12
-      %h3
-        Features
+      %h2
+        = I18n.t(:"headlines.welcome.features")
 
       :markdown
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -58,10 +58,31 @@
 
   .row
     %a.anchor#pricing
-    .col-xs-12.col-md-4.col-md-offset-2
-      = render 'base/pricing_table', type: 'basic'
-    .col-xs-12.col-md-4
-      = render 'base/pricing_table', type: 'premium'
+    .col-xs-12.col-md-12
+      %h2.hide
+        = I18n.t(:"headlines.welcome.prices")
+      .row
+        .col-xs-12.col-md-3.col-md-offset-1
+          = render "base/pricing_table", type: "free"
+        .col-xs-12.col-md-4
+          = render "base/pricing_table", type: "basic", featured: true
+        .col-xs-12.col-md-3
+          = render "base/pricing_table", type: "premium"
+
+  %hr
+
+  .row
+    %a.anchor#contact
+    .col-xs-12.col-md-12
+      %h2.hide
+        = I18n.t(:"headlines.welcome.contact")
+      .row
+        .col-xs-12.col-md-6.col-md-offset-3
+          .well
+            - if cookies[:contact].present?
+              = render "base/contact_received"
+            - else
+              = render "base/contact_form"
 
   #image-modal.modal.fade
     .modal-dialog

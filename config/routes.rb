@@ -88,6 +88,8 @@ Reckoning::Application.routes.draw do
     end
   end
 
+  resources :contacts, only: [:create]
+
   get 'impressum' => 'base#impressum'
   get 'privacy' => 'base#privacy'
   get 'terms' => 'base#terms'

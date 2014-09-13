@@ -2,6 +2,7 @@ class BaseController < ApplicationController
   include NumberHelper
   skip_authorization_check
   before_action :authenticate_user!, :only => [:fail]
+  before_action :check_contact
 
   def index
     if user_signed_in?
@@ -113,5 +114,19 @@ class BaseController < ApplicationController
     result << sum
     result << month
     return result, max_values
+  end
+
+  def contact
+    Contact.new
+  end
+  helper_method :contact
+
+  def check_contact
+    if cookies[:contact].present?
+      contact = Contact.where(email: cookies.signed[:contact]).first
+      if contact.blank?
+        cookies.delete :contact
+      end
+    end
   end
 end

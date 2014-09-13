@@ -1,49 +1,25 @@
-ul.pricing-table {
-  display: block;
-  list-style: none;
-  padding-left: 0;
-  border-color: #e3e3e3;
-  border-width: 1px;
-  border-style: solid;
-  border-radius: 5px;
+.pricing-table {
+  margin-top: 10px;
 
-  li {
-    list-style: none;
-    line-height: 1;
+  &.featured {
+    transform: scale(1.1, 1.1);
+  }
+
+  &.signup {
+    margin-top: 0;
+  }
+
+  .panel-title {
+    font-size: 160%;
+    font-family: 'Orbitron', sans-serif;
+    margin-top: 4px;
+  }
+
+  .panel-title, .list-group li, .panel-footer {
     text-align: center;
-    padding: .8em;
-    font-size: 1em;
-    background-color: white;
-    color: #333;
+  }
 
-    &.title {
-      padding: 1em 1.6em;
-      font-size: 1.4em;
-      color: #333;
-      background-color: whitesmoke;
-      font-family: 'Orbitron', sans-serif;
-    }
-
-    &.price {
-      padding: 1em 1.6em;
-      color: $navbar-active;
-      font-size: 1.8em;
-
-      small {
-        opacity: .6;
-      }
-    }
-
-    &.description {
-      color: #777;
-    }
-
-    &:first-child {
-      border-radius: 5px 5px 0 0;
-    }
-
-    &:last-child {
-      border-radius: 0 0 5px 5px;
-    }
+  .panel-footer {
+    padding-top: 20px;
   }
 }

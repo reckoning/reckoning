@@ -21,6 +21,8 @@ de:
       enabled: "Status"
       invoice: Rechnung
       timesheet: Stundenzettel
+    welcome:
+      contact_form: Haben Sie weitere Fragen?
     chart:
       on_date: am
       timers:
