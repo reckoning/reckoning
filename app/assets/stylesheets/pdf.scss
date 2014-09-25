@@ -41,7 +41,7 @@ body {
     font-style: normal;
 
     &#company {
-      font-size: 90%;
+      font-size: 11px;
       margin-bottom: 10px;
       margin-top: 62px;
       border-bottom: 1px solid #999;
@@ -61,7 +61,7 @@ body {
       #infomartion, #date, #delivery-date, #tax, #payment-due {
         float: right;
         clear: both;
-        font-size: 90%;
+        font-size: 12px;
         margin-bottom: 5px;
         text-align: right;
       }
@@ -98,11 +98,11 @@ body {
 
   address, .contact-information, .bank-information {
     display: inline-block;
-    font-size: 90%;
+    font-size: 11px;
     line-height: 1.2em;
 
     p {
-      font-size: 100%;
+      font-size: 11px;
       line-height: 1.2em;
     }
   }
