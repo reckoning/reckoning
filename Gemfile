@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "2.1.2"
+ruby "2.1.4"
 
 gem "rails", "4.1.5"
 
@@ -25,7 +25,7 @@ gem "dynamic_fields_for_rails"
 
 gem "simple_states"
 
-gem "sass-rails", github: "rails/sass-rails", branch: :master
+gem "sass-rails"
 gem "sass", "3.3.14"
 gem "coffee-rails"
 gem "bourbon"
