@@ -2,10 +2,14 @@
 
 @page {
   size: a4 portrait;
-  margin: 30mm 10mm 35mm 10mm;
+  margin: 30mm 20mm 55mm 20mm;
   counter-increment: page;
   @bottom-right {
-    margin-top: -105px;
+    margin-top: -60px;
+    margin-right: 0;
+    padding-right: 0;
+    font-size: 1.2em;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   }
 }
 
@@ -16,24 +20,23 @@ body {
   @import "partials/table";
 
   table {
-    border: 1px solid #cacaca !important;
-    thead, tfoot  {
-      th {
-        padding: 2px 6px;
-        background: #cacaca;
+    border: none;
 
-        &.align-right {
-          text-align: right;
-        }
+    thead th {
+      padding: 6px 0;
+      border-bottom: 2px solid #cacaca;
+
+      &.align-right {
+        text-align: right;
       }
     }
+
     td {
-      border-top: 1px solid #cacaca;
+      padding: 6px 0;
     }
-    tr.tax {
-      td {
-        background: #cacaca;
-      }
+
+    tfoot tr:first-child td {
+      border-top: 2px solid darken(#cacaca, 10%);
     }
   }
 
@@ -44,7 +47,7 @@ body {
       font-size: 90%;
       margin-bottom: 10px;
       margin-top: 62px;
-      border-bottom: 1px solid #999;
+      border-bottom: 1px solid #cacaca;
       display: inline-block;
     }
   }
@@ -80,7 +83,7 @@ body {
   top: 0;
   width: 100%;
   text-align: right;
-  border-bottom: 1px solid #999;
+  border-bottom: 1px solid #cacaca;
   font-size: 30px;
   font-weight: 900;
   font-style: italic;
@@ -89,20 +92,20 @@ body {
 }
 
 #pdf-footer {
-  border-top: 1px solid #999;
+  border-top: 1px solid #cacaca;
   position: fixed;
-  margin-bottom: -100px;
+  margin-bottom: -150px;
   bottom: 0;
   width: 100%;
   padding-top: 5px;
 
   address, .contact-information, .bank-information {
     display: inline-block;
-    font-size: 90%;
+    font-size: 12px;
     line-height: 1.2em;
 
     p {
-      font-size: 100%;
+      font-size: 12px;
       line-height: 1.2em;
     }
   }

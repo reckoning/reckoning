@@ -64,8 +64,9 @@
                 = number_to_currency @resource.rate
             %td.value
               = number_to_currency position.value
+      %tfoot
         - if @resource.user.tax.present?
-          %tr.step-sum.border
+          %tr.step-sum
             %td{colspan: 3}
               = I18n.t(:"pdf.invoice.net")
             %td.value
@@ -79,14 +80,15 @@
           - value = @resource.value + taxes
           - value_label = I18n.t(:"pdf.invoice.gross")
         - else
-          %tr.tax.border
+          %tr.tax
             %td{colspan: 4}
               = I18n.t(:"small_business")
           - value = @resource.value
           - value_label = I18n.t(:"pdf.invoice.sum")
         %tr.sum
           %td{colspan: 3}
-            = value_label
+            %strong
+              = value_label
           %td.value
             %strong
               = number_to_currency(value)
