@@ -10,11 +10,12 @@ class InvoiceMailerTest < ActionMailer::TestCase
     invoice.customer.invoice_email = "test@customer.io"
     invoice.customer.save
 
-    invoice.generate
+    # fake pdf file
+    File.open(invoice.pdf_path, "w") {}
   end
 
   after do
-    # File.unlink(invoice.pdf_path)
+    File.unlink(invoice.pdf_path)
   end
 
   describe "#customer_mail" do
