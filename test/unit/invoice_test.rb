@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class InvoiceTest < ActiveSupport::TestCase
-  fixtures :projects
+  fixtures :projects, :invoices, :positions, :timers, :weeks, :tasks
 
   it "should not be valid without project" do
     invoice = Invoice.new(customer_id: "foo", project_id: nil)
@@ -22,6 +22,26 @@ class InvoiceTest < ActiveSupport::TestCase
     project = projects :enterprise
     invoice = Invoice.new(project_id: project.id, date: Time.now)
     assert invoice.valid?, "#{invoice.inspect} should be valid"
+  end
+
+  describe "pdf generation" do
+    let(:invoice) { invoices :february }
+    let(:warpcore) { positions :warpcore }
+
+    before do
+      PdfGenerator.any_instance.stubs(:call_pdf_lib).returns(nil)
+
+      warpcore.timers << timers(:twohours)
+      warpcore.timers << timers(:threehours)
+      invoice.positions << warpcore
+      invoice.save
+    end
+
+    it "creates timesheet if timers present" do
+      assert_nothing_raised do
+        invoice.generate_timesheet
+      end
+    end
   end
 
   it "should have a unique ref scoped by user"

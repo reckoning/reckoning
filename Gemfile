@@ -75,4 +75,6 @@ end
 group :development, :test do
   gem "foreman"
   gem "byebug"
+  gem "guard-minitest"
+  gem "terminal-notifier-guard", "~> 1.6.1"
 end
