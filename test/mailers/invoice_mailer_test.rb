@@ -6,6 +6,8 @@ class InvoiceMailerTest < ActionMailer::TestCase
   let(:invoice) { invoices :january }
 
   before do
+    PdfGenerator.any_instance.stubs(:call_pdf_lib).returns(nil)
+
     invoice.customer.email_template = "Hallo Foo"
     invoice.customer.invoice_email = "test@customer.io"
     invoice.customer.save
