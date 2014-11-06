@@ -1,4 +1,5 @@
 = render "shared/pdf_header", resource: @resource
+- timers_by_date = @resource.timers.order(:date).group_by(&:date)
 #pdf-body
   .row
     #subject
@@ -11,9 +12,9 @@
           = I18n.l @resource.date
       %h1
         = I18n.t(:"pdf.timesheet.headline")
-        = I18n.l(@resource.date.beginning_of_month)
+        = I18n.l(timers_by_date.keys.first.beginning_of_month)
         = " - "
-        = I18n.l(@resource.date.end_of_month)
+        = I18n.l(timers_by_date.keys.last.end_of_month)
 
     %br
 
@@ -24,7 +25,6 @@
         %th.align-right=I18n.t(:"labels.defaults.hours")
       %tbody
         - value = 0
-        - timers_by_date = @resource.timers.order(:date).group_by(&:date)
         - timers_by_date.each do |date, timers|
           %tr
             %td.date
@@ -44,7 +44,8 @@
                 = number_to_currency(timer.value, unit: "")
         %tr.sum.border
           %td{colspan: 2}
-            = I18n.t(:"pdf.timesheet.sum")
+            %strong
+              = I18n.t(:"pdf.timesheet.sum")
           %td.value
             %strong
               = number_to_currency(value, unit: "")
