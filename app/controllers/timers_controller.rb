@@ -4,7 +4,7 @@ class TimersController < ApplicationController
   def index
     authorize! :index, Timer
     @date = date
-    projects = current_user.projects
+    projects = current_user.projects.order("created_at DESC")
     @projects = projects.all
   end
 
