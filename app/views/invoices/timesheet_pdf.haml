@@ -11,11 +11,8 @@
           = I18n.t(:"pdf.invoice.subject.date")
           = I18n.l @resource.date
       %h1
-        = I18n.t(:"pdf.timesheet.headline")
-        = I18n.l(timers_by_date.keys.first.beginning_of_month)
-        = " - "
-        = I18n.l(timers_by_date.keys.last.end_of_month)
-
+        = I18n.t(:"pdf.timesheet.headline", from: I18n.l(timers_by_date.keys.first.beginning_of_month), to: I18n.l(timers_by_date.keys.last.end_of_month)).html_safe
+        
     %br
 
     %table.table.table-condensed
