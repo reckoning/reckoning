@@ -70,6 +70,7 @@ group :test do
   gem "factory_girl"
   gem "mocha", require: false
   gem "spring"
+  gem "timecop"
 end
 
 group :development, :test do
