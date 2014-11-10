@@ -40,6 +40,7 @@ class InvoiceTest < ActiveSupport::TestCase
     it "creates timesheet if timers present" do
       assert_nothing_raised do
         invoice.generate_timesheet
+        invoice.generate
       end
     end
   end

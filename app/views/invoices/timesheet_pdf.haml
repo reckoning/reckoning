@@ -1,6 +1,6 @@
 = render "shared/pdf_header", resource: @resource
 - timers_by_date = @resource.timers.order(:date).group_by(&:date)
-#pdf-body
+#pdf-body.timesheet
   .row
     #subject
       .info-wrapper
@@ -12,7 +12,7 @@
           = I18n.l @resource.date
       %h1
         = I18n.t(:"pdf.timesheet.headline", from: I18n.l(timers_by_date.keys.first.beginning_of_month), to: I18n.l(timers_by_date.keys.last.end_of_month)).html_safe
-        
+
     %br
 
     %table.table.table-condensed
