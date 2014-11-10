@@ -12,12 +12,12 @@
   .row
     .col-xs-4.col-md-2.form-group{class: form_error?(project, :rate)}
       = form.label :rate
-      = form.text_field :rate, class: 'form-control'
+      = form.number_field :rate, class: 'form-control'
       = form_errors project, :rate
 
     .col-xs-4.col-md-2.form-group{class: form_error?(project, :budget)}
       = form.label :budget
-      = form.text_field :budget, class: 'form-control'
+      = form.number_field :budget, class: 'form-control'
       = form_errors project, :budget
 
   %fieldset
