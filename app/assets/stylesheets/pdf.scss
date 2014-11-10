@@ -16,64 +16,67 @@
 body {
   font-size: 1.6em;
   color: #333333 !important;
+}
 
-  @import "partials/table";
+@import "partials/table";
 
-  table {
-    border: none;
+table {
+  border: none;
 
-    thead th {
-      padding: 6px 0;
-      border-bottom: 2px solid #cacaca;
+  thead th {
+    padding: 6px 0;
+    border-bottom: 2px solid #cacaca;
 
-      &.align-right {
-        text-align: right;
-      }
-    }
-
-    td {
-      padding: 6px 0;
-    }
-
-    tfoot tr:first-child td {
-      border-top: 2px solid darken(#cacaca, 10%);
+    &.align-right {
+      text-align: right;
     }
   }
 
-  address {
-    font-style: normal;
+  td {
+    padding: 6px 0;
+  }
 
-    &#company {
-      font-size: 11px;
-      margin-bottom: 10px;
-      margin-top: 62px;
-      border-bottom: 1px solid #cacaca;
-      display: inline-block;
+  td, th {
+    font-size: 10pt;
+  }
+
+  tfoot tr:first-child td {
+    border-top: 2px solid darken(#cacaca, 10%);
+  }
+}
+
+address {
+  font-style: normal;
+
+  &#company {
+    font-size: 11px;
+    margin-bottom: 10px;
+    margin-top: 62px;
+    border-bottom: 1px solid #cacaca;
+    display: inline-block;
+  }
+}
+
+#subject {
+  position: relative;
+  margin: 30px 0;
+
+  .info-wrapper {
+    position: absolute;
+    right: 0;
+
+    #infomartion, #date, #delivery-date, #tax, #payment-due {
+      float: right;
+      clear: both;
+      font-size: 14px;
+      margin-bottom: 5px;
+      text-align: right;
     }
   }
 
-  #subject {
-    margin: 50px 0 60px;
-    position: relative;
-
-    .info-wrapper {
-      position: absolute;
-      right: 0;
-      top: -20px;
-
-      #infomartion, #date, #delivery-date, #tax, #payment-due {
-        float: right;
-        clear: both;
-        font-size: 14px;
-        margin-bottom: 5px;
-        text-align: right;
-      }
-    }
-
-    h1 {
-      font-size: 140%;
-      font-weight: bold;
-    }
+  h1 {
+    font-size: 140%;
+    font-weight: bold;
   }
 }
 
