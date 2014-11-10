@@ -8,7 +8,7 @@ class InvoiceTest < ActiveSupport::TestCase
     assert !invoice.valid?, "#{invoice.inspect} should be invalid"
   end
 
-  it "should not be valid without date" do
+  test "should not be valid without date" do
     invoice = Invoice.new(date: nil)
     assert !invoice.valid?, "#{invoice.inspect} should be invalid"
   end
