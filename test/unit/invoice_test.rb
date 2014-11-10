@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class InvoiceTest < ActiveSupport::TestCase
-  fixtures :projects, :invoices, :positions, :timers, :weeks, :tasks
+  fixtures :projects, :invoices, :customers, :positions, :timers, :weeks, :tasks
 
   it "should not be valid without project" do
     invoice = Invoice.new(customer_id: "foo", project_id: nil)
