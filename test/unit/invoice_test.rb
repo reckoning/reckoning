@@ -19,9 +19,11 @@ class InvoiceTest < ActiveSupport::TestCase
   end
 
   it "should create invoice if date and valid project present" do
-    project = projects :enterprise
-    invoice = Invoice.new(project_id: project.id, date: Time.now)
-    assert invoice.valid?, "#{invoice.inspect} should be valid"
+    Timecop.freeze "2014-01-01" do
+      project = projects :enterprise
+      invoice = Invoice.new(project_id: project.id, date: Time.now)
+      assert invoice.valid?, "#{invoice.inspect} should be valid"
+    end
   end
 
   describe "pdf generation" do
