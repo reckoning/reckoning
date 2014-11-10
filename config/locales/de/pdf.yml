@@ -18,5 +18,5 @@ de:
       sum: "Summe"
 
     timesheet:
-      headline: "Stunden"
+      headline: "Stunden von<br>%{from} bis %{to}"
       sum: "Gesamt"
