@@ -6,6 +6,9 @@ DEFAULTS: &DEFAULTS
 data:
   id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a72"
   email: "data@star.fleet"
+  contact_information:
+    company: "User"
+    name: "Name"
   <<: *DEFAULTS
 
 will:
