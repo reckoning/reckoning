@@ -59,6 +59,8 @@ gem "dropbox-sdk"
 
 gem "web_translate_it"
 
+gem "newrelic_rpm"
+
 # for sidekiq web
 gem "sinatra", ">= 1.3.0", require: nil
 
