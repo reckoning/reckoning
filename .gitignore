@@ -12,7 +12,7 @@ pids/*
 config/database.yml
 config/resque.yml
 config/secrets.yml
-config/newrelic.yml
+config/skylight.yml
 .env
 
 # test files
