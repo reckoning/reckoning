@@ -80,4 +80,5 @@ group :development, :test do
   gem "byebug"
   gem "guard-minitest"
   gem "terminal-notifier-guard", "~> 1.6.1"
+  gem "mina"
 end
