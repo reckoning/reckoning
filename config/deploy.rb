@@ -30,7 +30,7 @@ set :shared_paths, [
 ]
 
 task :environment do
-  invoke :"rvm:use[ruby-2.1.4@default]"
+  invoke :"rvm:use[ruby-2.1.5@default]"
 end
 
 desc "Deploys the current version to the server."
