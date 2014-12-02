@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "2.1.4"
+ruby "2.1.5"
 
 gem "rails", "4.1.5"
 
@@ -80,4 +80,5 @@ group :development, :test do
   gem "byebug"
   gem "guard-minitest"
   gem "terminal-notifier-guard", "~> 1.6.1"
+  gem "mina"
 end
