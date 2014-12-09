@@ -26,20 +26,12 @@ module Reckoning
       "#{html_tag}".html_safe
     }
 
-    config.middleware.use Rack::Cors do
-      allow do
-        origins 'http://frontend.reckoning.dev'
-        resource '*', :headers => :any, :methods => [:get, :post, :put, :patch, :delete, :options]
-      end
-    end
-
     config.exceptions_app = self.routes
   end
 end
 
 I18n.config.enforce_available_locales = true
 
-require 'hstore_accessor'
 require 'invoice_pdf_generator'
 require 'timesheet_pdf_generator'
 require_relative 'version'
