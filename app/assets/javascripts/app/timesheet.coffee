@@ -35,7 +35,7 @@ $(document).on 'change', '.timesheet-day input[type=text]', App.Timesheet.enable
 $ ->
   $('table.timesheet .timesheet-day input[type=text]').focusout (ev) ->
     $input = $(@)
-    $input.val(App.Timesheet.convertTimeField($input.val()))
+    $input.val(App.Timesheet.convertTimeField($input.val())) if $input.val() > 0
 
     td = $input.parent('td')
     col = $(td).parent().children().index(td)
@@ -50,7 +50,7 @@ $ ->
         sum += timeToDecimal(value) if value && parseInt(value, 10) isnt 0
 
     col_sum = decimalToTime(col_sum) || 0
-    $("table.timesheet tfoot tr td:eq(#{col})").text(col_sum)
+    $("table.timesheet tfoot tr td:eq(#{col})").text(col_sum) if col_sum > 0
 
     row_sum = 0.0
     $input.closest('tr').find('td.timesheet-day').each ->
@@ -58,10 +58,10 @@ $ ->
       row_sum += timeToDecimal(value) if value isnt undefined && value.length
 
     row_sum = decimalToTime(row_sum) || 0
-    $input.closest('tr').find("td.timesheet-row-sum").text(row_sum)
+    $input.closest('tr').find("td.timesheet-row-sum").text(row_sum) if row_sum > 0
 
     sum += parseInt(row_sum, 10)
-    $("table.timesheet tfoot tr td.timesheet-sum").text(decimalToTime(sum))
+    $("table.timesheet tfoot tr td.timesheet-sum").text(decimalToTime(sum)) if sum > 0
 
 
   if $('#select-project').length && $('#select-task').length
