@@ -50,8 +50,8 @@ class Invoice < ActiveRecord::Base
   end
 
   def send_via_mail
-    if self.files_present? && self.send_via_mail?
-      InvoiceMailerWorker.perform_async self.id
+    if self.send_via_mail?
+      InvoiceMailerWorker.perform_in 1.minute, self.id
     end
   end
 
