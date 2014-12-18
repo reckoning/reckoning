@@ -4,7 +4,10 @@ class CustomersController < ApplicationController
 
   def index
     authorize! :read, Customer
-    @customers = current_user.customers.page(params.fetch(:page){nil}).per(20)
+    @customers = current_user.customers
+      .order(sort_column + " " + sort_direction)
+      .page(params.fetch(:page){nil})
+      .per(20)
   end
 
   def show
@@ -56,7 +59,7 @@ class CustomersController < ApplicationController
   private
 
   def sort_column
-    Customer.column_names.include?(params[:sort]) ? params[:sort] : "id"
+    Customer.column_names.include?(params[:sort]) ? params[:sort] : "updated_at"
   end
 
   protected
