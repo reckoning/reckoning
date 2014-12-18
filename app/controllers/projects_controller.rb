@@ -76,6 +76,7 @@ class ProjectsController < ApplicationController
       :name,
       :rate,
       :budget,
+      :budget_on_dashboard,
       tasks_attributes: [
         :id,
         :name,
