@@ -11,6 +11,10 @@
                 = I18n.t(:"dashboard.panels.summary")
           .list-group
             .list-group-item
+              = I18n.t(:"dashboard.panels.all_invoices")
+              %strong.pull-right
+                = number_to_currency(invoices_sum(@charged_invoices + @paid_invoices))
+            .list-group-item
               = I18n.t(:"dashboard.panels.charged_invoices")
               %strong.pull-right
                 = number_to_currency(invoices_sum(@charged_invoices))
@@ -23,7 +27,7 @@
                 = I18n.t(:"dashboard.panels.provision")
                 %strong.pull-right
                   = number_to_currency(invoices_sum(@paid_invoices) / 100 * current_user.provision.to_i)
-            .list-group-item
+            .list-group-item.disabled
               = I18n.t(:"dashboard.panels.last_invoices")
               %strong.pull-right
                 = number_to_currency(invoices_sum(@last_invoices))
