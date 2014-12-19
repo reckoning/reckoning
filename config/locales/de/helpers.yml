@@ -3,6 +3,7 @@ de:
     label:
       project:
         rate: "Stundensatz"
+        budget_on_dashboard: "Budget auf Dashboard anzeigen?"
       user:
         remember_me: "Angemeldet bleiben"
       position:

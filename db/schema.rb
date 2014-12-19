@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140912054539) do
+ActiveRecord::Schema.define(version: 20141218172205) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,7 +19,6 @@ ActiveRecord::Schema.define(version: 20140912054539) do
   enable_extension "uuid-ossp"
 
   create_table "customers", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
-    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "address_id"
@@ -29,6 +28,8 @@ ActiveRecord::Schema.define(version: 20140912054539) do
     t.string   "default_from"
     t.uuid     "user_id"
     t.hstore   "contact_information"
+    t.string   "company"
+    t.string   "name"
   end
 
   create_table "invoices", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
@@ -63,9 +64,10 @@ ActiveRecord::Schema.define(version: 20140912054539) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "rate",        precision: 10, scale: 2, default: 0.0, null: false
-    t.decimal  "budget",      precision: 10, scale: 2, default: 0.0, null: false
+    t.decimal  "rate",                precision: 10, scale: 2, default: 0.0,  null: false
+    t.decimal  "budget",              precision: 10, scale: 2, default: 0.0,  null: false
     t.uuid     "customer_id"
+    t.boolean  "budget_on_dashboard",                          default: true
   end
 
   create_table "tasks", id: :uuid, default: "uuid_generate_v4()", force: true do |t|

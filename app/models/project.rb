@@ -9,7 +9,7 @@ class Project < ActiveRecord::Base
   accepts_nested_attributes_for :tasks, allow_destroy: true
 
   def self.with_budget
-    where("budget != ?", 0)
+    where("budget != ?", 0).where(budget_on_dashboard: true)
   end
 
   def name_with_customer

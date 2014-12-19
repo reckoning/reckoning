@@ -32,6 +32,12 @@ form {
     }
   }
 
+  .form-control[type=checkbox] {
+    margin: 0;
+    box-shadow: none;
+    background-color: transparent;
+  }
+
   .selectize {
     .form-control-feedback {
       top: 0;
