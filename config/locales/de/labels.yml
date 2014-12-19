@@ -11,6 +11,8 @@ de:
       state: "Status"
       hours: "Stunden"
       rate: "€/Std."
+      budget: "Budget"
+      remaining_budget: "Verbrauch"
       value: "Betrag"
       description: "Beschreibung"
       contact: "Kontaktinformationen"
@@ -55,7 +57,7 @@ de:
       email: "E-Mail Setup für Rechnungen"
     budget:
       uninvoiced: "Noch nicht in Rechnung gestellt"
-      limit: "Gesamt: %{hours} h"
+      limit: "Gesamt: %{hours}"
     table:
       blank:
         customer: "Keine Kunden vorhanden"
