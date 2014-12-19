@@ -3,8 +3,10 @@
     %thead
       %tr
         %th=sortable "name", I18n.t(:"labels.defaults.name")
-        %th=sortable "rate", I18n.t(:"labels.defaults.rate")
         %th=sortable "customers.company", I18n.t(:"labels.defaults.customer")
+        %th=sortable "rate", I18n.t(:"labels.defaults.rate")
+        %th.budget=sortable "budget", I18n.t(:"labels.defaults.budget")
+        %th.budget-bar=I18n.t(:"labels.defaults.remaining_budget")
         %th.actions.two=I18n.t(:"labels.defaults.actions")
 
     %tbody
