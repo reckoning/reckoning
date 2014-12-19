@@ -3,7 +3,7 @@ class Customer < ActiveRecord::Base
   has_many :projects, dependent: :destroy
   has_many :invoices, dependent: :destroy
 
-  store_accessor :contact_information, :name, :company, :address, :country, :email, :telefon, :fax, :website
+  store_accessor :contact_information, :address, :country, :email, :telefon, :fax, :website
 
   validate :at_least_one_name
 
