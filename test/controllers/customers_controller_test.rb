@@ -84,7 +84,7 @@ class CustomersControllerTest < ActionController::TestCase
     end
 
     it "User can update customer" do
-      put :update, {id: customer.id, customer: {address_attributes: {name: "bar"}}}
+      put :update, {id: customer.id, customer: {name: "bar"}}
 
       assert_response :found
       assert_equal I18n.t(:"messages.customer.update.success"), flash[:notice]
