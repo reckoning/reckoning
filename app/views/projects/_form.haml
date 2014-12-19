@@ -19,7 +19,7 @@
 
     .col-xs-6.col-md-2.form-group{class: form_error?(project, :budget)}
       = form.label :budget
-      = form.number_field :budget, class: 'form-control'
+      = form.number_field :budget, class: "form-control", step: "any"
       = form_errors project, :budget
 
     .col-xs-12.col-md-4.form-group{class: form_error?(project, :budget_on_dashboard)}

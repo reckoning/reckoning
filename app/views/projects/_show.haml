@@ -2,9 +2,27 @@
   %td
     = project.name
   %td
-    = project.rate
-  %td
     = project.customer.fullname
+  %td
+    = project.rate
+  %td.budget
+    - unless project.budget.zero?
+      = number_to_currency project.budget, unit: "h", precision: 0
+      %br
+      = number_to_currency project.budget * project.rate
+  %td
+    - unless project.budget.zero?
+      .row.budget-label
+        .col-xs-6.col-sm-6.col-md-6
+          = number_to_currency project.timer_values, unit: "h", precision: 2
+          - unless project.timer_values.zero? || project.timer_values_uninvoiced.zero?
+            %span.label.label-default{data: {toggle: 'tooltip'}, title: I18n.t(:"labels.budget.uninvoiced")}
+              = number_to_currency project.timer_values_uninvoiced, unit: "h", precision: 2
+        .col-xs-6.col-sm-6.col-md-6.text-right
+          = number_to_currency (project.budget - project.timer_values), unit: "h", precision: 2
+      .progress.progress-striped.text-center{title: I18n.t(:"labels.budget.limit", hours: number_to_currency(project.budget, unit: "h", precision: 2)), data: {toggle: "tooltip"}}
+        .progress-bar{class: budget_progress(project), role: "progressbar", aria: {valuemin: "0", valuemax: "100"},style: "width: #{project.budget_percent_invoiced}%"}
+        .progress-bar{role: "progressbar", aria: {valuemin: "0", valuemax: "100"}, style: "width: #{project.budget_percent_uninvoiced}%"}
   %td
     .btn-group
       = link_to edit_project_path(project), title: I18n.t(:"actions.edit"), class: "btn btn-default btn-sm" do
