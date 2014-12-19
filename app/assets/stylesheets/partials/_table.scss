@@ -23,8 +23,20 @@ table {
         min-width: 144px;
       }
     }
+    &.budget {
+      width: 100px;
+      min-width: 100px;
+    }
+    &.budget-bar {
+      width: 300px;
+      min-width: 300px;
+
+    }
   }
   td {
+    &.budget {
+      text-align: right;
+    }
     &.value, &.hours, &.rate {
       text-align: right;
     }
