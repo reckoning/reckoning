@@ -52,6 +52,5 @@ class Setup < Thor
     run "cp #{app_dir}/config/database.example.yml #{app_dir}/config/database.yml"
     run "cp #{app_dir}/config/secrets.example.yml #{app_dir}/config/secrets.yml"
     run "cp #{app_dir}/.env.example #{app_dir}/.env"
-    run "cp #{app_dir}/.ruby-version.example #{app_dir}/.ruby-version"
   end
 end
