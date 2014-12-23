@@ -9,7 +9,14 @@ window.displayNoty = function(text, timeout, type) {
     text: text,
     timeout: timeout,
     type: type,
-    layout: 'bottomRight'
+    layout: 'bottomRight',
+    theme: 'bootstrapTheme',
+    animation: {
+      open: 'animated fadeInUp',
+      close: 'animated fadeOutDown',
+      easing: 'swing',
+      speed: 500
+    }
   });
 };
 
@@ -47,7 +54,14 @@ window.displayConfirm = function(ev, $element) {
     text: $element.data('notyconfirm'),
     buttons: [okButton, cancelButton],
     type: 'warning',
-    layout: 'top'
+    layout: 'bottomRight',
+    theme: 'bootstrapTheme',
+    animation: {
+      open: 'animated fadeInUp',
+      close: 'animated fadeOutDown',
+      easing: 'swing',
+      speed: 500
+    }
   });
 };
 
