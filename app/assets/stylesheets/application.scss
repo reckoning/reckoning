@@ -1,4 +1,5 @@
 //= require_self
+//= require animate.css/animate.min.css
 //= require ladda/css/ladda
 //= require nvd3/nv.d3
 //= require selectize/dist/css/selectize.bootstrap3
@@ -64,5 +65,14 @@ code[data-target] {
 }
 
 .noty_buttons {
-  background-color: transparent !important;
+  margin-bottom: 10px;
+  text-align: center;
+
+  button {
+    margin-right: 5px;
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
 }
