@@ -6,7 +6,7 @@ class InvoiceTestMailerWorker
     invoice = Invoice.find invoice_id
 
     if invoice.present?
-      InvoiceMailer.test_mail(invoice, test_mail).deliver
+      InvoiceMailer.test_mail(invoice, test_mail).deliver_now
     end
   end
 end
