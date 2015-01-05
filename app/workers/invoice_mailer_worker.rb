@@ -7,7 +7,7 @@ class InvoiceMailerWorker
 
     if invoice.present?
       if invoice.files_present?
-        InvoiceMailer.customer_mail(invoice).deliver
+        InvoiceMailer.customer_mail(invoice).deliver_now
       elsif count <= 3
         InvoiceMailerWorker.perform_in 2.minutes, self.id, count + 1
       end
