@@ -14,7 +14,7 @@ set :repository, 'git@github.com:reckoning/app.git'
 if ENV['on'] == "live"
   set :domain, 'reckoning.io'
   set :branch, 'live'
-  set :repository, 'git@github.com:mortik/reckoning.git'
+  set :repository, 'git@git.mortik.de:reckoning/app.git'
 end
 
 set :shared_paths, [
@@ -47,4 +47,8 @@ task :deploy => :environment do
       queue "sudo supervisorctl restart reckoning:*"
     end
   end
+end
+
+task :restart => :environment do
+  queue "sudo supervisorctl restart reckoning:*"
 end
