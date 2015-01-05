@@ -11,4 +11,4 @@ branches:
     - master
     - develop
 notifications:
-  webhooks: https://mortik.slack.com/services/hooks/travis?token=aqp1ZDxk4YATzbB2XC8b36kn
+  webhooks: https://hooks.slack.com/services/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
