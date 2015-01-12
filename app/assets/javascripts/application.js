@@ -30,6 +30,7 @@ $(document).on('show.bs.collapse', '.navbar-collapse', function() {
 });
 
 $(function() {
+  Turbolinks.enableProgressBar();
   $('.btn.btn-loading').click(function() {
     $(this).button('loading');
   });
