@@ -242,16 +242,11 @@ class InvoicesController < ApplicationController
     end
   end
 
-  SORT_COLUMN_MAPPING = {
-    "customers.company" => "addresses.company"
-  }
-
   private
 
   def sort_column
     @sort_column ||= begin
       column = (Invoice.column_names + %w[customers.company]).include?(params[:sort]) ? params[:sort] : "ref"
-      column = SORT_COLUMN_MAPPING.fetch(column){column}
     end
   end
   helper_method :sort_column
