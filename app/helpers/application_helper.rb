@@ -11,15 +11,23 @@ module ApplicationHelper
     end
   end
 
+  def first_invoice_year
+    if first_invoice = current_user.invoices.order('date').first
+      first_invoice.date.year
+    else
+      nil
+    end
+  end
+
   def current_years
     current_year = Time.now.year
     if Time.now.month == 12
       current_year = (Time.now + 1.year).year
     end
-    if start_year = Invoice.start_year
-      years = (start_year..current_year)
+    if first_invoice_year
+      years = (first_invoice_year..current_year)
     else
-      years = ((Time.now - 1.years).year..current_year)
+      years = ((Time.now - 1.year).year..current_year)
     end
     years.to_a.reverse.map do |year|
       {name: year, link: year}
