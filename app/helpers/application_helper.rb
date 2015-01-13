@@ -12,9 +12,18 @@ module ApplicationHelper
   end
 
   def current_years
-    years = [{name: Time.now.year - 1, link: Time.now.year - 1}, {name: Time.now.year, link: Time.now.year}]
-    years << {name: Time.now.year + 1, link: Time.now.year + 1} if Time.now.month == 12
-    years.reverse
+    current_year = Time.now.year
+    if Time.now.month == 12
+      current_year = (Time.now + 1.year).year
+    end
+    if start_year = Invoice.start_year
+      years = (start_year..current_year)
+    else
+      years = ((Time.now - 1.years).year..current_year)
+    end
+    years.to_a.reverse.map do |year|
+      {name: year, link: year}
+    end
   end
 
   def sortable column, title = nil, remote = true
