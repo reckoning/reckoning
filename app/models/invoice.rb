@@ -44,14 +44,6 @@ class Invoice < ActiveRecord::Base
     where "date <= ? AND date >= ?", "#{year}-12-31", "#{year}-01-01"
   end
 
-  def self.start_year
-    if first_invoice = self.order('date').first
-      first_invoice.date.year
-    else
-      nil
-    end
-  end
-
   def set_pay_date
     self.pay_date = Date.today
     self.save
