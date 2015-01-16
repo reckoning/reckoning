@@ -45,9 +45,9 @@ class InvoicesController < ApplicationController
     authorize! :archive, invoice
     if current_user.has_dropbox?
       InvoiceDropboxAllWorker.perform_async current_user.id
-      redirect_to invoice_path(invoice), notice: I18n.t(:"messages.invoice.archive_all.success")
+      redirect_to invoices_path, notice: I18n.t(:"messages.invoice.archive_all.success")
     else
-      redirect_to invoice_path(invoice), warning: I18n.t(:"messages.invoice.archive_all.failure")
+      redirect_to invoices_path, warning: I18n.t(:"messages.invoice.archive_all.failure")
     end
   end
 
