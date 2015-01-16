@@ -39,6 +39,9 @@ Reckoning::Application.routes.draw do
   resource :password, only: [:edit, :update]
 
   resources :invoices do
+    collection do
+      put "archive" => "invoices#archive_all"
+    end
     member do
       put :generate_positions
       put :regenerate_pdf

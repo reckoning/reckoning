@@ -81,6 +81,9 @@ de:
       archive:
         success: "Rechnung wurde erfolgreich in Dropbox archiviert."
         failure: "Rechnung konnte nicht archiviert werden. Bitte überprüfen Sie Ihre Einstellungen für Ihren Dropbox-Account."
+      archive_all:
+        success: "Rechnungen werden nun in Dropbox archiviert."
+        failure: "Rechnungen konnten nicht archiviert werden. Bitte überprüfen Sie Ihre Einstellungen für Ihren Dropbox-Account."
       send:
         success: "Rechnung wurde erfolgreich versendet."
         failure: "Rechnung konnte nicht versandt werden. Bitte überprüfen Sie Ihre E-Mail-Einstellungen und die des betreffenden Kunden."
