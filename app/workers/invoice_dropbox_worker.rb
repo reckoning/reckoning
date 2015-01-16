@@ -10,7 +10,7 @@ class InvoiceDropboxWorker
     if invoice.present?
       client = ::DropboxClient.new(invoice.user.dropbox_token)
 
-      if File.exists?(invoice.timesheet_path)
+      if File.exists?(invoice.pdf_path)
         client.put_file("#{invoice.customer.fullname}/#{invoice.project.name}/#{invoice.invoice_file}", open(invoice.pdf_path), true)
       end
 
