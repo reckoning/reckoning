@@ -5,8 +5,6 @@ class InvoiceDropboxAllWorker
   sidekiq_options queue: (ENV['ARCHIVE_QUEUE'] || 'reckoning-archive-all').to_sym
 
   def perform user_id
-    client = ::DropboxClient.new(invoice.user.dropbox_token)
-
     Invoice.where(user_id: user_id).each do |invoice|
       begin
         invoice.generate
