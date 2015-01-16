@@ -1,37 +1,37 @@
 FORMAT: 1A
 
-# reckoningio
-Notes API is a *short texts saving* service similar to its physical paper presence on your table.
+# Reckoning.io
+Reckoning.io API for Timer Entries and Tasks 
 
-# Group Notes
-Notes related resources of the **Notes API**
+# Group Tasks
+Tasks related resources of the **Reckoning.io API**
 
-## Notes Collection [/notes]
-### List all Notes [GET]
+## Tasks Collection [/tasks]
+### List all Tasks [GET]
 + Response 200 (application/json)
 
         [{
-          "id": 1, "title": "Jogging in park"
+          "uuid": "2c1e6ffe-2a53-4b18-9bdc-90143af04b70", "name": "Development"
         }, {
-          "id": 2, "title": "Pick-up posters from post-office"
+          "uuid": "03b1f19a-8581-4b06-84a5-bd3d240f23f", "name": "Communication"
         }]
 
-### Create a Note [POST]
+### Create a Task [POST]
 + Request (application/json)
 
-        { "title": "Buy cheese and bread for breakfast." }
+        { "name": "Development" }
 
 + Response 201 (application/json)
 
-        { "id": 3, "title": "Buy cheese and bread for breakfast." }
+        { "uuid": "2c1e6ffe-2a53-4b18-9bdc-90143af04b70", "name": "Development" }
 
-## Note [/notes/{id}]
-A single Note object with all its details
+## Task [/tasks/{uuid}]
+A single Task object with all its details
 
 + Parameters
-    + id (required, number, `1`) ... Numeric `id` of the Note to perform action with. Has example value.
+    + uuid (required, string, `2c1e6ffe-2a53-4b18-9bdc-90143af04b70`) ... String `uuid` of the Task to perform action with. Has example value.
 
-### Retrieve a Note [GET]
+### Retrieve a Task [GET]
 + Response 200 (application/json)
 
     + Header
@@ -40,7 +40,5 @@ A single Note object with all its details
 
     + Body
 
-            { "id": 2, "title": "Pick-up posters from post-office" }
-
-### Remove a Note [DELETE]
-+ Response 204
+            { "uuid": "03b1f19a-8581-4b06-84a5-bd3d240f23f", "name": "Communication" }
+            
