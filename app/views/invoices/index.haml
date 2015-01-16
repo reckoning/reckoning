@@ -13,6 +13,9 @@
 
       .col-xs-12.col-md-4
         .btn-group.pull-right.resource-nav
+          - if current_user.has_dropbox?
+            %a.btn.btn-default{href: archive_invoices_path}
+              = I18n.t(:"nav.subnav.archive_invoices")
           %a.btn.btn-default{href: new_invoice_path, class: ("disabled" if invoice_limit_reached?)}
             = I18n.t(:"nav.subnav.new_invoice")
 
