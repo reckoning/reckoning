@@ -19,7 +19,6 @@ end
 
 set :shared_paths, [
   '.wti',
-  'vendor/assets',
   'public/assets',
   'public/uploads',
   'files',
