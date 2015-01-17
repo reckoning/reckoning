@@ -1,0 +1,23 @@
+{
+  "name": "pdf.js",
+  "version": "1.0.277",
+  "homepage": "https://github.com/mortik/pdf.js",
+  "authors": [
+    "mozilla",
+    "Marten Klitzke <m.klitzke@gmail.com>"
+  ],
+  "description": "PDF.js Bower Repository for Dependency-Management",
+  "keywords": [
+    "pdf.js"
+  ],
+  "license": "Apache License, Version 2.0",
+  "_release": "1.0.277",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.277",
+    "commit": "a615bd5fa0cb5911c49812e6a51b734efc38de1d"
+  },
+  "_source": "git://github.com/mortik/pdf.js.git",
+  "_target": "~1.0.277",
+  "_originalSource": "mortik/pdf.js"
+}

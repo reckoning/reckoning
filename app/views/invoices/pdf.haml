@@ -38,11 +38,12 @@
           #tax
             = I18n.t(:"pdf.invoice.subject.tax")
             = @resource.user.tax_ref
+        .clear
       %h1
         = I18n.t(:"pdf.invoice.headline")
         = @resource.ref_number
 
-    %br
+      .clear
 
     %table.table.table-condensed
       %thead

@@ -13,6 +13,14 @@
   }
 }
 
+// Mixin itself
+.clear {
+  content: " ";
+  height: 0;
+  clear: both;
+}
+
+
 body {
   font-size: 1.6em;
   color: #333333 !important;
@@ -62,8 +70,8 @@ address {
   margin: 30px 0;
 
   .info-wrapper {
-    position: absolute;
-    right: 0;
+    float: right;
+    width: 50%;
 
     #infomartion, #date, #delivery-date, #tax, #payment-due {
       float: right;
@@ -76,7 +84,10 @@ address {
 
   h1 {
     font-size: 140%;
+    width: 50%;
     font-weight: bold;
+    margin-top: 0;
+    float: left;
   }
 }
 
