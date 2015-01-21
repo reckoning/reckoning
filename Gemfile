@@ -31,7 +31,7 @@ gem "coffee-rails"
 gem "bourbon"
 
 gem "bootstrap-sass"
-gem 'font-awesome-sass'
+gem "font-awesome-sass"
 
 gem "jquery-rails"
 gem "jquery-turbolinks"
