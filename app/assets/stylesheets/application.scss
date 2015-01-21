@@ -2,6 +2,7 @@
 //= require animate.css/animate.min.css
 //= require ladda/css/ladda
 //= require nvd3/nv.d3
+//= require nprogress/nprogress
 //= require selectize/dist/css/selectize.bootstrap3
 
 $footer-border-color: #ccc;
@@ -30,8 +31,13 @@ html {
   height: 100%;
 }
 
-html.turbolinks-progress-bar::before {
-  background-color: #428bca !important;
+#nprogress .bar {
+  background: $navbar-active !important;
+}
+
+#nprogress .spinner-icon {
+  border-top-color: $navbar-active !important;
+  border-left-color: $navbar-active !important;
 }
 
 body {

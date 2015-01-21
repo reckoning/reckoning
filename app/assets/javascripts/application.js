@@ -17,6 +17,7 @@
 //= require d3/d3
 //= require nvd3/nv.d3
 //= require accounting/accounting
+//= require nprogress/nprogress
 //= require pdf.js/build/pdf
 //= require pdf_viewer
 //= require tabs
@@ -25,12 +26,15 @@
 //
 //= require turbolinks
 
+$(document).on('page:fetch',   function() { NProgress.start(); });
+$(document).on('page:change',  function() { NProgress.done(); });
+$(document).on('page:restore', function() { NProgress.remove(); });
+
 $(document).on('show.bs.collapse', '.navbar-collapse', function() {
   $('.navbar-collapse.in').not(this).collapse('hide');
 });
 
 $(function() {
-  Turbolinks.enableProgressBar();
   $('.btn.btn-loading').click(function() {
     $(this).button('loading');
   });
