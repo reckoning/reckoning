@@ -2,6 +2,7 @@
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/reckoning/app?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/reckoning/app.png?branch=master)](https://travis-ci.org/reckoning/app)
+![Codeship Status](https://codeship.com/projects/3e76bd30-839a-0132-7186-229036a4d434/status?branch=master)
 
 Reckoning is a simple tool for invoicing
 
