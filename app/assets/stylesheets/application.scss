@@ -31,21 +31,6 @@ html {
   height: 100%;
 }
 
-#nprogress .bar {
-  background: $navbar-active !important;
-}
-
-#nprogress .spinner-icon {
-  border-top-color: $navbar-active !important;
-  border-left-color: $navbar-active !important;
-}
-
-@media (max-width: $screen-xs-max) {
-  #nprogress .spinner {
-    right: 70px !important;
-  }
-}
-
 body {
   min-height: 100%;
   height: auto;
