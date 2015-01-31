@@ -1,0 +1,60 @@
+<% content_for :title do %>
+  <%= I18n.t(:"meta.title.timer.index") %>
+<% end %>
+<div class="row" ng-app="timesheet">
+  <div class="col-xs-12 col-md-12" ng-controller="WeekController as weekCtrl" ng-init="weekCtrl.setDates()">
+    <div class="table-responsive">
+      <table class="table table-condensed table-hover timesheet" ng-init="weekCtrl.getTasks()">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="text-right timesheet-day" ng-class="{'timesheet-today':date.isCurrentDate}" ng-repeat="date in weekCtrl.dates">
+              {{date.day}}
+              <br>
+              {{date.short}}
+            </th>
+            <th class="text-right timesheet-row-sum"></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="task in weekCtrl.tasks">
+            <td>
+              {{task.name}}
+            </td>
+            <td class="text-right timesheet-day" ng-class="{'timesheet-today':date.isCurrentDate}" ng-repeat="timer in task.timers">
+              <input type="text" ng-model="timer.value" class="form-control">
+            </td>
+            <td class="text-right timesheet-row-sum">
+              <span>{{weekCtrl.sumForTask(task) | time}}</span>
+            </td>
+            <td class="timesheet-actions">
+              <a class="btn btn-danger btn-sm" ng-click="weekCtrl.removeTask(task)">
+                <i class="fa fa-trash"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td class="text-right">
+              <button class="btn btn-default" type="button" ng-click="weekCtrl.addTask('New Task')">
+                <%= I18n.t(:"actions.add_timer") %>
+              </button>
+              <button class="btn btn-primary" disabled>
+                <%= I18n.t(:"actions.save")%>
+              </button>
+            </td>
+            <td class="text-right timesheet-col-sum" ng-class="{'timesheet-today':date.isCurrentDate}" ng-repeat="date in weekCtrl.dates">
+              <span>{{weekCtrl.sumForDate(date) | time}}</span>
+            </td>
+            <td class="text-right timesheet-sum">
+              <span>{{weekCtrl.sumForWeek() | time}}</span>
+            </td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>

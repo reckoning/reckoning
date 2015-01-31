@@ -11,18 +11,21 @@
 //= require dynamic_fields_for
 //= require i18n
 //= require i18n/translations
-//= require helper
 //= require moment/moment
 //= require moment_init
+//= require twix/bin/twix
 //= require d3/d3
 //= require nvd3/nv.d3
 //= require accounting/accounting
 //= require nprogress/nprogress
 //= require pdf.js/build/pdf
 //= require pdf_viewer
+//= require helper
+//= require_tree ./helpers
 //= require tabs
 //= require app
 //= require_tree ./app
+//= require timesheet
 //
 //= require turbolinks
 
