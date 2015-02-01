@@ -27,6 +27,10 @@
                 = I18n.t(:"dashboard.panels.provision")
                 %strong.pull-right
                   = number_to_currency(invoices_sum(@paid_invoices) / 100 * current_user.provision.to_i)
+              .list-group-item
+                = I18n.t(:"dashboard.panels.last_provision", year: (Time.now - 1.year).year)
+                %strong.pull-right
+                  = number_to_currency(invoices_sum(@last_invoices) / 100 * current_user.provision.to_i)
             .list-group-item.disabled
               = I18n.t(:"dashboard.panels.last_invoices")
               %strong.pull-right
