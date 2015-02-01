@@ -13,7 +13,7 @@ class Project < ActiveRecord::Base
   end
 
   def name_with_customer
-    "#{self.customer.fullname} - #{self.name}"
+    "#{self.customer.name} - #{self.name}"
   end
 
   def timer_values

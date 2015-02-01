@@ -5,21 +5,6 @@ class Customer < ActiveRecord::Base
 
   store_accessor :contact_information, :address, :country, :email, :telefon, :fax, :website
 
-  validate :at_least_one_name
-
-  def at_least_one_name
-    if self.name.blank? && self.company.blank?
-      errors[:name] << I18n.t(:"activerecord.errors.models.invoice.attributes.company_name.empty")
-      errors[:company] << I18n.t(:"activerecord.errors.models.invoice.attributes.company_name.empty")
-    end
-  end
-
-  validates_format_of :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
-
-  def fullname
-    company_and_name = []
-    company_and_name << name if name.present?
-    company_and_name << company if company.present?
-    company_and_name.join(' | ')
-  end
+  validates_presence_of :name
+  validates_format_of :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, allow_blank: true
 end
