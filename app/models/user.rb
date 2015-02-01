@@ -18,6 +18,8 @@ class User < ActiveRecord::Base
   before_save :update_gravatar_hash
   before_save :ensure_authentication_token
 
+  validates_format_of :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
+
   def update_gravatar_hash
     if gravatar.blank?
       hash = Digest::MD5.hexdigest(id.to_s)
