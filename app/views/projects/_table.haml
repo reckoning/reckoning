@@ -1,16 +1,18 @@
 .table-responsive
   %table.table.table-condensed.table-hover.table-outer-bordered.table-striped
-    %thead
-      %tr
-        %th=sortable "name", I18n.t(:"labels.defaults.name")
-        %th=sortable "customers.company", I18n.t(:"labels.defaults.customer")
-        %th=sortable "rate", I18n.t(:"labels.defaults.rate")
-        %th.budget=sortable "budget", I18n.t(:"labels.defaults.budget")
-        %th.budget-bar=I18n.t(:"labels.defaults.remaining_budget")
-        %th.actions.two=I18n.t(:"labels.defaults.actions")
+    - @customers.each do |customer|
+      %thead
+        %tr
+          %th
+            %a{href: edit_customer_path(customer)}
+              = customer.name
+          %th=I18n.t(:"labels.defaults.rate")
+          %th.budget=I18n.t(:"labels.defaults.budget")
+          %th.budget-bar=I18n.t(:"labels.defaults.remaining_budget")
+          -# %th.actions.two=I18n.t(:"labels.defaults.actions")
 
-    %tbody
-      = render partial: "projects/show", collection: @projects, as: :project
+      %tbody
+        = render partial: "projects/show", collection: customer.projects.order("name asc"), as: :project
 
-      - if @projects.blank?
-        = render "shared/tables/blank", count: 4, resource: "project"
+        - if customer.projects.blank?
+          = render "shared/tables/blank", count: 4, resource: "project"

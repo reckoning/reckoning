@@ -60,7 +60,7 @@ Reckoning::Application.routes.draw do
   resources :positions, only: [:new, :destroy]
 
   resources :customers, except: [:show]
-  resources :projects, except: [:show] do
+  resources :projects do
     resources :tasks, only: [:index, :create] do
       collection do
         get 'uninvoiced'

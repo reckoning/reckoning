@@ -24,7 +24,6 @@ de:
           user: "SMTP Benutzer"
           password: "SMTP Passwort oder Token"
     placeholder:
-      company: "Firma"
       name: "Name"
       address: "Adresse"
       telefon: "Telefon"
@@ -33,10 +32,6 @@ de:
       email: "E-Mail"
       test_mail:
         email: "E-Mail Adresse"
-      project:
-        name: "Name"
-      task:
-        name: "Name"
       position:
         description: "Beschreibung"
         rate: "0"
@@ -60,6 +55,7 @@ de:
           default_from: "Absender Für Rechnungs E-Mails"
           signature: "Signatur"
       customer:
+        name: "Firma / Name"
         payment_due: "Zahlungsziel (Tage)"
         email_template: "Inhalt"
         invoice_email: "Empfänger"

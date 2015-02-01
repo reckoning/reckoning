@@ -2,7 +2,7 @@
   .row.fields
     .col-xs-12.col-md-10
       .form-group{class: form_error?(fields.object, :name)}
-        = fields.text_field :name, placeholder: I18n.t(:"helpers.placeholder.task.name"), class: 'form-control'
+        = fields.text_field :name, placeholder: I18n.t(:"helpers.placeholder.name"), class: 'form-control'
         = form_errors fields.object, :name
 
     .col-xs-12.col-md-2

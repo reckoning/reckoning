@@ -68,7 +68,7 @@ class Invoice < ActiveRecord::Base
   def title
     [
       "<b>",
-      customer.fullname,
+      customer.name,
       "</b> - ",
       project.name
     ].join('').html_safe

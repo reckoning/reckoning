@@ -34,6 +34,12 @@ table {
     }
   }
   td {
+    .row {
+      margin: 0;
+      > div {
+        padding: 0;
+      }
+    }
     &.budget {
       text-align: right;
     }

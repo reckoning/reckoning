@@ -4,10 +4,13 @@ class ProjectsController < ApplicationController
 
   def index
     authorize! :read, Project
-    @projects = current_user.projects.includes(:customer).references(:customers)
-      .order(sort_column + " " + sort_direction)
+    @customers = current_user.customers.order(sort_column + " " + sort_direction)
       .page(params.fetch(:page){nil})
       .per(20)
+  end
+
+  def show
+    authorize! :read, project
   end
 
   def new
@@ -57,7 +60,11 @@ class ProjectsController < ApplicationController
   helper_method :project, :customers, :sort_column
 
   def sort_column
-    (Project.column_names + %w[customers.company]).include?(params[:sort]) ? params[:sort] : "updated_at"
+    (Project.column_names + %w[customers.company]).include?(params[:sort]) ? params[:sort] : "name"
+  end
+
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
 
   protected
