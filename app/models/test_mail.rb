@@ -1,14 +1,21 @@
-class TestMail < ActiveRecord::Base
-  def self.columns
-    @columns ||= []
-  end
+class TestMail
+  include ActiveModel::Validations
+  include ActiveModel::Conversion
+  extend ActiveModel::Naming
 
-  def self.column(name, sql_type = nil, default = nil, null = true)
-    columns << ActiveRecord::ConnectionAdapters::Column.new(name.to_s, default, sql_type.to_s, null)
-  end
+  attr_accessor :email
 
-  column :email, :string
-
-  validates_presence_of :email
   validates_format_of :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
+
+  def initialize(attributes = {})
+    unless attributes.nil?
+      attributes.each do |name, value|
+        send("#{name}=", value)
+      end
+    end
+  end
+
+  def persisted?
+    false
+  end
 end
