@@ -1,0 +1,40 @@
+- content_for :title do
+  = I18n.t(:"meta.title.project.edit")
+
+.row#show-project
+  .col-xs-12.col-md-12
+
+    .row
+      .col-xs-12.col-md-8
+        %h1
+          = I18n.t(:"headlines.project.show", name: project.name)
+
+      .col-xs-12.col-md-4
+        .btn-group.pull-right.resource-nav
+          = link_to I18n.t(:"nav.subnav.back"), projects_path, class: "btn btn-default"
+          = link_to edit_project_path(project), class: "btn btn-default" do
+            %i.fa.fa-edit
+            = I18n.t(:"actions.edit")
+          %a.btn.btn-danger{href: project_path(project), data: { method: "DELETE", notyConfirm: I18n.t(:"messages.confirm.delete") } }
+            %i.fa.fa-trash
+            = I18n.t(:"actions.delete")
+
+    .row
+      .col-xs-12.col-md-6
+
+      .col-xs-12.col-md-6
+
+    .row
+      .col-xs-12.col-md-12.nav-tabs-table
+        %ul.nav.nav-tabs{role: "tablist"}
+          %li.active
+            %a{href: "#invoices", role: "tab", data: { toggle: "tab" }}
+              = I18n.t(:"labels.defaults.invoices")
+          %li
+            %a{href: "#tasks", role: "tab", data: { toggle: "tab" }}
+              = I18n.t(:"labels.defaults.tasks")
+        .tab-content
+          .tab-pane.active#invoices
+            = render "base/invoices_panel", invoices: project.invoices, context: "default"
+          .tab-pane#tasks
+            = render "tasks_panel", tasks: project.tasks, context: "default"
