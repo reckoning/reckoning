@@ -23,6 +23,8 @@ de:
       enabled: "Status"
       invoice: Rechnung
       timesheet: Stundenzettel
+      tasks: Aufgaben
+      invoices: Rechnungen
     chart:
       on_date: am
       timers:
@@ -63,6 +65,7 @@ de:
         customer: "Keine Kunden vorhanden"
         invoice: "Keine Rechnungen vorhanden"
         project: "Keine Projekte vorhanden"
+        task: "Keine Aufgaben vorhanden"
 
 
     modals:
