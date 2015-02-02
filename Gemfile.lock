@@ -6,15 +6,6 @@ GIT
     i18n-js (3.0.0.rc8)
       i18n (~> 0.6)
 
-PATH
-  remote: ~/dev/gems/devise_google_authenticator
-  specs:
-    devise_google_authenticator (0.3.15)
-      actionmailer (>= 3.2.12)
-      devise (>= 3.2.0)
-      railties (>= 3.0)
-      rotp (~> 1.4.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -234,7 +225,6 @@ GEM
       nokogiri
       rubyzip
       spreadsheet (> 0.6.4)
-    rotp (1.4.6)
     ruby-ole (1.2.11.8)
     ruby-prof (0.15.2)
     ruby_parser (3.1.3)
@@ -316,7 +306,6 @@ DEPENDENCIES
   dalli
   database_cleaner
   devise
-  devise_google_authenticator!
   dropbox-sdk
   dynamic_fields_for_rails
   factory_girl
