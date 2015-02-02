@@ -16,7 +16,7 @@ class TasksController < ApplicationController
     authorize! :index, Task
     respond_to do |format|
       format.js {
-        project = current_user.projects.where(id: project_id).first
+        project = current_account.projects.where(id: project_id).first
         tasks = project.tasks.includes(:timers)
           .where("timers.position_id is ?", nil).references(:timers)
           .to_a
@@ -55,7 +55,7 @@ class TasksController < ApplicationController
   end
 
   def project
-    @project ||= current_user.projects.where(id: params.fetch(:project_id, nil)).first
+    @project ||= current_account.projects.where(id: params.fetch(:project_id, nil)).first
   end
 
   def date

@@ -49,11 +49,16 @@ de:
       created_at: "Erstellt"
       last_sign_in: "Letzte Aktivität"
       settings:
+        basic: Allgemein
+        security: Zugangsdaten
+    account:
+      settings:
         basic: "Account Informationen"
         address: "Adressdaten"
         banking: "Bank Informationen"
         taxes: "Steuern"
-      mailing: "E-Mail Einstellungen"
+        mailing: "E-Mail Einstellungen"
+        dropbox: "Dropbox Verbindung"
     customer:
       basic: "Allgemeine Informationen"
       email: "E-Mail Setup für Rechnungen"

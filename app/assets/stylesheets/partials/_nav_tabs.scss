@@ -36,16 +36,15 @@
       transition: box-shadow $nav-transition-speed, color $nav-transition-speed;
 
       i {
-        transition: opacity $nav-transition-speed;
-        color: $text-color;
-        opacity: .5;
+        transition: color $nav-transition-speed;
+        color: lighten($text-color, 30%);
       }
 
       &:hover {
         background-color: transparent;
 
         i {
-          opacity: 1;
+          color: $text-color;
         }
       }
     }
@@ -60,7 +59,7 @@
         border: 1px solid $gray-lighter;
 
         i {
-          opacity: 1;
+          color: $text-color;
         }
 
         &:before, &:after {

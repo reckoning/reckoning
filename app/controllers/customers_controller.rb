@@ -4,7 +4,7 @@ class CustomersController < ApplicationController
 
   def index
     authorize! :read, Customer
-    @customers = current_user.customers
+    @customers = current_account.customers
       .order(sort_column + " " + sort_direction)
       .page(params.fetch(:page){nil})
       .per(20)
@@ -77,7 +77,7 @@ class CustomersController < ApplicationController
 
   def customer
     @customer ||= Customer.where(id: params.fetch(:id){nil}).first
-    @customer ||= current_user.customers.new customer_params
+    @customer ||= current_account.customers.new customer_params
   end
 
   def hash

@@ -8,7 +8,7 @@ class InvoiceDropboxWorker
     invoice = Invoice.find invoice_id
 
     if invoice.present?
-      client = ::DropboxClient.new(invoice.user.dropbox_token)
+      client = ::DropboxClient.new(invoice.account.dropbox_token)
 
       if File.exists?(invoice.pdf_path)
         client.put_file("#{invoice.customer.name.gsub("/", "-").strip}/#{invoice.project.name.gsub("/", "-").strip}/#{invoice.invoice_file}", open(invoice.pdf_path), true)

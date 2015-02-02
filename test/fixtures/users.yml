@@ -6,26 +6,28 @@ DEFAULTS: &DEFAULTS
 data:
   id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a72"
   email: "data@star.fleet"
-  contact_information:
-    company: "User"
-    name: "Name"
+  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+  name: "Data"
   <<: *DEFAULTS
 
 will:
   id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
   email: "will@star.fleet"
-  contact_information:
-    company: "User"
-    name: "Name"
-    address: "Foo\nBar"
+  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+  name: "Will Riker"
   <<: *DEFAULTS
 
 jeanluc:
   id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a74"
   email: "jeanluc@star.fleet"
   admin: true
-  contact_information:
-    company: "User"
-    name: "Name"
-    address: "Foo\nBar"
+  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+  name: "Jeanluc Picard"
+  <<: *DEFAULTS
+
+worf:
+  id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a75"
+  email: "worf@star.fleet"
+  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a74"
+  name: "Worf"
   <<: *DEFAULTS

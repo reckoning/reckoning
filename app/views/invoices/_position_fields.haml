@@ -1,5 +1,5 @@
 .row.fields
-  = fields.select(:timer_ids, current_user.timers.collect {|t| [ t.value, t.id ] }, {}, { multiple: true, class: 'hide' })
+  = fields.select(:timer_ids, current_account.timers.collect {|t| [ t.value, t.id ] }, {}, { multiple: true, class: 'hide' })
   .col-xs-12.col-md-5
     .form-group{class: form_error?(fields.object, :description)}
       = fields.text_field :description, placeholder: I18n.t(:"helpers.placeholder.position.description"), class: 'form-control'

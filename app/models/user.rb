@@ -1,19 +1,9 @@
 class User < ActiveRecord::Base
   devise :database_authenticatable, :confirmable, :lockable, :recoverable, :registerable, :rememberable, :trackable, :validatable
 
-  store_accessor :settings, :tax, :tax_ref, :provision
-	store_accessor :bank_account, :bank, :account_number, :bank_code, :iban, :bic
-  store_accessor :services, :dropbox_user, :dropbox_token
-  store_accessor :mailing, :default_from, :signature
-  store_accessor :contact_information, :name, :company, :address, :country, :public_email, :telefon, :fax, :website
+  attr_accessor :account_name
 
-  has_many :invoices, dependent: :destroy
-  has_many :positions, through: :invoices
-  has_many :weeks, dependent: :destroy
-  has_many :customers, dependent: :destroy
-  has_many :projects, through: :customers
-  has_many :tasks, through: :projects
-  has_many :timers, through: :tasks
+  belongs_to :account
 
   before_save :update_gravatar_hash
   before_save :ensure_authentication_token
@@ -33,10 +23,6 @@ class User < ActiveRecord::Base
     if authentication_token.blank?
       self.authentication_token = generate_authentication_token
     end
-  end
-
-  def has_dropbox?
-    self.dropbox_token.present?
   end
 
   def send_welcome

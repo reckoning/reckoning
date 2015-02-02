@@ -4,7 +4,7 @@ class ProjectsController < ApplicationController
 
   def index
     authorize! :read, Project
-    @customers = current_user.customers.order(sort_column + " " + sort_direction)
+    @customers = current_account.customers.order(sort_column + " " + sort_direction)
       .page(params.fetch(:page){nil})
       .per(20)
   end
@@ -74,7 +74,7 @@ class ProjectsController < ApplicationController
   end
 
   def customers
-    @customers ||= current_user.customers
+    @customers ||= current_account.customers
   end
 
   def project_params
@@ -95,11 +95,11 @@ class ProjectsController < ApplicationController
 
   def project
     @project ||= Project.where(id: params.fetch(:id){nil}).first
-    @project ||= current_user.projects.new project_params
+    @project ||= current_account.projects.new project_params
   end
 
   def check_dependencies
-    if current_user.customers.blank?
+    if current_account.customers.blank?
       redirect_to new_customer_path, alert: I18n.t(:"messages.project.missing_customer")
     end
   end

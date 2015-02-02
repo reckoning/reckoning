@@ -7,7 +7,7 @@ class InvoicesController < ApplicationController
     authorize! :read, Invoice
     state = params.fetch(:state){nil}
     year = params.fetch(:year){nil}
-    @invoices = current_user.invoices
+    @invoices = current_account.invoices
     if state.present? && state =~ /charged|paid|created/
       @invoices = @invoices.send(state)
     end
@@ -29,7 +29,7 @@ class InvoicesController < ApplicationController
 
   def archive
     authorize! :archive, invoice
-    if current_user.has_dropbox?
+    if current_account.has_dropbox?
       if invoice.files_present?
         InvoiceDropboxWorker.perform_async invoice.id
         redirect_to invoice_path(invoice), notice: I18n.t(:"messages.invoice.archive.success")
@@ -43,8 +43,8 @@ class InvoicesController < ApplicationController
 
   def archive_all
     authorize! :archive, invoice
-    if current_user.has_dropbox?
-      InvoiceDropboxAllWorker.perform_async current_user.id
+    if current_account.has_dropbox?
+      InvoiceDropboxAllWorker.perform_async current_account.id
       redirect_to invoices_path, notice: I18n.t(:"messages.invoice.archive_all.success")
     else
       redirect_to invoices_path, warning: I18n.t(:"messages.invoice.archive_all.failure")
@@ -143,7 +143,7 @@ class InvoicesController < ApplicationController
   end
 
   def create
-    @invoice = current_user.invoices.new(invoice_params)
+    @invoice = current_account.invoices.new(invoice_params)
     authorize! :create, invoice
     if invoice.save
       redirect_to invoices_path, notice: I18n.t(:"messages.invoice.create.success")
@@ -266,7 +266,7 @@ class InvoicesController < ApplicationController
   end
 
   def projects
-    @projects ||= current_user.projects
+    @projects ||= current_account.projects
   end
   helper_method :projects
 
@@ -294,8 +294,8 @@ class InvoicesController < ApplicationController
   end
 
   def invoice
-    @invoice ||= current_user.invoices.where(id: params.fetch(:id, nil)).first
-    @invoice ||= current_user.invoices.new
+    @invoice ||= current_account.invoices.where(id: params.fetch(:id, nil)).first
+    @invoice ||= current_account.invoices.new
   end
   helper_method :invoice
 
@@ -315,7 +315,7 @@ class InvoicesController < ApplicationController
   end
 
   def check_dependencies
-    if current_user.address.blank?
+    if current_account.address.blank?
       redirect_to "#{edit_user_registration_path}#address", alert: I18n.t(:"messages.invoice.missing_address")
       return
     end

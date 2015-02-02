@@ -1,5 +1,5 @@
 class Week < ActiveRecord::Base
-  belongs_to :user
+  belongs_to :account
   has_many :timers
   has_and_belongs_to_many :tasks
   has_many :projects, through: :tasks
