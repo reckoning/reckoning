@@ -1,11 +1,18 @@
 require 'sidekiq/web'
 
 Reckoning::Application.routes.draw do
-  devise_for :users,
-    skip: [:sessions, :registrations],
-    controllers: { registrations: "registrations" }
+  scope module: "api", constraints: { subdomain: "api" } do
+    namespace :v1 do
+      resource :account
+    end
+  end
 
   namespace :backend do
+    scope module: "api", constraints: { subdomain: "api" } do
+      namespace :v1 do
+        resources :accounts
+      end
+    end
 
     resources :accounts, except: [:show]
 
@@ -24,10 +31,9 @@ Reckoning::Application.routes.draw do
     root to: 'base#dashboard'
   end
 
-  namespace :api do
-    resources :tasks
-    resources :timers
-  end
+  devise_for :users,
+    skip: [:sessions, :registrations],
+    controllers: { registrations: "registrations" }
 
   as :user do
     get 'signup' => 'registrations#new', as: :new_user_registration

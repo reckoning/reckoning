@@ -14,7 +14,6 @@ gem "haml"
 gem "haml-rails"
 
 gem "devise"
-gem "devise-two-factor"
 gem "cancancan"
 
 gem "dalli"
