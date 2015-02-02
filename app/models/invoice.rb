@@ -1,14 +1,14 @@
 class Invoice < ActiveRecord::Base
   DEFAULT_PAYMENT_DUE_DAYS = 14
 
-  belongs_to :user
+  belongs_to :account
   belongs_to :customer
   belongs_to :project
   has_many :positions, dependent: :destroy, inverse_of: :invoice
   has_many :timers, through: :positions
 
   validates_presence_of :customer_id, :project_id, :date
-  validates_uniqueness_of :ref, scope: :user_id
+  validates_uniqueness_of :ref, scope: :account_id
 
   accepts_nested_attributes_for :positions, allow_destroy: true
 
@@ -203,7 +203,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def set_ref
-    last_invoice = Invoice.where(user_id: self.user_id).order("ref DESC").first
+    last_invoice = Invoice.where(account_id: self.account_id).order("ref DESC").first
     if last_invoice.present?
       self.ref = last_invoice.ref + 1
     else

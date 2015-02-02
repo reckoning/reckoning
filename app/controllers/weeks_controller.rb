@@ -22,7 +22,7 @@ class WeeksController < ApplicationController
     authorize! :add_task, week
     respond_to do |format|
       format.js {
-        task = current_user.tasks.where(id: params.fetch(:task_id, nil)).first
+        task = current_account.tasks.where(id: params.fetch(:task_id, nil)).first
         if task.present? && !week.tasks.include?(task)
           week.tasks << task
           week.save
@@ -40,7 +40,7 @@ class WeeksController < ApplicationController
     authorize! :remove_task, week
 
     respond_to do |format|
-      task = current_user.tasks.where(id: params.fetch(:task_id, nil)).first
+      task = current_account.tasks.where(id: params.fetch(:task_id, nil)).first
       if task.present? && week.tasks.include?(task)
         week.timers.where(task_id: task.id, position_id: nil).destroy_all
         if task.timers.with_positions.empty?
@@ -85,9 +85,9 @@ class WeeksController < ApplicationController
   end
 
   def week
-    @week ||= current_user.weeks.where(id: params.fetch(:id, nil)).first
-    @week ||= current_user.weeks.where(start_date: params.fetch(:week, {}).fetch(:start_date, nil)).first
+    @week ||= current_account.weeks.where(id: params.fetch(:id, nil)).first
+    @week ||= current_account.weeks.where(start_date: params.fetch(:week, {}).fetch(:start_date, nil)).first
     week_params.fetch(:timers_attributes, {}).reject! {|index, timer| timer[:value].empty? } unless @week.present?
-    @week ||= current_user.weeks.new week_params
+    @week ||= current_account.weeks.new week_params
   end
 end

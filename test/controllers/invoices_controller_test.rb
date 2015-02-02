@@ -54,10 +54,9 @@ class InvoicesControllerTest < ActionController::TestCase
   end
 
   describe "missing dependencies" do
-    let(:user) { users :data }
-
+    let(:worf) { users :worf }
     it "redirects to user edit if address is missing" do
-      sign_in user
+      sign_in worf
 
       get :new
 
@@ -68,8 +67,9 @@ class InvoicesControllerTest < ActionController::TestCase
   end
 
   describe "happy path" do
+    let(:data) { users :data }
     before do
-      sign_in invoice.user
+      sign_in data
     end
 
     it "User can view the invoice list" do

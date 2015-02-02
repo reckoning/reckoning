@@ -13,6 +13,13 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def current_account
+    if current_user.present?
+      @current_account ||= current_user.account
+    end
+  end
+  helper_method :current_account
+
   def unauthorized_controllers
     devise_controller? || is_a?(RailsAssetLocalization::LocalesController)
   end
@@ -41,7 +48,7 @@ class ApplicationController < ActionController::Base
   helper_method :registration_enabled?
 
   def invoice_limit_reached?
-    !current_user.admin? && Rails.application.secrets[:base]["demo"] && current_user.invoices.count >= 2
+    !current_user.admin? && Rails.application.secrets[:base]["demo"] && current_account.invoices.count >= 2
   end
   helper_method :invoice_limit_reached?
 end

@@ -1,5 +1,5 @@
 class Customer < ActiveRecord::Base
-  belongs_to :user
+  belongs_to :account
   has_many :projects, dependent: :destroy
   has_many :invoices, dependent: :destroy
 

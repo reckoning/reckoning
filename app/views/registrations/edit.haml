@@ -3,38 +3,11 @@
 .row
   .col-xs-12.col-md-12
 
-    .row
-      .col-xs-12.col-md-8
-        %h1
-          = I18n.t(:"headlines.account")
-
-      .col-xs-12.col-md-4
-        .btn-group.pull-right.resource-nav
-          = link_to I18n.t(:"nav.subnav.back"), root_path, class: "btn btn-default"
+    = render "users/header"
 
     .row
       .col-xs-12.col-lg-2.col-md-3.col-sm-3
-        %ul.nav.nav-vertical-tabs
-          %li.active
-            %a{href: "#basic", data: {toggle: "tab"}}
-              = I18n.t("nav.subnav.user.basic")
-              %i.fa.fa-user
-          %li
-            %a{href: "#address", data: {toggle: "tab"}}
-              = I18n.t("nav.subnav.user.address")
-              %i.fa.fa-globe
-          %li
-            %a{href: "#banking", data: {toggle: "tab"}}
-              = I18n.t("nav.subnav.user.banking")
-              %i.fa.fa-credit-card
-          %li
-            %a{href: "#settings", data: {toggle: "tab"}}
-              = I18n.t("nav.subnav.user.settings")
-              %i.fa.fa-cog
-          %li
-            %a{href: "#mailing", data: {toggle: "tab"}}
-              = I18n.t("nav.subnav.user.mailing")
-              %i.fa.fa-send
+        = render "users/nav"
 
       .col-xs-12.col-lg-10.col-md-9.col-sm-9
         = form_for @user, url: update_user_registration_path do |form|
@@ -45,25 +18,10 @@
                 %legend
                   = I18n.t(:"labels.user.settings.basic")
                 = render "users/basic", form: form, resource: @user
-            .tab-pane#address
+            .tab-pane#security
               %fieldset
                 %legend
-                  = I18n.t(:"labels.user.settings.address")
-                = render "users/address", form: form, resource: @user
-            .tab-pane#banking
-              %fieldset
-                %legend
-                  = I18n.t(:"labels.user.settings.banking")
-                = render "users/banking", form: form, resource: @user
-            .tab-pane#settings
-              %fieldset
-                %legend
-                  = I18n.t(:"labels.user.settings.taxes")
-                = render "users/settings", form: form, resource: @user
-            .tab-pane#mailing
-              %fieldset
-                %legend
-                  = I18n.t(:"labels.user.mailing")
-                = render "users/mailing", form: form, resource: @user
+                  = I18n.t(:"labels.user.settings.security")
+                = render "users/security", form: form, resource: @user
 
           = render "shared/forms/submit", path: root_path

@@ -6,6 +6,9 @@ Reckoning::Application.routes.draw do
     controllers: { registrations: "registrations" }
 
   namespace :backend do
+
+    resources :accounts, except: [:show]
+
     resources :users, except: [:show] do
       member do
         put 'send_welcome'
@@ -35,6 +38,8 @@ Reckoning::Application.routes.draw do
     post 'signin' => 'sessions#create', as: :user_session
     delete 'signout' => 'sessions#destroy', as: :destroy_user_session
   end
+
+  resource :account, only: [:edit, :update]
 
   resource :password, only: [:edit, :update]
 
@@ -85,7 +90,7 @@ Reckoning::Application.routes.draw do
     end
   end
 
-  resource :dropbox, controller: "dropbox", only: [] do
+  resource :dropbox, controller: "dropbox", only: [:show] do
     collection do
       get :start
       get :activate

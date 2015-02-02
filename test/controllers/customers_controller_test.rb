@@ -1,10 +1,11 @@
 require 'test_helper'
 
 class CustomersControllerTest < ActionController::TestCase
-  fixtures :customers
+  fixtures :customers, :users
 
   tests ::CustomersController
 
+  let(:data) { users :data }
   let(:customer) { customers :starfleet }
 
   describe "unauthorized" do
@@ -55,7 +56,7 @@ class CustomersControllerTest < ActionController::TestCase
 
   describe "happy path" do
     before do
-      sign_in customer.user
+      sign_in data
     end
 
     it "User can view the customer list" do

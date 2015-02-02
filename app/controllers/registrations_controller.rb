@@ -8,12 +8,12 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   def edit
-    @active_nav = 'users'
+    @active_nav = 'user'
     authorize! :update, @user
   end
 
   def update
-    @active_nav = 'users'
+    @active_nav = 'user'
     authorize! :update, @user
     if @user.update_without_password(user_params)
       redirect_to "#{edit_user_registration_path}#{hash}", notice: I18n.t(:"messages.registration.update.success")

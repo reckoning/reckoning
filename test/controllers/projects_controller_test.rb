@@ -5,7 +5,7 @@ class ProjectsControllerTest < ActionController::TestCase
 
   tests ::ProjectsController
 
-  let(:project) { projects :enterprise }
+  let(:project) { projects :narendra3 }
 
   describe "unauthorized" do
     it "Unauthrized user cant view projects index" do
@@ -54,10 +54,10 @@ class ProjectsControllerTest < ActionController::TestCase
   end
 
   describe "missing dependencies" do
-    let(:user) { users :data }
+    let(:worf) { users :worf }
 
     it "redirects to user edit if address is missing" do
-      sign_in user
+      sign_in worf
 
       get :new
 
@@ -68,10 +68,11 @@ class ProjectsControllerTest < ActionController::TestCase
   end
 
   describe "happy path" do
-    let(:voyager) { projects :voyager }
+    let(:will) { users :will }
+    let(:outpost6) { projects :outpost6 }
 
     before do
-      sign_in project.customer.user
+      sign_in will
     end
 
     it "User can view the project list" do
@@ -107,12 +108,12 @@ class ProjectsControllerTest < ActionController::TestCase
     end
 
     it "User can destroy project" do
-      delete :destroy, {id: voyager.id}
+      delete :destroy, {id: outpost6.id}
 
       assert_response :found
       assert_equal I18n.t(:"messages.project.destroy.success"), flash[:notice]
 
-      assert_not_equal voyager, Project.where(id: voyager.id).first
+      assert_not_equal outpost6, Project.where(id: outpost6.id).first
     end
   end
 

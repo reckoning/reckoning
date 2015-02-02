@@ -12,10 +12,10 @@ class BaseController < ApplicationController
   end
 
   def dashboard
-    @charged_invoices = current_user.invoices.order('date DESC').charged
-    @paid_invoices = current_user.invoices.order('date DESC').paid.year(Time.now.year)
-    @last_invoices = current_user.invoices.order('date DESC').paid.year(Time.now.year - 1)
-    @budgets = current_user.projects.with_budget.includes(:tasks).order('tasks.updated_at DESC')
+    @charged_invoices = current_account.invoices.order('date DESC').charged
+    @paid_invoices = current_account.invoices.order('date DESC').paid.year(Time.now.year)
+    @last_invoices = current_account.invoices.order('date DESC').paid.year(Time.now.year - 1)
+    @budgets = current_account.projects.with_budget.includes(:tasks).order('tasks.updated_at DESC')
     @timers_chart_data = generate_timers_chart_data
     @invoices_chart_data, @invoices_max_values = generate_invoices_chart_data
     render 'dashboard'
@@ -30,11 +30,11 @@ class BaseController < ApplicationController
     result = []
     start_date = Date.today - 1.month
     end_date = Date.today
-    current_user.projects.each do |project|
+    current_account.projects.each do |project|
       chart = {key: project.name, values: []}
       if project.timers.where(date: start_date..end_date).present?
         (start_date..end_date).each do |date|
-          timers = current_user.timers.includes(:task).where(date: date, "tasks.project_id" => project.id).references(:task).all
+          timers = current_account.timers.includes(:task).where(date: date, "tasks.project_id" => project.id).references(:task).all
           value = 0.0
           timers.each do |timer|
             value += timer.value.to_d
@@ -52,7 +52,7 @@ class BaseController < ApplicationController
 
     result, max_values_current = values_for_year(result, Date.today.year)
     max_values_last = []
-    if current_user.invoices.where("date < ?", (Date.today - 1.year).end_of_year).count > 0
+    if current_account.invoices.where("date < ?", (Date.today - 1.year).end_of_year).count > 0
       result, max_values_last = values_for_year(result, (Date.today - 1.year).year, "last")
     end
 
@@ -70,7 +70,7 @@ class BaseController < ApplicationController
       end_date = Date.parse("#{year}-#{month_id}-1").at_end_of_month
 
       value = 0.0
-      current_user.invoices.where(date: start_date..end_date).all.each do |invoice|
+      current_account.invoices.where(date: start_date..end_date).all.each do |invoice|
         value += invoice.value.to_d
       end
 

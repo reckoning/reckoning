@@ -1,0 +1,27 @@
+- content_for :title do
+  = I18n.t(:"meta.title.account.edit")
+.row
+  .col-xs-12.col-md-12
+
+    = render "accounts/header", path: "#{edit_account_path}#dropbox"
+
+    .row
+      .col-xs-12.col-lg-2.col-md-3.col-sm-3
+        = render "accounts/nav", path: edit_account_path, active: "dropbox"
+
+      .col-xs-12.col-lg-10.col-md-9.col-sm-9
+        .tab-content
+          .tab-pane.active#dropbox
+            %fieldset
+              %legend
+                = I18n.t(:"labels.account.settings.dropbox")
+            .row
+              .col-xs-12.col-md-6.form-group
+                - if current_account.dropbox_token.present?
+                  %a.btn.btn-danger{href: deactivate_dropbox_path}
+                    %i.fa.fa-dropbox
+                    = I18n.t(:"actions.dropbox_unlink")
+                - else
+                  %a.btn.btn-primary{href: start_dropbox_path}
+                    %i.fa.fa-dropbox
+                    = I18n.t(:"actions.dropbox_link")

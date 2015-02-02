@@ -6,12 +6,15 @@ gem "rails", "4.2.0"
 
 gem "pg"
 
+gem "active_model_serializers", "~> 0.8.0"
+
 gem "sidekiq"
 
 gem "haml"
 gem "haml-rails"
 
 gem "devise"
+gem "devise-two-factor"
 gem "cancancan"
 
 gem "dalli"

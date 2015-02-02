@@ -12,7 +12,7 @@ module ApplicationHelper
   end
 
   def first_invoice_year
-    if first_invoice = current_user.invoices.order('date').first
+    if first_invoice = current_account.invoices.order('date').first
       first_invoice.date.year
     else
       nil
