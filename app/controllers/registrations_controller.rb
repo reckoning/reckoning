@@ -24,11 +24,7 @@ class RegistrationsController < Devise::RegistrationsController
 
   private def user_params
     @user_params ||= params.require(:user).permit(
-      :plan, :email, :gravatar, :remember_me,
-      :tax, :tax_ref, :provision, :bank, :account_number,
-      :bank_code, :bic, :iban, :default_from, :signature,
-      :company, :name, :address, :country, :email,
-      :telefon, :fax, :website
+      :email, :gravatar, :remember_me, name
     )
   end
 
