@@ -64,6 +64,8 @@ gem "dropbox-sdk"
 
 gem "web_translate_it"
 
+gem "sentry-raven"
+
 group :test do
   gem "rails-perftest"
   gem "minitest-rails"
