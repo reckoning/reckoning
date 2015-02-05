@@ -25,7 +25,6 @@ set :shared_paths, [
   'log',
   'config/secrets.yml',
   'config/database.yml',
-  'config/skylight.yml'
 ]
 
 task :environment do
