@@ -14,6 +14,7 @@ gem "haml"
 gem "haml-rails"
 
 gem "devise"
+gem "devise-async"
 gem "cancancan"
 
 gem "dalli"
