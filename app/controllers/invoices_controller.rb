@@ -232,7 +232,7 @@ class InvoicesController < ApplicationController
 
   private def sort_column
     @sort_column ||= begin
-      (Invoice.column_names + %w(customers.company)).include?(params[:sort]) ? params[:sort] : "ref"
+      (Invoice.column_names + %w(customers.name)).include?(params[:sort]) ? params[:sort] : "ref"
     end
   end
   helper_method :sort_column
