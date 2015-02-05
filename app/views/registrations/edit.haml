@@ -24,8 +24,4 @@
                   = I18n.t(:"labels.user.settings.security")
                 = render "users/security", form: form, resource: @user
 
-
-          = current_user.otp_secret_key
-          = image_tag("#{two_factor_qrcode_url}.png", :alt => 'Google Authenticator QRCode')
-
           = render "shared/forms/submit", path: root_path
