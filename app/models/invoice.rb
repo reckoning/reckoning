@@ -8,7 +8,7 @@ class Invoice < ActiveRecord::Base
   has_many :timers, through: :positions
 
   validates :customer_id, :project_id, :date, presence: true
-  validates :ref, uniqueness: true, scope: :account_id
+  validates :ref, uniqueness: { scope: :account_id }
 
   accepts_nested_attributes_for :positions, allow_destroy: true
 
@@ -61,7 +61,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def ref_number
-    "%05d".format ref
+    format "%05d", ref
   end
 
   def title
@@ -173,9 +173,7 @@ class Invoice < ActiveRecord::Base
     !pdf_not_present_or_generating? && (!timesheet_not_present_or_generating? || timers.blank?)
   end
 
-  private
-
-  def path(filename)
+  private def path(filename)
     dir = Rails.root.join('files', 'invoices')
     Dir.mkdir(dir) unless File.exist?(dir)
     pdf_dir = dir.join(customer.id.to_s)
@@ -183,18 +181,18 @@ class Invoice < ActiveRecord::Base
     Rails.root.join(pdf_dir, filename).to_s
   end
 
-  def set_customer
+  private def set_customer
     project = Project.where(id: project_id).first
     customer = Customer.where(id: project.customer_id).first unless project.blank?
-    return if customer.blan?
+    return if customer.blank?
     self.customer_id = customer.id
   end
 
-  def set_rate
+  private def set_rate
     self.rate = project.rate
   end
 
-  def set_ref
+  private def set_ref
     last_invoice = Invoice.where(account_id: account_id).order("ref DESC").first
     if last_invoice.present?
       self.ref = last_invoice.ref + 1
