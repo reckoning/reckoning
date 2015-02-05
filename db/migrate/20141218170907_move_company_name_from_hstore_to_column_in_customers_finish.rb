@@ -10,6 +10,5 @@ class MoveCompanyNameFromHstoreToColumnInCustomersFinish < ActiveRecord::Migrati
   end
 
   def down
-
   end
 end

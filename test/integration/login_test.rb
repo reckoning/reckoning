@@ -11,12 +11,12 @@ class LoginTest < ActionDispatch::IntegrationTest
     assert_select "#new_user"
     assert_response :success
 
-    post_via_redirect "/signin", {
-      user: {
-        email: user.email,
-        password: "enterprise"
-      }
-    }
+    post_via_redirect "/signin",
+                      user: {
+                        email: user.email,
+                        password: "enterprise"
+                      }
+
     assert_equal nil, flash[:alert]
 
     assert_equal root_path, path
@@ -32,16 +32,14 @@ class LoginTest < ActionDispatch::IntegrationTest
     assert_select "#new_user"
 
     # user submits form
-    post "/signin", {
-      user: {
-        email: user.email,
-        password: "foo"
-      }
-    }
+    post "/signin",
+         user: {
+           email: user.email,
+           password: "foo"
+         }
 
     assert_response :ok
 
     assert_equal I18n.t(:"devise.failure.invalid"), flash[:alert]
   end
-
 end

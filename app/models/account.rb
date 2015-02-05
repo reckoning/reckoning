@@ -14,10 +14,10 @@ class Account < ActiveRecord::Base
   store_accessor :mailing, :default_from, :signature
   store_accessor :contact_information, :address, :country, :public_email, :telefon, :fax, :website
 
-  validates_presence_of :name
-  validates_uniqueness_of :subdomain, allow_nil: true
+  validates :name, presence: true
+  validates :subdomain, uniqueness: true, allow_nil: true
 
-  def has_dropbox?
-    self.dropbox_token.present?
+  def dropbox?
+    dropbox_token.present?
   end
 end

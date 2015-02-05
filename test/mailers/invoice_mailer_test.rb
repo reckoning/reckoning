@@ -17,7 +17,7 @@ class InvoiceMailerTest < ActionMailer::TestCase
   end
 
   after do
-    File.unlink(invoice.pdf_path) if File.exists?(invoice.pdf_path)
+    File.unlink(invoice.pdf_path) if File.exist?(invoice.pdf_path)
   end
 
   describe "#customer_mail" do

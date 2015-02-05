@@ -17,7 +17,7 @@ class DropboxController < ApplicationController
 
   def start
     authorize! :connect, :dropbox
-    authorize_url = flow.start()
+    authorize_url = flow.start
     redirect_to authorize_url
   end
 
@@ -47,14 +47,12 @@ class DropboxController < ApplicationController
       current_account.save
 
       redirect_to edit_user_registration_path, notice: I18n.t(:"messages.dropbox.deactivate.success")
-    rescue => e
+    rescue
       redirect_to edit_user_registration_path, alert: I18n.t(:"messages.dropbox.deactivate.failure")
     end
   end
 
-  private
-
-  def flow
+  private def flow
     @flow ||= DropboxOAuth2Flow.new(
       Rails.application.secrets[:dropbox_key],
       Rails.application.secrets[:dropbox_secret],

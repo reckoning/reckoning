@@ -1,12 +1,12 @@
 module Api
   class BaseController < ActionController::Base
     include ActionController::HttpAuthentication::Token
-    before_filter :authenticate_user_from_token!
+    before_action :authenticate_user_from_token!
 
     private
 
     def authenticate_user_from_token!
-      auth_params, options = token_and_options(request)
+      auth_params, _options = token_and_options(request)
       user_id, auth_token  = auth_params && auth_params.split(':', 2)
       user                 = user_id && User.find(user_id)
 
