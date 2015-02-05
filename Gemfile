@@ -79,7 +79,7 @@ end
 
 group :development, :test do
   gem "foreman"
-  gem "robocop", require: false
+  gem "rubocop", require: false
   gem "byebug"
   gem "guard-minitest"
   gem "terminal-notifier-guard", "~> 1.6.1"
