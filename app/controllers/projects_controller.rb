@@ -56,7 +56,7 @@ class ProjectsController < ApplicationController
   end
 
   private def sort_column
-    (Project.column_names + %w(customers.company)).include?(params[:sort]) ? params[:sort] : "name"
+    (Project.column_names + %w(customers.name)).include?(params[:sort]) ? params[:sort] : "name"
   end
   helper_method :sort_column
 
