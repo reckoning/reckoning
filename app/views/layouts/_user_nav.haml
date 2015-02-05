@@ -1,14 +1,16 @@
 %ul.nav.navbar-nav.navbar-right
   - if user_signed_in?
-    %li.dropdown{class: get_active_nav('users') || get_active_nav('bank_accounts')}
+    %li.dropdown{class: get_active_nav('user') || get_active_nav('account')}
       %a.dropdown-toggle{href: '#', data: {toggle: 'dropdown'}}
         %img.gravatar{src: gravatar_path, alt: "avatar", with: 20, height: 20}
-        %span.user-email
-          = current_user.email
         %b.caret
+        %span.hide.user-email
+          = current_user.email
       %ul.dropdown-menu.navbar-right
-        %li{class: get_active_nav('users')}
-          = link_to I18n.t(:"nav.header.settings"), edit_user_registration_path
+        %li{class: get_active_nav('account')}
+          = link_to I18n.t(:"nav.header.account"), edit_account_path
+        %li{class: get_active_nav('user')}
+          = link_to I18n.t(:"nav.header.user"), edit_user_registration_path
         - if current_user.admin?
           %li.divider
           - if backend?

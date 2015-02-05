@@ -23,21 +23,21 @@ class InvoicesControllerTest < ActionController::TestCase
     end
 
     it "Unauthrized user cant create new invoice" do
-      post :create, {invoice: {project_id: "foo", date: Date.today}}
+      post :create, invoice: { project_id: "foo", date: Date.today }
 
       assert_response :found
       assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
     end
 
     it "Unauthrized user cant view invoice edit" do
-      get :edit, {id: invoice.id}
+      get :edit, id: invoice.id
 
       assert_response :found
       assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
     end
 
     it "Unauthrized user cant destroy invoice" do
-      delete :destroy, {id: invoice.id}
+      delete :destroy, id: invoice.id
 
       assert_response :found
       assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
@@ -46,7 +46,7 @@ class InvoicesControllerTest < ActionController::TestCase
     end
 
     it "Unauthrized user cant update invoice" do
-      put :update, {id: invoice.id, invoice: {date: Date.today - 1}}
+      put :update, id: invoice.id, invoice: { date: Date.today - 1 }
 
       assert_response :found
       assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
@@ -54,10 +54,9 @@ class InvoicesControllerTest < ActionController::TestCase
   end
 
   describe "missing dependencies" do
-    let(:user) { users :data }
-
+    let(:worf) { users :worf }
     it "redirects to user edit if address is missing" do
-      sign_in user
+      sign_in worf
 
       get :new
 
@@ -68,8 +67,9 @@ class InvoicesControllerTest < ActionController::TestCase
   end
 
   describe "happy path" do
+    let(:data) { users :data }
     before do
-      sign_in invoice.user
+      sign_in data
     end
 
     it "User can view the invoice list" do
@@ -85,27 +85,27 @@ class InvoicesControllerTest < ActionController::TestCase
     end
 
     it "User can view the edit invoice page" do
-      get :edit, {id: invoice.id}
+      get :edit, id: invoice.id
 
       assert_response :ok
     end
 
     it "User can create a new invoice" do
-      post :create, {invoice: {project_id: invoice.project.id, date: Date.today}}
+      post :create, invoice: { project_id: invoice.project.id, date: Date.today }
 
       assert_response :found
       assert_equal I18n.t(:"messages.invoice.create.success"), flash[:notice]
     end
 
     it "User can update invoice" do
-      put :update, {id: invoice.id, invoice: {project_id: invoice.project.id, date: Date.today - 1}}
+      put :update, id: invoice.id, invoice: { project_id: invoice.project.id, date: Date.today - 1 }
 
       assert_response :found
       assert_equal I18n.t(:"messages.invoice.update.success"), flash[:notice]
     end
 
     it "User can destroy invoice" do
-      delete :destroy, {id: invoice.id}
+      delete :destroy, id: invoice.id
 
       assert_response :found
       assert_equal I18n.t(:"messages.invoice.destroy.success"), flash[:notice]
@@ -115,11 +115,10 @@ class InvoicesControllerTest < ActionController::TestCase
 
     it "User can charge an invoice" do
       request.env["HTTP_REFERER"] = "where_i_came_from"
-      put :charge, {id: invoice.id}
+      put :charge, id: invoice.id
 
       assert_redirected_to "where_i_came_from"
       assert invoice.reload.charged?, invoice.inspect
     end
   end
-
 end

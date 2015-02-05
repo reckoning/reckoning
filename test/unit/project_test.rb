@@ -6,28 +6,27 @@ class ProjectTest < ActiveSupport::TestCase
   let(:customer) { customers :starfleet }
 
   it "should not save project without customer_id" do
-    project = Project.new({name: "Project", rate: 99.0})
+    project = Project.new(name: "Project", rate: 99.0)
     assert !project.valid?
   end
 
   it "should not save project without name" do
-    project = Project.new({customer_id: customer.id, rate: 99.0})
+    project = Project.new(customer_id: customer.id, rate: 99.0)
     assert !project.valid?
   end
 
   it "if rate is empty it should fall back to 0.0" do
-    project = Project.new({customer_id: customer.id, name: "Project"})
+    project = Project.new(customer_id: customer.id, name: "Project")
     assert project.rate == 0.0
   end
 
   it "should save project with customer_id & name & rate" do
-    project = Project.new({customer_id: customer.id, name: "Project", rate: 99.0})
+    project = Project.new(customer_id: customer.id, name: "Project", rate: 99.0)
     assert project.valid?
   end
 
   it "should respond to invoices" do
-    project = Project.new({customer_id: customer.id, name: "Project", rate: 99.0})
+    project = Project.new(customer_id: customer.id, name: "Project", rate: 99.0)
     assert_respond_to project, :invoices
   end
-
 end

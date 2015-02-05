@@ -4,10 +4,10 @@ class CustomersController < ApplicationController
 
   def index
     authorize! :read, Customer
-    @customers = current_user.customers
-      .order(sort_column + " " + sort_direction)
-      .page(params.fetch(:page){nil})
-      .per(20)
+    @customers = current_account.customers
+                 .order(sort_column + " " + sort_direction)
+                 .page(params.fetch(:page, nil))
+                 .per(20)
   end
 
   def show
@@ -56,31 +56,27 @@ class CustomersController < ApplicationController
     end
   end
 
-  private
-
-  def sort_column
+  private def sort_column
     Customer.column_names.include?(params[:sort]) ? params[:sort] : "updated_at"
   end
 
-  protected
-
-  def set_active_nav
+  private def set_active_nav
     @active_nav = 'projects'
   end
 
-  def customer_params
+  private def customer_params
     @customer_params ||= params.require(:customer).permit(
       :payment_due, :email_template, :invoice_email, :default_from, :company,
       :name, :address, :country, :email, :telefon, :fax, :website
     )
   end
 
-  def customer
-    @customer ||= Customer.where(id: params.fetch(:id){nil}).first
-    @customer ||= current_user.customers.new customer_params
+  private def customer
+    @customer ||= Customer.where(id: params.fetch(:id, nil)).first
+    @customer ||= current_account.customers.new customer_params
   end
 
-  def hash
+  private def hash
     params.fetch(:hash, "")
   end
 end

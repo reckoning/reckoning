@@ -1,0 +1,10 @@
+- unless defined?(path)
+  - path = root_path
+.row
+  .col-xs-12.col-md-8
+    %h1
+      = I18n.t(:"headlines.user")
+
+  .col-xs-12.col-md-4
+    .btn-group.pull-right.resource-nav
+      = link_to I18n.t(:"nav.subnav.back"), path, class: "btn btn-default"

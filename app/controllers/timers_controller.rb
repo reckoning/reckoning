@@ -4,7 +4,7 @@ class TimersController < ApplicationController
   def index
     authorize! :index, Timer
     @date = date
-    projects = current_user.projects.order("created_at DESC")
+    projects = current_account.projects.order("created_at DESC")
     @projects = projects.all
   end
 
@@ -28,8 +28,8 @@ class TimersController < ApplicationController
   end
 
   def week
-    @week ||= current_user.weeks.where(start_date: date.beginning_of_week).first
-    @week ||= current_user.weeks.new
+    @week ||= current_account.weeks.where(start_date: date.beginning_of_week).first
+    @week ||= current_account.weeks.new
   end
   helper_method :week
 

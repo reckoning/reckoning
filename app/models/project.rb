@@ -1,10 +1,10 @@
 class Project < ActiveRecord::Base
-  validates_presence_of :customer_id, :name, :rate
-
   belongs_to :customer
   has_many :invoices, dependent: :destroy
   has_many :tasks, dependent: :destroy
   has_many :timers, through: :tasks
+
+  validates :customer_id, :name, :rate, presence: true
 
   accepts_nested_attributes_for :tasks, allow_destroy: true
 
@@ -13,7 +13,7 @@ class Project < ActiveRecord::Base
   end
 
   def name_with_customer
-    "#{self.customer.name} - #{self.name}"
+    "#{customer.name} - #{name}"
   end
 
   def timer_values

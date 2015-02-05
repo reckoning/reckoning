@@ -1,39 +1,31 @@
 #pdf-footer><
   %address><
-    - if resource.user.company.present?
-      %strong
-        = resource.user.company
-      %br
-      = resource.user.name
-    - else
-      %strong
-        = resource.user.name
-      %br
+    %strong
+      = resource.account.name
     %br
-    = simple_format(resource.user.address)
+    %br
+    = simple_format(resource.account.address)
   .contact-information><
-    - if resource.user.telefon.present?
+    - if resource.account.telefon.present?
       Tel:
-      = resource.user.telefon
+      = resource.account.telefon
+    - if resource.account.fax.present?
       %br
-    - if resource.user.fax.present?
       Fax:
-      = resource.user.fax
+      = resource.account.fax
+    - if resource.account.public_email.present?
       %br
-    - if resource.user.public_email.present?
-      = resource.user.public_email
-    - else
-      = resource.user.email
+      = resource.account.public_email
     %br
-    - if resource.user.website.present?
-      = resource.user.website
+    - if resource.account.website.present?
+      = resource.account.website
   .bank-information><
-    - if resource.user.bank.present?
-      = resource.user.bank
+    - if resource.account.bank.present?
+      = resource.account.bank
       %br
-    = "IBAN: #{resource.user.iban}"
+    = "IBAN: #{resource.account.iban}"
     %br
-    = "BIC: #{resource.user.bic}"
+    = "BIC: #{resource.account.bic}"
     %br
-    = "Konto: #{resource.user.account_number} | BLZ: #{resource.user.bank_code}"
+    = "Konto: #{resource.account.account_number} | BLZ: #{resource.account.bank_code}"
 

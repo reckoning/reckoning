@@ -7,12 +7,9 @@ class Timer < ActiveRecord::Base
 
   before_save :convert_value
 
-  validates_presence_of :week
-  validates_presence_of :date
-  validates_presence_of :value
-  validates_presence_of :task_id
+  validates :week, :date, :value, :task_id, presence: true
 
-  def self.week_for date
+  def self.week_for(date)
     week_start = date.beginning_of_week
     week_end = date.end_of_week
     where date: [week_start..week_end]
@@ -33,7 +30,7 @@ class Timer < ActiveRecord::Base
         task = Task.where(project_id: project.id, name: row['task']).first_or_create
         week = Week.where(user_id: project.customer.user_id, start_date: date.beginning_of_week).first_or_create
         week.tasks << task unless week.tasks.include?(task)
-        self.where(date: row['date'], value: row['value'].gsub(',', '.'), task_id: task.id, week_id: week.id).first_or_create
+        where(date: row['date'], value: row['value'].gsub(',', '.'), task_id: task.id, week_id: week.id).first_or_create
       end
       return true
     else

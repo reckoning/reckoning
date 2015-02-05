@@ -8,12 +8,12 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   def edit
-    @active_nav = 'users'
+    @active_nav = 'user'
     authorize! :update, @user
   end
 
   def update
-    @active_nav = 'users'
+    @active_nav = 'user'
     authorize! :update, @user
     if @user.update_without_password(user_params)
       redirect_to "#{edit_user_registration_path}#{hash}", notice: I18n.t(:"messages.registration.update.success")
@@ -22,9 +22,7 @@ class RegistrationsController < Devise::RegistrationsController
     end
   end
 
-  private
-
-  def user_params
+  private def user_params
     @user_params ||= params.require(:user).permit(
       :plan, :email, :gravatar, :remember_me,
       :tax, :tax_ref, :provision, :bank, :account_number,
@@ -34,17 +32,16 @@ class RegistrationsController < Devise::RegistrationsController
     )
   end
 
-  def set_user
+  private def set_user
     @user = current_user
   end
 
-  def check_registration_setting
-    unless registration_enabled?
-      redirect_to root_path
-    end
+  private def check_registration_setting
+    return if registration_enabled?
+    redirect_to root_path
   end
 
-  def hash
+  private def hash
     params.fetch(:hash, "")
   end
 end

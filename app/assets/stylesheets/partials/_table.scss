@@ -40,6 +40,14 @@ table {
         padding: 0;
       }
     }
+
+    a {
+      color: $secondary-link-color;
+      &:hover {
+        color: darken($secondary-link-color, 20%)
+      }
+    }
+
     &.budget {
       text-align: right;
     }

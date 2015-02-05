@@ -5,25 +5,23 @@ class Position < ActiveRecord::Base
   before_save :set_value
   after_save :set_invoice_value
 
-  validates_presence_of :description, :invoice
+  validates :description, :invoice, presence: true
 
   accepts_nested_attributes_for :timers
 
   def set_value
-    if self.hours.present? && !self.hours.zero?
-      if rate.present?
-        self.value = self.hours * rate
-      elsif self.invoice.rate.present?
-        self.value = self.hours * self.invoice.rate
-      else
-        self.value = self.hours * self.invoice.project.rate
-      end
+    return if hours.blank? || hours.zero?
+    if rate.present?
+      self.value = hours * rate
+    elsif invoice.rate.present?
+      self.value = hours * invoice.rate
+    else
+      self.value = hours * invoice.project.rate
     end
   end
 
   def set_invoice_value
-    self.invoice.set_value
-    self.invoice.save
+    invoice.set_value
+    invoice.save
   end
-
 end

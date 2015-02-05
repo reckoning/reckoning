@@ -1,11 +1,21 @@
 require 'sidekiq/web'
 
 Reckoning::Application.routes.draw do
-  devise_for :users,
-    skip: [:sessions, :registrations],
-    controllers: { registrations: "registrations" }
+  scope module: "api", constraints: { subdomain: "api" } do
+    namespace :v1 do
+      resource :account
+    end
+  end
 
   namespace :backend do
+    scope module: "api", constraints: { subdomain: "api" } do
+      namespace :v1 do
+        resources :accounts
+      end
+    end
+
+    resources :accounts, except: [:show]
+
     resources :users, except: [:show] do
       member do
         put 'send_welcome'
@@ -14,17 +24,16 @@ Reckoning::Application.routes.draw do
 
     resources :settings, except: [:index, :show]
 
-    authenticate :user, lambda {|u| u.admin? } do
+    authenticate :user, ->(u) { u.admin? } do
       mount Sidekiq::Web => '/workers'
     end
 
     root to: 'base#dashboard'
   end
 
-  namespace :api do
-    resources :tasks
-    resources :timers
-  end
+  devise_for :users,
+             skip: [:sessions, :registrations],
+             controllers: { registrations: "registrations" }
 
   as :user do
     get 'signup' => 'registrations#new', as: :new_user_registration
@@ -35,6 +44,8 @@ Reckoning::Application.routes.draw do
     post 'signin' => 'sessions#create', as: :user_session
     delete 'signout' => 'sessions#destroy', as: :destroy_user_session
   end
+
+  resource :account, only: [:edit, :update]
 
   resource :password, only: [:edit, :update]
 
@@ -85,7 +96,7 @@ Reckoning::Application.routes.draw do
     end
   end
 
-  resource :dropbox, controller: "dropbox", only: [] do
+  resource :dropbox, controller: "dropbox", only: [:show] do
     collection do
       get :start
       get :activate
@@ -96,6 +107,8 @@ Reckoning::Application.routes.draw do
   get '404' => 'errors#not_found'
   get '422' => 'errors#server_error'
   get '500' => 'errors#server_error'
+
+  get 'two_factor_qrcode' => 'two_factor#qrcode', constraints: { format: :png }
 
   root to: 'base#index'
 end
