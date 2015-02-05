@@ -7,7 +7,7 @@ module Api
       if date
         date = Date.parse(date)
         timers = current_user.timers
-          .where("date BETWEEN ? AND ?", date.beginning_of_week, date.end_of_week)
+                 .where("date BETWEEN ? AND ?", date.beginning_of_week, date.end_of_week)
         tasks = Task.where(id: timers.map(&:task_id))
       else
         tasks = current_user.tasks

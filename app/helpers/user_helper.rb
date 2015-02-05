@@ -1,6 +1,5 @@
 module UserHelper
-
-  def last_user_logged_in user
+  def last_user_logged_in(user)
     result = []
     if user.current_sign_in_at.blank?
       result << I18n.t(:"user.current_sign_in_at.empty")

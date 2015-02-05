@@ -9,23 +9,21 @@ class PasswordsController < ApplicationController
   def update
     authorize! :update, @user
     if @user.update_with_password(password_params)
-      redirect_to edit_user_registration_path, notice: I18n.t(:"messages.password.update.success")
+      redirect_to "#{edit_user_registration_path}#security", notice: I18n.t(:"messages.password.update.success")
     else
-      render "edit", alert: I18n.t(:"messages.password.update.failure")
+      render "edit#security", alert: I18n.t(:"messages.password.update.failure")
     end
   end
 
-  private
-
-  def set_active_nav
+  private def set_active_nav
     @active_nav = 'users'
   end
 
-  def password_params
+  private def password_params
     @password_params ||= params.require(:user).permit(:password, :password_confirmation, :current_password)
   end
 
-  def set_user
+  private def set_user
     @user = current_user
   end
 end

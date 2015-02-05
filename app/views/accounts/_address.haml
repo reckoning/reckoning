@@ -1,14 +1,5 @@
 .row
   .col-xs-12.col-md-6
-    .form-group{class: form_error?(resource, :company)}
-      = form.text_field :company, placeholder: I18n.t(:"helpers.placeholder.company"), class: 'form-control'
-      = form_errors resource, :company
-  .col-xs-12.col-md-6
-    .form-group{class: form_error?(resource, :name)}
-      = form.text_field :name, placeholder: I18n.t(:"helpers.placeholder.name"), class: 'form-control'
-      = form_errors resource, :name
-.row
-  .col-xs-12.col-md-6
     .form-group{class: form_error?(resource, :address)}
       = form.text_area :address, placeholder: I18n.t(:"helpers.placeholder.address"), class: 'form-control'
       = form_errors resource, :address

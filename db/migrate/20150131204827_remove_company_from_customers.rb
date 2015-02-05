@@ -1,5 +1,5 @@
 class RemoveCompanyFromCustomers < ActiveRecord::Migration
-  def change
+  def up
     Customer.all.each do |customer|
       customer.name = customer.company unless customer.name.present?
       customer.contact_information = customer.contact_information.except("name", "company")
@@ -7,5 +7,8 @@ class RemoveCompanyFromCustomers < ActiveRecord::Migration
     end
 
     remove_column :customers, :company
+  end
+
+  def down
   end
 end

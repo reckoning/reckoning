@@ -5,13 +5,12 @@ class TestMail
 
   attr_accessor :email
 
-  validates_format_of :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
+  validates :email, email: true
 
   def initialize(attributes = {})
-    unless attributes.nil?
-      attributes.each do |name, value|
-        send("#{name}=", value)
-      end
+    return if attributes.nil?
+    attributes.each do |name, value|
+      send("#{name}=", value)
     end
   end
 

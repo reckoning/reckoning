@@ -1,7 +1,6 @@
 module Backend
-
   class BaseController < ApplicationController
-    before_filter :verify_admin
+    before_action :verify_admin
 
     skip_authorization_check
 

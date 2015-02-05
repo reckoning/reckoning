@@ -1,14 +1,14 @@
 class Invoice < ActiveRecord::Base
   DEFAULT_PAYMENT_DUE_DAYS = 14
 
-  belongs_to :user
+  belongs_to :account
   belongs_to :customer
   belongs_to :project
   has_many :positions, dependent: :destroy, inverse_of: :invoice
   has_many :timers, through: :positions
 
-  validates_presence_of :customer_id, :project_id, :date
-  validates_uniqueness_of :ref, scope: :user_id
+  validates :customer_id, :project_id, :date, presence: true
+  validates :ref, uniqueness: { scope: :account_id }
 
   accepts_nested_attributes_for :positions, allow_destroy: true
 
@@ -40,29 +40,28 @@ class Invoice < ActiveRecord::Base
     where state: :created
   end
 
-  def self.year year
-    where "date <= ? AND date >= ?", "#{year}-12-31", "#{year}-01-01"
+  def self.year(year)
+    where("date <= ? AND date >= ?", "#{year}-12-31", "#{year}-01-01")
   end
 
   def set_pay_date
     self.pay_date = Date.today
-    self.save
+    save
   end
 
   def send_via_mail
-    if self.send_via_mail?
-      InvoiceMailerWorker.perform_in 1.minute, self.id
-    end
+    return unless self.send_via_mail?
+    InvoiceMailerWorker.perform_in 1.minute, id
   end
 
   def generate_pdf
-    self.set_payment_due_date
-    self.update_attributes({pdf_generating: true})
-    InvoicePdfWorker.perform_async self.id
+    set_payment_due_date
+    update_attributes(pdf_generating: true)
+    InvoicePdfWorker.perform_async id
   end
 
   def ref_number
-    "%05d" % self.ref
+    format "%05d", ref
   end
 
   def title
@@ -75,11 +74,11 @@ class Invoice < ActiveRecord::Base
   end
 
   def invoice_file
-    "rechnung-#{self.ref}-#{I18n.l(self.date.to_date, format: :file).downcase}.pdf"
+    "rechnung-#{ref}-#{I18n.l(date.to_date, format: :file).downcase}.pdf"
   end
 
   def timesheet_file
-    "stunden-rechnung-#{self.ref}-#{I18n.l(self.date.to_date, format: :file).downcase}.pdf"
+    "stunden-rechnung-#{ref}-#{I18n.l(date.to_date, format: :file).downcase}.pdf"
   end
 
   def pdf_path
@@ -91,27 +90,22 @@ class Invoice < ActiveRecord::Base
   end
 
   def generate
-    pdf_generator = InvoicePdfGenerator.new self, {
-      pdf_path: pdf_path,
-      tempfile: "reckoning-invoice-pdf-#{self.id}"
-    }
+    pdf_generator = InvoicePdfGenerator.new self, pdf_path: pdf_path,
+                                                  tempfile: "reckoning-invoice-pdf-#{id}"
     pdf_generator.generate
   end
 
   def generate_timesheet
-    pdf_generator = TimesheetPdfGenerator.new self, {
-      pdf_path: timesheet_path,
-      tempfile: "reckoning-timesheet-pdf-#{self.id}"
-    }
+    pdf_generator = TimesheetPdfGenerator.new self, pdf_path: timesheet_path,
+                                                    tempfile: "reckoning-timesheet-pdf-#{id}"
     pdf_generator.generate
   end
 
   def set_payment_due_date
-    if self.payment_due_date.blank?
-      payment_due = self.customer.payment_due || DEFAULT_PAYMENT_DUE_DAYS
-      self.payment_due_date = Time.now + payment_due.days
-      self.save
-    end
+    return if payment_due_date.present?
+    payment_due = customer.payment_due || DEFAULT_PAYMENT_DUE_DAYS
+    self.payment_due_date = Time.now + payment_due.days
+    save
   end
 
   def pdf_present_or_generating?
@@ -139,19 +133,19 @@ class Invoice < ActiveRecord::Base
   end
 
   def pdf_up_to_date?
-    Time.at(self.pdf_generated_at.to_i) == Time.at(self.updated_at.to_i)
+    Time.at(pdf_generated_at.to_i) == Time.at(updated_at.to_i)
   end
 
   def pdf_present?
-    File.exists?(pdf_path)
+    File.exist?(pdf_path)
   end
 
   def timesheet_present?
-    File.exists?(timesheet_path)
+    File.exist?(timesheet_path)
   end
 
   def pdf_generating?
-    self.pdf_generating
+    pdf_generating
   end
 
   def editable?
@@ -160,13 +154,12 @@ class Invoice < ActiveRecord::Base
 
   def set_value
     value = 0.0
-    self.positions.each do |position|
-      unless position.marked_for_destruction?
-        if position.value.present?
-          value = value + position.value
-        elsif position.hours && position.rate
-          value = value + (position.rate * position.hours)
-        end
+    positions.each do |position|
+      next if position.marked_for_destruction?
+      if position.value.present?
+        value += position.value
+      elsif position.hours && position.rate
+        value += (position.rate * position.hours)
       end
     end
     self.value = value
@@ -180,30 +173,27 @@ class Invoice < ActiveRecord::Base
     !pdf_not_present_or_generating? && (!timesheet_not_present_or_generating? || timers.blank?)
   end
 
-  private
-
-  def path(filename)
+  private def path(filename)
     dir = Rails.root.join('files', 'invoices')
-    Dir.mkdir(dir) unless File.exists?(dir)
-    pdf_dir = dir.join(self.customer.id.to_s)
-    Dir.mkdir(pdf_dir) unless File.exists?(pdf_dir)
+    Dir.mkdir(dir) unless File.exist?(dir)
+    pdf_dir = dir.join(customer.id.to_s)
+    Dir.mkdir(pdf_dir) unless File.exist?(pdf_dir)
     Rails.root.join(pdf_dir, filename).to_s
   end
 
-  def set_customer
+  private def set_customer
     project = Project.where(id: project_id).first
     customer = Customer.where(id: project.customer_id).first unless project.blank?
-    if customer.present?
-      self.customer_id = customer.id
-    end
+    return if customer.blank?
+    self.customer_id = customer.id
   end
 
-  def set_rate
-    self.rate = self.project.rate
+  private def set_rate
+    self.rate = project.rate
   end
 
-  def set_ref
-    last_invoice = Invoice.where(user_id: self.user_id).order("ref DESC").first
+  private def set_ref
+    last_invoice = Invoice.where(account_id: account_id).order("ref DESC").first
     if last_invoice.present?
       self.ref = last_invoice.ref + 1
     else

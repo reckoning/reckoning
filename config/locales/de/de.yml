@@ -12,13 +12,14 @@ de:
       customers: "Kunden"
       projects: "Projekte"
       timers: "Zeiten"
-      settings: "Einstellungen"
       toggle: "Navigation aufklappen"
       intro: "Home"
       backend: "Backend"
       frontend: "Frontend"
       dashboard: "Dashboard"
       users: "Benutzer"
+      user: "Profil"
+      account: "Account"
     subnav:
       back: "Zurück"
       new_invoice: "Neue Rechnung"
@@ -28,11 +29,15 @@ de:
       new_user: "Neuer Benutzer"
       update_password: "Passwort ändern"
       user:
-        basic: Account
+        basic: Allgemein
+        security: Zugangsdaten
+      account:
+        basic: Allgemein
         address: Adresse
         banking: Bankdaten
-        settings: Einstellungen
+        taxes: Steuern
         mailing: E-Mail
+        dropbox: Dropbox
       customer:
         basic: Allgemein
         email: "E-Mail Setup"
@@ -67,8 +72,10 @@ de:
         show: "Rechnung %{invoice_ref}"
         new: "Neue Rechnung"
         edit: "Rechnung bearbeiten"
+      account:
+        edit: "Account bearbeiten"
       user:
-        edit: "Einstellungen bearbeiten"
+        edit: "Profil bearbeiten"
       password:
         new: "Passwort zurücksetzen"
         edit: "Passwort ändern"

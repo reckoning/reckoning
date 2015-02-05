@@ -4,9 +4,9 @@ class ProjectsController < ApplicationController
 
   def index
     authorize! :read, Project
-    @customers = current_user.customers.order(sort_column + " " + sort_direction)
-      .page(params.fetch(:page){nil})
-      .per(20)
+    @customers = current_account.customers.order(sort_column + " " + sort_direction)
+                 .page(params.fetch(:page, nil))
+                 .per(20)
   end
 
   def show
@@ -55,29 +55,25 @@ class ProjectsController < ApplicationController
     end
   end
 
-  private
+  private def sort_column
+    (Project.column_names + %w(customers.company)).include?(params[:sort]) ? params[:sort] : "name"
+  end
+  helper_method :sort_column
 
-  helper_method :project, :customers, :sort_column
-
-  def sort_column
-    (Project.column_names + %w[customers.company]).include?(params[:sort]) ? params[:sort] : "name"
+  private def sort_direction
+    %w(asc desc).include?(params[:direction]) ? params[:direction] : "asc"
   end
 
-  def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
-  end
-
-  protected
-
-  def set_active_nav
+  private def set_active_nav
     @active_nav = 'projects'
   end
 
-  def customers
-    @customers ||= current_user.customers
+  private def customers
+    @customers ||= current_account.customers
   end
+  helper_method :customers
 
-  def project_params
+  private def project_params
     @project_params ||= params.require(:project).permit(
       :customer_id,
       :name,
@@ -93,14 +89,14 @@ class ProjectsController < ApplicationController
     )
   end
 
-  def project
-    @project ||= Project.where(id: params.fetch(:id){nil}).first
-    @project ||= current_user.projects.new project_params
+  private def project
+    @project ||= Project.where(id: params.fetch(:id, nil)).first
+    @project ||= current_account.projects.new project_params
   end
+  helper_method :project
 
-  def check_dependencies
-    if current_user.customers.blank?
-      redirect_to new_customer_path, alert: I18n.t(:"messages.project.missing_customer")
-    end
+  private def check_dependencies
+    return if current_account.customers.present?
+    redirect_to new_customer_path, alert: I18n.t(:"messages.project.missing_customer")
   end
 end

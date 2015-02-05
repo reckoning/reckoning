@@ -3,31 +3,34 @@
 .row
   .col-xs-12.col-md-12
 
+    = render "users/header", path: "#{edit_user_registration_path}#security"
+
     .row
-      .col-xs-12.col-md-8
-        %h1
-          = I18n.t(:"headlines.change_password")
+      .col-xs-12.col-lg-2.col-md-3.col-sm-3
+        = render "users/nav", path: "#{edit_user_registration_path}#security", active: "security"
 
-      .col-xs-12.col-md-4
-        .btn-group.pull-right.resource-nav
-          = link_to I18n.t(:"nav.subnav.back"), edit_user_registration_path, class: "btn btn-default"
+      .col-xs-12.col-lg-10.col-md-9.col-sm-9
+        .tab-content
+          .tab-pane.active#basic
+            %fieldset
+              %legend
+                = I18n.t(:"headlines.change_password")
+        = form_for @user, url: password_path do |form|
+          .row
+            .col-xs-12.col-md-6.form-group{class: form_error?(@user, :current_password)}
+              = form.password_field :current_password, autocomplete: "off", placeholder: I18n.t(:"helpers.placeholder.user.current_password"), class: 'form-control'
+              %small
+                = form_errors @user, :current_password
+          .row
+            .col-xs-12.col-md-6.form-group{class: form_error?(@user, :password)}
+              = form.password_field :password, autocomplete: "off", placeholder: I18n.t(:"helpers.placeholder.user.password"), class: 'form-control'
+              %small
+                = form_errors @user, :password
 
-    = form_for @user, url: password_path do |form|
-      .row
-        .col-xs-12.col-md-6.form-group{class: form_error?(@user, :current_password)}
-          = form.password_field :current_password, autocomplete: "off", placeholder: I18n.t(:"helpers.placeholder.user.current_password"), class: 'form-control'
-          %small
-            = form_errors @user, :current_password
-      .row
-        .col-xs-12.col-md-6.form-group{class: form_error?(@user, :password)}
-          = form.password_field :password, autocomplete: "off", placeholder: I18n.t(:"helpers.placeholder.user.password"), class: 'form-control'
-          %small
-            = form_errors @user, :password
+          .row
+            .col-xs-12.col-md-6.form-group{class: form_error?(@user, :password_confirmation)}
+              = form.password_field :password_confirmation, autocomplete: "off", placeholder: I18n.t(:"helpers.placeholder.user.password_confirmation"), class: 'form-control'
+              %small
+                = form_errors @user, :password_confirmation
 
-      .row
-        .col-xs-12.col-md-6.form-group{class: form_error?(@user, :password_confirmation)}
-          = form.password_field :password_confirmation, autocomplete: "off", placeholder: I18n.t(:"helpers.placeholder.user.password_confirmation"), class: 'form-control'
-          %small
-            = form_errors @user, :password_confirmation
-
-      = render "shared/forms/submit", path: edit_user_registration_path
+          = render "shared/forms/submit", path: "#{edit_user_registration_path}#security"

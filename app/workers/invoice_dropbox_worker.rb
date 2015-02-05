@@ -4,19 +4,28 @@ class InvoiceDropboxWorker
   include Sidekiq::Worker
   sidekiq_options queue: (ENV['ARCHIVE_QUEUE'] || 'reckoning-archive').to_sym
 
-  def perform invoice_id
+  def perform(invoice_id)
     invoice = Invoice.find invoice_id
+    return if invoice.blank?
 
-    if invoice.present?
-      client = ::DropboxClient.new(invoice.user.dropbox_token)
+    client = ::DropboxClient.new(invoice.account.dropbox_token)
 
-      if File.exists?(invoice.pdf_path)
-        client.put_file("#{invoice.customer.name.gsub("/", "-").strip}/#{invoice.project.name.gsub("/", "-").strip}/#{invoice.invoice_file}", open(invoice.pdf_path), true)
-      end
+    base_path = [
+      invoice.customer.name.gsub('/', '-').strip,
+      invoice.project.name.gsub('/', '-').strip
+    ]
 
-      if File.exists?(invoice.timesheet_path)
-        client.put_file("#{invoice.customer.name.gsub("/", "-").strip}/#{invoice.project.name.gsub("/", "-").strip}/#{invoice.timesheet_file}", open(invoice.timesheet_path), true)
-      end
+    if File.exist?(invoice.pdf_path)
+      path = (base_path + [
+        invoice.invoice_file
+      ]).join("/")
+      client.put_file(path, open(invoice.pdf_path), true)
     end
+
+    return unless File.exist?(invoice.timesheet_path)
+    path = (base_path + [
+      invoice.timesheet_file
+    ]).join("/")
+    client.put_file(path, open(invoice.timesheet_path), true)
   end
 end
