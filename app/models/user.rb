@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   before_save :update_gravatar_hash
   before_save :ensure_authentication_token
 
-  validates_format_of :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
+  validates :email, email: true
 
   def update_gravatar_hash
     if gravatar.blank?
@@ -21,9 +21,8 @@ class User < ActiveRecord::Base
   end
 
   def ensure_authentication_token
-    if authentication_token.blank?
-      self.authentication_token = generate_authentication_token
-    end
+    return if authentication_token.present?
+    self.authentication_token = generate_authentication_token
   end
 
   def send_welcome

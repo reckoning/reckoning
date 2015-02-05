@@ -1,7 +1,7 @@
 class BaseController < ApplicationController
   include NumberHelper
   skip_authorization_check
-  before_action :authenticate_user!, :only => [:fail]
+  before_action :authenticate_user!, only: [:fail]
 
   def index
     if user_signed_in?
@@ -31,20 +31,21 @@ class BaseController < ApplicationController
     start_date = Date.today - 1.month
     end_date = Date.today
     current_account.projects.each do |project|
-      chart = {key: project.name, values: []}
-      if project.timers.where(date: start_date..end_date).present?
-        (start_date..end_date).each do |date|
-          timers = current_account.timers.includes(:task).where(date: date, "tasks.project_id" => project.id).references(:task).all
-          value = 0.0
-          timers.each do |timer|
-            value += timer.value.to_d
-          end
-          chart[:values] << {x: I18n.l(date, format: :db), y: value.to_f}
+      chart = { key: project.name, values: [] }
+
+      next if project.timers.where(date: start_date..end_date).blank?
+
+      (start_date..end_date).each do |date|
+        timers = current_account.timers.includes(:task).where(date: date, "tasks.project_id" => project.id).references(:task).all
+        value = 0.0
+        timers.each do |timer|
+          value += timer.value.to_d
         end
-        result << chart
+        chart[:values] << { x: I18n.l(date, format: :db), y: value.to_f }
       end
+      result << chart
     end
-    return result
+    result
   end
 
   def generate_invoices_chart_data
@@ -56,12 +57,14 @@ class BaseController < ApplicationController
       result, max_values_last = values_for_year(result, (Date.today - 1.year).year, "last")
     end
 
-    return result, (max_values_current + max_values_last)
+    [result, (max_values_current + max_values_last)]
   end
 
-  def values_for_year result, year, label = "current"
-    sum = {key: I18n.t(:"labels.chart.invoices.sum", year: year), values: []}
-    month = {key: I18n.t(:"labels.chart.invoices.month", year: year), values: []}
+  # TODO: Refactor!!!
+  # rubocop:disable Metrics/CyclomaticComplexity
+  def values_for_year(result, year)
+    sum = { key: I18n.t(:"labels.chart.invoices.sum", year: year), values: [] }
+    month = { key: I18n.t(:"labels.chart.invoices.month", year: year), values: [] }
 
     last_value = 0.0
     max_month_value = 0.0
@@ -84,24 +87,17 @@ class BaseController < ApplicationController
         last_value = sum_value = (last_value + value.to_f)
       end
 
-      if start_date.year != Date.today.year
-        start_date = start_date + 1.year
-      end
-      if end_date.year != Date.today.year
-        end_date = end_date + 1.year
-      end
+      start_date += 1.year if start_date.year != Date.today.year
 
       month[:values] << [(start_date.to_time.to_i * 1000), month_value]
       sum[:values] << [(start_date.to_time.to_i * 1000), sum_value]
 
-      if max_month_value < value.to_f
-        max_month_value = value.to_f
-      end
+      max_month_value = value.to_f if max_month_value < value.to_f
     end
     max_values = [round_to_k(last_value), round_to_k(max_month_value)]
 
     result << sum
     result << month
-    return result, max_values
+    [result, max_values]
   end
 end

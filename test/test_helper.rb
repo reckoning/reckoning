@@ -10,6 +10,7 @@ require "active_record/fixtures"
 require 'sidekiq/testing'
 Sidekiq::Testing.fake!
 
+# rubocop:disable Style/ClassAndModuleChildren
 class ActionController::TestCase
   include Devise::TestHelpers
   ActiveRecord::Migration.check_pending!

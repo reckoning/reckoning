@@ -13,7 +13,6 @@ class DropboxControllerTest < ActionController::TestCase
     it "Unauthorized User can't activate dropbox"
 
     it "Unauthorized User can't deactivate dropbox"
-
   end
 
   describe "happy path" do
@@ -27,5 +26,4 @@ class DropboxControllerTest < ActionController::TestCase
 
     it "#deactivate"
   end
-
 end

@@ -24,21 +24,21 @@ class CustomersControllerTest < ActionController::TestCase
     end
 
     it "Unauthrized user cant create new customer" do
-      post :create, {customer: {name: "foo"}}
+      post :create, customer: { name: "foo" }
 
       assert_response :found
       assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
     end
 
     it "Unauthrized user cant view customer edit" do
-      get :edit, {id: customer.id}
+      get :edit, id: customer.id
 
       assert_response :found
       assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
     end
 
     it "Unauthrized user cant destroy customer" do
-      delete :destroy, {id: customer.id}
+      delete :destroy, id: customer.id
 
       assert_response :found
       assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
@@ -47,7 +47,7 @@ class CustomersControllerTest < ActionController::TestCase
     end
 
     it "Unauthrized user cant update customer" do
-      put :update, {id: customer.id, customer: {name: "bar"}}
+      put :update, id: customer.id, customer: { name: "bar" }
 
       assert_response :found
       assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
@@ -72,20 +72,20 @@ class CustomersControllerTest < ActionController::TestCase
     end
 
     it "User can view the edit customer page" do
-      get :edit, {id: customer.id}
+      get :edit, id: customer.id
 
       assert_response :ok
     end
 
     it "User can create a new customer" do
-      post :create, {customer: {name: "foo"}}
+      post :create, customer: { name: "foo" }
 
       assert_response :found
       assert_equal I18n.t(:"messages.customer.create.success"), flash[:notice]
     end
 
     it "User can update customer" do
-      put :update, {id: customer.id, customer: {name: "bar"}}
+      put :update, id: customer.id, customer: { name: "bar" }
 
       assert_response :found
       assert_equal I18n.t(:"messages.customer.update.success"), flash[:notice]
@@ -93,7 +93,7 @@ class CustomersControllerTest < ActionController::TestCase
 
     it "User can destroy customer" do
       klingon = customers :klingon
-      delete :destroy, {id: klingon.id}
+      delete :destroy, id: klingon.id
 
       assert_response :found
 
@@ -102,5 +102,4 @@ class CustomersControllerTest < ActionController::TestCase
       assert_not_equal klingon, Customer.where(id: klingon.id).first
     end
   end
-
 end

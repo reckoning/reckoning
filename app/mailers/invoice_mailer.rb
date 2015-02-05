@@ -1,22 +1,22 @@
 # encoding: utf-8
 class InvoiceMailer < ActionMailer::Base
-  default from: "#{Rails.application.secrets[:mailer]["default_from"]}"
+  default from: "#{Rails.application.secrets[:mailer]['default_from']}"
 
   attr_accessor :invoice
 
-  def customer_mail invoice
+  def customer_mail(invoice)
     self.invoice = invoice
     send_mail invoice.customer.invoice_email
   end
 
-  def test_mail invoice, test_mail
+  def test_mail(invoice, test_mail)
     self.invoice = invoice
     send_mail test_mail
   end
 
   private
 
-  def send_mail to
+  def send_mail(to)
     month = I18n.l(invoice.date, format: :month)
     date = I18n.l(invoice.date, format: :month_year)
 
@@ -28,7 +28,7 @@ class InvoiceMailer < ActionMailer::Base
     @signature = invoice.account.signature
 
     attachments[invoice.invoice_file] = File.read(invoice.pdf_path)
-    attachments[invoice.timesheet_file] = File.read(invoice.timesheet_path) if File.exists?(invoice.timesheet_path)
+    attachments[invoice.timesheet_file] = File.read(invoice.timesheet_path) if File.exist?(invoice.timesheet_path)
 
     mail(
       from: from,

@@ -20,15 +20,18 @@ class Ability
       %i(created).include?(invoice.state.to_sym) && invoice.account_id == user.account_id
     end
 
+    can :two_factor_qrcode, User
     can :manage, Customer, account_id: user.account_id
     can :manage, Project, customer: { account_id: user.account_id }
     can :manage, Week, account_id: user.account_id
     can :manage, Task, project: { customer: { account_id: user.account_id } }
     can :manage, Timer, week: { account_id: user.account_id }
 
-    if user.admin?
-      can :manage, Account
-      can :manage, User
-    end
+    setup_admin_abilities if user.admin?
+  end
+
+  def setup_admin_abilities
+    can :manage, Account
+    can :manage, User
   end
 end

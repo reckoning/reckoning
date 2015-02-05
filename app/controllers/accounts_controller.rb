@@ -14,12 +14,11 @@ class AccountsController < ApplicationController
     end
   end
 
-  private
-  def set_active_nav
+  private def set_active_nav
     @active_nav = 'account'
   end
 
-  def account_params
+  private def account_params
     @account_params ||= params.require(:account).permit(
       :plan, :tax, :tax_ref, :provision, :bank, :account_number,
       :bank_code, :bic, :iban, :default_from, :signature,
@@ -28,12 +27,12 @@ class AccountsController < ApplicationController
     )
   end
 
-  def account
+  private def account
     @account = current_account
   end
   helper_method :account
 
-  def hash
+  private def hash
     params.fetch(:hash, "")
   end
 end

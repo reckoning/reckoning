@@ -24,7 +24,7 @@ Reckoning::Application.routes.draw do
 
     resources :settings, except: [:index, :show]
 
-    authenticate :user, lambda {|u| u.admin? } do
+    authenticate :user, ->(u) { u.admin? } do
       mount Sidekiq::Web => '/workers'
     end
 
@@ -32,8 +32,8 @@ Reckoning::Application.routes.draw do
   end
 
   devise_for :users,
-    skip: [:sessions, :registrations],
-    controllers: { registrations: "registrations" }
+             skip: [:sessions, :registrations],
+             controllers: { registrations: "registrations" }
 
   as :user do
     get 'signup' => 'registrations#new', as: :new_user_registration
@@ -107,6 +107,8 @@ Reckoning::Application.routes.draw do
   get '404' => 'errors#not_found'
   get '422' => 'errors#server_error'
   get '500' => 'errors#server_error'
+
+  get 'two_factor_qrcode' => 'two_factor#qrcode', constraints: { format: :png }
 
   root to: 'base#index'
 end

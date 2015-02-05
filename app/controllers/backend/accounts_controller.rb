@@ -5,9 +5,9 @@ module Backend
     # get: /backend/accounts
     def index
       @accounts = Account.all
-        .order("#{sort_column} #{sort_direction}")
-        .page(params.fetch(:page){nil})
-        .per(20)
+                  .order("#{sort_column} #{sort_direction}")
+                  .page(params.fetch(:page) { nil })
+                  .per(20)
     end
 
     # get: /backend/accounts/new
@@ -50,6 +50,7 @@ module Backend
     helper_method :sort_column
 
     private
+
     def account_params
       params.require(:account).permit(:name)
     end

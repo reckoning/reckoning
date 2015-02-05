@@ -13,7 +13,7 @@
 
       .col-xs-12.col-md-4
         .btn-group.pull-right.resource-nav
-          - if current_account.has_dropbox?
+          - if current_account.dropbox?
             = link_to archive_invoices_path, method: :put, class: "btn btn-default" do
               = I18n.t(:"nav.subnav.archive_invoices")
           %a.btn.btn-default{href: new_invoice_path, class: ("disabled" if invoice_limit_reached?)}

@@ -10,12 +10,8 @@ class CreateAccountsForCurrentUsers < ActiveRecord::Migration
   def up
     User.all.each do |user|
       account_name = user.company
-      if account_name.blank?
-        account_name = user.name
-      end
-      if account_name.blank?
-        account_name = user.email
-      end
+      account_name = user.name if account_name.blank?
+      account_name = user.email if account_name.blank?
       account = Account.new(
         name: account_name,
         contact_information: user.contact_information.except("name", "company"),
