@@ -9,6 +9,8 @@ gem "pg"
 gem "active_model_serializers", "~> 0.8.0"
 
 gem "sidekiq"
+# for sidekiq web
+gem "sinatra", ">= 1.3.0", require: nil
 
 gem "haml"
 gem "haml-rails"
@@ -61,11 +63,6 @@ gem "rack-cors", require: "rack/cors"
 gem "dropbox-sdk"
 
 gem "web_translate_it"
-
-gem "skylight"
-
-# for sidekiq web
-gem "sinatra", ">= 1.3.0", require: nil
 
 group :test do
   gem "rails-perftest"
