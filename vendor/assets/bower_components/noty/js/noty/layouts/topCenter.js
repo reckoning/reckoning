@@ -8,7 +8,7 @@ $.noty.layouts.topCenter = {
         selector: 'ul#noty_topCenter_layout_container',
         style   : function() {
             $(this).css({
-                top          : 10,
+                top          : 20,
                 left         : 0,
                 position     : 'fixed',
                 width        : '310px',

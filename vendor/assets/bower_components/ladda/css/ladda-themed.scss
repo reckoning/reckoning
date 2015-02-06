@@ -1,5 +1,8 @@
-/** Contains the default Ladda button theme styles */
+/*!
+ * Ladda including the default theme.
+ */
 
+@import "ladda";
 
 /*************************************
  * CONFIG
@@ -45,10 +48,8 @@ $mint: #16a085;
 	&[disabled],
 	&[data-loading] {
 		border-color: rgba( 0, 0, 0, 0.07 );
-		cursor: default;
-		background-color: #999;
 
-		&:hover {
+		&, &:hover {
 			cursor: default;
 			background-color: #999;
 		}
