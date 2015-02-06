@@ -232,8 +232,6 @@ GEM
       redis (~> 3.0, >= 3.0.4)
     responders (2.0.2)
       railties (>= 4.2.0.alpha, < 5)
-    robocop (0.1.1)
-      rack
     roo (1.13.2)
       nokogiri
       rubyzip
