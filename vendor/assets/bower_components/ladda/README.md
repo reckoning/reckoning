@@ -111,7 +111,7 @@ $.ladda( 'stopAll' );
 
 ## Module
 
-The spinner and Ladda can be loaded as a module using either Common.js or AMD.
+You can `bower install ladda` or `npm install ladda`. The spinner and Ladda can be loaded as a module using AMD.
 
 ```javascript
 // Using Require.js
@@ -119,6 +119,13 @@ define(['ladda'], function(Ladda) {
 	// Make Buttons Here
 });
 ```
+
+Or in Common.js, you will:
+
+```javascript
+var ladda = require('Ladda/dist/ladda.min');
+```
+
 ## Browser support
 
 The project is tested in Chrome and Firefox. It Should Work™ in the current stable releases of Chrome, Firefox, Safari as well as IE9 and up.
@@ -131,4 +138,4 @@ The project is tested in Chrome and Firefox. It Should Work™ in the current st
 
 MIT licensed
 
-Copyright (C) 2014 Hakim El Hattab, http://hakim.se
+Copyright (C) 2015 Hakim El Hattab, http://hakim.se

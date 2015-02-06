@@ -24,6 +24,7 @@
     "pdf.js": "mortik/pdf.js#~1.0.277",
     "animate.css": "~3.2.0",
     "twix": "icambron/twix.js#~0.6.0",
-    "nprogress": "~0.1.6"
+    "nprogress": "~0.1.6",
+    "fastclick": "~1.0.6"
   }
 }
