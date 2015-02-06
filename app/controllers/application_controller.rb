@@ -14,8 +14,7 @@ class ApplicationController < ActionController::Base
   private
 
   private def current_account
-    return unless current_user.present?
-    @current_account ||= current_user.account
+    @current_account ||= current_user && current_user.account
   end
   helper_method :current_account
 
