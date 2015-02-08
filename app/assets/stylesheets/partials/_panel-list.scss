@@ -1,4 +1,6 @@
 .panel-list {
+  position: relative;
+
   .list-group-item {
     a {
       color: $gray;
@@ -7,6 +9,12 @@
         text-decoration: none;
       }
     }
+  }
+
+  .panel-list-action {
+    position: absolute;
+    top: -4px;
+    right: 5px;
   }
 
   a.list-group-item.new-item {

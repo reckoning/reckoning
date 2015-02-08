@@ -35,9 +35,12 @@
     .row#tasks
       = form.fields_for :tasks, project.tasks do |builder|
         = render 'task_fields', fields: builder
+    .row
+      .col-xs-12
+        = link_to_add_fields form, :tasks, name: I18n.t(:"actions.add"), class: "btn btn-default pull-right", target: "#tasks" do
+          %i.fa.fa-plus
+          = I18n.t(:"actions.add_task")
 
-      = link_to_add_fields form, :tasks, name: I18n.t(:"actions.add"), class: "btn btn-default pull-right" do
-        %i.fa.fa-plus
-        = I18n.t(:"actions.add_task")
+  %br
 
   = render "shared/forms/submit", path: projects_path
