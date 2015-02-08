@@ -94,15 +94,16 @@ de:
       server_error: Fehler
 
   filter:
-    name:
-      invoice_state: "Filter"
-      invoice_year: "Jahr"
-    defaults:
-      all: "Alle"
+    invoice_year:
+      all: "Alle Jahre"
+    project_state:
+      all: "Aktive Projekte"
+      archived: "Archivierte Projekte"
     invoice_state:
-      created: "Neu"
+      all: "Alle Rechnungen"
+      created: "Neue Rechnungen"
       charged: "In Rechnung gestellt"
-      paid: "Bezahlt"
+      paid: "Bezahlte Rechnungen"
 
   user:
     current_sign_in_at:

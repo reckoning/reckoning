@@ -20,7 +20,8 @@ de:
     generate: "Erstellen"
     charge: "In Rechnung stellen"
     pay: "Rechnung als bezahlt markieren"
-    archive: "Archivieren"
+    archive: Archivieren
+    unarchive: Reaktivieren
     sign_in: "Anmelden"
     sign_out: "Abmelden"
     sign_up: "Registrieren"

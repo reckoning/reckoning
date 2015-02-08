@@ -15,7 +15,12 @@
               = I18n.t(:"labels.defaults.remaining_budget")
           .col-xs-2.col-md-1
             .pull-right
-              %a.btn.btn-default.btn-xs{href: new_project_path(customer_uuid: customer), title: I18n.t(:"nav.subnav.new_project"), data: {toggle: 'tooltip'}}
+              %a.btn.btn-primary.btn-xs{href: new_project_path(customer_uuid: customer), title: I18n.t(:"nav.subnav.new_project"), data: {toggle: 'tooltip'}}
                 %i.fa.fa-plus
     .list-group
-      = render partial: "projects/show", collection: customer.projects.order("name asc"), as: :project
+      - scope = customer.projects
+      - if state = params.fetch(:state, nil)
+        - scope = scope.send(state)
+      - else
+        - scope = scope.send(:active)
+      = render partial: "projects/show", collection: scope.order("name asc"), as: :project
