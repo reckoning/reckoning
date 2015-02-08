@@ -32,7 +32,7 @@
       - if project.active?
         .pull-right.hidden-xs.hidden-sm
           .btn-group
-            %button.btn.btn-default.btn-sm.dropdown-toggle{type: "button", data: {toggle: "dropdown"}, aria: {expanded: "false"}}
+            %button.btn.btn-default.dropdown-toggle{type: "button", data: {toggle: "dropdown"}, aria: {expanded: "false"}}
               = I18n.t(:"labels.defaults.actions")
               %span.caret
             %ul.dropdown-menu.dropdown-menu-right{role: "menu"}
@@ -41,7 +41,7 @@
                   = I18n.t(:"actions.edit")
                 %a{href: archive_v1_project_url(project), data: { redirect: projects_path, method: "PUT", notyConfirm: I18n.t(:"messages.confirm.project.archive") } }
                   = I18n.t(:"actions.archive")
-        .btn-group.btn-group-sm.btn-group-justified.visible-xs.visible.sm
+        .btn-group.btn-group-justified.visible-xs.visible-sm
           %a.btn.btn-default{href: project_path(project)}
             = I18n.t(:"actions.show")
           %a.btn.btn-default{href: edit_project_path(project)}
@@ -50,6 +50,6 @@
           /   = I18n.t(:"actions.archive")
       - else
         .pull-right.hidden-xs.hidden-sm
-          = link_to I18n.t(:"actions.unarchive"), unarchive_project_path(project), class: "btn btn-default btn-sm", method: :put
+          = link_to I18n.t(:"actions.unarchive"), unarchive_project_path(project), class: "btn btn-default", method: :put
         .btn-group.btn-group-sm.btn-group-justified.visible-xs.visible.sm
-          = link_to I18n.t(:"actions.unarchive"), unarchive_project_path(project), class: "btn btn-default btn-sm", method: :put
+          = link_to I18n.t(:"actions.unarchive"), unarchive_project_path(project), class: "btn btn-default", method: :put
