@@ -36,15 +36,6 @@ class ProjectsControllerTest < ActionController::TestCase
       assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
     end
 
-    it "Unauthrized user cant destroy project" do
-      delete :destroy, id: project.id
-
-      assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
-
-      assert_equal project, Project.where(id: project.id).first
-    end
-
     it "Unauthrized user cant update project" do
       put :update, id: project.id, project: { date: Date.today - 1 }
 
@@ -105,15 +96,6 @@ class ProjectsControllerTest < ActionController::TestCase
 
       assert_response :found
       assert_equal I18n.t(:"messages.project.update.success"), flash[:notice]
-    end
-
-    it "User can destroy project" do
-      delete :destroy, id: outpost6.id
-
-      assert_response :found
-      assert_equal I18n.t(:"messages.project.destroy.success"), flash[:notice]
-
-      assert_not_equal outpost6, Project.where(id: outpost6.id).first
     end
   end
 end

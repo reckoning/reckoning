@@ -1,0 +1,8 @@
+de:
+  validation_error:
+    customer:
+      destroy: "Kunde konnte nicht gelöscht werden."
+      destroy_failure_dependency: "Bitte löschen Sie zuerst alle Rechnungen für diesen Kunden."
+    project:
+      destroy: "Projekt konnte nicht gelöscht werden."
+      destroy_failure_dependency: "Bitte löschen Sie zuerst alle Rechnungen für dieses Projekt."

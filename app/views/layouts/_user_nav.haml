@@ -23,7 +23,7 @@
         %li
           = link_to I18n.t(:"actions.sign_out"), destroy_user_session_path, method: :delete
   - else
-    - if registration_enabled?
+    - if registration_enabled? && current_account.blank?
       %li{class: get_active_nav('registration')}
         = link_to I18n.t(:"actions.sign_up"), new_user_registration_path
     %li{class: get_active_nav('sessions') || get_active_nav('users')}
