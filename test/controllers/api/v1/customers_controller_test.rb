@@ -30,6 +30,14 @@ module Api
 
           assert_response :forbidden
         end
+
+        it "Unauthrized user cant destroy customer" do
+          delete :destroy, id: customer.id
+
+          assert_response :forbidden
+
+          assert_equal customer, Customer.where(id: customer.id).first
+        end
       end
 
       describe "happy path" do
@@ -61,6 +69,15 @@ module Api
           json = JSON.parse response.body
           assert json["uuid"]
           assert_equal "foo", json["name"]
+        end
+
+        it "User can destroy customer" do
+          klingon = customers :klingon
+          delete :destroy, id: klingon.id
+
+          assert_response :ok
+
+          refute_equal klingon, Customer.where(id: klingon.id).first
         end
       end
     end
