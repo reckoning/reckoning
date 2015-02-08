@@ -14,7 +14,13 @@ class ApplicationController < ActionController::Base
   private
 
   private def current_account
-    @current_account ||= current_user && current_user.account
+    @current_account ||= begin
+      if current_user.present?
+        current_user.account
+      elsif request.subdomain.present? && request.subdomain != "www" && request.subdomain != "api"
+        Account.where(subdomain: request.subdomain).first
+      end
+    end
   end
   helper_method :current_account
 

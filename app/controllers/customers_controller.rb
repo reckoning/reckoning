@@ -16,19 +16,6 @@ class CustomersController < ApplicationController
     end
   end
 
-  def destroy
-    authorize! :destroy, customer
-    if customer.invoices.present?
-      redirect_to projects_path, alert: I18n.t(:"messages.customer.destroy.failure_dependency")
-    else
-      if customer.destroy
-        redirect_to projects_path, notice: I18n.t(:"messages.customer.destroy.success")
-      else
-        redirect_to projects_path, alert: I18n.t(:"messages.customer.destroy.failure")
-      end
-    end
-  end
-
   private def set_active_nav
     @active_nav = 'projects'
   end

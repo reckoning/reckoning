@@ -1,4 +1,18 @@
 module ApplicationHelper
+  def main_title
+    [
+      (current_account.name if current_account.present?),
+      I18n.t(:"meta.title.default")
+    ].compact.join(" ")
+  end
+
+  def title(label = nil)
+    [
+      label,
+      main_title
+    ].compact.join(" | ")
+  end
+
   def invoice_label(invoice)
     case invoice.state
     when "created"

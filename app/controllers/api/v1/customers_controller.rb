@@ -22,6 +22,19 @@ module Api
         end
       end
 
+      def destroy
+        authorize! :destroy, customer
+        if customer.invoices.present?
+          render json: ValidationError.new("customer.destroy_failure_dependency"), status: :bad_request
+        else
+          if customer.destroy
+            render json: { message: I18n.t(:"messages.customer.destroy.success") }, status: :ok
+          else
+            render json: ValidationError.new("customer.destroy", customer.errors), status: :bad_request
+          end
+        end
+      end
+
       private def customer_params
         @customer_params ||= params.require(:customer).permit(
           :payment_due, :email_template, :invoice_email, :default_from, :name,

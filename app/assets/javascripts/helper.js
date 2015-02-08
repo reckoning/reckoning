@@ -33,7 +33,18 @@ window.displayConfirm = function(ev, $element) {
           url: $element.attr('href'),
           method: $element.data('method'),
           complete: function(result) {
-            Turbolinks.visit(window.location);
+            if ($element.data('redirect') === undefined) {
+              Turbolinks.visit(window.location);
+            } else {
+              Turbolinks.visit($element.data('redirect'));
+              // hack to show message
+              response = result.responseJSON;
+              if (response.message !== undefined) {
+                setTimeout(function() {
+                  displaySuccess(response.message);
+                }, 500);
+              }
+            }
           }
         });
       }
