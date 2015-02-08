@@ -22,9 +22,9 @@
       = form.number_field :budget, class: "form-control", step: "any"
       = form_errors project, :budget
 
-    .col-xs-12.col-md-4.form-group{class: form_error?(project, :budget_on_dashboard)}
+    .col-xs-12.col-md-4.form-group.checkbox{class: form_error?(project, :budget_on_dashboard)}
+      = form.check_box :budget_on_dashboard
       = form.label :budget_on_dashboard
-      = form.check_box :budget_on_dashboard, class: 'form-control'
       = form_errors project, :budget_on_dashboard
 
   %fieldset
