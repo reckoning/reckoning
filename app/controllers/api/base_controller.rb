@@ -3,9 +3,7 @@ module Api
     include ActionController::HttpAuthentication::Token
     before_action :authenticate_user_from_token!
 
-    private
-
-    def authenticate_user_from_token!
+    private def authenticate_user_from_token!
       auth_params, _options = token_and_options(request)
       user_id, auth_token  = auth_params && auth_params.split(':', 2)
       user                 = user_id && User.find(user_id)
@@ -17,5 +15,10 @@ module Api
         render json: { code: "authentication.missing", message: message }, status: :forbidden
       end
     end
+
+    private def current_account
+      @current_account ||= current_user && current_user.account
+    end
+    helper_method :current_account
   end
 end

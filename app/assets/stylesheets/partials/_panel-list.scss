@@ -1,0 +1,24 @@
+.panel-list {
+  .panel-title {
+    a:not(.btn), span {
+      line-height: 1.8;
+    }
+  }
+  .list-group-item {
+    a {
+      color: $gray;
+      &:hover {
+        color: $link-hover-color;
+        text-decoration: none;
+      }
+    }
+  }
+
+  a.list-group-item.new-item {
+    color: $link-color;
+    text-align: center;
+    &:hover {
+      color: $link-hover-color;
+    }
+  }
+}

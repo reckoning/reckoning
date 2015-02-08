@@ -11,13 +11,15 @@
 
       .col-xs-12.col-md-4
         .btn-group.pull-right.resource-nav
-          = link_to I18n.t(:"nav.subnav.new_customer"), new_customer_path, class: "btn btn-default"
-          = link_to I18n.t(:"nav.subnav.new_project"), new_project_path, class: "btn btn-default"
+          / = link_to I18n.t(:"nav.subnav.new_customer"), new_customer_path, class: "btn btn-default"
+          %a.btn.btn-primary{href: new_project_path}
+            %i.fa.fa-plus
+            = I18n.t(:"nav.subnav.new_project")
 
     .pull-right
       = paginate @customers
 
-    = render partial: "table", :@customers => @customers
+    = render partial: "list", customers: @customers
 
     .pull-right
       = paginate @customers

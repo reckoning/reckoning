@@ -23,11 +23,8 @@ de:
         success: "Projekt erfolgreich gelöscht."
         failure: "Projekt konnte nicht gelöscht werden."
         failure_dependency: "Bitte löschen Sie zuerst alle Rechnungen für dieses Projekt."
-      missing_address: "Bitte legen Sie zuerst einen Kunden an."
+      missing_address: "Bitte vervollständigen Sie zuerst Ihre Daten"
     customer:
-      create:
-        success: "Kunde erfolgreich erstellt."
-        failure: "Kunde konnte nicht erstellt werden."
       update:
         success: "Kunde erfolgreich bearbeitet."
         failure: "Kunde konnte nicht bearbeitet werden."
@@ -37,6 +34,16 @@ de:
         failure_dependency: "Bitte löschen Sie zuerst alle Rechnungen für diesen Kunden."
       confirm:
         delete: "Sind Sie sich sicher, dass Sie den Kunden löschen wollen? Alle zugehörigen Projekte werden ebenfalls gelöscht."
+    account:
+      create:
+        success: "Account erfolgreich erstellt."
+        failure: "Account konnte nicht erstellt werden."
+      update:
+        success: "Account wurde erfolgreich bearbeitet."
+        failure: "Account konnte nicht bearbeitet werden."
+      destroy:
+        success: "Account erfolgreich gelöscht."
+        failure: "Account konnte nicht gelöscht werden."
     user:
       create:
         success: "Benutzer erfolgreich erstellt."

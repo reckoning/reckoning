@@ -5,7 +5,7 @@ class Task < ActiveRecord::Base
   # rubocop:disable Rails/HasAndBelongsToMany
   has_and_belongs_to_many :weeks
 
-  validates :project_id, :name, presence: true
+  validates :project, :name, presence: true
 
   def project_name
     project.name_with_customer

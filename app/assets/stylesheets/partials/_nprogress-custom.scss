@@ -2,10 +2,23 @@
   background: $navbar-active !important;
 }
 
-#nprogress .spinner-icon {
-  border-top-color: $navbar-active !important;
-  border-left-color: $navbar-active !important;
+#nprogress {
+  .spinner {
+    // display: none;
+    top: 18px !important;
+  }
+
+  .spinner-icon {
+    border-top-color: $navbar-active !important;
+    border-left-color: $navbar-active !important;
+  }
 }
+
+// @media (max-width: $screen-sm-max) {
+//   #nprogress .spinner {
+//     right: 100px !important;
+//   }
+// }
 
 @media (max-width: $screen-xs-max) {
   #nprogress .spinner {
