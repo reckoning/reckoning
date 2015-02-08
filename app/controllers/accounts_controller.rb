@@ -7,7 +7,7 @@ class AccountsController < ApplicationController
 
   def update
     authorize! :update, account
-    if account.update_without_password(account_params)
+    if account.update(account_params)
       redirect_to "#{edit_account_path}#{hash}", notice: I18n.t(:"messages.account.update.success")
     else
       render "edit#{hash}", alert: I18n.t(:"messages.account.update.failure")
@@ -22,7 +22,7 @@ class AccountsController < ApplicationController
     @account_params ||= params.require(:account).permit(
       :plan, :tax, :tax_ref, :provision, :bank, :account_number,
       :bank_code, :bic, :iban, :default_from, :signature,
-      :name, :address, :country, :public_email,
+      :name, :address, :country, :public_email, :subdomain,
       :telefon, :fax, :website
     )
   end
