@@ -25,6 +25,7 @@
     "animate.css": "~3.2.0",
     "twix": "icambron/twix.js#~0.6.0",
     "nprogress": "~0.1.6",
-    "fastclick": "~1.0.6"
+    "fastclick": "~1.0.6",
+    "awesome-bootstrap-checkbox": "~0.2.3"
   }
 }
