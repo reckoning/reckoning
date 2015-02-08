@@ -31,7 +31,7 @@
     .col-xs-12.col-md-2.actions
       .pull-right.hidden-xs.hidden-sm
         .btn-group
-          %button.btn.btn-default.dropdown-toggle{type: "button", data: {toggle: "dropdown"}, aria: {expanded: "false"}}
+          %button.btn.btn-default.btn-sm.dropdown-toggle{type: "button", data: {toggle: "dropdown"}, aria: {expanded: "false"}}
             = I18n.t(:"labels.defaults.actions")
             %span.caret
           %ul.dropdown-menu.dropdown-menu-right{role: "menu"}
@@ -40,7 +40,7 @@
                 = I18n.t(:"actions.edit")
               / %a{href: "#"}
               /   = I18n.t(:"actions.archive")
-      .btn-group.btn-group-justified.visible-xs.visible.sm
+      .btn-group.btn-group-sm.btn-group-justified.visible-xs.visible.sm
         %a.btn.btn-default{href: project_path(project)}
           = I18n.t(:"actions.show")
         %a.btn.btn-default{href: edit_project_path(project)}
