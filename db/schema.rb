@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150201185140) do
+ActiveRecord::Schema.define(version: 20150208201925) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -76,10 +76,11 @@ ActiveRecord::Schema.define(version: 20150201185140) do
     t.string   "name",                limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "rate",                            precision: 10, scale: 2, default: 0.0,  null: false
-    t.decimal  "budget",                          precision: 10, scale: 2, default: 0.0,  null: false
+    t.decimal  "rate",                            precision: 10, scale: 2, default: 0.0,      null: false
+    t.decimal  "budget",                          precision: 10, scale: 2, default: 0.0,      null: false
     t.uuid     "customer_id"
     t.boolean  "budget_on_dashboard",                                      default: true
+    t.string   "state",                                                    default: "active", null: false
   end
 
   create_table "tasks", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|

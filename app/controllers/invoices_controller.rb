@@ -8,7 +8,7 @@ class InvoicesController < ApplicationController
     state = params.fetch(:state, nil)
     year = params.fetch(:year, nil)
     @invoices = current_account.invoices
-    if state.present? && state =~ /charged|paid|created/
+    if state.present? && Invoice.states.include?(state.to_sym)
       @invoices = @invoices.send(state)
     end
     @invoices = @invoices.year(year) if year.present? && year =~ /\d{4}/
@@ -242,7 +242,7 @@ class InvoicesController < ApplicationController
   end
 
   private def projects
-    @projects ||= current_account.projects
+    @projects ||= current_account.projects.active
   end
   helper_method :projects
 
