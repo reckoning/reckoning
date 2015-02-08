@@ -15,7 +15,7 @@
               = I18n.t(:"labels.defaults.remaining_budget")
           .col-xs-4.col-md-2
             .pull-right
-              %a.btn.btn-primary.btn-sm{href: new_project_path(customer_uuid: customer), title: I18n.t(:"nav.subnav.new_project"), data: {toggle: 'tooltip'}}
+              %a.btn.btn-default.btn-xs{href: new_project_path(customer_uuid: customer), title: I18n.t(:"nav.subnav.new_project"), data: {toggle: 'tooltip'}}
                 %i.fa.fa-plus
     .list-group
       = render partial: "projects/show", collection: customer.projects.order("name asc"), as: :project
