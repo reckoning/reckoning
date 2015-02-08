@@ -5,7 +5,7 @@ $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function(e) {
 });
 
 $(function() {
-  if ($('.nav-tabs a:first, .nav-vertical-tabs a:first').length == 0) {
+  if ($('.nav-tabs a:first, .nav-vertical-tabs a:first').length === 0) {
     return;
   }
 

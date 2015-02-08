@@ -4,10 +4,12 @@
 //= require nvd3
 //= require nprogress
 //= require selectize/dist/css/selectize.bootstrap3
+//= require awesome-bootstrap-checkbox
 
 $footer-border-color: #ccc;
 $footer-bg-color: #ddd;
-$navbar-active: #428bca;
+$brand-primary: #428bca;
+$navbar-active: $brand-primary;
 $gravatar-shadow: 0 1px 0 #fff;
 $font-size-base: 14px;
 $secondary-link-color: #222;

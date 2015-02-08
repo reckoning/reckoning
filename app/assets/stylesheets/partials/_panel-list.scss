@@ -1,0 +1,19 @@
+.panel-list {
+  .list-group-item {
+    a {
+      color: $gray;
+      &:hover {
+        color: $link-hover-color;
+        text-decoration: none;
+      }
+    }
+  }
+
+  a.list-group-item.new-item {
+    color: $link-color;
+    text-align: center;
+    &:hover {
+      color: $link-hover-color;
+    }
+  }
+}

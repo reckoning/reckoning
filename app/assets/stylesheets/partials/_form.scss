@@ -20,6 +20,14 @@ form {
     }
   }
 
+  .form-subdomain {
+    text-align: right;
+  }
+
+  .form-group.checkbox {
+    padding-top: 22px;
+  }
+
   .has-feedback {
 
     .form-control-feedback {
@@ -43,6 +51,7 @@ form {
       top: 0;
       right: 30px;
       z-index: 1;
+      padding-top: 10px;
     }
   }
 

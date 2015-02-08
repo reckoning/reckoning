@@ -2,7 +2,7 @@
   .row
     .col-xs-12.col-md-6
       .form-group.selectize{class: form_error?(project, :customer_id)}
-        = form.collection_select :customer_id, customers, :id, :name, {include_blank: ""}, {placeholder: I18n.t(:"helpers.prompt.project.customer_id"), class: "js-selectize"}
+        = form.collection_select :customer_id, customers, :id, :name, {include_blank: ""}, {placeholder: I18n.t(:"helpers.prompt.project.customer_id"), class: "js-customer-selectize"}
         = form_errors project, :customer_id
     .col-xs-12.col-md-6
       .form-group{class: form_error?(project, :name)}
@@ -22,9 +22,9 @@
       = form.number_field :budget, class: "form-control", step: "any"
       = form_errors project, :budget
 
-    .col-xs-12.col-md-4.form-group{class: form_error?(project, :budget_on_dashboard)}
+    .col-xs-12.col-md-4.form-group.checkbox{class: form_error?(project, :budget_on_dashboard)}
+      = form.check_box :budget_on_dashboard
       = form.label :budget_on_dashboard
-      = form.check_box :budget_on_dashboard, class: 'form-control'
       = form_errors project, :budget_on_dashboard
 
   %fieldset
