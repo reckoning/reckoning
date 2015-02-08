@@ -63,7 +63,7 @@ class ProjectsControllerTest < ActionController::TestCase
 
       assert_response :found
 
-      assert_equal I18n.t(:"messages.project.missing_customer"), flash[:alert]
+      assert_equal I18n.t(:"messages.project.missing_address"), flash[:alert]
     end
   end
 

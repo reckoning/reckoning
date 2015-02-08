@@ -30,6 +30,10 @@
       I18n.defaultLocale = "#{I18n.default_locale}";
       I18n.locale = "#{I18n.locale}";
 
+    - if user_signed_in?
+      :javascript
+        App.authToken = "#{current_user.id}:#{current_user.authentication_token}"
+
     != csrf_meta_tags
 
   %body{data: {success: notice, info: info, error: alert, warning: flash[:warning], spy: ("scroll" unless user_signed_in?), target: ".scrollspy-nav"}}

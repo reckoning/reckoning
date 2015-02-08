@@ -1,7 +1,7 @@
 class Project < ActiveRecord::Base
   belongs_to :customer
   has_many :invoices, dependent: :destroy
-  has_many :tasks, dependent: :destroy
+  has_many :tasks, dependent: :destroy, inverse_of: :project
   has_many :timers, through: :tasks
 
   validates :customer_id, :name, :rate, presence: true

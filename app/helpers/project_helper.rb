@@ -6,7 +6,7 @@ module ProjectHelper
     when 70..89
       return "progress-bar-warning"
     else
-      return "progress-bar-success"
+      return "progress-bar-primary"
     end
   end
 end

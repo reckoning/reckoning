@@ -1,0 +1,21 @@
+.panel.panel-list{class: "panel-default"}
+  - customers.each do |customer|
+    .panel-heading
+      .panel-title
+        .row
+          .col-xs-8.col-md-4.name
+            %a{href: edit_customer_path(customer)}
+              %strong
+                = customer.name
+          .col-xs-12.col-md-2.hidden-xs.hidden-sm
+            %span
+              = I18n.t(:"labels.defaults.budget")
+          .col-xs-12.col-md-4.hidden-xs.hidden-sm
+            %span
+              = I18n.t(:"labels.defaults.remaining_budget")
+          .col-xs-4.col-md-2
+            .pull-right
+              %a.btn.btn-primary.btn-sm{href: new_project_path(customer_uuid: customer), title: I18n.t(:"nav.subnav.new_project"), data: {toggle: 'tooltip'}}
+                %i.fa.fa-plus
+    .list-group
+      = render partial: "projects/show", collection: customer.projects.order("name asc"), as: :project

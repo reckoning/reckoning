@@ -15,7 +15,11 @@ class ProjectsController < ApplicationController
 
   def new
     authorize! :create, Project
-    @project = Project.new
+    if customer
+      @project = customer.projects.new
+    else
+      @project = Project.new
+    end
   end
 
   def edit
@@ -27,6 +31,7 @@ class ProjectsController < ApplicationController
     if project.save
       redirect_to projects_path, notice: I18n.t(:"messages.project.create.success")
     else
+      Rails.logger.debug project.errors.to_yaml
       flash.now[:warning] = I18n.t(:"messages.project.create.failure")
       render "new"
     end
@@ -73,6 +78,10 @@ class ProjectsController < ApplicationController
   end
   helper_method :customers
 
+  private def customer
+    @customer ||= current_account.customers.where(id: params.fetch(:customer_uuid, nil)).first
+  end
+
   private def project_params
     @project_params ||= params.require(:project).permit(
       :customer_id,
@@ -96,7 +105,7 @@ class ProjectsController < ApplicationController
   helper_method :project
 
   private def check_dependencies
-    return if current_account.customers.present?
-    redirect_to new_customer_path, alert: I18n.t(:"messages.project.missing_customer")
+    return if current_account.address.present?
+    redirect_to "#{edit_account_path}#address", alert: I18n.t(:"messages.project.missing_address")
   end
 end

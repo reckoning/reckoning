@@ -2,7 +2,7 @@
   .row
     .col-xs-12.col-md-6
       .form-group.selectize{class: form_error?(project, :customer_id)}
-        = form.collection_select :customer_id, customers, :id, :name, {include_blank: ""}, {placeholder: I18n.t(:"helpers.prompt.project.customer_id"), class: "js-selectize"}
+        = form.collection_select :customer_id, customers, :id, :name, {include_blank: ""}, {placeholder: I18n.t(:"helpers.prompt.project.customer_id"), class: "js-customer-selectize"}
         = form_errors project, :customer_id
     .col-xs-12.col-md-6
       .form-group{class: form_error?(project, :name)}

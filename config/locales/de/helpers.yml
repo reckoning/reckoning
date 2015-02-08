@@ -24,6 +24,7 @@ de:
           user: "SMTP Benutzer"
           password: "SMTP Passwort oder Token"
     placeholder:
+      subdomain: subdomain
       name: "Name"
       address: "Adresse"
       telefon: "Telefon"
