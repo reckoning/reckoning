@@ -17,6 +17,17 @@ module Api
         end
       end
 
+      def archive
+        authorize! :archive, project
+        project.archive
+        project.save
+        if project.reload.archived?
+          render json: { message: I18n.t(:"messages.project.archive.success") }, status: :ok
+        else
+          render json: ValidationError.new("project.archive", project.errors), status: :bad_request
+        end
+      end
+
       private def project_params
         @project_params ||= params.require(:project).permit(
           :customer_id,

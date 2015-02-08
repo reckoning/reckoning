@@ -3,6 +3,9 @@ module Api
     include ActionController::HttpAuthentication::Token
     before_action :authenticate_user_from_token!
 
+    attr_reader :current_account
+    helper_method :current_account
+
     private def authenticate_user_from_token!
       auth_params, _options = token_and_options(request)
       user_id, auth_token  = auth_params && auth_params.split(':', 2)
@@ -10,15 +13,11 @@ module Api
 
       if user && Devise.secure_compare(user.authentication_token, auth_token)
         sign_in user, store: false
+        @current_account = user.account
       else
         message = "HTTP Token: Access denied."
         render json: { code: "authentication.missing", message: message }, status: :forbidden
       end
     end
-
-    private def current_account
-      @current_account ||= current_user && current_user.account
-    end
-    helper_method :current_account
   end
 end

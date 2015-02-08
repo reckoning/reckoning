@@ -1,8 +1,7 @@
 - translateable ||= false
 .dropdown.filter-menu
   %a.btn.btn-default{href: '#', data: {toggle: 'dropdown'}}
-    = "#{I18n.t(:"filter.name.#{resource}_#{name}")}:"
-    - current_value = I18n.t(:"filter.defaults.all")
+    - current_value = I18n.t(:"filter.#{resource}_#{name}..all")
     - if params.fetch(name, nil)
       - if translateable
         - current_value = I18n.t(:"filter.#{resource}_#{name}.#{params.fetch(name, nil)}")
@@ -14,7 +13,7 @@
     %li{class: ("active" unless params.fetch(name, nil))}
       - reset_params = params.dup
       - reset_params.delete(name)
-      = link_to I18n.t(:"filter.defaults.all"), url_for(reset_params)
+      = link_to I18n.t(:"filter.#{resource}_#{name}.all"), url_for(reset_params)
     - filters.each do |filter|
       - if filter.is_a?(Hash)
         - filter = OpenStruct.new filter

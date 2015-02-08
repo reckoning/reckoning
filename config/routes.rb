@@ -6,7 +6,11 @@ Reckoning::Application.routes.draw do
       post 'signin' => 'session#create'
       resource :account
       resources :customers, only: [:index, :show, :create, :destroy]
-      resources :projects, only: [:destroy]
+      resources :projects, only: [:destroy] do
+        member do
+          put :archive
+        end
+      end
     end
   end
 
@@ -75,9 +79,13 @@ Reckoning::Application.routes.draw do
 
   resources :customers, only: [:edit, :update]
   resources :projects, except: [:destroy] do
+    member do
+      put :unarchive
+    end
+
     resources :tasks, only: [:index, :create] do
       collection do
-        get 'uninvoiced'
+        get :uninvoiced
       end
     end
   end
