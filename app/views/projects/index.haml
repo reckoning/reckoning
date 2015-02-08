@@ -11,13 +11,16 @@
 
       .col-xs-12.col-md-4
         .btn-group.pull-right.resource-nav
-          / = link_to I18n.t(:"nav.subnav.new_customer"), new_customer_path, class: "btn btn-default"
           %a.btn.btn-primary{href: new_project_path}
             %i.fa.fa-plus
             = I18n.t(:"nav.subnav.new_project")
 
-    .pull-right
-      = paginate @customers
+    .row
+      .col-xs-12.col-md-6
+        = render "shared/tables/filter", resource: "project", name: "state", filters: Project.states.reject {|state| state == :active}, translateable: true
+      .col-xs-12.col-md-6
+        .pull-right
+          = paginate @customers
 
     = render partial: "list", customers: @customers
 

@@ -5,7 +5,7 @@ class TimersController < ApplicationController
     authorize! :index, Timer
     @date = date
     projects = current_account.projects.order("created_at DESC")
-    @projects = projects.all
+    @projects = projects.active.all
   end
 
   def new_import

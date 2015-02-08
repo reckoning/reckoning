@@ -4,7 +4,16 @@ class ProjectsController < ApplicationController
 
   def index
     authorize! :read, Project
-    @customers = current_account.customers.order(sort_column + " " + sort_direction)
+
+    state = params.fetch(:state, nil)
+    scope = current_account.customers.includes(:projects).references(:projects)
+    if state.present? && Project.states.include?(state.to_sym)
+      scope = scope.where("projects.state = ?", state)
+    else
+      scope = scope.where("projects.state = ?", :active)
+    end
+
+    @customers = scope.order(sort_column + " " + sort_direction)
                  .page(params.fetch(:page, nil))
                  .per(20)
   end
@@ -31,7 +40,6 @@ class ProjectsController < ApplicationController
     if project.save
       redirect_to projects_path, notice: I18n.t(:"messages.project.create.success")
     else
-      Rails.logger.debug project.errors.to_yaml
       flash.now[:warning] = I18n.t(:"messages.project.create.failure")
       render "new"
     end
@@ -47,8 +55,19 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def unarchive
+    authorize! :archive, project
+    project.unarchive
+    project.save
+    if project.reload.active?
+      redirect_to projects_path, notice: I18n.t(:"messages.project.unarchive.success")
+    else
+      redirect_to projects_path, alert: I18n.t(:"messages.project.unarchive.failure")
+    end
+  end
+
   private def sort_column
-    (Project.column_names + %w(customers.name)).include?(params[:sort]) ? params[:sort] : "name"
+    (Project.column_names + %w(customers.name)).include?(params[:sort]) ? params[:sort] : "customers.name"
   end
   helper_method :sort_column
 
