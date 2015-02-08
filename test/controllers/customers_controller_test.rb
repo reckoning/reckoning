@@ -9,27 +9,6 @@ class CustomersControllerTest < ActionController::TestCase
   let(:customer) { customers :starfleet }
 
   describe "unauthorized" do
-    it "Unauthrized user cant view customers index" do
-      get :index
-
-      assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
-    end
-
-    it "Unauthrized user cant view customers new" do
-      get :new
-
-      assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
-    end
-
-    it "Unauthrized user cant create new customer" do
-      post :create, customer: { name: "foo" }
-
-      assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
-    end
-
     it "Unauthrized user cant view customer edit" do
       get :edit, id: customer.id
 
@@ -59,29 +38,10 @@ class CustomersControllerTest < ActionController::TestCase
       sign_in data
     end
 
-    it "User can view the customer list" do
-      get :index
-
-      assert_response :ok
-    end
-
-    it "User can view the new customer page" do
-      get :new
-
-      assert_response :ok
-    end
-
     it "User can view the edit customer page" do
       get :edit, id: customer.id
 
       assert_response :ok
-    end
-
-    it "User can create a new customer" do
-      post :create, customer: { name: "foo" }
-
-      assert_response :found
-      assert_equal I18n.t(:"messages.customer.create.success"), flash[:notice]
     end
 
     it "User can update customer" do

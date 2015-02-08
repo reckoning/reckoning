@@ -9,7 +9,7 @@ window.displayNoty = function(text, timeout, type) {
     text: text,
     timeout: timeout,
     type: type,
-    layout: 'bottomCenter',
+    layout: 'bottom',
     theme: 'bootstrapTheme',
     animation: {
       open: 'animated fadeInUp',
@@ -54,7 +54,7 @@ window.displayConfirm = function(ev, $element) {
     text: $element.data('notyconfirm'),
     buttons: [okButton, cancelButton],
     type: 'warning',
-    layout: 'bottomCenter',
+    layout: 'bottom',
     theme: 'bootstrapTheme',
     animation: {
       open: 'animated fadeInUp',

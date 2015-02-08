@@ -4,6 +4,7 @@ Reckoning::Application.routes.draw do
   scope module: "api", constraints: { subdomain: "api" } do
     namespace :v1 do
       resource :account
+      resources :customers, only: [:index, :show, :create]
     end
   end
 
@@ -70,7 +71,7 @@ Reckoning::Application.routes.draw do
 
   resources :positions, only: [:new, :destroy]
 
-  resources :customers, except: [:show]
+  resources :customers, only: [:edit, :update, :destroy]
   resources :projects do
     resources :tasks, only: [:index, :create] do
       collection do
