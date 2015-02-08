@@ -4,6 +4,7 @@ class RegistrationsController < Devise::RegistrationsController
 
   def new
     @active_nav = 'registration'
+    redirect_to new_user_session_path if current_account.present?
     @user = User.new
   end
 

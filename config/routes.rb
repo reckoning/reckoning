@@ -3,8 +3,10 @@ require 'sidekiq/web'
 Reckoning::Application.routes.draw do
   scope module: "api", constraints: { subdomain: "api" } do
     namespace :v1 do
+      post 'signin' => 'session#create'
       resource :account
-      resources :customers, only: [:index, :show, :create]
+      resources :customers, only: [:index, :show, :create, :destroy]
+      resources :projects, only: [:destroy]
     end
   end
 
@@ -71,8 +73,8 @@ Reckoning::Application.routes.draw do
 
   resources :positions, only: [:new, :destroy]
 
-  resources :customers, only: [:edit, :update, :destroy]
-  resources :projects do
+  resources :customers, only: [:edit, :update]
+  resources :projects, except: [:destroy] do
     resources :tasks, only: [:index, :create] do
       collection do
         get 'uninvoiced'

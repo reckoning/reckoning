@@ -57,6 +57,7 @@ de:
       default: "Rechnungen, Fakturierung, Abrechnung, Software-Dienstleistungen, Freelancer, Tools für Softwareentwickler, Rechnungs-Tools"
     title:
       default: "Reckoning.io"
+      dashboard: "Dashboard"
       timer:
         index: "Zeiten"
         import: "Zeiten importieren"
@@ -69,6 +70,7 @@ de:
         new: "Neues Projekt"
         edit: "Projekt bearbeiten"
       invoice:
+        index: "Rechnungen"
         show: "Rechnung %{invoice_ref}"
         new: "Neue Rechnung"
         edit: "Rechnung bearbeiten"

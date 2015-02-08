@@ -47,19 +47,6 @@ class ProjectsController < ApplicationController
     end
   end
 
-  def destroy
-    authorize! :destroy, project
-    if project.invoices.present?
-      redirect_to projects_path, alert: I18n.t(:"messages.project.destroy.failure_dependency")
-    else
-      if project.destroy
-        redirect_to projects_path, notice: I18n.t(:"messages.project.destroy.success")
-      else
-        redirect_to projects_path, alert: I18n.t(:"messages.project.destroy.failure")
-      end
-    end
-  end
-
   private def sort_column
     (Project.column_names + %w(customers.name)).include?(params[:sort]) ? params[:sort] : "name"
   end
