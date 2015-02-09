@@ -8,14 +8,14 @@ data:
   email: "data@star.fleet"
   account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
   name: "Data"
-  authentication_token: <%= Devise.friendly_token %>
+  authentication_token: "data"
   <<: *DEFAULTS
 
 will:
   id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
   email: "will@star.fleet"
   account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
-  authentication_token: <%= Devise.friendly_token %>
+  authentication_token: "will_riker"
   name: "Will Riker"
   <<: *DEFAULTS
 
@@ -24,7 +24,7 @@ jeanluc:
   email: "jeanluc@star.fleet"
   admin: true
   account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
-  authentication_token: <%= Devise.friendly_token %>
+  authentication_token: "jeanluc_picard"
   name: "Jeanluc Picard"
   <<: *DEFAULTS
 
@@ -32,6 +32,6 @@ worf:
   id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a75"
   email: "worf@star.fleet"
   account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a74"
-  authentication_token: <%= Devise.friendly_token %>
+  authentication_token: "worf"
   name: "Worf"
   <<: *DEFAULTS
