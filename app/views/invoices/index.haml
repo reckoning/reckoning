@@ -14,7 +14,7 @@
             = I18n.t(:"headlines.invoice.sum", sum: number_to_currency(sum))
 
       .col-xs-12.col-md-4
-        .btn-group.pull-right.resource-nav
+        .btn-group-responsive.pull-right.resource-nav
           %a.btn.btn-primary{href: new_invoice_path, class: ("disabled" if invoice_limit_reached?)}
             %i.fa.fa-plus
             = I18n.t(:"nav.subnav.new_invoice")
@@ -32,8 +32,9 @@
     .row
       .col-xs-12.col-md-6
         - if current_account.dropbox?
-          = link_to archive_invoices_path, method: :put, class: "btn btn-default" do
-            = I18n.t(:"nav.subnav.archive_invoices")
+          .btn-group-responsive
+            = link_to archive_invoices_path, method: :put, class: "btn btn-default" do
+              = I18n.t(:"nav.subnav.archive_invoices")
       .col-xs-12.col-md-6
         .pull-right
           = paginate @invoices
