@@ -39,7 +39,7 @@ class CustomersControllerTest < ActionController::TestCase
       put :update, id: customer.id, customer: { name: "bar" }
 
       assert_response :found
-      assert_equal I18n.t(:"messages.customer.update.success"), flash[:notice]
+      assert_equal I18n.t(:"messages.customer.update.success"), flash[:success]
     end
   end
 end

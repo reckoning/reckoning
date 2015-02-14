@@ -46,7 +46,7 @@ class WeeksController < ApplicationController
             render json: { code: :ok }, status: :ok
           end
           format.html do
-            redirect_to timers_path(date: week.start_date), success: I18n.t(:"messages.timesheet.remove_task.success")
+            redirect_to timers_path(date: week.start_date), flash: { success: I18n.t(:"messages.timesheet.remove_task.success") }
           end
         else
           format.js do
