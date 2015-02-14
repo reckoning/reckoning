@@ -88,14 +88,14 @@ class ProjectsControllerTest < ActionController::TestCase
       post :create, project: { customer_id: project.customer.id, name: "foo" }
 
       assert_response :found
-      assert_equal I18n.t(:"messages.project.create.success"), flash[:notice]
+      assert_equal I18n.t(:"messages.project.create.success"), flash[:success]
     end
 
     it "User can update project" do
       put :update, id: project.id, project: { name: "bar" }
 
       assert_response :found
-      assert_equal I18n.t(:"messages.project.update.success"), flash[:notice]
+      assert_equal I18n.t(:"messages.project.update.success"), flash[:success]
     end
   end
 end
