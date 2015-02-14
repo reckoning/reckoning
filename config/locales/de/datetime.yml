@@ -136,6 +136,7 @@ de:
       long: "%H:%M:%S %z"
       dt_default: "%d.%m.%Y %H:%M"
       dt_short: "%e. %b %H:%M"
-      dt_long: "%e. %B %Y %H:%M:%S %z"
+      dt_long: "%e. %B %Y %H:%M:%S"
+      dt_long_with_z: "%e. %B %Y %H:%M:%S %z"
     am: "am"
     pm: "pm"

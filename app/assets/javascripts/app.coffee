@@ -14,18 +14,6 @@ $(document).ajaxSend (event, jqxhr, settings) ->
   jqxhr.setRequestHeader 'Authorization', "Token token=\"#{App.authToken}\""
 
 $ ->
-  if success = $('body').attr('data-success')
-    displaySuccess success
-
-  if info = $('body').attr('data-info')
-    displayAlert info
-
-  if error = $('body').attr('data-error')
-    displayError error
-
-  if warning = $('body').attr('data-warning')
-    displayWarning warning
-
   $('select.js-selectize').selectize()
 
   $('select.js-customer-selectize').selectize

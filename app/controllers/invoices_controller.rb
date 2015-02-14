@@ -28,12 +28,12 @@ class InvoicesController < ApplicationController
     if current_account.dropbox?
       if invoice.files_present?
         InvoiceDropboxWorker.perform_async invoice.id
-        redirect_to invoice_path(invoice), notice: I18n.t(:"messages.invoice.archive.success")
+        redirect_to invoice_path(invoice), success: I18n.t(:"messages.invoice.archive.success")
       else
-        redirect_to invoice_path(invoice), warning: I18n.t(:"messages.invoice.files_missing")
+        redirect_to invoice_path(invoice), alert: I18n.t(:"messages.invoice.files_missing")
       end
     else
-      redirect_to invoice_path(invoice), warning: I18n.t(:"messages.invoice.archive.failure")
+      redirect_to invoice_path(invoice), alert: I18n.t(:"messages.invoice.archive.failure")
     end
   end
 
@@ -41,9 +41,9 @@ class InvoicesController < ApplicationController
     authorize! :archive, invoice
     if current_account.dropbox?
       InvoiceDropboxAllWorker.perform_async current_account.id
-      redirect_to invoices_path, notice: I18n.t(:"messages.invoice.archive_all.success")
+      redirect_to invoices_path, success: I18n.t(:"messages.invoice.archive_all.success")
     else
-      redirect_to invoices_path, warning: I18n.t(:"messages.invoice.archive_all.failure")
+      redirect_to invoices_path, alert: I18n.t(:"messages.invoice.archive_all.failure")
     end
   end
 
@@ -52,12 +52,12 @@ class InvoicesController < ApplicationController
     if invoice.send_via_mail?
       if invoice.files_present?
         InvoiceMailerWorker.perform_async invoice.id
-        redirect_to invoice_path(invoice), notice: I18n.t(:"messages.invoice.send.success")
+        redirect_to invoice_path(invoice), success: I18n.t(:"messages.invoice.send.success")
       else
-        redirect_to invoice_path(invoice), warning: I18n.t(:"messages.invoice.files_missing")
+        redirect_to invoice_path(invoice), alert: I18n.t(:"messages.invoice.files_missing")
       end
     else
-      redirect_to invoice_path(invoice), warning: I18n.t(:"messages.invoice.send.failure")
+      redirect_to invoice_path(invoice), alert: I18n.t(:"messages.invoice.send.failure")
     end
   end
 
@@ -67,9 +67,9 @@ class InvoicesController < ApplicationController
     @test_mail = TestMail.new(test_mail_params)
     if test_mail.valid?
       InvoiceTestMailerWorker.perform_async invoice.id, test_mail.email
-      redirect_to invoice_path(invoice), notice: I18n.t(:"messages.invoice.send_test_mail.success")
+      redirect_to invoice_path(invoice), success: I18n.t(:"messages.invoice.send_test_mail.success")
     else
-      flash.now[:warning] = I18n.t(:"messages.invoice.send_test_mail.failure")
+      flash.now[:alert] = I18n.t(:"messages.invoice.send_test_mail.failure")
       render "show"
     end
   end
@@ -142,9 +142,9 @@ class InvoicesController < ApplicationController
     @invoice = current_account.invoices.new(invoice_params)
     authorize! :create, invoice
     if invoice.save
-      redirect_to invoices_path, notice: I18n.t(:"messages.invoice.create.success")
+      redirect_to invoices_path, success: I18n.t(:"messages.invoice.create.success")
     else
-      flash.now[:warning] = I18n.t(:"messages.invoice.create.failure")
+      flash.now[:alert] = I18n.t(:"messages.invoice.create.failure")
       render "new"
     end
   end
@@ -152,9 +152,9 @@ class InvoicesController < ApplicationController
   def update
     authorize! :update, invoice
     if invoice.update(invoice_params)
-      redirect_to invoices_path, notice: I18n.t(:"messages.invoice.update.success")
+      redirect_to invoices_path, success: I18n.t(:"messages.invoice.update.success")
     else
-      flash.now[:warning] = I18n.t(:"messages.invoice.update.failure")
+      flash.now[:alert] = I18n.t(:"messages.invoice.update.failure")
       render "edit"
     end
   end
@@ -165,7 +165,7 @@ class InvoicesController < ApplicationController
     invoice.save
     respond_to do |format|
       if invoice.reload.charged?
-        flash[:notice] = I18n.t(:'messages.invoice.charge.success')
+        flash[:success] = I18n.t(:'messages.invoice.charge.success')
         format.js { render json: {}, status: :ok }
         format.html { redirect_to :back }
       else
@@ -181,7 +181,7 @@ class InvoicesController < ApplicationController
     invoice.pay
     invoice.save
     if invoice.reload.paid?
-      redirect_to :back, notice: I18n.t(:'messages.invoice.pay.success')
+      redirect_to :back, success: I18n.t(:'messages.invoice.pay.success')
     else
       redirect_to :back, alert: I18n.t(:'messages.invoice.pay.failure')
     end
@@ -216,7 +216,7 @@ class InvoicesController < ApplicationController
       File.delete(invoice.pdf_path) if File.exist?(invoice.pdf_path)
       File.delete(invoice.timesheet_path) if File.exist?(invoice.timesheet_path)
 
-      flash[:notice] = I18n.t(:"messages.invoice.destroy.success")
+      flash[:success] = I18n.t(:"messages.invoice.destroy.success")
       respond_to do |format|
         format.js { render json: {}, status: :ok }
         format.html { redirect_to invoices_path }

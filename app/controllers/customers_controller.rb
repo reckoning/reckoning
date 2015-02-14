@@ -9,9 +9,9 @@ class CustomersController < ApplicationController
   def update
     authorize! :update, customer
     if customer.update_attributes(customer_params)
-      redirect_to "#{edit_customer_path(customer)}#{hash}", notice: I18n.t(:"messages.customer.update.success")
+      redirect_to "#{edit_customer_path(customer)}#{hash}", success: I18n.t(:"messages.customer.update.success")
     else
-      flash.now[:warning] = I18n.t(:"messages.customer.update.failure")
+      flash.now[:alert] = I18n.t(:"messages.customer.update.failure")
       render "edit#{hash}"
     end
   end
