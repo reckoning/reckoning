@@ -1,6 +1,9 @@
-%button.btn.btn-primary.btn-lg{type: "submit"}
-  = I18n.t(:"actions.save")
+%hr
 
-%a.btn.btn-default{href: path, data: { notyConfirm: I18n.t(:"messages.confirm.form.cancel") } }
-  = I18n.t(:"actions.cancel")
+.btn-group-responsive
+  %button.btn.btn-primary.btn-lg{type: "submit"}
+    = I18n.t(:"actions.save")
+
+  %a.btn.btn-default{href: path, data: { notyConfirm: I18n.t(:"messages.confirm.form.cancel") } }
+    = I18n.t(:"actions.cancel")
 

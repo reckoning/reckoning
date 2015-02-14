@@ -34,6 +34,9 @@
       margin: 5px 0;
       border: 1px solid transparent;
       transition: box-shadow $nav-transition-speed, color $nav-transition-speed;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
 
       i {
         transition: color $nav-transition-speed;

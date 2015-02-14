@@ -8,7 +8,7 @@ class AccountsController < ApplicationController
   def update
     authorize! :update, account
     if account.update(account_params)
-      redirect_to "#{edit_account_path}#{hash}", notice: I18n.t(:"messages.account.update.success")
+      redirect_to "#{edit_account_path}#{hash}", success: I18n.t(:"messages.account.update.success")
     else
       render "edit#{hash}", alert: I18n.t(:"messages.account.update.failure")
     end

@@ -37,9 +37,10 @@
         = render 'task_fields', fields: builder
     .row
       .col-xs-12
-        = link_to_add_fields form, :tasks, name: I18n.t(:"actions.add"), class: "btn btn-default pull-right", target: "#tasks" do
-          %i.fa.fa-plus
-          = I18n.t(:"actions.add_task")
+        .btn-group-responsive.pull-right
+          = link_to_add_fields form, :tasks, name: I18n.t(:"actions.add"), class: "btn btn-default", target: "#tasks" do
+            %i.fa.fa-plus
+            = I18n.t(:"actions.add_task")
 
   %br
 

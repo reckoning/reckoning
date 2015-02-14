@@ -4,7 +4,7 @@
 
 #nprogress {
   .spinner {
-    // display: none;
+    display: none !important;
     top: 18px !important;
   }
 

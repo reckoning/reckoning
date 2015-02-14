@@ -38,9 +38,9 @@ class ProjectsController < ApplicationController
   def create
     authorize! :create, Project
     if project.save
-      redirect_to projects_path, notice: I18n.t(:"messages.project.create.success")
+      redirect_to projects_path, success: I18n.t(:"messages.project.create.success")
     else
-      flash.now[:warning] = I18n.t(:"messages.project.create.failure")
+      flash.now[:alert] = I18n.t(:"messages.project.create.failure")
       render "new"
     end
   end
@@ -48,9 +48,9 @@ class ProjectsController < ApplicationController
   def update
     authorize! :update, project
     if project.update_attributes(project_params)
-      redirect_to projects_path, notice: I18n.t(:"messages.project.update.success")
+      redirect_to projects_path, success: I18n.t(:"messages.project.update.success")
     else
-      flash.now[:warning] = I18n.t(:"messages.project.update.failure")
+      flash.now[:alert] = I18n.t(:"messages.project.update.failure")
       render "edit"
     end
   end
@@ -60,7 +60,7 @@ class ProjectsController < ApplicationController
     project.unarchive
     project.save
     if project.reload.active?
-      redirect_to projects_path, notice: I18n.t(:"messages.project.unarchive.success")
+      redirect_to projects_path, success: I18n.t(:"messages.project.unarchive.success")
     else
       redirect_to projects_path, alert: I18n.t(:"messages.project.unarchive.failure")
     end
