@@ -31,6 +31,7 @@ de:
       user:
         basic: Allgemein
         security: Zugangsdaten
+        totp: "Zwei-Faktor-Autorisierung"
       account:
         basic: Allgemein
         address: Adresse
@@ -58,6 +59,11 @@ de:
     title:
       default: "Reckoning.io"
       dashboard: "Dashboard"
+      devise_totp:
+        tokens: "Zwei-Faktor Autorisierung"
+        token: "Zwei-Faktor Token eingeben"
+        recovery: "Zwei-Faktor Setup abschließen"
+        token_refresh: "Zugriff bestätigen"
       timer:
         index: "Zeiten"
         import: "Zeiten importieren"

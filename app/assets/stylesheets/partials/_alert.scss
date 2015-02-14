@@ -1,0 +1,16 @@
+.alert {
+  position: relative;
+
+  .alert-btn {
+    position: absolute;
+    top: 8px;
+
+    &.alert-btn-right {
+      right: 8px;
+    }
+
+    &.alert-btn-left {
+      left: 8px;
+    }
+  }
+}

@@ -14,6 +14,9 @@ config/secrets.yml
 config/skylight.yml
 .env
 
+# gems
+gems/*
+
 # test files
 coverage/*
 
