@@ -1,0 +1,39 @@
+- content_for :title do
+  = I18n.t(:"meta.title.devise_totp.tokens")
+.row
+  .col-xs-12.col-md-12
+    = render "users/header", path: "#{edit_user_registration_path}#security"
+
+    .row
+      .col-xs-12.col-lg-2.col-md-3.col-sm-3
+        = render "users/nav", path: edit_user_registration_path, active: "security"
+
+      .col-xs-12.col-lg-10.col-md-9.col-sm-9
+        .tab-pane#security
+          fieldset
+            legend
+              = I18n.t(:title, scope: 'devise_totp.tokens')
+            p
+              == I18n.t(:explain, scope: 'devise_totp.tokens',
+                        google_auth_link: 'https://support.google.com/accounts/answer/1066447?hl=de',
+                        one_password_link: 'https://agilebits.com/onepassword',
+                        authy_link: 'https://www.authy.com/')
+
+            - if resource.totp_enabled?
+              .alert.alert-info
+                strong
+                  = I18n.t(:activated_on, scope: 'devise_totp.tokens', date: I18n.l(current_user.totp_enabled_on, format: :dt_long))
+                = link_to I18n.t(:reset_totp, { scope: 'devise_totp.token_secret' }), totp_token_path_for(resource_name), method: :delete, class: "btn btn-warning alert-btn alert-btn-right"
+
+              = render partial: 'trusted_devices' if trusted_devices_enabled?
+            - else
+              = form_for(resource, as: resource_name, url: [resource_name, :totp_token], html: { method: :put }) do |f|
+                = devise_error_messages!
+                = render :partial => 'token_secret'
+                .row
+                  .col-xs-12.col-md-2.col-md-offset-2
+                    = f.text_field :totp_token, autocomplete: :off, class: "form-control"
+
+                hr
+                  .btn-group-responsive
+                    = f.submit I18n.t(:submit, scope: 'devise_totp.tokens'), class: "btn btn-primary btn-lg"

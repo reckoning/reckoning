@@ -30,7 +30,7 @@ class DropboxController < ApplicationController
       current_account.dropbox_user = user_id
       current_account.save
 
-      redirect_to edit_user_registration_path, notice: I18n.t(:"messages.dropbox.activate.success")
+      redirect_to edit_user_registration_path, success: I18n.t(:"messages.dropbox.activate.success")
     rescue *DROPBOX_EXCEPTIONS
       redirect_to edit_user_registration_path, alert: I18n.t(:"messages.dropbox.activate.failure")
     end
@@ -46,7 +46,7 @@ class DropboxController < ApplicationController
       current_account.dropbox_user = nil
       current_account.save
 
-      redirect_to edit_user_registration_path, notice: I18n.t(:"messages.dropbox.deactivate.success")
+      redirect_to edit_user_registration_path, success: I18n.t(:"messages.dropbox.deactivate.success")
     rescue
       redirect_to edit_user_registration_path, alert: I18n.t(:"messages.dropbox.deactivate.failure")
     end

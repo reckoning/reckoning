@@ -19,11 +19,8 @@
               %label{for: "user_remember_me"}
                 = I18n.t(:"helpers.label.user.remember_me")
 
-          .text-right
-
-            %button.hidden-xs.btn.btn-lg.btn-primary.btn-loading{data: {loading: {text: I18n.t(:"actions.loading")}}}
-              = I18n.t(:"actions.sign_in")
-            %button.visible-xs.btn-block.btn.btn-lg.btn-primary.btn-loading{data: {loading: {text: I18n.t(:"actions.loading")}}}
+          .btn-group-responsive.text-right
+            %button.btn.btn-lg.btn-primary.btn-loading{data: {loading: {text: I18n.t(:"actions.loading")}}}
               = I18n.t(:"actions.sign_in")
           .clearfix
 

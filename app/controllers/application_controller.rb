@@ -1,8 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
-  add_flash_types :info, :warning
-
   check_authorization unless: :unauthorized_controllers
 
   rescue_from CanCan::AccessDenied do |exception|

@@ -25,7 +25,7 @@ class WeeksController < ApplicationController
         if task.present? && !week.tasks.include?(task)
           week.tasks << task
           week.save
-          flash[:notice] = I18n.t(:"messages.timesheet.add_task.success")
+          flash[:success] = I18n.t(:"messages.timesheet.add_task.success")
         end
         render json: task, status: :ok
       end
@@ -46,14 +46,14 @@ class WeeksController < ApplicationController
             render json: { code: :ok }, status: :ok
           end
           format.html do
-            redirect_to timers_path(date: week.start_date), notice: I18n.t(:"messages.timesheet.remove_task.success")
+            redirect_to timers_path(date: week.start_date), success: I18n.t(:"messages.timesheet.remove_task.success")
           end
         else
           format.js do
             render json: { code: "validations.timers_with_positions.present" }, status: :bad_request
           end
           format.html do
-            redirect_to timers_path(date: week.start_date), warning: I18n.t(:"messages.timesheet.remove_task.warning")
+            redirect_to timers_path(date: week.start_date), alert: I18n.t(:"messages.timesheet.remove_task.warning")
           end
         end
       else
