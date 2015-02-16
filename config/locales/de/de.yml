@@ -20,6 +20,7 @@ de:
       users: "Benutzer"
       user: "Profil"
       account: "Account"
+      sign_up: "Registrieren"
     subnav:
       back: "Zurück"
       new_invoice: "Neue Rechnung"

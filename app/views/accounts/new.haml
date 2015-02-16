@@ -1,0 +1,31 @@
+- content_for :title do
+  = I18n.t(:"meta.title.sign_up")
+- content_for :hide_footer, true
+- plan = params[:plan] || 'free'
+
+= form_for @account, url: registration_path, html: {class: "form-registration"} do |form|
+  %h1.form-registration-heading=I18n.t(:"headlines.sign_up")
+  = form.hidden_field :plan, value: plan
+
+  .form-group{class: form_error?(@account, :name)}
+    = form.text_field :name, autocomplete: "off", placeholder: I18n.t(:"helpers.placeholder.account.name"), class: 'form-control'
+    = form_errors @account, :name
+
+  %hr
+
+  = form.fields_for :users, @account.users do |fields|
+    .form-group{class: form_error?(fields.object, :email)}
+      = fields.text_field :email, autocomplete: "off", placeholder: I18n.t(:"helpers.placeholder.user.email"), class: 'form-control'
+      = form_errors fields.object, :email
+
+    .form-group{class: form_error?(fields.object, :password)}
+      = fields.password_field :password, autocomplete: "off", placeholder: I18n.t(:"helpers.placeholder.user.password"), class: 'form-control'
+      = form_errors fields.object, :password
+
+    .form-group{class: form_error?(fields.object, :password_confirmation)}
+      = fields.password_field :password_confirmation, autocomplete: "off", placeholder: I18n.t(:"helpers.placeholder.user.password_confirmation"), class: 'form-control'
+      = form_errors fields.object, :password_confirmation
+
+  %button.btn-block.btn.btn-primary.btn-lg.btn-loading{data: {loading: {text: I18n.t(:"actions.loading")}}}
+    = I18n.t(:"actions.sign_up")
+  .clearfix
