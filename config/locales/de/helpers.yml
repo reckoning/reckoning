@@ -38,6 +38,8 @@ de:
         rate: "0"
         hours: "0.0"
         value: "Betrag in"
+      account:
+        name: "Account Name"
       user:
         email: "E-Mail"
         password: "Passwort"

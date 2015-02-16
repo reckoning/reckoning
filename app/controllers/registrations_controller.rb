@@ -1,12 +1,5 @@
 class RegistrationsController < Devise::RegistrationsController
   before_action :set_user, only: [:edit, :update]
-  before_action :check_registration_setting, only: [:new, :create]
-
-  def new
-    @active_nav = 'registration'
-    redirect_to new_user_session_path if current_account.present?
-    @user = User.new
-  end
 
   def edit
     @active_nav = 'user'
@@ -31,11 +24,6 @@ class RegistrationsController < Devise::RegistrationsController
 
   private def set_user
     @user = current_user
-  end
-
-  private def check_registration_setting
-    return if registration_enabled?
-    redirect_to root_path
   end
 
   private def hash
