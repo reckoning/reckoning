@@ -1,6 +1,6 @@
 de:
   headlines:
-    sign_up: "Neuen Account erstellen"
+    sign_up: "Account erstellen"
     sign_in: "Anmelden"
     with_account: "bei %{account_name}"
     forgot_password: "Passwort vergessen?"
