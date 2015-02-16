@@ -1,5 +1,5 @@
 class Account < ActiveRecord::Base
-  has_many :users
+  has_many :users, dependent: :destroy
   has_many :invoices, dependent: :destroy
   has_many :positions, through: :invoices
   has_many :weeks, dependent: :destroy
@@ -14,8 +14,11 @@ class Account < ActiveRecord::Base
   store_accessor :mailing, :default_from, :signature
   store_accessor :contact_information, :address, :country, :public_email, :telefon, :fax, :website
 
-  validates :name, presence: true
+  validates :name, :users, presence: true
   validates :subdomain, uniqueness: true, allow_nil: true
+  validates_associated :users
+
+  accepts_nested_attributes_for :users
 
   def dropbox?
     dropbox_token.present?

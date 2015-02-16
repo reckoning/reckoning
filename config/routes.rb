@@ -43,8 +43,8 @@ Reckoning::Application.routes.draw do
              controllers: { registrations: "registrations" }
 
   as :user do
-    get 'signup' => 'registrations#new', as: :new_user_registration
-    post 'signup' => 'registrations#create', as: :user_registration
+    get 'signup' => 'accounts#new', as: :new_registration
+    post 'signup' => 'accounts#create', as: :registration
     get 'settings' => 'registrations#edit', as: :edit_user_registration
     patch 'settings' => 'registrations#update', as: :update_user_registration
     get 'signin' => 'sessions#new', as: :new_user_session
