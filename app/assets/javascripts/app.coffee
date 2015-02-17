@@ -1,6 +1,6 @@
 window.App ?= {}
 
-window.App.apiBasePath = "//api.#{window.location.host}"
+window.App.apiBasePath = "//#{window.location.host}"
 
 $(document).on 'click', 'a.disabled', (ev) ->
   ev.preventDefault()

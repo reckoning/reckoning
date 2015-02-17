@@ -4,7 +4,6 @@
   margin: 0 auto;
   margin-top: 8%;
 
-
   .form-signin-heading,
   .checkbox {
     margin-bottom: 10px;
@@ -34,5 +33,9 @@
         padding-top: 15px;
       }
     }
+  }
+
+  @media (max-width: $screen-xs-min) {
+    max-width: 100%;
   }
 }

@@ -1,7 +1,7 @@
 require 'sidekiq/web'
 
 Reckoning::Application.routes.draw do
-  scope module: "api", constraints: { subdomain: "api" } do
+  scope module: "api" do # , constraints: { subdomain: "api" } do
     namespace :v1 do
       post 'signin' => 'session#create'
       resource :account

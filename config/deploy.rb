@@ -14,7 +14,7 @@ set :repository, 'git@github.com:reckoning/app.git'
 if ENV['on'] == "live"
   set :domain, 'reckoning.io'
   set :branch, 'live'
-  set :repository, 'git@git.mortik.de:reckoning/app.git'
+  set :repository, 'git@github.com:mortik/reckoning.git'
 end
 
 set :shared_paths, [

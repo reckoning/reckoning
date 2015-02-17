@@ -35,4 +35,8 @@
       }
     }
   }
+
+  @media (max-width: $screen-xs-min) {
+    max-width: 100%;
+  }
 }
