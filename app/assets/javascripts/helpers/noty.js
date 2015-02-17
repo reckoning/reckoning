@@ -101,7 +101,6 @@ window.displayError = function(text, timeout) {
 
 $(function() {
   var success = $('body').data('success');
-  console.log(success);
   if (success) {
     displaySuccess(success);
   }

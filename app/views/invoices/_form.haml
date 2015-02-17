@@ -10,9 +10,11 @@
         = form_errors invoice, :project_id
     .col-xs-12.col-md-6
       .form-group{class: form_error?(invoice, :date)}
-        .input-group
+        .input-group.date
           = form.label :date, class: "input-group-addon"
           = form.date_field :date, class: 'form-control'
+          %span.input-group-addon
+            %i.fa.fa-calendar
         = form_errors invoice, :date
   .row
     .col-xs-12.col-md-4.form-group{class: form_error?(invoice, :ref)}
@@ -24,10 +26,14 @@
       .input-group
         = form.label :payment_due_date, class: "input-group-addon"
         = form.date_field :payment_due_date, class: 'form-control'
+        %span.input-group-addon
+          %i.fa.fa-calendar
     .col-xs-12.col-md-4.form-group
       .input-group
         = form.label :delivery_date, class: "input-group-addon"
         = form.date_field :delivery_date, class: 'form-control'
+        %span.input-group-addon
+          %i.fa.fa-calendar
 
   %fieldset
     %legend

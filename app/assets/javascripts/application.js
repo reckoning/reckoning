@@ -19,6 +19,7 @@
 //= require accounting/accounting
 //= require nprogress
 //= require fastclick
+//= require bootstrap-datepicker
 //= require pdf.js/build/pdf
 //= require pdf_viewer
 //= require tabs
@@ -38,6 +39,14 @@ $(document).on('show.bs.collapse', '.navbar-collapse', function() {
 
 $(function() {
   FastClick.attach(document.body);
+
+  $('input[type=date], .input-group.date').datepicker({
+    todayBtn: "linked",
+    clearBtn: true,
+    language: I18n.locale,
+    autoclose: true,
+    todayHighlight: true
+  });
 
   $('.btn.btn-loading').click(function() {
     $(this).button('loading');
