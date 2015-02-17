@@ -11,11 +11,7 @@
     %meta{name: "description", content: I18n.t(:"meta.description.default")}
     %meta{name: "keywords", content: I18n.t(:"meta.keywords.default")}
 
-    %meta{name: "mobile-web-app-capable", content: "yes"}
     = favicon_link_tag asset_url('icon-196.png'), rel: "shortcut icon", type: 'image/png'
-
-    %meta{name: "apple-mobile-web-app-capable", content: "yes"}
-    %meta{name: "apple-mobile-web-app-status-bar-style", content: "black"}
 
     = favicon_link_tag asset_url('touch-icon-iphone.png'), rel: "apple-touch-icon", type: 'image/png'
     = favicon_link_tag asset_url('touch-icon-ipad.png'), rel: "apple-touch-icon", sizes: "76x76", type: 'image/png'
