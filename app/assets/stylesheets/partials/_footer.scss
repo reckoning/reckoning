@@ -1,29 +1,11 @@
 footer#main-footer {
-  // padding: 15px 0 30px;
+  padding: 0 10px 10px;
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
 
-  // #disclaimer {
-  //   margin-top: 20px;
-  //   color: #999;
-  // }
-  // nav {
-  //   margin-bottom: 10px;
-
-  //   a {
-  //     color: lighten(#428bca, 10%);
-  //     &:hover {
-  //       color: #428bca;
-  //     }
-  //   }
-  // }
-
   .copyright {
-    position: absolute;
-    left: 10px;
-    bottom: 10px;
     color: #999;
 
     a {
@@ -36,9 +18,13 @@ footer#main-footer {
   }
 
   .version {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
     color: #999;
+    text-align: right;
+  }
+
+  @media (max-width: $screen-xs-min) {
+    .version, .copyright {
+      text-align: center;
+    }
   }
 }
