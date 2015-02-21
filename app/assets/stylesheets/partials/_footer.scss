@@ -1,41 +1,30 @@
 footer#main-footer {
-  padding: 15px 0 30px;
-  border-top: 1px solid rgba($footer-border-color, .5);
-  background-color: rgba($footer-bg-color, .5);
+  padding: 0 15px 10px;
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
 
-  .copyright,
-  .copyright a {
-    color: #666;
-  }
-
-  .copyright a {
-    &:hover {
-      color: #428bca;
-    }
-  }
-
-  #disclaimer {
-    margin-top: 20px;
-    color: #666;
-  }
-  nav {
-    margin-bottom: 10px;
+  .copyright {
+    color: #999;
 
     a {
-      color: lighten(#428bca, 10%);
+      color: #999;
+
       &:hover {
         color: #428bca;
       }
     }
   }
-}
 
-.version {
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
+  .version {
+    color: #999;
+    text-align: right;
+  }
+
+  @media (max-width: $screen-xs-min) {
+    .version, .copyright {
+      text-align: center;
+    }
+  }
 }

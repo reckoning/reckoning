@@ -2,11 +2,11 @@
   .row
     .col-xs-12.col-md-6
       .form-group.selectize{class: form_error?(project, :customer_id)}
-        = form.collection_select :customer_id, customers, :id, :fullname, {include_blank: ""}, {placeholder: I18n.t(:"helpers.prompt.project.customer_id"), class: "js-selectize"}
+        = form.collection_select :customer_id, customers, :id, :name, {include_blank: ""}, {placeholder: I18n.t(:"helpers.prompt.project.customer_id"), class: "js-customer-selectize"}
         = form_errors project, :customer_id
     .col-xs-12.col-md-6
       .form-group{class: form_error?(project, :name)}
-        = form.text_field :name, placeholder: I18n.t(:"helpers.placeholder.project.name"), class: 'form-control'
+        = form.text_field :name, placeholder: I18n.t(:"helpers.placeholder.name"), class: 'form-control'
         = form_errors project, :name
 
   .row
@@ -23,9 +23,10 @@
       = form_errors project, :budget
 
     .col-xs-12.col-md-4.form-group{class: form_error?(project, :budget_on_dashboard)}
-      = form.label :budget_on_dashboard
-      = form.check_box :budget_on_dashboard, class: 'form-control'
-      = form_errors project, :budget_on_dashboard
+      .checkbox
+        = form.check_box :budget_on_dashboard
+        = form.label :budget_on_dashboard
+        = form_errors project, :budget_on_dashboard
 
   %fieldset
     %legend
@@ -34,9 +35,13 @@
     .row#tasks
       = form.fields_for :tasks, project.tasks do |builder|
         = render 'task_fields', fields: builder
+    .row
+      .col-xs-12
+        .btn-group-responsive.pull-right
+          = link_to_add_fields form, :tasks, name: I18n.t(:"actions.add"), class: "btn btn-default", target: "#tasks" do
+            %i.fa.fa-plus
+            = I18n.t(:"actions.add_task")
 
-      = link_to_add_fields form, :tasks, name: I18n.t(:"actions.add"), class: "btn btn-default pull-right" do
-        %i.fa.fa-plus
-        = I18n.t(:"actions.add_task")
+  %br
 
   = render "shared/forms/submit", path: projects_path

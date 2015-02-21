@@ -5,9 +5,7 @@ module Api
     def index
       timers = current_user.timers
       task_id = params.fetch(:task_id, nil)
-      if task_id
-        timers.where(task_id: task_id)
-      end
+      timers.where(task_id: task_id) if task_id
       date = params.fetch(:date, nil)
       if date
         date = Date.parse(date)

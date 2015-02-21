@@ -1,19 +1,36 @@
 class Project < ActiveRecord::Base
-  validates_presence_of :customer_id, :name, :rate
-
   belongs_to :customer
   has_many :invoices, dependent: :destroy
-  has_many :tasks, dependent: :destroy
+  has_many :tasks, dependent: :destroy, inverse_of: :project
   has_many :timers, through: :tasks
 
+  validates :customer_id, :name, :rate, presence: true
+
   accepts_nested_attributes_for :tasks, allow_destroy: true
+
+  include ::SimpleStates
+
+  self.initial_state = :active
+  # active -> archive -> active
+  states :active, :archived
+
+  event :archive, from: :active, to: :archived
+  event :unarchive, from: :archived, to: :active
+
+  def self.active
+    where(state: :active)
+  end
+
+  def self.archived
+    where(state: :archived)
+  end
 
   def self.with_budget
     where("budget != ?", 0).where(budget_on_dashboard: true)
   end
 
   def name_with_customer
-    "#{self.customer.fullname} - #{self.name}"
+    "#{customer.name} - #{name}"
   end
 
   def timer_values

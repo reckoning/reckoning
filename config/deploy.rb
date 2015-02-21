@@ -14,7 +14,7 @@ set :repository, 'git@github.com:reckoning/app.git'
 if ENV['on'] == "live"
   set :domain, 'reckoning.io'
   set :branch, 'live'
-  set :repository, 'git@git.mortik.de:reckoning/app.git'
+  set :repository, 'git@github.com:mortik/reckoning.git'
 end
 
 set :shared_paths, [
@@ -25,7 +25,6 @@ set :shared_paths, [
   'log',
   'config/secrets.yml',
   'config/database.yml',
-  'config/skylight.yml'
 ]
 
 task :environment do
@@ -33,7 +32,7 @@ task :environment do
 end
 
 desc "Deploys the current version to the server."
-task :deploy => :environment do
+task deploy: :environment do
   deploy do
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
@@ -48,6 +47,6 @@ task :deploy => :environment do
   end
 end
 
-task :restart => :environment do
+task restart: :environment do
   queue "sudo supervisorctl restart reckoning:*"
 end

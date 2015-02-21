@@ -1,8 +1,6 @@
 require 'dropbox_sdk'
 
 class DropboxController < ApplicationController
-  skip_authorization_check
-
   DROPBOX_EXCEPTIONS = [
     DropboxOAuth2Flow::BadRequestError,
     DropboxOAuth2Flow::BadStateError,
@@ -12,43 +10,49 @@ class DropboxController < ApplicationController
     DropboxError
   ]
 
+  def show
+    @active_nav = "account"
+    authorize! :connect, :dropbox
+  end
+
   def start
-    authorize_url = flow.start()
+    authorize! :connect, :dropbox
+    authorize_url = flow.start
     redirect_to authorize_url
   end
 
   def activate
+    authorize! :connect, :dropbox
     begin
       access_token, user_id = flow.finish(params)
 
-      current_user.dropbox_token = access_token
-      current_user.dropbox_user = user_id
-      current_user.save
+      current_account.dropbox_token = access_token
+      current_account.dropbox_user = user_id
+      current_account.save
 
-      redirect_to edit_user_registration_path, notice: I18n.t(:"messages.dropbox.activate.success")
+      redirect_to edit_user_registration_path, flash: { success: I18n.t(:"messages.dropbox.activate.success") }
     rescue *DROPBOX_EXCEPTIONS
       redirect_to edit_user_registration_path, alert: I18n.t(:"messages.dropbox.activate.failure")
     end
   end
 
   def deactivate
+    authorize! :connect, :dropbox
     begin
-      client = DropboxClient.new(current_user.dropbox_token)
+      client = DropboxClient.new(current_account.dropbox_token)
       client.disable_access_token
 
-      current_user.dropbox_token = nil
-      current_user.dropbox_user = nil
-      current_user.save
+      current_account.dropbox_token = nil
+      current_account.dropbox_user = nil
+      current_account.save
 
-      redirect_to edit_user_registration_path, notice: I18n.t(:"messages.dropbox.deactivate.success")
-    rescue => e
+      redirect_to edit_user_registration_path, flash: { success: I18n.t(:"messages.dropbox.deactivate.success") }
+    rescue
       redirect_to edit_user_registration_path, alert: I18n.t(:"messages.dropbox.deactivate.failure")
     end
   end
 
-  private
-
-  def flow
+  private def flow
     @flow ||= DropboxOAuth2Flow.new(
       Rails.application.secrets[:dropbox_key],
       Rails.application.secrets[:dropbox_secret],

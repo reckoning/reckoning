@@ -1,3 +1,5 @@
+- content_for :title do
+  = I18n.t(:"meta.title.dashboard")
 .row#dashboard
   .col-xs-12.col-md-12
     %h1
@@ -22,11 +24,15 @@
               = I18n.t(:"dashboard.panels.paid_invoices")
               %strong.pull-right
                 = number_to_currency(invoices_sum(@paid_invoices))
-            - if current_user.provision.present?
+            - if current_account.provision.present?
               .list-group-item
                 = I18n.t(:"dashboard.panels.provision")
                 %strong.pull-right
-                  = number_to_currency(invoices_sum(@paid_invoices) / 100 * current_user.provision.to_i)
+                  = number_to_currency(invoices_sum(@paid_invoices) / 100 * current_account.provision.to_i)
+              .list-group-item
+                = I18n.t(:"dashboard.panels.last_provision", year: (Time.now - 1.year).year)
+                %strong.pull-right
+                  = number_to_currency(invoices_sum(@last_invoices) / 100 * current_account.provision.to_i)
             .list-group-item.disabled
               = I18n.t(:"dashboard.panels.last_invoices")
               %strong.pull-right

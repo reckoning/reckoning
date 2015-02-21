@@ -1,0 +1,13 @@
+- unless defined?(path)
+  - path = ""
+- unless defined?(active)
+  - active = "basic"
+%ul.nav.nav-vertical-tabs
+  %li{class: (active == "basic" ? "active" : "")}
+    %a{href: "#{path}#basic", data: {toggle: ("tab" if path.blank?)}}
+      = I18n.t("nav.subnav.user.basic")
+      %i.fa.fa-user
+  %li{class: (active == "security" ? "active" : "")}
+    %a{href: "#{path}#security", data: {toggle: ("tab" if path.blank?)}}
+      = I18n.t("nav.subnav.user.security")
+      %i.fa.fa-laptop

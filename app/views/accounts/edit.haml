@@ -1,0 +1,42 @@
+- content_for :title do
+  = I18n.t(:"meta.title.account.edit")
+.row
+  .col-xs-12.col-md-12
+
+    = render "accounts/header"
+
+    .row
+      .col-xs-12.col-lg-2.col-md-3.col-sm-3
+        = render "accounts/nav"
+
+      .col-xs-12.col-lg-10.col-md-9.col-sm-9
+        = form_for account, url: account_path do |form|
+          %input{name: "hash", value: "", type: :hidden}
+          .tab-content
+            .tab-pane.active#basic
+              %fieldset
+                %legend
+                  = I18n.t(:"labels.account.settings.basic")
+                = render "accounts/basic", form: form, resource: account
+            .tab-pane#address
+              %fieldset
+                %legend
+                  = I18n.t(:"labels.account.settings.address")
+                = render "accounts/address", form: form, resource: account
+            .tab-pane#banking
+              %fieldset
+                %legend
+                  = I18n.t(:"labels.account.settings.banking")
+                = render "accounts/banking", form: form, resource: account
+            .tab-pane#taxes
+              %fieldset
+                %legend
+                  = I18n.t(:"labels.account.settings.taxes")
+                = render "accounts/taxes", form: form, resource: account
+            .tab-pane#mailing
+              %fieldset
+                %legend
+                  = I18n.t(:"labels.account.settings.mailing")
+                = render "accounts/mailing", form: form, resource: account
+
+          = render "shared/forms/submit", path: root_path

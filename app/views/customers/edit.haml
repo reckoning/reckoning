@@ -5,13 +5,16 @@
   .col-xs-12.col-md-12
 
     .row
-      .col-xs-12.col-md-8
+      .col-xs-12.col-md-9
         %h1
           = I18n.t(:"headlines.customer.edit")
 
-      .col-xs-12.col-md-4
-        .btn-group.pull-right.resource-nav
-          = link_to I18n.t(:"nav.subnav.back"), customers_path, class: "btn btn-default"
+      .col-xs-12.col-md-3
+        .btn-group-responsive.pull-right.resource-nav
+          = link_to I18n.t(:"nav.subnav.back"), :back, class: "btn btn-default"
+          %a.btn.btn-danger{href: v1_customer_url(customer), data: { redirect: projects_path, method: "DELETE", notyConfirm: I18n.t(:"messages.confirm.delete") } }
+            %i.fa.fa-trash
+            = I18n.t(:"actions.delete")
 
     .row
       .col-xs-12.col-lg-2.col-md-3.col-sm-3

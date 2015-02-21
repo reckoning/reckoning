@@ -1,3 +1,12 @@
+.nav-tabs-table {
+  .nav-tabs {
+    margin-bottom: -1px;
+  }
+  .panel {
+    border-radius: 0 0 4px 4px;
+  }
+}
+
 .nav-vertical-tabs {
   position: relative;
   padding: 15px 0 20px;
@@ -25,6 +34,9 @@
       margin: 5px 0;
       border: 1px solid transparent;
       transition: box-shadow $nav-transition-speed, color $nav-transition-speed;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
 
       i {
         transition: color $nav-transition-speed;

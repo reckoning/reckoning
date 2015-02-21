@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class InvoiceMailerTest < ActionMailer::TestCase
-  fixtures [:invoices, :customers, :users, :projects, :positions]
+  fixtures :all
 
   let(:invoice) { invoices :january }
 
@@ -17,7 +17,7 @@ class InvoiceMailerTest < ActionMailer::TestCase
   end
 
   after do
-    File.unlink(invoice.pdf_path) if File.exists?(invoice.pdf_path)
+    File.unlink(invoice.pdf_path) if File.exist?(invoice.pdf_path)
   end
 
   describe "#customer_mail" do
@@ -31,8 +31,8 @@ class InvoiceMailerTest < ActionMailer::TestCase
     end
 
     it "sends email to global from address" do
-      invoice.user.default_from = "user@reckoning.io"
-      invoice.user.save
+      invoice.account.default_from = "user@reckoning.io"
+      invoice.account.save
 
       mail = InvoiceMailer.customer_mail(invoice).deliver_now
 
@@ -55,8 +55,8 @@ class InvoiceMailerTest < ActionMailer::TestCase
     end
 
     it "falls back to default from address if global email is empty string" do
-      invoice.user.default_from = ""
-      invoice.user.save
+      invoice.account.default_from = ""
+      invoice.account.save
 
       mail = InvoiceMailer.customer_mail(invoice).deliver_now
 

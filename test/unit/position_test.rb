@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class PositionTest < ActiveSupport::TestCase
-
   it "should not be valid if description is missing" do
     position = Position.new
     assert !position.valid?, "#{position.inspect} should be invalid"

@@ -1,7 +1,9 @@
 - if user_signed_in?
   %ul.nav.navbar-nav
-    %li{class: get_active_nav('backend_dashboard')}
+    %li{class: active_nav?('backend_dashboard')}
       = link_to I18n.t(:"nav.header.dashboard"), backend_root_path
-    %li{class: get_active_nav('backend_users')}
+    %li{class: active_nav?('backend_accounts')}
+      = link_to I18n.t(:"nav.header.accounts"), backend_accounts_path
+    %li{class: active_nav?('backend_users')}
       = link_to I18n.t(:"nav.header.users"), backend_users_path
 

@@ -23,6 +23,8 @@ de:
       enabled: "Status"
       invoice: Rechnung
       timesheet: Stundenzettel
+      tasks: Aufgaben
+      invoices: Rechnungen
     chart:
       on_date: am
       timers:
@@ -47,11 +49,16 @@ de:
       created_at: "Erstellt"
       last_sign_in: "Letzte Aktivität"
       settings:
+        basic: Allgemein
+        security: Zugangsdaten
+    account:
+      settings:
         basic: "Account Informationen"
         address: "Adressdaten"
         banking: "Bank Informationen"
         taxes: "Steuern"
-      mailing: "E-Mail Einstellungen"
+        mailing: "E-Mail Einstellungen"
+        dropbox: "Dropbox Verbindung"
     customer:
       basic: "Allgemeine Informationen"
       email: "E-Mail Setup für Rechnungen"
@@ -63,6 +70,7 @@ de:
         customer: "Keine Kunden vorhanden"
         invoice: "Keine Rechnungen vorhanden"
         project: "Keine Projekte vorhanden"
+        task: "Keine Aufgaben vorhanden"
 
 
     modals:

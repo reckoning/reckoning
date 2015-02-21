@@ -4,8 +4,8 @@ class TimersController < ApplicationController
   def index
     authorize! :index, Timer
     @date = date
-    projects = current_user.projects.order("created_at DESC")
-    @projects = projects.all
+    projects = current_account.projects.order("created_at DESC")
+    @projects = projects.active.all
   end
 
   def new_import
@@ -15,7 +15,7 @@ class TimersController < ApplicationController
   def csv_import
     authorize! :csv_import, Timer
     if Timer.import(params[:timer][:file], params[:timer][:project_id])
-      redirect_to timers_path, notice: I18n.t(:"messages.timer.import.success")
+      redirect_to timers_path, flash: { success: I18n.t(:"messages.timer.import.success") }
     else
       redirect_to timers_path, alert: I18n.t(:"messages.timer.import.failure")
     end
@@ -28,8 +28,8 @@ class TimersController < ApplicationController
   end
 
   def week
-    @week ||= current_user.weeks.where(start_date: date.beginning_of_week).first
-    @week ||= current_user.weeks.new
+    @week ||= current_account.weeks.where(start_date: date.beginning_of_week).first
+    @week ||= current_account.weeks.new
   end
   helper_method :week
 

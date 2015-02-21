@@ -1,12 +1,13 @@
 module NavHelper
-
-  def get_active_nav nav = 'home'
-    if nav == @active_nav
-      return "active"
-    end
+  def active_nav?(nav = "home")
+    return "active" if nav == @active_nav
   end
 
-  def back_path fallback
+  def hide_nav?(nav = "home")
+    return "hide" if nav == @active_nav
+  end
+
+  def back_path(fallback)
     if request.referer.blank?
       fallback
     else

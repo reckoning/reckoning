@@ -4,7 +4,7 @@ window.displayNoty = function(text, timeout, type) {
     text: text,
     timeout: timeout,
     type: type,
-    layout: 'bottomRight',
+    layout: 'bottom',
     theme: 'bootstrapTheme',
     animation: {
       open: 'animated fadeInUp',
@@ -28,7 +28,18 @@ window.displayConfirm = function(ev, $element) {
           url: $element.attr('href'),
           method: $element.data('method'),
           complete: function(result) {
-            Turbolinks.visit(window.location);
+            if ($element.data('redirect') === undefined) {
+              Turbolinks.visit(window.location);
+            } else {
+              Turbolinks.visit($element.data('redirect'));
+              // hack to show message
+              response = result.responseJSON;
+              if (response.message !== undefined) {
+                setTimeout(function() {
+                  displaySuccess(response.message);
+                }, 500);
+              }
+            }
           }
         });
       }
@@ -49,7 +60,7 @@ window.displayConfirm = function(ev, $element) {
     text: $element.data('notyconfirm'),
     buttons: [okButton, cancelButton],
     type: 'warning',
-    layout: 'bottomRight',
+    layout: 'bottom',
     theme: 'bootstrapTheme',
     animation: {
       open: 'animated fadeInUp',
@@ -67,18 +78,18 @@ window.displaySuccess = function(text, timeout) {
   displayNoty(text, timeout, 'success');
 };
 
-window.displayNotice = function(text, timeout) {
+window.displayInfo = function(text, timeout) {
   if (timeout === undefined) {
     timeout = 3000;
   }
-  displayNoty(text, timeout, 'alert');
+  displayNoty(text, timeout, 'info');
 };
 
 window.displayAlert = function(text, timeout) {
   if (timeout === undefined) {
-    timeout = 3000;
+    timeout = false;
   }
-  displayNoty(text, timeout, 'error');
+  displayNoty(text, timeout, 'alert');
 };
 
 window.displayError = function(text, timeout) {
@@ -88,16 +99,24 @@ window.displayError = function(text, timeout) {
   displayNoty(text, timeout, 'error');
 };
 
-window.displayWarning = function(text, timeout) {
-  if (timeout === undefined) {
-    timeout = false;
-  }
-  displayNoty(text, timeout, 'warning');
-};
-
 $(function() {
-  $("[data-notyConfirm]").click(function(ev) {
-    displayConfirm(ev, $(this));
-    return false;
-  });
+  var success = $('body').data('success');
+  if (success) {
+    displaySuccess(success);
+  }
+
+  var info = $('body').data('info');
+  if (info) {
+    displayAlert(info);
+  }
+
+  var error = $('body').data('error');
+  if (error) {
+    displayError(error);
+  }
+
+  var alert = $('body').data('alert');
+  if (alert) {
+    displayAlert(alert);
+  }
 });

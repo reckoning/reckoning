@@ -1,12 +1,14 @@
 class Task < ActiveRecord::Base
-  validates_presence_of :project_id, :name
-
   belongs_to :project
   has_many :timers, dependent: :destroy
+  # TODO: Refactor with frontend
+  # rubocop:disable Rails/HasAndBelongsToMany
   has_and_belongs_to_many :weeks
 
+  validates :project, :name, presence: true
+
   def project_name
-    return project.name_with_customer
+    project.name_with_customer
   end
 
   def timer_values

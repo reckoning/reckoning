@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class InvoiceTest < ActiveSupport::TestCase
-  fixtures :projects, :invoices, :customers, :positions, :timers, :weeks, :tasks
+  fixtures :all
 
   it "should not be valid without project" do
     invoice = Invoice.new(customer_id: "foo", project_id: nil)
@@ -20,7 +20,7 @@ class InvoiceTest < ActiveSupport::TestCase
 
   it "should create invoice if date and valid project present" do
     Timecop.freeze "2014-01-01" do
-      project = projects :enterprise
+      project = projects :narendra3
       invoice = Invoice.new(project_id: project.id, date: Time.now)
       assert invoice.valid?, "#{invoice.inspect} should be valid"
     end
@@ -47,7 +47,7 @@ class InvoiceTest < ActiveSupport::TestCase
     end
   end
 
-  it "should have a unique ref scoped by user"
+  it "should have a unique ref scoped by account"
 
   it "before_create set_ref"
 
@@ -59,7 +59,7 @@ class InvoiceTest < ActiveSupport::TestCase
 
   it "should respond to defined associations" do
     invoice = Invoice.new
-    assert_respond_to invoice, :user
+    assert_respond_to invoice, :account
     assert_respond_to invoice, :customer
     assert_respond_to invoice, :project
     assert_respond_to invoice, :positions

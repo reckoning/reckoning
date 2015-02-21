@@ -42,3 +42,10 @@ window.decimalToTime = function(val) {
     return '0:00';
   }
 };
+
+$(function() {
+  $("[data-notyConfirm]").click(function(ev) {
+    displayConfirm(ev, $(this));
+    return false;
+  });
+});

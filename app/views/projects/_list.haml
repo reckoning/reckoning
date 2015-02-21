@@ -1,0 +1,26 @@
+.panel.panel-list{class: "panel-default"}
+  - customers.each do |customer|
+    .panel-heading
+      .panel-title
+        .row
+          .col-xs-10.col-md-5.name
+            %a{href: edit_customer_path(customer)}
+              %strong
+                = customer.name
+          .col-md-2.hidden-xs.hidden-sm
+            %span
+              = I18n.t(:"labels.defaults.budget")
+          .col-md-4.hidden-xs.hidden-sm
+            %span
+              = I18n.t(:"labels.defaults.remaining_budget")
+          .col-xs-2.col-md-1
+            .panel-list-action.pull-right
+              %a.btn.btn-primary.btn-sm{href: new_project_path(customer_uuid: customer), title: I18n.t(:"nav.subnav.new_project"), data: {toggle: 'tooltip'}}
+                %i.fa.fa-plus
+    .list-group
+      - scope = customer.projects
+      - if state = params.fetch(:state, nil)
+        - scope = scope.send(state)
+      - else
+        - scope = scope.send(:active)
+      = render partial: "projects/show", collection: scope.order("name asc"), as: :project
