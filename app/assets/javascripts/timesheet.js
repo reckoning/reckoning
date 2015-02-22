@@ -15,7 +15,7 @@ timesheet.controller('WeekController', ['$filter', function($filter) {
         day: time.format('ddd'),
         short: time.format('D. MMM'),
         isCurrentDate: time.isSame(moment().toDate(), 'day')
-      })
+      });
     }
   };
   this.tasks = [];
@@ -54,7 +54,7 @@ timesheet.controller('WeekController', ['$filter', function($filter) {
     var sum = 0;
     task.timers.forEach(function(timer) {
       if (timer.value) {
-        sum += parseInt(timer.value, 10);
+        sum += parseFloat(timer.value, 10);
       }
     });
     return sum;
@@ -64,7 +64,7 @@ timesheet.controller('WeekController', ['$filter', function($filter) {
     this.tasks.forEach(function(task) {
       task.timers.forEach(function(timer) {
         if (timer.date == date.date && timer.value) {
-          sum += parseInt(timer.value, 10);
+          sum += parseFloat(timer.value, 10);
         }
       });
     });
@@ -75,7 +75,7 @@ timesheet.controller('WeekController', ['$filter', function($filter) {
     this.tasks.forEach(function(task) {
       task.timers.forEach(function(timer) {
         if (timer.value) {
-          sum += parseInt(timer.value, 10);
+          sum += parseFloat(timer.value, 10);
         }
       });
     });
@@ -88,11 +88,64 @@ timesheet.controller('WeekController', ['$filter', function($filter) {
   this.addTask = function(taskName) {
     var task = {
       name: taskName
-    }
+    };
     task.timers = this.initTimers([]);
     this.tasks.push(task);
   };
 }]);
+
+timesheet.directive('timefield', function($filter) {
+  return {
+    require: 'ngModel',
+    link: function(scope, element, attrs, ngModel) {
+      ngModel.$parsers.push(function(input) {
+        console.log("Parser", input);
+        console.log($filter('toTime')(input));
+        return ($filter('toDecimal')(input || ''));
+      });
+
+      ngModel.$formatters.push(function(input) {
+        console.log("Formatter", input);
+        if (input) {
+          return $filter('toTime')(input);
+        } else {
+          return input;
+        }
+      });
+    }
+  };
+});
+
+timesheet.filter('toTime', function() {
+  return function(input) {
+    var hours = Math.floor(input);
+    var minutes = Math.round((input % 1) * 60);
+
+    if (hours !== 0 || minutes !== 0) {
+
+      if (minutes < 10) {
+        padded = '0' + minutes.toString();
+      } else {
+        padded = minutes.toString();
+      }
+      return hours + ':' + padded;
+    } else {
+      return '0:00';
+    }
+  };
+});
+
+timesheet.filter('toDecimal', function($filter) {
+  return function(input) {
+    if (!input.match(':')) {
+      input = $filter('toTime')(input);
+    }
+    var parts = input.split(':');
+    var time = parseInt(parts[0], 10) + (parseInt(parts[1], 10) / 60);
+    console.log(time);
+    return parseFloat(time);
+  };
+});
 
 timesheet.filter('time', function() {
   return function(input) {
