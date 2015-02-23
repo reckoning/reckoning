@@ -1,8 +1,7 @@
-- if user_signed_in?
-  %ul.nav.navbar-nav
-    %li{class: active_nav?('invoices')}
-      = link_to I18n.t(:"nav.header.home"), invoices_path
-    %li{class: active_nav?('projects')}
-      = link_to I18n.t(:"nav.header.projects"), projects_path
-    %li{class: active_nav?('timers')}
-      = link_to I18n.t(:"nav.header.timers"), timers_path
+%ul.nav.navbar-nav
+  %li{class: active_nav?('invoices')}
+    = link_to I18n.t(:"nav.header.home"), invoices_path
+  %li{class: active_nav?('projects')}
+    = link_to I18n.t(:"nav.header.projects"), projects_path
+  %li{class: active_nav?('timers')}
+    = link_to I18n.t(:"nav.header.timers"), timers_path
