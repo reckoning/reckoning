@@ -1,30 +1,23 @@
 %ul.nav.navbar-nav.navbar-right
-  - if user_signed_in?
-    %li.dropdown{class: active_nav?('user') || active_nav?('account')}
-      %a.dropdown-toggle{href: '#', data: {toggle: 'dropdown'}}
-        %img.gravatar{src: gravatar_path, alt: "avatar", with: 20, height: 20}
-        %b.caret
-        %span.hide.user-email
-          = current_user.email
-      %ul.dropdown-menu.navbar-right
-        %li{class: active_nav?('account')}
-          = link_to I18n.t(:"nav.header.account"), edit_account_path
-        %li{class: active_nav?('user')}
-          = link_to I18n.t(:"nav.header.user"), edit_user_registration_path
-        - if current_user.admin?
-          %li.divider
-          - if backend?
-            %li
-              = link_to I18n.t(:"nav.header.frontend"), root_path
-          - else
-            %li
-              = link_to I18n.t(:"nav.header.backend"), backend_root_path
+  %li.dropdown{class: active_nav?('user') || active_nav?('account')}
+    %a.dropdown-toggle{href: '#', data: {toggle: 'dropdown'}}
+      %img.gravatar{src: gravatar_path, alt: "avatar", with: 20, height: 20}
+      %b.caret
+      %span.hide.user-email
+        = current_user.email
+    %ul.dropdown-menu.navbar-right
+      %li{class: active_nav?('account')}
+        = link_to I18n.t(:"nav.header.account"), edit_account_path
+      %li{class: active_nav?('user')}
+        = link_to I18n.t(:"nav.header.user"), edit_user_registration_path
+      - if current_user.admin?
         %li.divider
-        %li
-          = link_to I18n.t(:"actions.sign_out"), destroy_user_session_path, method: :delete
-  - else
-    - if registration_enabled?
-      %li{class: hide_nav?('registration')}
-        = link_to I18n.t(:"nav.header.sign_up"), new_registration_path
-    %li{class: hide_nav?('sessions') || hide_nav?('users')}
-      = link_to I18n.t(:"actions.sign_in"), new_user_session_path
+        - if backend?
+          %li
+            = link_to I18n.t(:"nav.header.frontend"), root_path
+        - else
+          %li
+            = link_to I18n.t(:"nav.header.backend"), backend_root_path
+      %li.divider
+      %li
+        = link_to I18n.t(:"actions.sign_out"), destroy_user_session_path, method: :delete

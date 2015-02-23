@@ -32,11 +32,12 @@
 
     != csrf_meta_tags
 
-  %body{data: {success: flash[:success], info: notice, error: alert, spy: ("scroll" unless user_signed_in?), target: ".scrollspy-nav"}}
-    - if backend?
-      = render "layouts/backend/navigation"
-    - else
-      = render "layouts/navigation"
+  %body{data: {success: flash[:success], info: notice, error: alert}}
+    - if user_signed_in? || content_for?(:main_nav)
+      - if backend?
+        = render "layouts/backend/navigation"
+      - else
+        = render "layouts/navigation"
     .container
       != yield
 

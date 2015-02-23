@@ -1,9 +1,16 @@
 .form-signin {
   max-width: 300px;
   margin: 0 auto;
-  margin-top: 8%;
+  margin-top: 12%;
 
-  .form-signin-heading,
+  .form-signin-heading {
+    margin-bottom: 20px;
+    text-align: center;
+    a:hover {
+      text-decoration: none;
+    }
+  }
+
   .checkbox {
     margin-bottom: 10px;
   }

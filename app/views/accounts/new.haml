@@ -4,7 +4,9 @@
 - plan = params[:plan] || 'free'
 
 = form_for @account, url: registration_path, html: {class: "form-registration"} do |form|
-  %h1.form-registration-heading=I18n.t(:"headlines.sign_up")
+  %h1.form-registration-heading
+    %a{href: root_path}= I18n.t(:"title.default")
+    %small=I18n.t(:"headlines.sign_up")
   = form.hidden_field :plan, value: plan
 
   .form-group{class: form_error?(@account, :name)}
@@ -29,3 +31,9 @@
   %button.btn-block.btn.btn-primary.btn-lg.btn-loading{data: {loading: {text: I18n.t(:"actions.loading")}}}
     = I18n.t(:"actions.sign_up")
   .clearfix
+
+  %hr
+
+  %p.text-center=I18n.t(:"info.sign_in")
+  %a.btn.btn-default.btn-block{href: new_user_session_path}
+    = I18n.t(:"actions.sign_in")
