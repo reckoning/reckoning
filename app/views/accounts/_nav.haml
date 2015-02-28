@@ -6,24 +6,24 @@
   %li{class: (active == "basic" ? "active" : "")}
     %a{href: "#{path}#basic", data: {toggle: ("tab" if path.blank?)}}
       = I18n.t("nav.subnav.account.basic")
-      %i.fa.fa-book
+      %i.fa.fa-book.fa-fw
   %li{class: (active == "address" ? "active" : "")}
     %a{href: "#{path}#address", data: {toggle: ("tab" if path.blank?)}}
       = I18n.t("nav.subnav.account.address")
-      %i.fa.fa-globe
+      %i.fa.fa-globe.fa-fw
   %li{class: (active == "banking" ? "active" : "")}
     %a{href: "#{path}#banking", data: {toggle: ("tab" if path.blank?)}}
       = I18n.t("nav.subnav.account.banking")
-      %i.fa.fa-bank
+      %i.fa.fa-bank.fa-fw
   %li{class: (active == "taxes" ? "active" : "")}
     %a{href: "#{path}#taxes", data: {toggle: ("tab" if path.blank?)}}
       = I18n.t("nav.subnav.account.taxes")
-      %i.fa.fa-building
+      %i.fa.fa-building.fa-fw
   %li{class: (active == "mailing" ? "active" : "")}
     %a{href: "#{path}#mailing", data: {toggle: ("tab" if path.blank?)}}
       = I18n.t("nav.subnav.account.mailing")
-      %i.fa.fa-send
+      %i.fa.fa-send.fa-fw
   %li{class: (active == "dropbox" ? "active" : "")}
     %a{href: dropbox_path}
       = I18n.t("nav.subnav.account.dropbox")
-      %i.fa.fa-dropbox
+      %i.fa.fa-dropbox.fa-fw

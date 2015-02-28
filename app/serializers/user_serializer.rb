@@ -1,4 +1,4 @@
-class UserSerializer < ActiveModel::Serializer
+class UserSerializer < BaseSerializer
   attributes :uuid, :email, :name, :authentication_token, :created_at, :updated_at
 
   def uuid

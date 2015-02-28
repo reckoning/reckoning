@@ -15,6 +15,46 @@ window.displayNoty = function(text, timeout, type) {
   });
 };
 
+window.confirm = function(message, okCallback, cancelCallback) {
+  var okButton = {
+    addClass: 'btn btn-primary',
+    text: I18n.t('actions.ok'),
+    onClick: function($noty) {
+      $noty.close();
+      if (okCallback !== undefined && _.isFunction(okCallback)) {
+        okCallback();
+      }
+      return false;
+    }
+  };
+
+  var cancelButton = {
+    addClass: 'btn btn-danger',
+    text: I18n.t('actions.cancel'),
+    onClick: function($noty) {
+      $noty.close();
+      if (cancelCallback !== undefined && _.isFunction(cancelCallback)) {
+        cancelCallBack();
+      }
+      return false;
+    }
+  };
+
+  noty({
+    text: message,
+    buttons: [okButton, cancelButton],
+    type: 'warning',
+    layout: 'bottom',
+    theme: 'bootstrapTheme',
+    animation: {
+      open: 'animated fadeInUp',
+      close: 'animated fadeOutDown',
+      easing: 'swing',
+      speed: 500
+    }
+  });
+};
+
 window.displayConfirm = function(ev, $element) {
   var okButton = {
     addClass: 'btn btn-primary',

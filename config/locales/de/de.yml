@@ -14,7 +14,7 @@ de:
       home: "Rechnungen"
       customers: "Kunden"
       projects: "Projekte"
-      timers: "Zeiten"
+      timesheet: "Zeiten"
       toggle: "Navigation aufklappen"
       intro: "Home"
       backend: "Backend"
@@ -68,7 +68,7 @@ de:
         token: "Zwei-Faktor Token eingeben"
         recovery: "Zwei-Faktor Setup abschließen"
         token_refresh: "Zugriff bestätigen"
-      timer:
+      timesheet:
         index: "Zeiten"
         import: "Zeiten importieren"
       customer:

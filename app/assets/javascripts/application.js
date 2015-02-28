@@ -1,5 +1,4 @@
 //= require jquery
-//= require jquery.turbolinks
 //= require jquery_ujs
 //= require spin.js/spin
 //= require ladda/js/ladda
@@ -29,8 +28,6 @@
 //= require_tree ./helpers
 //= require_tree ./app
 //= require timesheet
-//
-//= require turbolinks
 
 $(document).on('page:fetch',   function() { NProgress.start(); });
 $(document).on('page:change',  function() { NProgress.done(); });
@@ -54,7 +51,4 @@ $(function() {
   $('.btn.btn-loading').click(function() {
     $(this).button('loading');
   });
-
-  $('#blueimp-gallery').data('useBootstrapModal', false);
 });
-

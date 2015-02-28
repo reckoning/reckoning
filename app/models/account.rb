@@ -2,7 +2,6 @@ class Account < ActiveRecord::Base
   has_many :users, dependent: :destroy
   has_many :invoices, dependent: :destroy
   has_many :positions, through: :invoices
-  has_many :weeks, dependent: :destroy
   has_many :customers, dependent: :destroy
   has_many :projects, through: :customers
   has_many :tasks, through: :projects

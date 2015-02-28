@@ -1,9 +1,6 @@
 class Task < ActiveRecord::Base
   belongs_to :project
   has_many :timers, dependent: :destroy
-  # TODO: Refactor with frontend
-  # rubocop:disable Rails/HasAndBelongsToMany
-  has_and_belongs_to_many :weeks
 
   validates :project, :name, presence: true
 

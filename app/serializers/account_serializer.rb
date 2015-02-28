@@ -1,4 +1,4 @@
-class AccountSerializer < ActiveModel::Serializer
+class AccountSerializer < BaseSerializer
   attributes :uuid, :name, :subdomain, :created_at, :updated_at
 
   def uuid

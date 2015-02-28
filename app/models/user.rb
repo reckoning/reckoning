@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
          :registerable, :rememberable, :trackable, :validatable
 
   belongs_to :account
+  has_many :timers
 
   before_save :update_gravatar_hash
   before_save :ensure_authentication_token

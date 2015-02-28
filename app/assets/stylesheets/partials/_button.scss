@@ -10,3 +10,20 @@
     }
   }
 }
+
+
+.btn-link {
+  &.danger {
+    color: $brand-danger;
+    &:hover {
+      color: darken($brand-danger, 5%);
+    }
+  }
+
+  &.default {
+    color: $gray-light;
+    &:hover {
+      color: darken($gray-light, 5%);
+    }
+  }
+}

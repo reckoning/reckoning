@@ -1,0 +1,17 @@
+.modal.fade#task-modal modal=true open-callback="getProjects" hide-callback="afterModalDismiss" tabindex="-1" role="dialog" aria-hidden="true"
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close type="button" data-dismiss="modal" aria-hidden="true" &times;
+        h4.modal-title = I18n.t(:"labels.modals.title.timesheet.add_task")
+      .modal-body
+        select selectize=true label="nameWithCustomer" options="projects" ng-model="selectedProject" placeholder=I18n.t(:"helpers.prompt.timer.project")
+
+        hr
+
+        select selectize=true create="createTask" ng-disabled="!selectedProject.name.length" options="tasks" ng-model="selectedTask" placeholder=I18n.t(:"helpers.prompt.timer.task")
+      .modal-footer
+        button.btn.btn-default type="button" data-dismiss="modal"
+          = I18n.t(:"actions.close")
+        button.btn.btn-primary type="button" ng-disabled="!selectedTask.name.length" ng-click="addTask()" data-loading-text=I18n.t(:"actions.loading")
+          = I18n.t(:"actions.add")
