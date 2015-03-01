@@ -48,10 +48,14 @@ module Api
 
       def destroy
         authorize! :destroy, timer
-        if timer.destroy
-          render json: timer, status: :ok
+        if timer.position.blank?
+          if timer.destroy
+            render json: timer, status: :ok
+          else
+            render json: timer.errors, status: :bad_request
+          end
         else
-          render json: timer.errors, status: :bad_request
+          render json: { message: I18n.t(:"messages.timer.destroy.failure") }, status: :bad_request
         end
       end
 
