@@ -5,20 +5,32 @@ angular.module 'Timesheet'
   '$timeout'
   'Timer'
   'Task'
-  ($scope, $filter, $timeout, Timer, Task) ->
+  'Project'
+  '$modal'
+  ($scope, $filter, $timeout, Timer, Task, Project, $modal) ->
     $scope.currentTasks = []
-    $scope.excludedTaskUuids ?= []
+    $scope.currentTasksLoaded = false
+    $scope.excludedTaskUuids = []
+
+    $scope.openModal = ->
+      $modal.open
+        templateUrl: r(task_modal_timesheet_path)
+        controller: 'TimerNewController'
+        resolve:
+          timer: -> {date: $scope.date}
+          projects: -> Project.all()
+          excludedTaskUuids: -> $scope.excludedTaskUuids
+      .result.then (data) ->
+        task = Task.new($scope.dates, data)
+        $scope.currentTasks.push task
 
     $scope.getTasks = ->
       Task.all(@dates).success (tasks) ->
         $scope.currentTasks = tasks
         tasks.forEach (task) ->
           $scope.excludedTaskUuids.push task.uuid if !_.contains($scope.excludedTaskUuids, task.uuid)
-
+        $scope.currentTasksLoaded = true
     $scope.getTasks()
-
-    $scope.refresh = ->
-      $scope.getTasks()
 
     $scope.save = (timer) ->
       if timer.sumForTask && timer.sumForTask isnt 0

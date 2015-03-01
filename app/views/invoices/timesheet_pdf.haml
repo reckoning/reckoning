@@ -1,5 +1,5 @@
 = render "shared/pdf_header", resource: @resource
-- timers_by_date = @resource.timers.order(:date).group_by(&:date)
+- timers_by_date = @resource.timers.billable.order(:date).group_by(&:date)
 #pdf-body.timesheet
   .row
     #subject

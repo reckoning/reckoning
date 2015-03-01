@@ -3,18 +3,20 @@
     .col-xs-12.col-md-7
       h1
         span ng-bind="startOfWeek()"
-        = ". - "
+        |. -
         span ng-bind="endOfWeek()"
     .col-xs-12.col-md-5
       .pull-right.resource-nav
-        .btn-group
+        a.btn.btn-default.resource-nav.date datepicker=true ng-model="datepickerSelect"
+          i.fa.fa-calendar
+        .btn-group.btn-group-justified-responsive.resource-nav
           a.btn.btn-default href="#/week/{{prevWeek()}}"
             i.fa.fa-chevron-left
           a.btn.btn-default href="#/week" ng-disabled="isCurrentWeek()"
             = I18n.t(:"labels.timesheet.current_week")
           a.btn.btn-default href="#/week/{{nextWeek()}}"
             i.fa.fa-chevron-right
-        .btn-group
+        .btn-group.btn-group-justified-responsive.resource-nav
           a.btn.btn-default href="#/day/{{dayDate()}}"
             = I18n.t(:"labels.timesheet.day")
           a.btn.btn-default href="#/week/{{date}}" class="active"
@@ -32,6 +34,9 @@
         th.text-right.timesheet-row-sum
         th
       tbody
+        tr ng-cloak=true ng-if="currentTasksLoaded && !currentTasks.length"
+          td colspan="10"
+            = render "blank"
         tr.animate-repeat ng-repeat="task in currentTasks"
           td
             span ng-bind="task.projectName"
@@ -53,12 +58,12 @@
               i.fa.fa-close
       tfoot: tr
         td.text-right
-          button.btn.btn-default type="button" data-toggle="modal" data-target="#task-modal"
+          button.btn.btn-primary ng-click="openModal()"
+            i.fa.fa-plus
+            '
             = I18n.t(:"actions.add_task")
         td.text-right.timesheet-col-sum ng-class="{'timesheet-today':date.isCurrentDate}" ng-repeat="date in dates"
           span ng-bind="sumForDate(date) | toTime"
         td.text-right.timesheet-sum
           span ng-bind="sumForWeek() | toTime"
         td
-    div ng-controller="TimerNewController as timerNewCtrl"
-      = render "task_modal"

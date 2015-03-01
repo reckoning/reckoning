@@ -1,48 +1,53 @@
 angular.module 'Timesheet'
 .controller 'TimerNewController', [
   '$scope'
-  '$timeout'
-  'Project'
   'Task'
   'Timer'
-  ($scope, $timeout, Project, Task, Timer) ->
-    $scope.excludedTaskUuids ?= []
-    $scope.projects = []
-    $scope.tasks = []
-    $scope.selectedProject = {}
-    $scope.selectedTask = {}
+  '$modalInstance'
+  'timer'
+  'projects'
+  'excludedTaskUuids'
+  ($scope, Task, Timer, $modalInstance, timer, projects, excludedTaskUuids) ->
+    $scope.excludedTaskUuids = excludedTaskUuids
+    $scope.projects = projects.data
+    $scope.timer = timer
 
-    $scope.getProjects = ->
-      Project.all().success (data, status, headers, config) ->
-        $scope.projects = data
+    if timer.projectUuid
+      project = _.find $scope.projects, (project) -> project.uuid is timer.projectUuid
+      $scope.tasks = project.tasks
 
-    $scope.createTimer = ->
-      Timer.createStarted($scope.selectedTask.uuid, $scope.date).success (data, status, headers, config) ->
-        $scope.refresh()
-        $scope.selectedProject = {}
-        $scope.selectedTask = {}
-        $scope.dismissModal()
+    $scope.saveTimer = (timer) ->
+      if timer.uuid
+        Timer.update(timer).success (data) ->
+          $modalInstance.close(data)
+      else
+        timer.value = 0 unless timer.value
+        Timer.createStarted(timer).success (data) ->
+          $modalInstance.close(data)
+
+    $scope.cancel = ->
+      $modalInstance.dismiss('cancel')
 
     $scope.addTask = ->
-      $scope.currentTasks.push Task.new($scope.dates, $scope.selectedTask)
-      $scope.dismissModal()
+      task = _.find $scope.tasks, (task) -> task.uuid is $scope.timer.taskUuid
+      $modalInstance.close(task)
 
     $scope.createTask = (input, selectize) ->
       Task.create(
-        projectUuid: $scope.selectedProject.uuid,
+        projectUuid: $scope.timer.projectUuid,
         name: input
       ).success (newTask, status, headers, config) ->
         $timeout ->
           selectize.addOption newTask
           selectize.addItem newTask.uuid
 
-    $scope.afterModalDismiss = (element) ->
-      $timeout ->
-        element.find('select').each (index, select) ->
-          selectize = $(select)[0].selectize
-          selectize.clear()
+    $scope.delete = (timer) ->
+      confirm I18n.t('messages.confirm.timesheet.delete_timer'), ->
+        Timer.delete(timer.uuid).success (data) ->
+          $modalInstance.close(data)
 
-    $scope.$watch 'selectedProject', ->
-      $scope.tasks = _.filter $scope.selectedProject?.tasks, (item) ->
+    $scope.$watch 'timer.projectUuid', ->
+      project = _.find $scope.projects, (project) -> project.uuid is $scope.timer.projectUuid
+      $scope.tasks = _.filter project?.tasks, (item) ->
         !_.contains($scope.excludedTaskUuids, item.uuid)
 ]

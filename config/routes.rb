@@ -85,6 +85,8 @@ Reckoning::Application.routes.draw do
     member do
       get :day
       get :week
+      get :timer_modal
+      get :task_modal
     end
     # get :new_import
     # post :csv_import

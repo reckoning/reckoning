@@ -29,24 +29,12 @@
 //= require_tree ./app
 //= require timesheet
 
-$(document).on('page:fetch',   function() { NProgress.start(); });
-$(document).on('page:change',  function() { NProgress.done(); });
-$(document).on('page:restore', function() { NProgress.remove(); });
-
 $(document).on('show.bs.collapse', '.navbar-collapse', function() {
   $('.navbar-collapse.in').not(this).collapse('hide');
 });
 
 $(function() {
   FastClick.attach(document.body);
-
-  $('input[type=date], .input-group.date').datepicker({
-    todayBtn: "linked",
-    clearBtn: true,
-    language: I18n.locale,
-    autoclose: true,
-    todayHighlight: true
-  });
 
   $('.btn.btn-loading').click(function() {
     $(this).button('loading');

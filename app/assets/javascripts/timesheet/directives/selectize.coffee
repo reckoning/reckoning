@@ -7,6 +7,8 @@ angular.module 'Timesheet'
     ngDisabled: '='
     label: '@'
     create: '@'
+    multiple: '='
+    ngModel: '='
   link: (scope, element, attrs, ngModel) ->
     scope.label ?= 'name'
 
@@ -34,6 +36,12 @@ angular.module 'Timesheet'
 
           angular.forEach newTags, (tag) ->
             selectize.addOption(tag)
+        
+        selectize.addItem(scope.ngModel)
+
+    scope.$watch 'ngModel', ->
+      $timeout ->
+        selectize.addItem(scope.ngModel)
 
     scope.$watch 'ngDisabled', ->
       if element.prop('disabled')
@@ -43,6 +51,5 @@ angular.module 'Timesheet'
 
     selectize.on 'change', (value) ->
       $timeout ->
-        newValue = selectize.options[value]
-        ngModel.$setViewValue(newValue)
+        ngModel.$setViewValue(value)
 ]

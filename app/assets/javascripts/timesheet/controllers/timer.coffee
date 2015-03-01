@@ -1,7 +1,27 @@
 angular.module 'Timesheet'
-.controller 'TimerController', ['$scope', 'Timer', ($scope, Timer) ->
+.controller 'TimerController', [
+  '$scope'
+  'Timer'
+  'Project'
+  '$modal'
+  ($scope, Timer, Project, $modal) ->
     $scope.timers = []
+    $scope.timersLoaded = false
     $scope.currentTasks = []
+
+    $scope.openModal = (timer) ->
+      modalTimer = {date: @date, started: true}
+      if timer isnt undefined
+        angular.copy(timer, modalTimer)
+      $modal.open
+        templateUrl: r(timer_modal_timesheet_path)
+        controller: 'TimerNewController'
+        resolve:
+          timer: -> modalTimer
+          projects: -> Project.all()
+          excludedTaskUuids: -> []
+      .result.then (data) ->
+        $scope.getTimers()
 
     $scope.getTimers = ->
       Timer.all(@date).success (data, status, headers, config) ->
@@ -9,11 +29,9 @@ angular.module 'Timesheet'
         data.forEach (timer) ->
           task = {uuid: timer.taskUuid}
           $scope.currentTasks.push task
+        $scope.timersLoaded = true
 
     $scope.getTimers()
-
-    $scope.refresh = ->
-      @getTimers()
 
     $scope.startedValue = (timer) ->
       ms = moment().diff(moment(timer.startedAt))
@@ -21,14 +39,9 @@ angular.module 'Timesheet'
 
     $scope.startTimer = (timer) ->
       Timer.start(timer.uuid).success (data) ->
-        $scope.refresh()
+        $scope.getTimers()
 
     $scope.stopTimer = (timer) ->
       Timer.stop(timer.uuid).success (data) ->
-        $scope.refresh()
-
-    $scope.deleteTimer = (timer) ->
-      confirm I18n.t('messages.confirm.timesheet.delete_timer'), ->
-        Timer.delete(timer.uuid).success (data) ->
-          $scope.refresh()
+        $scope.getTimers()
 ]

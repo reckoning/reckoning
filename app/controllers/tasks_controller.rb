@@ -12,9 +12,10 @@ class TasksController < ApplicationController
     respond_to do |format|
       format.js do
         project = current_account.projects.where(id: project_id).first
-        tasks = project.tasks.includes(:timers)
-                .where("timers.position_id is ?", nil).references(:timers)
-                .to_a
+        tasks = project.tasks.includes(:timers).references(:timers)
+                .where(timers: { position_id: nil })
+                .where.not(timers: { value: [nil, 0] })
+                .all
         render json: { body: render_to_string(partial: "list", locals: { tasks: tasks }) }
       end
       format.html { redirect_to root_path }

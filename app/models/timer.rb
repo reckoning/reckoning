@@ -38,6 +38,10 @@ class Timer < ActiveRecord::Base
     where.not(position_id: nil)
   end
 
+  def self.billable
+    where.not(value: [nil, 0, "0.0", "0"])
+  end
+
   # def self.import(file, project_id)
   #   spreadsheet = open_spreadsheet(file)
   #   header = spreadsheet.row(1)
@@ -57,16 +61,16 @@ class Timer < ActiveRecord::Base
   #   end
   # end
 
-  def self.valid_csv?(header)
-    %w(date value task).reject { |h| header.include?(h) }.empty?
-  end
-
-  def self.open_spreadsheet(file)
-    case File.extname(file.original_filename)
-    when ".csv" then Roo::CSV.new(file.path)
-    else raise "Unknown file type: #{file.original_filename}"
-    end
-  end
+  # def self.valid_csv?(header)
+  #   %w(date value task).reject { |h| header.include?(h) }.empty?
+  # end
+  #
+  # def self.open_spreadsheet(file)
+  #   case File.extname(file.original_filename)
+  #   when ".csv" then Roo::CSV.new(file.path)
+  #   else raise "Unknown file type: #{file.original_filename}"
+  #   end
+  # end
 
   def convert_value
     return if value.blank? || started

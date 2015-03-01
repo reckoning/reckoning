@@ -2,9 +2,8 @@ angular.module 'Timesheet'
 .controller 'WeekController', [
   '$scope'
   '$routeParams'
-  '$timeout'
-  'Project'
-  ($scope, $routeParams, $timeout, Project) ->
+  '$location'
+  ($scope, $routeParams, $location) ->
     $scope.date = if $routeParams.date && moment($routeParams.date).isValid() then $routeParams.date else moment().startOf('isoWeek').format('YYYY-MM-DD')
     $scope.currentDate = moment().format('YYYY-MM-DD')
     $scope.dates = []
@@ -18,6 +17,10 @@ angular.module 'Timesheet'
         @currentDate
       else
         @date
+
+    $scope.$watch 'datepickerSelect', ->
+      if $scope.datepickerSelect
+        $location.path('/week/' + $scope.datepickerSelect)
 
     $scope.isCurrentWeek = ->
       $scope.date is moment($scope.currentDate).startOf('isoWeek').format('YYYY-MM-DD')

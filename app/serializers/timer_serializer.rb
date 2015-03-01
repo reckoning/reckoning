@@ -1,5 +1,5 @@
 class TimerSerializer < BaseSerializer
-  attributes :uuid, :date, :value, :position_uuid, :task_uuid,
+  attributes :uuid, :date, :value, :position_uuid, :task_uuid, :project_uuid,
              :task_name, :project_name, :started, :started_at, :start_time,
              :start_time_for_task, :sum_for_task
 
@@ -24,6 +24,10 @@ class TimerSerializer < BaseSerializer
 
   def task_uuid
     object.task_id
+  end
+
+  def project_uuid
+    object.task.project_id
   end
 
   def position_uuid

@@ -4,7 +4,7 @@ window.displayNoty = function(text, timeout, type) {
     text: text,
     timeout: timeout,
     type: type,
-    layout: 'bottom',
+    layout: 'topRight',
     theme: 'bootstrapTheme',
     animation: {
       open: 'animated fadeInUp',
@@ -62,23 +62,16 @@ window.displayConfirm = function(ev, $element) {
     onClick: function($noty) {
       $noty.close();
       if ($element.data('method') === undefined) {
-        Turbolinks.visit($element.attr('href'));
+        window.location = $element.attr('href');
       } else {
         $.ajax({
           url: $element.attr('href'),
           method: $element.data('method'),
           complete: function(result) {
             if ($element.data('redirect') === undefined) {
-              Turbolinks.visit(window.location);
+              window.location.reload();
             } else {
-              Turbolinks.visit($element.data('redirect'));
-              // hack to show message
-              response = result.responseJSON;
-              if (response.message !== undefined) {
-                setTimeout(function() {
-                  displaySuccess(response.message);
-                }, 500);
-              }
+              window.location = $element.data('redirect');
             }
           }
         });
@@ -118,16 +111,16 @@ window.displaySuccess = function(text, timeout) {
   displayNoty(text, timeout, 'success');
 };
 
-window.displayInfo = function(text, timeout) {
+window.displayAlert = function(text, timeout) {
   if (timeout === undefined) {
     timeout = 3000;
   }
-  displayNoty(text, timeout, 'info');
+  displayNoty(text, timeout, 'warning');
 };
 
-window.displayAlert = function(text, timeout) {
+window.displayInfo = function(text, timeout) {
   if (timeout === undefined) {
-    timeout = false;
+    timeout = 3000;
   }
   displayNoty(text, timeout, 'alert');
 };
@@ -153,10 +146,5 @@ $(function() {
   var error = $('body').data('error');
   if (error) {
     displayError(error);
-  }
-
-  var alert = $('body').data('alert');
-  if (alert) {
-    displayAlert(alert);
   }
 });

@@ -1,4 +1,4 @@
-angular.module 'Timesheet', ['ngRoute', 'ngAnimate', 'timer']
+angular.module 'Timesheet', ['ngRoute', 'ngAnimate', 'timer', 'ui.bootstrap.tpls', 'ui.bootstrap.modal']
 .run ['$http', '$browser', ($http, $browser) ->
   $http.defaults.headers.common['Authorization'] = "Token token=\"#{App.authToken}\""
 ]

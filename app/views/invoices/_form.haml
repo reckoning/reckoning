@@ -13,8 +13,6 @@
         .input-group.date
           = form.label :date, class: "input-group-addon"
           = form.date_field :date, class: 'form-control'
-          %span.input-group-addon
-            %i.fa.fa-calendar
         = form_errors invoice, :date
   .row
     .col-xs-12.col-md-4.form-group{class: form_error?(invoice, :ref)}
@@ -26,14 +24,10 @@
       .input-group
         = form.label :payment_due_date, class: "input-group-addon"
         = form.date_field :payment_due_date, class: 'form-control'
-        %span.input-group-addon
-          %i.fa.fa-calendar
     .col-xs-12.col-md-4.form-group
       .input-group
         = form.label :delivery_date, class: "input-group-addon"
         = form.date_field :delivery_date, class: 'form-control'
-        %span.input-group-addon
-          %i.fa.fa-calendar
 
   %fieldset
     %legend
@@ -64,7 +58,7 @@
       .modal-header
         %button.close{type: "button", data: {dismiss: "modal"}, aria: {hidden: "true"}}
           &times;
-        %h4.modal-title
+        %h3.modal-title
           = I18n.t(:"labels.modals.title.positions")
       .modal-body
         %form#add-positions{onsubmit: "App.Invoice.addPositions($(this)); return false;"}

@@ -2,11 +2,14 @@ angular.module 'Timesheet'
 .controller 'DayController', [
   '$scope'
   '$routeParams'
-  '$timeout'
-  'Project'
-  ($scope, $routeParams, $timeout, Project) ->
+  '$location'
+  ($scope, $routeParams, $location) ->
     $scope.date = if $routeParams.date && moment($routeParams.date).isValid() then $routeParams.date else moment().format('YYYY-MM-DD')
     $scope.currentDate = moment().format('YYYY-MM-DD')
+
+    $scope.$watch 'datepickerSelect', ->
+      if $scope.datepickerSelect
+        $location.path('/day/' + $scope.datepickerSelect)
 
     $scope.day = ->
       date = moment($scope.date)

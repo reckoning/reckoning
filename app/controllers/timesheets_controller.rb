@@ -15,6 +15,16 @@ class TimesheetsController < ApplicationController
     render "day", layout: false
   end
 
+  def task_modal
+    authorize! :task_modal, :timesheet
+    render "task_modal", layout: false
+  end
+
+  def timer_modal
+    authorize! :timer_modal, :timesheet
+    render "timer_modal", layout: false
+  end
+
   def new_import
     authorize! :new_import, Timer
   end

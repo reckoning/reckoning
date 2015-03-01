@@ -1,6 +1,6 @@
 .timesheet {
   padding: 0 15px;
-  
+
   table {
     border-collapse: separate;
 
@@ -97,6 +97,19 @@
       span {
         min-width: 55px;
         display: inline-block;
+      }
+    }
+  }
+
+  .timesheet-blank {
+    margin-bottom: 0;
+
+    .panel-body {
+      min-height: 350px;
+
+      blockquote {
+        color: $gray-light;
+        margin-top: 100px;
       }
     }
   }
