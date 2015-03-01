@@ -23,7 +23,8 @@ angular.module 'Timesheet'
         $location.path('/week/' + $scope.datepickerSelect)
 
     $scope.isCurrentWeek = ->
-      $scope.date is moment($scope.currentDate).startOf('isoWeek').format('YYYY-MM-DD')
+      date = moment($scope.date)
+      date.startOf('isoWeek').format('YYYY-MM-DD') is moment($scope.currentDate).startOf('isoWeek').format('YYYY-MM-DD')
 
     $scope.endOfWeek = ->
       date = moment($scope.date)
