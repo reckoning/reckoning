@@ -18,7 +18,7 @@ class Timer < ActiveRecord::Base
     self.started_at = Time.now
 
     Timer.where(user_id: user_id, started: true).all.each do |timer|
-      timer.value = timer.value.to_d + ((Time.now - timer.started_at) / 1.hour)
+      timer.value = timer.value + ((Time.now - timer.started_at) / 1.hour)
       timer.started = false
       timer.save
     end
@@ -74,21 +74,13 @@ class Timer < ActiveRecord::Base
 
   def convert_value
     return if value.blank? || started
-    time_to_decimal
 
-    self.value = (value.to_d.hours - (value.to_d.hours % 60)) / 3600
-  end
-
-  def time_to_decimal
-    return if value.blank? || !value.is_a?(String) || value.match(':').blank?
-    parts = value.split(':')
-    value = parts[0].to_d + (parts[1].to_d / 60)
-    value
+    self.value = (value.hours - (value.hours % 60)) / 3600
   end
 
   def value_as_time
     hours = value.to_i
-    minutes = format('%02d', ((value.to_d % 1) * 60).round)
+    minutes = format('%02d', ((value % 1) * 60).round)
     "#{hours}:#{minutes}"
   end
 end

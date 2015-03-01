@@ -30,7 +30,7 @@ module Api
 
       def stop
         authorize! :stop, timer
-        if timer.update(started: false, value: timer.value.to_d + ((Time.now - timer.started_at) / 1.hour))
+        if timer.update(started: false, value: timer.value + ((Time.now - timer.started_at) / 1.hour))
           render json: timer, status: :ok
         else
           render json: timer.errors, status: :bad_request
