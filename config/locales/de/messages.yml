@@ -107,8 +107,12 @@ de:
         success: "Ihr Passwort wurde erfolgreich bearbeitet."
         failure: "Ihr Passwort konnte nicht bearbeitet werden."
     timer:
+      start:
+        failure: "Zeit läuft bereits."
+      stop:
+        failure: "Zeit wurde bereits gestoppt."
       destroy:
-        failure: "Zeit wurde schon in Rechnung gestellt."
+        failure: "Zeit wurde bereits in Rechnung gestellt."
       import:
         success: "%{resource} erfolgreich importiert."
         failure: "%{resource} konnten nicht importiert werden."

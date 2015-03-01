@@ -30,20 +30,27 @@ module Api
 
       def stop
         authorize! :stop, timer
-        if timer.update(started: false, value: timer.value + ((Time.now - timer.started_at) / 1.hour))
-          render json: timer, status: :ok
+        if timer.started
+          if timer.update(started: false, value: timer.value + ((Time.now - timer.started_at) / 1.hour))
+            render json: timer, status: :ok
+          else
+            render json: timer.errors, status: :bad_request
+          end
         else
-          render json: timer.errors, status: :bad_request
-        end
+          render json: { message: I18n.t(:"messages.timer.stop.failure") }, status: :bad_request
+        else
       end
 
       def start
         authorize! :start, timer
-        if timer.update(started: true)
-          render json: timer, status: :ok
+        if timer.started
+          render json: { message: I18n.t(:"messages.timer.start.failure") }, status: :bad_request
         else
-          render json: timer.errors, status: :bad_request
-        end
+          if timer.update(started: true)
+            render json: timer, status: :ok
+          else
+            render json: timer.errors, status: :bad_request
+          end
       end
 
       def destroy
