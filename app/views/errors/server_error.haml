@@ -1,7 +1,9 @@
 - content_for(:title) do
   = I18n.t(:"meta.title.server_error")
 .cbox.cbox-error.cbox-large
+  %h1.form-signin-heading
+    %a{href: root_path}= I18n.t(:"title.default")
   .well
-    %h1= I18n.t(:"headlines.server_error")
+    %h2= I18n.t(:"headlines.server_error")
 
     %p= I18n.t(:"error_pages.server_error")

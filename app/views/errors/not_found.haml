@@ -1,7 +1,9 @@
 - content_for(:title) do
   = I18n.t(:"meta.title.not_found")
 .cbox.cbox-error.cbox-large
+  %h1.form-signin-heading
+    %a{href: root_path}= I18n.t(:"title.default")
   .well
-    %h1= I18n.t(:"headlines.not_found")
+    %h2= I18n.t(:"headlines.not_found")
 
     %p= I18n.t(:"error_pages.not_found", page: request.env["REQUEST_PATH"])

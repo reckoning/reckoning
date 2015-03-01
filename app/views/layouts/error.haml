@@ -28,13 +28,6 @@
     != csrf_meta_tags
 
   %body
-    %nav#main-nav.navbar.navbar-default{role: "navigation"}
-      .container
-        = render "layouts/brand"
-        - unless defined?(@without_links)
-          .collapse.navbar-collapse.navbar-ex1-collapse
-            = render "layouts/links"
-
     .container
       != yield
 
