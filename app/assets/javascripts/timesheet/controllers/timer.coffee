@@ -31,6 +31,8 @@ angular.module 'Timesheet'
           timer.projectUuid = result.data.projectUuid
           timer.note = result.data.note
         else if result.status is 'created'
+          $scope.timers.forEach (item) ->
+            item.started = false
           $scope.timers.push result.data
 
     $scope.getTimers = ->
@@ -49,7 +51,10 @@ angular.module 'Timesheet'
 
     $scope.startTimer = (timer) ->
       Timer.start(timer.uuid).success (data) ->
+        $scope.timers.forEach (item) ->
+          item.started = false
         timer.started = data.started
+        timer.startTime = data.startTime
         timer.startedAt = data.startedAt
 
     $scope.stopTimer = (timer) ->
