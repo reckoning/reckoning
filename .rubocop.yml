@@ -18,6 +18,9 @@ Style/FileName:
 Style/StringLiterals:
   Enabled: false
 
+Style/PredicateName:
+  Enabled: false
+
 # User.all.map do |user|
 #   [user.name, user.children.map(&:names)]
 # end.flatten.map do |name|
