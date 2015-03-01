@@ -10,7 +10,7 @@ angular.module 'Timesheet'
 
     $scope.startOfWeek = ->
       date = moment($scope.date)
-      date.format('D')
+      date.startOf('isoWeek').format('D')
 
     $scope.dayDate = ->
       if @isCurrentWeek()

@@ -1,0 +1,45 @@
+- context ||= 'info'
+br
+h3 = I18n.t(:"labels.timer.uninvoiced")
+.row.timers-list
+  - timers.where(position_id: nil).order("date DESC").each do |timer|
+    .col-xs-12.col-md-4
+      .panel class="panel-#{context}"
+        .list-group
+          a.list-group-item href="#{timesheet_path}#/day/#{timer.date}"
+            = timer.task.name
+            '
+            .label.label-warning
+              = number_to_currency(timer.value, unit: "")
+            span.badge
+              = I18n.l(timer.date)
+            - if timer.note
+              br
+              = timer.note
+  - if timers.where(position_id: nil).empty?
+    .col-xs-12
+      .panel class="panel-#{context}"
+        .list-group.timers-list
+          span.list-group-item = I18n.t(:"labels.table.blank.uninvoiced_timer")
+
+h3 = I18n.t(:"labels.timer.invoiced")
+.row.timers-list
+  - timers.where.not(position_id: nil).order("date DESC").each do |timer|
+    .col-xs-12.col-md-4
+      .panel class="panel-#{context}"
+        .list-group
+          a.list-group-item href="#{timesheet_path}#/day/#{timer.date}"
+            = timer.task.name
+            '
+            .label.label-success
+              = number_to_currency(timer.value, unit: "")
+            span.badge
+              = I18n.l(timer.date)
+            - if timer.note
+              br
+              = timer.note
+  - if timers.where.not(position_id: nil).empty?
+    .col-xs-12
+      .panel class="panel-#{context}"
+        .list-group.timers-list
+          span.list-group-item = I18n.t(:"labels.table.blank.invoiced_timer")

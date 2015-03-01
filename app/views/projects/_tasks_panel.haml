@@ -1,10 +1,5 @@
 - context ||= 'info'
 .panel{class: "panel-#{context}"}
-  - if defined?(title)
-    .panel-heading
-      .panel-title
-        %strong
-          = title
   .list-group.tasks-list
     - tasks.each do |task|
       %a.list-group-item{href: ""}
