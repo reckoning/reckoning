@@ -19,11 +19,11 @@ angular.module 'Timesheet'
     $scope.saveTimer = (timer) ->
       if timer.uuid
         Timer.update(timer).success (data) ->
-          $modalInstance.close(data)
+          $modalInstance.close({data: data, status: 'updated'})
       else
         timer.value = 0 unless timer.value
         Timer.createStarted(timer).success (data) ->
-          $modalInstance.close(data)
+          $modalInstance.close({data: data, status: 'created'})
 
     $scope.cancel = ->
       $modalInstance.dismiss('cancel')
@@ -44,7 +44,7 @@ angular.module 'Timesheet'
     $scope.delete = (timer) ->
       confirm I18n.t('messages.confirm.timesheet.delete_timer'), ->
         Timer.delete(timer.uuid).success (data) ->
-          $modalInstance.close(data)
+          $modalInstance.close({date: data, status: 'deleted'})
 
     $scope.$watch 'timer.projectUuid', ->
       project = _.find $scope.projects, (project) -> project.uuid is $scope.timer.projectUuid

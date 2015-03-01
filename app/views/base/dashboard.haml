@@ -41,19 +41,19 @@
         = render "budgets_panel", budgets: @budgets
 
       .col-xs-12.col-md-8
-        = render "invoices_panel", title: I18n.t(:"dashboard.panels.charged_invoices"), invoices: @charged_invoices, context: 'warning'
+        = render "invoices_panel", panel_title: I18n.t(:"dashboard.panels.charged_invoices"), invoices: @charged_invoices, context: 'warning'
 
         - unless @invoices_max_values.sum.zero?
           :javascript
             window.invoicesChartData = #{@invoices_chart_data.to_json}
             window.invoicesMaxValues = #{@invoices_max_values.to_json}
-          = render "chart_panel", title: I18n.t(:"dashboard.panels.invoices_chart", year: I18n.l(Date.today, format: :year)), id: 'invoices-chart'
+          = render "chart_panel", panel_title: I18n.t(:"dashboard.panels.invoices_chart", year: I18n.l(Date.today, format: :year)), id: 'invoices-chart'
 
         - unless @timers_chart_data.blank?
           :javascript
             window.timersChartData = #{@timers_chart_data.to_json}
-          = render "chart_panel", title: I18n.t(:"dashboard.panels.timers_chart"), id: 'timers-chart'
+          = render "chart_panel", panel_title: I18n.t(:"dashboard.panels.timers_chart"), id: 'timers-chart'
 
-        = render "invoices_panel", title: I18n.t(:"dashboard.panels.paid_invoices"), invoices: @paid_invoices, context: 'success'
+        = render "invoices_panel", panel_title: I18n.t(:"dashboard.panels.paid_invoices"), invoices: @paid_invoices, context: 'success'
 
-        = render "invoices_panel", title: I18n.t(:"dashboard.panels.last_invoices"), invoices: @last_invoices
+        = render "invoices_panel", panel_title: I18n.t(:"dashboard.panels.last_invoices"), invoices: @last_invoices

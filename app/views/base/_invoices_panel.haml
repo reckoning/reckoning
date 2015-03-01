@@ -1,10 +1,10 @@
 - context ||= 'info'
 .panel{class: "panel-#{context}"}
-  - if defined?(title)
+  - if defined?(panel_title)
     .panel-heading
       .panel-title
         %strong
-          = title
+          = panel_title
   .list-group.invoices-list
     - invoices.each do |invoice|
       %a.list-group-item{href: invoice_path(invoice)}

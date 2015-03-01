@@ -24,6 +24,7 @@ de:
       invoice: Rechnung
       timesheet: Stundenzettel
       tasks: Aufgaben
+      timers: Zeiten
       invoices: Rechnungen
     chart:
       on_date: am
@@ -43,6 +44,9 @@ de:
       current_day: "Heute"
       on_invoice: "Zeiten wurden bereits abgerechnet."
       blank: "Keine Zeiten erfasst."
+    timer:
+      uninvoiced: "Unabgerechnete Zeiten"
+      invoiced: "Abgrechnete Zeiten"
     invoice:
       customer: "Kunde/Projekt"
       due: "Fällig seit %{date}"
@@ -71,6 +75,8 @@ de:
       limit: "Gesamt: %{hours}"
     table:
       blank:
+        invoiced_timer: "Keine abgerechnete Zeiten vorhanden"
+        uninvoiced_timer: "Keine unabgerechnete Zeiten vorhanden"
         customer: "Keine Kunden vorhanden"
         invoice: "Keine Rechnungen vorhanden"
         project: "Keine Projekte vorhanden"
