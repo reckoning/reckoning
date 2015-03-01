@@ -75,7 +75,7 @@ class Timer < ActiveRecord::Base
   def convert_value
     return if value.blank? || started
 
-    self.value = (value.hours - (value.hours % 60)) / 3600
+    self.value = (value.hours.to_d - (value.hours.to_d % 60)) / 3600
   end
 
   def value_as_time
