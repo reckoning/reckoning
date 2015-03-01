@@ -36,7 +36,7 @@
         th.text-right.timesheet-row-sum
         th
       tbody
-        tr ng-cloak=true ng-if="currentTasksLoaded && !currentTasks.length"
+        tr.animate-repeat ng-cloak=true ng-if="currentTasksLoaded && !currentTasks.length"
           td colspan="10"
             = render "blank"
         tr.animate-repeat ng-repeat="task in currentTasks"
