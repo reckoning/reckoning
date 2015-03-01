@@ -4,7 +4,8 @@ angular.module 'Timesheet'
   'Timer'
   'Project'
   '$modal'
-  ($scope, Timer, Project, $modal) ->
+  '$timeout'
+  ($scope, Timer, Project, $modal, $timeout) ->
     $scope.timers = []
     $scope.timersLoaded = false
     $scope.currentTasks = []
@@ -20,8 +21,17 @@ angular.module 'Timesheet'
           timer: -> modalTimer
           projects: -> Project.all()
           excludedTaskUuids: -> []
-      .result.then (data) ->
-        $scope.getTimers()
+      .result.then (result) ->
+        if result.status is 'deleted'
+          $scope.timers.splice($scope.timers.indexOf(result.data), 1)
+        else if result.status is 'updated'
+          timer.value = result.data.value
+          timer.date = result.data.date
+          timer.taskUuid = result.data.taskUuid
+          timer.projectUuid = result.data.projectUuid
+          timer.note = result.data.note
+        else if result.status is 'created'
+          $scope.timers.push result.data
 
     $scope.getTimers = ->
       Timer.all(@date).success (data, status, headers, config) ->
@@ -39,9 +49,12 @@ angular.module 'Timesheet'
 
     $scope.startTimer = (timer) ->
       Timer.start(timer.uuid).success (data) ->
-        $scope.getTimers()
+        timer.started = data.started
+        timer.startedAt = data.startedAt
 
     $scope.stopTimer = (timer) ->
       Timer.stop(timer.uuid).success (data) ->
-        $scope.getTimers()
+        timer.value = data.value
+        timer.started = data.started
+        timer.startedAt = data.startedAt
 ]

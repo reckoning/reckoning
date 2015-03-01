@@ -38,7 +38,8 @@ de:
     download_timesheet: "Stundenzettel speichern"
     dropbox_link: "Dropbox verbinden"
     dropbox_unlink: "Dropbox trennen"
-    start: "Start"
-    stop: "Stop"
+    start: Start
+    begin: Starten
+    stop: Stop
     clear: "Zurücksetzen"
     today: "Heute"

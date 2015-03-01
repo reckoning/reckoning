@@ -30,7 +30,8 @@
     .col-xs-12.col-md-10
       div ng-cloak=true ng-if="timersLoaded && !timers.length"
         = render 'blank'
-      .panel.panel-default ng-repeat="timer in timers"
+
+      .timesheet-timer-panel.panel.panel-default.animate-repeat ng-repeat="timer in timers" style="overflow: hidden"
         .panel-body
           .pull-left
             h3 ng-bind="timer.projectName"
