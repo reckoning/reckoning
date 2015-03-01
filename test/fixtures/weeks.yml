@@ -1,9 +1,0 @@
-first:
-  id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205b99"
-  start_date: <%= Date.parse("2013-12-30") %>
-  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
-
-second:
-  id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205b98"
-  start_date: <%= Date.parse("2014-02-03") %>
-  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"

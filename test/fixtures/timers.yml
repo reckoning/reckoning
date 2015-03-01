@@ -3,11 +3,11 @@ twohours:
   date: <%= Date.parse("2014-01-01") %>
   value: 2
   task_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205b89"
-  week_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205b99"
+  user_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a72"
 
 threehours:
   id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205b80"
   date: <%= Date.parse("2014-02-03") %>
   value: 3
   task_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205b89"
-  week_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205b98"
+  user_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
