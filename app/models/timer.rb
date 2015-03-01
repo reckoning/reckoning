@@ -75,11 +75,8 @@ class Timer < ActiveRecord::Base
   def convert_value
     return if value.blank? || started
     time_to_decimal
-    Rails.logger.debug("Value: #{value}")
 
     self.value = (value.to_d.hours - (value.to_d.hours % 60)) / 3600
-
-    Rails.logger.debug("Value: #{self.value}")
   end
 
   def time_to_decimal
