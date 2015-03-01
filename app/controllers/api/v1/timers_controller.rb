@@ -38,7 +38,7 @@ module Api
           end
         else
           render json: { message: I18n.t(:"messages.timer.stop.failure") }, status: :bad_request
-        else
+        end
       end
 
       def start
@@ -51,6 +51,7 @@ module Api
           else
             render json: timer.errors, status: :bad_request
           end
+        end
       end
 
       def destroy
