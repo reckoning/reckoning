@@ -6,9 +6,16 @@ Reckoning::Application.routes.draw do
       post 'signin' => 'session#create'
       resource :account
       resources :customers, only: [:index, :show, :create, :destroy]
-      resources :projects, only: [:destroy] do
+      resources :projects, only: [:index, :destroy] do
         member do
           put :archive
+        end
+      end
+      resources :tasks, only: [:index, :create]
+      resources :timers, only: [:index, :create, :update, :destroy] do
+        member do
+          put :start
+          put :stop
         end
       end
     end
@@ -73,6 +80,18 @@ Reckoning::Application.routes.draw do
   end
 
   get 'invoices/:id/pdf/:pdf' => 'invoices#pdf', as: :invoice_pdf
+
+  resource :timesheet, only: [:show] do
+    member do
+      get :day
+      get :week
+      get :timer_modal
+      get :task_modal
+    end
+    # get :new_import
+    # post :csv_import
+  end
+
   get 'timesheets/:id/pdf/:pdf' => 'invoices#timesheet', as: :timesheet_pdf
 
   resources :positions, only: [:new, :destroy]
@@ -87,14 +106,6 @@ Reckoning::Application.routes.draw do
       collection do
         get :uninvoiced
       end
-    end
-  end
-
-  resources :timers, only: [:index] do
-    collection do
-      get :day
-      get :new_import
-      post :csv_import
     end
   end
 

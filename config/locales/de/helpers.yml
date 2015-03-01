@@ -31,6 +31,8 @@ de:
       fax: "Fax"
       website: "Homepage"
       email: "E-Mail"
+      timer:
+        note: "Beschreibung (Optional)"
       test_mail:
         email: "E-Mail Adresse"
       position:

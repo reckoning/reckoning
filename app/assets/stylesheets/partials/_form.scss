@@ -79,16 +79,14 @@ form {
     text-align: right;
   }
 
-  textarea {
-    max-width: 100%;
-    min-height: 150px;
-  }
-
   &#test_mail-form {
     .form-group {
       margin-bottom: 0;
     }
   }
-
 }
 
+textarea {
+  max-width: 100%;
+  min-height: 50px;
+}

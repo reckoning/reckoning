@@ -6,12 +6,15 @@ de:
     default: "Reckoning.io"
     backend: "Reckoning.io Backend"
   small_business: "umsatzsteuerbefreit nach § 19 UStG"
+  info:
+    sign_in: "Haben Sie bereits einen Account?"
+    sign_up: "Noch nicht registriert?"
   nav:
     header:
       home: "Rechnungen"
       customers: "Kunden"
       projects: "Projekte"
-      timers: "Zeiten"
+      timesheet: "Zeiten"
       toggle: "Navigation aufklappen"
       intro: "Home"
       backend: "Backend"
@@ -65,7 +68,7 @@ de:
         token: "Zwei-Faktor Token eingeben"
         recovery: "Zwei-Faktor Setup abschließen"
         token_refresh: "Zugriff bestätigen"
-      timer:
+      timesheet:
         index: "Zeiten"
         import: "Zeiten importieren"
       customer:

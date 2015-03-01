@@ -1,0 +1,9 @@
+$ ->
+  $.fn.datepicker.dates[I18n.locale] =
+    days: I18n.t('date.day_names')
+    daysShort: I18n.t('date.abbr_day_names')
+    daysMin: I18n.t('date.abbr_day_names')
+    months: I18n.t('date.dp_month_names')
+    monthsShort: I18n.t('date.dp_abbr_month_names')
+    today: I18n.t('actions.today')
+    clear: I18n.t('actions.clear')

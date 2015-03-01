@@ -37,8 +37,12 @@ de:
     timesheet:
       date: Datum
       task: Aufgabe
+      day: "Tag"
+      week: "Woche"
       current_week: "Diese Woche"
+      current_day: "Heute"
       on_invoice: "Zeiten wurden bereits abgerechnet."
+      blank: "Keine Zeiten erfasst."
     invoice:
       customer: "Kunde/Projekt"
       due: "Fällig seit %{date}"
@@ -75,7 +79,10 @@ de:
 
     modals:
       title:
-        timesheet: "Timer hinzufügen"
+        timesheet:
+          add_timer: "Zeit hinzufügen"
+          edit_timer: "Zeit bearbeiten"
+          add_task: "Aufgabe hinzufügen"
         positions: "Position aus Zeiten erstellen"
 
     panels:

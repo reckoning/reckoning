@@ -1,8 +1,0 @@
-= fields.hidden_field :date
-= fields.hidden_field :task_id
-- if fields.object.position.present?
-  %span{title: I18n.t(:"labels.timesheet.on_invoice"), data: {toggle: "tooltip"}}
-    = fields.hidden_field :value
-    = decimal_to_time(fields.object.value)
-- else
-  = fields.text_field :value, value: (decimal_to_time(fields.object.value) unless fields.object.value.blank?), class: 'form-control'

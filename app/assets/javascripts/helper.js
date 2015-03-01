@@ -1,8 +1,3 @@
-// Selectize
-window.selectizeCreateTemplate = function(data, escape) {
-  return '<div class="create"><strong>' + escape(data.input) + '</strong>&hellip; ' + I18n.t("actions.create") + '</div>';
-};
-
 window.toggleCheckbox = function($element) {
   var target = $element.data('target');
   var activeClass = $element.data('activeclass');

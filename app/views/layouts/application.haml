@@ -22,21 +22,16 @@
     = stylesheet_link_tag "application"
 
     = javascript_include_tag "application", data: {turbolinks: {track: true}}
-    :javascript
-      I18n.defaultLocale = "#{I18n.default_locale}";
-      I18n.locale = "#{I18n.locale}";
-
-    - if user_signed_in?
-      :javascript
-        App.authToken = "#{current_user.id}:#{current_user.authentication_token}"
+    = render 'layouts/js_defaults'
 
     != csrf_meta_tags
 
-  %body{data: {success: flash[:success], info: notice, error: alert, spy: ("scroll" unless user_signed_in?), target: ".scrollspy-nav"}}
-    - if backend?
-      = render "layouts/backend/navigation"
-    - else
-      = render "layouts/navigation"
+  %body{data: {success: flash[:success], info: notice, error: alert}}
+    - if user_signed_in? || content_for?(:main_nav)
+      - if backend?
+        = render "layouts/backend/navigation"
+      - else
+        = render "layouts/navigation"
     .container
       != yield
 

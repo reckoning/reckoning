@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150210223810) do
+ActiveRecord::Schema.define(version: 20150301002413) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,29 +37,29 @@ ActiveRecord::Schema.define(version: 20150210223810) do
     t.integer  "address_id"
     t.integer  "payment_due"
     t.text     "email_template"
-    t.string   "invoice_email"
-    t.string   "default_from"
+    t.string   "invoice_email",       limit: 255
+    t.string   "default_from",        limit: 255
     t.hstore   "contact_information"
-    t.string   "name"
-    t.uuid     "account_id",          null: false
+    t.string   "name",                limit: 255
+    t.uuid     "account_id",                      null: false
   end
 
   create_table "invoices", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.date     "date"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "value",            precision: 10, scale: 2, default: 0.0,   null: false
-    t.decimal  "rate",             precision: 10, scale: 2, default: 0.0,   null: false
-    t.string   "state"
+    t.decimal  "value",                        precision: 10, scale: 2, default: 0.0,   null: false
+    t.decimal  "rate",                         precision: 10, scale: 2, default: 0.0,   null: false
+    t.string   "state",            limit: 255
     t.datetime "pay_date"
     t.integer  "ref"
-    t.boolean  "pdf_generating",                            default: false, null: false
+    t.boolean  "pdf_generating",                                        default: false, null: false
     t.date     "delivery_date"
     t.date     "payment_due_date"
     t.datetime "pdf_generated_at"
     t.uuid     "customer_id"
     t.uuid     "project_id"
-    t.uuid     "account_id",                                                null: false
+    t.uuid     "account_id",                                                            null: false
   end
 
   create_table "positions", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
@@ -73,69 +73,64 @@ ActiveRecord::Schema.define(version: 20150210223810) do
   end
 
   create_table "projects", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",                limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "rate",                precision: 10, scale: 2, default: 0.0,      null: false
-    t.decimal  "budget",              precision: 10, scale: 2, default: 0.0,      null: false
+    t.decimal  "rate",                            precision: 10, scale: 2, default: 0.0,      null: false
+    t.decimal  "budget",                          precision: 10, scale: 2, default: 0.0,      null: false
     t.uuid     "customer_id"
-    t.boolean  "budget_on_dashboard",                          default: true
-    t.string   "state",                                        default: "active", null: false
+    t.boolean  "budget_on_dashboard",                                      default: true
+    t.string   "state",                                                    default: "active", null: false
   end
 
   create_table "tasks", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",       limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.uuid     "project_id"
   end
 
-  create_table "tasks_weeks", id: false, force: :cascade do |t|
-    t.uuid "week_id"
-    t.uuid "task_id"
-  end
-
-  add_index "tasks_weeks", ["task_id", "week_id"], name: "index_tasks_weeks_on_task_id_and_week_id", using: :btree
-  add_index "tasks_weeks", ["week_id"], name: "index_tasks_weeks_on_week_id", using: :btree
-
   create_table "timers", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.date     "date"
-    t.string   "value"
+    t.string   "value",       limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.uuid     "position_id"
     t.uuid     "task_id"
-    t.uuid     "week_id"
+    t.boolean  "started",                 default: false
+    t.datetime "started_at"
+    t.uuid     "user_id",                                 null: false
+    t.text     "note"
   end
 
   create_table "users", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
-    t.string   "email",                  default: "",    null: false
-    t.string   "encrypted_password",     default: "",    null: false
-    t.string   "reset_password_token"
+    t.string   "email",                  limit: 255, default: "",    null: false
+    t.string   "encrypted_password",     limit: 255, default: "",    null: false
+    t.string   "reset_password_token",   limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0
+    t.integer  "sign_in_count",                      default: 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
-    t.integer  "failed_attempts",        default: 0
-    t.string   "unlock_token"
+    t.string   "current_sign_in_ip",     limit: 255
+    t.string   "last_sign_in_ip",        limit: 255
+    t.integer  "failed_attempts",                    default: 0
+    t.string   "unlock_token",           limit: 255
     t.datetime "locked_at"
-    t.string   "authentication_token"
+    t.string   "authentication_token",   limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "address_id"
-    t.boolean  "enabled",                default: false
-    t.boolean  "admin",                  default: false
-    t.string   "confirmation_token"
+    t.boolean  "enabled",                            default: false
+    t.boolean  "admin",                              default: false
+    t.string   "confirmation_token",     limit: 255
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
-    t.string   "unconfirmed_email"
-    t.string   "gravatar"
-    t.string   "gravatar_hash"
-    t.string   "plan"
-    t.uuid     "account_id",                             null: false
+    t.string   "unconfirmed_email",      limit: 255
+    t.string   "gravatar",               limit: 255
+    t.string   "gravatar_hash",          limit: 255
+    t.string   "plan",                   limit: 255
+    t.uuid     "account_id",                                         null: false
     t.string   "name"
     t.string   "totp_auth_secret"
     t.string   "totp_recovery_secret"
@@ -156,12 +151,5 @@ ActiveRecord::Schema.define(version: 20150210223810) do
   add_index "users", ["totp_challenge_expires"], name: "index_users_on_totp_challenge_expires", using: :btree
   add_index "users", ["totp_session_challenge"], name: "index_users_on_totp_session_challenge", unique: true, using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
-
-  create_table "weeks", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
-    t.date     "start_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.uuid     "account_id", null: false
-  end
 
 end

@@ -28,7 +28,14 @@
     "fastclick": "~1.0.6",
     "awesome-bootstrap-checkbox": "~0.2.3",
     "bootstrap-colorpicker": "mjolnic/bootstrap-colorpicker#~2.0.1",
-    "bootstrap-datepicker": "eternicode/bootstrap-datepicker#~1.3.1"
+    "bootstrap-datepicker": "eternicode/bootstrap-datepicker#~1.3.1",
+    "angular": "~1.3.10",
+    "underscore": "~1.8.2",
+    "angular-sanitize": "~1.3.14",
+    "angular-route": "~1.3.14",
+    "angular-timer": "~1.2.1",
+    "angular-animate": "~1.3.14",
+    "angular-bootstrap": "~0.12.1"
   },
   "resolutions": {
     "bootstrap": ">=3.0 <4.0"

@@ -242,7 +242,7 @@ class InvoicesController < ApplicationController
   end
 
   private def projects
-    @projects ||= current_account.projects.active
+    @projects ||= current_account.projects.active.order("name ASC")
   end
   helper_method :projects
 

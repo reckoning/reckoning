@@ -1,23 +1,41 @@
-table.timesheet {
-  border-collapse: separate;
+.timesheet {
+  padding: 0 15px;
 
-  thead:first-child > tr:first-child > th {
-    border-top: 1px solid $table-border-color;
+  table {
+    border-collapse: separate;
 
-    &:first-child {
-      border-left: 1px solid $table-border-color;
+    thead:first-child > tr:first-child > th {
+      border-top: 1px solid $table-border-color;
+
+      &:first-child {
+        border-left: 1px solid $table-border-color;
+      }
+
+      &:last-child {
+        border-right: 1px solid $table-border-color;
+        width: 44px;
+      }
     }
 
-    &:last-child {
-      border-right: 1px solid $table-border-color;
-    }
-  }
+    tbody > tr {
+      &:first-child > td {
+        border-top: none;
+      }
+      > td {
+        height: 45px;
+        &:first-child {
+          border-left: 1px solid $table-border-color;
+        }
 
-  tbody > tr {
-    &:first-child > td {
-      border-top: none;
+        &:last-child {
+          border-right: 1px solid $table-border-color;
+        }
+      }
     }
-    > td {
+
+    tfoot > tr:first-child > td {
+      border-bottom: 1px solid $table-border-color;
+
       &:first-child {
         border-left: 1px solid $table-border-color;
       }
@@ -26,66 +44,108 @@ table.timesheet {
         border-right: 1px solid $table-border-color;
       }
     }
-  }
 
-  tfoot > tr:first-child > td {
-    border-bottom: 1px solid $table-border-color;
+    .timesheet-day {
+      width: 80px;
 
-    &:first-child {
-      border-left: 1px solid $table-border-color;
+      input {
+        min-width: 68px;
+        text-align: right;
+      }
+
+      span {
+        padding-right: 13px;
+      }
     }
 
-    &:last-child {
-      border-right: 1px solid $table-border-color;
+    .timesheet-day a:hover {
+      text-decoration: none;
+    }
+
+    .timesheet-timer.started {
+      color: $brand-primary;
+    }
+
+    thead th,
+    tbody td,
+    tfoot td {
+      vertical-align: middle;
+    }
+
+    .timesheet-sum,
+    .timesheet-col-sum {
+      width: 80px;
+    }
+
+    .timesheet-today {
+      background-color: #f9f9f9;
+    }
+
+    .timesheet-actions {
+      width: 44px;
+    }
+
+    tfoot td.timesheet-day,
+    .timesheet-row-sum,
+    .timesheet-col-sum,
+    .timesheet-sum {
+      padding-right: 18px;
+    }
+
+    .timesheet-row-sum,
+    .timesheet-sum {
+      span {
+        min-width: 55px;
+        display: inline-block;
+      }
     }
   }
 
-  .timesheet-day {
-    width: 80px;
-    input {
-      min-width: 68px;
-      text-align: right;
-    }
-    span {
-      padding-right: 13px;
-    }
-  }
+  .timesheet-blank {
+    margin-bottom: 0;
 
-  thead th,
-  tbody td,
-  tfoot td {
-    vertical-align: middle;
-  }
+    .panel-body {
+      min-height: 350px;
 
-  .timesheet-sum,
-  .timesheet-col-sum {
-    width: 80px;
-  }
-
-  .timesheet-today {
-    background-color: #f9f9f9;
-  }
-
-  .timesheet-actions {
-    width: 44px;
-  }
-
-  tfoot td.timesheet-day,
-  .timesheet-row-sum,
-  .timesheet-col-sum,
-  .timesheet-sum {
-    padding-right: 18px;
-  }
-
-  .timesheet-row-sum,
-  .timesheet-sum {
-    span {
-      min-width: 55px;
-      display: inline-block;
+      blockquote {
+        color: $gray-light;
+        margin-top: 100px;
+      }
     }
   }
-}
 
-.row.timesheet {
-  padding: 0 15px;
+  .timesheet-day-page {
+    .timesheet-timer span {
+      font-size: 28px;
+      vertical-align: middle;
+      padding-right: 10px;
+    }
+  }
+
+  .animate-repeat {
+    line-height:40px;
+    list-style:none;
+    box-sizing:border-box;
+  }
+
+  .animate-repeat.ng-move,
+  .animate-repeat.ng-enter,
+  .animate-repeat.ng-leave {
+    -webkit-transition:all linear 0.5s;
+    transition:all linear 0.5s;
+  }
+
+  .animate-repeat.ng-leave.ng-leave-active,
+  .animate-repeat.ng-move,
+  .animate-repeat.ng-enter {
+    opacity:0;
+    max-height:0;
+  }
+
+  .animate-repeat.ng-leave,
+  .animate-repeat.ng-move.ng-move-active,
+  .animate-repeat.ng-enter.ng-enter-active {
+    opacity:1;
+    max-height:40px;
+  }
 }

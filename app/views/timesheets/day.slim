@@ -1,0 +1,55 @@
+.col-xs-12.timesheet-day-page
+  .row
+    .col-xs-12.col-md-8
+      h1 ng-bind="day()"
+    .col-xs-12.col-md-4
+      .pull-right.resource-nav
+        a.btn.btn-default.resource-nav.date datepicker=true ng-model="datepickerSelect"
+          i.fa.fa-calendar
+        .btn-group.btn-group-justified-responsive.resource-nav
+          a.btn.btn-default href="#/day/{{prevDay()}}"
+            i.fa.fa-chevron-left
+          a.btn.btn-default href="#/day" ng-disabled="{{isCurrentDay()}}"
+            = I18n.t(:"labels.timesheet.current_day")
+          a.btn.btn-default href="#/day/{{nextDay()}}"
+            i.fa.fa-chevron-right
+        .btn-group.btn-group-justified-responsive.resource-nav
+          a.btn.btn-default href="#/day/{{dayDate()}}" class="active"
+            = I18n.t(:"labels.timesheet.day")
+          a.btn.btn-default href="#/week/{{weekDate()}}"
+            = I18n.t(:"labels.timesheet.week")
+  .row ng-controller="TimerController as timerCtrl"
+    .col-xs-12.col-md-2
+      .btn-group-responsive.resource-nav
+        button.btn.btn-primary.btn-lg ng-click="openModal()"
+          i.fa.fa-plus
+          '
+          = I18n.t(:"actions.add_timer")
+    .col-xs-12.col-md-10
+      div ng-cloak=true ng-if="timersLoaded && !timers.length"
+        = render 'blank'
+      .panel.panel-default ng-repeat="timer in timers"
+        .panel-body
+          .pull-left
+            h3 ng-bind="timer.projectName"
+            span ng-bind="timer.taskName"
+          .pull-right
+            span.timesheet-timer.invoiced ng-if="timer.positionUuid" title=I18n.t(:"labels.timesheet.on_invoice") data-toggle="tooltip"
+              span ng-bind="timer.value | toTime"
+            span.timesheet-timer.started ng-if="timer.started"
+              timer start-time="timer.startTime" max-time-unit="'hour'" {{hours}}:{{mminutes}}
+              '
+              button.btn.btn-success.btn-lg ng-click="stopTimer(timer, $event)"
+                i.fa.fa-circle-o-notch.fa-spin
+                '
+                = I18n.t(:"actions.stop")
+            span.timesheet-timer ng-if="!timer.started && !timer.positionUuid"
+              span ng-bind="timer.value | toTime"
+              '
+              button.btn.btn-default.btn-lg ng-click="startTimer(timer, $event)"
+                i.fa.fa-circle-o-notch
+                '
+                = I18n.t(:"actions.start")
+            '
+            button.btn.btn-link.btn-lg.default ng-click="openModal(timer)"
+              i.fa.fa-edit
