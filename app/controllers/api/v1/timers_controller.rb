@@ -5,6 +5,7 @@ module Api
       respond_to :json
 
       def index
+        authorize! :index, Timer
         scope = current_user.timers
         scope = scope.where(date: date) if date
         render json: scope.order('created_at ASC'), each_serializer: TimerSerializer, status: :ok

@@ -1,7 +1,5 @@
 window.App ?= {}
 
-window.App.apiBasePath = "//#{window.location.host}"
-
 $(document).on 'click', 'a.disabled', (ev) ->
   ev.preventDefault()
 
@@ -22,7 +20,7 @@ $ ->
     create: (input, callback) ->
       xhr.abort() if xhr
       xhr = $.ajax
-        url: "#{App.apiBasePath}#{r(v1_customers_path)}"
+        url: ApiBasePath + r(v1_customers_path)
         data: {customer: {name: input}}
         method: 'POST'
         dataType: 'json'

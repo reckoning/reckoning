@@ -5,6 +5,7 @@ module Api
       respond_to :json
 
       def index
+        authorize! :index, Task
         scope = current_account.tasks
         if week_date
           date = Date.parse(week_date)

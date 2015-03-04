@@ -3,6 +3,12 @@ module Api
     include ActionController::HttpAuthentication::Token
     before_action :authenticate_user_from_token!
 
+    check_authorization
+
+    rescue_from CanCan::AccessDenied do |exception|
+      render json: { message: exception.message }, status: :forbidden
+    end
+
     attr_reader :current_account
     helper_method :current_account
 
