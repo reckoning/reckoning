@@ -60,7 +60,7 @@
               i.fa.fa-close
     .timesheet-footer.row.animate ng-cloak=true ng-if="currentTasksLoaded && currentTasks.length"
       .col-xs-12.col-md-offset-4.col-md-6.timesheet-days
-        .timesheet-day ng-class="{'timesheet-today':date.isCurrentDate}" ng-repeat="date in dates"
+        .timesheet-day.timesheet-col-sum ng-repeat="date in dates"
           span ng-bind="sumForDate(date) | toTime"
       .col-xs-12.col-md-1.timesheet-sum
         .text-right
