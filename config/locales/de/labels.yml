@@ -40,6 +40,7 @@ de:
       task: Aufgabe
       day: "Tag"
       week: "Woche"
+      sum: "Gesamt:"
       current_week: "Diese Woche"
       current_day: "Heute"
       on_invoice: "Zeiten wurden bereits abgerechnet."
