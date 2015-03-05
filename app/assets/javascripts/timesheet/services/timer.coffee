@@ -5,23 +5,23 @@ angular.module 'Timesheet'
   all: (date) ->
     @allPromise.resolve()
     @allPromise = $q.defer()
-    $http.get(App.apiBasePath + r(v1_timers_path), {timeout: @allPromise, params: {date: date}})
+    $http.get(ApiBasePath + r(v1_timers_path), {timeout: @allPromise, params: {date: date}})
 
   create: (timer) ->
-    $http.post(App.apiBasePath + r(v1_timers_path), timer)
+    $http.post(ApiBasePath + r(v1_timers_path), timer)
 
   createStarted: (timer) ->
-    $http.post(App.apiBasePath + r(v1_timers_path), timer)
+    $http.post(ApiBasePath + r(v1_timers_path), timer)
 
   update: (timer) ->
-    $http.put(App.apiBasePath + r(v1_timer_path, timer.uuid), timer)
+    $http.put(ApiBasePath + r(v1_timer_path, timer.uuid), timer)
 
   start: (timerUuid) ->
-    $http.put(App.apiBasePath + r(start_v1_timer_path, timerUuid))
+    $http.put(ApiBasePath + r(start_v1_timer_path, timerUuid))
 
   stop: (timerUuid) ->
-    $http.put(App.apiBasePath + r(stop_v1_timer_path, timerUuid))
+    $http.put(ApiBasePath + r(stop_v1_timer_path, timerUuid))
 
   delete: (timerUuid) ->
-    $http.delete(App.apiBasePath + r(v1_timer_path, timerUuid))
+    $http.delete(ApiBasePath + r(v1_timer_path, timerUuid))
 ]

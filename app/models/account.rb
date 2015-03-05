@@ -15,6 +15,7 @@ class Account < ActiveRecord::Base
 
   validates :name, :users, presence: true
   validates :subdomain, uniqueness: true, allow_nil: true
+  validates :subdomain, exclusion: { in: %w(www app admin api backend reckoning) }
   validates_associated :users
 
   accepts_nested_attributes_for :users

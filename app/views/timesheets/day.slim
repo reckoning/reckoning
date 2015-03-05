@@ -28,10 +28,10 @@
           '
           = I18n.t(:"actions.add_timer")
     .col-xs-12.col-md-10
-      div ng-cloak=true ng-if="timersLoaded && !timers.length"
+      .animate ng-cloak=true ng-if="timersLoaded && !timers.length"
         = render 'blank'
 
-      .timesheet-timer-panel.panel.panel-default.animate-repeat ng-repeat="timer in timers" style="overflow: hidden"
+      .timesheet-timer-panel.panel.panel-default.animate ng-repeat="timer in timers" style="overflow: hidden"
         .panel-body
           .pull-left
             h3 ng-bind="timer.projectName"

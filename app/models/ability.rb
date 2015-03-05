@@ -24,7 +24,7 @@ class Ability
     can :manage, Customer, account_id: user.account_id
     can :manage, Project, customer: { account_id: user.account_id }
     can :manage, Task, project: { customer: { account_id: user.account_id } }
-    can :manage, Timer, task: { project: { customer: { account_id: user.account_id } } }
+    can :manage, Timer, user_id: user.id
     can :manage, :timesheet
 
     setup_admin_abilities if user.admin?

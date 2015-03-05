@@ -7,7 +7,8 @@ angular.module 'Timesheet'
   'timer'
   'projects'
   'excludedTaskUuids'
-  ($scope, Task, Timer, $modalInstance, timer, projects, excludedTaskUuids) ->
+  '$timeout'
+  ($scope, Task, Timer, $modalInstance, timer, projects, excludedTaskUuids, $timeout) ->
     $scope.excludedTaskUuids = excludedTaskUuids
     $scope.projects = projects.data
     $scope.timer = timer
@@ -39,6 +40,7 @@ angular.module 'Timesheet'
       ).success (newTask, status, headers, config) ->
         $timeout ->
           selectize.addOption newTask
+          $scope.tasks.push newTask
           selectize.addItem newTask.uuid
 
     $scope.delete = (timer) ->

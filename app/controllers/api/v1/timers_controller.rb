@@ -5,6 +5,7 @@ module Api
       respond_to :json
 
       def index
+        authorize! :index, Timer
         scope = current_user.timers
         scope = scope.where(date: date) if date
         render json: scope.order('created_at ASC'), each_serializer: TimerSerializer, status: :ok
@@ -30,19 +31,27 @@ module Api
 
       def stop
         authorize! :stop, timer
-        if timer.update(started: false, value: timer.value.to_d + ((Time.now - timer.started_at) / 1.hour))
-          render json: timer, status: :ok
+        if timer.started
+          if timer.update(started: false, value: timer.value + ((Time.now - timer.started_at) / 1.hour))
+            render json: timer, status: :ok
+          else
+            render json: timer.errors, status: :bad_request
+          end
         else
-          render json: timer.errors, status: :bad_request
+          render json: { message: I18n.t(:"messages.timer.stop.failure") }, status: :bad_request
         end
       end
 
       def start
         authorize! :start, timer
-        if timer.update(started: true)
-          render json: timer, status: :ok
+        if timer.started
+          render json: { message: I18n.t(:"messages.timer.start.failure") }, status: :bad_request
         else
-          render json: timer.errors, status: :bad_request
+          if timer.update(started: true)
+            render json: timer, status: :ok
+          else
+            render json: timer.errors, status: :bad_request
+          end
         end
       end
 

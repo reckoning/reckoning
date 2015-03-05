@@ -11,7 +11,7 @@
 //= require i18n
 //= require i18n/translations
 //= require moment/moment
-//= require moment_init
+//= require moment-init
 //= require twix/bin/twix
 //= require d3
 //= require nvd3
@@ -20,14 +20,16 @@
 //= require fastclick
 //= require bootstrap-datepicker
 //= require pdf.js/build/pdf
-//= require pdf_viewer
+//= require pdf-viewer
 //= require helper
 //= require_tree ./helpers
 //= require tabs
 //= require app
 //= require_tree ./helpers
 //= require_tree ./app
+//= require angular-init
 //= require timesheet
+window.ApiBasePath = "//api." + window.location.host
 
 $(document).on('show.bs.collapse', '.navbar-collapse', function() {
   $('.navbar-collapse.in').not(this).collapse('hide');

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150301002413) do
+ActiveRecord::Schema.define(version: 20150301161658) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,15 +92,15 @@ ActiveRecord::Schema.define(version: 20150301002413) do
 
   create_table "timers", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.date     "date"
-    t.string   "value",       limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.uuid     "position_id"
     t.uuid     "task_id"
-    t.boolean  "started",                 default: false
+    t.boolean  "started",                               default: false
     t.datetime "started_at"
-    t.uuid     "user_id",                                 null: false
+    t.uuid     "user_id",                                               null: false
     t.text     "note"
+    t.decimal  "value",       precision: 30, scale: 18
   end
 
   create_table "users", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|

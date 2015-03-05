@@ -6,7 +6,7 @@ angular.module 'Timesheet'
     factory = @
     @allPromise.resolve()
     @allPromise = $q.defer()
-    $http.get(App.apiBasePath + r(v1_tasks_path), {timeout: @allPromise, params: {week_date: dates[0].date}}).success (tasks, status, headers, config) ->
+    $http.get(ApiBasePath + r(v1_tasks_path), {timeout: @allPromise, params: {week_date: dates[0].date}}).success (tasks, status, headers, config) ->
       currentTasks = []
       if tasks.length
         tasks.forEach (task) ->
@@ -15,7 +15,7 @@ angular.module 'Timesheet'
       currentTasks
 
   create: (params) ->
-    $http.post(App.apiBasePath + r(v1_tasks_path), params)
+    $http.post(ApiBasePath + r(v1_tasks_path), params)
 
   new: (dates, task) ->
     task.timers = @fillTimers(dates, task.uuid, [])

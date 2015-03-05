@@ -5,6 +5,7 @@ module Api
       respond_to :json
 
       def create
+        authorize! :index, Task
         if user && user.valid_password?(user_params.fetch(:password))
           sign_in("user", user)
           render json: user, status: :ok
