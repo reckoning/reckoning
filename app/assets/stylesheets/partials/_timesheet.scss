@@ -37,7 +37,7 @@
       box-shadow: inset 0 -4px 0 $brand-primary;
     }
   }
-  
+
   .timesheet-footer {
     .timesheet-day {
       padding-right: 13px;
@@ -108,7 +108,7 @@
     }
   }
 
-  @media (max-width: $screen-xs-min) {
+  @media (max-width: $screen-sm-min) {
     .timesheet-header, .timesheet-footer {
       .timesheet-day {
         padding-right: 0;
