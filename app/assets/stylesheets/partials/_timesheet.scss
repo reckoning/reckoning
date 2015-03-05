@@ -15,8 +15,9 @@
     padding: 5px 15px;
 
     .timesheet-day {
-      padding-right: 5px;
+      padding-right: 8px;
       padding-bottom: 4px;
+      text-align: right;
 
       a:hover {
         text-decoration: none;
@@ -29,18 +30,8 @@
   }
 
   .timesheet-header {
-    .timesheet-day {
-      text-align: right;
-    }
-
     .timesheet-today {
       box-shadow: inset 0 -4px 0 $brand-primary;
-    }
-  }
-
-  .timesheet-footer {
-    .timesheet-day {
-      text-align: center;
     }
   }
 
@@ -57,6 +48,10 @@
 
     &.started {
       color: $brand-primary;
+    }
+
+    &.invoiced, &.started {
+      padding-right: 8px;
     }
   }
 
@@ -105,8 +100,9 @@
   }
 
   @media (max-width: $screen-xs-min) {
-    .timesheet-header {
+    .timesheet-header, .timesheet-footer {
       .timesheet-day {
+        padding-right: 0;
         text-align: center;
       }
     }
