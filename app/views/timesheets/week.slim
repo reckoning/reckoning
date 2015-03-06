@@ -25,16 +25,22 @@
             = I18n.t(:"labels.timesheet.week")
 
   div ng-controller="TaskController as taskCtrl"
-    .animate ng-cloak=true ng-if="currentTasksLoaded && !currentTasks.length"
-      = render 'blank'
-
-    .timesheet-header.row.animate ng-cloak=true ng-if="currentTasksLoaded && currentTasks.length"
-      .col-xs-12.col-md-offset-4.col-md-6.timesheet-days
+    .timesheet-header.row
+      .col-xs-12.col-md-4.timesheet-actions
+        .btn-group.btn-group-justified-responsive
+          a.btn.btn-primary ng-click="openModal()"
+            i.fa.fa-plus
+            '
+            = I18n.t(:"actions.add_task")
+      .col-xs-12.col-md-6.timesheet-days
         .timesheet-day ng-class="{'timesheet-today':date.isCurrentDate}" ng-repeat="date in dates"
           a href="#/day/{{date.date}}"
             span.hidden-xs ng-bind="date.day"
             br
             span ng-bind="date.short"
+    .animate ng-cloak=true ng-if="currentTasksLoaded && !currentTasks.length"
+      = render 'blank'
+
     .panel.panel-default.animate ng-repeat="task in currentTasks"
       .panel-body.row
         .col-xs-12.col-md-4.timesheet-task
@@ -60,18 +66,10 @@
               i.fa.fa-close
     .timesheet-footer.row.animate ng-cloak=true ng-if="currentTasksLoaded && currentTasks.length"
       .col-xs-12.col-md-offset-4.col-md-6.timesheet-days
-        .timesheet-day ng-class="{'timesheet-today':date.isCurrentDate}" ng-repeat="date in dates"
+        .timesheet-day.timesheet-col-sum ng-repeat="date in dates"
           span ng-bind="sumForDate(date) | toTime"
       .col-xs-12.col-md-1.timesheet-sum
         .text-right
           .timesheet-sum-label = I18n.t(:"labels.timesheet.sum")
           '
           span ng-bind="sumForWeek() | toTime"
-
-    .timesheet-actions.row.animate ng-cloak=true ng-if="currentTasksLoaded"
-      .col-xs-12
-        .btn-group.btn-group-justified-responsive
-          a.btn.btn-primary ng-click="openModal()"
-            i.fa.fa-plus
-            '
-            = I18n.t(:"actions.add_task")
