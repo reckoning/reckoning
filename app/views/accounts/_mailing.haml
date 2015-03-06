@@ -5,6 +5,6 @@
       = form_errors resource, :default_from
 .row
   .col-xs-12.col-md-6.form-group{class: form_error?(resource, :signature)}
-    = form.text_area :signature, placeholder: I18n.t(:"helpers.placeholder.user.mailing.signature"), class: 'form-control'
+    = form.text_area :signature, placeholder: I18n.t(:"helpers.placeholder.user.mailing.signature"), rows: 5, class: 'form-control'
     %small
       = form_errors resource, :signature

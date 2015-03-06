@@ -36,7 +36,7 @@
         .row
           .col-xs-12.col-md-6
             .form-group{class: form_error?(customer, :email_template)}
-              = form.text_area :email_template, placeholder: I18n.t(:"helpers.placeholder.customer.email_template"), class: 'form-control'
+              = form.text_area :email_template, placeholder: I18n.t(:"helpers.placeholder.customer.email_template"), rows: 7, class: 'form-control'
               = form_errors customer, :email_template
           .col-xs-12.col-md-6
             .panel.panel-default
