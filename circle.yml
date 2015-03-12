@@ -1,4 +1,0 @@
-machine:
-  pre:
-    - bundle exec thor setup:dev_env
-    - bundle exec rake db:create db:migrate
