@@ -27,7 +27,7 @@
   div ng-controller="TaskController as taskCtrl"
     .timesheet-header.row
       .col-xs-12.col-md-4.timesheet-actions
-        .btn-group.btn-group-justified-responsive
+        .btn-group.btn-group-justified-responsive.resource-nav
           a.btn.btn-primary ng-click="openModal()"
             i.fa.fa-plus
             '
@@ -39,7 +39,7 @@
             br
             span ng-bind="date.short"
     .animate ng-cloak=true ng-if="currentTasksLoaded && !currentTasks.length"
-      = render 'blank'
+      = render 'blank_template'
 
     .panel.panel-default.animate ng-repeat="task in currentTasks"
       .panel-body.row
@@ -70,6 +70,6 @@
           span ng-bind="sumForDate(date) | toTime"
       .col-xs-12.col-md-1.timesheet-sum
         .text-right
-          .timesheet-sum-label = I18n.t(:"labels.timesheet.sum")
+          span.visible-xs-inline-block = I18n.t(:"labels.timesheet.sum")
           '
           span ng-bind="sumForWeek() | toTime"

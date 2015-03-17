@@ -5,24 +5,24 @@ class TimesheetsController < ApplicationController
     authorize! :show, :timesheet
   end
 
-  def week
+  def week_template
     authorize! :week, :timesheet
-    render "week", layout: false
+    render "week_template", layout: false
   end
 
-  def day
+  def day_template
     authorize! :day, :timesheet
-    render "day", layout: false
+    render "day_template", layout: false
   end
 
-  def task_modal
+  def task_modal_template
     authorize! :task_modal, :timesheet
-    render "task_modal", layout: false
+    render "task_modal_template", layout: false
   end
 
-  def timer_modal
+  def timer_modal_template
     authorize! :timer_modal, :timesheet
-    render "timer_modal", layout: false
+    render "timer_modal_template", layout: false
   end
 
   def new_import

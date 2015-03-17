@@ -1,24 +1,26 @@
-angular.module 'Timesheet'
+angular.module 'Reckoning'
 .directive 'selectize', ['$timeout', ($timeout) ->
   restrict: 'A'
   require: '?ngModel'
   scope:
     options: '='
     ngDisabled: '='
-    label: '@'
+    labelField: '@'
+    valueField: '@'
     create: '@'
     multiple: '='
     ngModel: '='
   link: (scope, element, attrs, ngModel) ->
-    scope.label ?= 'name'
+    scope.labelField ?= 'name'
+    scope.valueField ?= 'uuid'
 
     createItem = (input) ->
       scope.$parent[scope.create](input, @)
 
     $select = element.selectize
-      valueField: 'uuid'
-      labelField: scope.label
-      searchField: scope.label
+      valueField: scope.valueField
+      labelField: scope.labelField
+      searchField: scope.labelField
       create: createItem if scope.create
       render:
         option_create: selectizeCreateTemplate
@@ -36,7 +38,7 @@ angular.module 'Timesheet'
 
           angular.forEach newTags, (tag) ->
             selectize.addOption(tag)
-        
+
         selectize.addItem(scope.ngModel)
 
     scope.$watch 'ngModel', ->
