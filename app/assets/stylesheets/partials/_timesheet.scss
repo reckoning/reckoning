@@ -54,7 +54,7 @@
   }
 
   .timesheet-timer {
-    padding-top: 3px;
+    padding: 3px 2px 0;
 
     &.started {
       color: $brand-primary;
@@ -91,9 +91,6 @@
   .timesheet-sum {
     font-weight: bold;
     font-size: 20px;
-    .timesheet-sum-label {
-      display: none;
-    }
   }
 
   .timesheet-blank {
@@ -161,10 +158,6 @@
       padding: 5px 0;
       margin: 5px 0;
       border-top: 1px solid $gray-lighter;
-
-      .timesheet-sum-label {
-        display: inline-block;
-      }
     }
   }
 

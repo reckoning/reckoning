@@ -15,8 +15,8 @@ angular.module 'Timesheet'
       if timer isnt undefined
         angular.copy(timer, modalTimer)
       $modal.open
-        templateUrl: r(timer_modal_timesheet_path)
-        controller: 'TimerNewController'
+        templateUrl: r(timer_modal_template_timesheet_path)
+        controller: 'TimerModalController'
         resolve:
           timer: -> modalTimer
           projects: -> Project.all()

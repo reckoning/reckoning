@@ -1,8 +1,8 @@
 .modal-header
   button.close ng-click="cancel()" aria-hidden="true" &times;
-  h4.modal-title = I18n.t(:"labels.modals.title.timesheet.add_task")
+  h3.modal-title = I18n.t(:"labels.modals.title.timesheet.add_task")
 .modal-body
-  select selectize=true label="nameWithCustomer" options="projects" ng-model="timer.projectUuid" placeholder=I18n.t(:"helpers.prompt.timer.project")
+  select selectize=true label-field="nameWithCustomer" options="projects" ng-model="timer.projectUuid" placeholder=I18n.t(:"helpers.prompt.timer.project")
 
   hr
 

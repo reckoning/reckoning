@@ -19,6 +19,7 @@ module Api
 
       if user && Devise.secure_compare(user.authentication_token, auth_token)
         sign_in user, store: false
+        @current_user = user
         @current_account = user.account
       else
         message = "HTTP Token: Access denied."

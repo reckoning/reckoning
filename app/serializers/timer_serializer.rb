@@ -3,10 +3,6 @@ class TimerSerializer < BaseSerializer
              :task_name, :project_name, :started, :started_at, :start_time,
              :start_time_for_task, :sum_for_task, :note
 
-  def uuid
-    object.id
-  end
-
   def start_time
     (object.started_at - object.value.to_d.hours).to_i * 1000 if object.started_at
   end

@@ -12,6 +12,7 @@ angular.module 'Timesheet'
       language: I18n.locale
       autoclose: true
       todayHighlight: true
+      weekStart: I18n.t('date.first_day_of_week')
 
     $datepicker.datepicker('update', scope.ngModel)
 

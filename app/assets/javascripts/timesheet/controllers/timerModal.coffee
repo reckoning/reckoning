@@ -1,5 +1,5 @@
 angular.module 'Timesheet'
-.controller 'TimerNewController', [
+.controller 'TimerModalController', [
   '$scope'
   'Task'
   'Timer'

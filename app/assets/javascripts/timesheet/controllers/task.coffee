@@ -14,8 +14,8 @@ angular.module 'Timesheet'
 
     $scope.openModal = ->
       $modal.open
-        templateUrl: r(task_modal_timesheet_path)
-        controller: 'TimerNewController'
+        templateUrl: r(task_modal_template_timesheet_path)
+        controller: 'TimerModalController'
         resolve:
           timer: -> {date: $scope.date}
           projects: -> Project.all()

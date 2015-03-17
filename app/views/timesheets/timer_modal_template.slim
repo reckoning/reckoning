@@ -6,7 +6,7 @@
     span ng-if="!timer.uuid"
       = I18n.t(:"labels.modals.title.timesheet.add_timer")
 .modal-body
-  select selectize=true label="nameWithCustomer" options="projects" ng-model="timer.projectUuid" placeholder=I18n.t(:"helpers.prompt.timer.project")
+  select selectize=true label-field="nameWithCustomer" options="projects" ng-model="timer.projectUuid" placeholder=I18n.t(:"helpers.prompt.timer.project")
 
   hr
 
