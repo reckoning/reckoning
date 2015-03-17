@@ -83,10 +83,10 @@ Reckoning::Application.routes.draw do
 
   resource :timesheet, only: [:show] do
     member do
-      get :day
-      get :week
-      get :timer_modal
-      get :task_modal
+      get :day_template
+      get :week_template
+      get :timer_modal_template
+      get :task_modal_template
     end
     # get :new_import
     # post :csv_import
