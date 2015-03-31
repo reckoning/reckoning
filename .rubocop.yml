@@ -2,9 +2,12 @@
 AllCops:
   RunRailsCops: true
   Exclude:
-    - 'bin/*'
-    - 'db/schema.rb'
     - 'node_modules/**/*'
+    - "db/**/*"
+    - "tmp/**/*"
+    - "vendor/**/*"
+    - "bin/**/*"
+    - "log/**/*"
 
 Style/Documentation:
   Enabled: false # for now
