@@ -1,4 +1,4 @@
-dependency:
+dependencies:
   post:
     - bundle exec thor setup:dev_env
 test:
