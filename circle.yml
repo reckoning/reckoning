@@ -1,0 +1,12 @@
+dependency:
+  post:
+    - bundle exec thor setup:dev_env
+test:
+  override:
+    - bundle exec rake
+    - bundle exec rubocop
+deployment:
+  production:
+    branch: live
+    commands:
+      - bundle exec mina deploy on=live
