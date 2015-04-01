@@ -24,6 +24,21 @@ class Timer < ActiveRecord::Base
     end
   end
 
+  def start
+    return if started?
+
+    update(started: true)
+  end
+
+  def stop
+    return unless started?
+
+    update(
+      started: false,
+      value: timer.value + ((Time.now - timer.started_at) / 1.hour)
+    )
+  end
+
   def project_name
     task.project.name_with_customer
   end
