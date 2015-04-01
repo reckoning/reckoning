@@ -1,6 +1,6 @@
 # Reckoning
 
-[![Codeship Status for reckoning/app](https://codeship.com/projects/929e0e70-9089-0132-4c0b-66130ee6610f/status?branch=master)](https://codeship.com/projects/61545)
+[![Circle CI](https://circleci.com/gh/reckoning/app.svg?style=svg)](https://circleci.com/gh/reckoning/app)
 
 Reckoning is a simple tool for invoicing
 
