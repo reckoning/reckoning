@@ -3,8 +3,9 @@
   %head
     %meta{charset: "utf-8"}
 
-    = favicon_link_tag asset_url('favicon.png')
-    %meta{name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"}
+    = favicon_link_tag asset_url('favicon.png'), rel: "shortcut icon", type: 'image/png'
+
+    %meta{name: "viewport", content: "width=device-width, initial-scale=1.0, user-scalable=no"}
     %meta(name="google-site-verification" content="Ff-90jxpaoaNW0wA-Ysj6TPo-PYd8_u3sAeecvfu_Y4")
 
     %title=content_for?(:title) ? title(yield(:title)) : title
@@ -12,7 +13,6 @@
     %meta{name: "keywords", content: I18n.t(:"meta.keywords.default")}
 
     %meta{name: "mobile-web-app-capable", content: "yes"}
-    = favicon_link_tag asset_url('icon-196.png'), rel: "shortcut icon", type: 'image/png'
 
     %meta{name: "apple-mobile-web-app-capable", content: "yes"}
     %meta{name: "apple-mobile-web-app-status-bar-style", content: "black"}
