@@ -35,7 +35,7 @@ class Timer < ActiveRecord::Base
 
     update(
       started: false,
-      value: timer.value + ((Time.now - timer.started_at) / 1.hour)
+      value: value + ((Time.now - started_at) / 1.hour)
     )
   end
 
