@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   check_authorization unless: :unauthorized_controllers
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_url, warning: exception.message
+    redirect_to root_url, alert: exception.message
   end
 
   before_action :authenticate_user!, :set_default_nav

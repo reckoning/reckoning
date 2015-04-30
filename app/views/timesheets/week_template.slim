@@ -39,7 +39,8 @@
             br
             span ng-bind="date.short"
     .animate ng-cloak=true ng-if="currentTasksLoaded && !currentTasks.length"
-      = render 'blank_template'
+      .row
+        = render 'templates/blank'
 
     .panel.panel-default.animate ng-repeat="task in currentTasks"
       .panel-body.row

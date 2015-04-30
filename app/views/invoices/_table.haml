@@ -10,6 +10,3 @@
         %th.actions.four=I18n.t(:"labels.defaults.actions")
     %tbody
       = render partial: "invoices/show", collection: @invoices, as: :invoice
-
-      - if @invoices.blank?
-        = render "shared/tables/blank", count: 6, resource: "invoice"

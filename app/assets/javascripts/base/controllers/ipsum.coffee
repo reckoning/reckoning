@@ -1,4 +1,4 @@
-angular.module 'Timesheet'
+angular.module 'Reckoning'
 .controller 'IpsumController', ['$scope', ($scope) ->
   $scope.quotes = [
     { author: "Spock", text: "Insufficient facts always invite danger." }

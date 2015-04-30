@@ -92,6 +92,10 @@ Reckoning::Application.routes.draw do
     # post :csv_import
   end
 
+  resource :template, only: [] do
+    get :blank
+  end
+
   get 'timesheets/:id/pdf/:pdf' => 'invoices#timesheet', as: :timesheet_pdf
 
   resources :positions, only: [:new, :destroy]

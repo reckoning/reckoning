@@ -27,7 +27,10 @@
         .pull-right
           = paginate @invoices
 
-    = render partial: "invoices/table", :@invoices => @invoices
+    - if @invoices.present?
+      = render partial: "invoices/table", :@invoices => @invoices
+    - else
+      = render partial: "shared/blank"
 
     .row
       .col-xs-12.col-md-6

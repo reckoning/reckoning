@@ -29,6 +29,7 @@
 //= require_tree ./app
 //= require angular-init
 //= require base
+//= require blank
 //= require timesheet
 window.ApiBasePath = "//api." + window.location.host
 
