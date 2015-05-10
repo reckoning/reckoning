@@ -29,7 +29,7 @@ class AccountsController < ApplicationController
     if account.update(account_params)
       redirect_to "#{edit_account_path}#{hash}", flash: { success: I18n.t(:"messages.account.update.success") }
     else
-      render "edit#{hash}", alert: I18n.t(:"messages.account.update.failure")
+      render "edit", alert: I18n.t(:"messages.account.update.failure")
     end
   end
 
