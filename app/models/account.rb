@@ -14,7 +14,7 @@ class Account < ActiveRecord::Base
   store_accessor :contact_information, :address, :country, :public_email, :telefon, :fax, :website
 
   validates :name, :users, presence: true
-  validates :subdomain, uniqueness: true, allow_nil: true
+  validates :subdomain, uniqueness: true, allow_blank: true
   validates :subdomain, exclusion: { in: %w(www app admin api backend reckoning) }
   validates_associated :users
 
