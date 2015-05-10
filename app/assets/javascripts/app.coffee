@@ -9,7 +9,7 @@ $(document).on 'click', 'code[data-target]', (ev) ->
   $target.val($target.val() + $element.text())
 
 $(document).ajaxSend (event, jqxhr, settings) ->
-  jqxhr.setRequestHeader 'Authorization', "Token token=\"#{App.authToken}\""
+  jqxhr.setRequestHeader 'Authorization', "Token token=\"#{AuthToken}\""
 
 $ ->
   $('select.js-selectize').selectize()
