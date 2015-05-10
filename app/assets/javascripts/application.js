@@ -31,7 +31,7 @@
 //= require base
 //= require blank
 //= require timesheet
-window.ApiBasePath = "//api." + window.location.host
+window.ApiBasePath = "//api." + window.location.host;
 
 $(document).on('show.bs.collapse', '.navbar-collapse', function() {
   $('.navbar-collapse.in').not(this).collapse('hide');
