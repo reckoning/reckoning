@@ -18,7 +18,6 @@
 //= require accounting/accounting
 //= require nprogress
 //= require fastclick
-//= require bootstrap-datepicker
 //= require pdf.js/build/pdf
 //= require pdf-viewer
 //= require helper
@@ -31,6 +30,7 @@
 //= require base
 //= require blank
 //= require timesheet
+
 window.ApiBasePath = "//api." + window.location.host;
 
 $(document).on('show.bs.collapse', '.navbar-collapse', function() {

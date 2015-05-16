@@ -1,4 +1,10 @@
 de:
+  datepicker:
+    labels:
+      next_month: 'Nächster Monat'
+      prev_month: 'Vorheriger Monat'
+      select_month: 'Monat auswählen'
+      select_year: 'Jahr auswählen'
   date:
     formats:
       default: "%d.%m.%Y"
@@ -6,13 +12,13 @@ de:
       long: "%e. %B %Y"
       only_day: "%e"
       day_number: "%d"
-      datepicker: "dd.mm.yy"
+      datepicker: 'd. mmmm yyyy'
+      datepicker_submit: "yyyy-mm-dd"
       month_year: "%B %Y"
       month: "%B"
       file: "%B-%Y"
       year: "%Y"
       day: "%a"
-      db: "%Y-%m-%d"
 
     first_day_of_week: 1
 

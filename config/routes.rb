@@ -94,6 +94,7 @@ Reckoning::Application.routes.draw do
 
   resource :template, only: [] do
     get :blank
+    get :datepicker
   end
 
   get 'timesheets/:id/pdf/:pdf' => 'invoices#timesheet', as: :timesheet_pdf

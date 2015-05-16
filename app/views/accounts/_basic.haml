@@ -4,8 +4,8 @@
       = form.text_field :name, placeholder: I18n.t(:"helpers.placeholder.name"), class: 'form-control'
       = form_errors resource, :name
   .col-xs-12.col-md-4
-    .form-group
-      .input-group{class: form_error?(resource, :subdomain)}
+    .form-group{class: form_error?(resource, :subdomain)}
+      .input-group
         = form.text_field :subdomain, placeholder: I18n.t(:"helpers.placeholder.subdomain"), class: 'form-subdomain form-control'
         = form.label :subdomain, class: "input-group-addon" do
           = ".#{Rails.application.secrets[:domain]}"

@@ -1,23 +1,23 @@
 angular.module 'Timesheet'
 .directive 'datepicker', ['$timeout', ($timeout) ->
-  restrict: 'A'
+  restrict: 'E'
+  templateUrl: r(datepicker_template_path)
   require: '?ngModel'
   scope:
     options: '='
     ngModel: '='
   link: (scope, element, attrs, ngModel) ->
-    $datepicker = element.datepicker
-      todayBtn: "linked"
-      clearBtn: true
-      language: I18n.locale
-      autoclose: true
-      todayHighlight: true
-      weekStart: I18n.t('date.first_day_of_week')
+    picker = Datepicker.init element.find('input'), true
 
-    $datepicker.datepicker('update', scope.ngModel)
+    picker.set('select', scope.ngModel, { format: 'yyyy-mm-dd' })
 
-    $datepicker.on 'changeDate', (e) ->
+    scope.openDatepicker = (event) ->
+      event.stopPropagation()
+      event.preventDefault()
+      picker.open()
+
+    picker.on 'set', ->
+      date = @get('select', 'yyyy-mm-dd')
       $timeout ->
-        date = moment(e.date).format("YYYY-MM-DD")
         ngModel.$setViewValue(date)
-]
+  ]

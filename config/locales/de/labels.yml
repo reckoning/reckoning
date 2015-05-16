@@ -26,6 +26,11 @@ de:
       tasks: Aufgaben
       timers: Zeiten
       invoices: Rechnungen
+    datepicker:
+      next_month: "Nächster Monat"
+      previous_month: "Vorheriger Monat"
+      months: "Monat auswählen"
+      years: "Jahr auswählen"
     chart:
       on_date: am
       timers:
