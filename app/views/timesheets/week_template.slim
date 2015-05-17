@@ -7,11 +7,10 @@
         span ng-bind="endOfWeek()"
     .col-xs-12.col-md-6
       .pull-right.resource-nav
-        datepicker ng-model="datepickerSelect"
-        '
         .btn-group.btn-group-justified-responsive.resource-nav
           a.btn.btn-default href="#/week/{{prevWeek()}}"
             i.fa.fa-chevron-left
+          datepicker ng-model="datepickerSelect"
           a.btn.btn-default href="#/week" ng-disabled="isCurrentWeek()"
             = I18n.t(:"labels.timesheet.current_week")
           a.btn.btn-default href="#/week/{{nextWeek()}}"
