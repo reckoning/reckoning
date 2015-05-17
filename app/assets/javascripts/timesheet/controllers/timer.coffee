@@ -19,7 +19,7 @@ angular.module 'Timesheet'
         controller: 'TimerModalController'
         resolve:
           timer: -> modalTimer
-          projects: -> Project.all()
+          projects: -> Project.all(sort: "last_used")
           excludedTaskUuids: -> []
       .result.then (result) ->
         if result.status is 'deleted'

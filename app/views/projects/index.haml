@@ -24,5 +24,8 @@
 
     = render partial: "list", customers: @customers
 
+    - if @customers.blank?
+      = render partial: "shared/blank"
+
     .pull-right
       = paginate @customers

@@ -5,6 +5,7 @@ angular.module 'Reckoning'
   scope:
     options: '='
     ngDisabled: '='
+    selectizeDefault: '='
     labelField: '@'
     valueField: '@'
     create: '@'
@@ -41,6 +42,9 @@ angular.module 'Reckoning'
 
         selectize.addItem(scope.ngModel)
 
+        if scope.selectizeDefault && scope.options
+          selectize.setValue scope.options[0].uuid
+
     scope.$watch 'ngModel', ->
       $timeout ->
         selectize.addItem(scope.ngModel)
@@ -54,4 +58,7 @@ angular.module 'Reckoning'
     selectize.on 'change', (value) ->
       $timeout ->
         ngModel.$setViewValue(value)
+
+    if scope.selectizeDefault && scope.options
+      selectize.setValue scope.options[0].uuid
 ]

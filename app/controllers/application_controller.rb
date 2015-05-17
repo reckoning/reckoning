@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   check_authorization unless: :unauthorized_controllers
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_url, warning: exception.message
+    redirect_to root_url, alert: exception.message
   end
 
   before_action :authenticate_user!, :set_default_nav
@@ -21,6 +21,15 @@ class ApplicationController < ActionController::Base
     end
   end
   helper_method :current_account
+
+  private def auth_token
+    if user_signed_in?
+      "#{current_user.id}:#{current_user.authentication_token}"
+    else
+      ""
+    end
+  end
+  helper_method :auth_token
 
   private def unauthorized_controllers
     devise_controller?

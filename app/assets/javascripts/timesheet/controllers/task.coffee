@@ -18,16 +18,18 @@ angular.module 'Timesheet'
         controller: 'TimerModalController'
         resolve:
           timer: -> {date: $scope.date}
-          projects: -> Project.all()
+          projects: -> Project.all(sort: "last_used")
           excludedTaskUuids: -> $scope.excludedTaskUuids
       .result.then (data) ->
         task = Task.new($scope.dates, data)
+        $scope.excludedTaskUuids.push task.uuid
         $scope.currentTasks.push task
 
     $scope.getTasks = ->
       Task.all(@dates).success (tasks) ->
         $scope.currentTasks = tasks
         tasks.forEach (task) ->
+          console.log task.uuid
           $scope.excludedTaskUuids.push task.uuid if !_.contains($scope.excludedTaskUuids, task.uuid)
         $scope.currentTasksLoaded = true
     $scope.getTasks()

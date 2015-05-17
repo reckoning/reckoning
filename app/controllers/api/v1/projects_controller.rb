@@ -17,7 +17,12 @@ module Api
 
         scope = scope.where.not(id: without_ids) if without_ids
 
-        scope = scope.order("name asc")
+        sort = params.fetch(:sort, nil)
+        if sort.present? && sort == "last_used"
+          scope = scope.includes(:timers).order("timers.created_at")
+        else
+          scope = scope.order("name asc")
+        end
 
         render json: scope, each_serializer: ProjectSerializer
       end

@@ -1,7 +1,4 @@
 :javascript
   I18n.defaultLocale = "#{I18n.default_locale}";
   I18n.locale = "#{I18n.locale}";
-
-- if user_signed_in?
-  :javascript
-    AuthToken = "#{current_user.id}:#{current_user.authentication_token}"
+  AuthToken = "#{auth_token}"

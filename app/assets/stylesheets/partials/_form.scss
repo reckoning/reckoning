@@ -9,6 +9,14 @@ $input-error-bg-color: rgba(198, 15, 19, 0.1);
   position: relative;
 }
 
+.datepicker {
+  .form-control[disabled],
+  .form-control[readonly],
+  fieldset[disabled] .form-control {
+    cursor: pointer;
+  }
+}
+
 form {
   .selectize-control {
     height: 34px;
@@ -29,6 +37,15 @@ form {
   }
 
   .has-feedback {
+    .input-group {
+      .form-control {
+        padding-right: $padding-base-horizontal;
+      }
+
+      .input-group-addon {
+        padding-right: ($input-height-base * 1.25);
+      }
+    }
 
     .form-control-feedback {
       z-index: 3;
@@ -36,6 +53,10 @@ form {
       &:nth-child(2) {
         top: 0;
         padding-top: 10px;
+      }
+
+      &.input-group-btn-feedback {
+        right: 38px;
       }
     }
   }
