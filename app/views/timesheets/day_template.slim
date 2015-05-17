@@ -4,11 +4,10 @@
       h1 ng-bind="day()"
     .col-xs-12.col-md-5
       .pull-right.resource-nav
-        datepicker ng-model="datepickerSelect"
-        '
         .btn-group.btn-group-justified-responsive.resource-nav
           a.btn.btn-default href="#/day/{{prevDay()}}"
             i.fa.fa-chevron-left
+          datepicker ng-model="datepickerSelect"
           a.btn.btn-default href="#/day" ng-disabled="{{isCurrentDay()}}"
             = I18n.t(:"labels.timesheet.current_day")
           a.btn.btn-default href="#/day/{{nextDay()}}"
