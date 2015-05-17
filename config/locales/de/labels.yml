@@ -46,8 +46,6 @@ de:
       day: "Tag"
       week: "Woche"
       sum: "Gesamt:"
-      current_week: "Diese Woche"
-      current_day: "Heute"
       on_invoice: "Zeiten wurden bereits abgerechnet."
       blank: "Keine Zeiten erfasst."
     timer:
