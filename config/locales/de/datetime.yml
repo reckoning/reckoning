@@ -19,6 +19,7 @@ de:
       file: "%B-%Y"
       year: "%Y"
       day: "%a"
+      db: "%Y-%m-%d"
 
     first_day_of_week: 1
 
