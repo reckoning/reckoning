@@ -6,11 +6,11 @@
     span ng-if="!timer.uuid"
       = I18n.t(:"labels.modals.title.timesheet.add_timer")
 .modal-body
-  select selectize=true label-field="nameWithCustomer" options="projects" ng-model="timer.projectUuid" placeholder=I18n.t(:"helpers.prompt.timer.project")
+  select selectize="true" selectize-default="true" label-field="nameWithCustomer" options="projects" ng-model="timer.projectUuid" placeholder=I18n.t(:"helpers.prompt.timer.project")
 
   hr
 
-  select selectize=true create="createTask" ng-disabled="!timer.projectUuid" options="tasks" ng-model="timer.taskUuid" placeholder=I18n.t(:"helpers.prompt.timer.task")
+  select selectize="true" selectize-default="true" create="createTask" ng-disabled="!timer.projectUuid" options="tasks" ng-model="timer.taskUuid" placeholder=I18n.t(:"helpers.prompt.timer.task")
 
   hr
 
@@ -20,14 +20,14 @@
     .col-xs-12.col-md-4
       input.input-lg.form-control.text-right ng-model="timer.value" placeholder="0:00" timefield=true
 .modal-footer
-  .pull-left
-    button.btn.btn-primary ng-disabled="!timer.taskUuid" ng-click="saveTimer(timer)" data-loading-text=I18n.t(:"actions.loading")
+  .pull-right
+    button.btn.btn-default ng-click="cancel()"
+      = I18n.t(:"actions.close")
+    button.btn.btn-primary.btn-lg ng-disabled="!timer.taskUuid" ng-click="saveTimer(timer)" data-loading-text=I18n.t(:"actions.loading")
       span ng-if="timer.uuid"
         = I18n.t(:"actions.save")
       span ng-if="!timer.uuid"
         = I18n.t(:"actions.begin")
-    button.btn.btn-default ng-click="cancel()"
-      = I18n.t(:"actions.close")
-  .pull-right ng-if="timer.uuid"
+  .pull-left ng-if="timer.uuid"
     button.btn.btn-danger ng-click="delete(timer)"
       = I18n.t(:"actions.delete")
