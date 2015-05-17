@@ -3,3 +3,15 @@
     text-align: center;
   }
 }
+
+.picker__input {
+  &.btn {
+    cursor: pointer;
+  }
+}
+
+@media (min-height: 33.875em) {
+  .picker--opened .picker__frame {
+    top: 30px !important;
+  }
+}

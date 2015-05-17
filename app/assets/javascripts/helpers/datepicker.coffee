@@ -2,8 +2,8 @@
 #= require pickadate/lib/picker.date
 
 window.Datepicker =
-  init: ($element, slim) ->
-    slim ?= false
+  init: ($element, withoutInput) ->
+    withoutInput ?= false
     options =
       monthsFull: I18n.t('date.dp_month_names')
       monthsShort: I18n.t('date.dp_abbr_month_names')
@@ -22,10 +22,10 @@ window.Datepicker =
       clear: I18n.t('actions.clear')
       close: I18n.t('actions.close')
 
-    if slim
-      options.today = false
+    if withoutInput
       options.clear = false
-      options.close = false
+      options.container = "body"
+      options.containerHidden = "body"
     else
       options.hiddenName = true
 

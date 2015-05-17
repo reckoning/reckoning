@@ -3,11 +3,12 @@ angular.module 'Timesheet'
   restrict: 'E'
   templateUrl: r(datepicker_template_path)
   require: '?ngModel'
+  replace: true
   scope:
     options: '='
     ngModel: '='
   link: (scope, element, attrs, ngModel) ->
-    picker = Datepicker.init element.find('input'), true
+    picker = Datepicker.init element, true
 
     picker.set('select', scope.ngModel, { format: 'yyyy-mm-dd' })
 
