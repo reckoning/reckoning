@@ -23,7 +23,8 @@ angular.module 'Timesheet'
           $modalInstance.close({data: data, status: 'updated'})
       else
         timer.value = 0 unless timer.value
-        Timer.createStarted(timer).success (data) ->
+        timer.started = false if timer.value > 0
+        Timer.create(timer).success (data) ->
           $modalInstance.close({data: data, status: 'created'})
 
     $scope.cancel = ->
