@@ -4,7 +4,7 @@ window.displayNoty = function(text, timeout, type) {
     text: text,
     timeout: timeout,
     type: type,
-    layout: 'topRight',
+    layout: 'bottom',
     theme: 'bootstrapTheme',
     animation: {
       open: 'animated fadeInUp',
