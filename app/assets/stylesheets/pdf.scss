@@ -3,10 +3,10 @@ $secondary-link-color: #222;
 
 @page {
   size: a4 portrait;
-  margin: 30mm 20mm 55mm 20mm;
+  margin: 30mm 20mm 60mm 20mm;
   counter-increment: page;
   @bottom-right {
-    margin-top: -60px;
+    margin-top: -30px;
     margin-right: 0;
     padding-right: 0;
     font-size: 1.2em;
@@ -109,7 +109,7 @@ address {
 #pdf-footer {
   border-top: 1px solid #cacaca;
   position: fixed;
-  margin-bottom: -150px;
+  margin-bottom: -170px;
   bottom: 0;
   width: 100%;
   padding-top: 5px;
