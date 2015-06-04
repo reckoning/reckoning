@@ -4,3 +4,4 @@
 #= require angular-timer
 #= require angular-animate
 #= require angular-bootstrap
+#= require angular-touch

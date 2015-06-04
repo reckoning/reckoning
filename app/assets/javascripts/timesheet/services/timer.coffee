@@ -10,9 +10,6 @@ angular.module 'Timesheet'
   create: (timer) ->
     $http.post(ApiBasePath + r(v1_timers_path), timer)
 
-  createStarted: (timer) ->
-    $http.post(ApiBasePath + r(v1_timers_path), timer)
-
   update: (timer) ->
     $http.put(ApiBasePath + r(v1_timer_path, timer.uuid), timer)
 

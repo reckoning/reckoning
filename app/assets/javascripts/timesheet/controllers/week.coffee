@@ -40,6 +40,12 @@ angular.module 'Timesheet'
     $scope.prevWeek = ->
       moment($scope.date).subtract(1, 'weeks').format('YYYY-MM-DD')
 
+    $scope.nextPage = ->
+      $location.path('/week/' + $scope.nextWeek())
+
+    $scope.prevPage = ->
+      $location.path('/week/' + $scope.prevWeek())
+
     $scope.setDates = ->
       $scope.dates = []
       date = moment($scope.date)
