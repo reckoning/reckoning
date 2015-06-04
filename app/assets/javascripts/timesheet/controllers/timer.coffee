@@ -27,8 +27,8 @@ angular.module 'Timesheet'
         else if result.status is 'updated'
           timer.value = result.data.value
           timer.date = result.data.date
-          timer.taskUuid = result.data.taskUuid
-          timer.projectUuid = result.data.projectUuid
+          timer.task_uuid = result.data.task_uuid
+          timer.project_uuid = result.data.project_uuid
           timer.note = result.data.note
         else if result.status is 'created'
           $scope.timers.forEach (item) ->
@@ -39,14 +39,14 @@ angular.module 'Timesheet'
       Timer.all(@date).success (data, status, headers, config) ->
         $scope.timers = data
         data.forEach (timer) ->
-          task = {uuid: timer.taskUuid}
+          task = {uuid: timer.task_uuid}
           $scope.currentTasks.push task
         $scope.timersLoaded = true
 
     $scope.getTimers()
 
     $scope.startedValue = (timer) ->
-      ms = moment().diff(moment(timer.startedAt))
+      ms = moment().diff(moment(timer.started_at))
       moment.duration(ms).asHours() + parseFloat(timer.value)
 
     $scope.startTimer = (timer) ->
@@ -54,12 +54,12 @@ angular.module 'Timesheet'
         $scope.timers.forEach (item) ->
           item.started = false
         timer.started = data.started
-        timer.startTime = data.startTime
-        timer.startedAt = data.startedAt
+        timer.start_time = data.start_time
+        timer.started_at = data.started_at
 
     $scope.stopTimer = (timer) ->
       Timer.stop(timer.uuid).success (data) ->
         timer.value = data.value
         timer.started = data.started
-        timer.startedAt = data.startedAt
+        timer.started_at = data.started_at
 ]

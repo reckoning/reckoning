@@ -13,8 +13,8 @@ angular.module 'Timesheet'
     $scope.projects = projects.data
     $scope.timer = timer
 
-    if timer.projectUuid
-      project = _.find $scope.projects, (project) -> project.uuid is timer.projectUuid
+    if timer.project_uuid
+      project = _.find $scope.projects, (project) -> project.uuid is timer.project_uuid
       $scope.tasks = project.tasks
 
     $scope.saveTimer = (timer) ->
@@ -31,12 +31,12 @@ angular.module 'Timesheet'
       $modalInstance.dismiss('cancel')
 
     $scope.addTask = ->
-      task = _.find $scope.tasks, (task) -> task.uuid is $scope.timer.taskUuid
+      task = _.find $scope.tasks, (task) -> task.uuid is $scope.timer.task_uuid
       $modalInstance.close(task)
 
     $scope.createTask = (input, selectize) ->
       Task.create(
-        projectUuid: $scope.timer.projectUuid,
+        projectUuid: $scope.timer.project_uuid,
         name: input
       ).success (newTask, status, headers, config) ->
         $timeout ->
@@ -49,8 +49,8 @@ angular.module 'Timesheet'
         Timer.delete(timer.uuid).success (data) ->
           $modalInstance.close({date: data, status: 'deleted'})
 
-    $scope.$watch 'timer.projectUuid', ->
-      project = _.find $scope.projects, (project) -> project.uuid is $scope.timer.projectUuid
+    $scope.$watch 'timer.project_uuid', ->
+      project = _.find $scope.projects, (project) -> project.uuid is $scope.timer.project_uuid
       $scope.tasks = _.filter project?.tasks, (item) ->
         !_.contains($scope.excludedTaskUuids, item.uuid)
 ]

@@ -1,4 +1,4 @@
-class TaskSerializer < BaseSerializer
+class TaskSerializer < ActiveModel::Serializer
   attributes :uuid, :name, :project_name
 
   has_many :timers, serializer: TimerSerializer
