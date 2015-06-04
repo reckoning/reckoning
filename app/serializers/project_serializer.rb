@@ -1,4 +1,4 @@
-class ProjectSerializer < BaseSerializer
+class ProjectSerializer < ActiveModel::Serializer
   attributes :uuid, :name, :name_with_customer
 
   has_many :tasks, serializer: TaskSerializer

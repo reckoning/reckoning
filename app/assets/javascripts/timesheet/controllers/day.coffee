@@ -32,4 +32,10 @@ angular.module 'Timesheet'
 
     $scope.prevDay = ->
       moment($scope.date).subtract(1, 'day').format('YYYY-MM-DD')
+
+    $scope.nextPage = ->
+      $location.path('/day/' + $scope.nextDay())
+
+    $scope.prevPage = ->
+      $location.path('/day/' + $scope.prevDay())
 ]

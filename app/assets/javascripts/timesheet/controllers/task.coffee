@@ -29,7 +29,6 @@ angular.module 'Timesheet'
       Task.all(@dates).success (tasks) ->
         $scope.currentTasks = tasks
         tasks.forEach (task) ->
-          console.log task.uuid
           $scope.excludedTaskUuids.push task.uuid if !_.contains($scope.excludedTaskUuids, task.uuid)
         $scope.currentTasksLoaded = true
     $scope.getTasks()
