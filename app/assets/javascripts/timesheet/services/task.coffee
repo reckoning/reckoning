@@ -30,7 +30,7 @@ angular.module 'Timesheet'
           timers.push timer
       else
         timers.push
-          task_uuid: task_uuid
+          task_uuid: taskUuid
           date: date.date
           value: null
           sumForTask: null
