@@ -16,11 +16,10 @@ window.Datepicker =
       format: I18n.t('date.formats.datepicker')
       formatSubmit: I18n.t('date.formats.datepicker_submit')
       selectYears: true
-      selectMonths: true
       firstDay: I18n.t('date.first_day_of_week')
       today: I18n.t('actions.today')
-      clear: I18n.t('actions.clear')
-      close: I18n.t('actions.close')
+      clear: ' '
+      close: ' '
 
     if withoutInput
       options.clear = false
