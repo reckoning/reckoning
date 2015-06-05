@@ -1,4 +1,6 @@
 .list-group-item
+  = project.name_with_customer
+.list-group-item.project-group-item
   .row.budget-label
     .col-xs-6.col-sm-6.col-md-6
       = number_to_currency project.timer_values, unit: "h", precision: 2
@@ -11,5 +13,3 @@
 
     .progress-bar{class: budget_progress(project), role: "progressbar", aria: {valuemin: "0", valuemax: "100"}, style: "width: #{project.budget_percent_invoiced}%"}
     .progress-bar.progress-bar-success{role: "progressbar", aria: {valuemin: "0", valuemax: "100"}, style: "width: #{project.budget_percent_uninvoiced}%"}
-  .project-name.text-right
-    = project.name_with_customer
