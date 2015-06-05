@@ -43,7 +43,6 @@ angular.module 'Reckoning'
         selectize.addItem(scope.ngModel)
 
         if scope.selectizeDefault && scope.options && scope.ngModel is undefined
-          console.log "foo"
           selectize.setValue scope.options[0].uuid
 
 
