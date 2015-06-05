@@ -57,7 +57,7 @@ module Api
       end
 
       private def project_params
-        @project_params ||= params.require(:project).permit(
+        @project_params ||= params.permit(
           :customer_id,
           :name,
           :rate,

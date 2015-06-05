@@ -69,7 +69,7 @@ module Api
       end
 
       private def timer_params
-        @timer_params ||= params.require(:timer).permit(:date, :value, :started, :note).merge(
+        @timer_params ||= params.permit(:date, :value, :started, :note).merge(
           task_id: task.id,
           user_id: current_user.id
         )
