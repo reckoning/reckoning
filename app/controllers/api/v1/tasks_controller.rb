@@ -34,7 +34,7 @@ module Api
       end
 
       private def task_params
-        @task_params ||= params.require(:task).permit(:name).merge(project_id: project.id)
+        @task_params ||= params.permit(:name).merge(project_id: project.id)
       end
 
       private def task
