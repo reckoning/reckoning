@@ -86,3 +86,10 @@ code[data-target] {
     margin-right: 0;
   }
 }
+
+
+.list-group-item {
+  &.project-group-item {
+      border-top-color: #eee;
+  }
+}

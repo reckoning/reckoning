@@ -6,22 +6,8 @@ table {
 
   th {
     &.actions {
-      &.one {
-        width: 42px;
-        min-width: 42px;
-      }
-      &.two {
-        width: 84px;
-        min-width: 84px;
-      }
-      &.three {
-        width: 111px;
-        min-width: 111px;
-      }
-      &.four {
-        width: 144px;
-        min-width: 144px;
-      }
+      width: 103px;
+      min-width: 103px;
     }
     &.budget {
       width: 100px;
@@ -30,7 +16,6 @@ table {
     &.budget-bar {
       width: 300px;
       min-width: 300px;
-
     }
   }
   td {
