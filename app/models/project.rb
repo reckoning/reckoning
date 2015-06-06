@@ -78,7 +78,7 @@ class Project < ActiveRecord::Base
   end
 
   def budget_percent_invoiced
-    return if budget_hours.present?
+    return if budget_hours.blank?
     timer_values_invoiced / budget_hours * 100
   end
 
