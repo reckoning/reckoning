@@ -66,8 +66,6 @@ gem 'web_translate_it'
 
 gem 'sentry-raven'
 
-gem 'le'
-
 gem 'intercom-rails'
 
 group :test do
