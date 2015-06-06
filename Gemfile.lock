@@ -179,6 +179,7 @@ GEM
     kaminari (0.16.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
+    le (2.6.2)
     listen (2.8.4)
       celluloid (>= 0.15.2)
       rb-fsevent (>= 0.9.3)
@@ -386,6 +387,7 @@ DEPENDENCIES
   intercom-rails
   jquery-rails
   kaminari
+  le
   mina
   minitest-ci!
   minitest-rails
