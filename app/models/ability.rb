@@ -5,22 +5,33 @@ class Ability
     user ||= User.new # guest user (not logged in)
 
     can :update, User, id: user.id
+    can :update, Account, id: user.account_id
 
-    can [:read, :create, :destroy, :check, :archive, :send], Invoice, user_id: user.id
+    can :connect, :dropbox
+
+    can [:read, :create, :destroy, :check, :archive, :send], Invoice, account_id: user.account_id
     can :update, Invoice do |invoice|
-      %i(created charged).include?(invoice.state.to_sym) && invoice.user_id == user.id
+      %i(created charged).include?(invoice.state.to_sym) && invoice.account_id == user.account_id
     end
     can :pay, Invoice do |invoice|
-      %i(charged).include?(invoice.state.to_sym) && invoice.user_id == user.id
+      %i(charged).include?(invoice.state.to_sym) && invoice.account_id == user.account_id
     end
     can :charge, Invoice do |invoice|
-      %i(created).include?(invoice.state.to_sym) && invoice.user_id == user.id
+      %i(created).include?(invoice.state.to_sym) && invoice.account_id == user.account_id
     end
 
-    can :manage, Customer, user_id: user.id
-    can :manage, Project, customer: { user_id: user.id }
-    can :manage, Week, user_id: user.id
-    can :manage, Task, project: { customer: { user_id: user.id } }
-    can :manage, Timer, week: { user_id: user.id }
+    can :two_factor_qrcode, User
+    can :manage, Customer, account_id: user.account_id
+    can :manage, Project, customer: { account_id: user.account_id }
+    can :manage, Task, project: { customer: { account_id: user.account_id } }
+    can :manage, Timer, user_id: user.id
+    can :manage, :timesheet
+
+    setup_admin_abilities if user.admin?
+  end
+
+  def setup_admin_abilities
+    can :manage, Account
+    can :manage, User
   end
 end

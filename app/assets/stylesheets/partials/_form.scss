@@ -9,6 +9,14 @@ $input-error-bg-color: rgba(198, 15, 19, 0.1);
   position: relative;
 }
 
+.datepicker {
+  .form-control[disabled],
+  .form-control[readonly],
+  fieldset[disabled] .form-control {
+    cursor: pointer;
+  }
+}
+
 form {
   .selectize-control {
     height: 34px;
@@ -20,7 +28,24 @@ form {
     }
   }
 
+  .form-subdomain {
+    text-align: right;
+  }
+
+  .form-group .checkbox {
+    padding-top: 22px;
+  }
+
   .has-feedback {
+    .input-group {
+      .form-control {
+        padding-right: $padding-base-horizontal;
+      }
+
+      .input-group-addon {
+        padding-right: ($input-height-base * 1.25);
+      }
+    }
 
     .form-control-feedback {
       z-index: 3;
@@ -29,7 +54,17 @@ form {
         top: 0;
         padding-top: 10px;
       }
+
+      &.input-group-btn-feedback {
+        right: 38px;
+      }
     }
+  }
+
+  .form-control[type=checkbox] {
+    margin: 0;
+    box-shadow: none;
+    background-color: transparent;
   }
 
   .selectize {
@@ -37,6 +72,7 @@ form {
       top: 0;
       right: 30px;
       z-index: 1;
+      padding-top: 10px;
     }
   }
 
@@ -64,16 +100,19 @@ form {
     text-align: right;
   }
 
-  textarea {
-    max-width: 100%;
-    min-height: 150px;
-  }
-
   &#test_mail-form {
     .form-group {
       margin-bottom: 0;
     }
   }
-
 }
 
+.list-group-item .checkbox {
+  margin-top: 2px;
+}
+
+textarea {
+  max-width: 100%;
+  min-height: 50px;
+  max-height: 300px;
+}

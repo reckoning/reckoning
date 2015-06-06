@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite time='0.016029' skipped='0' failures='0' errors='0' name="happy path" assertions='2' tests='1'>
+  <testcase time='0.016029' file="test/controllers/api/v1/projects_controller_test.rb" name="test_0001_User can destroy project" assertions='2'>
+  </testcase>
+</testsuite>

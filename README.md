@@ -1,5 +1,8 @@
 # Reckoning
-[![Build Status](https://travis-ci.org/reckoning/app.png?branch=master)](https://travis-ci.org/reckoning/app)
+
+[![Circle CI](https://circleci.com/gh/reckoning/app.svg?style=svg)](https://circleci.com/gh/reckoning/app)
+[![Code Climate](https://codeclimate.com/github/reckoning/app/badges/gpa.svg)](https://codeclimate.com/github/reckoning/app)
+[![Test Coverage](https://codeclimate.com/github/reckoning/app/badges/coverage.svg)](https://codeclimate.com/github/reckoning/app)
 
 Reckoning is a simple tool for invoicing
 
@@ -8,6 +11,9 @@ Reckoning is a simple tool for invoicing
 - Create basic Invoices with multiple Positions
 - Generate PDFs for Invoices
 - Basic Dashboard with Current Invoices and their current states (Charged, Paid) and information about due payments.
+- Send Invoices via E-Mail to Customers
+  - Mail Templates for each Customer
+- Time tracking and Import of Timesheets (beta)
 
 ## Setup
 
@@ -25,10 +31,7 @@ To run Reckoning on your local machine you need to install:
 
 ## Future features
 
-- Send Invoices via E-Mail to Customers
-  - Mail Templates for each Customer
 - Templates for Invoices
-- Time tracking and Import of Timesheets
 - Offer generation
 - Bank account support
 - ...

@@ -1,0 +1,15 @@
+.picker {
+  .picker__weekday {
+    text-align: center;
+  }
+}
+
+.picker__input {
+  &.btn {
+    cursor: pointer;
+  }
+}
+
+.picker__select--year {
+  width: auto;
+}

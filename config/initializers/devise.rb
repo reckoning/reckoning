@@ -36,12 +36,12 @@ Devise.setup do |config|
   # Configure which authentication keys should be case-insensitive.
   # These keys will be downcased upon creating or modifying a user and when used
   # to authenticate or find a user. Default is :email.
-  config.case_insensitive_keys = [ :email ]
+  config.case_insensitive_keys = [:email]
 
   # Configure which authentication keys should have whitespace stripped.
   # These keys will have whitespace before and after removed upon creating or
   # modifying a user and when used to authenticate or find a user. Default is :email.
-  config.strip_whitespace_keys = [ :email ]
+  config.strip_whitespace_keys = [:email]
 
   # Tell if authentication through request.params is enabled. True by default.
   # It can be set to an array that will enable params authentication only for the
@@ -240,4 +240,30 @@ Devise.setup do |config|
   # When using omniauth, Devise cannot automatically set Omniauth path,
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = "/my_engine/users/auth"
+
+  # ==> Devise TOTP Extension
+  # Configure TOTP extension for devise
+
+  # TOTP is mandatory, users are going to be asked to
+  # enroll TOTP the next time they sign in, before they can successfully complete the session establishment.
+  # This is the global value, can also be set on each user.
+  # config.totp_mandatory = false
+
+  # Drift: a window which provides allowance for drift between a user's token device clock
+  # (and therefore their TOTP tokens) and the authentication server's clock.
+  # Expressed in minutes centered at the current time. (Note: it's a number, *NOT* 3.minutes )
+  # config.totp_drift_window = 3
+
+  # Users that have logged in longer than this time ago, are going to be asked their password
+  # (and an TOTP challenge, if enabled) before they can see or change their otp informations.
+  # config.totp_credentials_refresh = 15.minutes
+
+  # The user is allowed to set his browser as "trusted", no more TOTP challenges will be
+  # asked for that browser, for a limited time.
+  # set to false to disable setting the browser as trusted
+  # config.totp_trust_persistence = 1.month
+
+  # The name of this application, to be added to the provisioning
+  # url as 'application_name:<user_email>' (defaults to the Rails application class)
+  config.totp_uri_application = 'Reckoning.io'
 end

@@ -1,15 +1,13 @@
 starfleet:
   id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a76"
-  user_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+  name: "Starfleet"
   contact_information:
-    company: "User"
-    name: "Name"
-    address: "Foo"
+    address: "San Fransisco"
 
 klingon:
   id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a81"
-  user_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+  name: "Klingon"
   contact_information:
-    company: "User"
-    name: "Name"
-    address: "Foo"
+    address: "Qo'nos"

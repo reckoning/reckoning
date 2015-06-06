@@ -1,0 +1,27 @@
+#nprogress .bar {
+  background: $navbar-active !important;
+}
+
+#nprogress {
+  .spinner {
+    display: none !important;
+    top: 18px !important;
+  }
+
+  .spinner-icon {
+    border-top-color: $navbar-active !important;
+    border-left-color: $navbar-active !important;
+  }
+}
+
+// @media (max-width: $screen-sm-max) {
+//   #nprogress .spinner {
+//     right: 100px !important;
+//   }
+// }
+
+@media (max-width: $screen-xs-max) {
+  #nprogress .spinner {
+    right: 70px !important;
+  }
+}

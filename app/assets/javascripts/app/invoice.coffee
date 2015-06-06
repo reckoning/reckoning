@@ -17,7 +17,7 @@ window.App.Invoice.generate = ($element) ->
     type: 'PUT'
     dataType: 'json'
     success: ->
-      displayNotice I18n.t("messages.invoice.pdf_generating")
+      displayInfo I18n.t("messages.invoice.pdf_generating")
       App.Invoice.pdfInterval = setInterval App.Invoice.checkPdfStatus, 1000
 
 window.App.Invoice.checkPdfStatus = ->
@@ -75,7 +75,7 @@ window.App.Invoice.loadPositions = ($element) ->
   laddaButton.start() if laddaButton
   project_id = $('#invoice_project_id').val()
   unless project_id.length
-    displayWarning I18n.t("messages.invoice.load_positions.missing")
+    displayAlert I18n.t("messages.invoice.load_positions.missing")
     laddaButton.stop() if laddaButton
     return
 
@@ -140,5 +140,3 @@ $ ->
     button = document.querySelector('.ladda-button')
     if button
       window.laddaButton = Ladda.create(button)
-
-

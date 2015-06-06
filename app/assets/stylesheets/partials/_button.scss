@@ -1,0 +1,41 @@
+@media (max-width: $screen-xs-max) {
+  .btn-group-responsive {
+    width: 100%;
+
+    > .btn {
+      float: none;
+      display: block;
+      width: 100%;
+      margin-bottom: 5px;
+    }
+  }
+  .btn-group-justified-responsive {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: separate;
+
+    > .btn {
+      display: table-cell;
+      float: none;
+      width: 1%;
+    }
+  }
+}
+
+
+.btn-link {
+  &.danger {
+    color: $brand-danger;
+    &:hover {
+      color: darken($brand-danger, 5%);
+    }
+  }
+
+  &.default {
+    color: $gray-light;
+    &:hover {
+      color: darken($gray-light, 5%);
+    }
+  }
+}

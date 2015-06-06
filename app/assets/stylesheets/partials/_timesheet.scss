@@ -1,91 +1,181 @@
-table.timesheet {
-  border-collapse: separate;
-
-  thead:first-child > tr:first-child > th {
-    border-top: 1px solid $table-border-color;
-
-    &:first-child {
-      border-left: 1px solid $table-border-color;
-    }
-
-    &:last-child {
-      border-right: 1px solid $table-border-color;
-    }
-  }
-
-  tbody > tr {
-    &:first-child > td {
-      border-top: none;
-    }
-    > td {
-      &:first-child {
-        border-left: 1px solid $table-border-color;
-      }
-
-      &:last-child {
-        border-right: 1px solid $table-border-color;
-      }
-    }
-  }
-
-  tfoot > tr:first-child > td {
-    border-bottom: 1px solid $table-border-color;
-
-    &:first-child {
-      border-left: 1px solid $table-border-color;
-    }
-
-    &:last-child {
-      border-right: 1px solid $table-border-color;
-    }
-  }
+.timesheet {
+  padding: 0 15px;
 
   .timesheet-day {
-    width: 80px;
+    width: 14.28%;
+    padding: 0 1px;
+    display: inline-block;
+
     input {
-      min-width: 68px;
       text-align: right;
     }
-    span {
+  }
+
+  .timesheet-header, .timesheet-footer {
+    padding: 5px 15px;
+
+    .timesheet-day {
+      padding-bottom: 4px;
+      text-align: right;
+
+      a:hover {
+        text-decoration: none;
+      }
+    }
+  }
+
+  .timesheet-actions {
+    margin-left: -15px;
+    margin-right: 15px;
+  }
+
+  .timesheet-header {
+    .timesheet-day {
+      padding-right: 8px;
+    }
+
+    .timesheet-today {
+      box-shadow: inset 0 -4px 0 $brand-primary;
+    }
+  }
+
+  .timesheet-footer {
+    .timesheet-col-sum {
       padding-right: 13px;
     }
   }
 
-  thead th,
-  tbody td,
-  tfoot td {
-    vertical-align: middle;
+  .panel {
+    margin-bottom: 10px;
+
+    .panel-body {
+      padding: 10px 15px;
+    }
   }
 
-  .timesheet-sum,
-  .timesheet-col-sum {
-    width: 80px;
+  .timesheet-timer {
+    padding: 3px 2px 0;
+
+    &.started {
+      color: $brand-primary;
+    }
   }
 
-  .timesheet-today {
-    background-color: #f9f9f9;
+  .timesheet-week-page {
+    .timesheet-timer {
+      &.invoiced, &.started {
+        padding-right: 12px;
+      }
+    }
   }
 
-  .timesheet-actions {
-    width: 44px;
+  .timesheet-task-actions {
+    .btn {
+      padding-top: 5px;
+    }
   }
 
-  tfoot td.timesheet-day,
-  .timesheet-row-sum,
-  .timesheet-col-sum,
-  .timesheet-sum {
-    padding-right: 18px;
-  }
+  .timesheet-row-sum {
+    font-weight: bold;
 
-  .timesheet-row-sum,
-  .timesheet-sum {
     span {
-      min-width: 55px;
+      padding-top: 8px;
       display: inline-block;
     }
   }
-}
 
-.row.timesheet {
-  padding: 0 15px;
+  .timesheet-col-sum {
+    font-weight: bold;
+  }
+
+  .timesheet-sum {
+    font-weight: bold;
+    font-size: 20px;
+  }
+
+  .timesheet-blank {
+    margin-bottom: 0;
+
+    .panel-body {
+      min-height: 350px;
+
+      blockquote {
+        color: $gray-light;
+        margin-top: 100px;
+      }
+    }
+  }
+
+  .timesheet-day-page {
+    .timesheet-timer span {
+      font-size: 28px;
+      vertical-align: middle;
+      padding-right: 10px;
+    }
+  }
+
+  @media (max-width: $screen-sm-min) {
+    .timesheet-header, .timesheet-footer {
+      .timesheet-day {
+        padding-right: 0;
+        text-align: center;
+      }
+    }
+
+    .timesheet-actions {
+      margin-left: 0;
+      margin-right: 0;
+      padding: 0;
+    }
+
+    .timesheet-day {
+      input {
+        padding: 2px 4px;
+      }
+    }
+
+    .timesheet-task,
+    .timesheet-days {
+      padding-left: 2px;
+      padding-right: 2px;
+    }
+
+    .timesheet-week-page {
+      .panel {
+        .panel-body {
+          padding: 2px 15px;
+        }
+      }
+
+      .timesheet-timer {
+        &.invoiced, &.started {
+          padding-right: 2px;
+        }
+      }
+    }
+
+    .timesheet-sum {
+      padding: 5px 0;
+      margin: 5px 0;
+      border-top: 1px solid $gray-lighter;
+    }
+  }
+
+  .animate.ng-move,
+  .animate.ng-enter {
+    -webkit-transition:all linear 0.5s;
+    transition:all linear 0.5s;
+  }
+
+  .animate.ng-leave.ng-leave-active,
+  .animate.ng-move,
+  .animate.ng-enter {
+    opacity:0;
+  }
+
+  .animate.ng-leave,
+  .animate.ng-move.ng-move-active,
+  .animate.ng-enter.ng-enter-active {
+    opacity:1;
+  }
 }

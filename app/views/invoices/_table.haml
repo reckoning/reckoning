@@ -3,13 +3,10 @@
     %thead
       %tr
         %th.ref=sortable "ref", I18n.t(:"labels.defaults.ref")
-        %th=sortable "customers.company", I18n.t(:"labels.invoice.customer")
+        %th=sortable "customers.name", I18n.t(:"labels.invoice.customer")
         %th.month=sortable "date", I18n.t(:"labels.defaults.date")
         %th=sortable "value", I18n.t(:"labels.defaults.value")
         %th=sortable "state", I18n.t(:"labels.defaults.state")
-        %th.actions.four=I18n.t(:"labels.defaults.actions")
+        %th.actions=I18n.t(:"labels.defaults.actions")
     %tbody
       = render partial: "invoices/show", collection: @invoices, as: :invoice
-
-      - if @invoices.blank?
-        = render "shared/tables/blank", count: 6, resource: "invoice"

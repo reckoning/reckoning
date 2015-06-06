@@ -1,4 +1,10 @@
 de:
+  datepicker:
+    labels:
+      next_month: 'Nächster Monat'
+      prev_month: 'Vorheriger Monat'
+      select_month: 'Monat auswählen'
+      select_year: 'Jahr auswählen'
   date:
     formats:
       default: "%d.%m.%Y"
@@ -6,7 +12,8 @@ de:
       long: "%e. %B %Y"
       only_day: "%e"
       day_number: "%d"
-      datepicker: "dd.mm.yy"
+      datepicker: 'd. mmmm yyyy'
+      datepicker_submit: "yyyy-mm-dd"
       month_year: "%B %Y"
       month: "%B"
       file: "%B-%Y"
@@ -136,6 +143,7 @@ de:
       long: "%H:%M:%S %z"
       dt_default: "%d.%m.%Y %H:%M"
       dt_short: "%e. %b %H:%M"
-      dt_long: "%e. %B %Y %H:%M:%S %z"
+      dt_long: "%e. %B %Y %H:%M:%S"
+      dt_long_with_z: "%e. %B %Y %H:%M:%S %z"
     am: "am"
     pm: "pm"

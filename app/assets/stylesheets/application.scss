@@ -1,13 +1,20 @@
-//= require_self
+//= require animate.css/animate.min.css
 //= require ladda/css/ladda
-//= require nvd3/nv.d3
-//= require selectize/dist/css/selectize.bootstrap3
+//= require pickadate/lib/themes/default
+//= require pickadate/lib/themes/default.date
+//= require nvd3
+//= require nprogress
+//= require selectize/dist/css/selectize.default
+//= require awesome-bootstrap-checkbox
+//= require_self
 
 $footer-border-color: #ccc;
 $footer-bg-color: #ddd;
-$navbar-active: #428bca;
+$brand-primary: #428bca;
+$navbar-active: $brand-primary;
 $gravatar-shadow: 0 1px 0 #fff;
 $font-size-base: 14px;
+$secondary-link-color: #222;
 $font-size-h1: floor(($font-size-base * 2.15));
 $font-size-h2: floor(($font-size-base * 1.7));
 $font-size-h3: floor(($font-size-base * 1.25));
@@ -33,11 +40,15 @@ body {
   min-height: 100%;
   height: auto;
   position: relative;
-  padding-bottom: 110px;
+  padding-bottom: 60px;
 
   > .container {
     padding-bottom: 20px;
   }
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
 }
 
 a.plain {
@@ -64,5 +75,21 @@ code[data-target] {
 }
 
 .noty_buttons {
-  background-color: transparent !important;
+  margin-bottom: 10px;
+  text-align: center;
+
+  button {
+    margin-right: 5px;
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+
+.list-group-item {
+  &.project-group-item {
+      border-top-color: #eee;
+  }
 }

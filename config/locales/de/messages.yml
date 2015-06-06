@@ -21,22 +21,30 @@ de:
         failure: "Projekt konnte nicht bearbeitet werden."
       destroy:
         success: "Projekt erfolgreich gelöscht."
-        failure: "Projekt konnte nicht gelöscht werden."
-        failure_dependency: "Bitte löschen Sie zuerst alle Rechnungen für dieses Projekt."
-      missing_address: "Bitte legen Sie zuerst einen Kunden an."
+      archive:
+        success: "Project erfolgreich archiviert."
+      unarchive:
+        success: "Project erfolgreich aktiviert."
+        failure: "Projekt konnte nicht aktiviert werden."
+      missing_address: "Bitte vervollständigen Sie zuerst Ihre Daten"
     customer:
-      create:
-        success: "Kunde erfolgreich erstellt."
-        failure: "Kunde konnte nicht erstellt werden."
       update:
         success: "Kunde erfolgreich bearbeitet."
         failure: "Kunde konnte nicht bearbeitet werden."
       destroy:
         success: "Kunde erfolgreich gelöscht."
-        failure: "Kunde konnte nicht gelöscht werden."
-        failure_dependency: "Bitte löschen Sie zuerst alle Rechnungen für diesen Kunden."
       confirm:
         delete: "Sind Sie sich sicher, dass Sie den Kunden löschen wollen? Alle zugehörigen Projekte werden ebenfalls gelöscht."
+    account:
+      create:
+        success: "Account erfolgreich erstellt."
+        failure: "Account konnte nicht erstellt werden."
+      update:
+        success: "Account wurde erfolgreich bearbeitet."
+        failure: "Account konnte nicht bearbeitet werden."
+      destroy:
+        success: "Account erfolgreich gelöscht."
+        failure: "Account konnte nicht gelöscht werden."
     user:
       create:
         success: "Benutzer erfolgreich erstellt."
@@ -81,6 +89,9 @@ de:
       archive:
         success: "Rechnung wurde erfolgreich in Dropbox archiviert."
         failure: "Rechnung konnte nicht archiviert werden. Bitte überprüfen Sie Ihre Einstellungen für Ihren Dropbox-Account."
+      archive_all:
+        success: "Rechnungen werden nun in Dropbox archiviert."
+        failure: "Rechnungen konnten nicht archiviert werden. Bitte überprüfen Sie Ihre Einstellungen für Ihren Dropbox-Account."
       send:
         success: "Rechnung wurde erfolgreich versendet."
         failure: "Rechnung konnte nicht versandt werden. Bitte überprüfen Sie Ihre E-Mail-Einstellungen und die des betreffenden Kunden."
@@ -96,6 +107,12 @@ de:
         success: "Ihr Passwort wurde erfolgreich bearbeitet."
         failure: "Ihr Passwort konnte nicht bearbeitet werden."
     timer:
+      start:
+        failure: "Zeit läuft bereits."
+      stop:
+        failure: "Zeit wurde bereits gestoppt."
+      destroy:
+        failure: "Zeit wurde bereits in Rechnung gestellt."
       import:
         success: "%{resource} erfolgreich importiert."
         failure: "%{resource} konnten nicht importiert werden."
@@ -114,6 +131,11 @@ de:
     confirm:
       form:
         cancel: "Sind Sie sich sicher? Ungespeicherte Änderungen gehen verloren."
+      project:
+        archive: "Sind Sie sich sicher, dass Sie das Projekt archivieren möchten?"
+      timesheet:
+        delete_timer: "Sind Sie sich sicher, dass Sie diesen Eintrag löschen wollen?"
+        delete_task: "Sind Sie sich sicher, dass Sie alle Einträge für diese Aufgabe in der aktuellen Woche löschen wollen?"
       delete: "Sind Sie sich sicher, dass Sie den Eintrag löschen wollen?"
       charge: "Sind Sie sich sicher, dass Sie die Rechnung absenden wollen?<br>Die Rechnung und die damit verbundenen Zeiten können dann nicht mehr verändert werden."
       charge_mail: "Sind Sie sich sicher, dass Sie die Rechnung absenden wollen?<br>Die Rechnung und die damit verbundenen Zeiten können dann nicht mehr verändert werden.<br><br>Die Rechnung und der Stundenzettel werden per E-Mail an den Kunden geschickt."

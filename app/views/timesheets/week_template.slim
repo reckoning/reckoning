@@ -1,0 +1,74 @@
+.col-xs-12.timesheet-week-page ng-swipe-left="nextPage()" ng-swipe-right="prevPage()"
+  .row
+    .col-xs-12.col-md-6
+      h1
+        span ng-bind="startOfWeek()"
+        |. -
+        span ng-bind="endOfWeek()"
+    .col-xs-12.col-md-6
+      .pull-right.resource-nav
+        .btn-group.btn-group-justified-responsive.resource-nav
+          a.btn.btn-default href="#/week/{{prevWeek()}}"
+            i.fa.fa-chevron-left
+          datepicker ng-model="datepickerSelect"
+          a.btn.btn-default href="#/week" ng-disabled="isCurrentWeek()"
+            = I18n.t('actions.today')
+          a.btn.btn-default href="#/week/{{nextWeek()}}"
+            i.fa.fa-chevron-right
+        '
+        .btn-group.btn-group-justified-responsive.resource-nav
+          a.btn.btn-default href="#/day/{{dayDate()}}"
+            = I18n.t(:"labels.timesheet.day")
+          a.btn.btn-default href="#/week/{{date}}" class="active"
+            = I18n.t(:"labels.timesheet.week")
+
+  div ng-controller="TaskController as taskCtrl"
+    .timesheet-header.row
+      .col-xs-12.col-md-4.timesheet-actions
+        .btn-group.btn-group-justified-responsive.resource-nav
+          a.btn.btn-primary ng-click="openModal()"
+            i.fa.fa-plus
+            '
+            = I18n.t(:"actions.add_task")
+      .col-xs-12.col-md-6.timesheet-days
+        .timesheet-day ng-class="{'timesheet-today':date.isCurrentDate}" ng-repeat="date in dates"
+          a href="#/day/{{date.date}}"
+            span.hidden-xs ng-bind="date.day"
+            br
+            span ng-bind="date.short"
+    .animate ng-cloak=true ng-if="currentTasksLoaded && !currentTasks.length"
+      .row
+        = render file: 'templates/blank'
+
+    .panel.panel-default.animate ng-repeat="task in currentTasks"
+      .panel-body.row
+        .col-xs-12.col-md-4.timesheet-task
+          span ng-bind="task.project_name"
+          br
+          span ng-bind="task.name"
+        .col-xs-12.col-md-6.timesheet-days
+          .text-right.timesheet-day ng-repeat="date in dates"
+            div ng-repeat="timer in task.timers | forDate:date.date"
+              div ng-if="$last"
+                .timesheet-timer.invoiced ng-if="timer.position_uuid"
+                  span title=I18n.t(:"labels.timesheet.on_invoice") data-toggle="tooltip" ng-bind="timer.sum_for_task | toTime"
+                .timesheet-timer.started ng-if="timer.start_time_for_task"
+                  timer start-time="timer.start_time_for_task" max-time-unit="'hour'" {{hours}}:{{mminutes}}
+                .timesheet-timer ng-if="!timer.start_time_for_task && !timer.position_uuid"
+                  input.form-control type="text" ng-model="timer.sum_for_task" timefield=true ng-disabled="timer.position_uuid" ng-blur="save(timer)"
+        .col-xs-3.col-xs-offset-7.col-md-offset-0.col-md-1
+          .text-right.timesheet-row-sum
+            span ng-bind="sumForTask(task) | toTime"
+        .col-xs-2.col-md-1
+          .text-right.timesheet-task-actions
+            button.btn.btn-link.btn-lg.default ng-click="removeTask(task)"
+              i.fa.fa-close
+    .timesheet-footer.row.animate ng-cloak=true ng-if="currentTasksLoaded && currentTasks.length"
+      .col-xs-12.col-md-offset-4.col-md-6.timesheet-days
+        .timesheet-day.timesheet-col-sum ng-repeat="date in dates"
+          span ng-bind="sumForDate(date) | toTime"
+      .col-xs-12.col-md-1.timesheet-sum
+        .text-right
+          span.visible-xs-inline-block = I18n.t(:"labels.timesheet.sum")
+          '
+          span ng-bind="sumForWeek() | toTime"

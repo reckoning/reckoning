@@ -11,6 +11,8 @@ de:
       state: "Status"
       hours: "Stunden"
       rate: "€/Std."
+      budget: "Budget"
+      remaining_budget: "Verbrauch"
       value: "Betrag"
       description: "Beschreibung"
       contact: "Kontaktinformationen"
@@ -21,7 +23,14 @@ de:
       enabled: "Status"
       invoice: Rechnung
       timesheet: Stundenzettel
-      created_at: "Erstellt"
+      tasks: Aufgaben
+      timers: Zeiten
+      invoices: Rechnungen
+    datepicker:
+      next_month: "Nächster Monat"
+      previous_month: "Vorheriger Monat"
+      months: "Monat auswählen"
+      years: "Jahr auswählen"
     welcome:
       contact_form: Haben Sie weitere Fragen?
     chart:
@@ -36,8 +45,14 @@ de:
     timesheet:
       date: Datum
       task: Aufgabe
-      current_week: "Diese Woche"
+      day: "Tag"
+      week: "Woche"
+      sum: "Gesamt:"
       on_invoice: "Zeiten wurden bereits abgerechnet."
+      blank: "Keine Zeiten erfasst."
+    timer:
+      uninvoiced: "Unabgerechnete Zeiten"
+      invoiced: "Abgrechnete Zeiten"
     invoice:
       customer: "Kunde/Projekt"
       due: "Fällig seit %{date}"
@@ -51,28 +66,39 @@ de:
       created_at: "Erstellt"
       last_sign_in: "Letzte Aktivität"
       settings:
+        basic: Allgemein
+        security: Zugangsdaten
+    account:
+      settings:
         basic: "Account Informationen"
         address: "Adressdaten"
         banking: "Bank Informationen"
         taxes: "Steuern"
-      mailing: "E-Mail Einstellungen"
+        mailing: "E-Mail Einstellungen"
+        dropbox: "Dropbox Verbindung"
     customer:
       basic: "Allgemeine Informationen"
       email: "E-Mail Setup für Rechnungen"
     budget:
       uninvoiced: "Noch nicht in Rechnung gestellt"
-      limit: "Gesamt: %{hours} h"
+      limit: "Gesamt: %{budget} - %{hours}"
     table:
       blank:
+        invoiced_timer: "Keine abgerechnete Zeiten vorhanden"
+        uninvoiced_timer: "Keine unabgerechnete Zeiten vorhanden"
         customer: "Keine Kunden vorhanden"
         invoice: "Keine Rechnungen vorhanden"
         project: "Keine Projekte vorhanden"
+        task: "Keine Aufgaben vorhanden"
         contact: "Keine Anfragen vorhanden"
 
 
     modals:
       title:
-        timesheet: "Timer hinzufügen"
+        timesheet:
+          add_timer: "Zeit hinzufügen"
+          edit_timer: "Zeit bearbeiten"
+          add_task: "Aufgabe hinzufügen"
         positions: "Position aus Zeiten erstellen"
 
     panels:

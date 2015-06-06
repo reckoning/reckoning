@@ -3,6 +3,7 @@ de:
     label:
       project:
         rate: "Stundensatz"
+        budget_on_dashboard: "Auf Dashboard anzeigen?"
       user:
         remember_me: "Angemeldet bleiben"
       position:
@@ -23,24 +24,24 @@ de:
           user: "SMTP Benutzer"
           password: "SMTP Passwort oder Token"
     placeholder:
-      company: "Firma"
+      subdomain: subdomain
       name: "Name"
       address: "Adresse"
       telefon: "Telefon"
       fax: "Fax"
       website: "Homepage"
       email: "E-Mail"
+      timer:
+        note: "Beschreibung (Optional)"
       test_mail:
         email: "E-Mail Adresse"
-      project:
-        name: "Name"
-      task:
-        name: "Name"
       position:
         description: "Beschreibung"
         rate: "0"
         hours: "0.0"
         value: "Betrag in"
+      account:
+        name: "Account Name"
       user:
         email: "E-Mail"
         password: "Passwort"
@@ -59,6 +60,7 @@ de:
           default_from: "Absender Für Rechnungs E-Mails"
           signature: "Signatur"
       customer:
+        name: "Firma / Name"
         payment_due: "Zahlungsziel (Tage)"
         email_template: "Inhalt"
         invoice_email: "Empfänger"

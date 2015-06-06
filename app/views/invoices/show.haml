@@ -14,8 +14,8 @@
                 = I18n.t(:"labels.invoice.due", date: time_ago_in_words(invoice.payment_due_date))
 
       .col-xs-12.col-md-3
-        .btn-group.pull-right.resource-nav
-          = link_to I18n.t(:"nav.subnav.back"), invoices_path, class: "btn btn-default"
+        .btn-group-responsive.pull-right.resource-nav
+          = link_to I18n.t(:"nav.subnav.back"), back_path(invoices_path), class: "btn btn-default"
 
     .row
       .col-xs-12.col-md-8
@@ -24,8 +24,8 @@
       .col-xs-12.col-md-4
         .row
           .col-xs-12.col-md-12
-            .btn-group.pull-right
-              %button.ladda-button.btn.btn-primary.generate-invoice{data: {style: "expand-right", action: regenerate_pdf_invoice_path(invoice)}, onclick: "App.Invoice.generate($(this)); return false;", class: ('generating' if invoice.pdf_generating)}
+            .btn-group.btn-group-justified-responsive.pull-right
+              %a.ladda-button.btn.btn-primary.generate-invoice{data: {style: "expand-right", action: regenerate_pdf_invoice_path(invoice)}, onclick: "App.Invoice.generate($(this)); return false;", class: ('generating' if invoice.pdf_generating)}
                 .span.generate{class: ('hide' if invoice.pdf_present_or_generating? )}
                   %i.fa.fa-download
                   = I18n.t(:"actions.generate")

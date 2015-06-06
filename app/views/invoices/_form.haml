@@ -10,10 +10,13 @@
         = form_errors invoice, :project_id
     .col-xs-12.col-md-6
       .form-group{class: form_error?(invoice, :date)}
-        .input-group
+        .input-group.datepicker
           = form.label :date, class: "input-group-addon"
-          = form.date_field :date, class: 'form-control'
-        = form_errors invoice, :date
+          = form.date_field :date, class: 'form-control', "data-value" => form.object.date
+          %span.input-group-btn
+            %button.btn.btn-default{type: "button"}
+              %i.fa.fa-calendar
+        = form_errors invoice, :date, 'input-group-btn-feedback'
   .row
     .col-xs-12.col-md-4.form-group{class: form_error?(invoice, :ref)}
       .input-group
@@ -21,13 +24,19 @@
         = form.text_field :ref, value: (invoice.ref_number unless invoice.ref.blank?), class: 'form-control'
       = form_errors invoice, :ref
     .col-xs-12.col-md-4.form-group
-      .input-group
+      .input-group.datepicker
         = form.label :payment_due_date, class: "input-group-addon"
-        = form.date_field :payment_due_date, class: 'form-control'
+        = form.date_field :payment_due_date, class: 'form-control', "data-value" => form.object.payment_due_date
+        %span.input-group-btn
+          %button.btn.btn-default{type: "button"}
+            %i.fa.fa-calendar
     .col-xs-12.col-md-4.form-group
-      .input-group
+      .input-group.datepicker
         = form.label :delivery_date, class: "input-group-addon"
-        = form.date_field :delivery_date, class: 'form-control'
+        = form.date_field :delivery_date, class: 'form-control', "data-value" => form.object.delivery_date
+        %span.input-group-btn
+          %button.btn.btn-default{type: "button"}
+            %i.fa.fa-calendar
 
   %fieldset
     %legend
@@ -40,11 +49,11 @@
         - else
           = render 'timer_position_fields', fields: builder
 
-    .btn-group.pull-right
+    .btn-group-responsive.pull-right
       = link_to_add_fields form, :positions, name: I18n.t(:"actions.add"), class: "btn btn-default", target: "#positions" do
         %i.fa.fa-plus
         = I18n.t(:"actions.add_position")
-
+      = " "
       %button.ladda-button.btn.btn-default{type: "button", onclick: "App.Invoice.loadPositions($(this)); return false;", data: {style: "expand-right"}}
         %i.fa.fa-plus
         = I18n.t(:"actions.generate_position")
@@ -58,7 +67,7 @@
       .modal-header
         %button.close{type: "button", data: {dismiss: "modal"}, aria: {hidden: "true"}}
           &times;
-        %h4.modal-title
+        %h3.modal-title
           = I18n.t(:"labels.modals.title.positions")
       .modal-body
         %form#add-positions{onsubmit: "App.Invoice.addPositions($(this)); return false;"}

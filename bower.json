@@ -16,11 +16,28 @@
   ],
   "dependencies": {
     "ladda": "~0.9.4",
-    "noty": "~2.2.5",
-    "selectize": "~0.11.0",
+    "noty": "~2.3.2",
+    "selectize": "~0.12.0",
     "nvd3": "~1.1.15-beta",
     "moment": "~2.8.1",
     "accounting": "~0.3.2",
-    "pdf.js": "mortik/pdf.js#~1.0.277"
+    "pdf.js": "mortik/pdf.js#~1.0.277",
+    "animate.css": "~3.2.0",
+    "twix": "icambron/twix.js#~0.6.0",
+    "nprogress": "~0.1.6",
+    "fastclick": "~1.0.6",
+    "awesome-bootstrap-checkbox": "~0.2.3",
+    "angular": "~1.4.0",
+    "underscore": "~1.8.2",
+    "angular-sanitize": "~1.4.0",
+    "angular-route": "~1.4.0",
+    "angular-timer": "~1.2.1",
+    "angular-animate": "~1.4.0",
+    "angular-bootstrap": "~0.12.1",
+    "pickadate": "~3.5.6",
+    "angular-touch": "~1.4.0"
+  },
+  "resolutions": {
+    "bootstrap": ">=3.0 <4.0"
   }
 }

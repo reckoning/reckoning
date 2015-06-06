@@ -1,19 +1,36 @@
 class Project < ActiveRecord::Base
-  validates_presence_of :customer_id, :name, :rate
-
   belongs_to :customer
   has_many :invoices, dependent: :destroy
-  has_many :tasks, dependent: :destroy
+  has_many :tasks, dependent: :destroy, inverse_of: :project
   has_many :timers, through: :tasks
+
+  validates :customer_id, :name, :rate, presence: true
 
   accepts_nested_attributes_for :tasks, allow_destroy: true
 
+  include ::SimpleStates
+
+  self.initial_state = :active
+  # active -> archive -> active
+  states :active, :archived
+
+  event :archive, from: :active, to: :archived
+  event :unarchive, from: :archived, to: :active
+
+  def self.active
+    where(state: :active)
+  end
+
+  def self.archived
+    where(state: :archived)
+  end
+
   def self.with_budget
-    where("budget != ?", 0)
+    where.not(budget: 0).where(budget_on_dashboard: true)
   end
 
   def name_with_customer
-    "#{self.customer.fullname} - #{self.name}"
+    "#{customer.name} - #{name}"
   end
 
   def timer_values
@@ -44,15 +61,29 @@ class Project < ActiveRecord::Base
     values
   end
 
+  def invoice_values
+    values = 0.0
+    invoices.each do |invoice|
+      values += invoice.value.to_d
+    end
+    values
+  end
+
   def budget_percent
-    timer_values / budget * 100
+    if budget_hours.present?
+      timer_values / budget_hours * 100
+    else
+      invoice_values / budget * 100
+    end
   end
 
   def budget_percent_invoiced
-    timer_values_invoiced / budget * 100
+    return if budget_hours.present?
+    timer_values_invoiced / budget_hours * 100
   end
 
   def budget_percent_uninvoiced
-    timer_values_uninvoiced / budget * 100
+    return if budget_hours.blank?
+    timer_values_uninvoiced / budget_hours * 100
   end
 end

@@ -1,32 +1,33 @@
 - content_for :title do
   = I18n.t(:"meta.title.sign_in")
-.row
-  .col-xs-12
-    .cbox.cbox-login
-      .well
-        %h1=I18n.t(:"headlines.sign_in")
 
-        = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "form-signin" }) do |f|
+  %h1.form-signin-heading
+    %a{href: root_path}= I18n.t(:"title.default")
 
-          .form-group
-            = f.email_field :email, required: false, autofocus: true, placeholder: I18n.t(:"helpers.placeholder.user.email"), class: 'form-control'
-          .form-group
-            = f.password_field :password, required: false, placeholder: I18n.t(:"helpers.placeholder.user.password"), class: 'form-control'
+  .form-group
+    = f.email_field :email, autofocus: true, placeholder: I18n.t(:"helpers.placeholder.user.email"), class: 'form-control'
 
-          - if devise_mapping.rememberable?
-            .checkbox
-              %label{for: "user_remember_me"}
-                = f.check_box :remember_me
-                = I18n.t(:"helpers.label.user.remember_me")
+  .form-group
+    = f.password_field :password, placeholder: I18n.t(:"helpers.placeholder.user.password"), class: 'form-control'
 
-          .text-right
+  - if devise_mapping.rememberable?
+    .checkbox
+      = f.check_box :remember_me
+      %label{for: "user_remember_me"}
+        = I18n.t(:"helpers.label.user.remember_me")
 
-            %button.hidden-xs.btn.btn-lg.btn-primary.btn-loading{data: {loading: {text: I18n.t(:"actions.loading")}}}
-              = I18n.t(:"actions.sign_in")
-            %button.visible-xs.btn-block.btn.btn-lg.btn-primary.btn-loading{data: {loading: {text: I18n.t(:"actions.loading")}}}
-              = I18n.t(:"actions.sign_in")
-          .clearfix
+  %button.btn.btn-lg.btn-primary.btn-loading.btn-block{data: {loading: {text: I18n.t(:"actions.loading")}}}
+    = I18n.t(:"actions.sign_in")
+  .clearfix
 
-      .text-center
-        %a.btn.btn-link{href: new_password_path(resource_name)}
-          = I18n.t(:"actions.reset_password")
+  .text-center
+    %a.btn.btn-link{href: new_password_path(resource_name)}
+      = I18n.t(:"actions.reset_password")
+
+  - if registration_enabled?
+    %hr
+    %p.text-center=I18n.t(:"info.sign_up")
+    %a.btn.btn-default.btn-block{href: new_registration_path}
+      = I18n.t(:"actions.sign_up")
+

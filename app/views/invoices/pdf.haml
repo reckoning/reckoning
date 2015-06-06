@@ -1,16 +1,13 @@
 = render "shared/pdf_header", resource: @resource
-#pdf-body
+#pdf-body.invoice
   .row
     %address#company
-      - if @resource.user.company.present?
-        = "#{@resource.user.company},"
-      - else
-        = "#{@resource.user.name},"
-      = @resource.user.address.gsub("\r\n", ", ").gsub("\n", ", ").gsub("\r", ", ") unless @resource.user.address.blank?
+      = "#{@resource.account.name},"
+      = @resource.account.address.gsub("\r\n", ", ").gsub("\n", ", ").gsub("\r", ", ") unless @resource.account.address.blank?
 
   .row
     %address#customer
-      = @resource.customer.company
+      = @resource.customer.name
       %br
       %br
       = simple_format(@resource.customer.address)
@@ -34,15 +31,16 @@
             = I18n.t(:"pdf.invoice.subject.payment_due")
             = I18n.l @resource.payment_due_date
 
-        - if @resource.user.tax_ref.present?
+        - if @resource.account.tax_ref.present?
           #tax
             = I18n.t(:"pdf.invoice.subject.tax")
-            = @resource.user.tax_ref
+            = @resource.account.tax_ref
+        .clear
       %h1
         = I18n.t(:"pdf.invoice.headline")
         = @resource.ref_number
 
-    %br
+      .clear
 
     %table.table.table-condensed
       %thead
@@ -65,7 +63,7 @@
             %td.value
               = number_to_currency position.value
       %tfoot
-        - if @resource.user.tax.present?
+        - if @resource.account.tax.present?
           %tr.step-sum
             %td{colspan: 3}
               = I18n.t(:"pdf.invoice.net")
@@ -73,9 +71,9 @@
               = number_to_currency @resource.value
           %tr.tax
             %td{colspan: 3}
-              = I18n.t(:"pdf.invoice.tax", value: @resource.user.tax)
+              = I18n.t(:"pdf.invoice.tax", value: @resource.account.tax)
             %td.value
-              - taxes = (@resource.value * @resource.user.tax.to_d) / 100
+              - taxes = (@resource.value * @resource.account.tax.to_d) / 100
               = number_to_currency taxes
           - value = @resource.value + taxes
           - value_label = I18n.t(:"pdf.invoice.gross")
@@ -93,4 +91,3 @@
             %strong
               = number_to_currency(value)
 = render "shared/pdf_footer", resource: @resource
-

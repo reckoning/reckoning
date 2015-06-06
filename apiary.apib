@@ -1,0 +1,44 @@
+FORMAT: 1A
+
+# Reckoning.io
+Reckoning.io API for Timer Entries and Tasks 
+
+# Group Tasks
+Tasks related resources of the **Reckoning.io API**
+
+## Tasks Collection [/tasks]
+### List all Tasks [GET]
++ Response 200 (application/json)
+
+        [{
+          "uuid": "2c1e6ffe-2a53-4b18-9bdc-90143af04b70", "name": "Development"
+        }, {
+          "uuid": "03b1f19a-8581-4b06-84a5-bd3d240f23f", "name": "Communication"
+        }]
+
+### Create a Task [POST]
++ Request (application/json)
+
+        { "name": "Development" }
+
++ Response 201 (application/json)
+
+        { "uuid": "2c1e6ffe-2a53-4b18-9bdc-90143af04b70", "name": "Development" }
+
+## Task [/tasks/{uuid}]
+A single Task object with all its details
+
++ Parameters
+    + uuid (required, string, `2c1e6ffe-2a53-4b18-9bdc-90143af04b70`) ... String `uuid` of the Task to perform action with. Has example value.
+
+### Retrieve a Task [GET]
++ Response 200 (application/json)
+
+    + Header
+
+            X-My-Header: The Value
+
+    + Body
+
+            { "uuid": "03b1f19a-8581-4b06-84a5-bd3d240f23f", "name": "Communication" }
+            

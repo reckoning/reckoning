@@ -1,8 +1,21 @@
 $nav-transition-speed: .3s;
 
+.dropdown-menu {
+  li {
+    > a {
+      transition: all $nav-transition-speed;
+    }
+    &.active > a,
+    &:hover > a {
+      box-shadow: inset 4px 0 0 $navbar-active;
+    }
+  }
+}
+
 #main-nav {
   border-radius: 0;
   z-index: 100;
+  box-shadow: #EeEeEe 0 1px 5px;
 
   .navbar-collapse {
     .nav.navbar-nav {
@@ -19,16 +32,8 @@ $nav-transition-speed: .3s;
           box-shadow: inset 0 -4px 0 $navbar-active;
         }
 
-        .dropdown-menu {
-          li {
-            > a {
-              transition: all $nav-transition-speed;
-            }
-            &.active > a,
-            &:hover > a {
-              box-shadow: inset 4px 0 0 $navbar-active;
-            }
-          }
+        &:active > a {
+          background: #e8e8e8;
         }
       }
     }

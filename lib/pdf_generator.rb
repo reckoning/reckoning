@@ -5,9 +5,9 @@ class PdfGenerator < AbstractController::Base
 
   attr_accessor :resource, :tempfile, :pdf_path
 
-  self.view_paths = Rails.root.join("app","views")
+  self.view_paths = Rails.root.join("app", "views")
 
-  def initialize resource, options
+  def initialize(resource, options)
     @resource = resource
     @pdf_path = options.fetch(:pdf_path)
     @tempfile = options.fetch(:tempfile)
@@ -22,7 +22,7 @@ class PdfGenerator < AbstractController::Base
     raise NotImplementedError.new
   end
 
-  def call_pdf_lib html
+  def call_pdf_lib(html)
     file = Tempfile.new(tempfile)
     file.open
     file.write(html)

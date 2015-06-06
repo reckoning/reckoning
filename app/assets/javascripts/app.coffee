@@ -8,22 +8,32 @@ $(document).on 'click', 'code[data-target]', (ev) ->
   $target = $($element.data('target'))
   $target.val($target.val() + $element.text())
 
+$(document).ajaxSend (event, jqxhr, settings) ->
+  jqxhr.setRequestHeader 'Authorization', "Token token=\"#{AuthToken}\""
+
 $ ->
-  if success = $('body').attr('data-success')
-    displaySuccess success
+  $('select.js-selectize').selectize()
 
-  if info = $('body').attr('data-info')
-    displayAlert info
-
-  if error = $('body').attr('data-error')
-    displayError error
-
-  if warning = $('body').attr('data-warning')
-    displayWarning warning
-
-  $('select.js-selectize').selectize
-    plugins: ['remove_button']
-    dataAttr: 'data-data'
+  $('select.js-customer-selectize').selectize
+    render:
+      option_create: selectizeCreateTemplate
+    create: (input, callback) ->
+      xhr.abort() if xhr
+      xhr = $.ajax
+        url: ApiBasePath + r(v1_customers_path)
+        data: {customer: {name: input}}
+        method: 'POST'
+        dataType: 'json'
+        success: (result) =>
+          data = {
+            value: result.uuid,
+            text: result.name
+          }
+          @addOption data
+          @addItem result.uuid
+          callback data
+        error: ->
+          callback()
 
   $('[data-toggle=tooltip]').tooltip()
 

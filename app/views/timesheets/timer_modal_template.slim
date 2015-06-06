@@ -1,0 +1,34 @@
+.modal-header
+  button.close ng-click="cancel()" aria-hidden="true" &times;
+  h3.modal-title
+    span ng-if="timer.uuid"
+      = I18n.t(:"labels.modals.title.timesheet.edit_timer")
+    span ng-if="!timer.uuid"
+      = I18n.t(:"labels.modals.title.timesheet.add_timer")
+.modal-body
+  select selectize="true" selectize-default="true" label-field="name_with_customer" options="projects" ng-model="timer.project_uuid" placeholder=I18n.t(:"helpers.prompt.timer.project")
+
+  hr
+
+  select selectize="true" selectize-default="true" create="createTask" ng-disabled="!timer.project_uuid" options="tasks" ng-model="timer.task_uuid" placeholder=I18n.t(:"helpers.prompt.timer.task")
+
+  hr
+
+  .row
+    .col-xs-12.col-md-8
+      textarea.form-control ng-model="timer.note" placeholder=I18n.t(:"helpers.placeholder.timer.note")
+    .col-xs-12.col-md-4
+      br.visible-sm.visible-xs
+      input.input-lg.form-control.text-right ng-model="timer.value" placeholder="0:00" timefield=true
+.modal-footer
+  .pull-right
+    button.btn.btn-default ng-click="cancel()"
+      = I18n.t(:"actions.close")
+    button.btn.btn-primary.btn-lg ng-disabled="!timer.task_uuid" ng-click="saveTimer(timer)" data-loading-text=I18n.t(:"actions.loading")
+      span ng-if="timer.uuid"
+        = I18n.t(:"actions.save")
+      span ng-if="!timer.uuid"
+        = I18n.t(:"actions.begin")
+  .pull-left ng-if="timer.uuid"
+    button.btn.btn-danger ng-click="delete(timer)"
+      = I18n.t(:"actions.delete")

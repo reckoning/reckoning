@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite time='0.013328' skipped='0' failures='0' errors='0' name="unauthorized" assertions='6' tests='4'>
+  <testcase time='0.002498' file="test/controllers/api/v1/customers_controller_test.rb" name="test_0001_Unauthrized user cant view customers index" assertions='2'>
+  </testcase>
+  <testcase time='0.004890' file="test/controllers/api/v1/customers_controller_test.rb" name="test_0002_Unauthrized user cant view customer" assertions='1'>
+  </testcase>
+  <testcase time='0.002129' file="test/controllers/api/v1/customers_controller_test.rb" name="test_0003_Unauthrized user cant create new customer" assertions='1'>
+  </testcase>
+  <testcase time='0.003811' file="test/controllers/api/v1/customers_controller_test.rb" name="test_0004_Unauthrized user cant destroy customer" assertions='2'>
+  </testcase>
+</testsuite>

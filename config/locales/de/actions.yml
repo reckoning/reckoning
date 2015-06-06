@@ -20,10 +20,11 @@ de:
     generate: "Erstellen"
     charge: "In Rechnung stellen"
     pay: "Rechnung als bezahlt markieren"
-    archive: "Archivieren"
+    archive: Archivieren
+    unarchive: Reaktivieren
     sign_in: "Anmelden"
     sign_out: "Abmelden"
-    sign_up: "Registrieren"
+    sign_up: "Account erstellen"
     confirm: "Account bestätigen"
     unlock: "Account entsperren"
     forgot_password: "Passwort vergessen?"
@@ -37,3 +38,8 @@ de:
     download_timesheet: "Stundenzettel speichern"
     dropbox_link: "Dropbox verbinden"
     dropbox_unlink: "Dropbox trennen"
+    start: Start
+    begin: Starten
+    stop: Stop
+    clear: "Zurücksetzen"
+    today: "Heute"

@@ -1,39 +1,46 @@
 //= require jquery
-//= require jquery.turbolinks
 //= require jquery_ujs
 //= require spin.js/spin
 //= require ladda/js/ladda
-//= require noty/js/noty/packaged/jquery.noty.packaged.min
-//= require sifter/sifter
-//= require microplugin/src/microplugin
-//= require selectize/dist/js/selectize
+//= require noty
+//= require sifter
+//= require microplugin
+//= require selectize
 //= require bootstrap
 //= require dynamic_fields_for
 //= require i18n
 //= require i18n/translations
-//= require helper
 //= require moment/moment
-//= require moment_init
-//= require d3/d3
-//= require nvd3/nv.d3
+//= require moment-init
+//= require twix/bin/twix
+//= require d3
+//= require nvd3
 //= require accounting/accounting
+//= require nprogress
+//= require fastclick
 //= require pdf.js/build/pdf
-//= require pdf_viewer
+//= require pdf-viewer
+//= require helper
+//= require_tree ./helpers
 //= require tabs
 //= require app
+//= require_tree ./helpers
 //= require_tree ./app
-//
-//= require turbolinks
+//= require angular-init
+//= require base
+//= require blank
+//= require timesheet
+
+window.ApiBasePath = "//api." + window.location.host;
 
 $(document).on('show.bs.collapse', '.navbar-collapse', function() {
   $('.navbar-collapse.in').not(this).collapse('hide');
 });
 
 $(function() {
+  FastClick.attach(document.body);
+
   $('.btn.btn-loading').click(function() {
     $(this).button('loading');
   });
-
-  $('#blueimp-gallery').data('useBootstrapModal', false);
 });
-

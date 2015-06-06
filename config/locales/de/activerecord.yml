@@ -45,6 +45,10 @@ de:
           attributes:
             email:
               invalid: "Ungültiges Format"
+        customer:
+          attributes:
+            email:
+              invalid: "Ungültiges Format"
         user:
           attributes:
             confirmation_token:

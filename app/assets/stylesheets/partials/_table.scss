@@ -6,25 +6,36 @@ table {
 
   th {
     &.actions {
-      &.one {
-        width: 42px;
-        min-width: 42px;
-      }
-      &.two {
-        width: 84px;
-        min-width: 84px;
-      }
-      &.three {
-        width: 111px;
-        min-width: 111px;
-      }
-      &.four {
-        width: 144px;
-        min-width: 144px;
-      }
+      width: 103px;
+      min-width: 103px;
+    }
+    &.budget {
+      width: 100px;
+      min-width: 100px;
+    }
+    &.budget-bar {
+      width: 300px;
+      min-width: 300px;
     }
   }
   td {
+    .row {
+      margin: 0;
+      > div {
+        padding: 0;
+      }
+    }
+
+    a {
+      color: $secondary-link-color;
+      &:hover {
+        color: darken($secondary-link-color, 20%)
+      }
+    }
+
+    &.budget {
+      text-align: right;
+    }
     &.value, &.hours, &.rate {
       text-align: right;
     }

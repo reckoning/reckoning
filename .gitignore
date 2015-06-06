@@ -6,13 +6,16 @@ log/*
 tmp/*
 
 pids/*
-.ruby-version
 
 # config files
 config/database.yml
 config/resque.yml
 config/secrets.yml
+config/skylight.yml
 .env
+
+# gems
+gems/*
 
 # test files
 coverage/*
@@ -21,9 +24,11 @@ coverage/*
 files/*
 
 # js dependencies
-vendor/assets/bower_components/*
 vendor/assets/.bowerrc
 vendor/assets/bower.json
 
 # js translations
 public/javascripts/translations.js
+reckoning-app.sublime-workspace
+reckoning.io.csr
+reckoning.io.key

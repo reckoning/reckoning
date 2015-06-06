@@ -1,22 +1,8 @@
-.version
-  = I18n.t(:"version", version: Reckoning::CODENAME, version_number: Reckoning::VERSION)
 %footer#main-footer
-  .container
-    .row
-      .col-xs-12.col-md-6
-        %p.footer-links
-          %a{href: "mailto:info@reckoning.io", target: "_blank", data: {no: {turbolink: "true"}}}><
-            = I18n.t(:"nav.footer.contact")
-          = " | "
-          %a{href: impressum_path, class: get_active_nav('impressum')}><
-            = I18n.t(:"nav.footer.impressum")
-          = " | "
-          %a{href: privacy_path, class: get_active_nav('privacy')}><
-            = I18n.t(:"nav.footer.privacy")
-          = " | "
-          %a{href: terms_path, class: get_active_nav('terms')}><
-            = I18n.t(:"nav.footer.terms")
-      .col-xs-12.col-md-8.col-md-offset-2.text-center#disclaimer
-        %p.copyright
-          Copyright &copy; 2014
-          = link_to "Marten Klitzke - mortik.", "mailto:info@mortik.de", target: "_blank", data: { no_turbolink: 'true'}
+  .row
+    .col-xs-12.col-md-6.copyright
+      Copyright &copy; 2014
+      = link_to "Marten Klitzke - mortik.", "mailto:info@mortik.de", target: "_blank", data: { no_turbolink: 'true'}
+
+    .col-xs-12.col-md-6.version
+      = I18n.t(:"version", version: Reckoning::CODENAME, version_number: Reckoning::VERSION)

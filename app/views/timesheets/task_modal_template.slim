@@ -1,0 +1,15 @@
+.modal-header
+  button.close ng-click="cancel()" aria-hidden="true" &times;
+  h3.modal-title = I18n.t(:"labels.modals.title.timesheet.add_task")
+.modal-body
+  select selectize=true selectize-default="true" label-field="name_with_customer" options="projects" ng-model="timer.project_uuid" placeholder=I18n.t(:"helpers.prompt.timer.project")
+
+  hr
+
+  select selectize=true selectize-default="true" create="createTask" ng-disabled="!timer.project_uuid" options="tasks" ng-model="timer.task_uuid" placeholder=I18n.t(:"helpers.prompt.timer.task")
+.modal-footer
+  .pull-left
+    button.btn.btn-primary ng-disabled="!timer.task_uuid" ng-click="addTask()" data-loading-text=I18n.t(:"actions.loading")
+      = I18n.t(:"actions.add")
+    button.btn.btn-default ng-click="cancel()"
+      = I18n.t(:"actions.close")

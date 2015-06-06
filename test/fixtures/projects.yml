@@ -1,11 +1,11 @@
-enterprise:
+narendra3:
   id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a79"
   customer_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a76"
-  name: "USS Enterprise"
+  name: "Narendra 3"
   rate: 99.0
 
-voyager:
+outpost6:
   id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a80"
   customer_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a76"
-  name: "USS Voyager"
+  name: "Outpost 6"
   rate: 79.0
