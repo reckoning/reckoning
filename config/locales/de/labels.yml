@@ -76,7 +76,7 @@ de:
       email: "E-Mail Setup für Rechnungen"
     budget:
       uninvoiced: "Noch nicht in Rechnung gestellt"
-      limit: "Gesamt: %{hours}"
+      limit: "Gesamt: %{budget} - %{hours}"
     table:
       blank:
         invoiced_timer: "Keine abgerechnete Zeiten vorhanden"

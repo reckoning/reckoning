@@ -68,6 +68,8 @@ gem 'sentry-raven'
 
 gem 'le'
 
+gem 'intercom-rails'
+
 group :test do
   gem 'rails-perftest'
   gem 'minitest-rails'

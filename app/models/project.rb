@@ -26,7 +26,7 @@ class Project < ActiveRecord::Base
   end
 
   def self.with_budget
-    where("budget != ?", 0).where(budget_on_dashboard: true)
+    where.not(budget: 0).where(budget_on_dashboard: true)
   end
 
   def name_with_customer
@@ -61,15 +61,29 @@ class Project < ActiveRecord::Base
     values
   end
 
+  def invoice_values
+    values = 0.0
+    invoices.each do |invoice|
+      values += invoice.value.to_d
+    end
+    values
+  end
+
   def budget_percent
-    timer_values / budget * 100
+    if budget_hours.present?
+      timer_values / budget_hours * 100
+    else
+      invoice_values / budget * 100
+    end
   end
 
   def budget_percent_invoiced
-    timer_values_invoiced / budget * 100
+    return if budget_hours.present?
+    timer_values_invoiced / budget_hours * 100
   end
 
   def budget_percent_uninvoiced
-    timer_values_uninvoiced / budget * 100
+    return if budget_hours.blank?
+    timer_values_uninvoiced / budget_hours * 100
   end
 end
