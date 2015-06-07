@@ -70,7 +70,7 @@ gem 'web_translate_it'
 
 gem 'sentry-raven'
 
-gem 'intercom-rails'
+# gem 'intercom-rails'
 
 gem 'le'
 
