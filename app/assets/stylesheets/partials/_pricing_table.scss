@@ -1,0 +1,29 @@
+.pricing-table {
+  margin-top: 10px;
+
+  &.featured {
+    transform: scale(1.1, 1.1);
+  }
+
+  &.signup {
+    margin-top: 0;
+  }
+
+  .panel-title {
+    font-size: 160%;
+    font-family: 'Orbitron', sans-serif;
+    margin-top: 4px;
+  }
+
+  .panel-title, .list-group li, .panel-footer {
+    text-align: center;
+  }
+
+  .panel-footer {
+    padding-top: 20px;
+  }
+}
+
+.pricing-table-small-print {
+  color: #999;
+}

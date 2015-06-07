@@ -33,11 +33,23 @@
     }
   }
 
+  .selectize-input {
+    padding: 11px;
+    font-size: 16px;
+    line-height: 20px;
+  }
+
   .has-feedback {
     .form-control-feedback {
       &:nth-child(2) {
         padding-top: 15px;
       }
+    }
+  }
+
+  .selectize {
+    .form-control-feedback {
+      padding-top: 15px;
     }
   }
 

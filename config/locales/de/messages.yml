@@ -123,6 +123,10 @@ de:
       deactivate:
         success: "Dropbox-Account erfolgreich getrennt"
         failure: "Beim Trennen Ihres Dropbox-Accounts ist ein Fehler aufgetreten."
+    contact:
+      create:
+        success: "Anmeldung erfolgreich."
+        failure: "Beim Absenden ist ein Fehler aufgetreten. Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut."
     demo_active: "Anwendung befindet sich im Demo-Modus, Sie dürfen nur eine Rechnung anlegen."
     confirm:
       form:

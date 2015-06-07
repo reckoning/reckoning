@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  id: MyString
+  featured: false
+  base_price: 9.99
+  quantity: 1
+  interval: MyString
+  discount: 1
+
+two:
+  id: MyString
+  featured: false
+  base_price: 9.99
+  quantity: 1
+  interval: MyString
+  discount: 1

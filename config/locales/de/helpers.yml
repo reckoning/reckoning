@@ -42,6 +42,7 @@ de:
         value: "Betrag in"
       account:
         name: "Account Name"
+        vat_id: "USt-Id"
       user:
         email: "E-Mail"
         password: "Passwort"
@@ -74,6 +75,8 @@ de:
       timer:
         project: "Bitte wähle ein Projekt"
         task: "Bitte wähle eine Aufgabe"
+      account:
+        plan: "Bitte wähle einen Plan"
     help:
       customer:
         default_from: "Absender für diesen Kunden festlegen, alternativ kann global in Ihrem Benutzerkonto ein Absender definiert werden."

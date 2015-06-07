@@ -1,0 +1,12 @@
+.table-responsive
+  %table.table.table-condensed.table-hover.table-bordered.table-striped
+    %thead
+      %tr
+        %th.id=sortable "id", I18n.t(:"labels.defaults.id")
+        %th=sortable "email", I18n.t(:"labels.defaults.email")
+        %th=sortable "created_at", I18n.t(:"labels.defaults.created_at")
+    %tbody
+      = render partial: "backend/contacts/show", collection: @contacts, as: :contact
+
+      - if @contacts.blank?
+        = render "shared/tables/blank", count: 3, resource: :contact
