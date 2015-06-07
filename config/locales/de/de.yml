@@ -129,22 +129,36 @@ de:
     current_sign_in_at:
       empty: "Noch nie eingeloggt"
 
-  prices:
+  plans:
+    name:
+      basic: "Basic (%{price} € pro Monat)"
+      plus: "Plus (%{price} € pro Monat)"
+      premium: "Premium (%{price} € pro Monat)"
     price:
-      free: "<sup>€</sup> 0 <small>pro Monat</small>"
-      basic: "<sup>€</sup> 5 <small>pro Monat</small>"
-      premium: "<sup>€</sup> 10 <small>pro Monat</small>"
+      month: "<sup>€</sup> %{price} <small>pro Monat</small>"
+      year: "<sup>€</sup> %{price} <small>pro Jahr</small>"
     desc:
       free:
-        projects: "<strong>1</strong> aktive Projekte"
-        invoices: "<strong>1</strong> Rechnungen pro Monat"
+        projects: "<b>1</b> aktives Projekt"
+        invoices: "<b>1</b> Rechnung pro Monat"
+        users: "<b>1</b> Benutzer"
       basic:
-        projects: "<strong>10</strong> aktive Projekte"
-        invoices: "<strong>2</strong> Rechnungen pro Monat pro Projekt"
+        projects: "<b>5</b> aktive Projekte"
+        invoices: "<b>&infin;</b> Rechnungen pro Monat"
+        users: "<b>1</b> Benutzer"
+      basic-year: {}
+      plus:
+        projects: "<b>&infin;</b> aktive Projekte"
+        invoices: "<b>&infin;</b> Rechnungen pro Monat"
+        users: "<b>5</b> Benutzer"
+      plus-year: {}
       premium:
-        projects: "<strong>&infin;</strong>aktive Projekte"
-        invoices: "<strong>&infin;</strong>Rechnungen pro Monat"
-    ctab: "Anmelden"
+        projects: "<b>&infin;</b> aktive Projekte"
+        invoices: "<b>&infin;</b> Rechnungen pro Monat"
+        users: "<b>10</b> Benutzer*"
+      premium-year: {}
+    small_print: "* %{price} € pro Monat für jeden weiteren Benutzer"
+    cta_button: "Reckoning für 30 Tage gratis testen"
 
   error_pages:
     not_found: 'Die Seite "%{page}" konnte nicht gefunden werden.'

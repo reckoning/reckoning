@@ -9,8 +9,7 @@ class BaseController < ApplicationController
     elsif current_account.present?
       redirect_to new_user_session_path
     else
-      @active_nav = 'welcome'
-      render 'welcome'
+      welcome
     end
   end
 
@@ -30,17 +29,53 @@ class BaseController < ApplicationController
 
   def dashboard
     @charged_invoices = current_account.invoices.order('date DESC').charged
-    @paid_invoices = current_account.invoices.order('date DESC').paid.year(Time.now.year)
-    @last_invoices = current_account.invoices.order('date DESC').paid.year(Time.now.year - 1)
+    @paid_invoices = current_account.invoices.order('date DESC').paid.year(Time.zone.now.year)
+    @last_invoices = current_account.invoices.order('date DESC').paid.year(Time.zone.now.year - 1)
     @budgets = current_account.projects.with_budget.includes(:tasks).order('tasks.updated_at DESC')
     @timers_chart_data = generate_timers_chart_data
     @invoices_chart_data, @invoices_max_values = generate_invoices_chart_data
+    render 'dashboard'
   end
 
+  def welcome
+    @active_nav = 'welcome'
+    render 'welcome'
+  end
+
+  def contact
+    Contact.new
+  end
+  helper_method :contact
+
+  def contact_cookie
+    return if cookies[:_reckoning_contact].blank?
+    contact = Contact.where(email: cookies.signed[:_reckoning_contact]).first
+    if contact.blank?
+      cookies.delete :_reckoning_contact
+      false
+    else
+      true
+    end
+  end
+  helper_method :contact_cookie
+
+  def plans
+    plans = []
+
+    plan_list = Stripe::Plan.all
+    plan_list.data.each do |plan|
+      plans << plan
+    end
+
+    plans = plans.sort_by(&:amount)
+
+    plans
+  end
+  helper_method :plans
   def generate_timers_chart_data
     result = []
-    start_date = Date.today - 1.month
-    end_date = Date.today
+    start_date = Time.zone.today - 1.month
+    end_date = Time.zone.today
     current_account.projects.each do |project|
       chart = { key: project.name, values: [] }
 
@@ -62,10 +97,10 @@ class BaseController < ApplicationController
   def generate_invoices_chart_data
     result = []
 
-    result, max_values_current = values_for_year(result, Date.today.year)
+    result, max_values_current = values_for_year(result, Time.zone.today.year)
     max_values_last = []
-    if current_account.invoices.where("date < ?", (Date.today - 1.year).end_of_year).count > 0
-      result, max_values_last = values_for_year(result, (Date.today - 1.year).year)
+    if current_account.invoices.where("date < ?", (Time.zone.today - 1.year).end_of_year).count > 0
+      result, max_values_last = values_for_year(result, (Time.zone.today - 1.year).year)
     end
 
     [result, (max_values_current + max_values_last)]
@@ -80,17 +115,17 @@ class BaseController < ApplicationController
     last_value = 0.0
     max_month_value = 0.0
     (1..12).each do |month_id|
-      start_date = Date.parse("#{year}-#{month_id}-1").at_beginning_of_month
-      end_date = Date.parse("#{year}-#{month_id}-1").at_end_of_month
+      start_date = Time.zone.parse("#{year}-#{month_id}-1").at_beginning_of_month
+      end_date = Time.zone.parse("#{year}-#{month_id}-1").at_end_of_month
 
       value = 0.0
       current_account.invoices.where(date: start_date..end_date).all.each do |invoice|
         value += invoice.value.to_d
       end
 
-      if value.zero? && end_date > Date.today
+      if value.zero? && end_date > Time.zone.today
         month_value = sum_value = nil
-      elsif value.zero? && end_date < Date.today
+      elsif value.zero? && end_date < Time.zone.today
         month_value = 0.0
         sum_value = last_value
       else
@@ -98,10 +133,10 @@ class BaseController < ApplicationController
         last_value = sum_value = (last_value + value.to_f)
       end
 
-      start_date += 1.year if start_date.year != Date.today.year
+      start_date += 1.year if start_date.year != Time.zone.today.year
 
-      month[:values] << [(start_date.to_time.to_i * 1000), month_value]
-      sum[:values] << [(start_date.to_time.to_i * 1000), sum_value]
+      month[:values] << [(start_date.to_i * 1000), month_value]
+      sum[:values] << [(start_date.to_i * 1000), sum_value]
 
       max_month_value = value.to_f if max_month_value < value.to_f
     end
@@ -111,23 +146,4 @@ class BaseController < ApplicationController
     result << month
     [result, max_values]
   end
-
-  def contact
-    Contact.new
-  end
-  helper_method :contact
-
-  def contact_cookie
-    if cookies[:_reckoning_contact].present?
-      contact = Contact.where(email: cookies.signed[:_reckoning_contact]).first
-      if contact.blank?
-        cookies.delete :_reckoning_contact
-        false
-      else
-        true
-      end
-    end
-  end
-  helper_method :contact_cookie
-
 end

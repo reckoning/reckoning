@@ -55,20 +55,7 @@
 
         lorem ipsum
 
-  %hr
-
-  .row
-    %a.anchor#pricing
-    .col-xs-12.col-md-12
-      %h2.hide
-        = I18n.t(:"headlines.welcome.prices")
-      .row
-        .col-xs-12.col-md-3.col-md-offset-1
-          = render "base/pricing_table", type: "free"
-        .col-xs-12.col-md-4
-          = render "base/pricing_table", type: "basic", featured: true
-        .col-xs-12.col-md-3
-          = render "base/pricing_table", type: "premium"
+  = render partial: "base/plans" if Plan.base.present?
 
   %hr
 

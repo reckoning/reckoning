@@ -1,0 +1,34 @@
+$ ->
+  return unless window.location.pathname.match /// /signup ///
+
+  handler = StripeCheckout.configure
+    key: StripeKey
+    image: '<%= asset_path "favicon.png" %>'
+    name: I18n.t('title.default')
+    currency: "eur"
+    email: $('#account_users_attributes_0_email')
+    panelLabel: I18n.t('actions.subscribe')
+    allowRememberMe: false
+
+    token: (token) ->
+      $('#account_stripe_token').val(token.id)
+      $('#account_stripe_email').val(token.email)
+      $('form').submit()
+    closed: ->
+      $('form button').button('reset')
+
+  $('form button').on 'click', (event) ->
+    event.preventDefault()
+    if $('#account_plan').val() == "free"
+      $('form').submit()
+    else
+      if $('#account_stripe_token').val()
+        $('form').submit()
+      else
+        plan = $('#account_plan')[0].selectize.options[$('#account_plan').val()]
+        handler.open
+          description: plan.description
+
+
+  $(window).on 'popstate', ->
+    handler.close()

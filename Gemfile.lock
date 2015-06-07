@@ -86,6 +86,9 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    akami (1.3.1)
+      gyoku (>= 0.4.0)
+      nokogiri
     arel (6.0.0)
     asset_pipeline_routes (0.3.0)
     ast (2.0.0)
@@ -160,6 +163,8 @@ GEM
     guard-minitest (2.3.2)
       guard (~> 2.0)
       minitest (>= 3.0)
+    gyoku (1.3.1)
+      builder (>= 2.1.2)
     haml (4.1.0.beta.1)
       tilt
     haml-rails (0.6.0)
@@ -180,6 +185,8 @@ GEM
       ruby_parser (~> 3.1.1)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
+    httpi (2.4.0)
+      rack
     i18n (0.7.0)
     intercom-rails (0.2.28)
       activesupport (> 3.0)
@@ -213,12 +220,15 @@ GEM
       railties (~> 4.1)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
+    money (6.5.1)
+      i18n (>= 0.6.4, <= 0.7.0)
     multi_json (1.10.1)
     multipart-post (2.0.0)
     nenv (0.1.1)
     netrc (0.10.3)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
+    nori (2.6.0)
     open4 (1.3.4)
     orm_adapter (0.5.0)
     parser (2.2.0.2)
@@ -305,6 +315,14 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (~> 1.1)
+    savon (2.11.1)
+      akami (~> 1.2)
+      builder (>= 2.1.2)
+      gyoku (~> 1.2)
+      httpi (~> 2.3)
+      nokogiri (>= 1.4.0)
+      nori (~> 2.4)
+      wasabi (~> 3.4)
     sentry-raven (0.12.3)
       faraday (>= 0.7.6)
     sexp_processor (4.4.4)
@@ -367,8 +385,13 @@ GEM
     unf_ext (0.0.7.1)
     url_plumber (0.1.2)
       activesupport (>= 3.0.0)
+    valvat (0.6.10)
+      savon (>= 2.3.0)
     warden (1.2.3)
       rack (>= 1.0)
+    wasabi (3.5.0)
+      httpi (~> 2.0)
+      nokogiri (>= 1.4.2)
     web_translate_it (2.3.4)
       multi_json
       multipart-post (~> 2.0)
@@ -410,6 +433,7 @@ DEPENDENCIES
   minitest-ci!
   minitest-rails
   mocha
+  money
   pg
   puma
   rack-cors
@@ -433,4 +457,5 @@ DEPENDENCIES
   timecop
   uglifier
   url_plumber
+  valvat
   web_translate_it

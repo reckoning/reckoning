@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150606092527) do
+ActiveRecord::Schema.define(version: 20150607193220) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,6 +29,11 @@ ActiveRecord::Schema.define(version: 20150606092527) do
     t.hstore   "contact_information"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
+    t.datetime "trail_end_at"
+    t.boolean  "trail_used"
+    t.string   "stripe_email"
+    t.string   "stripe_token"
+    t.string   "vat_id"
   end
 
   create_table "contacts", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
@@ -68,6 +73,18 @@ ActiveRecord::Schema.define(version: 20150606092527) do
     t.uuid     "account_id",                                                                     null: false
     t.string   "customer_token"
     t.datetime "customer_token_created_at"
+  end
+
+  create_table "plans", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.string   "code"
+    t.decimal  "base_price"
+    t.integer  "quantity"
+    t.string   "interval"
+    t.integer  "discount"
+    t.boolean  "featured"
+    t.string   "stripe_plan_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
   create_table "positions", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
