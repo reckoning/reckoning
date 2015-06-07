@@ -1,6 +1,6 @@
 class ContactsController < ApplicationController
   skip_authorization_check
-  before_action :authenticate_user!, :only => []
+  before_action :authenticate_user!, only: []
 
   def create
     Contact.new(contact_params).save

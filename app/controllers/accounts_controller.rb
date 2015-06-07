@@ -41,7 +41,7 @@ class AccountsController < ApplicationController
     @account_params ||= params.require(:account).permit(
       :plan,
       :tax,
-      :tax_ref,
+      :vat_id,
       :provision,
       :bank,
       :account_number,

@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite time='0.016029' skipped='0' failures='0' errors='0' name="happy path" assertions='2' tests='1'>
-  <testcase time='0.016029' file="test/controllers/api/v1/projects_controller_test.rb" name="test_0001_User can destroy project" assertions='2'>
+<testsuite time='0.116204' skipped='0' failures='0' errors='0' name="happy path" assertions='7' tests='5'>
+  <testcase time='0.039825' file="test/controllers/projects_controller_test.rb" name="test_0001_User can view the project list" assertions='1'>
+  </testcase>
+  <testcase time='0.030096' file="test/controllers/projects_controller_test.rb" name="test_0002_User can view the new project page" assertions='1'>
+  </testcase>
+  <testcase time='0.023495' file="test/controllers/projects_controller_test.rb" name="test_0003_User can view the edit project page" assertions='1'>
+  </testcase>
+  <testcase time='0.013166' file="test/controllers/projects_controller_test.rb" name="test_0004_User can create a new project" assertions='2'>
+  </testcase>
+  <testcase time='0.009622' file="test/controllers/projects_controller_test.rb" name="test_0005_User can update project" assertions='2'>
   </testcase>
 </testsuite>

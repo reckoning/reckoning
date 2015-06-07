@@ -31,10 +31,10 @@
             = I18n.t(:"pdf.invoice.subject.payment_due")
             = I18n.l @resource.payment_due_date
 
-        - if @resource.account.tax_ref.present?
+        - if @resource.account.vat_id.present?
           #tax
             = I18n.t(:"pdf.invoice.subject.tax")
-            = @resource.account.tax_ref
+            = @resource.account.vat_id
         .clear
       %h1
         = I18n.t(:"pdf.invoice.headline")

@@ -1,4 +1,3 @@
 class Contact < ActiveRecord::Base
-  validates_presence_of :email
-  validates_uniqueness_of :email
+  validates :email, presence: true, uniqueness: true
 end

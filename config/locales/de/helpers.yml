@@ -55,8 +55,6 @@ de:
           account_number: "Konto"
           iban: "IBAN"
           bic: "BIC"
-        settings:
-          tax_ref: "Steuernummer"
         mailing:
           default_from: "Absender Für Rechnungs E-Mails"
           signature: "Signatur"

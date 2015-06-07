@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite time='0.009609' skipped='0' failures='0' errors='0' name="PositionTest" assertions='4' tests='4'>
-  <testcase time='0.006152' file="test/unit/position_test.rb" name="test_0001_should not be valid if description is missing" assertions='1'>
+<testsuite time='0.005097' skipped='0' failures='0' errors='0' name="PositionTest" assertions='4' tests='4'>
+  <testcase time='0.002075' file="test/unit/position_test.rb" name="test_0001_should not be valid if description is missing" assertions='1'>
   </testcase>
-  <testcase time='0.001495' file="test/unit/position_test.rb" name="test_0002_should not be valid if invoice is missing" assertions='1'>
+  <testcase time='0.001349' file="test/unit/position_test.rb" name="test_0002_should not be valid if invoice is missing" assertions='1'>
   </testcase>
-  <testcase time='0.001070' file="test/unit/position_test.rb" name="test_0003_should set the correct value on save for position and invoice" assertions='1'>
+  <testcase time='0.000933' file="test/unit/position_test.rb" name="test_0003_should set the correct value on save for position and invoice" assertions='1'>
   </testcase>
-  <testcase time='0.000892' file="test/unit/position_test.rb" name="test_0004_should respond to invoice" assertions='1'>
+  <testcase time='0.000740' file="test/unit/position_test.rb" name="test_0004_should respond to invoice" assertions='1'>
   </testcase>
 </testsuite>
