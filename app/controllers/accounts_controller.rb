@@ -75,7 +75,7 @@ class AccountsController < ApplicationController
   end
 
   private def check_registration_setting
-    return if registration_enabled?
+    return if registration_enabled? || params[:stripe_test].present?
     redirect_to root_path
   end
 end

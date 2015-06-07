@@ -55,7 +55,7 @@
 
         lorem ipsum
 
-  = render partial: "base/plans" if Plan.base.present?
+  = render partial: "base/plans" if Plan.base.present? && registration_enabled?
 
   %hr
 
