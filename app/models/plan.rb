@@ -12,7 +12,7 @@ class Plan < ActiveRecord::Base
     begin
       stripe_discount = Stripe::Coupon.retrieve(code)
     rescue Stripe::InvalidRequestError => _e
-      # ignore if no discount present
+      Rails.logger.info "Discount Coupon not present"
     end
 
     self.base_price = stripe_plan.amount
