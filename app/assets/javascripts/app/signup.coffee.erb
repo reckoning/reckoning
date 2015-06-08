@@ -4,6 +4,7 @@ $ ->
   handler = StripeCheckout.configure
     key: StripeKey
     image: '<%= asset_path "favicon.png" %>'
+    color: 'gray'
     panelLabel: I18n.t('actions.subscribe')
     allowRememberMe: false
     name: I18n.t('title.default')
