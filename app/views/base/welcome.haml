@@ -45,16 +45,26 @@
       .col-xs-12.col-md-12
         %h2
           = I18n.t(:"headlines.welcome.features")
+      .row
+        .col-xs-12.col-md-4
+          :markdown
+            - Rechnungen
+              - Rechnungen für Kunden und einzelne Projekte erfassen.
+              - Rechnungen als PDF erstellen, downloaden und direkt an den Kunden verschicken.
+              - E-Mail Templates für jeden Kunden.
 
-        :markdown
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-          proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+        .col-xs-12.col-md-4
+          :markdown
+            - Zeiterfassung
+              - Zeiten nachträglich in einer Wochenansicht oder für jeden Tag erfassen.
+              - Zeiten direkt beim arbeiten erfassen in dem einfach ein Timer gestartet wird.
+              - Stundenzettel werden automatisch generiert wenn Rechnungspositionen aus Einträgen der Zeiterfassung stammen.
 
-          lorem ipsum
+        .col-xs-12.col-md-4
+          :markdown
+            - Projekte & Kunden
+              - Erfassen sie alle ihre Kunden und die einzelnen Projekte.
+              - Legen Sie Budgets für jedes Projekt fest und bekommen sie so Informationen über verbleibene Budgets.
 
     = render partial: "base/plans" if Plan.base.present?
 
