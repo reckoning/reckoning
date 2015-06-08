@@ -26,7 +26,7 @@
     = stylesheet_link_tag "application"
 
     = yield(:js_includes) if content_for?(:js_includes)
-    = javascript_include_tag "application", data: {turbolinks: {track: true}}
+    = javascript_include_tag "application"
     = render 'layouts/js_defaults'
 
     != csrf_meta_tags
