@@ -11,18 +11,3 @@
     = form.email_field :gravatar, placeholder: I18n.t(:"helpers.placeholder.user.gravatar"), class: 'form-control'
     %small
       = form_errors resource, :gravatar
-
-%hr
-
-.row
-  .col-xs-12.col-md-6.form-group
-    .btn-group
-      = link_to user_totp_token_path, class: "btn btn-default" do
-        %i.fa.fa-qrcode
-        = I18n.t(:"nav.subnav.user.totp")
-
-      .btn.disabled{class: "btn-#{(current_user.totp_enabled? ? "success" : "danger")}"}
-        - if current_user.totp_enabled?
-          %i.fa.fa-check
-        - else
-          %i.fa.fa-close

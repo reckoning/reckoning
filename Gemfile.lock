@@ -7,18 +7,6 @@ GIT
       i18n (~> 0.6)
 
 GIT
-  remote: git://github.com/mortik/devise-totp.git
-  revision: 8c403fc34d051a30a38f7daa568eced9299d20f6
-  branch: master
-  specs:
-    devise-totp (0.0.1)
-      devise (>= 3.4.1, < 4.0.0)
-      rails (>= 4.2.0, < 5)
-      rotp (>= 2.0.0)
-      rqrcode_png (>= 0.1.5)
-      slim-rails (>= 3.0.1)
-
-GIT
   remote: git://github.com/plataformatec/devise.git
   revision: 2992b411a283b6483a3f30c9ac2541c2e9488dc4
   branch: master
@@ -101,7 +89,6 @@ GEM
     cancancan (1.9.2)
     celluloid (0.16.0)
       timers (~> 4.0.0)
-    chunky_png (1.3.3)
     codeclimate-test-reporter (0.4.7)
       simplecov (>= 0.7.1, < 1.0.0)
     coderay (1.1.0)
@@ -169,8 +156,6 @@ GEM
       hpricot (~> 0.8.6)
       ruby_parser (~> 3.1.1)
     i18n (0.7.0)
-    intercom-rails (0.2.28)
-      activesupport (> 3.0)
     jquery-rails (4.0.3)
       rails-dom-testing (~> 1.0)
       railties (>= 4.2.0)
@@ -264,11 +249,6 @@ GEM
       nokogiri
       rubyzip
       spreadsheet (> 0.6.4)
-    rotp (2.1.0)
-    rqrcode (0.4.2)
-    rqrcode_png (0.1.5)
-      chunky_png
-      rqrcode
     rubocop (0.28.0)
       astrolabe (~> 1.3)
       parser (>= 2.2.0.pre.7, < 3.0)
@@ -372,7 +352,6 @@ DEPENDENCIES
   database_cleaner
   devise!
   devise-async
-  devise-totp!
   dropbox-sdk
   dynamic_fields_for_rails
   factory_girl
@@ -383,7 +362,6 @@ DEPENDENCIES
   haml-rails
   highline
   i18n-js!
-  intercom-rails
   jquery-rails
   kaminari
   mina

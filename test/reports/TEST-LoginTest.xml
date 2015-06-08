@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite time='0.209726' skipped='0' failures='0' errors='0' name="LoginTest" assertions='9' tests='2'>
-  <testcase time='0.173257' file="test/integration/login_test.rb" name="test_0001_login with valid credentials redirects and gives correct success message" assertions='6'>
+<testsuite time='0.760498' skipped='0' failures='0' errors='0' name="LoginTest" assertions='9' tests='2'>
+  <testcase time='0.723832' file="test/integration/login_test.rb" name="test_0001_login with valid credentials redirects and gives correct success message" assertions='6'>
   </testcase>
-  <testcase time='0.036469' file="test/integration/login_test.rb" name="test_0002_login with invalid credentials redirects and gives correct alert message" assertions='3'>
+  <testcase time='0.036666' file="test/integration/login_test.rb" name="test_0002_login with invalid credentials redirects and gives correct alert message" assertions='3'>
   </testcase>
 </testsuite>

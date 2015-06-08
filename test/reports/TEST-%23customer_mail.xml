@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite time='0.278458' skipped='0' failures='0' errors='0' name="#customer_mail" assertions='12' tests='4'>
-  <testcase time='0.215063' file="test/mailers/invoice_mailer_test.rb" name="test_0001_sends email to default from if nothing is defined" assertions='3'>
+<testsuite time='0.322541' skipped='0' failures='0' errors='0' name="#customer_mail" assertions='12' tests='4'>
+  <testcase time='0.257587' file="test/mailers/invoice_mailer_test.rb" name="test_0001_sends email to default from if nothing is defined" assertions='3'>
   </testcase>
-  <testcase time='0.023406' file="test/mailers/invoice_mailer_test.rb" name="test_0002_sends email to global from address" assertions='3'>
+  <testcase time='0.022111' file="test/mailers/invoice_mailer_test.rb" name="test_0002_sends email to global from address" assertions='3'>
   </testcase>
-  <testcase time='0.016900' file="test/mailers/invoice_mailer_test.rb" name="test_0003_sends email to customer from address" assertions='3'>
+  <testcase time='0.017659' file="test/mailers/invoice_mailer_test.rb" name="test_0003_sends email to customer from address" assertions='3'>
   </testcase>
-  <testcase time='0.023089' file="test/mailers/invoice_mailer_test.rb" name="test_0004_falls back to default from address if global email is empty string" assertions='3'>
+  <testcase time='0.025184' file="test/mailers/invoice_mailer_test.rb" name="test_0004_falls back to default from address if global email is empty string" assertions='3'>
   </testcase>
 </testsuite>

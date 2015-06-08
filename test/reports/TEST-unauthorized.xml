@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite time='0.003832' skipped='0' failures='0' errors='0' name="unauthorized" assertions='2' tests='1'>
-  <testcase time='0.003832' file="test/controllers/api/v1/projects_controller_test.rb" name="test_0001_Unauthrized user cant destroy project" assertions='2'>
+<testsuite time='0.042780' skipped='0' failures='0' errors='0' name="unauthorized" assertions='13' tests='6'>
+  <testcase time='0.006164' file="test/controllers/invoices_controller_test.rb" name="test_0001_Unauthrized user cant view invoices index" assertions='2'>
+  </testcase>
+  <testcase time='0.007834' file="test/controllers/invoices_controller_test.rb" name="test_0002_Unauthrized user cant view invoices new" assertions='2'>
+  </testcase>
+  <testcase time='0.006035' file="test/controllers/invoices_controller_test.rb" name="test_0003_Unauthrized user cant create new invoice" assertions='2'>
+  </testcase>
+  <testcase time='0.007026' file="test/controllers/invoices_controller_test.rb" name="test_0004_Unauthrized user cant view invoice edit" assertions='2'>
+  </testcase>
+  <testcase time='0.008238' file="test/controllers/invoices_controller_test.rb" name="test_0005_Unauthrized user cant destroy invoice" assertions='3'>
+  </testcase>
+  <testcase time='0.007483' file="test/controllers/invoices_controller_test.rb" name="test_0006_Unauthrized user cant update invoice" assertions='2'>
   </testcase>
 </testsuite>

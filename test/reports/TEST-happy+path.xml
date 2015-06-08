@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite time='0.005084' skipped='3' failures='0' errors='0' name="happy path" assertions='0' tests='3'>
-  <testcase time='0.001955' file="/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/spec.rb" name="test_0001_#start" assertions='0'>
-    <skipped type='Minitest::Skip' message="(no tests defined)">
-    </skipped>
+<testsuite time='0.042748' skipped='0' failures='0' errors='0' name="happy path" assertions='3' tests='2'>
+  <testcase time='0.032043' file="test/controllers/customers_controller_test.rb" name="test_0001_User can view the edit customer page" assertions='1'>
   </testcase>
-  <testcase time='0.001568' file="/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/spec.rb" name="test_0002_#activate" assertions='0'>
-    <skipped type='Minitest::Skip' message="(no tests defined)">
-    </skipped>
-  </testcase>
-  <testcase time='0.001561' file="/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/spec.rb" name="test_0003_#deactivate" assertions='0'>
-    <skipped type='Minitest::Skip' message="(no tests defined)">
-    </skipped>
+  <testcase time='0.010705' file="test/controllers/customers_controller_test.rb" name="test_0002_User can update customer" assertions='2'>
   </testcase>
 </testsuite>
