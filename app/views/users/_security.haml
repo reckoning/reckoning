@@ -12,13 +12,17 @@
     %small
       = form_errors resource, :gravatar
 
-  - if !current_user.otp_required_for_login
-    = link_to "Enable 2FA", users_enable_otp_path, method: :post
+%hr
 
-  - if current_user.otp_required_for_login
-    = link_to "Disable 2FA", users_disable_otp_path, method: :post
-    = raw RQRCode::render_qrcode(current_user.otp_provisioning_uri(current_user.email, issuer: "Devise-Two-Factor-Demo"),
-                                   :svg,
-                                   :level => :l,
-                                   :unit => 2)
-    br
+.row
+  .col-xs-12.col-md-6.form-group
+    .btn-group
+      = link_to otp_me_path, class: "btn btn-default" do
+        %i.fa.fa-qrcode
+        = I18n.t(:"nav.subnav.user.totp")
+
+      .btn.disabled{class: "btn-#{(current_user.otp_required_for_login? ? "success" : "danger")}"}
+        - if current_user.otp_required_for_login?
+          %i.fa.fa-check
+        - else
+          %i.fa.fa-close
