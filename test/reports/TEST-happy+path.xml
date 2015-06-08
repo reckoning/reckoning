@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite time='0.016029' skipped='0' failures='0' errors='0' name="happy path" assertions='2' tests='1'>
-  <testcase time='0.016029' file="test/controllers/api/v1/projects_controller_test.rb" name="test_0001_User can destroy project" assertions='2'>
+<testsuite time='0.005084' skipped='3' failures='0' errors='0' name="happy path" assertions='0' tests='3'>
+  <testcase time='0.001955' file="/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/spec.rb" name="test_0001_#start" assertions='0'>
+    <skipped type='Minitest::Skip' message="(no tests defined)">
+    </skipped>
+  </testcase>
+  <testcase time='0.001568' file="/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/spec.rb" name="test_0002_#activate" assertions='0'>
+    <skipped type='Minitest::Skip' message="(no tests defined)">
+    </skipped>
+  </testcase>
+  <testcase time='0.001561' file="/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/spec.rb" name="test_0003_#deactivate" assertions='0'>
+    <skipped type='Minitest::Skip' message="(no tests defined)">
+    </skipped>
   </testcase>
 </testsuite>

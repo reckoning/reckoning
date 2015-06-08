@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite time='0.008831' skipped='0' failures='0' errors='0' name="ProjectTest" assertions='5' tests='5'>
-  <testcase time='0.001767' file="test/unit/project_test.rb" name="test_0001_should not save project without customer_id" assertions='1'>
+<testsuite time='0.009696' skipped='0' failures='0' errors='0' name="ProjectTest" assertions='5' tests='5'>
+  <testcase time='0.002975' file="test/unit/project_test.rb" name="test_0001_should not save project without customer_id" assertions='1'>
   </testcase>
-  <testcase time='0.002202' file="test/unit/project_test.rb" name="test_0002_should not save project without name" assertions='1'>
+  <testcase time='0.002237' file="test/unit/project_test.rb" name="test_0002_should not save project without name" assertions='1'>
   </testcase>
-  <testcase time='0.001561' file="test/unit/project_test.rb" name="test_0003_if rate is empty it should fall back to 0.0" assertions='1'>
+  <testcase time='0.001400' file="test/unit/project_test.rb" name="test_0003_if rate is empty it should fall back to 0.0" assertions='1'>
   </testcase>
-  <testcase time='0.001625' file="test/unit/project_test.rb" name="test_0004_should save project with customer_id &amp; name &amp; rate" assertions='1'>
+  <testcase time='0.001653' file="test/unit/project_test.rb" name="test_0004_should save project with customer_id &amp; name &amp; rate" assertions='1'>
   </testcase>
-  <testcase time='0.001676' file="test/unit/project_test.rb" name="test_0005_should respond to invoices" assertions='1'>
+  <testcase time='0.001431' file="test/unit/project_test.rb" name="test_0005_should respond to invoices" assertions='1'>
   </testcase>
 </testsuite>
