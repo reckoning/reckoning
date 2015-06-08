@@ -1,6 +1,11 @@
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
+  config.warden do |manager|
+    manager.default_strategies(scope: :user).unshift :two_factor_authenticatable
+    manager.default_strategies(scope: :user).unshift :two_factor_backupable
+  end
+
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class with default "from" parameter.
@@ -198,6 +203,8 @@ Devise.setup do |config|
   # Set this configuration to false if you want /users/sign_out to sign out
   # only the current scope. By default, Devise signs out all scopes.
   # config.sign_out_all_scopes = true
+
+  config.sign_in_after_reset_password = false
 
   # ==> Navigation configuration
   # Lists the formats that should be treated as navigational. Formats like

@@ -10,6 +10,24 @@ de:
         other: "Konnte %{resource} nicht speichern: %{count} Fehler."
 
   devise:
+    otp:
+      title: 'Zwei-Faktor-Autorisierung'
+      explain: 'Sie können eine Zwei-Faktor-Autorisierung mit z.B. <a href="%{google_auth_link}" target="_blank">Google Authenticator</a>, <a href="%{one_password_link}" target="_blank">1Password</a> oder <a href="%{authy_link}" target="_blank">Authy</a> hinzufügen, um Ihren Zugang zu Reckoning.io sicherer zu machen.'
+      enable_explain: 'Scanen Sie diesen QRCode und geben Sie einen der generierten Tokens ein.'
+      disable_explain: 'Wenn Sie die Zwei-Faktor-Autorisierung wieder deaktivieren wollen, geben Sie einen der generierten Tokens ein.'
+      backup_explain: 'Speichern Sie diese Backup Codes an einem sicherem Ort.'
+      backup_codes: 'Backup Codes generieren'
+      enable: 'Aktivieren'
+      disable: 'Deaktivieren'
+      otp_token: 'Zwei-Faktor Token'
+      otp_enabled: 'Zwei-Faktor-Autorisierung aktiviert?'
+      messages:
+        enable:
+          failure: "Bitte geben Sie einen gültigen Token an."
+          success: "Zwei-Faktor-Autorisierung wurde eingerichtet."
+        disable:
+          failure: "Bitte geben Sie einen gültigen Token an."
+          success: "Zwei-Faktor-Autorisierung wurde erfolgreich deaktiviert."
     failure:
       already_authenticated: 'Sie sind bereits angemeldet.'
       unauthenticated: 'Sie müssen sich anmelden oder registrieren, bevor Sie fortfahren können.'

@@ -111,6 +111,11 @@ form {
   margin-top: 2px;
 }
 
+.otp-qrcode svg {
+  width: auto;
+  height: auto;
+}
+
 textarea {
   max-width: 100%;
   min-height: 50px;
