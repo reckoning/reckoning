@@ -50,6 +50,8 @@ Reckoning::Application.routes.draw do
              controllers: { registrations: "registrations" }
 
   as :user do
+    post '/users/enable_otp' => 'users#enable_otp', as: :users_enable_otp
+    post '/users/disable_otp' => 'users#disable_otp', as: :users_disable_otp
     get 'signup' => 'accounts#new', as: :new_registration
     post 'signup' => 'accounts#create', as: :registration
     get 'settings' => 'registrations#edit', as: :edit_user_registration

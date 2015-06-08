@@ -11,3 +11,14 @@
     = form.email_field :gravatar, placeholder: I18n.t(:"helpers.placeholder.user.gravatar"), class: 'form-control'
     %small
       = form_errors resource, :gravatar
+
+  - if !current_user.otp_required_for_login
+    = link_to "Enable 2FA", users_enable_otp_path, method: :post
+
+  - if current_user.otp_required_for_login
+    = link_to "Disable 2FA", users_disable_otp_path, method: :post
+    = raw RQRCode::render_qrcode(current_user.otp_provisioning_uri(current_user.email, issuer: "Devise-Two-Factor-Demo"),
+                                   :svg,
+                                   :level => :l,
+                                   :unit => 2)
+    br

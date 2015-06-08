@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
-  devise :database_authenticatable, :confirmable, :async, :lockable, :recoverable,
-         :registerable, :rememberable, :trackable, :validatable
+  devise :two_factor_authenticatable, :confirmable, :async, :lockable, :recoverable,
+         :registerable, :rememberable, :trackable, :validatable,
+         otp_secret_encryption_key: Rails.application.secrets[:devise_otp]
 
   belongs_to :account
   has_many :timers
