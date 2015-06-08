@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite time='0.023381' skipped='5' failures='0' errors='0' name="InvoiceTest" assertions='8' tests='10'>
-  <testcase time='0.004301' file="test/unit/invoice_test.rb" name="test_0001_should not be valid without project" assertions='1'>
+<testsuite time='0.022556' skipped='5' failures='0' errors='0' name="InvoiceTest" assertions='8' tests='10'>
+  <testcase time='0.004781' file="test/unit/invoice_test.rb" name="test_0001_should not be valid without project" assertions='1'>
   </testcase>
-  <testcase time='0.003509' file="test/unit/invoice_test.rb" name="test_0002_should not be valid without customer" assertions='1'>
+  <testcase time='0.003869' file="test/unit/invoice_test.rb" name="test_0002_should not be valid without customer" assertions='1'>
   </testcase>
-  <testcase time='0.006974' file="test/unit/invoice_test.rb" name="test_0003_should create invoice if date and valid project present" assertions='1'>
+  <testcase time='0.005128' file="test/unit/invoice_test.rb" name="test_0003_should create invoice if date and valid project present" assertions='1'>
   </testcase>
-  <testcase time='0.000746' file="/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/spec.rb" name="test_0004_should have a unique ref scoped by account" assertions='0'>
+  <testcase time='0.000822' file="/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/spec.rb" name="test_0004_should have a unique ref scoped by account" assertions='0'>
     <skipped type='Minitest::Skip' message="(no tests defined)">
     </skipped>
   </testcase>
-  <testcase time='0.000704' file="/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/spec.rb" name="test_0005_before_create set_ref" assertions='0'>
+  <testcase time='0.000731' file="/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/spec.rb" name="test_0005_before_create set_ref" assertions='0'>
     <skipped type='Minitest::Skip' message="(no tests defined)">
     </skipped>
   </testcase>
-  <testcase time='0.000680' file="/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/spec.rb" name="test_0006_before_save set_rate" assertions='0'>
+  <testcase time='0.000774' file="/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/spec.rb" name="test_0006_before_save set_rate" assertions='0'>
     <skipped type='Minitest::Skip' message="(no tests defined)">
     </skipped>
   </testcase>
-  <testcase time='0.000736' file="/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/spec.rb" name="test_0007_before_save set_value" assertions='0'>
+  <testcase time='0.000628' file="/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/spec.rb" name="test_0007_before_save set_value" assertions='0'>
     <skipped type='Minitest::Skip' message="(no tests defined)">
     </skipped>
   </testcase>
-  <testcase time='0.000738' file="/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/spec.rb" name="test_0008_should only set set_payment_due_date if payment_due_date empty" assertions='0'>
+  <testcase time='0.000748' file="/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/spec.rb" name="test_0008_should only set set_payment_due_date if payment_due_date empty" assertions='0'>
     <skipped type='Minitest::Skip' message="(no tests defined)">
     </skipped>
   </testcase>
-  <testcase time='0.001267' file="test/unit/invoice_test.rb" name="test_0009_should respond to defined associations" assertions='4'>
+  <testcase time='0.001196' file="test/unit/invoice_test.rb" name="test_0009_should respond to defined associations" assertions='4'>
   </testcase>
-  <testcase time='0.003726' file="test/unit/invoice_test.rb" name="test_should_not_be_valid_without_date" assertions='1'>
+  <testcase time='0.003879' file="test/unit/invoice_test.rb" name="test_should_not_be_valid_without_date" assertions='1'>
   </testcase>
 </testsuite>

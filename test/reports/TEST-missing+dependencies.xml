@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite time='0.006966' skipped='0' failures='0' errors='0' name="missing dependencies" assertions='2' tests='1'>
-  <testcase time='0.006966' file="test/controllers/projects_controller_test.rb" name="test_0001_redirects to user edit if address is missing" assertions='2'>
+<testsuite time='0.009053' skipped='0' failures='0' errors='0' name="missing dependencies" assertions='2' tests='1'>
+  <testcase time='0.009053' file="test/controllers/invoices_controller_test.rb" name="test_0001_redirects to user edit if address is missing" assertions='2'>
   </testcase>
 </testsuite>

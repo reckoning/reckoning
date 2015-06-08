@@ -22,7 +22,6 @@ gem 'slim-rails'
 
 gem 'devise', github: 'plataformatec/devise', branch: :master
 gem 'devise-async'
-gem 'devise-totp', github: 'mortik/devise-totp', branch: :master # path: 'gems/devise-totp'
 gem 'cancancan'
 
 gem 'dalli'
@@ -69,10 +68,6 @@ gem 'dropbox-sdk'
 gem 'web_translate_it'
 
 gem 'sentry-raven'
-
-# gem 'intercom-rails'
-
-gem 'le'
 
 group :test do
   gem 'rails-perftest'
