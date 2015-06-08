@@ -59,6 +59,13 @@ Reckoning::Application.routes.draw do
     delete 'signout' => 'sessions#destroy', as: :destroy_user_session
   end
 
+  resource :me, controller: :current_user, only: [] do
+    get :otp
+    post :otp_backup_codes
+    post :enable_otp
+    post :disable_otp
+  end
+
   resource :account, only: [:edit, :update]
 
   resource :password, only: [:edit, :update]

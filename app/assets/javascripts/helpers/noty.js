@@ -64,6 +64,7 @@ window.displayConfirm = function(ev, $element) {
       if ($element.data('method') === undefined) {
         window.location = $element.attr('href');
       } else {
+        console.log($element.data('method'));
         $.ajax({
           url: $element.attr('href'),
           method: $element.data('method'),
@@ -133,6 +134,12 @@ window.displayError = function(text, timeout) {
 };
 
 $(function() {
+
+  $("[data-notyConfirm]").click(function(ev) {
+    displayConfirm(ev, $(this));
+    return false;
+  });
+
   var success = $('body').data('success');
   if (success) {
     displaySuccess(success);
