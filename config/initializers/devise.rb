@@ -1,6 +1,11 @@
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
+  config.warden do |manager|
+    manager.default_strategies(scope: :user).unshift :two_factor_authenticatable
+    manager.default_strategies(scope: :user).unshift :two_factor_backupable
+  end
+
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class with default "from" parameter.
@@ -199,6 +204,8 @@ Devise.setup do |config|
   # only the current scope. By default, Devise signs out all scopes.
   # config.sign_out_all_scopes = true
 
+  config.sign_in_after_reset_password = false
+
   # ==> Navigation configuration
   # Lists the formats that should be treated as navigational. Formats like
   # :html, should redirect to the sign in page when the user does not have
@@ -240,30 +247,4 @@ Devise.setup do |config|
   # When using omniauth, Devise cannot automatically set Omniauth path,
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = "/my_engine/users/auth"
-
-  # ==> Devise TOTP Extension
-  # Configure TOTP extension for devise
-
-  # TOTP is mandatory, users are going to be asked to
-  # enroll TOTP the next time they sign in, before they can successfully complete the session establishment.
-  # This is the global value, can also be set on each user.
-  # config.totp_mandatory = false
-
-  # Drift: a window which provides allowance for drift between a user's token device clock
-  # (and therefore their TOTP tokens) and the authentication server's clock.
-  # Expressed in minutes centered at the current time. (Note: it's a number, *NOT* 3.minutes )
-  # config.totp_drift_window = 3
-
-  # Users that have logged in longer than this time ago, are going to be asked their password
-  # (and an TOTP challenge, if enabled) before they can see or change their otp informations.
-  # config.totp_credentials_refresh = 15.minutes
-
-  # The user is allowed to set his browser as "trusted", no more TOTP challenges will be
-  # asked for that browser, for a limited time.
-  # set to false to disable setting the browser as trusted
-  # config.totp_trust_persistence = 1.month
-
-  # The name of this application, to be added to the provisioning
-  # url as 'application_name:<user_email>' (defaults to the Rails application class)
-  config.totp_uri_application = 'Reckoning.io'
 end

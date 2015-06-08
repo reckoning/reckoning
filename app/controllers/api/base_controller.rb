@@ -1,7 +1,7 @@
 module Api
   class BaseController < ActionController::Base
     include ActionController::HttpAuthentication::Token
-    before_action :authenticate_user_from_token!
+    around_action :authenticate_user_from_token!
 
     check_authorization
 
@@ -21,6 +21,8 @@ module Api
         sign_in user, store: false
         @current_user = user
         @current_account = user.account
+
+        yield
       else
         message = "HTTP Token: Access denied."
         render json: { code: "authentication.missing", message: message }, status: :forbidden

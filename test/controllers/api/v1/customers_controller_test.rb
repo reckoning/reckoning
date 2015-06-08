@@ -62,7 +62,7 @@ module Api
         end
 
         it "creates a new customer" do
-          post :create, customer: { name: "foo" }
+          post :create, name: "foo"
 
           assert_response :created
 

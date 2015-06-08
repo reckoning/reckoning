@@ -46,7 +46,7 @@ angular.module 'Timesheet'
           Timer.delete(timer.uuid)
 
     $scope.calculateTimerValue = (timer) ->
-      task = _.find @currentTasks, (task) -> task.uuid is timer.taskUuid
+      task = _.find @currentTasks, (task) -> task.uuid is timer.task_uuid
       timersForDate = $filter('filter')(task.timers, timer.date, true)
       _.reduce timersForDate, (num, timerForDate) ->
         if timerForDate.uuid is timer.uuid

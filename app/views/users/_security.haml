@@ -17,12 +17,12 @@
 .row
   .col-xs-12.col-md-6.form-group
     .btn-group
-      = link_to user_totp_token_path, class: "btn btn-default" do
+      = link_to otp_me_path, class: "btn btn-default" do
         %i.fa.fa-qrcode
-        = I18n.t(:"nav.subnav.user.totp")
+        = I18n.t(:"nav.subnav.user.otp")
 
-      .btn.disabled{class: "btn-#{(current_user.totp_enabled? ? "success" : "danger")}"}
-        - if current_user.totp_enabled?
+      .btn.disabled{class: "btn-#{(current_user.otp_required_for_login? ? "success" : "danger")}"}
+        - if current_user.otp_required_for_login?
           %i.fa.fa-check
         - else
           %i.fa.fa-close

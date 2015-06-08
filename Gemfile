@@ -18,7 +18,8 @@ gem 'slim-rails'
 
 gem 'devise', github: 'plataformatec/devise', branch: :master
 gem 'devise-async'
-gem 'devise-totp', github: 'mortik/devise-totp', branch: :master # path: 'gems/devise-totp'
+gem 'devise-two-factor'
+gem 'rqrcode-rails3'
 gem 'cancancan'
 
 gem 'dalli'

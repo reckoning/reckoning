@@ -1,7 +1,7 @@
 module Api
   module V1
     class TasksController < Api::BaseController
-      before_action :authenticate_user_from_token!
+      around_action :authenticate_user_from_token!
       respond_to :json
 
       def index
@@ -34,7 +34,7 @@ module Api
       end
 
       private def task_params
-        @task_params ||= params.require(:task).permit(:name).merge(project_id: project.id)
+        @task_params ||= params.permit(:name).merge(project_id: project.id)
       end
 
       private def task

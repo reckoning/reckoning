@@ -36,7 +36,7 @@ angular.module 'Timesheet'
 
     $scope.createTask = (input, selectize) ->
       Task.create(
-        projectUuid: $scope.timer.project_uuid,
+        project_uuid: $scope.timer.project_uuid,
         name: input
       ).success (newTask, status, headers, config) ->
         $timeout ->

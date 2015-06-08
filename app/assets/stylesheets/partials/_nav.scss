@@ -1,5 +1,17 @@
 $nav-transition-speed: .3s;
 
+.dropdown-menu {
+  li {
+    > a {
+      transition: all $nav-transition-speed;
+    }
+    &.active > a,
+    &:hover > a {
+      box-shadow: inset 4px 0 0 $navbar-active;
+    }
+  }
+}
+
 #main-nav {
   border-radius: 0;
   z-index: 100;
@@ -22,18 +34,6 @@ $nav-transition-speed: .3s;
 
         &:active > a {
           background: #e8e8e8;
-        }
-
-        .dropdown-menu {
-          li {
-            > a {
-              transition: all $nav-transition-speed;
-            }
-            &.active > a,
-            &:hover > a {
-              box-shadow: inset 4px 0 0 $navbar-active;
-            }
-          }
         }
       }
     }

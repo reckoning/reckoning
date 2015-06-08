@@ -10,8 +10,6 @@
   }
 }
 
-@media (min-height: 33.875em) {
-  .picker--opened .picker__frame {
-    top: 30px !important;
-  }
+.picker__select--year {
+  width: auto;
 }

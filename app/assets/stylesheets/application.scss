@@ -1,12 +1,12 @@
-//= require_self
 //= require animate.css/animate.min.css
 //= require ladda/css/ladda
 //= require pickadate/lib/themes/default
 //= require pickadate/lib/themes/default.date
 //= require nvd3
 //= require nprogress
-//= require selectize/dist/css/selectize.bootstrap3
+//= require selectize/dist/css/selectize.default
 //= require awesome-bootstrap-checkbox
+//= require_self
 
 $footer-border-color: #ccc;
 $footer-bg-color: #ddd;
@@ -84,5 +84,12 @@ code[data-target] {
 
   &:last-child {
     margin-right: 0;
+  }
+}
+
+
+.list-group-item {
+  &.project-group-item {
+      border-top-color: #eee;
   }
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite time='0.042748' skipped='0' failures='0' errors='0' name="happy path" assertions='3' tests='2'>
+  <testcase time='0.032043' file="test/controllers/customers_controller_test.rb" name="test_0001_User can view the edit customer page" assertions='1'>
+  </testcase>
+  <testcase time='0.010705' file="test/controllers/customers_controller_test.rb" name="test_0002_User can update customer" assertions='2'>
+  </testcase>
+</testsuite>

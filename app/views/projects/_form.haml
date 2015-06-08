@@ -10,19 +10,28 @@
         = form_errors project, :name
 
   .row
-    .col-xs-6.col-md-2.form-group{class: form_error?(project, :rate)}
+    .col-xs-6.col-md-3.form-group{class: form_error?(project, :rate)}
       = form.label :rate
-      = form.number_field :rate, class: 'form-control'
+      .input-group
+        = form.number_field :rate, class: 'form-control text-right'
+        %span.input-group-addon €/Std.
       = form_errors project, :rate
 
-    .col-md-4.hidden-xs.hidden-sm
-
-    .col-xs-6.col-md-2.form-group{class: form_error?(project, :budget)}
+    .col-xs-6.col-md-3.form-group{class: form_error?(project, :budget)}
       = form.label :budget
-      = form.number_field :budget, class: "form-control", step: "any"
+      .input-group
+        = form.number_field :budget, class: 'form-control text-right', step: 'any'
+        %span.input-group-addon €
       = form_errors project, :budget
 
-    .col-xs-12.col-md-4.form-group{class: form_error?(project, :budget_on_dashboard)}
+    .col-xs-6.col-md-3.form-group{class: form_error?(project, :budget_hours)}
+      = form.label :budget_hours
+      .input-group
+        = form.number_field :budget_hours, class: 'form-control text-right', step: 'any'
+        %span.input-group-addon h
+      = form_errors project, :budget_hours
+
+    .col-xs-12.col-md-3.form-group{class: form_error?(project, :budget_on_dashboard)}
       .checkbox
         = form.check_box :budget_on_dashboard
         = form.label :budget_on_dashboard

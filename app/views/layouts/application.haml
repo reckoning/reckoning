@@ -6,6 +6,8 @@
     = favicon_link_tag asset_url('favicon.png'), rel: "shortcut icon", type: 'image/png'
 
     %meta{name: "viewport", content: "width=device-width, initial-scale=1.0, user-scalable=no"}
+    %meta{name: "apple-mobile-web-app-capable", content: "yes"}
+
     %meta(name="google-site-verification" content="Ff-90jxpaoaNW0wA-Ysj6TPo-PYd8_u3sAeecvfu_Y4")
 
     %title=content_for?(:title) ? title(yield(:title)) : title
