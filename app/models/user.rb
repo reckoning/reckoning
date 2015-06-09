@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
 
   before_save :update_gravatar_hash
   before_save :ensure_authentication_token
+  before_create :setup_otp_secret
 
   validates :email, email: true
 
@@ -24,6 +25,10 @@ class User < ActiveRecord::Base
   def ensure_authentication_token
     return if authentication_token.present?
     self.authentication_token = generate_authentication_token
+  end
+
+  def setup_otp_secret
+    self.otp_secret = User.generate_otp_secret
   end
 
   def send_welcome
