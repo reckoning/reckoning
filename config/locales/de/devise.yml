@@ -22,6 +22,7 @@ de:
       otp_token: 'Zwei-Faktor Token'
       otp_enabled: 'Zwei-Faktor-Autorisierung aktiviert?'
       messages:
+        backup_codes: "Backup Codes erfolgreich erstellt."
         enable:
           failure: "Bitte geben Sie einen gültigen Token an."
           success: "Zwei-Faktor-Autorisierung wurde eingerichtet."
