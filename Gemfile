@@ -24,6 +24,7 @@ gem 'devise', github: 'plataformatec/devise', branch: :master
 gem 'devise-async'
 gem 'devise-two-factor'
 gem 'rqrcode-rails3'
+gem 'mini_magick'
 gem 'cancancan'
 
 gem 'dalli'

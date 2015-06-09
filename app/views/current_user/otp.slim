@@ -50,10 +50,8 @@
                   = I18n.t(:enable_explain, scope: 'devise.otp')
                 .row
                   .col-xs-12.col-md-6
-                    .text-center
-                      .otp-qrcode
-                        = raw RQRCode::render_qrcode(current_user.otp_provisioning_uri(current_user.email, issuer: Rails.application.secrets[:devise_otp_issuer]), :svg, level: :l, unit: 2)
-                    br
+                    = image_tag otp_qrcode_me_path, class: "otp-qrcode"
+                br
                 .row
                   .col-xs-12.col-md-4
                     = f.text_field :otp_attempt, autocomplete: :off, placeholder: I18n.t(:otp_token, scope: 'devise.otp'), class: "form-control"

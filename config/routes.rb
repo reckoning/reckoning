@@ -61,6 +61,7 @@ Reckoning::Application.routes.draw do
 
   resource :me, controller: :current_user, only: [] do
     get :otp
+    get :otp_qrcode
     post :otp_backup_codes
     post :enable_otp
     post :disable_otp
@@ -147,8 +148,6 @@ Reckoning::Application.routes.draw do
   get '404' => 'errors#not_found'
   get '422' => 'errors#server_error'
   get '500' => 'errors#server_error'
-
-  get 'two_factor_qrcode' => 'two_factor#qrcode', constraints: { format: :png }
 
   root to: 'base#index'
 end
