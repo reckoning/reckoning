@@ -4,20 +4,16 @@
     %meta{charset: "utf-8"}
 
     = favicon_link_tag asset_url('favicon.png'), rel: "shortcut icon", type: 'image/png'
+    %link{rel: "icon", sizes: "any" mask: true, href: asset_url('favicon.svg')}
+    %meta{name: "theme-color", content: "#428bca"}
 
     %meta{name: "viewport", content: "width=device-width, initial-scale=1.0, user-scalable=no"}
-    %meta{name: "apple-mobile-web-app-capable", content: "yes"}
 
     %meta(name="google-site-verification" content="Ff-90jxpaoaNW0wA-Ysj6TPo-PYd8_u3sAeecvfu_Y4")
 
     %title=content_for?(:title) ? title(yield(:title)) : title
     %meta{name: "description", content: I18n.t(:"meta.description.default")}
     %meta{name: "keywords", content: I18n.t(:"meta.keywords.default")}
-
-    %meta{name: "mobile-web-app-capable", content: "yes"}
-
-    %meta{name: "apple-mobile-web-app-capable", content: "yes"}
-    %meta{name: "apple-mobile-web-app-status-bar-style", content: "black"}
 
     = favicon_link_tag asset_url('touch-icon-iphone.png'), rel: "apple-touch-icon", type: 'image/png'
     = favicon_link_tag asset_url('touch-icon-ipad.png'), rel: "apple-touch-icon", sizes: "76x76", type: 'image/png'
