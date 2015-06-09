@@ -3,9 +3,10 @@
   %head
     %meta{charset: "utf-8"}
 
-    = favicon_link_tag asset_url('favicon.svg'), rel: "icon", mask: true, sizes: "any"
-    %meta{name: "theme-color", content: "#428bca"}
-    = favicon_link_tag asset_url('favicon.png'), rel: "shortcut icon", type: 'image/png'
+    :plain
+      <link rel="shortcut icon" type="image/png" href="#{asset_url('favicon.png')}">
+      <link rel="icon" sizes="any" mask href="#{asset_url('favicon.svg')}">
+      <meta name="theme-color" content="#428bca">
 
     %meta{name: "viewport", content: "width=device-width, initial-scale=1.0, user-scalable=no"}
 
