@@ -68,6 +68,8 @@ gem 'web_translate_it'
 
 gem 'sentry-raven'
 
+gem 'intercom-rails'
+
 group :test do
   gem 'rails-perftest'
   gem 'minitest-rails'

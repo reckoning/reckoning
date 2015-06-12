@@ -29,7 +29,8 @@
     = stylesheet_link_tag "https://fonts.googleapis.com/css?family=Orbitron:400,500,700,900"
     = stylesheet_link_tag "application"
 
-    = javascript_include_tag "application", data: {turbolinks: {track: true}}
+    = javascript_include_tag "//cdn.ravenjs.com/1.1.15/jquery,native/raven.min.js"
+    = javascript_include_tag "application"
     = render 'layouts/js_defaults'
 
     != csrf_meta_tags
@@ -46,3 +47,4 @@
     = render "layouts/footer"
     - if Rails.env.production? && !backend?
       = render "layouts/google_analytics"
+      = render "layouts/sentry"

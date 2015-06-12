@@ -167,6 +167,8 @@ GEM
       hpricot (~> 0.8.6)
       ruby_parser (~> 3.1.1)
     i18n (0.7.0)
+    intercom-rails (0.2.28)
+      activesupport (> 3.0)
     jquery-rails (4.0.3)
       rails-dom-testing (~> 1.0)
       railties (>= 4.2.0)
@@ -382,6 +384,7 @@ DEPENDENCIES
   haml-rails
   highline
   i18n-js!
+  intercom-rails
   jquery-rails
   kaminari
   mina
