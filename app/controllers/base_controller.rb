@@ -115,8 +115,8 @@ class BaseController < ApplicationController
     last_value = 0.0
     max_month_value = 0.0
     (1..12).each do |month_id|
-      start_date = Date.parse("#{year}-#{month_id}-1").at_beginning_of_month
-      end_date = Date.parse("#{year}-#{month_id}-1").at_end_of_month
+      start_date = Time.zone.parse("#{year}-#{month_id}-1").at_beginning_of_month.to_date
+      end_date = Time.zone.parse("#{year}-#{month_id}-1").at_end_of_month.to_date
 
       value = 0.0
       current_account.invoices.paid.where(date: start_date..end_date).all.each do |invoice|
