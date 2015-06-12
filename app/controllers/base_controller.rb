@@ -99,7 +99,7 @@ class BaseController < ApplicationController
 
     result, max_values_current = values_for_year(result, Time.zone.today.year)
     max_values_last = []
-    if current_account.invoices.where("date < ?", (Time.zone.today - 1.year).end_of_year).count > 0
+    if current_account.invoices.paid.where("date < ?", (Time.zone.today - 1.year).end_of_year).count > 0
       result, max_values_last = values_for_year(result, (Time.zone.today - 1.year).year)
     end
 
@@ -115,11 +115,11 @@ class BaseController < ApplicationController
     last_value = 0.0
     max_month_value = 0.0
     (1..12).each do |month_id|
-      start_date = Time.zone.parse("#{year}-#{month_id}-1").at_beginning_of_month
-      end_date = Time.zone.parse("#{year}-#{month_id}-1").at_end_of_month
+      start_date = Date.parse("#{year}-#{month_id}-1").at_beginning_of_month
+      end_date = Date.parse("#{year}-#{month_id}-1").at_end_of_month
 
       value = 0.0
-      current_account.invoices.where(date: start_date..end_date).all.each do |invoice|
+      current_account.invoices.paid.where(date: start_date..end_date).all.each do |invoice|
         value += invoice.value.to_d
       end
 
@@ -135,8 +135,8 @@ class BaseController < ApplicationController
 
       start_date += 1.year if start_date.year != Time.zone.today.year
 
-      month[:values] << [(start_date.to_i * 1000), month_value]
-      sum[:values] << [(start_date.to_i * 1000), sum_value]
+      month[:values] << [(start_date.to_time.to_i * 1000), month_value]
+      sum[:values] << [(start_date.to_time.to_i * 1000), sum_value]
 
       max_month_value = value.to_f if max_month_value < value.to_f
     end
