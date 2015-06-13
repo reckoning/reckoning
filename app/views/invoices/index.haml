@@ -28,7 +28,7 @@
           = paginate @invoices
 
     - if @invoices.present?
-      = render partial: "invoices/table", :@invoices => @invoices
+      = render partial: "invoices/list", :@invoices => @invoices
     - else
       = render partial: "shared/blank"
 
