@@ -38,9 +38,9 @@ class ProjectsController < ApplicationController
   def create
     authorize! :create, Project
     if project.save
-      redirect_to projects_path, flash: { success: I18n.t(:"messages.project.create.success") }
+      redirect_to projects_path, flash: { success: I18n.t(:"messages.resource.create.success", resource: "Projekt") }
     else
-      flash.now[:alert] = I18n.t(:"messages.project.create.failure")
+      flash.now[:alert] = I18n.t(:"messages.resource.create.failure", resource: "Projekt")
       render "new"
     end
   end
@@ -48,9 +48,9 @@ class ProjectsController < ApplicationController
   def update
     authorize! :update, project
     if project.update_attributes(project_params)
-      redirect_to projects_path, flash: { success: I18n.t(:"messages.project.update.success") }
+      redirect_to projects_path, flash: { success: I18n.t(:"messages.resource.update.success", resource: "Projekt") }
     else
-      flash.now[:alert] = I18n.t(:"messages.project.update.failure")
+      flash.now[:alert] = I18n.t(:"messages.resource.update.failure", resource: "Projekt")
       render "edit"
     end
   end

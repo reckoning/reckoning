@@ -5,7 +5,6 @@ de:
     cancel: "Abbrechen"
     edit: "Bearbeiten"
     delete: "Löschen"
-    cancel: "Abbrechen"
     save: "Speichern"
     create: "Erstellen"
     add: "Hinzufügen"
@@ -15,9 +14,7 @@ de:
     add_task: "Aufgabe hinzufügen"
     add_timer: "Neuer Timer"
     show: "Anzeigen"
-    download: "Speichern"
     regenerate: "Neu generieren"
-    generate: "Erstellen"
     charge: "In Rechnung stellen"
     pay: "Rechnung als bezahlt markieren"
     archive: Archivieren

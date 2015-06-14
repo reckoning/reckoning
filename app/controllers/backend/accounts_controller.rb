@@ -17,9 +17,9 @@ module Backend
     # post: /backend/accounts
     def create
       if account.save
-        redirect_to backend_accounts_path, notice: I18n.t(:"messages.account.create.success")
+        redirect_to backend_accounts_path, notice: I18n.t(:"messages.resource.create.success", resource: "Account")
       else
-        render 'new', error: I18n.t(:"messages.account.create.failure")
+        render 'new', error: I18n.t(:"messages.resource.create.failure", resource: "Account")
       end
     end
 
@@ -30,17 +30,17 @@ module Backend
     # patch: /backend/accounts/:id
     def update
       if account.update(account_params)
-        redirect_to backend_accounts_path, notice: I18n.t(:"messages.account.create.success")
+        redirect_to backend_accounts_path, notice: I18n.t(:"messages.resource.create.success", resource: "Account")
       else
-        render "edit", error: I18n.t(:"messages.account.update.failure")
+        render "edit", error: I18n.t(:"messages.resource.update.failure", resource: "Account")
       end
     end
 
     def destroy
       if account.destroy
-        redirect_to backend_accounts_path, notice: I18n.t(:"messages.account.destroy.success")
+        redirect_to backend_accounts_path, notice: I18n.t(:"messages.resource.destroy.success", resource: "Account")
       else
-        redirect_to backend_accounts_path, error: I18n.t(:"messages.account.destroy.failure")
+        redirect_to backend_accounts_path, error: I18n.t(:"messages.resource.destroy.failure", resource: "Account")
       end
     end
 
