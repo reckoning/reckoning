@@ -3,6 +3,7 @@ de:
     default: "Zugriff verweigert!"
   messages:
     error: "Es ist ein Fehler aufgetreten."
+    missing_address: "Bitte vervollständigen Sie zuerst Ihre Daten"
     timesheet:
       add_task:
         success: "Aufgabe erfolgreich hinzugefügt."
@@ -12,23 +13,12 @@ de:
         success: "Aufgabe erfolgreich entfernt."
         warning: "Aufgabe konnte nicht gelöscht werden, da schon Zeiten in dieser Aufgabe zu einer Rechnung hinzugefügt wurden."
         failure: "Die Aufgabe konnte nicht entfernt werden."
-    resource:
-      create:
-        success: "%{resource} erfolgreich erstellt."
-        failure: "%{resource} konnte nicht erstellt werden."
-      update:
-        success: "%{resource} erfolgreich bearbeitet."
-        failure: "%{resource} konnte nicht bearbeitet werden."
-      destroy:
-        success: "%{resource} erfolgreich gelöscht."
-        failure: "%{resource} konnte nicht gelöscht werden."
     project:
       archive:
         success: "Project erfolgreich archiviert."
       unarchive:
         success: "Project erfolgreich aktiviert."
         failure: "Projekt konnte nicht aktiviert werden."
-      missing_address: "Bitte vervollständigen Sie zuerst Ihre Daten"
     customer:
       confirm:
         delete: "Sind Sie sich sicher, dass Sie den Kunden löschen wollen? Alle zugehörigen Projekte werden ebenfalls gelöscht."
@@ -51,7 +41,6 @@ de:
         failure: "Rechnung konnte nicht in Rechnung gestellt werden."
       pdf_generating: "PDF wird generiert"
       pdf_generated: "PDF wurde erfolgreich erstellt."
-      missing_address: "Bitte vervollständigen Sie zuerst Ihre Daten"
       files_missing: 'Bitte warten Sie bis die Rechnung erstellt wurde oder klicken Sie erneut auf "Rechnung erstellen".'
       load_positions:
         missing: "Bitte wählen Sie zunächst ein Projekt und geben Sie ein Datum an."

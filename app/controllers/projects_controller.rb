@@ -1,4 +1,6 @@
 class ProjectsController < ApplicationController
+  include ResourceHelper
+
   before_action :set_active_nav
   before_action :check_dependencies, only: [:new]
 
@@ -38,9 +40,9 @@ class ProjectsController < ApplicationController
   def create
     authorize! :create, Project
     if project.save
-      redirect_to projects_path, flash: { success: I18n.t(:"messages.resource.create.success", resource: "Projekt") }
+      redirect_to projects_path, flash: { success: resource_message(:project, :create, :success) }
     else
-      flash.now[:alert] = I18n.t(:"messages.resource.create.failure", resource: "Projekt")
+      flash.now[:alert] = resource_message(:project, :create, :failure)
       render "new"
     end
   end
@@ -48,9 +50,9 @@ class ProjectsController < ApplicationController
   def update
     authorize! :update, project
     if project.update_attributes(project_params)
-      redirect_to projects_path, flash: { success: I18n.t(:"messages.resource.update.success", resource: "Projekt") }
+      redirect_to projects_path, flash: { success: resource_message(:project, :update, :success) }
     else
-      flash.now[:alert] = I18n.t(:"messages.resource.update.failure", resource: "Projekt")
+      flash.now[:alert] = resource_message(:project, :update, :failure)
       render "edit"
     end
   end
@@ -113,6 +115,6 @@ class ProjectsController < ApplicationController
 
   private def check_dependencies
     return if current_account.address.present?
-    redirect_to "#{edit_account_path}#address", alert: I18n.t(:"messages.project.missing_address")
+    redirect_to "#{edit_account_path}#address", alert: I18n.t(:"messages.missing_address")
   end
 end

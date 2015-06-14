@@ -1,4 +1,6 @@
 class AccountsController < ApplicationController
+  include ResourceHelper
+
   before_action :check_registration_setting, only: [:new, :create]
   before_action :set_active_nav, except: [:new, :create]
   before_action :authenticate_user!, except: [:new, :create]
@@ -14,9 +16,9 @@ class AccountsController < ApplicationController
   def create
     @active_nav = 'registration'
     if account.save
-      redirect_to new_user_session_path, flash: { success: I18n.t(:"messages.resource.create.success", resource: "Account") }
+      redirect_to new_user_session_path, flash: { success: resource_message(:account, :create, :success) }
     else
-      render "new", alert: I18n.t(:"messages.resource.create.failure", resource: "Account")
+      render "new", alert: resource_message(:account, :create, :failure)
     end
   end
 
@@ -27,9 +29,9 @@ class AccountsController < ApplicationController
   def update
     authorize! :update, account
     if account.update(account_params)
-      redirect_to "#{edit_account_path}#{hash}", flash: { success: I18n.t(:"messages.resource.update.success", resource: "Account") }
+      redirect_to "#{edit_account_path}#{hash}", flash: { success: resource_message(:account, :update, :success) }
     else
-      render "edit", alert: I18n.t(:"messages.resource.update.failure", resource: "Account")
+      render "edit", alert: resource_message(:account, :update, :failure)
     end
   end
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite time='0.096920' skipped='0' failures='0' errors='0' name="pdf generation" assertions='0' tests='1'>
-  <testcase time='0.096920' file="test/unit/invoice_test.rb" name="test_0001_creates timesheet if timers present" assertions='0'>
+<testsuite time='0.191142' skipped='0' failures='0' errors='0' name="pdf generation" assertions='0' tests='1'>
+  <testcase time='0.191142' file="test/unit/invoice_test.rb" name="test_0001_creates timesheet if timers present" assertions='0'>
   </testcase>
 </testsuite>

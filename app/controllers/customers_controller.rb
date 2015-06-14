@@ -1,4 +1,6 @@
 class CustomersController < ApplicationController
+  include ResourceHelper
+
   before_action :set_active_nav
   helper_method :customer, :sort_column
 
@@ -9,9 +11,9 @@ class CustomersController < ApplicationController
   def update
     authorize! :update, customer
     if customer.update_attributes(customer_params)
-      redirect_to "#{edit_customer_path(customer)}#{hash}", flash: { success: I18n.t(:"messages.resource.update.success", resource: "Kunde") }
+      redirect_to "#{edit_customer_path(customer)}#{hash}", flash: { success: resource_message(:customer, :update, :success) }
     else
-      flash.now[:alert] = I18n.t(:"messages.resource.update.failure", resource: "Kunde")
+      flash.now[:alert] = resource_message(:customer, :update, :failure)
       render "edit#{hash}"
     end
   end

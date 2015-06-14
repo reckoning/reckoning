@@ -1,0 +1,16 @@
+de:
+  resources:
+    invoice: "Rechnung"
+    project: "Projekt"
+    customer: "Kunde"
+    account: "Account"
+    messages:
+      create:
+        success: "%{resource} erfolgreich erstellt."
+        failure: "%{resource} konnte nicht erstellt werden."
+      update:
+        success: "%{resource} erfolgreich bearbeitet."
+        failure: "%{resource} konnte nicht bearbeitet werden."
+      destroy:
+        success: "%{resource} erfolgreich gelöscht."
+        failure: "%{resource} konnte nicht gelöscht werden."

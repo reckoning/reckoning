@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite time='0.042780' skipped='0' failures='0' errors='0' name="unauthorized" assertions='13' tests='6'>
-  <testcase time='0.006164' file="test/controllers/invoices_controller_test.rb" name="test_0001_Unauthrized user cant view invoices index" assertions='2'>
+<testsuite time='0.002768' skipped='3' failures='0' errors='0' name="unauthorized" assertions='0' tests='3'>
+  <testcase time='0.001056' file="/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/spec.rb" name="test_0001_Unauthorized User can&#39;t start dropbox activation" assertions='0'>
+    <skipped type='Minitest::Skip' message="(no tests defined)">
+    </skipped>
   </testcase>
-  <testcase time='0.007834' file="test/controllers/invoices_controller_test.rb" name="test_0002_Unauthrized user cant view invoices new" assertions='2'>
+  <testcase time='0.000904' file="/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/spec.rb" name="test_0002_Unauthorized User can&#39;t activate dropbox" assertions='0'>
+    <skipped type='Minitest::Skip' message="(no tests defined)">
+    </skipped>
   </testcase>
-  <testcase time='0.006035' file="test/controllers/invoices_controller_test.rb" name="test_0003_Unauthrized user cant create new invoice" assertions='2'>
-  </testcase>
-  <testcase time='0.007026' file="test/controllers/invoices_controller_test.rb" name="test_0004_Unauthrized user cant view invoice edit" assertions='2'>
-  </testcase>
-  <testcase time='0.008238' file="test/controllers/invoices_controller_test.rb" name="test_0005_Unauthrized user cant destroy invoice" assertions='3'>
-  </testcase>
-  <testcase time='0.007483' file="test/controllers/invoices_controller_test.rb" name="test_0006_Unauthrized user cant update invoice" assertions='2'>
+  <testcase time='0.000808' file="/usr/local/var/rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/minitest-5.5.1/lib/minitest/spec.rb" name="test_0003_Unauthorized User can&#39;t deactivate dropbox" assertions='0'>
+    <skipped type='Minitest::Skip' message="(no tests defined)">
+    </skipped>
   </testcase>
 </testsuite>
