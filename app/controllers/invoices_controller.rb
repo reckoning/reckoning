@@ -142,9 +142,9 @@ class InvoicesController < ApplicationController
     @invoice = current_account.invoices.new(invoice_params)
     authorize! :create, invoice
     if invoice.save
-      redirect_to invoices_path, flash: { success: I18n.t(:"messages.invoice.create.success") }
+      redirect_to invoices_path, flash: { success: I18n.t(:"messages.resource.create.success", resource: "Rechnung") }
     else
-      flash.now[:alert] = I18n.t(:"messages.invoice.create.failure")
+      flash.now[:alert] = I18n.t(:"messages.resource.create.failure", resource: "Rechnung")
       render "new"
     end
   end
@@ -152,9 +152,9 @@ class InvoicesController < ApplicationController
   def update
     authorize! :update, invoice
     if invoice.update(invoice_params)
-      redirect_to invoices_path, flash: { success: I18n.t(:"messages.invoice.update.success") }
+      redirect_to invoices_path, flash: { success: I18n.t(:"messages.resource.update.success", resource: "Rechnung") }
     else
-      flash.now[:alert] = I18n.t(:"messages.invoice.update.failure")
+      flash.now[:alert] = I18n.t(:"messages.resource.update.failure", resource: "Rechnung")
       render "edit"
     end
   end
@@ -216,13 +216,13 @@ class InvoicesController < ApplicationController
       File.delete(invoice.pdf_path) if File.exist?(invoice.pdf_path)
       File.delete(invoice.timesheet_path) if File.exist?(invoice.timesheet_path)
 
-      flash[:success] = I18n.t(:"messages.invoice.destroy.success")
+      flash[:success] = I18n.t(:"messages.resource.destroy.success", resource: "Rechnung")
       respond_to do |format|
         format.js { render json: {}, status: :ok }
         format.html { redirect_to invoices_path }
       end
     else
-      flash[:alert] = I18n.t(:"messages.invoice.destroy.failure")
+      flash[:alert] = I18n.t(:"messages.resource.destroy.failure", resource: "Rechnung")
       respond_to do |format|
         format.js { render json: {}, status: :ok }
         format.html { redirect_to invoices_path }

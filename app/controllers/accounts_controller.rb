@@ -14,9 +14,9 @@ class AccountsController < ApplicationController
   def create
     @active_nav = 'registration'
     if account.save
-      redirect_to new_user_session_path, flash: { success: I18n.t(:"messages.account.create.success") }
+      redirect_to new_user_session_path, flash: { success: I18n.t(:"messages.resource.create.success", resource: "Account") }
     else
-      render "new", alert: I18n.t(:"messages.account.create.failure")
+      render "new", alert: I18n.t(:"messages.resource.create.failure", resource: "Account")
     end
   end
 
@@ -27,9 +27,9 @@ class AccountsController < ApplicationController
   def update
     authorize! :update, account
     if account.update(account_params)
-      redirect_to "#{edit_account_path}#{hash}", flash: { success: I18n.t(:"messages.account.update.success") }
+      redirect_to "#{edit_account_path}#{hash}", flash: { success: I18n.t(:"messages.resource.update.success", resource: "Account") }
     else
-      render "edit", alert: I18n.t(:"messages.account.update.failure")
+      render "edit", alert: I18n.t(:"messages.resource.update.failure", resource: "Account")
     end
   end
 

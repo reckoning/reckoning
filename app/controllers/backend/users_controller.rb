@@ -23,9 +23,9 @@ module Backend
       ))
       user.skip_confirmation_notification!
       if user.save
-        redirect_to backend_users_path, notice: I18n.t(:"messages.user.create.success")
+        redirect_to backend_users_path, notice: I18n.t(:"messages.resource.create.success", resource: "Benutzer")
       else
-        render 'new', error: I18n.t(:"messages.user.create.failure")
+        render 'new', error: I18n.t(:"messages.resource.create.failure", resource: "Benutzer")
       end
     end
 
@@ -44,17 +44,17 @@ module Backend
     # patch: /backend/users/:id
     def update
       if user.update(user_params)
-        redirect_to backend_users_path, notice: I18n.t(:"messages.user.create.success")
+        redirect_to backend_users_path, notice: I18n.t(:"messages.resource.update.success", resource: "Benutzer")
       else
-        render "edit", error: I18n.t(:"messages.user.update.failure")
+        render "edit", error: I18n.t(:"messages.resource.update.failure", resource: "Benutzer")
       end
     end
 
     def destroy
       if user.destroy
-        redirect_to backend_users_path, notice: I18n.t(:"messages.user.destroy.success")
+        redirect_to backend_users_path, notice: I18n.t(:"messages.resource.destroy.success", resource: "Benutzer")
       else
-        redirect_to backend_users_path, error: I18n.t(:"messages.user.destroy.failure")
+        redirect_to backend_users_path, error: I18n.t(:"messages.resource.destroy.failure", resource: "Benutzer")
       end
     end
 

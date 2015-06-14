@@ -56,6 +56,7 @@ gem 'redcarpet'
 gem 'puma'
 
 gem 'i18n-js', github: 'fnando/i18n-js', branch: :master
+gem 'rails-i18n', '~> 4.0.0'
 
 gem 'thor'
 gem 'highline'

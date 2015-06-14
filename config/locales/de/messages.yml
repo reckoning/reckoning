@@ -12,15 +12,17 @@ de:
         success: "Aufgabe erfolgreich entfernt."
         warning: "Aufgabe konnte nicht gelöscht werden, da schon Zeiten in dieser Aufgabe zu einer Rechnung hinzugefügt wurden."
         failure: "Die Aufgabe konnte nicht entfernt werden."
-    project:
+    resource:
       create:
-        success: "Projekt erfolgreich erstellt."
-        failure: "Projekt konnte nicht erstellt werden."
+        success: "%{resource} erfolgreich erstellt."
+        failure: "%{resource} konnte nicht erstellt werden."
       update:
-        success: "Projekt erfolgreich bearbeitet."
-        failure: "Projekt konnte nicht bearbeitet werden."
+        success: "%{resource} erfolgreich bearbeitet."
+        failure: "%{resource} konnte nicht bearbeitet werden."
       destroy:
-        success: "Projekt erfolgreich gelöscht."
+        success: "%{resource} erfolgreich gelöscht."
+        failure: "%{resource} konnte nicht gelöscht werden."
+    project:
       archive:
         success: "Project erfolgreich archiviert."
       unarchive:
@@ -28,33 +30,9 @@ de:
         failure: "Projekt konnte nicht aktiviert werden."
       missing_address: "Bitte vervollständigen Sie zuerst Ihre Daten"
     customer:
-      update:
-        success: "Kunde erfolgreich bearbeitet."
-        failure: "Kunde konnte nicht bearbeitet werden."
-      destroy:
-        success: "Kunde erfolgreich gelöscht."
       confirm:
         delete: "Sind Sie sich sicher, dass Sie den Kunden löschen wollen? Alle zugehörigen Projekte werden ebenfalls gelöscht."
-    account:
-      create:
-        success: "Account erfolgreich erstellt."
-        failure: "Account konnte nicht erstellt werden."
-      update:
-        success: "Account wurde erfolgreich bearbeitet."
-        failure: "Account konnte nicht bearbeitet werden."
-      destroy:
-        success: "Account erfolgreich gelöscht."
-        failure: "Account konnte nicht gelöscht werden."
     user:
-      create:
-        success: "Benutzer erfolgreich erstellt."
-        failure: "Benutzer konnte nicht erstellt werden."
-      update:
-        success: "Benutzer wurde erfolgreich bearbeitet."
-        failure: "Benutzer konnte nicht bearbeitet werden."
-      destroy:
-        success: "Benutzer erfolgreich gelöscht."
-        failure: "Benutzer konnte nicht gelöscht werden."
       send_welcome:
         success: "Nachricht erfolgreich verschickt."
         failure: "Nachricht konnte nicht verschickt werden."
@@ -65,15 +43,6 @@ de:
         success: "Benutzer erfolgreich freigeschaltet."
         failure: "Benutzer konnte nicht freigeschaltet werden."
     invoice:
-      create:
-        success: "Rechnung erfolgreich erstellt."
-        failure: "Rechnung konnte nicht erstellt werden."
-      update:
-        success: "Rechnung wurde erfolgreich bearbeitet."
-        failure: "Rechnung konnte nicht bearbeitet werden."
-      destroy:
-        success: "Rechnung erfolgreich gelöscht."
-        failure: "Rechnung konnte nicht gelöscht werden."
       pay:
         success: "Rechnung erfolgreich als bezahlt markiert."
         failure: "Rechnung konnte nicht als bezahlt markiert werden."

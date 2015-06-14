@@ -5,8 +5,8 @@ window.Datepicker =
   init: ($element, withoutInput) ->
     withoutInput ?= false
     options =
-      monthsFull: I18n.t('date.dp_month_names')
-      monthsShort: I18n.t('date.dp_abbr_month_names')
+      monthsFull: I18n.t('date.month_names')
+      monthsShort: I18n.t('date.abbr_month_names')
       weekdaysFull: I18n.t('date.day_names')
       weekdaysShort: I18n.t('date.abbr_day_names')
       labelMonthNext: I18n.t('labels.datepicker.next_month')
