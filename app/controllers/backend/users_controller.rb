@@ -1,5 +1,7 @@
 module Backend
   class UsersController < BaseController
+    include ResourceHelper
+
     before_action :set_active_nav
 
     # get: /backend/users
@@ -23,9 +25,9 @@ module Backend
       ))
       user.skip_confirmation_notification!
       if user.save
-        redirect_to backend_users_path, notice: I18n.t(:"messages.resource.create.success", resource: "Benutzer")
+        redirect_to backend_users_path, notice: resource_message(:user, :create, :success)
       else
-        render 'new', error: I18n.t(:"messages.resource.create.failure", resource: "Benutzer")
+        render 'new', error: resource_message(:user, :create, :failure)
       end
     end
 
@@ -44,17 +46,17 @@ module Backend
     # patch: /backend/users/:id
     def update
       if user.update(user_params)
-        redirect_to backend_users_path, notice: I18n.t(:"messages.resource.update.success", resource: "Benutzer")
+        redirect_to backend_users_path, notice: resource_message(:user, :update, :success)
       else
-        render "edit", error: I18n.t(:"messages.resource.update.failure", resource: "Benutzer")
+        render "edit", error: resource_message(:user, :update, :failure)
       end
     end
 
     def destroy
       if user.destroy
-        redirect_to backend_users_path, notice: I18n.t(:"messages.resource.destroy.success", resource: "Benutzer")
+        redirect_to backend_users_path, notice: resource_message(:user, :destroy, :success)
       else
-        redirect_to backend_users_path, error: I18n.t(:"messages.resource.destroy.failure", resource: "Benutzer")
+        redirect_to backend_users_path, error: resource_message(:user, :destroy, :failure)
       end
     end
 

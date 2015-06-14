@@ -1,5 +1,7 @@
 module Backend
   class AccountsController < BaseController
+    include ResourceHelper
+
     before_action :set_active_nav
 
     # get: /backend/accounts
@@ -17,9 +19,9 @@ module Backend
     # post: /backend/accounts
     def create
       if account.save
-        redirect_to backend_accounts_path, notice: I18n.t(:"messages.resource.create.success", resource: "Account")
+        redirect_to backend_accounts_path, notice: resource_message(:account, :create, :success)
       else
-        render 'new', error: I18n.t(:"messages.resource.create.failure", resource: "Account")
+        render 'new', error: resource_message(:account, :create, :failure)
       end
     end
 
@@ -30,17 +32,17 @@ module Backend
     # patch: /backend/accounts/:id
     def update
       if account.update(account_params)
-        redirect_to backend_accounts_path, notice: I18n.t(:"messages.resource.create.success", resource: "Account")
+        redirect_to backend_accounts_path, notice: resource_message(:account, :update, :success)
       else
-        render "edit", error: I18n.t(:"messages.resource.update.failure", resource: "Account")
+        render "edit", error: resource_message(:account, :update, :failure)
       end
     end
 
     def destroy
       if account.destroy
-        redirect_to backend_accounts_path, notice: I18n.t(:"messages.resource.destroy.success", resource: "Account")
+        redirect_to backend_accounts_path, notice: resource_message(:account, :destroy, :success)
       else
-        redirect_to backend_accounts_path, error: I18n.t(:"messages.resource.destroy.failure", resource: "Account")
+        redirect_to backend_accounts_path, error: resource_message(:account, :destroy, :failure)
       end
     end
 

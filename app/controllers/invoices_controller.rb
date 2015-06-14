@@ -1,4 +1,6 @@
 class InvoicesController < ApplicationController
+  include ResourceHelper
+
   before_action :set_active_nav
   before_action :check_limit, only: [:new, :create]
   before_action :check_dependencies, only: [:new]
@@ -142,9 +144,9 @@ class InvoicesController < ApplicationController
     @invoice = current_account.invoices.new(invoice_params)
     authorize! :create, invoice
     if invoice.save
-      redirect_to invoices_path, flash: { success: I18n.t(:"messages.resource.create.success", resource: "Rechnung") }
+      redirect_to invoices_path, flash: { success: resource_message(:invoice, :create, :success) }
     else
-      flash.now[:alert] = I18n.t(:"messages.resource.create.failure", resource: "Rechnung")
+      flash.now[:alert] = resource_message(:invoice, :create, :failure)
       render "new"
     end
   end
@@ -152,9 +154,9 @@ class InvoicesController < ApplicationController
   def update
     authorize! :update, invoice
     if invoice.update(invoice_params)
-      redirect_to invoices_path, flash: { success: I18n.t(:"messages.resource.update.success", resource: "Rechnung") }
+      redirect_to invoices_path, flash: { success: resource_message(:invoice, :update, :success) }
     else
-      flash.now[:alert] = I18n.t(:"messages.resource.update.failure", resource: "Rechnung")
+      flash.now[:alert] = resource_message(:invoice, :update, :failure)
       render "edit"
     end
   end
@@ -216,13 +218,13 @@ class InvoicesController < ApplicationController
       File.delete(invoice.pdf_path) if File.exist?(invoice.pdf_path)
       File.delete(invoice.timesheet_path) if File.exist?(invoice.timesheet_path)
 
-      flash[:success] = I18n.t(:"messages.resource.destroy.success", resource: "Rechnung")
+      flash[:success] = resource_message(:invoice, :destroy, :success)
       respond_to do |format|
         format.js { render json: {}, status: :ok }
         format.html { redirect_to invoices_path }
       end
     else
-      flash[:alert] = I18n.t(:"messages.resource.destroy.failure", resource: "Rechnung")
+      flash[:alert] = resource_message(:invoice, :destroy, :failure)
       respond_to do |format|
         format.js { render json: {}, status: :ok }
         format.html { redirect_to invoices_path }
@@ -291,6 +293,6 @@ class InvoicesController < ApplicationController
 
   private def check_dependencies
     return if current_account.address.present?
-    redirect_to "#{edit_user_registration_path}#address", alert: I18n.t(:"messages.invoice.missing_address")
+    redirect_to "#{edit_user_registration_path}#address", alert: I18n.t(:"messages.missing_address")
   end
 end

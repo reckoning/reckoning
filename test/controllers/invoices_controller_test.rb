@@ -62,7 +62,7 @@ class InvoicesControllerTest < ActionController::TestCase
 
       assert_response :found
 
-      assert_equal I18n.t(:"messages.invoice.missing_address"), flash[:alert]
+      assert_equal I18n.t(:"messages.missing_address"), flash[:alert]
     end
   end
 
@@ -94,21 +94,21 @@ class InvoicesControllerTest < ActionController::TestCase
       post :create, invoice: { project_id: invoice.project.id, date: Date.today }
 
       assert_response :found
-      assert_equal I18n.t(:"messages.invoice.create.success"), flash[:success]
+      assert_equal I18n.t(:"resources.messages.create.success", resource: I18n.t(:"resources.invoice")), flash[:success]
     end
 
     it "User can update invoice" do
       put :update, id: invoice.id, invoice: { project_id: invoice.project.id, date: Date.today - 1 }
 
       assert_response :found
-      assert_equal I18n.t(:"messages.invoice.update.success"), flash[:success]
+      assert_equal I18n.t(:"resources.messages.update.success", resource: I18n.t(:"resources.invoice")), flash[:success]
     end
 
     it "User can destroy invoice" do
       delete :destroy, id: invoice.id
 
       assert_response :found
-      assert_equal I18n.t(:"messages.invoice.destroy.success"), flash[:success]
+      assert_equal I18n.t(:"resources.messages.destroy.success", resource: I18n.t(:"resources.invoice")), flash[:success]
 
       assert_not_equal invoice, Invoice.where(id: invoice.id).first
     end

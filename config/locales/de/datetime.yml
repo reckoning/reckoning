@@ -9,5 +9,6 @@ de:
     formats:
       db: "%Y-%m-%d"
       month_year: "%B %Y"
+      month: "%B"
       year: "%Y"
       file: "%B-%Y"
