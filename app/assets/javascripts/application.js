@@ -1,5 +1,6 @@
 //= require jquery
 //= require jquery_ujs
+//= require js-routes
 //= require spin.js/spin
 //= require ladda/js/ladda
 //= require noty

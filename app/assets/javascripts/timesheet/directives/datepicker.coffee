@@ -1,7 +1,7 @@
 angular.module 'Timesheet'
 .directive 'datepicker', ['$timeout', ($timeout) ->
   restrict: 'E'
-  templateUrl: r(datepicker_template_path)
+  templateUrl: Routes.datepicker_template_path()
   require: '?ngModel'
   replace: true
   scope:
