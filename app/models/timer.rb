@@ -15,10 +15,10 @@ class Timer < ActiveRecord::Base
   def stop_other_timers
     return unless started
 
-    self.started_at = Time.now
+    self.started_at = Time.zone.now
 
     Timer.where(user_id: user_id, started: true).all.each do |timer|
-      timer.value = timer.value + ((Time.now - timer.started_at) / 1.hour)
+      timer.value = timer.value + ((Time.zone.now - timer.started_at) / 1.hour)
       timer.started = false
       timer.save
     end
@@ -35,7 +35,7 @@ class Timer < ActiveRecord::Base
 
     update(
       started: false,
-      value: value + ((Time.now - started_at) / 1.hour)
+      value: value + ((Time.zone.now - started_at) / 1.hour)
     )
   end
 
