@@ -25,9 +25,9 @@
     button.btn.btn-default ng-click="cancel()"
       = I18n.t(:"actions.close")
     button.btn.btn-primary.btn-lg ng-disabled="!timer.task_uuid" ng-click="saveTimer(timer)" data-loading-text=I18n.t(:"actions.loading")
-      span ng-if="timer.uuid"
+      span ng-if="timer.uuid || timer.value.length"
         = I18n.t(:"actions.save")
-      span ng-if="!timer.uuid"
+      span ng-if="!timer.uuid && !timer.value.length"
         = I18n.t(:"actions.begin")
   .pull-left ng-if="timer.uuid"
     button.btn.btn-danger ng-click="delete(timer)"
