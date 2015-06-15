@@ -23,7 +23,7 @@ class ProjectsControllerTest < ActionController::TestCase
     end
 
     it "Unauthrized user cant create new project" do
-      post :create, project: { project_id: "foo", date: Date.today }
+      post :create, project: { project_id: "foo", date: Time.zone.today }
 
       assert_response :found
       assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
@@ -37,7 +37,7 @@ class ProjectsControllerTest < ActionController::TestCase
     end
 
     it "Unauthrized user cant update project" do
-      put :update, id: project.id, project: { date: Date.today - 1 }
+      put :update, id: project.id, project: { date: Time.zone.today - 1 }
 
       assert_response :found
       assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]

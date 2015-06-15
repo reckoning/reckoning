@@ -31,12 +31,12 @@ module ApplicationHelper
   end
 
   def current_years
-    current_year = Time.now.year
-    current_year = (Time.now + 1.year).year if Time.now.month == 12
+    current_year = Time.zone.now.year
+    current_year = (Time.zone.now + 1.year).year if Time.zone.now.month == 12
     if first_invoice_year
       years = (first_invoice_year..current_year)
     else
-      years = ((Time.now - 1.year).year..current_year)
+      years = ((Time.zone.now - 1.year).year..current_year)
     end
     years.to_a.reverse.map do |year|
       { name: year, link: year }

@@ -9,7 +9,7 @@ class InvoicePdfWorker
       invoice.generate
       invoice.generate_timesheet if invoice.timers.present?
 
-      invoice.update_attributes(pdf_generated_at: Time.now)
+      invoice.update_attributes(pdf_generated_at: Time.zone.now)
     rescue => e
       Rails.logger.debug e.inspect
     ensure

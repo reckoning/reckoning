@@ -33,7 +33,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def self.due
-    where "payment_due_date < ?", Time.now.to_date
+    where "payment_due_date < ?", Time.zone.now.to_date
   end
 
   def self.created
@@ -45,7 +45,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def set_pay_date
-    self.pay_date = Date.today
+    self.pay_date = Time.zone.today
     save
   end
 
@@ -104,7 +104,7 @@ class Invoice < ActiveRecord::Base
   def set_payment_due_date
     return if payment_due_date.present?
     payment_due = customer.payment_due || DEFAULT_PAYMENT_DUE_DAYS
-    self.payment_due_date = Time.now + payment_due.days
+    self.payment_due_date = Time.zone.now + payment_due.days
     save
   end
 
@@ -133,7 +133,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def pdf_up_to_date?
-    Time.at(pdf_generated_at.to_i) == Time.at(updated_at.to_i)
+    Time.zone.at(pdf_generated_at.to_i) == Time.zone.at(updated_at.to_i)
   end
 
   def pdf_present?
@@ -182,8 +182,8 @@ class Invoice < ActiveRecord::Base
   end
 
   private def set_customer
-    project = Project.where(id: project_id).first
-    customer = Customer.where(id: project.customer_id).first unless project.blank?
+    project = Project.find_by(id: project_id)
+    customer = Customer.find_by(id: project.customer_id) unless project.blank?
     return if customer.blank?
     self.customer_id = customer.id
   end
