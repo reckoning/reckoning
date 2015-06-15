@@ -4,7 +4,7 @@ require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
-Bundler.require(:default, Rails.env)
+Bundler.require(*Rails.groups)
 
 module Reckoning
   class Application < Rails::Application
@@ -28,7 +28,7 @@ module Reckoning
 
     config.exceptions_app = routes
 
-    config.middleware.insert_before 0, "Rack::Cors", debug: true, logger: (-> { Rails.logger }) do
+    config.middleware.insert_before 0, "Rack::Cors", debug: true, logger: -> { Rails.logger } do
       allow do
         origins '*'
         resource '*', headers: :any,

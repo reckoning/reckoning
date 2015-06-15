@@ -34,7 +34,6 @@ gem 'dynamic_fields_for_rails'
 gem 'simple_states'
 
 gem 'sass-rails'
-gem 'sass'
 gem 'coffee-rails'
 gem 'bourbon'
 
@@ -43,7 +42,7 @@ gem 'font-awesome-sass'
 
 gem 'jquery-rails'
 
-gem 'asset_pipeline_routes'
+gem 'js-routes'
 
 gem 'uglifier'
 
@@ -88,7 +87,6 @@ group :development, :test do
   gem 'foreman'
   gem 'rubocop', require: false
   gem 'byebug'
-  gem 'guard-minitest'
   gem 'terminal-notifier-guard', '~> 1.6.1'
   gem 'mina'
 end

@@ -20,7 +20,7 @@ $ ->
     create: (input, callback) ->
       xhr.abort() if xhr
       xhr = $.ajax
-        url: ApiBasePath + r(v1_customers_path)
+        url: ApiBasePath + Routes.v1_customers_path()
         data: {customer: {name: input}}
         method: 'POST'
         dataType: 'json'
