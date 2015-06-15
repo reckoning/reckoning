@@ -19,6 +19,7 @@ gems/*
 
 # test files
 coverage/*
+test/reports/*
 
 # app files
 files/*

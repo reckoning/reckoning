@@ -85,7 +85,7 @@ group :test do
   gem 'mocha', require: false
   gem 'spring'
   gem 'timecop'
-  gem "codeclimate-test-reporter", require: nil
+  gem "codeclimate-test-reporter", require: false
 end
 
 group :development, :test do
