@@ -23,7 +23,7 @@ class InvoicesControllerTest < ActionController::TestCase
     end
 
     it "Unauthrized user cant create new invoice" do
-      post :create, invoice: { project_id: "foo", date: Date.today }
+      post :create, invoice: { project_id: "foo", date: Time.zone.today }
 
       assert_response :found
       assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
@@ -46,7 +46,7 @@ class InvoicesControllerTest < ActionController::TestCase
     end
 
     it "Unauthrized user cant update invoice" do
-      put :update, id: invoice.id, invoice: { date: Date.today - 1 }
+      put :update, id: invoice.id, invoice: { date: Time.zone.today - 1 }
 
       assert_response :found
       assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
@@ -91,14 +91,14 @@ class InvoicesControllerTest < ActionController::TestCase
     end
 
     it "User can create a new invoice" do
-      post :create, invoice: { project_id: invoice.project.id, date: Date.today }
+      post :create, invoice: { project_id: invoice.project.id, date: Time.zone.today }
 
       assert_response :found
       assert_equal I18n.t(:"resources.messages.create.success", resource: I18n.t(:"resources.invoice")), flash[:success]
     end
 
     it "User can update invoice" do
-      put :update, id: invoice.id, invoice: { project_id: invoice.project.id, date: Date.today - 1 }
+      put :update, id: invoice.id, invoice: { project_id: invoice.project.id, date: Time.zone.today - 1 }
 
       assert_response :found
       assert_equal I18n.t(:"resources.messages.update.success", resource: I18n.t(:"resources.invoice")), flash[:success]

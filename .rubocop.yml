@@ -56,8 +56,8 @@ Metrics/AbcSize:
 Metrics/PerceivedComplexity:
   Enabled: false
 
-Style/RegexpLiteral:
-  MaxSlashes: 0
+Style/ParallelAssignment:
+  Enabled: false
 
 # `fail` is seldom/never seen in Ruby code.
 # https://github.com/bbatsov/ruby-style-guide/issues/233

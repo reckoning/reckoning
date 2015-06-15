@@ -17,7 +17,7 @@ class Timer < ActiveRecord::Base
 
     self.started_at = Time.zone.now
 
-    Timer.where(user_id: user_id, started: true).all.each do |timer|
+    Timer.where(user_id: user_id, started: true).find_each do |timer|
       timer.value = timer.value + ((Time.zone.now - timer.started_at) / 1.hour)
       timer.started = false
       timer.save

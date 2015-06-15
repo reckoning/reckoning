@@ -49,7 +49,7 @@ class TasksController < ApplicationController
   end
 
   private def date
-    @date ||= (params[:date].present? ? Date.parse(params.fetch(:date, nil)) : Date.today)
+    @date ||= (params[:date].present? ? Time.zone.parse(params.fetch(:date, nil)) : Time.zone.today)
   end
 
   private def project_id

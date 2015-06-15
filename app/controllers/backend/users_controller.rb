@@ -19,10 +19,12 @@ module Backend
     # post: /backend/users
     def create
       password = Devise.friendly_token.first(30)
-      @user = User.new(user_params.merge(
-        password: password,
-        password_confirmation: password
-      ))
+      @user = User.new(
+        user_params.merge(
+          password: password,
+          password_confirmation: password
+        )
+      )
       user.skip_confirmation_notification!
       if user.save
         redirect_to backend_users_path, notice: resource_message(:user, :create, :success)

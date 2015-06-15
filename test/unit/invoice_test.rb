@@ -21,7 +21,7 @@ class InvoiceTest < ActiveSupport::TestCase
   it "should create invoice if date and valid project present" do
     Timecop.freeze "2014-01-01" do
       project = projects :narendra3
-      invoice = Invoice.new(project_id: project.id, date: Time.now)
+      invoice = Invoice.new(project_id: project.id, date: Time.zone.now)
       assert invoice.valid?, "#{invoice.inspect} should be valid"
     end
   end
