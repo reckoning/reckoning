@@ -1,6 +1,6 @@
 {
   "name": "pdf.js",
-  "version": "1.0.277",
+  "version": "1.1.3",
   "homepage": "https://github.com/mortik/pdf.js",
   "authors": [
     "mozilla",
@@ -11,13 +11,18 @@
     "pdf.js"
   ],
   "license": "Apache License, Version 2.0",
-  "_release": "1.0.277",
+  "main": [
+    "build/pdf.js",
+    "build/pdf.worker.js"
+  ],
+  "ignore": [],
+  "_release": "1.1.3",
   "_resolution": {
     "type": "version",
-    "tag": "v1.0.277",
-    "commit": "a615bd5fa0cb5911c49812e6a51b734efc38de1d"
+    "tag": "v1.1.3",
+    "commit": "79d485966dea504623a96675b7b5f71abae75a39"
   },
   "_source": "git://github.com/mortik/pdf.js.git",
-  "_target": "~1.0.277",
+  "_target": "~1.1.3",
   "_originalSource": "mortik/pdf.js"
 }

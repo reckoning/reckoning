@@ -10,5 +10,10 @@
   "keywords": [
     "pdf.js"
   ],
-  "license": "Apache License, Version 2.0"
+  "license": "Apache License, Version 2.0",
+  "main": [
+    "build/pdf.js",
+    "build/pdf.worker.js"
+  ],
+  "ignore": []
 }
