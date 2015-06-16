@@ -7,6 +7,19 @@ GIT
       i18n (~> 0.6)
 
 GIT
+  remote: git://github.com/mortik/devise-two-factor.git
+  revision: 218df5b4558e1d08dcd37e9b4e5f50897af1a7c6
+  branch: master
+  specs:
+    devise-two-factor (1.0.2)
+      activemodel
+      activesupport
+      attr_encrypted (~> 1.3.2)
+      devise (>= 3.2.4)
+      railties
+      rotp (~> 2)
+
+GIT
   remote: git://github.com/plataformatec/devise.git
   revision: 15b99977a2a3539c28c5c03fb2d5d7ad721ccbc7
   branch: master
@@ -25,17 +38,6 @@ GIT
   specs:
     minitest-ci (3.0.4.pre)
       minitest (~> 5.0, >= 5.0.6)
-
-PATH
-  remote: /Users/mortik/dev/gems/devise-two-factor
-  specs:
-    devise-two-factor (1.0.2)
-      activemodel
-      activesupport
-      attr_encrypted (~> 1.3.2)
-      devise (>= 3.2.4)
-      railties
-      rotp (~> 2)
 
 GEM
   remote: https://rubygems.org/
