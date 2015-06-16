@@ -7,8 +7,21 @@ GIT
       i18n (~> 0.6)
 
 GIT
+  remote: git://github.com/mortik/devise-two-factor.git
+  revision: 218df5b4558e1d08dcd37e9b4e5f50897af1a7c6
+  branch: master
+  specs:
+    devise-two-factor (1.0.2)
+      activemodel
+      activesupport
+      attr_encrypted (~> 1.3.2)
+      devise (>= 3.2.4)
+      railties
+      rotp (~> 2)
+
+GIT
   remote: git://github.com/plataformatec/devise.git
-  revision: 099aee5c5b801523135e1eb87d82f4be50648de2
+  revision: 15b99977a2a3539c28c5c03fb2d5d7ad721ccbc7
   branch: master
   specs:
     devise (3.5.1)
@@ -100,7 +113,7 @@ GEM
     cache_digests (0.3.1)
       actionpack (>= 3.2)
       thread_safe
-    cancancan (1.10.1)
+    cancancan (1.11.0)
     celluloid (0.16.0)
       timers (~> 4.0.0)
     chunky_png (1.3.4)
@@ -119,13 +132,6 @@ GEM
     database_cleaner (1.4.1)
     devise-async (0.10.1)
       devise (~> 3.2)
-    devise-two-factor (1.0.0)
-      activemodel
-      activesupport
-      attr_encrypted
-      devise
-      rails
-      rotp
     docile (1.1.5)
     domain_name (0.5.24)
       unf (>= 0.0.5, < 1.0.0)
@@ -209,7 +215,7 @@ GEM
     nori (2.6.0)
     open4 (1.3.4)
     orm_adapter (0.5.0)
-    parser (2.3.0.pre.2)
+    parser (2.2.2.5)
       ast (>= 1.1, < 3.0)
     pg (0.18.2)
     powerpack (0.1.1)
@@ -380,7 +386,7 @@ DEPENDENCIES
   database_cleaner
   devise!
   devise-async
-  devise-two-factor
+  devise-two-factor!
   dropbox-sdk
   dynamic_fields_for_rails
   factory_girl
