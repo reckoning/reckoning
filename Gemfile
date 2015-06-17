@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '2.2.2'
 
-gem 'rails', '4.2.0'
+gem 'rails', '4.2.2'
 
 gem 'pg'
 
@@ -10,7 +10,7 @@ gem 'stripe', github: 'stripe/stripe-ruby'
 gem 'money'
 gem 'valvat'
 
-gem 'active_model_serializers', '~> 0.8.0'
+gem 'active_model_serializers'
 
 gem 'sidekiq'
 # for sidekiq web
@@ -91,6 +91,5 @@ group :development, :test do
   gem 'foreman'
   gem 'rubocop', require: false
   gem 'byebug'
-  gem 'terminal-notifier-guard', '~> 1.6.1'
   gem 'mina'
 end

@@ -1,5 +1,5 @@
 /**
- * angular-timer - v1.2.1 - 2015-02-25 4:19 PM
+ * angular-timer - v1.3.3 - 2015-05-28 9:05 AM
  * https://github.com/siddii/angular-timer
  *
  * Copyright (c) 2015 Siddique Hameed
@@ -17,9 +17,11 @@ var timerModule = angular.module('timer', [])
         countdownattr: '=countdown',
         finishCallback: '&finishCallback',
         autoStart: '&autoStart',
+        language: '@?',
+        fallback: '@?',
         maxTimeUnit: '='
       },
-      controller: ['$scope', '$element', '$attrs', '$timeout', '$interpolate', function ($scope, $element, $attrs, $timeout, $interpolate) {
+      controller: ['$scope', '$element', '$attrs', '$timeout', 'I18nService', '$interpolate', 'progressBarService', function ($scope, $element, $attrs, $timeout, I18nService, $interpolate, progressBarService) {
 
         // Checking for trim function since IE8 doesn't have it
         // If not a function, create tirm with RegEx to mimic native trim
@@ -33,6 +35,25 @@ var timerModule = angular.module('timer', [])
         //supporting both "autostart" and "auto-start" as a solution for
         //backward and forward compatibility.
         $scope.autoStart = $attrs.autoStart || $attrs.autostart;
+
+
+        $scope.language = $scope.language || 'en';
+        $scope.fallback = $scope.fallback || 'en';
+
+        //allow to change the language of the directive while already launched
+        $scope.$watch('language', function(newVal, oldVal) {
+          if(newVal !== undefined) {
+            i18nService.init(newVal, $scope.fallback);
+          }
+        });
+
+        //init momentJS i18n, default english
+        var i18nService = new I18nService();
+        i18nService.init($scope.language, $scope.fallback);
+
+        //progress bar
+        $scope.displayProgressBar = 0;
+        $scope.displayProgressActive = 'active'; //Bootstrap active effect for progress bar
 
         if ($element.html().trim().length === 0) {
           $element.append($compile('<span>' + $interpolate.startSymbol() + 'millis' + $interpolate.endSymbol() + '</span>')($scope));
@@ -61,11 +82,11 @@ var timerModule = angular.module('timer', [])
         $scope.$on('timer-clear', function () {
           $scope.clear();
         });
-        
+
         $scope.$on('timer-reset', function () {
           $scope.reset();
         });
-        
+
         $scope.$on('timer-set-countdown', function (e, countdown) {
           $scope.countdown = countdown;
         });
@@ -82,9 +103,15 @@ var timerModule = angular.module('timer', [])
           }
         });
 
+        $scope.$watch('endTimeAttr', function(newValue, oldValue) {
+          if (newValue !== oldValue && $scope.isRunning) {
+            $scope.start();
+          }
+        });
+
         $scope.start = $element[0].start = function () {
-          $scope.startTime = $scope.startTimeAttr ? new Date($scope.startTimeAttr) : new Date();
-          $scope.endTime = $scope.endTimeAttr ? new Date($scope.endTimeAttr) : null;
+          $scope.startTime = $scope.startTimeAttr ? moment($scope.startTimeAttr) : moment();
+          $scope.endTime = $scope.endTimeAttr ? moment($scope.endTimeAttr) : null;
           if (!$scope.countdown) {
             $scope.countdown = $scope.countdownattr && parseInt($scope.countdownattr, 10) > 0 ? parseInt($scope.countdownattr, 10) : undefined;
           }
@@ -98,7 +125,7 @@ var timerModule = angular.module('timer', [])
           if ($scope.countdownattr) {
             $scope.countdown += 1;
           }
-          $scope.startTime = new Date() - ($scope.stoppedTime - $scope.startTime);
+          $scope.startTime = moment().diff((moment($scope.stoppedTime).diff(moment($scope.startTime))));
           tick();
           $scope.isRunning = true;
         };
@@ -111,31 +138,37 @@ var timerModule = angular.module('timer', [])
 
         $scope.clear = $element[0].clear = function () {
           // same as stop but without the event being triggered
-          $scope.stoppedTime = new Date();
+          $scope.stoppedTime = moment();
           resetTimeout();
           $scope.timeoutId = null;
           $scope.isRunning = false;
         };
 
         $scope.reset = $element[0].reset = function () {
-          $scope.startTime = $scope.startTimeAttr ? new Date($scope.startTimeAttr) : new Date();
-          $scope.endTime = $scope.endTimeAttr ? new Date($scope.endTimeAttr) : null;
+          $scope.startTime = $scope.startTimeAttr ? moment($scope.startTimeAttr) : moment();
+          $scope.endTime = $scope.endTimeAttr ? moment($scope.endTimeAttr) : null;
           $scope.countdown = $scope.countdownattr && parseInt($scope.countdownattr, 10) > 0 ? parseInt($scope.countdownattr, 10) : undefined;
           resetTimeout();
           tick();
           $scope.isRunning = false;
           $scope.clear();
         };
-        
+
         $element.bind('$destroy', function () {
           resetTimeout();
           $scope.isRunning = false;
         });
 
+
         function calculateTimeUnits() {
+          var timeUnits = {}; //will contains time with units
+
           if ($attrs.startTime !== undefined){
-            $scope.millis = new Date() - new Date($scope.startTimeAttr);
+            $scope.millis = moment().diff(moment($scope.startTimeAttr));
           }
+
+          timeUnits = i18nService.getTimeUnits($scope.millis);
+
           // compute time values based on maxTimeUnit specification
           if (!$scope.maxTimeUnit || $scope.maxTimeUnit === 'day') {
             $scope.seconds = Math.floor(($scope.millis / 1000) % 60);
@@ -187,13 +220,16 @@ var timerModule = angular.module('timer', [])
           $scope.daysS = ($scope.days === 1)? '' : 's';
           $scope.monthsS = ($scope.months === 1)? '' : 's';
           $scope.yearsS = ($scope.years === 1)? '' : 's';
+
+
           // new plural-singular unit decision functions (for custom units and multilingual support)
-          $scope.secondUnit = function(singleSecond, pluralSecond){if($scope.seconds === 1){if(singleSecond){return singleSecond;} return 'second';} if(pluralSecond){return pluralSecond;} return 'seconds';};
-          $scope.minuteUnit = function(singleMinute, pluralMinute){if($scope.minutes === 1){if(singleMinute){return singleMinute;} return 'minute';} if(pluralMinute){return pluralMinute;} return 'minutes';};
-          $scope.hourUnit = function(singleHour, pluralHour){if($scope.hours === 1){if(singleHour){return singleHour;} return 'hour';} if(pluralHour){return pluralHour;} return 'hours';};
-          $scope.dayUnit = function(singleDay, pluralDay){if($scope.days === 1){if(singleDay){return singleDay;} return 'day';} if(pluralDay){return pluralDay;} return 'days';};
-          $scope.monthUnit = function(singleMonth, pluralMonth){if($scope.months === 1){if(singleMonth){return singleMonth;} return 'month';} if(pluralMonth){return pluralMonth;} return 'months';};
-          $scope.yearUnit = function(singleYear, pluralYear){if($scope.years === 1){if(singleYear){return singleYear;} return 'year';} if(pluralYear){return pluralYear;} return 'years';};
+          $scope.secondUnit = timeUnits.seconds;
+          $scope.minuteUnit = timeUnits.minutes;
+          $scope.hourUnit = timeUnits.hours;
+          $scope.dayUnit = timeUnits.days;
+          $scope.monthUnit = timeUnits.months;
+          $scope.yearUnit = timeUnits.years;
+
           //add leading zero if number is smaller than 10
           $scope.sseconds = $scope.seconds < 10 ? '0' + $scope.seconds : $scope.seconds;
           $scope.mminutes = $scope.minutes < 10 ? '0' + $scope.minutes : $scope.minutes;
@@ -236,18 +272,19 @@ var timerModule = angular.module('timer', [])
         }
         calculateTimeUnits();
 
-        var tick = function () {
-
-          $scope.millis = new Date() - $scope.startTime;
+        var tick = function tick() {
+          var typeTimer = null; // countdown or endTimeAttr
+          $scope.millis = moment().diff($scope.startTime);
           var adjustment = $scope.millis % 1000;
 
           if ($scope.endTimeAttr) {
-            $scope.millis = $scope.endTime - new Date();
+            typeTimer = $scope.endTimeAttr;
+            $scope.millis = moment($scope.endTime).diff(moment());
             adjustment = $scope.interval - $scope.millis % 1000;
           }
 
-
           if ($scope.countdownattr) {
+            typeTimer = $scope.countdownattr;
             $scope.millis = $scope.countdown * 1000;
           }
 
@@ -279,6 +316,15 @@ var timerModule = angular.module('timer', [])
               $scope.$eval($scope.finishCallback);
             }
           }
+
+          if(typeTimer !== null){
+            //calculate progress bar
+            $scope.progressBar = progressBarService.calculateProgressBar($scope.startTime, $scope.millis, $scope.endTime, $scope.countdownattr);
+
+            if($scope.progressBar === 100){
+              $scope.displayProgressActive = ''; //No more Bootstrap active effect
+            }
+          }
         };
 
         if ($scope.autoStart === undefined || $scope.autoStart === true) {
@@ -286,9 +332,121 @@ var timerModule = angular.module('timer', [])
         }
       }]
     };
-  }]);
+    }]);
 
 /* commonjs package manager support (eg componentjs) */
 if (typeof module !== "undefined" && typeof exports !== "undefined" && module.exports === exports){
   module.exports = timerModule;
 }
+
+var app = angular.module('timer');
+
+app.factory('I18nService', function() {
+
+    var I18nService = function() {};
+
+    I18nService.prototype.language = 'en';
+    I18nService.prototype.fallback = 'en';
+    I18nService.prototype.timeHumanizer = {};
+
+    I18nService.prototype.init = function init(lang, fallback) {
+        var supported_languages = humanizeDuration.getSupportedLanguages();
+
+        this.fallback = (fallback !== undefined) ? fallback : 'en';
+        if (supported_languages.indexOf(fallback) === -1) {
+            this.fallback = 'en';
+        }
+
+        this.language = lang;
+        if (supported_languages.indexOf(lang) === -1) {
+            this.language = this.fallback;
+        }
+
+        //moment init
+        moment.locale(this.language); //@TODO maybe to remove, it should be handle by the user's application itself, and not inside the directive
+
+        //human duration init, using it because momentjs does not allow accurate time (
+        // momentJS: a few moment ago, human duration : 4 seconds ago
+        this.timeHumanizer = humanizeDuration.humanizer({
+            language: this.language,
+            halfUnit:false
+        });
+    };
+
+    /**
+     * get time with units from momentJS i18n
+     * @param {int} millis
+     * @returns {{millis: string, seconds: string, minutes: string, hours: string, days: string, months: string, years: string}}
+     */
+    I18nService.prototype.getTimeUnits = function getTimeUnits(millis) {
+        var diffFromAlarm = Math.round(millis/1000) * 1000; //time in milliseconds, get rid of the last 3 ms value to avoid 2.12 seconds display
+
+        var time = {};
+
+        if (typeof this.timeHumanizer != 'undefined'){
+            time = {
+                'millis' : this.timeHumanizer(diffFromAlarm, { units: ["milliseconds"] }),
+                'seconds' : this.timeHumanizer(diffFromAlarm, { units: ["seconds"] }),
+                'minutes' : this.timeHumanizer(diffFromAlarm, { units: ["minutes", "seconds"] }) ,
+                'hours' : this.timeHumanizer(diffFromAlarm, { units: ["hours", "minutes", "seconds"] }) ,
+                'days' : this.timeHumanizer(diffFromAlarm, { units: ["days", "hours", "minutes", "seconds"] }) ,
+                'months' : this.timeHumanizer(diffFromAlarm, { units: ["months", "days", "hours", "minutes", "seconds"] }) ,
+                'years' : this.timeHumanizer(diffFromAlarm, { units: ["years", "months", "days", "hours", "minutes", "seconds"] })
+            };
+        }
+        else {
+            console.error('i18nService has not been initialized. You must call i18nService.init("en") for example');
+        }
+
+        return time;
+    };
+
+    return I18nService;
+});
+
+var app = angular.module('timer');
+
+app.factory('progressBarService', function() {
+
+  var ProgressBarService = function() {};
+
+  /**
+   * calculate the remaining time in a progress bar in percentage
+   * @param {momentjs} startValue in seconds
+   * @param {integer} currentCountdown, where are we in the countdown
+   * @param {integer} remainingTime, remaining milliseconds
+   * @param {integer} endTime, end time, can be undefined
+   * @param {integer} coutdown, original coutdown value, can be undefined
+   *
+   * joke : https://www.youtube.com/watch?v=gENVB6tjq_M
+   * @return {float} 0 --> 100
+   */
+  ProgressBarService.prototype.calculateProgressBar = function calculateProgressBar(startValue, remainingTime, endTimeAttr, coutdown) {
+    var displayProgressBar = 0,
+      endTimeValue,
+      initialCountdown;
+
+    remainingTime = remainingTime / 1000; //seconds
+
+
+    if(endTimeAttr !== null){
+      endTimeValue = moment(endTimeAttr);
+      initialCountdown = endTimeValue.diff(startValue, 'seconds');
+      displayProgressBar = remainingTime * 100 / initialCountdown;
+    }
+    else {
+      displayProgressBar = remainingTime * 100 / coutdown;
+    }
+
+    displayProgressBar = 100 - displayProgressBar; //To have 0 to 100 and not 100 to 0
+    displayProgressBar = Math.round(displayProgressBar * 10) / 10; //learn more why : http://stackoverflow.com/questions/588004/is-floating-point-math-broken
+
+    if(displayProgressBar > 100){ //security
+      displayProgressBar = 100;
+    }
+
+    return displayProgressBar;
+  };
+
+  return new ProgressBarService();
+});

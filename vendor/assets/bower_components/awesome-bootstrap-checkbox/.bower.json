@@ -4,7 +4,7 @@
     "awesome-bootstrap-checkbox.css",
     "awesome-bootstrap-checkbox.scss"
   ],
-  "version": "0.2.3",
+  "version": "0.3.4",
   "homepage": "https://github.com/flatlogic/awesome-bootstrap-checkbox",
   "authors": [
     "okendoken flatlogic.com"
@@ -15,14 +15,13 @@
     "bower_components"
   ],
   "dependencies": {},
-  "_release": "0.2.3",
+  "_release": "0.3.4",
   "_resolution": {
     "type": "version",
-    "tag": "v0.2.3",
-    "commit": "c44377a3ea7ba968e4f48e1339fce4d943baa37f"
+    "tag": "v0.3.4",
+    "commit": "3218692dba19fac31ce2a6b086b271be27d2d70e"
   },
   "_source": "git://github.com/flatlogic/awesome-bootstrap-checkbox.git",
-  "_target": "~0.2.3",
-  "_originalSource": "awesome-bootstrap-checkbox",
-  "_direct": true
+  "_target": "~0.3.0",
+  "_originalSource": "awesome-bootstrap-checkbox"
 }

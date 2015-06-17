@@ -2,6 +2,8 @@
 // Checkboxes
 // --------------------------------------------------
 
+$font-family-icon: 'FontAwesome' !default;
+
 @mixin checkbox-variant($parent, $color) {
   #{$parent} input[type="checkbox"]:checked + label{
     &::before {
@@ -20,6 +22,7 @@
 
   label{
     display: inline-block;
+    vertical-align: middle;
     position: relative;
     padding-left: 5px;
 
@@ -48,19 +51,20 @@
       padding-left: 3px;
       padding-top: 1px;
       font-size: 11px;
-      color: $gray;
+      color: $input-color;
     }
   }
 
   input[type="checkbox"]{
     opacity: 0;
+    z-index: 1;
 
     &:focus + label::before{
       @include tab-focus();
     }
 
     &:checked + label::after{
-      font-family: 'FontAwesome';
+      font-family: $font-family-icon;
       content: $fa-var-check;
     }
 
@@ -68,7 +72,7 @@
       opacity: 0.65;
 
       &::before{
-        background-color: $gray-lighter;
+        background-color: $input-bg-disabled;
         cursor: not-allowed;
       }
     }
@@ -117,6 +121,7 @@
 
   label{
     display: inline-block;
+    vertical-align: middle;
     position: relative;
     padding-left: 5px;
 
@@ -144,7 +149,7 @@
       top: 3px;
       margin-left: -20px;
       border-radius: 50%;
-      background-color: $gray;
+      background-color: $input-color;
       @include scale(0, 0);
 
       @include transition-transform(.1s cubic-bezier(.8,-0.33,.2,1.33));
@@ -154,6 +159,7 @@
 
   input[type="radio"]{
     opacity: 0;
+    z-index: 1;
 
     &:focus + label::before{
       @include tab-focus();
