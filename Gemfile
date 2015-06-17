@@ -86,6 +86,15 @@ end
 group :development, :test do
   gem 'foreman'
   gem 'rubocop', require: false
-  gem 'byebug'
   gem 'mina'
+
+  # generate fake data
+  gem 'faker'
+
+  # debugging
+  gem 'bullet'
+  gem 'byebug'
+  gem 'pry-rails'
+  gem 'pry-remote'
+  gem 'better_errors'
 end

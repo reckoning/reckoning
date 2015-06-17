@@ -1,9 +1,9 @@
 require 'test_helper'
 
 class ProjectsControllerTest < ActionController::TestCase
-  fixtures :all
-
   tests ::ProjectsController
+
+  fixtures :all
 
   let(:project) { projects :narendra3 }
 

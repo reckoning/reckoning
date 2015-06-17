@@ -3,9 +3,9 @@ require 'test_helper'
 module Api
   module V1
     class CustomersControllerTest < ActionController::TestCase
-      fixtures :customers, :users, :accounts
-
       tests ::Api::V1::CustomersController
+
+      fixtures :all
 
       let(:data) { users :data }
       let(:customer) { customers :starfleet }

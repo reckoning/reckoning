@@ -1,9 +1,9 @@
 require 'test_helper'
 
 class InvoicesControllerTest < ActionController::TestCase
-  fixtures :all
-
   tests ::InvoicesController
+
+  fixtures :all
 
   let(:invoice) { invoices :january }
 
