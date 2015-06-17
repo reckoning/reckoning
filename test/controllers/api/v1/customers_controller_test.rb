@@ -3,7 +3,7 @@ require 'test_helper'
 module Api
   module V1
     class CustomersControllerTest < ActionController::TestCase
-      fixtures :customers, :users
+      fixtures :customers, :users, :accounts
 
       tests ::Api::V1::CustomersController
 
