@@ -2,6 +2,7 @@
     padding-left: 20px; }
 .checkbox label {
     display: inline-block;
+    vertical-align: middle;
     position: relative;
     padding-left: 5px; }
 .checkbox label::before {
@@ -31,7 +32,8 @@
     font-size: 11px;
     color: #555555; }
 .checkbox input[type="checkbox"] {
-    opacity: 0; }
+    opacity: 0;
+    z-index: 1; }
 .checkbox input[type="checkbox"]:focus + label::before {
     outline: thin dotted;
     outline: 5px auto -webkit-focus-ring-color;
@@ -83,6 +85,7 @@
     padding-left: 20px; }
 .radio label {
     display: inline-block;
+    vertical-align: middle;
     position: relative;
     padding-left: 5px; }
 .radio label::before {
@@ -119,7 +122,8 @@
     -o-transition: -o-transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33);
     transition: transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33); }
 .radio input[type="radio"] {
-    opacity: 0; }
+    opacity: 0;
+    z-index: 1; }
 .radio input[type="radio"]:focus + label::before {
     outline: thin dotted;
     outline: 5px auto -webkit-focus-ring-color;

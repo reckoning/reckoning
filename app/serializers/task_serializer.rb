@@ -4,6 +4,6 @@ class TaskSerializer < ActiveModel::Serializer
   has_many :timers, serializer: TimerSerializer
 
   def timers
-    object.timers.where(user_id: current_user.id).order("created_at ASC")
+    object.timers.where(user_id: scope.id).order("created_at ASC")
   end
 end

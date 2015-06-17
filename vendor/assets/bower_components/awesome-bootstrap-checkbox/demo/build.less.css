@@ -3,6 +3,7 @@
 }
 .checkbox label {
   display: inline-block;
+  vertical-align: middle;
   position: relative;
   padding-left: 5px;
 }
@@ -36,6 +37,7 @@
 }
 .checkbox input[type="checkbox"] {
   opacity: 0;
+  z-index: 1;
 }
 .checkbox input[type="checkbox"]:focus + label::before {
   outline: thin dotted;
@@ -99,6 +101,7 @@
 }
 .radio label {
   display: inline-block;
+  vertical-align: middle;
   position: relative;
   padding-left: 5px;
 }
@@ -139,6 +142,7 @@
 }
 .radio input[type="radio"] {
   opacity: 0;
+  z-index: 1;
 }
 .radio input[type="radio"]:focus + label::before {
   outline: thin dotted;
