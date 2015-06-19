@@ -15,13 +15,14 @@ Add [nprogress.js] and [nprogress.css] to your project.
 <link rel='stylesheet' href='nprogress.css'/>
 ```
 
-NProgress is available via [bower] and [npm].
+NProgress is available via [bower] and [npm] and [spm].
 
     $ bower install --save nprogress
     $ npm install --save nprogress
 
 [bower]: http://bower.io/search/?q=nprogress
 [npm]: https://www.npmjs.org/package/nprogress
+[spm]: http://spmjs.io/package/nprogress
 
 Basic usage
 -----------
@@ -109,16 +110,16 @@ NProgress.configure({
 });
 ~~~
 
-#### `ease` and `speed`
-Adjust animation settings using *ease* (a CSS easing string)
+#### `easing` and `speed`
+Adjust animation settings using *easing* (a CSS easing string)
 and *speed* (in ms). (default: `ease` and `200`)
 
 ~~~ js
-NProgress.configure({ ease: 'ease', speed: 500 });
+NProgress.configure({ easing: 'ease', speed: 500 });
 ~~~
 
 #### `trickle`
-Turn of the automatic incrementing behavior by setting this to `false`. (default: `true`)
+Turn off the automatic incrementing behavior by setting this to `false`. (default: `true`)
 
 ~~~ js
 NProgress.configure({ trickle: false });
@@ -150,7 +151,7 @@ Customization
 -------------
 
 Just edit `nprogress.css` to your liking. Tip: you probably only want to find
-and replace occurances of `#29d`.
+and replace occurrences of `#29d`.
 
 The included CSS file is pretty minimal... in fact, feel free to scrap it and
 make your own!
@@ -189,7 +190,8 @@ Authored and maintained by Rico Sta. Cruz with help from [contributors].
 > Twitter [@rstacruz](https://twitter.com/rstacruz)
 
 [MIT License]: http://mit-license.org/
-[contributors]: http://github.com/rstacruz/jsfuse/contributors
+[contributors]: http://github.com/rstacruz/nprogress/contributors
 
 [![Status](https://api.travis-ci.org/rstacruz/nprogress.svg?branch=master)](http://travis-ci.org/rstacruz/nprogress) 
 [![npm version](https://img.shields.io/npm/v/nprogress.png)](https://npmjs.org/package/nprogress "View this project on npm")
+[![spm package](http://spmjs.io/badge/nprogress)](http://spmjs.io/package/nprogress)

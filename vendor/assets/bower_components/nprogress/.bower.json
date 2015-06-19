@@ -2,7 +2,7 @@
   "name": "nprogress",
   "repo": "rstacruz/nprogress",
   "description": "slim progress bar",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "keywords": [
     "progress",
     "bar",
@@ -28,13 +28,13 @@
     "vendor"
   ],
   "homepage": "https://github.com/rstacruz/nprogress",
-  "_release": "0.1.6",
+  "_release": "0.2.0",
   "_resolution": {
     "type": "version",
-    "tag": "v0.1.6",
-    "commit": "c41da63d8aa511023fe1b2a79a946575e01c2ee3"
+    "tag": "v0.2.0",
+    "commit": "d3699f2104f80b4bbb8e2500f7ab939755b2b66b"
   },
   "_source": "git://github.com/rstacruz/nprogress.git",
-  "_target": "~0.1.6",
+  "_target": "~0.2.0",
   "_originalSource": "nprogress"
 }

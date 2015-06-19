@@ -33,9 +33,11 @@ class Timer < ActiveRecord::Base
   def stop
     return unless started?
 
+    timer_value = ((Time.zone.now - started_at) / 1.hour)
+
     update(
       started: false,
-      value: value + ((Time.zone.now - started_at) / 1.hour)
+      value: ((value + timer_value) * 4).round / 4.0
     )
   end
 

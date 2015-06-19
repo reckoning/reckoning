@@ -1,6 +1,10 @@
 .panel-list {
   position: relative;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+
+  .panel-heading {
+    padding: 8px 15px;
+  }
 
   .list-group-item {
     a {
@@ -14,8 +18,8 @@
 
   .panel-list-action {
     position: absolute;
-    top: -4px;
-    right: 5px;
+    top: -6px;
+    right: 2px;
   }
 
   a.list-group-item.new-item {
