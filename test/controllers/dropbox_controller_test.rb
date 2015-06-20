@@ -1,9 +1,9 @@
 require "test_helper"
 
 class DropboxControllerTest < ActionController::TestCase
-  fixtures :users
-
   tests ::DropboxController
+
+  fixtures :all
 
   let(:user) { users :will }
 

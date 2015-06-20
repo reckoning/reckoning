@@ -3,9 +3,9 @@ require 'test_helper'
 module Api
   module V1
     class ProjectsControllerTest < ActionController::TestCase
-      fixtures :all
-
       tests ::Api::V1::ProjectsController
+
+      fixtures :all
 
       let(:project) { projects :narendra3 }
 
