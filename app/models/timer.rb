@@ -37,7 +37,7 @@ class Timer < ActiveRecord::Base
 
     update(
       started: false,
-      value: ((value + timer_value) * 4).round / 4.0
+      value: ((value + timer_value) * task.project.round_up).round / task.project.round_up
     )
   end
 

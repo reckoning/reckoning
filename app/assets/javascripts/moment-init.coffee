@@ -1,11 +1,18 @@
+window.monthNames = []
+window.abbrMonthNames = []
+
 window.initMoment = ->
-  month_names = I18n.t('date.month_names')
-  abbr_month_names = I18n.t('date.abbr_month_names')
-  month_names.shift()
-  abbr_month_names.shift()
+  names = I18n.t('date.month_names')
+  names.shift()
+  window.monthNames = names
+
+  names = I18n.t('date.abbr_month_names')
+  names.shift()
+  window.abbrMonthNames = names
+
   moment.locale I18n.locale,
-    months: month_names
-    monthsShort: abbr_month_names
+    months: monthNames
+    monthsShort: abbrMonthNames
     weekdays: I18n.t('date.day_names')
     weekdaysShort: I18n.t('date.abbr_day_names')
     weekdaysMin: I18n.t('date.abbr_day_names')

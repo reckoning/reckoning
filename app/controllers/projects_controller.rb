@@ -97,6 +97,7 @@ class ProjectsController < ApplicationController
       :rate,
       :budget,
       :budget_hours,
+      :round_up,
       :budget_on_dashboard,
       tasks_attributes: [
         :id,
