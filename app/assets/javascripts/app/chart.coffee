@@ -3,8 +3,8 @@ Chart.defaults.global.responsive = true;
 window.loadInvoicesChart = ->
   if $('#invoices-chart').length && invoicesChartData
     ctx = document.getElementById("invoices-chart").getContext("2d")
-    console.log invoicesChartData
     invoicesChart = new Chart(ctx).Line invoicesChartData,
+      bezierCurve: false
       scaleLabel: (data) ->
         {label: accounting.formatMoney(data.value)}
       tooltipTemplate: (data) ->
