@@ -37,6 +37,16 @@
         = form.label :budget_on_dashboard
         = form_errors project, :budget_on_dashboard
 
+  .row
+    .col-xs-6.col-md-3
+      .form-group.selectize{class: form_error?(project, :round_up)}
+        %select.js-customer-selectize#project_round_up{name: "project[round_up]"}
+          %option
+          - Project::DEFAULT_ROUND_UP_OPTIONS.each do |key, value|
+            %option{value: value, selected: project.round_up.to_f == value}
+              = key
+        = form_errors project, :round_up
+
   %fieldset
     %legend
       Aufgaben:

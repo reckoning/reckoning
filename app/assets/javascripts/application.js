@@ -14,9 +14,9 @@
 //= require moment/moment
 //= require moment-init
 //= require twix/bin/twix
-//= require d3
-//= require nvd3
+//= require Chart.js/Chart
 //= require accounting/accounting
+//= require accounting-init
 //= require nprogress
 //= require fastclick
 //= require pdf.js/build/pdf
