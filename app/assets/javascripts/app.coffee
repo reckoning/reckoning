@@ -39,5 +39,4 @@ $ ->
 
   initMoment()
   initAccounting()
-  loadTimersChart()
   loadInvoicesChart()
