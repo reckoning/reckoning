@@ -38,5 +38,6 @@ $ ->
   $('[data-toggle=tooltip]').tooltip()
 
   initMoment()
+  initAccounting()
   loadTimersChart()
   loadInvoicesChart()

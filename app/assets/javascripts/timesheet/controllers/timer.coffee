@@ -50,6 +50,10 @@ angular.module 'Timesheet'
       moment.duration(ms).asHours() + parseFloat(timer.value)
 
     $scope.startTimer = (timer) ->
+    #   timer.started = true
+    #   timer.start_time = data.start_time
+
+    # (object.started_at - timer.value * 60).to_i * 1000 if object.started_at
       Timer.start(timer.uuid).success (data) ->
         $scope.timers.forEach (item) ->
           item.started = false
