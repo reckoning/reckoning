@@ -1,30 +1,38 @@
 require 'sidekiq/web'
 
 Reckoning::Application.routes.draw do
-  scope module: "api", constraints: { subdomain: "api" } do
-    namespace :v1 do
-      post 'signin' => 'session#create'
-      resource :account
-      resources :customers, only: [:index, :show, :create, :destroy]
-      resources :projects, only: [:index, :destroy] do
-        member do
-          put :archive
-        end
+  v1_api_routes = lambda do
+    post 'signin' => 'session#create'
+    resource :account
+    resources :customers, only: [:index, :show, :create, :destroy]
+    resources :projects, only: [:index, :destroy] do
+      member do
+        put :archive
       end
-      resources :tasks, only: [:index, :create]
-      resources :timers, only: [:index, :create, :update, :destroy] do
-        member do
-          put :start
-          put :stop
-        end
+    end
+    resources :tasks, only: [:index, :create]
+    resources :timers, only: [:index, :create, :update, :destroy] do
+      member do
+        put :start
+        put :stop
       end
+    end
+  end
+
+  v1_backend_api_routes = lambda do
+    resources :accounts
+  end
+
+  scope module: :api, constraints: { subdomain: "api" } do
+    scope :v1, defaults: { format: :json }, as: :v1 do
+      scope module: :v1, &v1_api_routes
     end
   end
 
   namespace :backend do
     scope module: "api", constraints: { subdomain: "api" } do
-      namespace :v1 do
-        resources :accounts
+      scope :v1, defaults: { format: :json }, as: :v1 do
+        scope module: :v1, &v1_backend_api_routes
       end
     end
 
