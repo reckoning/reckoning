@@ -40,3 +40,4 @@ $ ->
   initMoment()
   initAccounting()
   loadInvoicesChart()
+  loadProjectChart()
