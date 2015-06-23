@@ -23,8 +23,8 @@ module Charts
       dataset = new_dataset(I18n.t(:"labels.chart.project.budget"), colorsets[1])
       dataset[:data] = []
       (0..11).to_a.reverse.map do |month_offset|
-        start_date = (Time.zone.now - month_offset.months).beginning_of_month
-        end_date = (Time.zone.now - month_offset.months).end_of_month
+        start_date = (Time.zone.now - month_offset.months).to_date.beginning_of_month
+        end_date = (Time.zone.now - month_offset.months).to_date.end_of_month
         value = scope.where(date: start_date..end_date).all.sum(:value)
         dataset[:data] << value
       end
