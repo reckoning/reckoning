@@ -47,7 +47,7 @@
         - unless @invoices_chart_data.blank?
           :javascript
             window.invoicesChartData = #{@invoices_chart_data.to_json}
-          = render "chart_panel", panel_title: I18n.t(:"dashboard.panels.invoices_chart", year: I18n.l(Date.today, format: :year)), id: 'invoices-chart'
+          = render "shared/chart_panel", panel_title: I18n.t(:"dashboard.panels.invoices_chart", year: I18n.l(Date.today, format: :year)), id: 'invoices-chart'
 
         - if @paid_invoices.present?
           = render "invoices_panel", panel_title: I18n.t(:"dashboard.panels.paid_invoices"), invoices: @paid_invoices, context: 'success'

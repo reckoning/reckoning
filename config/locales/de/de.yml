@@ -74,6 +74,7 @@ de:
         edit: "Kunde bearbeiten"
       project:
         index: "Projekte"
+        show: "Projekt: %{name}"
         new: "Neues Projekt"
         edit: "Projekt bearbeiten"
       invoice:
