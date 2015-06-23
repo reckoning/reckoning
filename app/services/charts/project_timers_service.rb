@@ -22,11 +22,9 @@ module Charts
     def generate_datasets
       dataset = new_dataset(I18n.t(:"labels.chart.project.budget"), colorsets[1])
       dataset[:data] = []
-      year = Time.zone.now.year
-      (0..11).map do |month_offset|
-        month = (Time.zone.now - month_offset.months).month
-        start_date = Time.zone.parse("#{year}-#{month}-1").to_date.beginning_of_month
-        end_date = Time.zone.parse("#{year}-#{month}-1").to_date.end_of_month
+      (0..11).to_a.reverse.map do |month_offset|
+        start_date = (Time.zone.now - month_offset.months).beginning_of_month
+        end_date = (Time.zone.now - month_offset.months).end_of_month
         value = scope.where(date: start_date..end_date).all.sum(:value)
         dataset[:data] << value
       end
