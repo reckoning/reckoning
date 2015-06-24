@@ -23,7 +23,7 @@ module Charts
       dataset = new_dataset(I18n.t(:"labels.chart.project.budget"), colorsets[1])
       dataset[:data] = []
       budget = project.budget
-      (0..months_count).to_a.reverse.map do |month_offset|
+      (1..(months_count + 1)).to_a.reverse.map do |month_offset|
         month_start_date = (end_date - month_offset.months).to_date.beginning_of_month
         month_end_date = (end_date - month_offset.months).to_date.end_of_month
         next if month_start_date > Time.zone.now
