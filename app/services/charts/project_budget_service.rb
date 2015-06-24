@@ -26,6 +26,7 @@ module Charts
       (0..months_count).to_a.reverse.map do |month_offset|
         month_start_date = (end_date - month_offset.months).to_date.beginning_of_month
         month_end_date = (end_date - month_offset.months).to_date.end_of_month
+        next if month_start_date > Time.zone.now
         budget -= scope.where(date: month_start_date..month_end_date).all.sum(:value)
         dataset[:data] << budget
       end
