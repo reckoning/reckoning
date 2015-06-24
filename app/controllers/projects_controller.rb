@@ -102,6 +102,8 @@ class ProjectsController < ApplicationController
       :budget_hours,
       :round_up,
       :budget_on_dashboard,
+      :start_date,
+      :end_date,
       tasks_attributes: [
         :id,
         :name,

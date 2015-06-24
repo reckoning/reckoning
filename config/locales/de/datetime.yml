@@ -12,3 +12,5 @@ de:
       month: "%B"
       year: "%Y"
       file: "%B-%Y"
+      datepicker: 'd. mmmm yyyy'
+      datepicker_submit: "yyyy-mm-dd"

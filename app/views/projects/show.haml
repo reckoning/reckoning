@@ -19,16 +19,16 @@
             %i.fa.fa-trash
             = I18n.t(:"actions.delete")
 
-    .row
-      .col-xs-12.col-md-12
-        - unless @project_budget_chart_data.blank?
+    - unless @project_budget_chart_data.blank?
+      .row
+        .col-xs-12.col-md-12
           :javascript
             window.projectBudgetChartData = #{@project_budget_chart_data.to_json}
           = render "shared/chart_panel", panel_title: I18n.t(:"labels.panels.charts.project_budget"), id: 'project-budget-chart'
 
-    .row
-      .col-xs-12.col-md-12
-        - unless @project_timers_chart_data.blank?
+    - unless @project_timers_chart_data.blank?
+      .row
+        .col-xs-12.col-md-12
           :javascript
             window.projectTimersChartData = #{@project_timers_chart_data.to_json}
           = render "shared/chart_panel", panel_title: I18n.t(:"labels.panels.charts.project_timers"), id: 'project-timers-chart'

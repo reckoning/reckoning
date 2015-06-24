@@ -4,6 +4,9 @@ de:
       project:
         rate: "Stundensatz"
         budget_on_dashboard: "Auf Dashboard anzeigen?"
+        start_date: "Start"
+        end_date: "Ende"
+        round_up: "Zeiten aufrunden?"
       user:
         remember_me: "Angemeldet bleiben"
       position:
