@@ -34,12 +34,12 @@ module Charts
     end
 
     private def start_date
-      @start_date ||= project.start_date.to_date || scope.order(:created_at).first.try(:date) || (Time.zone.now - 12.months).to_date
+      @start_date ||= project.start_date.try(:to_date) || scope.order(:created_at).first.try(:date) || (Time.zone.now - 12.months).to_date
     end
 
     private def end_date
       @end_date ||= begin
-        end_date = project.end_date.to_date
+        end_date = project.end_date.try(:to_date)
         end_date = Time.zone.now.to_date if project.end_date.blank? || project.end_date < Time.zone.now.to_date
         end_date
       end
