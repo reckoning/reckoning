@@ -19,7 +19,7 @@
 //= require accounting-init
 //= require nprogress
 //= require fastclick
-//= require pdf.js/build/pdf
+//= require pdfjs-dist/build/pdf
 //= require pdf-viewer
 //= require helper
 //= require_tree ./helpers

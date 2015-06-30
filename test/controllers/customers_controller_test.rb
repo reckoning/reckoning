@@ -3,8 +3,6 @@ require 'test_helper'
 class CustomersControllerTest < ActionController::TestCase
   tests ::CustomersController
 
-  fixtures :all
-
   let(:data) { users :data }
   let(:customer) { customers :starfleet }
 

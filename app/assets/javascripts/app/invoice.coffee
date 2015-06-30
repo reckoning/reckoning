@@ -23,7 +23,7 @@ window.App.Invoice.generate = ($element) ->
 window.App.Invoice.checkPdfStatus = ->
   id = $('#invoice').attr('data-id')
   $.ajax
-    url: r(check_pdf_invoice_path, id)
+    url: Routes.check_pdf_invoice_path(id)
     dataType: 'json'
     success: (data) ->
       return unless data
@@ -81,7 +81,7 @@ window.App.Invoice.loadPositions = ($element) ->
 
   xhr.abort() if xhr
   xhr = $.ajax
-    url: r(uninvoiced_project_tasks_path, project_id)
+    url: Routes.uninvoiced_project_tasks_path(project_id)
     dataType: 'json'
     context: $('#add-positions-modal')
     success: (result) ->
