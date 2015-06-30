@@ -137,6 +137,8 @@ $ ->
 
     $('#invoice_project_id').data('pre', App.Invoice.projectRate)
 
+
     button = document.querySelector('.ladda-button')
     if button
       window.laddaButton = Ladda.create(button)
+
