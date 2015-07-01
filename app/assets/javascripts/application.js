@@ -20,6 +20,8 @@
 //= require nprogress
 //= require fastclick
 //= require pdfjs-dist/build/pdf
+//= require d3
+//= require metrics-graphics
 //= require pdf-viewer
 //= require helper
 //= require_tree ./helpers
