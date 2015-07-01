@@ -5,7 +5,7 @@ window.loadInvoicesChart = ->
     ctx = document.getElementById("invoices-chart").getContext("2d")
     invoicesChart = new Chart(ctx).Line invoicesChartData,
       bezierCurve: false
-      pointDotRadius: 5
+      pointDotRadius: 4
       scaleLabel: (data) ->
         {label: accounting.formatMoney(data.value)}
       multiTooltipTemplate: (data) ->
@@ -17,7 +17,7 @@ window.loadProjectChart = ->
     ctx = document.getElementById("project-budget-chart").getContext("2d")
     invoicesChart = new Chart(ctx).Line projectBudgetChartData,
       bezierCurve: false
-      pointDotRadius: 6
+      pointDotRadius: 4
       scaleBeginAtZero: true
       scaleLabel: (data) ->
         {label: accounting.formatMoney(data.value)}
