@@ -74,6 +74,8 @@ gem 'sentry-raven'
 
 gem 'intercom-rails'
 
+gem 'typhoeus'
+
 group :test do
   gem 'rails-perftest'
   gem 'minitest-rails'
