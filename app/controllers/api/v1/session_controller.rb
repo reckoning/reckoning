@@ -11,6 +11,7 @@ module Api
           render json: user, status: :ok
         else
           warden.custom_failure!
+          Rails.logger.info "Session Create Failed"
           render json: ValidationError.new("sessions.authentication"), status: :unauthorized
         end
       end

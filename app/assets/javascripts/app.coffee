@@ -21,7 +21,7 @@ $ ->
       xhr.abort() if xhr
       xhr = $.ajax
         url: ApiBasePath + Routes.v1_customers_path()
-        data: {customer: {name: input}}
+        data: {name: input}
         method: 'POST'
         dataType: 'json'
         success: (result) =>

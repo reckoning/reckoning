@@ -16,6 +16,7 @@ module Api
         if timer.save
           render json: timer, status: :created
         else
+          Rails.logger.info "Timer Create Failed: #{timer.errors.full_messages.to_yaml}"
           render json: timer.errors, status: :bad_request
         end
       end
@@ -25,6 +26,7 @@ module Api
         if timer.update(timer_params)
           render json: timer, status: :ok
         else
+          Rails.logger.info "Timer Update Failed: #{timer.errors.full_messages.to_yaml}"
           render json: timer.errors, status: :bad_request
         end
       end
@@ -34,6 +36,7 @@ module Api
         if timer.stop
           render json: timer, status: :ok
         else
+          Rails.logger.info "Timer Stop Failed: #{timer.to_yaml}"
           render json: { message: I18n.t(:"messages.timer.stop.failure") }, status: :bad_request
         end
       end
@@ -43,6 +46,7 @@ module Api
         if timer.start
           render json: timer, status: :ok
         else
+          Rails.logger.info "Timer Start Failed: #{timer.to_yaml}"
           render json: { message: I18n.t(:"messages.timer.start.failure") }, status: :bad_request
         end
       end
@@ -53,9 +57,11 @@ module Api
           if timer.destroy
             render json: timer, status: :ok
           else
+            Rails.logger.info "Timer Destroy Failed: #{timer.errors.full_messages.to_yaml}"
             render json: timer.errors, status: :bad_request
           end
         else
+          Rails.logger.info "Timer Destroy Failed: Timer allready on Invoice"
           render json: { message: I18n.t(:"messages.timer.destroy.failure") }, status: :bad_request
         end
       end
