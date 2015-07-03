@@ -12,7 +12,7 @@ a.list-group-item href=project_path(project)
       = number_to_currency (project.budget_hours - project.timer_values), unit: "h", precision: 2
   .progress.progress-slim.text-center title=I18n.t(:"labels.budget.limit_complete", hours: number_to_currency(project.budget_hours, unit: "h", precision: 2), budget: number_to_currency(project.budget)) data-toggle="tooltip"
     .progress-bar class=budget_progress(project) role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: #{project.budget_percent_invoiced}%"
-    .progress-bar.progress-bar-success role="progressbar" aria-valuemin="0", aria-valuemax="100" style="width: #{project.budget_percent_uninvoiced}%"
+    .progress-bar.progress-bar-success role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: #{project.budget_percent_uninvoiced}%"
   .row
     .col-xs-6.col-sm-6.col-md-6
       = number_to_currency project.invoice_values
