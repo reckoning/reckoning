@@ -18,6 +18,7 @@ module Api
         if customer.save
           render json: customer, status: :created
         else
+          Rails.logger.info "Customer Create Failed: #{customer.errors.full_messages.to_yaml}"
           render json: customer.errors, status: :bad_request
         end
       end
@@ -25,11 +26,13 @@ module Api
       def destroy
         authorize! :destroy, customer
         if customer.invoices.present?
+          Rails.logger.info "Customer Destroy Failed: Invoices present"
           render json: ValidationError.new("customer.destroy_failure_dependency"), status: :bad_request
         else
           if customer.destroy
             render json: { message: I18n.t(:"messages.customer.destroy.success") }, status: :ok
           else
+            Rails.logger.info "Customer Destroy Failed: #{customer.errors.full_messages.to_yaml}"
             render json: ValidationError.new("customer.destroy", customer.errors), status: :bad_request
           end
         end

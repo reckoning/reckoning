@@ -31,11 +31,13 @@ module Api
         authorize! :destroy, project
 
         if project.invoices.present?
+          Rails.logger.info "Project Destroy Failed: Invoices present"
           render json: ValidationError.new("project.destroy_failure_dependency"), status: :bad_request
         else
           if project.destroy
             render json: { message: I18n.t(:"messages.project.destroy.success") }, status: :ok
           else
+            Rails.logger.info "Project Destroy Failed: #{project.errors.full_messages.to_yaml}"
             render json: ValidationError.new("project.destroy", project.errors), status: :bad_request
           end
         end
@@ -48,6 +50,7 @@ module Api
         if project.reload.archived?
           render json: { message: I18n.t(:"messages.project.archive.success") }, status: :ok
         else
+          Rails.logger.info "Project Archive Failed: #{project.errors.full_messages.to_yaml}"
           render json: ValidationError.new("project.archive", project.errors), status: :bad_request
         end
       end

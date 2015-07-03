@@ -21,6 +21,7 @@ module Api
         if task.save
           render json: task, status: :created
         else
+          Rails.logger.info "Task Create Failed: #{task.errors.full_messages.to_yaml}"
           render json: task.errors, status: :bad_request
         end
       end
