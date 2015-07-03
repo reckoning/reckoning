@@ -3,7 +3,7 @@
     .panel-heading
       .panel-title
         .row
-          .col-xs-8.col-md-5.name
+          .col-xs-8.col-md-4.name
             %a{href: edit_customer_path(customer)}
               %strong
                 = customer.name
@@ -13,7 +13,7 @@
           .col-md-4.hidden-xs.hidden-sm
             %span
               = I18n.t(:"labels.defaults.remaining_budget")
-          .col-xs-4.col-md-1
+          .col-xs-4.col-md-2
             .panel-list-action.pull-right
               %a.btn.btn-primary{href: new_project_path(customer_uuid: customer), title: I18n.t(:"nav.subnav.new_project"), data: {toggle: 'tooltip'}}
                 %i.fa.fa-plus
