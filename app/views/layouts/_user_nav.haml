@@ -5,7 +5,7 @@
       %b.caret
       %span.hide.user-email
         = current_user.email
-    %ul.dropdown-menu.navbar-right
+    %ul.dropdown-menu
       %li{class: active_nav?('account')}
         = link_to I18n.t(:"nav.header.account"), edit_account_path
       %li{class: active_nav?('user')}
