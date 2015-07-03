@@ -133,6 +133,11 @@ class InvoicesController < ApplicationController
 
   def new
     authorize! :create, Invoice
+    if project
+      @invoice ||= project.invoices.new
+    else
+      @invoice ||= current_account.invoices.new
+    end
     invoice.positions << Position.new
   end
 
@@ -250,30 +255,21 @@ class InvoicesController < ApplicationController
 
   private def invoice_params
     params.require(:invoice).permit(
-      :customer_id,
-      :date,
-      :delivery_date,
-      :payment_due_date,
-      :ref,
-      :project_id,
-      positions_attributes: [
-        :id,
-        :description,
-        :hours,
-        :rate,
-        :value,
-        :invoice_id,
-        {
-          timer_ids: []
-        },
-        :_destroy
+      :customer_id, :date, :delivery_date, :payment_due_date, :ref,
+      :project_id, positions_attributes: [
+        :id, :description, :hours, :rate, :value,
+        :invoice_id, { timer_ids: [] }, :_destroy
       ]
     )
   end
 
+  private def project
+    @project ||= current_account.projects.find_by(id: params.fetch(:project_uuid, nil))
+  end
+
   private def invoice
-    @invoice ||= current_account.invoices.where(id: params.fetch(:id, nil)).first
-    @invoice ||= current_account.invoices.new
+    @invoice ||= current_account.invoices.find_by(id: params.fetch(:id, nil))
+    @invoice ||= current_account.invoices.new invoice_params
   end
   helper_method :invoice
 

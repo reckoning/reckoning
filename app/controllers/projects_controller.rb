@@ -30,9 +30,9 @@ class ProjectsController < ApplicationController
   def new
     authorize! :create, Project
     if customer
-      @project = customer.projects.new
+      @project ||= customer.projects.new
     else
-      @project = Project.new
+      @project ||= current_account.projects.new
     end
   end
 
@@ -90,23 +90,14 @@ class ProjectsController < ApplicationController
   helper_method :customers
 
   private def customer
-    @customer ||= current_account.customers.where(id: params.fetch(:customer_uuid, nil)).first
+    @customer ||= current_account.customers.find_by(id: params.fetch(:customer_uuid, nil))
   end
 
   private def project_params
     @project_params ||= params.require(:project).permit(
-      :customer_id,
-      :name,
-      :rate,
-      :budget,
-      :budget_hours,
-      :round_up,
-      :budget_on_dashboard,
-      tasks_attributes: [
-        :id,
-        :name,
-        :project_id,
-        :_destroy
+      :customer_id, :name, :rate, :budget, :budget_hours, :round_up,
+      :budget_on_dashboard, :start_date, :end_date, tasks_attributes: [
+        :id, :name, :project_id, :_destroy
       ]
     )
   end

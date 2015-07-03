@@ -1,0 +1,67 @@
+.list-group-item
+  .row
+    .col-xs-12.col-md-4.name
+      a href=project_path(project)
+        b = project.name
+    .col-xs-12.col-md-2
+      - unless project.budget.zero?
+        b = number_to_currency (project.budget - project.invoice_values)
+        br
+        = " von "
+        = number_to_currency(project.budget)
+    .col-xs-12.col-md-4.project-progress
+      .budget-label
+        .row
+          .col-xs-6.col-sm-6.col-md-6
+            = number_to_currency project.timer_values, unit: "h", precision: 2
+            - unless project.timer_values.zero? || project.timer_values_uninvoiced.zero?
+              '
+              span.label.label-default data-toggle='tooltip' title=I18n.t(:"labels.budget.uninvoiced")
+                = number_to_currency project.timer_values_uninvoiced, unit: "h", precision: 2
+          - unless project.budget.zero?
+            .col-xs-6.col-sm-6.col-md-6.text-right
+              = number_to_currency (project.budget_hours - project.timer_values), unit: "h", precision: 2
+      - unless project.budget.zero?
+        .progress.budget-progress.progress-slim.text-center title=I18n.t(:"labels.budget.limit_hours", hours: number_to_currency(project.budget_hours, unit: "h", precision: 2)) data-toggle="tooltip"
+          .progress-bar class=budget_progress(project) role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: #{project.budget_percent_invoiced}%"
+          .progress-bar.progress-bar-success role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: #{project.budget_percent_uninvoiced}%"
+      br.hidden-md.hidden-lg
+    .col-xs-12.col-md-2.actions
+      - if project.active?
+        .pull-right.hidden-xs.hidden-sm
+          .dropdown
+            button.btn.btn-default.dropdown-toggle type="button" data-toggle="dropdown" aria-expanded="false"
+              = I18n.t(:"labels.defaults.actions")
+              '
+              span.caret
+            ul.dropdown-menu.dropdown-menu-right role="menu"
+              li
+                a href=new_invoice_path(project_uuid: project)
+                  i.fa.fa-file
+                  '
+                  = I18n.t(:"actions.add_invoice")
+              li
+                a href=edit_project_path(project)
+                  i.fa.fa-edit
+                  '
+                  = I18n.t(:"actions.edit")
+              li.divider
+              li
+                a href=archive_v1_project_url(project) data-redirect=projects_path data-method="PUT" data-notyConfirm=I18n.t(:"messages.confirm.project.archive")
+                  i.fa.fa-archive
+                  '
+                  = I18n.t(:"actions.archive")
+        .btn-group.btn-group-justified.visible-xs.visible-sm
+          a.btn.btn-default href=project_path(project)
+            = I18n.t(:"actions.show")
+          a.btn.btn-default href=new_invoice_path(project_uuid: project)
+            = I18n.t(:"actions.add_invoice")
+          a.btn.btn-default href=edit_project_path(project)
+            = I18n.t(:"actions.edit")
+          a.btn.btn-default href=archive_v1_project_url(project) data-redirect=projects_path data-method="PUT" data-notyConfirm=I18n.t(:"messages.confirm.project.archive")
+            = I18n.t(:"actions.archive")
+      - else
+        .pull-right.hidden-xs.hidden-sm
+          = link_to I18n.t(:"actions.unarchive"), unarchive_project_path(project), class: "btn btn-default", method: :put
+        .btn-group.btn-group-sm.btn-group-justified.visible-xs.visible.sm
+          = link_to I18n.t(:"actions.unarchive"), unarchive_project_path(project), class: "btn btn-default", method: :put
