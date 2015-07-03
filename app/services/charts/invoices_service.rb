@@ -22,7 +22,7 @@ module Charts
       last_value = 0
       dataset[:data] = []
       (1..12).map do |month|
-        break if Time.zone.now.month < month && Time.zone.now.year == year
+        break if Time.zone.now.month <= month && Time.zone.now.year == year
         start_date = Time.zone.parse("#{year}-#{month}-1").to_date.beginning_of_month
         end_date = Time.zone.parse("#{year}-#{month}-1").to_date.end_of_month
         value = scope.where(date: start_date..end_date).all.sum(:value)
@@ -39,7 +39,7 @@ module Charts
       start_of_year = Time.zone.parse("#{year}-1-1").to_date.beginning_of_month
       dataset[:data] = []
       (1..12).each do |month|
-        break if Time.zone.now.month < month && Time.zone.now.year == year
+        break if Time.zone.now.month <= month && Time.zone.now.year == year
         end_date = Time.zone.parse("#{year}-#{month}-1").to_date.end_of_month
         dataset[:data] << scope.where(date: start_of_year..end_date).all.sum(:value)
       end
