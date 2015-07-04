@@ -4,35 +4,42 @@ module Charts
 
     def initialize(project, scope)
       @project = project
+
       super scope
     end
 
-    def generate_labels
-      @labels = []
-      (0..11).each do |month_offset|
-        month = (Time.zone.now - month_offset.months).month
-        @labels << {
-          label: I18n.t('date.abbr_month_names')[month],
-          title: I18n.t('date.month_names')[month]
-        }
-      end
-      @labels = labels.reverse
-    end
-
     def generate_datasets
-      dataset = new_dataset(I18n.t(:"labels.chart.project.budget"), colorsets[1])
-      dataset[:data] = []
-      year = Time.zone.now.year
+      dataset = new_dataset(I18n.t(:"labels.chart.project.budget"))
       budget = project.budget
-      (0..11).map do |month_offset|
-        month = (Time.zone.now - month_offset.months).month
-        start_date = Time.zone.parse("#{year}-#{month}-1").to_date.beginning_of_month
-        end_date = Time.zone.parse("#{year}-#{month}-1").to_date.end_of_month
-        budget -= scope.where(date: start_date..end_date).all.sum(:value)
-        dataset[:data] << budget
+      (1..(months_count + 1)).to_a.reverse.map do |month_offset|
+        month_start_date = (end_date - month_offset.months).beginning_of_month
+        month_end_date = (end_date - month_offset.months).to_date.end_of_month
+        next if month_start_date > Time.zone.now
+        budget -= scope.where(date: month_start_date.to_date..month_end_date).all.sum(:value)
+
+        dataset[:values] << {
+          x: (month_start_date.to_time.to_i * 1000),
+          y: budget
+        }
       end
 
       @datasets << dataset
+    end
+
+    private def start_date
+      @start_date ||= project.start_date.try(:to_date) || scope.order(:created_at).first.try(:date) || (Time.zone.now - 12.months).to_date
+    end
+
+    private def end_date
+      @end_date ||= begin
+        end_date = project.end_date.try(:to_date)
+        end_date = Time.zone.now if project.end_date.blank? || project.end_date < Time.zone.now
+        end_date
+      end
+    end
+
+    private def months_count
+      (end_date.year * 12 + end_date.month) - (start_date.year * 12 + start_date.month)
     end
   end
 end

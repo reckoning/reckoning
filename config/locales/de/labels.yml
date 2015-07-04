@@ -33,6 +33,8 @@ de:
       years: "Jahr auswählen"
     chart:
       on_date: am
+      project:
+        budget: "Budget"
       timers:
         headline: "Erfasste Stunden im letzten Monat"
         no_data: "Keine Zeiten erfasst."
