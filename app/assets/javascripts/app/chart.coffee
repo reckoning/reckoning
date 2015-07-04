@@ -32,7 +32,7 @@ window.Chart =
         '<h3>' + moment(d).format('MMMM') + '</h3>'
 
       chart.tooltip.valueFormatter (d) ->
-        accounting.formatMoney(d, {symbol: '€', format: '%v %s', decimal: ',', thousand: '.'})
+        accounting.formatMoney(d, {symbol: '€', format: '%v %s', decimal: ',', thousand: '.'}) if d
 
       chart.xAxis
         .tickPadding(10)
