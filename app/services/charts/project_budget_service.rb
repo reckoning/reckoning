@@ -9,7 +9,7 @@ module Charts
     end
 
     def generate_datasets
-      dataset = new_dataset(I18n.t(:"labels.chart.project.budget"))
+      dataset = new_dataset(I18n.t(:"labels.chart.project.budget"), colors[2])
       budget = project.budget
       (1..(months_count + 1)).to_a.reverse.map do |month_offset|
         month_start_date = (end_date - month_offset.months).beginning_of_month
@@ -18,7 +18,7 @@ module Charts
         budget -= scope.where(date: month_start_date.to_date..month_end_date).all.sum(:value)
 
         dataset[:values] << {
-          x: (month_start_date.to_time.to_i * 1000),
+          x: (month_start_date.to_i * 1000),
           y: budget
         }
       end
@@ -27,13 +27,18 @@ module Charts
     end
 
     private def start_date
-      @start_date ||= project.start_date.try(:to_date) || scope.order(:created_at).first.try(:date) || (Time.zone.now - 12.months).to_date
+      @start_date ||= begin
+        start_date = project.start_date if project.start_date.present?
+        start_date ||= Time.zone.parse(scope.order(:created_at).first.try(:date)) if scope.order(:created_at).first.present?
+        start_date ||= (Time.zone.now - 12.months)
+        start_date
+      end
     end
 
     private def end_date
       @end_date ||= begin
-        end_date = project.end_date.try(:to_date)
-        end_date = Time.zone.now if project.end_date.blank? || project.end_date < Time.zone.now
+        end_date = project.end_date if project.end_date.present?
+        end_date ||= Time.zone.now
         end_date
       end
     end

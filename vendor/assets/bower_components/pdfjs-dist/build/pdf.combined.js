@@ -22,8 +22,13 @@ if (typeof PDFJS === 'undefined') {
   (typeof window !== 'undefined' ? window : this).PDFJS = {};
 }
 
+<<<<<<< HEAD
 PDFJS.version = '1.1.228';
 PDFJS.build = '1b370da';
+=======
+PDFJS.version = '1.1.248';
+PDFJS.build = '3ffed9d';
+>>>>>>> develop
 
 (function pdfjsWrapper() {
   // Use strict in our context only - users might not want it
@@ -81,6 +86,17 @@ var AnnotationType = {
   LINK: 3
 };
 
+<<<<<<< HEAD
+=======
+var AnnotationBorderStyleType = {
+  SOLID: 1,
+  DASHED: 2,
+  BEVELED: 3,
+  INSET: 4,
+  UNDERLINE: 5
+};
+
+>>>>>>> develop
 var StreamType = {
   UNKNOWN: 0,
   FLATE: 1,
@@ -534,7 +550,11 @@ Object.defineProperty(PDFJS, 'isLittleEndian', {
   }
 });
 
+<<<<<<< HEAD
   // Lazy test if the userAgant support CanvasTypedArrays
+=======
+  // Lazy test if the userAgent support CanvasTypedArrays
+>>>>>>> develop
 function hasCanvasTypedArrays() {
   var canvas = document.createElement('canvas');
   canvas.width = canvas.height = 1;
@@ -6593,6 +6613,7 @@ var AnnotationUtils = (function AnnotationUtilsClosure() {
     var width = item.rect[2] - item.rect[0];
     var height = item.rect[3] - item.rect[1];
 
+<<<<<<< HEAD
     var bWidth = item.borderWidth || 0;
     if (bWidth) {
       width = width - 2 * bWidth;
@@ -6606,6 +6627,66 @@ var AnnotationUtils = (function AnnotationUtilsClosure() {
                                              Math.round(color[2] * 255));
       }
     }
+=======
+    // Border
+    if (item.borderStyle.width > 0) {
+      // Border width
+      container.style.borderWidth = item.borderStyle.width + 'px';
+      if (item.borderStyle.style !== AnnotationBorderStyleType.UNDERLINE) {
+        // Underline styles only have a bottom border, so we do not need
+        // to adjust for all borders. This yields a similar result as
+        // Adobe Acrobat/Reader.
+        width = width - 2 * item.borderStyle.width;
+        height = height - 2 * item.borderStyle.width;
+      }
+
+      // Horizontal and vertical border radius
+      var horizontalRadius = item.borderStyle.horizontalCornerRadius;
+      var verticalRadius = item.borderStyle.verticalCornerRadius;
+      if (horizontalRadius > 0 || verticalRadius > 0) {
+        var radius = horizontalRadius + 'px / ' + verticalRadius + 'px';
+        CustomStyle.setProp('borderRadius', container, radius);
+      }
+
+      // Border style
+      switch (item.borderStyle.style) {
+        case AnnotationBorderStyleType.SOLID:
+          container.style.borderStyle = 'solid';
+          break;
+
+        case AnnotationBorderStyleType.DASHED:
+          container.style.borderStyle = 'dashed';
+          break;
+
+        case AnnotationBorderStyleType.BEVELED:
+          warn('Unimplemented border style: beveled');
+          break;
+
+        case AnnotationBorderStyleType.INSET:
+          warn('Unimplemented border style: inset');
+          break;
+
+        case AnnotationBorderStyleType.UNDERLINE:
+          container.style.borderBottomStyle = 'solid';
+          break;
+
+        default:
+          break;
+      }
+
+      // Border color
+      if (item.color) {
+        container.style.borderColor =
+          Util.makeCssRgb(Math.round(item.color[0] * 255),
+                          Math.round(item.color[1] * 255),
+                          Math.round(item.color[2] * 255));
+      } else {
+        // Default color is black, but that's not obvious from the spec.
+        container.style.borderColor = 'rgb(0,0,0)';
+      }
+    }
+
+>>>>>>> develop
     cstyle.width = width + 'px';
     cstyle.height = height + 'px';
     return container;
@@ -7998,6 +8079,29 @@ var NetworkManager = (function NetworkManagerClosure() {
     return array.buffer;
   }
 
+<<<<<<< HEAD
+=======
+  var supportsMozChunked = (function supportsMozChunkedClosure() {
+    var x = new XMLHttpRequest();
+    try {
+      // Firefox 37- required .open() to be called before setting responseType.
+      // https://bugzilla.mozilla.org/show_bug.cgi?id=707484
+      x.open('GET', 'https://example.com');
+    } catch (e) {
+      // Even though the URL is not visited, .open() could fail if the URL is
+      // blocked, e.g. via the connect-src CSP directive or the NoScript addon.
+      // When this error occurs, this feature detection method will mistakenly
+      // report that moz-chunked-arraybuffer is not supported in Firefox 37-.
+    }
+    try {
+      x.responseType = 'moz-chunked-arraybuffer';
+      return x.responseType === 'moz-chunked-arraybuffer';
+    } catch (e) {
+      return false;
+    }
+  })();
+
+>>>>>>> develop
   NetworkManager.prototype = {
     requestRange: function NetworkManager_requestRange(begin, end, listeners) {
       var args = {
@@ -8038,6 +8142,7 @@ var NetworkManager = (function NetworkManagerClosure() {
         pendingRequest.expectedStatus = 200;
       }
 
+<<<<<<< HEAD
       if (args.onProgressiveData) {
         // Some legacy browsers might throw an exception.
         try {
@@ -8049,6 +8154,13 @@ var NetworkManager = (function NetworkManagerClosure() {
         } else {
           xhr.responseType = 'arraybuffer';
         }
+=======
+      var useMozChunkedLoading = supportsMozChunked && !!args.onProgressiveData;
+      if (useMozChunkedLoading) {
+        xhr.responseType = 'moz-chunked-arraybuffer';
+        pendingRequest.onProgressiveData = args.onProgressiveData;
+        pendingRequest.mozChunked = true;
+>>>>>>> develop
       } else {
         xhr.responseType = 'arraybuffer';
       }
@@ -11356,6 +11468,7 @@ var Annotation = (function AnnotationClosure() {
       }
     }
 
+<<<<<<< HEAD
     // Some types of annotations have border style dict which has more
     // info than the border array
     if (dict.has('BS')) {
@@ -11395,6 +11508,10 @@ var Annotation = (function AnnotationClosure() {
         }
       }
     }
+=======
+    this.borderStyle = data.borderStyle = new AnnotationBorderStyle();
+    this.setBorderStyle(dict);
+>>>>>>> develop
 
     this.appearance = getDefaultAppearance(dict);
     data.hasAppearance = !!this.appearance;
@@ -11402,6 +11519,44 @@ var Annotation = (function AnnotationClosure() {
   }
 
   Annotation.prototype = {
+<<<<<<< HEAD
+=======
+    /**
+     * Set the border style (as AnnotationBorderStyle object).
+     *
+     * @public
+     * @memberof Annotation
+     * @param {Dict} borderStyle - The border style dictionary
+     */
+    setBorderStyle: function Annotation_setBorderStyle(borderStyle) {
+      if (!isDict(borderStyle)) {
+        return;
+      }
+      if (borderStyle.has('BS')) {
+        var dict = borderStyle.get('BS');
+        var dictType;
+
+        if (!dict.has('Type') || (isName(dictType = dict.get('Type')) &&
+                                  dictType.name === 'Border')) {
+          this.borderStyle.setWidth(dict.get('W'));
+          this.borderStyle.setStyle(dict.get('S'));
+          this.borderStyle.setDashArray(dict.get('D'));
+        }
+      } else if (borderStyle.has('Border')) {
+        var array = borderStyle.get('Border');
+        if (isArray(array) && array.length >= 3) {
+          this.borderStyle.setHorizontalCornerRadius(array[0]);
+          this.borderStyle.setVerticalCornerRadius(array[1]);
+          this.borderStyle.setWidth(array[2]);
+          this.borderStyle.setStyle('S');
+
+          if (array.length === 4) { // Dash array available
+            this.borderStyle.setDashArray(array[3]);
+          }
+        }
+      }
+    },
+>>>>>>> develop
 
     getData: function Annotation_getData() {
       return this.data;
@@ -11588,6 +11743,147 @@ var Annotation = (function AnnotationClosure() {
   return Annotation;
 })();
 
+<<<<<<< HEAD
+=======
+/**
+ * Contains all data regarding an annotation's border style.
+ *
+ * @class
+ */
+var AnnotationBorderStyle = (function AnnotationBorderStyleClosure() {
+  /**
+   * @constructor
+   * @private
+   */
+  function AnnotationBorderStyle() {
+    this.width = 1;
+    this.style = AnnotationBorderStyleType.SOLID;
+    this.dashArray = [3];
+    this.horizontalCornerRadius = 0;
+    this.verticalCornerRadius = 0;
+  }
+
+  AnnotationBorderStyle.prototype = {
+    /**
+     * Set the width.
+     *
+     * @public
+     * @memberof AnnotationBorderStyle
+     * @param {integer} width - The width
+     */
+    setWidth: function AnnotationBorderStyle_setWidth(width) {
+      if (width === (width | 0)) {
+        this.width = width;
+      }
+    },
+
+    /**
+     * Set the style.
+     *
+     * @public
+     * @memberof AnnotationBorderStyle
+     * @param {Object} style - The style object
+     * @see {@link shared/util.js}
+     */
+    setStyle: function AnnotationBorderStyle_setStyle(style) {
+      if (!style) {
+        return;
+      }
+      switch (style.name) {
+        case 'S':
+          this.style = AnnotationBorderStyleType.SOLID;
+          break;
+
+        case 'D':
+          this.style = AnnotationBorderStyleType.DASHED;
+          break;
+
+        case 'B':
+          this.style = AnnotationBorderStyleType.BEVELED;
+          break;
+
+        case 'I':
+          this.style = AnnotationBorderStyleType.INSET;
+          break;
+
+        case 'U':
+          this.style = AnnotationBorderStyleType.UNDERLINE;
+          break;
+
+        default:
+          break;
+      }
+    },
+
+    /**
+     * Set the dash array.
+     *
+     * @public
+     * @memberof AnnotationBorderStyle
+     * @param {Array} dashArray - The dash array with at least one element
+     */
+    setDashArray: function AnnotationBorderStyle_setDashArray(dashArray) {
+      // We validate the dash array, but we do not use it because CSS does not
+      // allow us to change spacing of dashes. For more information, visit
+      // http://www.w3.org/TR/css3-background/#the-border-style.
+      if (isArray(dashArray) && dashArray.length > 0) {
+        // According to the PDF specification: the elements in a dashArray
+        // shall be numbers that are nonnegative and not all equal to zero.
+        var isValid = true;
+        var allZeros = true;
+        for (var i = 0, len = dashArray.length; i < len; i++) {
+          var element = dashArray[i];
+          var validNumber = (+element >= 0);
+          if (!validNumber) {
+            isValid = false;
+            break;
+          } else if (element > 0) {
+            allZeros = false;
+          }
+        }
+        if (isValid && !allZeros) {
+          this.dashArray = dashArray;
+        } else {
+          this.width = 0; // Adobe behavior when the array is invalid.
+        }
+      } else if (dashArray) {
+        this.width = 0; // Adobe behavior when the array is invalid.
+      }
+    },
+
+    /**
+     * Set the horizontal corner radius (from a Border dictionary).
+     *
+     * @public
+     * @memberof AnnotationBorderStyle
+     * @param {integer} radius - The horizontal corner radius
+     */
+    setHorizontalCornerRadius:
+        function AnnotationBorderStyle_setHorizontalCornerRadius(radius) {
+      if (radius === (radius | 0)) {
+        this.horizontalCornerRadius = radius;
+      }
+    },
+
+    /**
+     * Set the vertical corner radius (from a Border dictionary).
+     *
+     * @public
+     * @memberof AnnotationBorderStyle
+     * @param {integer} radius - The vertical corner radius
+     */
+    setVerticalCornerRadius:
+        function AnnotationBorderStyle_setVerticalCornerRadius(radius) {
+      if (radius === (radius | 0)) {
+        this.verticalCornerRadius = radius;
+      }
+    }
+  };
+
+  return AnnotationBorderStyle;
+})();
+
+>>>>>>> develop
 var WidgetAnnotation = (function WidgetAnnotationClosure() {
 
   function WidgetAnnotation(params) {
@@ -22989,6 +23285,35 @@ var OpenTypeFileBuilder = (function OpenTypeFileBuilderClosure() {
   return OpenTypeFileBuilder;
 })();
 
+<<<<<<< HEAD
+=======
+// Problematic Unicode characters in the fonts that needs to be moved to avoid
+// issues when they are painted on the canvas, e.g. complex-script shaping or
+// control/whitespace characters. The ranges are listed in pairs: the first item
+// is a code of the first problematic code, the second one is the next
+// non-problematic code. The ranges must be in sorted order.
+var ProblematicCharRanges = new Int32Array([
+  // Control characters.
+  0x0000, 0x0020,
+  0x007F, 0x00A1,
+  0x00AD, 0x00AE,
+  // Chars that is used in complex-script shaping.
+  0x0600, 0x0780,
+  0x08A0, 0x10A0,
+  0x1780, 0x1800,
+  // General punctuation chars.
+  0x2000, 0x2010,
+  0x2011, 0x2012,
+  0x2028, 0x2030,
+  0x205F, 0x2070,
+  0x25CC, 0x25CD,
+  // Chars that is used in complex-script shaping.
+  0xAA60, 0xAA80,
+  // Specials Unicode block.
+  0xFFF0, 0x10000
+]);
+
+>>>>>>> develop
 /**
  * 'Font' is the class the outside world should use, it encapsulate all the font
  * decoding logics whatever type it is (assuming the font type is supported).
@@ -23272,6 +23597,7 @@ var Font = (function FontClosure() {
    * @return {boolean}
    */
   function isProblematicUnicodeLocation(code) {
+<<<<<<< HEAD
     if (code <= 0x1F) { // Control chars
       return true;
     }
@@ -23299,6 +23625,20 @@ var Font = (function FontClosure() {
       return true;
     }
     return false;
+=======
+    // Using binary search to find a range start.
+    var i = 0, j = ProblematicCharRanges.length - 1;
+    while (i < j) {
+      var c = (i + j + 1) >> 1;
+      if (code < ProblematicCharRanges[c]) {
+        j = c - 1;
+      } else {
+        i = c;
+      }
+    }
+    // Even index means code in problematic range.
+    return !(i & 1);
+>>>>>>> develop
   }
 
   /**
@@ -24723,13 +25063,26 @@ var Font = (function FontClosure() {
 
       var charCodeToGlyphId = [], charCode;
       var toUnicode = properties.toUnicode, widths = properties.widths;
+<<<<<<< HEAD
       var isIdentityUnicode = toUnicode instanceof IdentityToUnicodeMap;
 
+=======
+      var skipToUnicode = (toUnicode instanceof IdentityToUnicodeMap ||
+                           toUnicode.length === 0x10000);
+
+      // Helper function to try to skip mapping of empty glyphs.
+      // Note: In some cases, just relying on the glyph data doesn't work,
+      //       hence we also use a few heuristics to fix various PDF files.
+>>>>>>> develop
       function hasGlyph(glyphId, charCode, widthCode) {
         if (!missingGlyphs[glyphId]) {
           return true;
         }
+<<<<<<< HEAD
         if (!isIdentityUnicode && charCode >= 0 && toUnicode.has(charCode)) {
+=======
+        if (!skipToUnicode && charCode >= 0 && toUnicode.has(charCode)) {
+>>>>>>> develop
           return true;
         }
         if (widths && widthCode >= 0 && isNum(widths[widthCode])) {
