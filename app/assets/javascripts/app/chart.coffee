@@ -49,7 +49,7 @@ window.Chart =
       chart.dispatch.on 'stateChange', (e) ->
         chart.forceY([0, Chart.maxValue(data)])
 
-      d3.select(id + ' svg')
+      d3.select(id).append('svg')
         .datum(data)
         .call(chart)
 
