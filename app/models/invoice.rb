@@ -32,10 +32,6 @@ class Invoice < ActiveRecord::Base
     where(state: :paid)
   end
 
-  def self.paid_or_charged
-    where state: [:paid, :charged]
-  end
-
   def self.charged
     where(state: :charged)
   end
