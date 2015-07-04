@@ -6,7 +6,7 @@ window.Chart =
       $.each dataset.values, (_i, value) ->
         newValue = parseFloat(value.y)
         if maxValue < newValue
-          maxValue = newValue
+          maxValue = Math.ceil(newValue / 500) * 500
 
     maxValue
   ticks: (datasets) ->
@@ -14,111 +14,86 @@ window.Chart =
     $.each datasets, (_i, dataset) ->
       return if dataset.disabled
       $.each dataset.values, (index, value) ->
-        if index % 2 is 0 && ticks.indexOf(value.x) is -1
+        if ticks.indexOf(value.x) is -1
           ticks.push value.x
 
     ticks
 
-  loadInvoices: ->
-    if $('#invoices-chart').length && invoicesChartData
-      data = invoicesChartData
+  currencyChart: (id, data) ->
+    nv.addGraph ->
+      chart = nv.models.lineChart()
+        .margin({top: 20, right: 10, bottom: 30, left: 40})
+        .options
+          transitionDuration: 300
 
-      nv.addGraph ->
-        chart = nv.models.lineChart()
-          .margin({top: 20, right: 10, bottom: 40, left: 70})
-          .useInteractiveGuideline(true)
-          .options
-            transitionDuration: 300
+      chart.forceY([0, Chart.maxValue(data)])
 
+      chart.tooltip.headerFormatter (d) ->
+        '<h3>' + moment(d).format('MMMM') + '</h3>'
+
+      chart.tooltip.valueFormatter (d) ->
+        accounting.formatMoney(d, {symbol: '€', format: '%v %s', decimal: ',', thousand: '.'})
+
+      chart.xAxis
+        .tickPadding(10)
+        .showMaxMin(false)
+        .tickValues(Chart.ticks(data, true))
+        .tickFormat (d) ->
+          moment(d).startOf('month').format('MMM')
+
+      chart.yAxis
+        .tickPadding(10)
+        .tickFormat (d) ->
+          d / 1000 + 'k' if d
+
+      chart.dispatch.on 'stateChange', (e) ->
         chart.forceY([0, Chart.maxValue(data)])
 
-        chart.interactiveLayer.tooltip.headerFormatter (data) ->
-          '<h3>' + data + '</h3>'
+      d3.select(id + ' svg')
+        .datum(data)
+        .call(chart)
 
-        chart.xAxis
-          .showMaxMin(false)
-          .tickValues(Chart.ticks(data, true))
-          .tickFormat (d) ->
-            moment(d).startOf('month').format('MMMM')
+      nv.utils.windowResize(chart.update)
 
-        chart.yAxis
-          .tickFormat (d) ->
-            accounting.formatMoney(d, {symbol: '€', format: '%v %s', decimal: ',', thousand: '.'})
+      chart
 
-        chart.dispatch.on 'stateChange', (e) ->
-          chart.forceY([0, Chart.maxValue(data)])
+  timersChart: (id, data) ->
+    nv.addGraph ->
+      chart = nv.models.multiBarChart()
+        .margin({top: 20, right: 10, bottom: 40, left: 15})
+        .showControls(false)
+        .stacked(true)
 
-        d3.select('#invoices-chart svg')
-          .datum(data)
-          .call(chart)
+      chart.tooltip.headerFormatter (data) ->
+        '<h3>' + moment(data).format('MMMM') + '</h3>'
+    #     .tooltip(function(key, x, y, e, graph) {
+    # #           return "<h3>" + key + "</h3><p>" + (decimalToTime(e.value) || "0:00") + "h " + I18n.t('labels.chart.on_date') + " " + x + "</p>";
+    # #         });
+    # #
+      chart.xAxis
+        .showMaxMin(false)
+        .tickFormat (d) ->
+          moment(d).format('D. MMM YY')
 
-        nv.utils.windowResize(chart.update)
+      chart.yAxis
+        .tickFormat (d) ->
+          d3.format('d')(d || 0)
 
-        chart
+      d3.select(id + ' svg')
+        .datum(data)
+        .transition().duration(500)
+        .call(chart)
 
-  loadProject: ->
-    if $('#project-budget-chart').length && projectBudgetChartData
-      data = projectBudgetChartData
+      nv.utils.windowResize(chart.update)
 
-      nv.addGraph ->
-        chart = nv.models.lineChart()
-          .margin({top: 20, right: 10, bottom: 40, left: 70})
-          .options
-            transitionDuration: 300
+      chart
 
-        chart.forceY([0, Chart.maxValue(data)])
+$ ->
+  if $('#invoices-chart').length && invoicesChartData
+    Chart.currencyChart('#invoices-chart', invoicesChartData)
 
-        chart.tooltip.headerFormatter (data) ->
-          '<h3>' + moment(data).format('MMMM') + '</h3>'
+  if $('#project-budget-chart').length && projectBudgetChartData
+    Chart.currencyChart('#project-budget-chart', projectBudgetChartData)
 
-        chart.xAxis
-          .showMaxMin(false)
-          .tickValues(Chart.ticks(data, true))
-          .tickFormat (d) ->
-            moment(d).format('MMMM')
-
-        chart.yAxis
-          .tickFormat (d) ->
-            accounting.formatMoney(d, {symbol: '€', format: '%v %s', decimal: ',', thousand: '.'})
-
-        d3.select('#project-budget-chart svg')
-          .datum(projectBudgetChartData)
-          .call(chart)
-
-        nv.utils.windowResize(chart.update)
-
-        chart
-
-    if $('#project-timers-chart').length && projectTimersChartData
-      data = projectTimersChartData
-
-      console.log projectTimersChartData
-      nv.addGraph ->
-        chart = nv.models.multiBarChart()
-          .margin({top: 20, right: 10, bottom: 40, left: 15})
-          .showControls(false)
-          .stacked(true)
-
-        chart.tooltip.headerFormatter (data) ->
-          '<h3>' + moment(data).format('MMMM') + '</h3>'
-      #     .tooltip(function(key, x, y, e, graph) {
-      # #           return "<h3>" + key + "</h3><p>" + (decimalToTime(e.value) || "0:00") + "h " + I18n.t('labels.chart.on_date') + " " + x + "</p>";
-      # #         });
-      # #
-        chart.xAxis
-          .showMaxMin(false)
-          .tickFormat (d) ->
-            moment(d).format('D. MMM YY')
-
-        chart.yAxis
-          .tickFormat (d) ->
-            d3.format('d')(d || 0)
-
-        d3.select('#project-timers-chart svg')
-          .datum(data)
-          .transition().duration(500)
-          .call(chart)
-
-        nv.utils.windowResize(chart.update)
-
-        chart
+  if $('#project-timers-chart').length && projectTimersChartData
+    Chart.timersChart('#project-timers-chart', projectTimersChartData)

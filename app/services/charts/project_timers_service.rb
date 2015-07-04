@@ -14,7 +14,7 @@ module Charts
         (0..months_count).to_a.reverse.map do |month_offset|
           month_start_date = (end_date - month_offset.months).beginning_of_month
           month_end_date = (end_date - month_offset.months).to_date.end_of_month
-          next if month_start_date > Time.zone.now
+          break if month_start_date.month >= Time.zone.now.month
           value = scope.where(task: task, date: month_start_date.to_date..month_end_date).all.sum(:value)
           dataset[:values] << {
             label: (month_start_date.to_i * 1000),
