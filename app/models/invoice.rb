@@ -24,16 +24,20 @@ class Invoice < ActiveRecord::Base
   event :charge, from: :created, to: :charged, before: :generate_pdf, after: :send_via_mail
   event :pay, from: :charged, to: :paid, after: :set_pay_date
 
+  def self.paid_or_charged
+    where(state: [:charged, :paid])
+  end
+
   def self.paid
-    where state: :paid
+    where(state: :paid)
   end
 
   def self.charged
-    where state: :charged
+    where(state: :charged)
   end
 
   def self.due
-    where "payment_due_date < ?", Time.zone.now.to_date
+    where("payment_due_date < ?", Time.zone.now.to_date)
   end
 
   def self.created
