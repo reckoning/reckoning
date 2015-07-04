@@ -39,5 +39,3 @@ $ ->
 
   initMoment()
   initAccounting()
-  Chart.loadInvoices()
-  Chart.loadProject()

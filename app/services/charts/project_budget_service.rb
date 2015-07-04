@@ -14,12 +14,16 @@ module Charts
       (1..(months_count + 1)).to_a.reverse.map do |month_offset|
         month_start_date = (end_date - month_offset.months).beginning_of_month
         month_end_date = (end_date - month_offset.months).to_date.end_of_month
-        next if month_start_date > Time.zone.now
-        budget -= scope.where(date: month_start_date.to_date..month_end_date).all.sum(:value)
+        if month_start_date.month >= Time.zone.now.month && Time.zone.now.year == month_start_date.year
+          value = nil
+        else
+          budget -= scope.where(date: month_start_date.to_date..month_end_date).all.sum(:value)
+          value = budget
+        end
 
         dataset[:values] << {
           x: (month_start_date.to_i * 1000),
-          y: budget
+          y: value
         }
       end
 
