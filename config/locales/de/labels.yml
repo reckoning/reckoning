@@ -35,6 +35,8 @@ de:
       contact_form: Haben Sie weitere Fragen?
     chart:
       on_date: am
+      project:
+        budget: "Budget"
       timers:
         headline: "Erfasste Stunden im letzten Monat"
         no_data: "Keine Zeiten erfasst."

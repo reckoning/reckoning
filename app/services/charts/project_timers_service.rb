@@ -4,33 +4,25 @@ module Charts
 
     def initialize(project, scope)
       @project = project
+
       super scope
     end
 
-    def generate_labels
-      @labels = []
-      (0..months_count).each do |month_offset|
-        month = (end_date - month_offset.months).month
-        @labels << {
-          label: I18n.t('date.abbr_month_names')[month],
-          title: I18n.t('date.month_names')[month]
-        }
-      end
-      @labels = labels.reverse
-    end
-
     def generate_datasets
-      dataset = new_dataset(I18n.t(:"labels.chart.project.budget"), colorsets[1])
-      dataset[:data] = []
-      (0..months_count).to_a.reverse.map do |month_offset|
-        month_start_date = (end_date - month_offset.months).to_date.beginning_of_month
-        month_end_date = (end_date - month_offset.months).to_date.end_of_month
-        next if month_start_date > Time.zone.now
-        value = scope.where(date: month_start_date..month_end_date).all.sum(:value)
-        dataset[:data] << value
+      project.tasks.each_with_index do |task, index|
+        dataset = new_dataset(task.name, colors[index])
+        (0..months_count).to_a.reverse.map do |month_offset|
+          month_start_date = (end_date - month_offset.months).to_date.beginning_of_month
+          month_end_date = (end_date - month_offset.months).to_date.end_of_month
+          next if month_start_date > Time.zone.now
+          value = scope.where(task: task, date: month_start_date..month_end_date).all.sum(:value)
+          dataset[:values] << {
+            label: (month_start_date.to_time.to_i * 1000),
+            y: value
+          }
+        end
+        @datasets << dataset if dataset[:values].present?
       end
-
-      @datasets << dataset
     end
 
     private def start_date
