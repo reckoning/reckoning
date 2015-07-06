@@ -1,12 +1,13 @@
 window.Chart =
-  maxValue: (datasets) ->
-    maxValue = 0;
+  maxValue: (datasets, steps) ->
+    steps ?= 1
+    maxValue = 0
     $.each datasets, (index, dataset) ->
       return if dataset.disabled
       $.each dataset.values, (_i, value) ->
         newValue = parseFloat(value.y)
         if maxValue < newValue
-          maxValue = Math.ceil(newValue / 500) * 500
+          maxValue = Math.ceil(newValue / steps) * steps
 
     maxValue
   ticks: (datasets) ->
@@ -26,7 +27,7 @@ window.Chart =
         .options
           transitionDuration: 300
 
-      chart.forceY([0, Chart.maxValue(data)])
+      chart.forceY([0, Chart.maxValue(data, 500)])
 
       chart.tooltip.headerFormatter (d) ->
         '<h3>' + moment(d).format('MMMM') + '</h3>'
@@ -39,7 +40,7 @@ window.Chart =
         .showMaxMin(false)
         .tickValues(Chart.ticks(data, true))
         .tickFormat (d) ->
-          moment(d).startOf('month').format('MMM')
+          moment(d).startOf('month').format('MMM.')
 
       chart.yAxis
         .tickPadding(10)
@@ -47,7 +48,7 @@ window.Chart =
           d / 1000 + 'k' if d
 
       chart.dispatch.on 'stateChange', (e) ->
-        chart.forceY([0, Chart.maxValue(data)])
+        chart.forceY([0, Chart.maxValue(data, 500)])
 
       d3.select(id).append('svg')
         .datum(data)
@@ -60,26 +61,32 @@ window.Chart =
   timersChart: (id, data) ->
     nv.addGraph ->
       chart = nv.models.multiBarChart()
-        .margin({top: 20, right: 10, bottom: 40, left: 15})
+        .margin({top: 20, right: 10, bottom: 30, left: 40})
         .showControls(false)
-        .stacked(true)
+
+      chart.forceY([0, Chart.maxValue(data)])
 
       chart.tooltip.headerFormatter (data) ->
         '<h3>' + moment(data).format('MMMM') + '</h3>'
-    #     .tooltip(function(key, x, y, e, graph) {
-    # #           return "<h3>" + key + "</h3><p>" + (decimalToTime(e.value) || "0:00") + "h " + I18n.t('labels.chart.on_date') + " " + x + "</p>";
-    # #         });
-    # #
+
+      chart.tooltip.valueFormatter (data) ->
+        (decimalToTime(data) || "0:00") + "h "
+
       chart.xAxis
+        .tickPadding(10)
         .showMaxMin(false)
         .tickFormat (d) ->
-          moment(d).format('D. MMM YY')
+          moment(d).format('MMM. YYYY')
 
       chart.yAxis
+        .tickPadding(10)
         .tickFormat (d) ->
           d3.format('d')(d || 0)
 
-      d3.select(id + ' svg')
+      chart.dispatch.on 'stateChange', (e) ->
+        chart.forceY([0, Chart.maxValue(data)])
+
+      d3.select(id).append('svg')
         .datum(data)
         .transition().duration(500)
         .call(chart)

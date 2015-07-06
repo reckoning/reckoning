@@ -24,15 +24,20 @@ module Charts
 
     private def colors
       @colors ||= [
-        "#dcdcdc",
-        "#c3c3c3",
         "#428bca",
         "#3071a9"
       ]
     end
 
+    private def background_colors
+      @background_colors ||= [
+        "#dcdcdc",
+        "#c3c3c3"
+      ]
+    end
+
     private def random_color
-      colors[rand(0..3)]
+      colors[rand(0..1)]
     end
   end
 end
