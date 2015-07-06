@@ -6,16 +6,6 @@
     padding: 8px 15px;
   }
 
-  .list-group-item {
-    a {
-      color: $gray;
-      &:hover {
-        color: $link-hover-color;
-        text-decoration: none;
-      }
-    }
-  }
-
   .panel-list-action {
     position: absolute;
     top: -6px;

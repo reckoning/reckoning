@@ -87,6 +87,10 @@ code[data-target] {
   }
 }
 
+.tooltip > .tooltip-inner {
+  min-width: 120px;
+}
+
 .list-group-item {
   &.project-group-item {
       border-top-color: #eee;

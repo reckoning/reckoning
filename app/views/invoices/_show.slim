@@ -1,20 +1,24 @@
 .list-group-item
   .row
-    .col-xs-12.col-md-1.ref
+    .col-xs-6.col-md-1.ref
       = invoice.ref_number
+    .col-xs-6.visible-xs.visible-sm
+      .pull-right
+        span class="label label-#{invoice_label(invoice)}"
+          = I18n.t(:"activerecord.attributes.invoice.states.#{invoice.state}")
     .col-xs-12.col-md-4.name
       a.plain href=invoice_path(invoice)
         = invoice.title
-    .col-xs-12.col-md-2.month
+    .col-xs-6.col-md-2.month
       = I18n.l invoice.date, format: :month_year
-    .col-xs-12.col-md-2.value
+    .col-xs-6.col-md-2.value
       .pull-right
-        = number_to_currency invoice.value
-    .col-xs-12.col-md-1.state
+        b= number_to_currency invoice.value
+    .col-md-1.state.hidden-xs.hidden-sm
       span class="label label-#{invoice_label(invoice)}"
         = I18n.t(:"activerecord.attributes.invoice.states.#{invoice.state}")
     .col-xs-12.col-md-2
-      .pull-right
+      .pull-right.hidden-xs.hidden-sm
         .dropdown
           button.btn.btn-default.dropdown-toggle type="button" data-toggle="dropdown" data-aria-expanded="false"
             = I18n.t(:"labels.defaults.actions")
@@ -24,8 +28,6 @@
             - if can? :read, invoice
               li
                 a href=invoice_path(invoice)
-                  i.fa.fa-file
-                  '
                   = I18n.t(:"actions.show")
             - if can? :update, invoice
               li
@@ -44,7 +46,7 @@
                   = I18n.t(:"actions.charge")
             - if can? :pay, invoice
               li
-                = link_to pay_invoice_path(invoice), method: :put, class: "btn btn-success btn-sm" do
+                = link_to pay_invoice_path(invoice), method: :put do
                   i.fa.fa-check-square-o
                   '
                   = I18n.t(:"actions.pay")
@@ -55,3 +57,30 @@
                   i.fa.fa-trash
                   '
                   = I18n.t(:"actions.delete")
+
+      .btn-group.btn-group-justified.visible-xs.visible-sm
+        a.btn.btn-default href=invoice_path(invoice)
+          = I18n.t(:"actions.show")
+        - if can? :update, invoice
+          a.btn.btn-default href=edit_invoice_path(invoice)
+            i.fa.fa-edit
+            '
+            span.hidden-xs.hidden-sm= I18n.t(:"actions.edit")
+        - if can? :charge, invoice
+          - charge_confirm = I18n.t(:"messages.confirm.charge")
+          - if invoice.send_via_mail?
+            - charge_confirm = I18n.t(:"messages.confirm.charge_mail")
+          a.btn.btn-default href=charge_invoice_path(invoice) data-method="PUT" data-notyConfirm=charge_confirm
+            i.fa.fa-envelope
+            '
+            span.hidden-xs.hidden-sm= I18n.t(:"actions.charge")
+        - if can? :pay, invoice
+          = link_to pay_invoice_path(invoice), method: :put, class: "btn btn-success" do
+            i.fa.fa-check-square-o
+            '
+            span.hidden-xs.hidden-sm= I18n.t(:"actions.pay")
+        - if can? :destroy, invoice
+          a.btn.btn-danger href=invoice_path(invoice) data-method="DELETE" data-notyConfirm=I18n.t(:"messages.confirm.delete")
+            i.fa.fa-trash
+            '
+            span.hidden-xs.hidden-sm= I18n.t(:"actions.delete")
