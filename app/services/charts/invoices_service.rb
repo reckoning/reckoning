@@ -53,8 +53,8 @@ module Charts
 
     private def color_for_year
       @color_for_year ||= {
-        (Time.zone.now - 1.year).year => ["#dcdcdc", "#c3c3c3"],
-        Time.zone.now.year => ["#428bca", "#3071a9"]
+        (Time.zone.now - 1.year).year => background_colors,
+        Time.zone.now.year => colors
       }
     end
   end
