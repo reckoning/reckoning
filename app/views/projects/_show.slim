@@ -1,19 +1,19 @@
 .list-group-item
   .row
     .col-xs-12.col-md-4.name
-      a href=project_path(project)
+      a.plain href=project_path(project)
         b = project.name
     .col-xs-12.col-md-2
       - unless project.budget.zero?
         b = number_to_currency (project.budget - project.invoice_values)
-        br
+        br.hidden-xs.hidden-sm
         = " von "
         = number_to_currency(project.budget)
     .col-xs-12.col-md-4.project-progress
       .budget-label
         .row
           .col-xs-6.col-sm-6.col-md-6
-            = number_to_currency project.timer_values, unit: "h", precision: 2
+            = number_to_currency project.timer_values - project.timer_values_uninvoiced, unit: "h", precision: 2
             - unless project.timer_values.zero? || project.timer_values_uninvoiced.zero?
               '
               span.label.label-default data-toggle='tooltip' title=I18n.t(:"labels.budget.uninvoiced")
@@ -36,8 +36,11 @@
               span.caret
             ul.dropdown-menu.dropdown-menu-right role="menu"
               li
+                a href=project_path(project)
+                  = I18n.t(:"actions.show")
+              li
                 a href=new_invoice_path(project_uuid: project)
-                  i.fa.fa-file
+                  i.fa.fa-plus
                   '
                   = I18n.t(:"actions.add_invoice")
               li
@@ -54,12 +57,15 @@
         .btn-group.btn-group-justified.visible-xs.visible-sm
           a.btn.btn-default href=project_path(project)
             = I18n.t(:"actions.show")
-          a.btn.btn-default href=new_invoice_path(project_uuid: project)
-            = I18n.t(:"actions.add_invoice")
-          a.btn.btn-default href=edit_project_path(project)
-            = I18n.t(:"actions.edit")
-          a.btn.btn-default href=archive_v1_project_url(project) data-redirect=projects_path data-method="PUT" data-notyConfirm=I18n.t(:"messages.confirm.project.archive")
-            = I18n.t(:"actions.archive")
+          a.btn.btn-default href=new_invoice_path(project_uuid: project) title=I18n.t(:"actions.add_invoice")
+            i.fa.fa-plus
+            span.hidden-xs.hidden-sm= I18n.t(:"actions.add_invoice")
+          a.btn.btn-default href=edit_project_path(project) title=I18n.t(:"actions.edit")
+            i.fa.fa-edit
+            span.hidden-xs.hidden-sm= I18n.t(:"actions.edit")
+          a.btn.btn-default href=archive_v1_project_url(project) data-redirect=projects_path data-method="PUT" data-notyConfirm=I18n.t(:"messages.confirm.project.archive") title=I18n.t(:"actions.archive")
+            i.fa.fa-archive
+            span.hidden-xs.hidden-sm= I18n.t(:"actions.archive")
       - else
         .pull-right.hidden-xs.hidden-sm
           = link_to I18n.t(:"actions.unarchive"), unarchive_project_path(project), class: "btn btn-default", method: :put
