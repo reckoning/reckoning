@@ -3,8 +3,6 @@ require 'test_helper'
 class InvoicesControllerTest < ActionController::TestCase
   tests ::InvoicesController
 
-  fixtures :all
-
   let(:invoice) { invoices :january }
 
   describe "unauthorized" do

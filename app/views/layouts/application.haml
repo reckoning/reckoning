@@ -30,6 +30,8 @@
     = stylesheet_link_tag "application"
 
     = javascript_include_tag "//cdn.ravenjs.com/1.1.15/jquery,native/raven.min.js"
+    = yield(:js_includes) if content_for?(:js_includes)
+
     = javascript_include_tag "application"
     = render 'layouts/js_defaults'
 

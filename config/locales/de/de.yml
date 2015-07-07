@@ -5,6 +5,8 @@ de:
   title:
     default: "Reckoning.io"
     backend: "Reckoning.io Backend"
+  default_country: "Deutschland"
+  default_country_code: "DE"
   small_business: "umsatzsteuerbefreit nach § 19 UStG"
   info:
     sign_in: "Haben Sie bereits einen Account?"
@@ -15,8 +17,11 @@ de:
       customers: "Kunden"
       projects: "Projekte"
       timesheet: "Zeiten"
+      upgrade: "Upgrade auf Pro"
       toggle: "Navigation aufklappen"
       intro: "Home"
+      features: "Features"
+      pricing: "Pricing"
       backend: "Backend"
       frontend: "Frontend"
       dashboard: "Dashboard"
@@ -24,12 +29,18 @@ de:
       user: "Profil"
       account: "Account"
       sign_up: "Registrieren"
+    footer:
+      impressum: Impressum
+      privacy: Datenschutz
+      contact: Kontakt
+      terms: AGBs
     subnav:
       back: "Zurück"
       new_invoice: "Neue Rechnung"
       archive_invoices: "Alle Rechnungen archivieren"
       new_customer: "Neuer Kunde"
       new_project: "Neues Projekt"
+      new_project_for_customer: "Neues Projekt für %{customer}"
       new_user: "Neuer Benutzer"
       update_password: "Passwort ändern"
       user:
@@ -116,6 +127,37 @@ de:
   user:
     current_sign_in_at:
       empty: "Noch nie eingeloggt"
+
+  plans:
+    name:
+      basic: "Basic (%{price} € pro Monat)"
+      plus: "Plus (%{price} € pro Monat)"
+      premium: "Premium (%{price} € pro Monat)"
+    price:
+      month: "<sup>€</sup> %{price} <small>pro Monat</small>"
+      year: "<sup>€</sup> %{price} <small>pro Jahr</small>"
+    desc:
+      free:
+        projects: "<b>1</b> aktives Projekt"
+        invoices: "<b>1</b> Rechnung pro Monat"
+        users: "<b>1</b> Benutzer"
+      basic:
+        projects: "<b>5</b> aktive Projekte"
+        invoices: "<b>&infin;</b> Rechnungen pro Monat"
+        users: "<b>1</b> Benutzer"
+      basic-year: {}
+      plus:
+        projects: "<b>&infin;</b> aktive Projekte"
+        invoices: "<b>&infin;</b> Rechnungen pro Monat"
+        users: "<b>5</b> Benutzer"
+      plus-year: {}
+      premium:
+        projects: "<b>&infin;</b> aktive Projekte"
+        invoices: "<b>&infin;</b> Rechnungen pro Monat"
+        users: "<b>10</b> Benutzer*"
+      premium-year: {}
+    small_print: "* %{price} € pro Monat für jeden weiteren Benutzer"
+    cta_button: "Reckoning für 30 Tage gratis testen"
 
   error_pages:
     not_found: 'Die Seite "%{page}" konnte nicht gefunden werden.'

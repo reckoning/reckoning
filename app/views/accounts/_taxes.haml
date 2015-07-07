@@ -11,10 +11,10 @@
             = form_errors resource, :tax
           %span.input-group-addon
             = "%"
-  .col-xs-12.col-md-6.form-group{class: form_error?(resource, :tax_ref)}
-    = form.text_field :tax_ref, placeholder: I18n.t(:"helpers.placeholder.user.settings.tax_ref"), class: 'form-control'
+  .col-xs-12.col-md-6.form-group{class: form_error?(resource, :vat_id)}
+    = form.text_field :vat_id, placeholder: I18n.t(:"helpers.placeholder.account.vat_id"), class: 'form-control'
     %small
-      = form_errors resource, :tax_ref
+      = form_errors resource, :vat_id
 .row
   .col-xs-12.col-md-6.form-group
     .row.form-horizontal

@@ -1,0 +1,12 @@
+.col-xs-12 class=(plan.featured ? "col-md-4" : "col-md-3")
+  .panel.panel-default.pricing-table class=(plan.featured ? "featured" : "")
+    .panel-heading
+      h3.panel-title
+        = plan.name
+    ul.list-group
+      - I18n.t(:"plans.desc.#{plan.code}").each do |key, text|
+        li.list-group-item
+          = text.html_safe
+    .panel-footer
+      h2
+        == I18n.t(:"plans.price.#{plan.interval}", price: plan.price)

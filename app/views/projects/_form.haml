@@ -8,7 +8,22 @@
       .form-group{class: form_error?(project, :name)}
         = form.text_field :name, placeholder: I18n.t(:"helpers.placeholder.name"), class: 'form-control'
         = form_errors project, :name
+  .row
+    .col-xs-12.col-md-6.form-group{class: form_error?(project, :start_date)}
+      .input-group.datepicker
+        = form.label :start_date, class: "input-group-addon"
+        = form.date_field :start_date, class: 'form-control', "data-value" => form.object.start_date
+        %span.input-group-btn
+          %button.btn.btn-default{type: "button"}
+            %i.fa.fa-calendar
 
+    .col-xs-12.col-md-6.form-group{class: form_error?(project, :end_date)}
+      .input-group.datepicker
+        = form.label :end_date, class: "input-group-addon"
+        = form.date_field :end_date, class: 'form-control', "data-value" => form.object.end_date
+        %span.input-group-btn
+          %button.btn.btn-default{type: "button"}
+            %i.fa.fa-calendar
   .row
     .col-xs-6.col-md-3.form-group{class: form_error?(project, :rate)}
       = form.label :rate
@@ -38,6 +53,9 @@
         = form_errors project, :budget_on_dashboard
 
   .row
+    .col-xs-6.col-md-3
+      %p.form-control-static.text-right
+        = I18n.t(:"helpers.label.project.round_up")
     .col-xs-6.col-md-3
       .form-group.selectize{class: form_error?(project, :round_up)}
         %select.js-customer-selectize#project_round_up{name: "project[round_up]"}

@@ -44,7 +44,7 @@ Reckoning::Application.routes.draw do
       end
     end
 
-    resources :settings, except: [:index, :show]
+    resources :contacts, only: [:index]
 
     authenticate :user, ->(u) { u.admin? } do
       mount Sidekiq::Web => '/workers'
@@ -144,6 +144,12 @@ Reckoning::Application.routes.draw do
       get :deactivate
     end
   end
+
+  resources :contacts, only: [:create]
+
+  get 'impressum' => 'base#impressum'
+  get 'privacy' => 'base#privacy'
+  get 'terms' => 'base#terms'
 
   get '404' => 'errors#not_found'
   get '422' => 'errors#server_error'

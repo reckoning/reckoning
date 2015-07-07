@@ -6,6 +6,10 @@ gem 'rails', '4.2.2'
 
 gem 'pg'
 
+gem 'stripe', github: 'stripe/stripe-ruby'
+gem 'money'
+gem 'valvat'
+
 gem 'active_model_serializers'
 
 gem 'sidekiq'
@@ -71,6 +75,7 @@ gem 'sentry-raven'
 gem 'intercom-rails'
 
 # pdf rendering
+gem 'typhoeus'
 gem 'wicked_pdf'
 
 group :test do

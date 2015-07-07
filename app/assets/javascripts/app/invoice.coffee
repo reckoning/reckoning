@@ -46,7 +46,7 @@ window.App.Invoice.loadPositions = ($element) ->
 
   xhr.abort() if xhr
   xhr = $.ajax
-    url: r(uninvoiced_project_tasks_path, project_id)
+    url: Routes.uninvoiced_project_tasks_path(project_id)
     dataType: 'json'
     context: $('#add-positions-modal')
     success: (result) ->

@@ -1,21 +1,15 @@
 .panel-list {
   position: relative;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 
-  .list-group-item {
-    a {
-      color: $gray;
-      &:hover {
-        color: $link-hover-color;
-        text-decoration: none;
-      }
-    }
+  .panel-heading {
+    padding: 8px 15px;
   }
 
   .panel-list-action {
     position: absolute;
-    top: -4px;
-    right: 5px;
+    top: -6px;
+    right: 2px;
   }
 
   a.list-group-item.new-item {

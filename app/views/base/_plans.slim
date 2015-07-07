@@ -1,0 +1,20 @@
+hr
+
+.row
+  a.anchor#pricing
+  .col-xs-12.col-md-12
+    h2.hide
+      = I18n.t(:"headlines.welcome.prices")
+    .row
+      .col-md-1
+      - Plan.all.each do |plan|
+        = render "base/pricing_table", plan: plan
+    .row
+      .col-md-1
+      .col-md-10
+        .pricing-table-small-print.text-right
+          = I18n.t(:"plans.small_print", price: Plan.base.price)
+        .text-center
+          a.btn.btn-success.btn-lg href=new_registration_path
+            = I18n.t(:"plans.cta_button")
+      .col-md-1

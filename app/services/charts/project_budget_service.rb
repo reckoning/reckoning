@@ -9,7 +9,7 @@ module Charts
     end
 
     def generate_datasets
-      dataset = new_dataset(I18n.t(:"labels.chart.project.budget"), colors[2])
+      dataset = new_dataset(I18n.t(:"labels.chart.project.budget"), colors[0])
       budget = project.budget
       (1..(months_count + 1)).to_a.reverse.map do |month_offset|
         month_start_date = (end_date - month_offset.months).beginning_of_month
