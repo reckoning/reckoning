@@ -76,10 +76,6 @@ gem 'intercom-rails'
 
 gem 'typhoeus'
 
-# heroku production
-gem 'rails_12factor', group: :production
-gem 'non-stupid-digest-assets'
-
 group :test do
   gem 'rails-perftest'
   gem 'minitest-rails'
