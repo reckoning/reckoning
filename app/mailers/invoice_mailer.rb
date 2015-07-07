@@ -27,8 +27,10 @@ class InvoiceMailer < ActionMailer::Base
 
     @signature = invoice.account.signature
 
-    attachments[invoice.invoice_file] = File.read(invoice.pdf_path)
-    attachments[invoice.timesheet_file] = File.read(invoice.timesheet_path) if File.exist?(invoice.timesheet_path)
+    invoice_pdf_path(invoice, invoice.invoice_file)
+
+    attachments[invoice.invoice_file] = invoice.inline_pdf
+    attachments[invoice.timesheet_file] = invoice.inline_timesheet_pdf unless invoice.timers.blank?
 
     mail(
       from: from,

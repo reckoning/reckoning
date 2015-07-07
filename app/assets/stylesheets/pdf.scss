@@ -1,19 +1,6 @@
 @import "pdf_normalize";
 $secondary-link-color: #222;
 
-@page {
-  size: a4 portrait;
-  margin: 30mm 20mm 55mm 20mm;
-  counter-increment: page;
-  @bottom-right {
-    margin-top: -60px;
-    margin-right: 0;
-    padding-right: 0;
-    font-size: 1.2em;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  }
-}
-
 // Mixin itself
 .clear {
   content: " ";
@@ -21,9 +8,10 @@ $secondary-link-color: #222;
   clear: both;
 }
 
-
 body {
   font-size: 1.6em;
+  padding: 10px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #333333 !important;
 }
 
@@ -53,6 +41,15 @@ table {
     border-top: 2px solid darken(#cacaca, 10%);
   }
 }
+
+.table-breaker {
+  content: " ";
+  height: 0;
+  clear: both;
+  display: block;
+  page-break-after: always;
+}
+
 
 address {
   font-style: normal;
@@ -92,9 +89,11 @@ address {
   }
 }
 
+tr {
+  page-break-inside: avoid;
+}
+
 #pdf-header {
-  position: fixed;
-  margin-top: -70px;
   top: 0;
   width: 100%;
   text-align: right;
@@ -103,13 +102,17 @@ address {
   font-weight: 900;
   font-style: italic;
   color: #2ba6cb !important;
-  font-family: 'Orbitron', sans-serif !important;
+  font-family: Orbitron, sans-serif !important;
+}
+
+#pagination {
+  font-size: .8em;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-align: right;
 }
 
 #pdf-footer {
   border-top: 1px solid #cacaca;
-  position: fixed;
-  margin-bottom: -150px;
   bottom: 0;
   width: 100%;
   padding-top: 5px;
@@ -130,11 +133,11 @@ address {
   }
 
   .contact-information{
-    width: 40%;
+    width: 38%;
     margin-top: 1.2em;
   }
 
   .bank-information {
-    width: 35%;
+    width: 34%;
   }
 }

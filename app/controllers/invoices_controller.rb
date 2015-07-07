@@ -22,18 +22,13 @@ class InvoicesController < ApplicationController
 
   def show
     authorize! :read, invoice
-    invoice.generate_pdf if invoice.pdf_not_present_and_not_generating? || !invoice.pdf_present_and_up_to_date?
   end
 
   def archive
     authorize! :archive, invoice
     if current_account.dropbox?
-      if invoice.files_present?
-        InvoiceDropboxWorker.perform_async invoice.id
-        redirect_to invoice_path(invoice), flash: { success: I18n.t(:"messages.invoice.archive.success") }
-      else
-        redirect_to invoice_path(invoice), alert: I18n.t(:"messages.invoice.files_missing")
-      end
+      InvoiceDropboxWorker.perform_async invoice.id
+      redirect_to invoice_path(invoice), flash: { success: I18n.t(:"messages.invoice.archive.success") }
     else
       redirect_to invoice_path(invoice), alert: I18n.t(:"messages.invoice.archive.failure")
     end
@@ -52,12 +47,8 @@ class InvoicesController < ApplicationController
   def send_mail
     authorize! :send, invoice
     if invoice.send_via_mail?
-      if invoice.files_present?
-        InvoiceMailerWorker.perform_async invoice.id
-        redirect_to invoice_path(invoice), flash: { success: I18n.t(:"messages.invoice.send.success") }
-      else
-        redirect_to invoice_path(invoice), alert: I18n.t(:"messages.invoice.files_missing")
-      end
+      InvoiceMailerWorker.perform_async invoice.id
+      redirect_to invoice_path(invoice), flash: { success: I18n.t(:"messages.invoice.send.success") }
     else
       redirect_to invoice_path(invoice), alert: I18n.t(:"messages.invoice.send.failure")
     end
@@ -80,12 +71,7 @@ class InvoicesController < ApplicationController
     authorize! :read, invoice
     respond_to do |format|
       format.pdf do
-        if File.exist?(invoice.pdf_path)
-          send_file invoice.pdf_path, type: 'application/pdf', disposition: 'inline'
-        else
-          invoice.generate_pdf
-          redirect_to invoice_path(invoice)
-        end
+        render invoice.pdf
       end
       unless Rails.env.production?
         format.html do
@@ -101,12 +87,7 @@ class InvoicesController < ApplicationController
     authorize! :read, invoice
     respond_to do |format|
       format.pdf do
-        if File.exist?(invoice.timesheet_path)
-          send_file invoice.timesheet_path, type: 'application/pdf', disposition: 'inline'
-        else
-          invoice.generate_pdf
-          redirect_to invoice_path(invoice)
-        end
+        render invoice.timesheet_pdf
       end
       unless Rails.env.production?
         format.html do
@@ -114,19 +95,6 @@ class InvoicesController < ApplicationController
           @preview = true
           render 'timesheet_pdf', layout: 'pdf'
         end
-      end
-    end
-  end
-
-  def regenerate_pdf
-    authorize! :read, invoice
-    respond_to do |format|
-      format.js do
-        render json: invoice.generate_pdf.to_json
-      end
-      format.html do
-        invoice.generate_pdf
-        redirect_to invoice_path(invoice)
       end
     end
   end
@@ -194,35 +162,9 @@ class InvoicesController < ApplicationController
     end
   end
 
-  def check_pdf
-    authorize! :check, invoice
-    respond_to do |format|
-      format.js do
-        if invoice.present?
-          if invoice.pdf_generating?
-            data = false
-          else
-            data = {}
-            data[:invoice] = invoice_pdf_path(invoice, invoice.invoice_file)
-            if invoice.timers.present?
-              data[:timesheet] = timesheet_pdf_path(invoice, invoice.timesheet_file)
-            end
-          end
-          render json: data, status: :ok
-        else
-          render json: {}, status: :ok
-        end
-      end
-      format.html { redirect_to root_path }
-    end
-  end
-
   def destroy
     authorize! :destroy, invoice
     if invoice.destroy
-      File.delete(invoice.pdf_path) if File.exist?(invoice.pdf_path)
-      File.delete(invoice.timesheet_path) if File.exist?(invoice.timesheet_path)
-
       flash[:success] = resource_message(:invoice, :destroy, :success)
       respond_to do |format|
         format.js { render json: {}, status: :ok }

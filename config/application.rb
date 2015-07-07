@@ -41,6 +41,4 @@ end
 
 I18n.config.enforce_available_locales = true
 
-require 'invoice_pdf_generator'
-require 'timesheet_pdf_generator'
 require_relative 'version'

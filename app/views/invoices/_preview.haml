@@ -8,16 +8,8 @@
         = I18n.t(:"labels.defaults.timesheet")
 #preview-wrapper
   .tab-content
-    .tab-pane.active#invoice-preview{class: ('hide' unless invoice.pdf_present_and_up_to_date?)}
-      .pdf-viewer{ data: { pdf: { path: (invoice_pdf_path(invoice, invoice.invoice_file) if invoice.pdf_present_and_up_to_date?) } } }
+    .tab-pane.active#invoice-preview
+      .pdf-viewer{ data: { pdf: { path: invoice_pdf_path(invoice, invoice.invoice_file) } } }
     - if invoice.timers.present?
-      .tab-pane#timesheet-preview{class: ("hide" unless invoice.timesheet_present_and_up_to_date?)}
-        .pdf-viewer{ data: { pdf: { path: (timesheet_pdf_path(invoice, invoice.invoice_file) if invoice.timesheet_present_and_up_to_date?) } } }
-
-  #preview-info{class: ('hide' if invoice.pdf_present_and_up_to_date?)}
-    .panel.panel-default
-      .panel-heading
-        .panel-title
-          = I18n.t(:"pdf.not_generated")
-      .panel-body
-        = I18n.t(:"pdf.please_regenerate", generate: I18n.t(:"actions.create"), regenerate: I18n.t(:"actions.regenerate"))
+      .tab-pane#timesheet-preview
+        .pdf-viewer{ data: { pdf: { path: timesheet_pdf_path(invoice, invoice.invoice_file) } } }

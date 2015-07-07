@@ -15,17 +15,15 @@ class InvoiceDropboxWorker
       invoice.project.name.gsub('/', '-').strip
     ]
 
-    if File.exist?(invoice.pdf_path)
-      path = (base_path + [
-        invoice.invoice_file
-      ]).join("/")
-      client.put_file(path, open(invoice.pdf_path), true)
-    end
+    path = (base_path + [
+      invoice.invoice_file
+    ]).join("/")
+    client.put_file(path, invoice.inline_pdf, true)
 
-    return unless File.exist?(invoice.timesheet_path)
+    return unless invoice.timers.blank?
     path = (base_path + [
       invoice.timesheet_file
     ]).join("/")
-    client.put_file(path, open(invoice.timesheet_path), true)
+    client.put_file(path, invoice.inline_timesheet_pdf, true)
   end
 end

@@ -21,24 +21,7 @@
       .col-xs-12.col-md-8
         = render "preview"
 
-      .col-xs-12.col-md-4
-        .row
-          .col-xs-12.col-md-12
-            .btn-group.btn-group-justified-responsive.pull-right
-              %a.ladda-button.btn.btn-primary.generate-invoice{data: {style: "expand-right", action: regenerate_pdf_invoice_path(invoice)}, onclick: "App.Invoice.generate($(this)); return false;", class: ('generating' if invoice.pdf_generating)}
-                .span.generate{class: ('hide' if invoice.pdf_present_or_generating? )}
-                  %i.fa.fa-download
-                  = I18n.t(:"actions.create")
-                .span.regenerate{class: ('hide' if invoice.pdf_not_present_and_not_generating?)}
-                  %i.fa.fa-refresh
-                  = I18n.t(:"actions.regenerate")
-
-              %a.btn.btn-danger{href: invoice_path(invoice), data: { method: "DELETE", notyConfirm: I18n.t(:"messages.confirm.delete") } }
-                %i.fa.fa-trash
-                = I18n.t(:"actions.delete")
-
-        %br
-
+      .col-xs-12.col-md-4.side-nav
         .row
           .col-xs-12.col-md-12
             .panel.panel-default
@@ -47,10 +30,10 @@
                   %strong
                     = I18n.t(:"labels.panels.title.downloads")
               .list-group
-                = link_to invoice_pdf_path(invoice, invoice.invoice_file), target: "_blank", title: I18n.t(:"actions.download"), class: "save-invoice list-group-item#{(" disabled" if invoice.pdf_not_present_or_generating?)}" do
+                = link_to invoice_pdf_path(invoice, invoice.invoice_file), target: "_blank", class: "save-invoice list-group-item" do
                   %i.fa.fa-download
                   = I18n.t(:"actions.download_invoice")
-                = link_to timesheet_pdf_path(invoice, invoice.timesheet_file), target: "_blank", title: I18n.t(:"actions.download"), class: "save-timesheet list-group-item#{(" disabled" if invoice.timesheet_not_present_or_generating?)}#{(" hide" if invoice.timers.blank?)}" do
+                = link_to timesheet_pdf_path(invoice, invoice.timesheet_file), target: "_blank", class: "save-timesheet list-group-item#{(" hide" if invoice.timers.blank?)}" do
                   %i.fa.fa-download
                   = I18n.t(:"actions.download_timesheet")
 

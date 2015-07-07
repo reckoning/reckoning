@@ -31,3 +31,6 @@
       = link_to send_mail_invoice_path(invoice), method: :put, class: "list-group-item" do
         %i.fa.fa-send
         = I18n.t(:"actions.send_invoice")
+    %a.list-group-item{href: invoice_path(invoice), data: { method: "DELETE", notyConfirm: I18n.t(:"messages.confirm.delete") } }
+      %i.fa.fa-trash
+      = I18n.t(:"actions.delete")
