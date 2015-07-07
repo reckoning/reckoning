@@ -1,15 +1,14 @@
-= render "shared/pdf_header", resource: @resource
-- timers_by_date = @resource.timers.billable.order(:date).group_by(&:date)
+- timers_by_date = resource.timers.billable.order(:date).group_by(&:date)
 #pdf-body.timesheet
   .row
     #subject
       .info-wrapper
         #infomartion
           = I18n.t(:"pdf.invoice.subject.project")
-          = @resource.project.name
+          = resource.project.name
         #date
           = I18n.t(:"pdf.invoice.subject.date")
-          = I18n.l @resource.date
+          = I18n.l resource.date
       %h1
         = I18n.t(:"pdf.timesheet.headline", from: I18n.l(timers_by_date.keys.first), to: I18n.l(timers_by_date.keys.last)).html_safe
 
@@ -46,4 +45,3 @@
           %td.value
             %strong
               = number_to_currency(value, unit: "")
-= render "shared/pdf_footer", resource: @resource

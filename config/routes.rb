@@ -85,10 +85,8 @@ Reckoning::Application.routes.draw do
     end
     member do
       put :generate_positions
-      put :regenerate_pdf
       put :charge
       put :pay
-      get :check_pdf
       put :archive
       put :send_mail
       post :send_test_mail

@@ -58,12 +58,6 @@ class Invoice < ActiveRecord::Base
     InvoiceMailerWorker.perform_in 1.minute, id
   end
 
-  def generate_pdf
-    set_payment_due_date
-    update_attributes(pdf_generating: true)
-    InvoicePdfWorker.perform_async id
-  end
-
   def ref_number
     format "%05d", ref
   end
@@ -77,79 +71,11 @@ class Invoice < ActiveRecord::Base
     ].join('').html_safe
   end
 
-  def invoice_file
-    "rechnung-#{ref}-#{I18n.l(date.to_date, format: :file).downcase}.pdf"
-  end
-
-  def timesheet_file
-    "stunden-rechnung-#{ref}-#{I18n.l(date.to_date, format: :file).downcase}.pdf"
-  end
-
-  def pdf_path
-    path(invoice_file)
-  end
-
-  def timesheet_path
-    path(timesheet_file)
-  end
-
-  def generate
-    pdf_generator = InvoicePdfGenerator.new self, pdf_path: pdf_path,
-                                                  tempfile: "reckoning-invoice-pdf-#{id}"
-    pdf_generator.generate
-  end
-
-  def generate_timesheet
-    pdf_generator = TimesheetPdfGenerator.new self, pdf_path: timesheet_path,
-                                                    tempfile: "reckoning-timesheet-pdf-#{id}"
-    pdf_generator.generate
-  end
-
   def set_payment_due_date
     return if payment_due_date.present?
     payment_due = customer.payment_due || DEFAULT_PAYMENT_DUE_DAYS
     self.payment_due_date = Time.zone.now + payment_due.days
     save
-  end
-
-  def pdf_present_or_generating?
-    self.pdf_present? || self.pdf_generating?
-  end
-
-  def pdf_not_present_and_not_generating?
-    !self.pdf_present? && !self.pdf_generating?
-  end
-
-  def timesheet_not_present_or_generating?
-    !self.timesheet_present? || self.pdf_generating?
-  end
-
-  def pdf_not_present_or_generating?
-    !self.pdf_present? || self.pdf_generating?
-  end
-
-  def pdf_present_and_up_to_date?
-    self.pdf_present? && (self.pdf_up_to_date? || self.paid?)
-  end
-
-  def timesheet_present_and_up_to_date?
-    self.timesheet_present? && (self.pdf_up_to_date? || self.paid?)
-  end
-
-  def pdf_up_to_date?
-    Time.zone.at(pdf_generated_at.to_i) == Time.zone.at(updated_at.to_i)
-  end
-
-  def pdf_present?
-    File.exist?(pdf_path)
-  end
-
-  def timesheet_present?
-    File.exist?(timesheet_path)
-  end
-
-  def pdf_generating?
-    pdf_generating
   end
 
   def editable?
@@ -173,18 +99,6 @@ class Invoice < ActiveRecord::Base
     customer.email_template.present? && customer.invoice_email.present?
   end
 
-  def files_present?
-    !pdf_not_present_or_generating? && (!timesheet_not_present_or_generating? || timers.blank?)
-  end
-
-  private def path(filename)
-    dir = Rails.root.join('files', 'invoices')
-    Dir.mkdir(dir) unless File.exist?(dir)
-    pdf_dir = dir.join(customer.id.to_s)
-    Dir.mkdir(pdf_dir) unless File.exist?(pdf_dir)
-    Rails.root.join(pdf_dir, filename).to_s
-  end
-
   private def set_customer
     project = Project.find_by(id: project_id)
     customer = Customer.find_by(id: project.customer_id) unless project.blank?
@@ -203,5 +117,65 @@ class Invoice < ActiveRecord::Base
     else
       self.ref = 1
     end
+  end
+
+  def invoice_file
+    "rechnung-#{ref}-#{I18n.l(date.to_date, format: :file).downcase}.pdf"
+  end
+
+  def timesheet_file
+    "stunden-rechnung-#{ref}-#{I18n.l(date.to_date, format: :file).downcase}.pdf"
+  end
+
+  def pdf
+    pdf_options(invoice_file)
+  end
+
+  def inline_pdf
+    WickedPdf.new.pdf_from_string(
+      ApplicationController.new.render_to_string("invoices/pdf", inline_pdf_options),
+      whicked_pdf_options
+    )
+  end
+
+  def timesheet_pdf
+    pdf_options(timesheet_file)
+  end
+
+  def inline_timesheet_pdf
+    WickedPdf.new.pdf_from_string(
+      ApplicationController.new.render_to_string("invoices/timesheet", inline_pdf_options),
+      whicked_pdf_options
+    )
+  end
+
+  def pdf_options(file)
+    {
+      pdf: file
+    }.merge(inline_pdf_options).merge(whicked_pdf_options)
+  end
+
+  def inline_pdf_options
+    {
+      layout: "layouts/pdf",
+      locals: { resource: self }
+    }
+  end
+
+  def whicked_pdf_options
+    {
+      header: {
+        content: ApplicationController.new.render_to_string("shared/pdf_header", inline_pdf_options)
+      },
+      footer: {
+        content: ApplicationController.new.render_to_string("shared/pdf_footer", inline_pdf_options)
+      },
+      margin: {
+        top: 30,
+        bottom: 40,
+        left: 18,
+        right: 18
+      }
+    }
   end
 end

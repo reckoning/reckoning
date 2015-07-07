@@ -70,6 +70,9 @@ gem 'sentry-raven'
 
 gem 'intercom-rails'
 
+# pdf rendering
+gem 'wicked_pdf'
+
 group :test do
   gem 'rails-perftest'
   gem 'minitest-rails'

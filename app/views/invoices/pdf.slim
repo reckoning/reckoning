@@ -1,0 +1,98 @@
+#pdf-body.invoice
+  .row
+    address#company
+      = "#{resource.account.name},"
+      '
+      = resource.account.address.gsub("\r\n", ", ").gsub("\n", ", ").gsub("\r", ", ") unless resource.account.address.blank?
+
+  .row
+    address#customer
+      = resource.customer.name
+      br
+      br
+      = simple_format(resource.customer.address)
+
+  .row
+    #subject
+      .info-wrapper
+        #infomartion
+          = I18n.t(:"pdf.invoice.subject.project")
+          '
+          = resource.project.name
+        #date
+          = I18n.t(:"pdf.invoice.subject.date")
+          '
+          = I18n.l resource.date
+        - if resource.delivery_date.present?
+          #delivery-date
+            = I18n.t(:"pdf.invoice.subject.delivery_date")
+            '
+            = I18n.l resource.delivery_date
+
+        - if resource.payment_due_date.present?
+          #payment-due
+            = I18n.t(:"pdf.invoice.subject.payment_due")
+            '
+            = I18n.l resource.payment_due_date
+
+        - if resource.account.tax_ref.present?
+          #tax
+            = I18n.t(:"pdf.invoice.subject.tax")
+            '
+            = resource.account.tax_ref
+        .clear
+      h1
+        = I18n.t(:"pdf.invoice.headline")
+        '
+        = resource.ref_number
+
+      .clear
+
+    table.table.table-condensed
+      thead
+        th=I18n.t(:"labels.defaults.description")
+        th.align-right=I18n.t(:"labels.defaults.hours")
+        th.align-right=I18n.t(:"labels.defaults.rate")
+        th.align-right=I18n.t(:"labels.defaults.value")
+      tbody
+        - resource.positions.each do |position|
+          tr
+            td
+              = position.description
+            td.hours
+              = number_to_currency position.hours, unit: ""
+            td.rate
+              - if position.rate.present?
+                = number_to_currency position.rate
+              - elsif position.hours.present?
+                = number_to_currency @resource.rate
+            td.value
+              = number_to_currency position.value
+      tfoot
+        - if resource.account.tax.present?
+          tr.step-sum
+            td colspan=3
+              = I18n.t(:"pdf.invoice.net")
+            td.value
+              = number_to_currency resource.value
+          tr.tax
+            td colspan=3
+              = I18n.t(:"pdf.invoice.tax", value: resource.account.tax)
+            td.value
+              - taxes = (resource.value * resource.account.tax.to_d) / 100
+              = number_to_currency taxes
+          - value = resource.value + taxes
+          - value_label = I18n.t(:"pdf.invoice.gross")
+        - else
+          tr.tax
+            td colspan=4
+              = I18n.t(:"small_business")
+          - value = resource.value
+          - value_label = I18n.t(:"pdf.invoice.sum")
+        tr.sum
+          td colspan=3
+            strong
+              = value_label
+          td.value
+            strong
+              = number_to_currency(value)

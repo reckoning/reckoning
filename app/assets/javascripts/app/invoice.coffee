@@ -1,42 +1,7 @@
 window.App.Invoice ?= {}
 
-window.App.Invoice.pdfInterval = false
 window.App.Invoice.projectRate = 0
 window.App.Invoice.oldProjectRate = 0
-
-window.laddaButton ?= {}
-
-window.App.Invoice.generate = ($element) ->
-  laddaButton.start() if laddaButton
-  $('.save-invoice').addClass('disabled')
-  $('.save-timesheet').addClass('disabled')
-  $element.find('.generate').addClass('hide')
-  $element.find('.regenerate').removeClass('hide')
-  $.ajax
-    url: $element.attr('data-action')
-    type: 'PUT'
-    dataType: 'json'
-    success: ->
-      displayInfo I18n.t("messages.invoice.pdf_generating")
-      App.Invoice.pdfInterval = setInterval App.Invoice.checkPdfStatus, 1000
-
-window.App.Invoice.checkPdfStatus = ->
-  id = $('#invoice').attr('data-id')
-  $.ajax
-    url: r(check_pdf_invoice_path, id)
-    dataType: 'json'
-    success: (data) ->
-      return unless data
-      laddaButton.stop() if laddaButton
-      $("#invoice-preview .pdf-viewer").data('pdfPath', data.invoice)
-      $('.save-invoice').removeClass('disabled')
-      if data.timesheet
-        $('#timesheet-preview .pdf-viewer').data('pdfPath', data.timesheet)
-        $('.save-timesheet').removeClass('disabled')
-      clearInterval App.Invoice.pdfInterval
-      displaySuccess I18n.t("messages.invoice.pdf_generated")
-      PdfViewer.load()
-      App.Invoice.showPreview()
 
 window.App.Invoice.showPreview = ->
   $('#preview-info').addClass('hide')
@@ -119,16 +84,6 @@ $(document).on 'change', ".invoice-position-rate", App.Invoice.updateValue
 $(document).on 'change', "#invoice_project_id", App.Invoice.updateRate
 
 $ ->
-  if $('#invoice').length
-    button = document.querySelector('.ladda-button')
-    if button
-      window.laddaButton = Ladda.create(button)
-
-    if $('.generate-invoice').hasClass('generating')
-      laddaButton.start() if laddaButton
-      $('.generate-invoice').removeClass('generating')
-      App.Invoice.pdfInterval = setInterval App.Invoice.checkPdfStatus, 1000
-
   if $('#invoice-form').length
     project_select = $('#invoice_project_id')[0].selectize
     project_id = $('#invoice_project_id').val()
@@ -136,7 +91,3 @@ $ ->
       App.Invoice.projectRate = project_select.options[project_id].rate
 
     $('#invoice_project_id').data('pre', App.Invoice.projectRate)
-
-    button = document.querySelector('.ladda-button')
-    if button
-      window.laddaButton = Ladda.create(button)

@@ -1,31 +1,41 @@
-#pdf-footer><
-  %address><
-    %strong
+#pagination
+  = I18n.t(:"pdf.page")
+  '
+  span.page
+  '
+  = I18n.t(:"pdf.page_from")
+  '
+  span.topage
+#pdf-footer
+  address
+    strong
       = resource.account.name
-    %br
-    %br
+    br
+    br
     = simple_format(resource.account.address)
-  .contact-information><
+  .contact-information
     - if resource.account.telefon.present?
-      Tel:
+      |Tel:
+      '
       = resource.account.telefon
     - if resource.account.fax.present?
-      %br
-      Fax:
+      br
+      |Fax:
+      '
       = resource.account.fax
     - if resource.account.public_email.present?
-      %br
+      br
       = resource.account.public_email
-    %br
+    br
     - if resource.account.website.present?
       = resource.account.website
-  .bank-information><
+  .bank-information
     - if resource.account.bank.present?
       = resource.account.bank
-      %br
+      br
     = "IBAN: #{resource.account.iban}"
-    %br
+    br
     = "BIC: #{resource.account.bic}"
-    %br
+    br
     = "Konto: #{resource.account.account_number} | BLZ: #{resource.account.bank_code}"
 

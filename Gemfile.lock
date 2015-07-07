@@ -346,6 +346,8 @@ GEM
       multi_json
       multipart-post (~> 2.0)
       trollop (~> 2.0)
+    wicked_pdf (0.11.0)
+      rails
 
 PLATFORMS
   ruby
@@ -411,3 +413,4 @@ DEPENDENCIES
   uglifier
   url_plumber
   web_translate_it
+  wicked_pdf
