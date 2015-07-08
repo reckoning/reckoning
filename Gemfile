@@ -78,7 +78,7 @@ gem 'typhoeus'
 
 # pdf rendering
 gem 'wicked_pdf'
-gem 'wkhtmltopdf-heroku', group: :production
+gem 'wkhtmltopdf-heroku'
 
 # heroku production
 gem 'rails_12factor', group: :production
