@@ -4,6 +4,8 @@
 [![Code Climate](https://codeclimate.com/github/reckoning/app/badges/gpa.svg)](https://codeclimate.com/github/reckoning/app)
 [![Test Coverage](https://codeclimate.com/github/reckoning/app/badges/coverage.svg)](https://codeclimate.com/github/reckoning/app)
 
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
 Reckoning is a simple tool for invoicing
 
 ## Features
