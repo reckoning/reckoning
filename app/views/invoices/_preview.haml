@@ -9,7 +9,7 @@
 #preview-wrapper
   .tab-content
     .tab-pane.active#invoice-preview
-      .pdf-viewer{ data: { pdf: { path: invoice_pdf_path(invoice, invoice.invoice_file) } } }
+      .pdf-viewer{ data: { pdf: { path: invoice_pdf_path(invoice, "#{invoice.invoice_file}.pdf") } } }
     - if invoice.timers.present?
       .tab-pane#timesheet-preview
-        .pdf-viewer{ data: { pdf: { path: timesheet_pdf_path(invoice, invoice.invoice_file) } } }
+        .pdf-viewer{ data: { pdf: { path: timesheet_pdf_path(invoice, "#{invoice.invoice_file}.pdf") } } }

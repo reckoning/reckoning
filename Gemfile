@@ -70,8 +70,11 @@ gem 'sentry-raven'
 
 gem 'intercom-rails'
 
+gem 'typhoeus'
+
 # pdf rendering
 gem 'wicked_pdf'
+gem 'wkhtmltopdf-heroku', group: :production
 
 # heroku production
 gem 'rails_12factor', group: :production

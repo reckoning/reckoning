@@ -71,7 +71,7 @@ class InvoicesController < ApplicationController
     authorize! :read, invoice
     respond_to do |format|
       format.pdf do
-        render invoice.pdf.merge(show_as_html: params[:debug].present?)
+        render invoice.pdf
       end
       unless Rails.env.production?
         format.html do
