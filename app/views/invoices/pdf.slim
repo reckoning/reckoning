@@ -1,16 +1,14 @@
 #pdf-body.invoice
-  .row
-    address#company
-      = "#{resource.account.name},"
-      '
-      = resource.account.address.gsub("\r\n", ", ").gsub("\n", ", ").gsub("\r", ", ") unless resource.account.address.blank?
+  address#company
+    = "#{resource.account.name},"
+    '
+    = resource.account.address.gsub("\r\n", ", ").gsub("\n", ", ").gsub("\r", ", ") unless resource.account.address.blank?
 
-  .row
-    address#customer
-      = resource.customer.name
-      br
-      br
-      = simple_format(resource.customer.address)
+  address#customer
+    = resource.customer.name
+    br
+    br
+    = simple_format(resource.customer.address)
 
   .row
     #subject

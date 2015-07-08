@@ -50,13 +50,6 @@ module ApplicationHelper
     link_to title, plumb(sort: column, direction: direction, page: nil), class: css_class
   end
 
-  def asset_data_base64(path)
-    asset = Rails.application.assets.find_asset(path)
-    throw "Could not find asset '#{path}'" if asset.nil?
-    base64 = Base64.encode64(asset.to_s).gsub(/\s+/, "")
-    "data:#{asset.content_type};base64,#{Rack::Utils.escape(base64)}"
-  end
-
   def gravatar_path(size = 20, hash = nil)
     hash ||= current_user.gravatar_hash
     "//www.gravatar.com/avatar/#{hash}?s=#{size}&d=https%3A%2F%2Fidenticons.github.com%2F#{hash}.png&amp;r=x&amp;s=#{size}"
