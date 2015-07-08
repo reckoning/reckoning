@@ -8,16 +8,10 @@ $secondary-link-color: #222;
   clear: both;
 }
 
-@font-face {
-  font-family: 'Helvetica Neue';
-  src: url(<%= ApplicationHelper.asset_data_base64('fonts/HelveticaNeue.ttf') %>)
-}
-
 body {
-  font-size: 1.6em;
+  font-size: 1.2em;
   padding: 10px;
-  font-family: Helvetica Neue, Helvetica, Arial, sans-serif !important;
-  color: #333333 !important;
+  color: #333;
 }
 
 @import "partials/table";
@@ -39,7 +33,7 @@ table {
   }
 
   td, th {
-    font-size: 10pt;
+    font-size: .8em;
   }
 
   tfoot tr:first-child td {
@@ -66,6 +60,9 @@ address {
     border-bottom: 1px solid #cacaca;
     display: inline-block;
   }
+  &#customer {
+    font-size: 16px;
+  }
 }
 
 #subject {
@@ -79,18 +76,17 @@ address {
     #infomartion, #date, #delivery-date, #tax, #payment-due {
       float: right;
       clear: both;
-      font-size: 14px;
+      font-size: 15px;
       margin-bottom: 5px;
       text-align: right;
     }
   }
 
   h1 {
-    font-size: 140%;
+    font-size: 130%;
     width: 50%;
     font-weight: bold;
     margin-top: 0;
-    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
     float: left;
   }
 }
@@ -112,7 +108,7 @@ tr {
 }
 
 #pagination {
-  font-size: .8em;
+  font-size: 12px;
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
   text-align: right;
 }
@@ -125,11 +121,11 @@ tr {
 
   address, .contact-information, .bank-information {
     display: inline-block;
-    font-size: 11px;
+    font-size: 12px;
     line-height: 1.2em;
 
     p {
-      font-size: 11px;
+      font-size: 12px;
       line-height: 1.2em;
     }
   }

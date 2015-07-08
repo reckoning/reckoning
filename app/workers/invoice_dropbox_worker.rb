@@ -16,13 +16,13 @@ class InvoiceDropboxWorker
     ]
 
     path = (base_path + [
-      invoice.invoice_file
+      "#{invoice.invoice_file}.pdf"
     ]).join("/")
     client.put_file(path, invoice.inline_pdf, true)
 
     return unless invoice.timers.blank?
     path = (base_path + [
-      invoice.timesheet_file
+      "#{invoice.timesheet_file}.pdf"
     ]).join("/")
     client.put_file(path, invoice.inline_timesheet_pdf, true)
   end

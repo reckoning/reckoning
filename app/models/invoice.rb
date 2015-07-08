@@ -120,11 +120,11 @@ class Invoice < ActiveRecord::Base
   end
 
   def invoice_file
-    "rechnung-#{ref}-#{I18n.l(date.to_date, format: :file).downcase}.pdf"
+    "rechnung-#{ref}-#{I18n.l(date.to_date, format: :file).downcase}"
   end
 
   def timesheet_file
-    "stunden-rechnung-#{ref}-#{I18n.l(date.to_date, format: :file).downcase}.pdf"
+    "stunden-rechnung-#{ref}-#{I18n.l(date.to_date, format: :file).downcase}"
   end
 
   def pdf
