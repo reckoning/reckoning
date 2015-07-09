@@ -27,8 +27,10 @@ angular.module 'Timesheet'
         else if result.status is 'updated'
           timer.value = result.data.value
           timer.date = result.data.date
-          timer.task_uuid = result.data.task_uuid
           timer.project_uuid = result.data.project_uuid
+          timer.project_name = result.data.project_name
+          timer.task_uuid = result.data.task_uuid
+          timer.task_name = result.data.task_name
           timer.note = result.data.note
         else if result.status is 'created'
           $scope.timers.forEach (item) ->

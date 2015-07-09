@@ -60,6 +60,6 @@ angular.module 'Reckoning'
       $timeout ->
         ngModel.$setViewValue(value)
 
-    if scope.selectizeDefault && scope.options
+    if scope.selectizeDefault && scope.options && !scope.ngModel
       selectize.setValue scope.options[0].uuid
 ]
