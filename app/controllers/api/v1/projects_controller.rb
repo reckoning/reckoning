@@ -19,7 +19,7 @@ module Api
 
         sort = params.fetch(:sort, nil)
         if sort.present? && sort == "last_used"
-          scope = scope.includes(:timers).order("timers.created_at")
+          scope = scope.includes(:timers).order("timers.created_at desc nulls last")
         else
           scope = scope.order("name asc")
         end
