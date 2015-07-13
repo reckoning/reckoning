@@ -1,54 +1,47 @@
 - content_for :title do
   = I18n.t(:"meta.title.project.show", name: project.name)
-
 .row#show-project
   .col-xs-12.col-md-12
-
     .row
       .col-xs-12.col-md-7
-        %h1
+        h1
           = I18n.t(:"headlines.project.show", name: project.name)
-
       .col-xs-12.col-md-5
         .btn-group.btn-group-justified-responsive.pull-right.resource-nav
           = link_to I18n.t(:"nav.subnav.back"), projects_path, class: "btn btn-default"
-          %a.btn.btn-default{href: new_invoice_path(project_uuid: project)}
-            %i.fa.fa-plus
-            %span.hidden-xs.hidden-sm.hidden-md= I18n.t(:"actions.add_invoice")
-          %a.btn.btn-primary{href: edit_project_path(project)}
-            %i.fa.fa-edit
-            %span.hidden-xs.hidden-sm.hidden-md= I18n.t(:"actions.edit")
-          %a.btn.btn-danger{href: v1_project_url(project), data: { redirect: projects_path, method: "DELETE", notyConfirm: I18n.t(:"messages.confirm.delete") } }
-            %i.fa.fa-trash
-            %span.hidden-xs.hidden-sm.hidden-md= I18n.t(:"actions.delete")
-
+          a.btn.btn-default href=new_invoice_path(project_uuid: project)
+            i.fa.fa-plus
+            span.hidden-xs.hidden-sm.hidden-md= I18n.t(:"actions.add_invoice")
+          a.btn.btn-primary href=edit_project_path(project)
+            i.fa.fa-edit
+            span.hidden-xs.hidden-sm.hidden-md= I18n.t(:"actions.edit")
+          a.btn.btn-danger href=v1_project_url(project) data-redirect=projects_path data-method="DELETE" data-notyConfirm= I18n.t(:"messages.confirm.delete")
+            i.fa.fa-trash
+            span.hidden-xs.hidden-sm.hidden-md= I18n.t(:"actions.delete")
     .row
       - unless @project_budget_chart_data.blank?
         .col-xs-12.col-md-12.col-lg-6
           :javascript
-            window.projectBudgetChartData = #{@project_budget_chart_data.to_json}
+            window.projectBudgetChartData = #{@project_budget_chart_data.to_json};
           = render "shared/chart_panel", panel_title: I18n.t(:"labels.panels.charts.project_budget"), id: 'project-budget-chart'
-
       - unless @project_timers_chart_data.blank?
         .col-xs-12.col-md-12.col-lg-6
           :javascript
-            window.projectTimersChartData = #{@project_timers_chart_data.to_json}
+            window.projectTimersChartData = #{@project_timers_chart_data.to_json};
           = render "shared/chart_panel", panel_title: I18n.t(:"labels.panels.charts.project_timers"), id: 'project-timers-chart'
-
     .row
       .col-xs-12.col-md-12
-
     .row
       .col-xs-12.col-md-12.nav-tabs-table
-        %ul.nav.nav-tabs{role: "tablist"}
-          %li.active
-            %a{href: "#invoices", role: "tab", data: { toggle: "tab" }}
+        ul.nav.nav-tabs role="tablist"
+          li.active
+            a href="#invoices" role="tab" data-toggle="tab"
               = I18n.t(:"labels.defaults.invoices")
-          %li
-            %a{href: "#timers", role: "tab", data: { toggle: "tab" }}
+          li
+            a href="#timers" role="tab" data-toggle="tab"
               = I18n.t(:"labels.defaults.timers")
-          %li
-            %a{href: "#tasks", role: "tab", data: { toggle: "tab" }}
+          li
+            a href="#tasks" role="tab" data-toggle="tab"
               = I18n.t(:"labels.defaults.tasks")
         .tab-content
           .tab-pane.active#invoices
