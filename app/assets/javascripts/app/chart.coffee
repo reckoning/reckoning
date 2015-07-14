@@ -24,6 +24,7 @@ window.Chart =
     nv.addGraph ->
       chart = nv.models.lineChart()
         .margin({top: 20, right: 10, bottom: 30, left: 40})
+        .showLegend(data.length > 1)
         .options
           transitionDuration: 300
 
