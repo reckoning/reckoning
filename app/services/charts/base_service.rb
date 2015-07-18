@@ -1,24 +1,37 @@
 module Charts
   class BaseService
-    attr_accessor :scope, :datasets
+    attr_accessor :scope, :datasets, :labels
 
     def initialize(scope)
       @scope = scope
       @datasets = []
+      @labels = []
 
+      generate_labels
       generate_datasets
+    end
+
+    def data
+      {
+        labels: labels,
+        datasets: datasets
+      }
+    end
+
+    def generate_labels
+      raise NotImplementedError
     end
 
     def generate_datasets
       raise NotImplementedError
     end
 
-    private def new_dataset(key, color = random_color, area = true)
+    private def new_dataset(name, color = random_color)
       {
-        key: key,
-        values: [],
-        color: color,
-        area: area
+        name: name,
+        data: [],
+        zone: nil,
+        color: color
       }
     end
 

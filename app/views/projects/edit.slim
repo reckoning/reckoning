@@ -1,16 +1,15 @@
 - content_for :title do
   = I18n.t(:"meta.title.project.edit")
-
 .row#edit-project
   .col-xs-12.col-md-12
-
     .row
       .col-xs-12.col-md-8
-        %h1
-          = I18n.t(:"headlines.project.edit")
-
+        h1= I18n.t(:"headlines.project.edit")
       .col-xs-12.col-md-4
         .btn-group.btn-group-justified-responsive.pull-right.resource-nav
           = link_to I18n.t(:"nav.subnav.back"), :back, class: "btn btn-default"
-
+          a.btn.btn-danger href=v1_project_url(project) data-redirect=projects_path data-method="DELETE" data-notyConfirm= I18n.t(:"messages.confirm.delete")
+            i.fa.fa-trash
+            '
+            = I18n.t(:"actions.delete")
     = render "form"
