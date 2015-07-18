@@ -59,7 +59,7 @@ window.Chart =
         labels:
           format: '{value}k €'
           formatter: ->
-            value = if @value is 0 then @value else "#{@value / 1000.0}k"
+            value = if @value < 1000 then @value else "#{@value / 1000.0}k"
             "#{value} €"
         title:
           text: null
@@ -103,11 +103,10 @@ window.Chart =
           useHTML: true
       }],
       yAxis:
-        min: 0
         labels:
           format: '{value}k €'
           formatter: ->
-            value = if @value is 0 then @value else "#{@value / 1000.0}k"
+            value = if @value < 1000 then @value else "#{@value / 1000.0}k"
             "#{value} €"
         title:
           text: null
