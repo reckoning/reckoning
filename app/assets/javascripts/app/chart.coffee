@@ -1,107 +1,143 @@
 window.Chart =
-  maxValue: (datasets, steps) ->
-    steps ?= 1
-    maxValue = 0
-    $.each datasets, (index, dataset) ->
-      return if dataset.disabled
-      $.each dataset.values, (_i, value) ->
-        newValue = parseFloat(value.y)
-        if maxValue < newValue
-          maxValue = Math.ceil(newValue / steps) * steps
+  generateSeries: (datasets, suffix) ->
+    suffix ?= ' €'
+    series = []
+    for dataset, i in datasets
+      data = _.map dataset.data, (value) -> parseFloat(value) if value
+      series.push
+        color: dataset.color
+        name: dataset.name
+        marker:
+          symbol: 'circle'
+        data: data
+        tooltip:
+          valueSuffix: suffix
+        zoneAxis: 'x'
+        zones: [
+          {
+            value: dataset.zone
+          }
+          {
+            dashStyle: 'shortdash'
+          }
+        ]
+    series
 
-    maxValue
-  ticks: (datasets) ->
-    ticks = []
-    $.each datasets, (_i, dataset) ->
-      return if dataset.disabled
-      $.each dataset.values, (index, value) ->
-        if ticks.indexOf(value.x) is -1
-          ticks.push value.x
+  generateMonthCategories: (labels) ->
+    categories = []
+    for month, i in labels
+      date = moment(month)
+      categories.push {short: date.format("MMM"), long: date.format("MMMM")}
+    categories
 
-    ticks
 
-  currencyChart: (id, data) ->
-    nv.addGraph ->
-      chart = nv.models.lineChart()
-        .margin({top: 20, right: 10, bottom: 30, left: 40})
-        .showLegend(data.length > 1)
-        .options
-          transitionDuration: 300
+  invoicesChart: (id, data) ->
+    $(id).highcharts
+      chart:
+        type: 'line'
+      credits:
+        enabled: false
+      title:
+        text: null
+        useHTML: true
+      noData:
+        style:
+          fontSize: "18px"
+          fontWeight: "bold"
+          color: "#ccc"
+      xAxis: [{
+        categories: @generateMonthCategories(data.labels),
+        crosshair: true,
+        title:
+          text: null
+        labels:
+          format: '{value.short}'
+          useHTML: true
+      }],
+      yAxis:
+        startOnTick: false
+        labels:
+          format: '{value}k €'
+          formatter: ->
+            value = if @value is 0 then @value else "#{@value / 1000.0}k"
+            "#{value} €"
+        title:
+          text: null
+      tooltip:
+        shared: true
+        headerFormat: '<div class="highcharts-tooltip-header"><b>{point.key.long}</b></div>'
+        pointFormatter: ->
+          value = accounting.formatMoney(@y, {symbol: '€', format: '%v %s', decimal: ',', thousand: '.'})
+          "<div><div style='float: left;'><span style='color:#{@color}'>\u25CF</span> #{@series.name}: </div><div style='float: right;'><b>#{value}</b></div></div>"
+        useHTML: true
+      navigation:
+        buttonOptions:
+          enabled: false
+      legend:
+        enabled: false
+        useHTML: true
+        verticalAlign: 'top'
+      series: @generateSeries(data.datasets)
 
-      chart.forceY([0, Chart.maxValue(data, 500)])
-
-      chart.tooltip.headerFormatter (d) ->
-        '<h3>' + moment(d).format('MMMM') + '</h3>'
-
-      chart.tooltip.valueFormatter (d) ->
-        accounting.formatMoney(d, {symbol: '€', format: '%v %s', decimal: ',', thousand: '.'}) if d
-
-      chart.xAxis
-        .tickPadding(10)
-        .showMaxMin(false)
-        .tickValues(Chart.ticks(data, true))
-        .tickFormat (d) ->
-          moment(d).startOf('month').format('MMM.')
-
-      chart.yAxis
-        .tickPadding(10)
-        .tickFormat (d) ->
-          d / 1000 + 'k' if d
-
-      chart.dispatch.on 'stateChange', (e) ->
-        chart.forceY([0, Chart.maxValue(data, 500)])
-
-      d3.select(id).append('svg')
-        .datum(data)
-        .call(chart)
-
-      nv.utils.windowResize(chart.update)
-
-      chart
-
-  timersChart: (id, data) ->
-    nv.addGraph ->
-      chart = nv.models.multiBarChart()
-        .margin({top: 20, right: 10, bottom: 30, left: 40})
-        .showControls(false)
-
-      chart.forceY([0, Chart.maxValue(data)])
-
-      chart.tooltip.headerFormatter (data) ->
-        '<h3>' + moment(data).format('MMMM') + '</h3>'
-
-      chart.tooltip.valueFormatter (data) ->
-        (decimalToTime(data) || "0:00") + "h "
-
-      chart.xAxis
-        .tickPadding(10)
-        .showMaxMin(false)
-        .tickFormat (d) ->
-          moment(d).format('MMM. YYYY')
-
-      chart.yAxis
-        .tickPadding(10)
-        .tickFormat (d) ->
-          d3.format('d')(d || 0)
-
-      chart.dispatch.on 'stateChange', (e) ->
-        chart.forceY([0, Chart.maxValue(data)])
-
-      d3.select(id).append('svg')
-        .datum(data)
-        .transition().duration(500)
-        .call(chart)
-
-      nv.utils.windowResize(chart.update)
-
-      chart
+  budgetChart: (id, data) ->
+    $(id).highcharts
+      chart:
+        type: 'line'
+      credits:
+        enabled: false
+      title:
+        text: null
+        useHTML: true
+      noData:
+        style:
+          fontSize: "18px"
+          fontWeight: "bold"
+          color: "#ccc"
+      xAxis: [{
+        categories: @generateMonthCategories(data.labels),
+        crosshair: true,
+        title:
+          text: null
+        labels:
+          format: '{value.short}'
+          useHTML: true
+      }],
+      yAxis:
+        min: 0
+        labels:
+          format: '{value}k €'
+          formatter: ->
+            value = if @value is 0 then @value else "#{@value / 1000.0}k"
+            "#{value} €"
+        title:
+          text: null
+      tooltip:
+        shared: true
+        headerFormat: '<div class="highcharts-tooltip-header"><b>{point.key.long}</b></div>'
+        pointFormatter: ->
+          value = accounting.formatMoney(@y, {symbol: '€', format: '%v %s', decimal: ',', thousand: '.'})
+          point = "<div>"
+          point = "#{point}<div style='float: left;'><span style='color:#{@color}'>\u25CF</span> #{@series.name}: </div>"
+          point = "#{point}<div style='float: right;'><b>#{value}</b></div>"
+          point = "#{point}</div>"
+          point
+        useHTML: true
+      navigation:
+        buttonOptions:
+          enabled: false
+      legend:
+        enabled: false
+        useHTML: true
+        verticalAlign: 'top'
+      series: @generateSeries(data.datasets)
 
 $ ->
+  Highcharts.setOptions
+    lang:
+      noData: I18n.t("labels.chart.no_data")
+
   if $('#invoices-chart').length && invoicesChartData
-    Chart.currencyChart('#invoices-chart', invoicesChartData)
+    Chart.invoicesChart('#invoices-chart', invoicesChartData)
 
   if $('#project-budget-chart').length && projectBudgetChartData
-    Chart.currencyChart('#project-budget-chart', projectBudgetChartData)
-
-  if $('#project-timers-chart').length && projectTimersChartData
-    Chart.timersChart('#project-timers-chart', projectTimersChartData)
+    Chart.budgetChart('#project-budget-chart', projectBudgetChartData)

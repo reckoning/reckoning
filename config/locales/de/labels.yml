@@ -1,6 +1,7 @@
 de:
   labels:
     defaults:
+      na: "N/V"
       actions: "Aktionen"
       value: "Betrag"
       date: "Monat/Jahr"
@@ -35,6 +36,7 @@ de:
       contact_form: Haben Sie weitere Fragen?
     chart:
       on_date: am
+      no_data: "Keine Daten vorhanden."
       project:
         budget: "Budget"
       timers:
@@ -84,7 +86,7 @@ de:
     budget:
       uninvoiced: "Noch nicht in Rechnung gestellt"
       limit: "Gesamt: %{budget}"
-      limit_hours: "Gesamt: %{hours}"
+      limit_hours: "Verbleidend: %{hours}"
       limit_complete: "Gesamt: %{budget} (%{hours})"
     table:
       blank:

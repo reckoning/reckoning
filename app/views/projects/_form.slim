@@ -1,52 +1,52 @@
 = form_for project do |form|
   .row
     .col-xs-12.col-md-6
-      .form-group.selectize{class: form_error?(project, :customer_id)}
+      .form-group.selectize class=form_error?(project, :customer_id)
         = form.collection_select :customer_id, customers, :id, :name, {include_blank: ""}, {placeholder: I18n.t(:"helpers.prompt.project.customer_id"), class: "js-customer-selectize"}
         = form_errors project, :customer_id
     .col-xs-12.col-md-6
-      .form-group{class: form_error?(project, :name)}
+      .form-group class=form_error?(project, :name)
         = form.text_field :name, placeholder: I18n.t(:"helpers.placeholder.name"), class: 'form-control'
         = form_errors project, :name
   .row
-    .col-xs-12.col-md-6.form-group{class: form_error?(project, :start_date)}
+    .col-xs-12.col-md-6.form-group class=form_error?(project, :start_date)
       .input-group.datepicker
         = form.label :start_date, class: "input-group-addon"
         = form.date_field :start_date, class: 'form-control', "data-value" => form.object.start_date
-        %span.input-group-btn
-          %button.btn.btn-default{type: "button"}
-            %i.fa.fa-calendar
+        span.input-group-btn
+          button.btn.btn-default type="button"
+            i.fa.fa-calendar
 
-    .col-xs-12.col-md-6.form-group{class: form_error?(project, :end_date)}
+    .col-xs-12.col-md-6.form-group class=form_error?(project, :end_date)
       .input-group.datepicker
         = form.label :end_date, class: "input-group-addon"
         = form.date_field :end_date, class: 'form-control', "data-value" => form.object.end_date
-        %span.input-group-btn
-          %button.btn.btn-default{type: "button"}
-            %i.fa.fa-calendar
+        span.input-group-btn
+          button.btn.btn-default type="button"
+            i.fa.fa-calendar
   .row
-    .col-xs-6.col-md-3.form-group{class: form_error?(project, :rate)}
+    .col-xs-6.col-md-3.form-group class=form_error?(project, :rate)
       = form.label :rate
       .input-group
         = form.number_field :rate, class: 'form-control text-right'
-        %span.input-group-addon €/Std.
+        span.input-group-addon €/Std.
       = form_errors project, :rate
 
-    .col-xs-6.col-md-3.form-group{class: form_error?(project, :budget)}
+    .col-xs-6.col-md-3.form-group class=form_error?(project, :budget)
       = form.label :budget
       .input-group
         = form.number_field :budget, class: 'form-control text-right', step: 'any'
-        %span.input-group-addon €
+        span.input-group-addon €
       = form_errors project, :budget
 
-    .col-xs-6.col-md-3.form-group{class: form_error?(project, :budget_hours)}
+    .col-xs-6.col-md-3.form-group class=form_error?(project, :budget_hours)
       = form.label :budget_hours
       .input-group
         = form.number_field :budget_hours, class: 'form-control text-right', step: 'any'
-        %span.input-group-addon h
+        span.input-group-addon h
       = form_errors project, :budget_hours
 
-    .col-xs-12.col-md-3.form-group{class: form_error?(project, :budget_on_dashboard)}
+    .col-xs-12.col-md-3.form-group class=form_error?(project, :budget_on_dashboard)
       .checkbox
         = form.check_box :budget_on_dashboard
         = form.label :budget_on_dashboard
@@ -54,21 +54,19 @@
 
   .row
     .col-xs-6.col-md-3
-      %p.form-control-static.text-right
+      p.form-control-static.text-right
         = I18n.t(:"helpers.label.project.round_up")
     .col-xs-6.col-md-3
-      .form-group.selectize{class: form_error?(project, :round_up)}
-        %select.js-customer-selectize#project_round_up{name: "project[round_up]"}
-          %option
+      .form-group.selectize class=form_error?(project, :round_up)
+        select.js-customer-selectize#project_round_up name="project[round_up]"
+          option
           - Project::DEFAULT_ROUND_UP_OPTIONS.each do |key, value|
-            %option{value: value, selected: project.round_up.to_f == value}
+            option value=value selected=(project.round_up.to_f == value)
               = key
         = form_errors project, :round_up
 
-  %fieldset
-    %legend
-      Aufgaben:
-
+  fieldset
+    legend Aufgaben:
     .row#tasks
       = form.fields_for :tasks, project.tasks do |builder|
         = render 'task_fields', fields: builder
@@ -76,9 +74,16 @@
       .col-xs-12
         .btn-group-responsive.pull-right
           = link_to_add_fields form, :tasks, name: I18n.t(:"actions.add"), class: "btn btn-default", target: "#tasks" do
-            %i.fa.fa-plus
+            i.fa.fa-plus
+            '
             = I18n.t(:"actions.add_task")
 
-  %br
+  br
+  hr
 
-  = render "shared/forms/submit", path: projects_path
+  .btn-group-responsive
+    button.btn.btn-primary.btn-lg type="submit"
+      = I18n.t(:"actions.save")
+    '
+    a.btn.btn-default href=projects_path data-notyConfirm=I18n.t(:"messages.confirm.form.cancel")
+      = I18n.t(:"actions.cancel")

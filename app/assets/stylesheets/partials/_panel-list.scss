@@ -19,4 +19,10 @@
       color: $link-hover-color;
     }
   }
+
+  .list-group-item {
+    .project-name, .project-budget, .project-progress {
+      padding-top: 5px;
+    }
+  }
 }

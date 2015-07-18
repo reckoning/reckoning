@@ -20,7 +20,7 @@
 //   }
 // }
 
-@media (max-width: $screen-xs-max) {
+@media (max-width: $screen-md-min) {
   #nprogress .spinner {
     right: 70px !important;
   }

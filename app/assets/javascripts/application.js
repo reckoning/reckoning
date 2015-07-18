@@ -21,6 +21,8 @@
 //= require pdfjs-dist/build/pdf
 //= require d3
 //= require nvd3
+//= require vendor/highcharts/highcharts
+//= require vendor/highcharts/no-data-to-display
 //= require pdf-viewer
 //= require helper
 //= require_tree ./helpers
