@@ -11,6 +11,8 @@ pids/*
 config/database.yml
 .env
 
+latest.dump
+
 # gems
 gems/*
 

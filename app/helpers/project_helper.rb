@@ -1,12 +1,12 @@
 module ProjectHelper
   def budget_progress(project)
-    case project.budget_percent.to_i
-    when 90..100
-      return "progress-bar-danger"
-    when 70..89
-      return "progress-bar-warning"
+    case
+    when project.budget_percent.to_f > 90.0
+      "progress-bar-danger"
+    when project.budget_percent.to_f > 70.0
+      "progress-bar-warning"
     else
-      return "progress-bar-primary"
+      "progress-bar-success"
     end
   end
 end

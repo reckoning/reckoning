@@ -21,6 +21,9 @@ module Charts
       dataset = new_dataset(I18n.t(:"labels.chart.project.budget"), colors[0])
       months do |month_start_date, month_end_date, index|
         budget -= scope.where(date: month_start_date..month_end_date).all.sum(:value)
+        if month_end_date.month == Time.zone.now.month && Time.zone.now.year == month_end_date.year
+          budget -= project.timer_values_uninvoiced * project.rate
+        end
         value = budget
 
         dataset[:data] << value

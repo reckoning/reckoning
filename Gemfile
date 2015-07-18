@@ -94,7 +94,6 @@ group :test do
 end
 
 group :development, :test do
-  gem 'foreman'
   gem 'rubocop', require: false
   gem 'mina'
 

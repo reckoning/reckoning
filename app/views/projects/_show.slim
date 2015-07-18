@@ -11,7 +11,7 @@
         - if project.budget.present? && !project.budget.zero?
           .progress.budget-progress.text-center title=I18n.t(:"labels.budget.limit_hours", hours: number_to_currency(project.budget_hours - project.timer_values, unit: "h", precision: 2)) data-toggle="tooltip"
             .progress-bar class=budget_progress(project) role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: #{project.budget_percent_invoiced}%"
-            .progress-bar.progress-bar-success role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: #{project.budget_percent_uninvoiced}%"
+            .progress-bar.progress-bar-primary role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: #{project.budget_percent_uninvoiced}%"
         - else
           = number_to_currency project.timer_values, unit: "h", precision: 2
     .col-xs-12.col-md-2.actions
