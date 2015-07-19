@@ -103,7 +103,7 @@ de:
 
     panels:
       charts:
-        project_budget: "Budget Burndown"
+        project_budget: "Budget Verlauf"
         project_timers: "Zeiten"
       title:
         default: "Aktionen"
