@@ -22,7 +22,7 @@ class ProjectsController < ApplicationController
 
   def show
     authorize! :read, project
-    @project_budget_chart_data = Charts::ProjectBudgetService.new(project, project.invoices.paid_or_charged).data
+    @project_budget_chart_data = Charts::ProjectBudgetService.new(project, project.timers).data
   end
 
   def new

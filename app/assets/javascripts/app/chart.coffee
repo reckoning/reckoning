@@ -3,23 +3,20 @@ window.Chart =
     suffix ?= ' €'
     series = []
     for dataset, i in datasets
-      data = _.map dataset.data, (value) -> parseFloat(value) if value
+      data = _.map dataset.data, (value) -> parseFloat(value)
       series.push
         color: dataset.color
         name: dataset.name
         marker:
           symbol: 'circle'
+          enabled: false
         data: data
         tooltip:
           valueSuffix: suffix
         zoneAxis: 'x'
         zones: [
-          {
-            value: dataset.zone
-          }
-          {
-            dashStyle: 'shortdash'
-          }
+          {value: dataset.zone}
+          {dashStyle: 'shortdash'}
         ]
     series
 
@@ -27,7 +24,7 @@ window.Chart =
     categories = []
     for month, i in labels
       date = moment(month)
-      categories.push {short: date.format("MMM"), long: date.format("MMMM")}
+      categories.push {short: date.format("MMM"), long: date.format("MMMM"), date: date.format("DD. MMMM")}
     categories
 
 
@@ -45,6 +42,13 @@ window.Chart =
           fontSize: "18px"
           fontWeight: "bold"
           color: "#ccc"
+      plotOptions:
+        series:
+          point:
+            events:
+              mouseOver: ->
+                $("#{id} .highcharts-xaxis-labels span").removeClass('hover')
+                $("#{id} .highcharts-xaxis-labels span:contains(#{@category.short})").addClass('hover')
       xAxis: [{
         categories: @generateMonthCategories(data.labels),
         crosshair: true,
@@ -93,6 +97,13 @@ window.Chart =
           fontSize: "18px"
           fontWeight: "bold"
           color: "#ccc"
+      plotOptions:
+        series:
+          point:
+            events:
+              mouseOver: ->
+                $("#{id} .highcharts-xaxis-labels span").removeClass('hover')
+                $("#{id} .highcharts-xaxis-labels span:contains(#{@category.short})").addClass('hover')
       xAxis: [{
         categories: @generateMonthCategories(data.labels),
         crosshair: true,
@@ -101,8 +112,12 @@ window.Chart =
         labels:
           format: '{value.short}'
           useHTML: true
+          x: -10
+        tickPositions: data.ticks
       }],
       yAxis:
+        min: if parseInt(data.datasets[0].data[0], 10) is 0 then undefined else 0
+        startOnTick: false
         labels:
           format: '{value}k €'
           formatter: ->
@@ -110,9 +125,16 @@ window.Chart =
             "#{value} €"
         title:
           text: null
+        plotLines: [{
+          value: data.budget
+          color: '#d9534f'
+          width: 2
+          label:
+            text: "#{I18n.t("labels.chart.project.budget_estimate")}: #{accounting.formatMoney(data.budget, {symbol: '€', format: '%v %s', decimal: ',', thousand: '.'})}"
+        }]
       tooltip:
         shared: true
-        headerFormat: '<div class="highcharts-tooltip-header"><b>{point.key.long}</b></div>'
+        headerFormat: '<div class="highcharts-tooltip-header"><b>{point.key.date}</b></div>'
         pointFormatter: ->
           value = accounting.formatMoney(@y, {symbol: '€', format: '%v %s', decimal: ',', thousand: '.'})
           point = "<div>"
