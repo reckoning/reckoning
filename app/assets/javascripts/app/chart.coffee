@@ -109,7 +109,7 @@ window.Chart =
 
             for segment, i in segments
               $label = $($(id).find('.highcharts-xaxis-labels span')[i])
-              $label.css('left', segment.position - (segment.width / 2) - ($label.width() / 2))
+              $label.css('left', segment.position - (segment.width / 2) - ($label.width() / 2) - 1)
 
       credits:
         enabled: false
