@@ -44,7 +44,7 @@
                   - if project.budget_hours.present? && !project.budget_hours.zero?
                     .row
                       .col-xs-4.text-left Gesamt
-                      .col-xs-8.text-right= number_to_currency(project.budget_hours)
+                      .col-xs-8.text-right= number_to_currency(project.budget_hours, unit: "h", precision: 2)
               .col-xs-6.col-md-3.panel-box.panel-box-bottom
                 h2 Verbleibendes Budget
                 .highlight

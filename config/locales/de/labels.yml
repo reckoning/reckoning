@@ -36,7 +36,8 @@ de:
       on_date: am
       no_data: "Keine Daten vorhanden."
       project:
-        budget: "Budget"
+        budget_estimate: "Geplantes Budget"
+        budget: "Verbrauchtes Budget"
       timers:
         headline: "Erfasste Stunden im letzten Monat"
         no_data: "Keine Zeiten erfasst."

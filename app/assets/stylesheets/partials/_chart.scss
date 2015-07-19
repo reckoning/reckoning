@@ -10,7 +10,7 @@
 }
 
 .highcharts-tooltip > span {
-  min-width: 200px;
+  min-width: 220px;
   display: block;
 }
 
@@ -19,4 +19,10 @@
   padding-bottom: 2px;
   border-bottom: 1px solid #ccc;
   text-align: center;
+}
+
+.highcharts-xaxis-labels {
+  span.hover {
+    font-weight: bold;
+  }
 }
