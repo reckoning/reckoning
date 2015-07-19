@@ -87,6 +87,30 @@ window.Chart =
     $(id).highcharts
       chart:
         type: 'line'
+        events:
+          load: (e) ->
+            segments = []
+            width = @plotWidth / @pointCount
+            lastPosition = -1
+            for position in @xAxis[0].tickPositions
+              segmentPosition = @plotLeft
+              segmentWidth = 0
+              for i in [0..@pointCount - 1]
+                if i <= position
+                  segmentPosition += width
+                  if i > lastPosition
+                    segmentWidth += width
+
+              segments.push
+                position: segmentPosition
+                width: segmentWidth
+
+              lastPosition = position
+
+            for segment, i in segments
+              $label = $($(id).find('.highcharts-xaxis-labels span')[i])
+              $label.css('left', segment.position - (segment.width / 2) - ($label.width() / 2))
+
       credits:
         enabled: false
       title:
@@ -112,13 +136,13 @@ window.Chart =
         labels:
           format: '{value.short}'
           useHTML: true
-          x: -10
         tickPositions: data.ticks
       }],
       yAxis:
         min: if parseInt(data.datasets[0].data[0], 10) is 0 then undefined else 0
         startOnTick: false
         labels:
+          useHTML: true
           format: '{value}k €'
           formatter: ->
             value = if @value < 1000 then @value else "#{@value / 1000.0}k"
@@ -154,6 +178,8 @@ window.Chart =
 
 $(document).on 'mouseleave', '.chart', ->
   $(@).find('.highcharts-xaxis-labels span').removeClass('hover')
+
+
 $ ->
   Highcharts.setOptions
     lang:
