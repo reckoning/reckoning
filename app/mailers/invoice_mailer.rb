@@ -27,8 +27,6 @@ class InvoiceMailer < ActionMailer::Base
 
     @signature = invoice.account.signature
 
-    invoice_pdf_path(invoice, invoice.invoice_file)
-
     attachments["#{invoice.invoice_file}.pdf"] = invoice.inline_pdf
     attachments["#{invoice.timesheet_file}.pdf"] = invoice.inline_timesheet_pdf unless invoice.timers.blank?
 

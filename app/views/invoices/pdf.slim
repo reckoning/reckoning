@@ -63,7 +63,7 @@
               - if position.rate.present?
                 = number_to_currency position.rate
               - elsif position.hours.present?
-                = number_to_currency @resource.rate
+                = number_to_currency resource.rate
             td.value
               = number_to_currency position.value
       tfoot
