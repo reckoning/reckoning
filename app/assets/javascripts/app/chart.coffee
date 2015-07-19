@@ -24,7 +24,7 @@ window.Chart =
     categories = []
     for month, i in labels
       date = moment(month)
-      categories.push {short: date.format("MMM"), long: date.format("MMMM"), date: date.format("DD. MMMM")}
+      categories.push {short: date.format("MMM"), long: date.format("MMMM"), date: date.format("DD. MMMM YYYY")}
     categories
 
 
@@ -89,6 +89,7 @@ window.Chart =
         type: 'line'
         events:
           load: (e) ->
+            return unless data.datasets[0]
             segments = []
             width = @plotWidth / @pointCount
             lastPosition = -1
@@ -139,7 +140,7 @@ window.Chart =
         tickPositions: data.ticks
       }],
       yAxis:
-        min: if parseInt(data.datasets[0].data[0], 10) is 0 then undefined else 0
+        min: if data.datasets[0] && parseInt(data.datasets[0].data[0], 10) is 0 then undefined else 0
         startOnTick: false
         labels:
           useHTML: true
@@ -151,21 +152,20 @@ window.Chart =
           text: null
         plotLines: [{
           value: data.budget
-          color: '#d9534f'
+          color: '#777777'
           width: 2
           label:
-            text: "#{I18n.t("labels.chart.project.budget_estimate")}: #{accounting.formatMoney(data.budget, {symbol: '€', format: '%v %s', decimal: ',', thousand: '.'})}"
+            useHTML: true
+            style:
+              fontSize: null
+            text: "<span class='label label-default highcharts-plotline-budget'>#{I18n.t("labels.chart.project.budget_estimate")}: #{accounting.formatMoney(data.budget, {symbol: '€', format: '%v %s', decimal: ',', thousand: '.'})}</span>"
         }]
       tooltip:
         shared: true
         headerFormat: '<div class="highcharts-tooltip-header"><b>{point.key.date}</b></div>'
         pointFormatter: ->
           value = accounting.formatMoney(@y, {symbol: '€', format: '%v %s', decimal: ',', thousand: '.'})
-          point = "<div>"
-          point = "#{point}<div style='float: left;'><span style='color:#{@color}'>\u25CF</span> #{@series.name}: </div>"
-          point = "#{point}<div style='float: right;'><b>#{value}</b></div>"
-          point = "#{point}</div>"
-          point
+          "<div><div style='float: left;'><span style='color:#{@color}'>\u25CF</span> #{@series.name}: </div><div style='float: right;'><b>#{value}</b></div></div>"
         useHTML: true
       navigation:
         buttonOptions:
