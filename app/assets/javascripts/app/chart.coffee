@@ -27,8 +27,18 @@ window.Chart =
       categories.push {short: date.format("MMM"), long: date.format("MMMM"), date: date.format("DD. MMMM YYYY")}
     categories
 
+  getCurrentWeek: (labels) ->
+    currentWeek = {start: 0, end: 0}
+    for month, i in labels
+      date = moment(month)
+      if date >= moment()
+        currentWeek.start = i - 1.5
+        currentWeek.end = i - 0.5
+        break
+    currentWeek
 
   invoicesChart: (id, data) ->
+    currentWeek = @getCurrentWeek(data.labels)
     $(id).highcharts
       chart:
         type: 'line'
@@ -57,6 +67,11 @@ window.Chart =
         labels:
           format: '{value.short}'
           useHTML: true
+        plotBands: [{
+          color: 'rgba(66, 139, 202, 0.2)'
+          from: currentWeek.start
+          to: currentWeek.end
+        }]
       }],
       yAxis:
         startOnTick: false
@@ -84,6 +99,7 @@ window.Chart =
       series: @generateSeries(data.datasets)
 
   budgetChart: (id, data) ->
+    currentWeek = @getCurrentWeek(data.labels)
     $(id).highcharts
       chart:
         type: 'line'
@@ -131,12 +147,16 @@ window.Chart =
                 $("#{id} .highcharts-xaxis-labels span:contains(#{@category.short})").addClass('hover')
       xAxis: [{
         categories: @generateMonthCategories(data.labels),
-        crosshair: true,
         title:
           text: null
         labels:
           format: '{value.short}'
           useHTML: true
+        plotBands: [{
+          color: 'rgba(66, 139, 202, 0.2)'
+          from: currentWeek.start
+          to: currentWeek.end
+        }]
         tickPositions: data.ticks
       }],
       yAxis:
@@ -162,6 +182,9 @@ window.Chart =
         }]
       tooltip:
         shared: true
+        crosshairs: [{
+          color: 'rgba(51, 51, 51, 0.2)'
+        }]
         headerFormat: '<div class="highcharts-tooltip-header"><b>{point.key.date}</b></div>'
         pointFormatter: ->
           value = accounting.formatMoney(@y, {symbol: '€', format: '%v %s', decimal: ',', thousand: '.'})
@@ -178,7 +201,6 @@ window.Chart =
 
 $(document).on 'mouseleave', '.chart', ->
   $(@).find('.highcharts-xaxis-labels span').removeClass('hover')
-
 
 $ ->
   Highcharts.setOptions
