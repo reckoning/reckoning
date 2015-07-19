@@ -22,8 +22,13 @@
 }
 
 .highcharts-xaxis-labels {
-  span.hover {
-    font-weight: bold;
+  span {
+    min-width: 30px;
+    text-align: center;
+
+    &.hover {
+      font-weight: bold;
+    }
   }
 }
 

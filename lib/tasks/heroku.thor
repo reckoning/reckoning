@@ -9,7 +9,7 @@ class Heroku < Thor
     create_backup
 
     p "Deploying..."
-    run_clean "git push heroku live:master"
+    run_clean "git push git@heroku.com:#{app}.git live:master"
 
     if options[:migrate]
       run_migrate
