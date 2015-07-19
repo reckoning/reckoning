@@ -6,18 +6,9 @@ class InvoiceMailerTest < ActionMailer::TestCase
   let(:invoice) { invoices :january }
 
   before do
-    PdfGenerator.any_instance.stubs(:call_pdf_lib).returns(nil)
-
     invoice.customer.email_template = "Hallo Foo"
     invoice.customer.invoice_email = "test@customer.io"
     invoice.customer.save
-
-    # fake pdf file
-    File.open(invoice.pdf_path, "w") {}
-  end
-
-  after do
-    File.unlink(invoice.pdf_path) if File.exist?(invoice.pdf_path)
   end
 
   describe "#customer_mail" do
