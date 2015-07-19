@@ -11,11 +11,10 @@ class Heroku < Thor
     p "Deploying..."
     run_clean "git push heroku live:master"
 
-    run_migrate if options[:migrate]
-
-    run_reindex if options[:reindex]
-
-    restart_app if options[:migrate]
+    if options[:migrate]
+      run_migrate
+      restart_app
+    end
 
     p "Deployment finished"
   end
@@ -64,12 +63,21 @@ class Heroku < Thor
     create_backup
   end
 
+  desc "maintenance", "Enable/Disable Maintenance"
+  def maintenance(state = 'on')
+    toggle_maintenance(state)
+  end
+
   no_commands do
     private def run_migrate
       p "Migrate DB"
-      run_clean "heroku maintenance:on --app #{app}"
+      toggle_maintenance('on')
       run_clean "heroku run rake db:migrate --app #{app}"
-      run_clean "heroku maintenance:off --app #{app}"
+      toggle_maintenance('off')
+    end
+
+    private def toggle_maintenance(state)
+      run_clean "heroku maintenance:#{state} --app #{app}"
     end
 
     private def restart_app
