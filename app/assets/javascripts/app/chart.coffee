@@ -152,6 +152,8 @@ window.Chart =
         verticalAlign: 'top'
       series: @generateSeries(data.datasets)
 
+$(document).on 'mouseleave', '.chart', ->
+  $(@).find('.highcharts-xaxis-labels span').removeClass('hover')
 $ ->
   Highcharts.setOptions
     lang:
@@ -162,3 +164,4 @@ $ ->
 
   if $('#project-budget-chart').length && projectBudgetChartData
     Chart.budgetChart('#project-budget-chart', projectBudgetChartData)
+
