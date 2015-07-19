@@ -26,7 +26,6 @@ de:
       new: "Neues Projekt"
       edit: "Projekt bearbeiten"
       index: "Projekte"
-      show: "Projekt: %{name}"
 
     invoice:
       new: "Neue Rechnung"
