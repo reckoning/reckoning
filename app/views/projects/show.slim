@@ -24,6 +24,11 @@
           .panel-body
             .chart.chart-big#project-budget-chart
             .row
+              .col-xs-12.panel-progress
+                .progress.progress-slim.text-center
+                  .progress-bar class=budget_progress(project) role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: #{project.budget_percent_invoiced}%"
+                  .progress-bar.progress-bar-primary role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: #{project.budget_percent_uninvoiced}%"
+            .row
               .col-xs-6.col-md-3.panel-box.panel-box-bottom
                 h2 Erfasste Stunden
                 .highlight

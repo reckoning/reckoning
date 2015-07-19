@@ -1,0 +1,13 @@
+.panel {
+  .panel-progress {
+    border-top: 1px solid $panel-inner-border;
+    background-color: $panel-default-heading-bg;
+    padding: $grid-gutter-width / 2;
+    margin-top: $grid-gutter-width / 2;
+    margin-bottom: -$grid-gutter-width / 2;
+
+    .progress {
+      margin-bottom: 0;
+    }
+  }
+}
