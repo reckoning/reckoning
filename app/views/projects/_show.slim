@@ -10,8 +10,7 @@
       .budget-label
         - if project.budget.present? && !project.budget.zero?
           .progress.budget-progress.progress-slim.text-center
-            .progress-bar class=budget_progress(project) role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: #{project.budget_percent_invoiced}%"
-            .progress-bar.progress-bar-primary role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: #{project.budget_percent_uninvoiced}%"
+            .progress-bar class=budget_progress(project) role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: #{project.budget_percent}%"
         - else
           = number_to_currency project.timer_values, unit: "h", precision: 2
     .col-xs-12.col-md-2.actions
