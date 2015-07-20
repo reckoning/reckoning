@@ -1,4 +1,20 @@
 .panel {
+  .panel-heading {
+    color: lighten($text-color, 20%);
+  }
+
+  .panel-progress {
+    border-top: 1px solid $panel-inner-border;
+    background-color: $panel-default-heading-bg;
+    padding: $grid-gutter-width / 2;
+    margin-top: $grid-gutter-width / 2;
+    margin-bottom: -$grid-gutter-width / 2;
+
+    .progress {
+      margin-bottom: 0;
+    }
+  }
+
   .panel-box {
     padding: $grid-gutter-width / 2;
     background-color: $panel-default-heading-bg;
@@ -8,14 +24,19 @@
     height: 122px;
 
     h2 {
-      font-size: 16px;
+      font-size: 15px;
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
+      color: lighten($text-color, 20%);
     }
 
     .highlight {
       font-size: 26px;
+
+      &.blank {
+        color: lighten($text-color, 30%);
+      }
     }
 
     .subline {
