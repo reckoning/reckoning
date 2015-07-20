@@ -39,10 +39,11 @@
                     = I18n.t(:"actions.add_timer")
               .col-xs-6.col-md-3.panel-box.panel-box-bottom
                 h2 Verbleibende Stunden
-                .highlight
-                  - if project.budget_hours.present? && !project.budget_hours.zero?
+                - if project.budget_hours.present? && !project.budget_hours.zero?
+                  .highlight
                     = number_to_currency((project.budget_hours - project.timer_values), unit: "h", precision: 2)
-                  - else
+                - else
+                  .highlight.blank
                     = I18n.t(:"labels.defaults.na")
                 .subline
                   - if project.budget_hours.present? && !project.budget_hours.zero?
@@ -51,10 +52,11 @@
                       .col-xs-8.text-right= number_to_currency(project.budget_hours, unit: "h", precision: 2)
               .col-xs-6.col-md-3.panel-box.panel-box-bottom
                 h2 Verbleibendes Budget
-                .highlight
-                  - if project.budget.present? && !project.budget.zero?
+                - if project.budget.present? && !project.budget.zero?
+                  .highlight
                     = number_to_currency (project.budget - project.invoice_values)
-                  - else
+                - else
+                  .highlight.blank
                     = I18n.t(:"labels.defaults.na")
                 .subline
                   - if project.budget.present? && !project.budget.zero?
@@ -63,10 +65,11 @@
                       .col-xs-8.text-right= number_to_currency(project.budget)
               .col-xs-6.col-md-3.panel-box.panel-box-bottom
                 h2 Offener Betrag
-                .highlight
-                  - if project.rate.present?
+                - if project.rate.present?
+                  .highlight
                     = number_to_currency project.timer_values_uninvoiced * project.rate
-                  - else
+                - else
+                  .highlight.blank
                     = I18n.t(:"labels.defaults.na")
                 .subline
                   a href=new_invoice_path(project_uuid: project)
