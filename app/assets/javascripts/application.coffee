@@ -35,7 +35,8 @@
 #= require blank
 #= require timesheet
 
-window.ApiBasePath = "//api.#{document.domain}"
+window.domain = (location.host.match(/([^.]+)\.\w{2,3}(?:\.\w{2})?$/) || [])[0]
+window.ApiBasePath = "//api.#{domain}"
 
 $(document).on 'show.bs.collapse', '.navbar-collapse', ->
   $('.navbar-collapse.in').not(this).collapse('hide')
