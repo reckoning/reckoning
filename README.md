@@ -4,8 +4,6 @@
 [![Code Climate](https://codeclimate.com/github/reckoning/app/badges/gpa.svg)](https://codeclimate.com/github/reckoning/app)
 [![Test Coverage](https://codeclimate.com/github/reckoning/app/badges/coverage.svg)](https://codeclimate.com/github/reckoning/app)
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
-
 Reckoning is a simple tool for invoicing
 
 ## Features
@@ -19,23 +17,24 @@ Reckoning is a simple tool for invoicing
 
 ## Setup
 
-See [provisioning Repo](https://github.com/reckoning/provisioning) for a basic Setup.
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
 To run Reckoning on your local machine you need to install:
 
 - postgresql with activated hstore on the used database
-- [weasyprint](http://weasyprint.org/) to generate Invoices 
+- WKHTMLTOPDF to generate Invoices 
 
 ## ToDo:
 
-- Translations
 - Tests
 
 ## Future features
 
+- Project Landingpages
+- Integrations: Google Drive, Harvest Import etc.
+- Custom Logos and Colors for Invoices
 - Templates for Invoices
-- Offer generation
-- Bank account support
+- Expanses 
 - ...
   
 ## Contributing
