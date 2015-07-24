@@ -94,6 +94,6 @@
           .tab-pane.active#invoices
             = render "base/invoices_panel", invoices: project.invoices, context: "default"
           .tab-pane#timers
-            = render "timers_panel", timers: project.timers, context: "default"
+            = render "timers_panel", timers: project.timers.includes(:task), context: "default"
           .tab-pane#tasks
             = render "tasks_panel", tasks: project.tasks, context: "default"
