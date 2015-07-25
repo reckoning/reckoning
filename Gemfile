@@ -83,7 +83,6 @@ gem 'non-stupid-digest-assets'
 group :test do
   gem 'rails-perftest'
   gem 'minitest-rails'
-  gem 'minitest-ci', git: 'git@github.com:circleci/minitest-ci.git'
   gem 'ruby-prof'
   gem 'database_cleaner'
   gem 'factory_girl'
