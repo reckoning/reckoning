@@ -3,6 +3,8 @@ window.App.Invoice ?= {}
 window.App.Invoice.projectRate = 0
 window.App.Invoice.oldProjectRate = 0
 
+window.laddaButton ?= {}
+
 window.App.Invoice.showPreview = ->
   $('#preview-info').addClass('hide')
   $(".pdf-viewer").parent().removeClass('hide')
@@ -85,6 +87,10 @@ $(document).on 'change', "#invoice_project_id", App.Invoice.updateRate
 
 $ ->
   if $('#invoice-form').length
+    button = document.querySelector('.ladda-button')
+    if button
+      window.laddaButton = Ladda.create(button)
+
     project_select = $('#invoice_project_id')[0].selectize
     project_id = $('#invoice_project_id').val()
     if project_id.length

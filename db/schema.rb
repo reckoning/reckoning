@@ -59,20 +59,18 @@ ActiveRecord::Schema.define(version: 20150624175712) do
     t.date     "date"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "value",                                 precision: 10, scale: 2, default: 0.0,   null: false
-    t.decimal  "rate",                                  precision: 10, scale: 2, default: 0.0,   null: false
-    t.string   "state",                     limit: 255
+    t.decimal  "value",                        precision: 10, scale: 2, default: 0.0,   null: false
+    t.decimal  "rate",                         precision: 10, scale: 2, default: 0.0,   null: false
+    t.string   "state",            limit: 255
     t.datetime "pay_date"
     t.integer  "ref"
-    t.boolean  "pdf_generating",                                                 default: false, null: false
+    t.boolean  "pdf_generating",                                        default: false, null: false
     t.date     "delivery_date"
     t.date     "payment_due_date"
     t.datetime "pdf_generated_at"
     t.uuid     "customer_id"
     t.uuid     "project_id"
-    t.uuid     "account_id",                                                                     null: false
-    t.string   "customer_token"
-    t.datetime "customer_token_created_at"
+    t.uuid     "account_id",                                                            null: false
   end
 
   create_table "permissions", force: :cascade do |t|
@@ -170,7 +168,6 @@ ActiveRecord::Schema.define(version: 20150624175712) do
     t.string   "plan",                      limit: 255
     t.uuid     "account_id",                                            null: false
     t.string   "name"
-    t.string   "role"
     t.string   "encrypted_otp_secret"
     t.string   "encrypted_otp_secret_iv"
     t.string   "encrypted_otp_secret_salt"

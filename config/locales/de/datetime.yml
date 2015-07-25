@@ -7,6 +7,8 @@ de:
       select_year: 'Jahr auswählen'
   date:
     formats:
+      datepicker: 'd. mmmm yyyy'
+      datepicker_submit: "yyyy-mm-dd"
       db: "%Y-%m-%d"
       month_year: "%B %Y"
       month: "%B"

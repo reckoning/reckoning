@@ -1,0 +1,11 @@
+language: ruby
+rvm:
+  - 2.2.2
+cache: bundler
+before_script:
+  - bundle exec thor setup:dev_env
+  - bundle exec rake db:create db:migrate
+branches:
+  only:
+    - master
+    - develop
