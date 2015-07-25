@@ -26,8 +26,8 @@ class Heroku < Thor
     p "Download for App #{app} finished"
   end
 
-  desc "import_local", "Import Dump into Local DB"
-  def import_local
+  desc "local_import", "Import Dump into Local DB"
+  def local_import
     run "pg_restore --verbose --clean --no-acl --no-owner -h localhost -d reckoning_dev latest.dump"
   end
 

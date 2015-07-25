@@ -54,7 +54,7 @@
         %i.fa.fa-plus
         = I18n.t(:"actions.add_position")
       = " "
-      %button.ladda-button.btn.btn-default{type: "button", onclick: "App.Invoice.loadPositions($(this)); return false;", data: {style: "expand-right"}}
+      %button.ladda-button.btn.btn-default{type: "button", onclick: "App.Invoice.loadPositions($(this)); return false;", data: {style: "expand-right", "spinner-color": "#333"}}
         %i.fa.fa-plus
         = I18n.t(:"actions.generate_position")
 
