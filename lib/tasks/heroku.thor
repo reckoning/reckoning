@@ -22,7 +22,7 @@ class Heroku < Thor
   desc "download_backup", "Start Backup Download"
   def download_backup
     p "Starting Download for App #{app}"
-    run_clean "curl -o lastest.dump $(heroku pg:backups public-url --app #{app})"
+    run_clean "curl -o latest.dump $(heroku pg:backups public-url --app #{app})"
     p "Download for App #{app} finished"
   end
 
