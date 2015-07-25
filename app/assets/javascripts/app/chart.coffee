@@ -147,6 +147,7 @@ window.Chart =
           fontSize: null
         text: "<span class='label label-default highcharts-plotline-budget'>#{I18n.t("labels.chart.project.budget_estimate")}: #{accounting.formatMoney(data.budget, {symbol: '€', format: '%v %s', decimal: ',', thousand: '.'})}</span>"
     }]
+    options.tooltip.headerFormat = '<div class="highcharts-tooltip-header"><b>{point.key.date}</b></div>'
 
     $(id).highcharts(options)
 
