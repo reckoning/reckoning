@@ -6,10 +6,9 @@ cache: bundler
 before_script:
   - bundle exec thor setup:dev_env
   - bundle exec rake db:setup db:migrate
+  - sudo apt-get install -y wkhtmltopdf
+env: WKHTMLTOPDF_BIN=/usr/bin/wkhtmltopdf
 branches:
   only:
     - master
     - develop
-addons:
-  code_climate:
-    repo_token: 23cec99a1c89d920b7f6e4e545895dddc3faf52973c9c021e50e888109c34fcd
