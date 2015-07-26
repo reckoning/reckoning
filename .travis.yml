@@ -7,7 +7,6 @@ before_script:
   - bundle exec thor setup:dev_env
   - bundle exec rake db:setup db:migrate
   - sudo apt-get install -y wkhtmltopdf
-env: WKHTMLTOPDF_BIN=/usr/bin/wkhtmltopdf
 branches:
   only:
     - master
