@@ -87,19 +87,16 @@ gem 'non-stupid-digest-assets'
 group :test do
   gem 'rails-perftest'
   gem 'minitest-rails'
-  gem 'minitest-ci', git: 'git@github.com:circleci/minitest-ci.git'
   gem 'ruby-prof'
   gem 'database_cleaner'
   gem 'factory_girl'
   gem 'mocha', require: false
-  gem 'spring'
   gem 'timecop'
   gem "codeclimate-test-reporter", require: false
 end
 
 group :development, :test do
   gem 'rubocop', require: false
-  gem 'mina'
 
   # generate fake data
   gem 'faker'
@@ -107,7 +104,6 @@ group :development, :test do
   # debugging
   gem 'bullet'
   gem 'byebug'
-  gem 'pry-rails'
-  gem 'pry-remote'
-  gem 'better_errors'
+  gem 'web-console', '~> 2.0'
+  gem 'spring'
 end

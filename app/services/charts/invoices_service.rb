@@ -5,7 +5,7 @@ module Charts
     def generate_labels
       date = Time.zone.now
       (1..12).map do |month|
-        @labels << "#{date.year}-#{month}-1"
+        @labels << Date.parse("#{date.year}-#{month}-1")
       end
     end
 
