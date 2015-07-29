@@ -10,8 +10,14 @@
 }
 
 .highcharts-tooltip > span {
+  background: rgba(#fff, .85);
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  box-shadow: #EeEeEe 1px 1px 3px;
+  z-index: 9999 !important;
   min-width: 220px;
   display: block;
+  padding: 8px;
 }
 
 .highcharts-tooltip-header {
@@ -21,8 +27,15 @@
   text-align: center;
 }
 
+.highcharts-plotline-budget {
+  display: block;
+  z-index: 1 !important;
+}
+
 .highcharts-xaxis-labels {
   span {
+    display: block;
+    z-index: 1 !important;
     min-width: 30px;
     text-align: center;
 

@@ -75,15 +75,20 @@ window.Chart =
         title:
           text: null
       tooltip:
+        useHTML: true
+        backgroundColor: null
+        borderWidth: 0
+        shadow: false
+        style:
+          padding: 0
+        shared: true
         crosshairs: [{
           color: 'rgba(200, 200, 200, 0.2)'
         }]
-        shared: true
         headerFormat: '<div class="highcharts-tooltip-header"><b>{point.key.long}</b></div>'
         pointFormatter: ->
           value = accounting.formatMoney(@y, {symbol: '€', format: '%v %s', decimal: ',', thousand: '.'})
           "<div><div style='float: left;'><span style='color:#{@color}'>\u25CF</span> #{@series.name}: </div><div style='float: right;'><b>#{value}</b></div></div>"
-        useHTML: true
       navigation:
         buttonOptions:
           enabled: false
