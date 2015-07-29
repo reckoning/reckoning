@@ -94,7 +94,6 @@ end
 
 group :development, :test do
   gem 'rubocop', require: false
-  gem 'mina'
 
   # generate fake data
   gem 'faker'
@@ -102,7 +101,6 @@ group :development, :test do
   # debugging
   gem 'bullet'
   gem 'byebug'
-  gem 'pry-rails'
-  gem 'pry-remote'
-  gem 'better_errors'
+  gem 'web-console', '~> 2.0'
+  gem 'spring'
 end
