@@ -87,7 +87,6 @@ group :test do
   gem 'database_cleaner'
   gem 'factory_girl'
   gem 'mocha', require: false
-  gem 'spring'
   gem 'timecop'
   gem "codeclimate-test-reporter", require: false
 end
