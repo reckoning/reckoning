@@ -41,7 +41,7 @@
                 h2 Verbleibende Stunden
                 - if project.budget_hours.present? && !project.budget_hours.zero?
                   .highlight
-                    = number_to_currency((project.budget_hours - project.timer_values), unit: "h", precision: 2)
+                    = number_to_currency((project.budget_hours - project.timer_values_billable), unit: "h", precision: 2)
                 - else
                   .highlight.blank
                     = I18n.t(:"labels.defaults.na")

@@ -48,6 +48,15 @@ class Project < ActiveRecord::Base
     values
   end
 
+  def timer_values_billable
+    values = 0.0
+    timers.billable.each do |timer|
+      values += timer.value.to_d unless timer.value.blank?
+    end
+    values
+  end
+
+
   def timer_values_invoiced
     values = 0.0
     timers.each do |timer|
@@ -60,7 +69,7 @@ class Project < ActiveRecord::Base
 
   def timer_values_uninvoiced
     values = 0.0
-    timers.each do |timer|
+    timers.billable.each do |timer|
       if timer.value.present? && timer.position_id.blank?
         values += timer.value.to_d
       end

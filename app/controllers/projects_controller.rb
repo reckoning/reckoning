@@ -22,7 +22,7 @@ class ProjectsController < ApplicationController
 
   def show
     authorize! :read, project
-    @project_budget_chart_data = Charts::ProjectBudgetService.new(project, project.timers).data
+    @project_budget_chart_data = Charts::ProjectBudgetService.new(project, project.timers.billable).data
   end
 
   def new
@@ -95,7 +95,7 @@ class ProjectsController < ApplicationController
     @project_params ||= params.require(:project).permit(
       :customer_id, :name, :rate, :budget, :budget_hours, :round_up,
       :budget_on_dashboard, :start_date, :end_date, tasks_attributes: [
-        :id, :name, :project_id, :_destroy
+        :id, :name, :project_id, :billable, :_destroy
       ]
     )
   end

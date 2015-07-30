@@ -18,6 +18,10 @@ class TimerSerializer < ActiveModel::Serializer
     timers.inject(0) { |a, e|  a + e.value }
   end
 
+  def task_name
+    "#{object.task_name} (#{I18n.t("labels.task.billable.#{object.task.billable}")})"
+  end
+
   def task_uuid
     object.task_id
   end
