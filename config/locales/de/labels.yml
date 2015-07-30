@@ -55,8 +55,13 @@ de:
       sum: "Gesamt:"
       on_invoice: "Zeiten wurden bereits abgerechnet."
       blank: "Keine Zeiten erfasst."
+    task:
+      billable:
+        "true": "fakturierbar"
+        "false": "nicht fakturierbar"
     timer:
       uninvoiced: "Unabgerechnete Zeiten"
+      non_billable: "Nicht fakturierbare Zeiten"
       invoiced: "Abgrechnete Zeiten"
     invoice:
       customer: "Kunde/Projekt"

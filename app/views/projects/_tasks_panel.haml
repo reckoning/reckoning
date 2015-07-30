@@ -4,6 +4,8 @@
     - tasks.each do |task|
       %a.list-group-item{href: ""}
         = task.name
+        %span.pull-right.badge
+          = I18n.t("labels.task.billable.#{task.billable}")
     - if tasks.empty?
       %span.list-group-item
         = I18n.t(:"labels.table.blank.task")

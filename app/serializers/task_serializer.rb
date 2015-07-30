@@ -6,4 +6,8 @@ class TaskSerializer < ActiveModel::Serializer
   def timers
     object.timers.where(user_id: scope.id).order("created_at ASC")
   end
+
+  def name
+    "#{object.name} (#{I18n.t("labels.task.billable.#{object.billable}")})"
+  end
 end

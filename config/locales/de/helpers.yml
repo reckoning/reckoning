@@ -3,6 +3,7 @@ de:
     label:
       project:
         rate: "Stundensatz"
+        round_up: "Zeiten aufrunden?"
         budget_on_dashboard: "Auf Dashboard anzeigen?"
         start_date: "Start"
         end_date: "Ende"
@@ -18,6 +19,8 @@ de:
         delivery_date: "Lieferdatum"
         payment_due_date: "Zahlungsziel"
         ref: "Rechnungsnummer"
+      task:
+        billable: "Fakturierbar?"
       setting:
         base:
           registration: "Registrierung aktiv?"

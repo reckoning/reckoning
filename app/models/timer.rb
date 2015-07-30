@@ -56,7 +56,11 @@ class Timer < ActiveRecord::Base
   end
 
   def self.billable
-    where.not(value: [nil, 0, "0.0", "0"])
+    where.not(value: [nil, 0, "0.0", "0"]).includes(:task).where(tasks: { billable: true }).references(:task)
+  end
+
+  def self.non_billable
+    where.not(tasks: { billable: true }).references(:task)
   end
 
   # def self.import(file, project_id)

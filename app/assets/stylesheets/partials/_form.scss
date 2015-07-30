@@ -105,6 +105,44 @@ form {
       margin-bottom: 0;
     }
   }
+
+  .checkbox {
+    label {
+      padding-left: 5px;
+    }
+  }
+
+  .form-group {
+    .input-group-addon {
+      .checkbox {
+        margin: 0;
+        margin-top: -3px;
+        padding-top: 0;
+
+        label {
+          padding-top: 5px;
+          padding-left: 5px;
+
+          &::before {
+            top: 3px;
+          }
+
+          &::after {
+            padding-left: 0px;
+            padding-top: 6px;
+          }
+        }
+
+        input[type="checkbox"] {
+          margin-top: 5px;
+        }
+      }
+
+      label {
+        margin-bottom: 0;
+      }
+    }
+  }
 }
 
 .list-group-item .checkbox {
