@@ -56,7 +56,6 @@ class Project < ActiveRecord::Base
     values
   end
 
-
   def timer_values_invoiced
     values = 0.0
     timers.each do |timer|
