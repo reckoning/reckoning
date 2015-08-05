@@ -451,6 +451,3 @@ DEPENDENCIES
   web_translate_it
   wicked_pdf
   wkhtmltopdf-heroku
-
-BUNDLED WITH
-   1.10.5

@@ -29,17 +29,6 @@ ActiveRecord::Schema.define(version: 20150729184717) do
     t.hstore   "contact_information"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
-    t.datetime "trail_end_at"
-    t.boolean  "trail_used"
-    t.string   "stripe_email"
-    t.string   "stripe_token"
-    t.string   "vat_id"
-  end
-
-  create_table "contacts", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
-    t.string   "email"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "customers", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
@@ -59,39 +48,20 @@ ActiveRecord::Schema.define(version: 20150729184717) do
     t.date     "date"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "value",                        precision: 10, scale: 2, default: 0.0,   null: false
-    t.decimal  "rate",                         precision: 10, scale: 2, default: 0.0,   null: false
-    t.string   "state",            limit: 255
+    t.decimal  "value",                                 precision: 10, scale: 2, default: 0.0,   null: false
+    t.decimal  "rate",                                  precision: 10, scale: 2, default: 0.0,   null: false
+    t.string   "state",                     limit: 255
     t.datetime "pay_date"
     t.integer  "ref"
-    t.boolean  "pdf_generating",                                        default: false, null: false
+    t.boolean  "pdf_generating",                                                 default: false, null: false
     t.date     "delivery_date"
     t.date     "payment_due_date"
     t.datetime "pdf_generated_at"
     t.uuid     "customer_id"
     t.uuid     "project_id"
-    t.uuid     "account_id",                                                            null: false
-  end
-
-  create_table "permissions", force: :cascade do |t|
-    t.string   "resource_type"
-    t.uuid     "resource_id"
-    t.boolean  "write",         default: false, null: false
-    t.uuid     "user_id"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
-  end
-
-  create_table "plans", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
-    t.string   "code"
-    t.decimal  "base_price"
-    t.integer  "quantity"
-    t.string   "interval"
-    t.integer  "discount"
-    t.boolean  "featured"
-    t.string   "stripe_plan_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.uuid     "account_id",                                                                     null: false
+    t.string   "customer_token"
+    t.datetime "customer_token_created_at"
   end
 
   create_table "positions", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
@@ -113,8 +83,6 @@ ActiveRecord::Schema.define(version: 20150729184717) do
     t.uuid     "customer_id"
     t.boolean  "budget_on_dashboard",                                      default: true
     t.string   "state",                                                    default: "active", null: false
-    t.decimal  "budget_hours",                    precision: 10, scale: 2, default: 0.0,      null: false
-    t.decimal  "round_up",                                                 default: 10.0,     null: false
     t.datetime "start_date"
     t.datetime "end_date"
   end
@@ -141,45 +109,52 @@ ActiveRecord::Schema.define(version: 20150729184717) do
   end
 
   create_table "users", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
-    t.string   "email",                     limit: 255, default: "",    null: false
-    t.string   "encrypted_password",        limit: 255, default: "",    null: false
-    t.string   "reset_password_token",      limit: 255
+    t.string   "email",                  limit: 255, default: "",    null: false
+    t.string   "encrypted_password",     limit: 255, default: "",    null: false
+    t.string   "reset_password_token",   limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                         default: 0
+    t.integer  "sign_in_count",                      default: 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip",        limit: 255
-    t.string   "last_sign_in_ip",           limit: 255
-    t.integer  "failed_attempts",                       default: 0
-    t.string   "unlock_token",              limit: 255
+    t.string   "current_sign_in_ip",     limit: 255
+    t.string   "last_sign_in_ip",        limit: 255
+    t.integer  "failed_attempts",                    default: 0
+    t.string   "unlock_token",           limit: 255
     t.datetime "locked_at"
-    t.string   "authentication_token",      limit: 255
+    t.string   "authentication_token",   limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "address_id"
-    t.boolean  "enabled",                               default: false
-    t.boolean  "admin",                                 default: false
-    t.string   "confirmation_token",        limit: 255
+    t.boolean  "enabled",                            default: false
+    t.boolean  "admin",                              default: false
+    t.string   "confirmation_token",     limit: 255
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
-    t.string   "unconfirmed_email",         limit: 255
-    t.string   "gravatar",                  limit: 255
-    t.string   "gravatar_hash",             limit: 255
-    t.string   "plan",                      limit: 255
-    t.uuid     "account_id",                                            null: false
+    t.string   "unconfirmed_email",      limit: 255
+    t.string   "gravatar",               limit: 255
+    t.string   "gravatar_hash",          limit: 255
+    t.string   "plan",                   limit: 255
+    t.uuid     "account_id",                                         null: false
     t.string   "name"
-    t.string   "encrypted_otp_secret"
-    t.string   "encrypted_otp_secret_iv"
-    t.string   "encrypted_otp_secret_salt"
-    t.boolean  "otp_required_for_login"
-    t.string   "otp_backup_codes",                                                   array: true
+    t.string   "totp_auth_secret"
+    t.string   "totp_recovery_secret"
+    t.boolean  "totp_enabled",                       default: false, null: false
+    t.boolean  "totp_mandatory",                     default: false, null: false
+    t.datetime "totp_enabled_on"
+    t.integer  "totp_failed_attempts",               default: 0,     null: false
+    t.integer  "totp_recovery_counter",              default: 0,     null: false
+    t.string   "totp_persistence_seed"
+    t.string   "totp_session_challenge"
+    t.datetime "totp_challenge_expires"
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["totp_challenge_expires"], name: "index_users_on_totp_challenge_expires", using: :btree
+  add_index "users", ["totp_session_challenge"], name: "index_users_on_totp_session_challenge", unique: true, using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
 end
