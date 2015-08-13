@@ -119,8 +119,6 @@ GEM
     dalli (2.7.4)
     database_cleaner (1.4.1)
     debug_inspector (0.0.2)
-    devise-async (0.10.1)
-      devise (~> 3.2)
     docile (1.1.5)
     dropbox-sdk (1.6.4)
       json
@@ -358,7 +356,6 @@ DEPENDENCIES
   dalli
   database_cleaner
   devise!
-  devise-async
   devise-two-factor!
   dropbox-sdk
   dynamic_fields_for_rails
