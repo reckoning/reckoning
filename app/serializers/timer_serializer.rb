@@ -15,7 +15,7 @@ class TimerSerializer < ActiveModel::Serializer
 
   def sum_for_task
     timers = Timer.where(task_id: object.task_id, date: object.date).all
-    timers.inject(0) { |a, e|  a + e.value }
+    timers.inject(0) { |a, e| a + e.value }
   end
 
   def task_name

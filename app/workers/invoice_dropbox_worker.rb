@@ -11,8 +11,8 @@ class InvoiceDropboxWorker
     client = ::DropboxClient.new(invoice.account.dropbox_token)
 
     base_path = [
-      invoice.customer.name.gsub('/', '-').strip,
-      invoice.project.name.gsub('/', '-').strip
+      invoice.customer.name.tr('/', '-').strip,
+      invoice.project.name.tr('/', '-').strip
     ]
 
     path = (base_path + [
