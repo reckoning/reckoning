@@ -16,8 +16,8 @@ gem 'haml'
 gem 'haml-rails'
 gem 'slim-rails'
 
-gem 'devise', github: 'plataformatec/devise', branch: :master
-gem 'devise-two-factor', github: 'mortik/devise-two-factor', branch: :master
+gem 'devise'
+gem 'devise-two-factor'
 gem 'rqrcode-rails3'
 gem 'mini_magick'
 gem 'cancancan'
