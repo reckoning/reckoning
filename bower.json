@@ -21,7 +21,7 @@
     "moment": "~2.10.0",
     "accounting": "~0.3.2",
     "animate.css": "~3.4.0",
-    "twix": "~0.6.4",
+    "twix": "~0.7.0",
     "nprogress": "~0.2.0",
     "fastclick": "~1.0.6",
     "awesome-bootstrap-checkbox": "~0.3.0",

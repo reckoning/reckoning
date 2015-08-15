@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '2.2.2'
 
-gem 'rails', '4.2.2'
+gem 'rails', '4.2.3'
 
 gem 'pg'
 
@@ -23,7 +23,6 @@ gem 'mini_magick'
 gem 'cancancan'
 
 gem 'dalli'
-gem 'cache_digests'
 
 gem 'url_plumber'
 gem 'kaminari'

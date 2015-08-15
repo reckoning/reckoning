@@ -509,7 +509,7 @@ test = (moment, Twix) ->
       assertEqual(false, thatDay("12:00", "13:00").isEmpty())
 
     it "returns false for 'empty' all-day ranges", ->
-      assertEqual(false, moment("1982-05-25").twix("1982-05-25", allDay: true).isEmpty())
+      assertEqual(false, moment("1982-05-25").twix("1982-05-25", true).isEmpty())
 
   describe "asDuration()", ->
     it "returns a duration object", ->
@@ -623,6 +623,9 @@ test = (moment, Twix) ->
 
       it "returns false for moments before the range", ->
         assertEqual false, range.contains(thisYear "05-24")
+
+      it "returns false for moments after the end of the range", ->
+        assertEqual false, range.contains(thisYear "05-26", "00:00:00")
 
       it "returns false for moments after the range", ->
         assertEqual false, range.contains(thisYear "05-26", "00:00:01")
@@ -855,8 +858,17 @@ test = (moment, Twix) ->
       it "intersects with an engulfing range", ->
         assertTwixEqual thatDay("05:30", "08:30"), someTime.intersection(thatDay "04:30", "09:30")
 
-      it "does not intersect an adjacent range", ->
+      it "does not intersect an adjacent range (later)", ->
         assertEqual 0, someTime.intersection(thatDay "08:30", "09:30").length()
+
+      it "does not intersect an adjacent range (earlier)", ->
+        assertEqual 0, someTime.intersection(thatDay "04:30", "05:30").length()
+
+      it "returns self for an identical range", ->
+        assertTwixEqual someTime, someTime.intersection(someTime)
+
+      it "returns self for a time that starts at the same time but ends later", ->
+        assertTwixEqual someTime, someTime.intersection(thatDay("05:30", "09:30"))
 
     describe "one all-day range", ->
       it "intersects with a later time", ->
@@ -1013,6 +1025,12 @@ test = (moment, Twix) ->
         assertEqual 1, exed.length
         assertTwixEqual someTime, exed[0]
 
+      it "returns self for an adjacent range (inverse)", ->
+        other = thatDay("08:30", "10:30")
+        exed = other.difference(someTime)
+        assertEqual 1, exed.length
+        assertTwixEqual other, exed[0]
+
     describe "one all-day range", ->
       it "uses the full day", ->
         exed = someDays.difference(new Twix("1982-05-25T16:00", "1982-05-26T02:00"))
@@ -1030,16 +1048,16 @@ test = (moment, Twix) ->
         second = new Twix "1982-05-25", "1982-05-27", true
 
         firstStart = first._trueStart.clone()
-        firstEnd = first._trueEnd.clone()
+        firstEnd = first._displayEnd.clone()
         secondStart = second._trueStart.clone()
-        secondEnd = second._trueEnd.clone()
+        secondEnd = second._displayEnd.clone()
 
         first.difference(second)
 
         assertMomentEqual firstStart, first._trueStart
-        assertMomentEqual firstEnd, first._trueEnd
+        assertMomentEqual firstEnd, first._displayEnd
         assertMomentEqual secondStart, second._trueStart
-        assertMomentEqual secondEnd, second._trueEnd
+        assertMomentEqual secondEnd, second._displayEnd
 
     describe "multiple ranges", ->
       it "returns the difference of three ranges", ->
@@ -1434,31 +1452,14 @@ test = (moment, Twix) ->
           result: "May 25, 5 PM | May 26, 10 AM, 1982"
 
   describe "internationalization", ->
-    it "uses alternative language when specified by moment", ->
-      start = moment("1982-05-25").locale "fr"
-      range = start.twix(start.clone().add 1, 'days')
-
-      assertEqual '25 mai, 0:00 - 26 mai, 0:00, 1982', range.format()
-
-    it "uses English formatting rules when there's no format for the specified language", ->
-      start = moment("1982-10-14").locale "de"
-      range = start.twix(start.clone().add 1, 'days')
-
-      assertEqual 'Okt. 14, 12 AM - Okt. 15, 12 AM, 1982', range.format()
-
-    it "uses alternative languages when they're set globally", ->
-      try
-        moment.locale("fr")
-        start = moment("1982-05-25")
-        range = start.twix(start.clone().add 1, 'days')
-
-        assertEqual '25 mai, 0:00 - 26 mai, 0:00, 1982', range.format()
-      finally
-        moment.locale("en")
+    it "uses the moment locale's LT setting by default", ->
+      start = moment("1982-05-25").locale "en-gb"
+      range = start.twix(start.clone().add 1, "days")
+      assertEqual "May 25, 0:00 - May 26, 0:00, 1982", range.format()
 
 if define?
   define(["moment", "twix"], (moment, Twix) -> test moment, Twix)
 else
   moment = require?("moment") ? @moment
-  Twix = require?("../../bin/twix") ? @Twix
+  Twix = require?("../../dist/twix") ? @Twix
   test moment, Twix

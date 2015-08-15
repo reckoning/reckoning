@@ -14,8 +14,6 @@ isArray = (input) ->
 makeTwix = (moment) ->
   throw "Can't find moment" unless moment?
 
-  localesLoaded = false
-
   class Twix
     constructor: (start, end, parseFormat, options = {}) ->
 
@@ -29,8 +27,7 @@ makeTwix = (moment) ->
       @end = moment end, parseFormat, options.parseStrict
       @allDay = options.allDay ? false
 
-      @_trueStart = if @allDay then @start.clone().startOf("day") else @start
-      @_trueEnd = if @allDay then @end.startOf('d').clone().add(1, "day") else @end
+      @_mutated()
 
     @_extend: (first, others...) ->
       for other in others
@@ -38,59 +35,11 @@ makeTwix = (moment) ->
           first[attr] = other[attr] unless typeof other[attr] == "undefined"
       first
 
-    @defaults:
-      twentyFourHour: false
-      allDaySimple:
-        fn: (options) -> () -> options.allDay
-        slot: 0
-        pre: " "
-      dayOfWeek:
-        fn: (options) -> (date) -> date.format options.weekdayFormat
-        slot: 1
-        pre: " "
-      allDayMonth:
-        fn: (options) -> (date) -> date.format "#{options.monthFormat} #{options.dayFormat}"
-        slot: 2
-        pre: " "
-      month:
-        fn: (options) -> (date) -> date.format options.monthFormat
-        slot: 2
-        pre: " "
-      date:
-        fn: (options) -> (date) -> date.format options.dayFormat
-        slot: 3
-        pre: " "
-      year:
-        fn: (options) -> (date) -> date.format options.yearFormat
-        slot: 4
-        pre: ", "
-      time:
-        fn: (options) -> (date) ->
-          str = if date.minutes() == 0 && options.implicitMinutes && !options.twentyFourHour
-                  date.format options.hourFormat
-                else
-                  date.format "#{options.hourFormat}:#{options.minuteFormat}"
-
-          if !options.groupMeridiems && !options.twentyFourHour
-            str += " " if options.spaceBeforeMeridiem
-            str += date.format options.meridiemFormat
-          str
-        slot: 5
-        pre: ", "
-      meridiem:
-        fn: (options) -> (t) => t.format options.meridiemFormat
-        slot: 6
-        pre: (options)->
-          if options.spaceBeforeMeridiem then " " else ""
-
-    @registerLocale: (name, options) ->
-      moment.locale name, twix: Twix._extend {}, Twix.defaults, options
-
     # -- INFORMATIONAL --
     isSame: (period) -> @start.isSame @end, period
 
     length: (period) ->
-      @_trueEnd.diff @_trueStart, period
+      @_displayEnd.diff @_trueStart, period
 
     count: (period) ->
       start = @start.clone().startOf period
@@ -135,50 +84,41 @@ makeTwix = (moment) ->
       moment.duration(diff)
 
     isPast: ->
-      if @allDay
-        @end.clone().endOf("day") < moment()
-      else
-        @end < moment()
+      @_lastMilli < moment()
 
     isFuture: ->
-      if @allDay
-        @start.clone().startOf("day") > moment()
-      else
-        @start > moment()
+      @_trueStart > moment()
 
     isCurrent: -> !@isPast() && !@isFuture()
 
     contains: (mom) ->
       mom = moment mom unless moment.isMoment(mom)
-      @_trueStart <= mom && @_trueEnd >= mom
+      @_trueStart <= mom && @_lastMilli >= mom
 
     isEmpty: ->
-      @_trueStart.isSame(@_trueEnd)
+      @_trueStart.isSame(@_displayEnd)
 
     # -- WORK WITH MULTIPLE RANGES --
-    overlaps: (other) -> (@_trueEnd.isAfter(other._trueStart) && @_trueStart.isBefore(other._trueEnd))
+    overlaps: (other) -> (@_displayEnd.isAfter(other._trueStart) && @_trueStart.isBefore(other._displayEnd))
 
-    engulfs: (other) -> @_trueStart <= other._trueStart && @_trueEnd >= other._trueEnd
+    engulfs: (other) -> @_trueStart <= other._trueStart && @_displayEnd >= other._displayEnd
 
     union: (other) ->
       allDay = @allDay && other.allDay
-      if allDay
-        newStart = if @start < other.start then @start else other.start
-        newEnd = if @end > other.end then @end else other.end
+      newStart = if @_trueStart < other._trueStart then @_trueStart else other._trueStart
+      newEnd = if @_lastMilli > other._lastMilli
+        (if allDay then @_transferrableEnd else @_displayEnd)
       else
-        newStart = if @_trueStart < other._trueStart then @_trueStart else other._trueStart
-        newEnd = if @_trueEnd > other._trueEnd then @_trueEnd else other._trueEnd
-
+        (if allDay then other._transferrableEnd else other._displayEnd)
       new Twix(newStart, newEnd, allDay)
 
     intersection: (other) ->
       allDay = @allDay && other.allDay
-      if allDay
-        newStart = if @start > other.start then @start else other.start
-        newEnd = if @end < other.end then @end else other.end
+      newStart = if @_trueStart > other._trueStart then @_trueStart else other._trueStart
+      newEnd = if @_lastMilli < other._lastMilli
+        (if allDay then @_transferrableEnd else @_displayEnd)
       else
-        newStart = if @_trueStart > other._trueStart then @_trueStart else other._trueStart
-        newEnd = if @_trueEnd < other._trueEnd then @_trueEnd else other._trueEnd
+        (if allDay then other._transferrableEnd else other._displayEnd)
 
       new Twix(newStart, newEnd, allDay)
 
@@ -192,7 +132,7 @@ makeTwix = (moment) ->
       arr = []
       for item, i in [@].concat(others)
         arr.push({time: item._trueStart, i: i, type: 0})
-        arr.push({time: item._trueEnd, i: i, type: 1})
+        arr.push({time: item._displayEnd, i: i, type: 1})
       arr = arr.sort((a, b) -> a.time - b.time)
 
       for other in arr
@@ -204,6 +144,7 @@ makeTwix = (moment) ->
             last = results[results.length - 1]
             if last && last.end.isSame(start)
               last.end = other.time
+              last._mutated()
             else
               #because we used the diffable end, we have to subtract back off a day. blech
               endTime = if allDay then other.time.clone().subtract(1, 'd') else other.time
@@ -235,18 +176,18 @@ makeTwix = (moment) ->
 
       return [@] if (dur && dur.asMilliseconds() == 0) || (times && times.length == 0)
 
-      vals = []; i = 0; final = @_trueEnd
+      vals = []; i = 0; final = @_displayEnd
       while start < final && (!times? || times[i])
         end = if dur then start.clone().add(dur) else times[i].clone()
         end = moment.min(final, end)
         vals.push(moment.twix(start, end)) if !start.isSame(end)
         start = end
         i += 1
-      if !end.isSame(@_trueEnd) && times
-        vals.push(moment.twix(end, @_trueEnd))
+      if !end.isSame(@_displayEnd) && times
+        vals.push(moment.twix(end, @_displayEnd))
       vals
 
-    isValid: -> @_trueStart <= @_trueEnd
+    isValid: -> @_trueStart <= @_displayEnd
 
     equals: (other) ->
       (other instanceof Twix) &&
@@ -269,16 +210,16 @@ makeTwix = (moment) ->
       s
 
     format: (inopts) ->
-      @_lazyLocale()
 
       return "" if @isEmpty()
+
+      momentHourFormat = @start.localeData()._longDateFormat["LT"][0]
 
       options =
         groupMeridiems: true
         spaceBeforeMeridiem: true
         showDate: true
         showDayOfWeek: false
-        twentyFourHour: @localeData.twentyFourHour
         implicitMinutes: true
         implicitYear: true
         yearFormat: "YYYY"
@@ -286,7 +227,7 @@ makeTwix = (moment) ->
         weekdayFormat: "ddd"
         dayFormat: "D"
         meridiemFormat: "A"
-        hourFormat: "h"
+        hourFormat: momentHourFormat
         minuteFormat: "mm"
         allDay: "all day"
         explicitAllDay: false
@@ -297,7 +238,14 @@ makeTwix = (moment) ->
 
       fs = []
 
-      options.hourFormat = options.hourFormat.replace("h", "H") if options.twentyFourHour
+      #the twentyFourHour option is deprecated, but support it for now anyway
+      if inopts && inopts.twentyFourHour?
+        options.hourFormat = if inopts.twentyFourHour
+                              options.hourFormat.replace("h", "H")
+                             else
+                              options.hourFormat.replace("H", "h")
+
+      needsMeridiem = options.hourFormat && options.hourFormat[0] == "h"
 
       goesIntoTheMorning =
         options.lastNightEndsAt > 0 &&
@@ -311,59 +259,69 @@ makeTwix = (moment) ->
       if @allDay && @isSame("day") && (!options.showDate || options.explicitAllDay)
         fs.push
           name: "all day simple"
-          fn: @_formatFn('allDaySimple', options)
-          pre: @_formatPre('allDaySimple', options)
-          slot: @_formatSlot('allDaySimple')
+          fn:  () -> options.allDay
+          pre: " "
+          slot: 0
 
       if needDate && (!options.implicitYear || @start.year() != moment().year() || !@isSame("year"))
         fs.push
           name: "year",
-          fn: @_formatFn('year', options)
-          pre: @_formatPre('year', options)
-          slot: @_formatSlot('year')
+          fn:  (date) -> date.format options.yearFormat
+          pre: ", "
+          slot: 4
 
       if !@allDay && needDate
         fs.push
           name: "all day month"
-          fn: @_formatFn('allDayMonth', options)
+          fn: (date) -> date.format "#{options.monthFormat} #{options.dayFormat}"
           ignoreEnd: -> goesIntoTheMorning
-          pre: @_formatPre('allDayMonth', options)
-          slot: @_formatSlot('allDayMonth')
+          pre: " "
+          slot: 2
 
       if @allDay && needDate
         fs.push
           name: "month"
-          fn: @_formatFn('month', options)
-          pre: @_formatPre('month', options)
-          slot: @_formatSlot('month')
+          fn: (date) -> date.format options.monthFormat
+          pre: " "
+          slot: 2
 
       if @allDay && needDate
         fs.push
           name: "date"
-          fn: @_formatFn('date', options)
-          pre: @_formatPre('date', options)
-          slot: @_formatSlot('date')
+          fn: (date) -> date.format options.dayFormat
+          pre: " "
+          slot: 3
 
       if needDate && options.showDayOfWeek
         fs.push
           name: "day of week",
-          fn: @_formatFn('dayOfWeek', options)
-          pre: @_formatPre('dayOfWeek', options)
-          slot: @_formatSlot('dayOfWeek')
+          fn: (date) -> date.format options.weekdayFormat
+          pre: " "
+          slot: 1
 
-      if options.groupMeridiems && !options.twentyFourHour && !@allDay
+      if options.groupMeridiems && needsMeridiem && !@allDay
         fs.push
           name: "meridiem",
-          fn: @_formatFn('meridiem', options)
-          pre: @_formatPre('meridiem', options)
-          slot: @_formatSlot('meridiem')
+          fn: (t) => t.format options.meridiemFormat
+          slot: 6
+          pre: if options.spaceBeforeMeridiem then " " else ""
 
       if !@allDay
         fs.push
+
           name: "time",
-          fn: @_formatFn('time', options)
-          pre: @_formatPre('time', options)
-          slot: @_formatSlot('time')
+          fn: (date) ->
+            str = if date.minutes() == 0 && options.implicitMinutes && needsMeridiem
+                    date.format options.hourFormat
+                  else
+                    date.format "#{options.hourFormat}:#{options.minuteFormat}"
+
+            if !options.groupMeridiems && needsMeridiem
+              str += " " if options.spaceBeforeMeridiem
+              str += date.format options.meridiemFormat
+            str
+          slot: 5
+          pre: ", "
 
       start_bucket = []
       end_bucket = []
@@ -443,7 +401,7 @@ makeTwix = (moment) ->
 
     _inner: (period = "ms", intervalAmount = 1) ->
       start = @_trueStart.clone()
-      end = @_trueEnd.clone()
+      end = @_displayEnd.clone()
 
       start.startOf(period).add(intervalAmount, period) if start > start.clone().startOf(period)
       end.startOf(period) if end < end.clone().endOf(period)
@@ -457,34 +415,11 @@ makeTwix = (moment) ->
 
       [start, end]
 
-    _lazyLocale: ->
-      localeData = @start.localeData()
-
-      @end.locale(localeData._abbr) if localeData? && @end.locale()._abbr != localeData._abbr
-
-      return if @localeData? && @localeData._abbr == localeData._abbr
-
-      if hasModule && !(localesLoaded || localeData._abbr == "en")
-        try
-          locales = require "./locale"
-          locales moment, Twix
-        catch e
-
-        localesLoaded = true
-
-      @localeData = localeData?._twix ? Twix.defaults
-
-    _formatFn: (name, options) ->
-      @localeData[name].fn(options)
-
-    _formatSlot: (name) ->
-      @localeData[name].slot
-
-    _formatPre: (name, options) ->
-      if typeof @localeData[name].pre == "function"
-        @localeData[name].pre(options)
-      else
-        @localeData[name].pre
+    _mutated: ->
+      @_trueStart = if @allDay then @start.clone().startOf("day") else @start
+      @_lastMilli = if @allDay then @end.clone().endOf("day") else @end
+      @_transferrableEnd = if @allDay then @end.clone().startOf("day") else @end
+      @_displayEnd = if @allDay then @_transferrableEnd.clone().add(1, "day") else @end
 
     # -- DEPRECATED METHODS --
     sameDay: deprecate "sameDay", "isSame('day')", -> @isSame "day"
@@ -511,7 +446,7 @@ makeTwix = (moment) ->
   Twix
 
 # -- MAKE AVAILABLE
-module.exports = makeTwix(require "moment") if hasModule
+return module.exports = makeTwix(require "moment") if hasModule
 
 if  typeof(define) == "function"
   define "twix", ["moment"], (moment) -> makeTwix(moment)

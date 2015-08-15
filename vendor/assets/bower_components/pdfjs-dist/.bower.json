@@ -1,6 +1,6 @@
 {
   "name": "pdfjs-dist",
-  "version": "1.1.248",
+  "version": "1.1.381",
   "main": [
     "build/pdf.js",
     "build/pdf.worker.js"
@@ -12,11 +12,11 @@
     "pdf.js"
   ],
   "homepage": "https://github.com/mozilla/pdfjs-dist",
-  "_release": "1.1.248",
+  "_release": "1.1.381",
   "_resolution": {
     "type": "version",
-    "tag": "v1.1.248",
-    "commit": "3b830793dd8601a58db2730e7cbc403fa5c57045"
+    "tag": "v1.1.381",
+    "commit": "47547a490e36860a35f5194a6010cee3616b1425"
   },
   "_source": "git://github.com/mozilla/pdfjs-dist.git",
   "_target": "~1.1.228",
