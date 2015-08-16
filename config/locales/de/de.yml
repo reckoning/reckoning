@@ -95,6 +95,7 @@ de:
         account:
           index: Accounts
           new: "Neuer Account"
+          edit: "Account bearbeiten"
         user:
           index: "Benutzer"
           new: "Neuer Benutzer"

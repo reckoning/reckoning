@@ -42,6 +42,7 @@ de:
         edit: 'Einstellung bearbeiten'
       account:
         index: "Accounts"
+        edit: "Account bearbeiten"
         new: "Neuen Account anlegen"
 
     timer:
