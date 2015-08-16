@@ -12,6 +12,7 @@
           = link_to I18n.t(:"nav.subnav.back"), backend_accounts_path, class: "btn btn-default"
 
     = form_for [:backend, account] do |form|
+      = form.hidden_field :plan, value: :free
       .row
         .col-xs-12.col-md-6
           .form-group class=form_error?(account, :name)
