@@ -1,0 +1,7 @@
+.panel.panel-list.panel-default
+  .panel-heading
+    .panel-title
+      .row
+        .col-xs-8.col-md-4.name Name
+  .list-group
+    = render partial: "backend/accounts/show", collection: @accounts, as: :account

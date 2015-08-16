@@ -7,6 +7,6 @@ class InvoiceTestMailerWorker
 
     return if invoice.blank?
 
-    InvoiceMailer.test_mail(invoice, test_mail).deliver_now
+    InvoiceMailer.test(invoice, test_mail).deliver_now
   end
 end

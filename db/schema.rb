@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150729184717) do
+ActiveRecord::Schema.define(version: 20150816101055) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,15 +71,6 @@ ActiveRecord::Schema.define(version: 20150729184717) do
     t.uuid     "customer_id"
     t.uuid     "project_id"
     t.uuid     "account_id",                                                            null: false
-  end
-
-  create_table "permissions", force: :cascade do |t|
-    t.string   "resource_type"
-    t.uuid     "resource_id"
-    t.boolean  "write",         default: false, null: false
-    t.uuid     "user_id"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
   end
 
   create_table "plans", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
@@ -174,6 +165,7 @@ ActiveRecord::Schema.define(version: 20150729184717) do
     t.string   "encrypted_otp_secret_salt"
     t.boolean  "otp_required_for_login"
     t.string   "otp_backup_codes",                                                   array: true
+    t.boolean  "created_via_admin",                     default: false
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree

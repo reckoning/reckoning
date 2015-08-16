@@ -11,9 +11,9 @@ class InvoiceMailerTest < ActionMailer::TestCase
     invoice.customer.save
   end
 
-  describe "#customer_mail" do
+  describe "#customer" do
     it "sends email to default from if nothing is defined" do
-      mail = InvoiceMailer.customer_mail(invoice).deliver_now
+      mail = InvoiceMailer.customer(invoice).deliver_now
 
       refute ActionMailer::Base.deliveries.empty?
 
@@ -25,7 +25,7 @@ class InvoiceMailerTest < ActionMailer::TestCase
       invoice.account.default_from = "user@reckoning.io"
       invoice.account.save
 
-      mail = InvoiceMailer.customer_mail(invoice).deliver_now
+      mail = InvoiceMailer.customer(invoice).deliver_now
 
       refute ActionMailer::Base.deliveries.empty?
 
@@ -37,7 +37,7 @@ class InvoiceMailerTest < ActionMailer::TestCase
       invoice.customer.default_from = "special-customer@reckoning.io"
       invoice.customer.save
 
-      mail = InvoiceMailer.customer_mail(invoice).deliver_now
+      mail = InvoiceMailer.customer(invoice).deliver_now
 
       refute ActionMailer::Base.deliveries.empty?
 
@@ -49,7 +49,7 @@ class InvoiceMailerTest < ActionMailer::TestCase
       invoice.account.default_from = ""
       invoice.account.save
 
-      mail = InvoiceMailer.customer_mail(invoice).deliver_now
+      mail = InvoiceMailer.customer(invoice).deliver_now
 
       refute ActionMailer::Base.deliveries.empty?
 

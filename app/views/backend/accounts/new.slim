@@ -1,0 +1,31 @@
+- content_for :title do
+  = I18n.t(:"meta.title.backend.account.new")
+.row#account-new
+  .col-xs-12.col-md-12
+    .row
+      .col-xs-12.col-md-8
+        h1
+          = I18n.t(:"headlines.backend.account.new")
+
+      .col-xs-12.col-md-4
+        .btn-group.pull-right.resource-nav
+          = link_to I18n.t(:"nav.subnav.back"), backend_accounts_path, class: "btn btn-default"
+
+    = form_for [:backend, account] do |form|
+      .row
+        .col-xs-12.col-md-6
+          .form-group class=form_error?(account, :name)
+            = form.text_field :name, placeholder: I18n.t(:"helpers.placeholder.account.name"), class: 'form-control'
+            small
+              = form_errors account, :name
+
+      = form.fields_for :users, account.users do |fields|
+        .row
+          .col-xs-12.col-md-6
+            .form-group class=form_error?(fields.object, :email)
+              = fields.text_field :email, placeholder: I18n.t(:"helpers.placeholder.user.email"), class: 'form-control'
+              small
+                = form_errors fields.object, :email
+
+      = render "shared/forms/submit", path: backend_accounts_path
+

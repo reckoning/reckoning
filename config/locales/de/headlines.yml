@@ -40,6 +40,9 @@ de:
         new: 'Neuen Benutzer anlegen'
       setting:
         edit: 'Einstellung bearbeiten'
+      account:
+        index: "Accounts"
+        new: "Neuen Account anlegen"
 
     timer:
       import: "Zeiten importieren"

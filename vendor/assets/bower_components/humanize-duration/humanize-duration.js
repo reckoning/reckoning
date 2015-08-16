@@ -1,18 +1,6 @@
 // HumanizeDuration.js - http://git.io/j0HgmQ
 
-(function() {
-
-  var UNITS = {
-    y: 31557600000,
-    mo: 2629800000,
-    w: 604800000,
-    d: 86400000,
-    h: 3600000,
-    m: 60000,
-    s: 1000,
-    ms: 1
-  };
-
+(function(global) {
   var languages = {
     ar: {
       y: function(c) { return ((c === 1) ? "سنة" : "سنوات"); },
@@ -89,6 +77,17 @@
       m: function(c) { return "minute" + ((c !== 1) ? "s" : ""); },
       s: function(c) { return "seconde" + ((c !== 1) ? "s" : ""); },
       ms: function(c) { return "milliseconde" + ((c !== 1) ? "s" : ""); },
+      decimal: ","
+    },
+    gr: {
+      y: function(c) { return ((c === 1) ? "χρόνος" : "χρόνια"); },
+      mo: function(c) { return ((c === 1) ? "μήνας" : "μήνες"); },
+      w: function(c) { return ((c === 1) ? "εβδομάδα" : "εβδομάδες"); },
+      d: function(c) { return ((c === 1) ? "μέρα" : "μέρες"); },
+      h: function(c) { return ((c === 1) ? "ώρα" : "ώρες"); },
+      m: function(c) { return ((c === 1) ? "λεπτό" : "λεπτά"); },
+      s: function(c) { return ((c === 1) ? "δευτερόλεπτο" : "δευτερόλεπτα"); },
+      ms: function(c) { return ((c === 1) ? "χιλιοστό του δευτερολέπτου" : "χιλιοστά του δευτερολέπτου"); },
       decimal: ","
     },
     hu: {
@@ -180,14 +179,25 @@
       decimal: ","
     },
     ru: {
-      y: function(c) { return ["лет", "год", "года"][getRussianForm(c)]; },
-      mo: function(c) { return ["месяцев", "месяц", "месяца"][getRussianForm(c)]; },
-      w: function(c) { return ["недель", "неделя", "недели"][getRussianForm(c)]; },
-      d: function(c) { return ["дней", "день", "дня"][getRussianForm(c)]; },
-      h: function(c) { return ["часов", "час", "часа"][getRussianForm(c)]; },
-      m: function(c) { return ["минут", "минута", "минуты"][getRussianForm(c)]; },
-      s: function(c) { return ["секунд", "секунда", "секунды"][getRussianForm(c)]; },
-      ms: function(c) { return ["миллисекунд", "миллисекунда", "миллисекунды"][getRussianForm(c)]; },
+      y: function(c) { return ["лет", "год", "года"][getSlavicForm(c)]; },
+      mo: function(c) { return ["месяцев", "месяц", "месяца"][getSlavicForm(c)]; },
+      w: function(c) { return ["недель", "неделя", "недели"][getSlavicForm(c)]; },
+      d: function(c) { return ["дней", "день", "дня"][getSlavicForm(c)]; },
+      h: function(c) { return ["часов", "час", "часа"][getSlavicForm(c)]; },
+      m: function(c) { return ["минут", "минута", "минуты"][getSlavicForm(c)]; },
+      s: function(c) { return ["секунд", "секунда", "секунды"][getSlavicForm(c)]; },
+      ms: function(c) { return ["миллисекунд", "миллисекунда", "миллисекунды"][getSlavicForm(c)]; },
+      decimal: ","
+    },
+    uk: {
+      y: function(c) { return ["років", "рік", "роки"][getSlavicForm(c)]; },
+      mo: function(c) { return ["місяців", "місяць", "місяці"][getSlavicForm(c)]; },
+      w: function(c) { return ["неділь", "неділя", "неділі"][getSlavicForm(c)]; },
+      d: function(c) { return ["днів", "день", "дні"][getSlavicForm(c)]; },
+      h: function(c) { return ["годин", "година", "години"][getSlavicForm(c)]; },
+      m: function(c) { return ["хвилин", "хвилина", "хвилини"][getSlavicForm(c)]; },
+      s: function(c) { return ["секунд", "секунда", "секунди"][getSlavicForm(c)]; },
+      ms: function(c) { return ["мілісекунд", "мілісекунда", "мілісекунди"][getSlavicForm(c)]; },
       decimal: ","
     },
     sv: {
@@ -250,7 +260,17 @@
       spacer: " ",
       units: ["y", "mo", "w", "d", "h", "m", "s"],
       languages: {},
-      round: false
+      round: false,
+      unitMeasures: {
+        y: 31557600000,
+        mo: 2629800000,
+        w: 604800000,
+        d: 86400000,
+        h: 3600000,
+        m: 60000,
+        s: 1000,
+        ms: 1
+      }
     }, passedOptions);
   }
 
@@ -279,7 +299,7 @@
     for (var i = 0, len = options.units.length; i < len; i++) {
 
       unitName = options.units[i];
-      unitMS = UNITS[unitName];
+      unitMS = options.unitMeasures[unitName];
 
       // What's the number of full units we can fit?
       if ((i + 1) === len) {
@@ -361,8 +381,8 @@
     }
   }
 
-  // Internal helper function for Russian language.
-  function getRussianForm(c) {
+  // Internal helper function for Russian and Ukranian languages.
+  function getSlavicForm(c) {
     if (Math.floor(c) !== c) {
       return 2;
     } else if (c === 0 || (c >= 5 && c <= 20) || (c % 10 >= 5 && c % 10 <= 9) || (c % 10 === 0)) {
@@ -396,7 +416,7 @@
   } else if (typeof module !== "undefined" && module.exports) {
     module.exports = humanizeDuration;
   } else {
-    this.humanizeDuration = humanizeDuration;
+    global.humanizeDuration = humanizeDuration;
   }
 
-})();
+})(this);

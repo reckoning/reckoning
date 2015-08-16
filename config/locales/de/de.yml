@@ -23,6 +23,7 @@ de:
       users: "Benutzer"
       user: "Profil"
       account: "Account"
+      accounts: Accounts
       sign_up: "Registrieren"
     subnav:
       back: "Zurück"
@@ -32,6 +33,7 @@ de:
       new_project: "Neues Projekt"
       new_project_for_customer: "Neues Projekt für %{customer}"
       new_user: "Neuer Benutzer"
+      new_account: "Neuer Account"
       update_password: "Passwort ändern"
       user:
         basic: Allgemein
@@ -90,6 +92,9 @@ de:
         new: "Passwort zurücksetzen"
         edit: "Passwort ändern"
       backend:
+        account:
+          index: Accounts
+          new: "Neuer Account"
         user:
           index: "Benutzer"
           new: "Neuer Benutzer"

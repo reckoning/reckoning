@@ -9,7 +9,7 @@ I have the time in milliseconds and I want it to become "30 minutes" or "3 days,
 Basic usage
 -----------
 
-This package is available as *humanize-duration* in npm and Bower. You can also include the JavaScript in the browser.
+This package is available as *humanize-duration* in [npm](https://www.npmjs.com/package/humanize-duration) and Bower. You can also include the JavaScript in the browser.
 
 In the browser:
 
@@ -50,6 +50,9 @@ humanizeDuration(22140000, { delimiter: "--" })     // "6 hours--9 minutes"
 humanizeDuration(260040000, { spacer: " whole " })  // "3 whole days, 14 whole minutes"
 humanizeDuration(260040000, { spacer: "" })         // "3days, 14minutes"
 
+humanizeDuration(1000000000000)                  // 31 years, 8 months, 1 week, 19 hours, 46 minutes, 40 seconds
+humanizeDuration(1000000000000, { largest: 2 })  // 31 years, 8 month
+
 humanizeDuration(3600000, { units: ["h"] })       // "1 hour"
 humanizeDuration(3600000, { units: ["m"] })       // "60 minutes"
 humanizeDuration(3600000, { units: ["d", "h"] })  // "1 hour"
@@ -60,6 +63,16 @@ humanizeDuration(1600, { round: true })  // "2 seconds"
 
 humanizeDuration(1200)                          // "1.2 seconds"
 humanizeDuration(1200, { decimal: ' point ' })  // "1 point 2 seconds"
+
+humanizeDuration(400)    // 0.4 seconds
+humanizeDuration(400, {  // 1 year, 1 month, 5 days
+  unitMeasures: {
+    y: 365,
+    mo: 30,
+    w: 7,
+    d: 1
+  }
+})
 
 humanizeDuration(3600000, {
   language: "es",
@@ -121,26 +134,29 @@ Supported languages
 
 Humanize Duration supports the following languages:
 
-* Arabic (ar)
-* Catalan (ca)
-* Chinese, simplified (zh_CN)
-* Chinese, traditional (zh_TW)
-* Danish (da)
-* Dutch (nl)
-* English (en)
-* French (fr)
-* German (de)
-* Hungarian (hu)
-* Italian (it)
-* Japanese (ja)
-* Korean (ko)
-* Norwegian (no)
-* Polish (pl)
-* Portuguese (pt)
-* Russian (ru)
-* Spanish (es)
-* Swedish (sv)
-* Turkish (tr)
+| Language             | Code |
+|----------------------|------|
+| Arabic               | `ar` |
+| Catalan              | `ca` |
+| Chinese, simplified  | `zh_CN` |
+| Chinese, traditional | `zh_TW` |
+| Danish               | `da` |
+| Dutch                | `nl` |
+| English              | `en` |
+| French               | `fr` |
+| German               | `de` |
+| Hungarian            | `hu` |
+| Italian              | `it` |
+| Japanese             | `ja` |
+| Korean               | `ko` |
+| Norwegian            | `no` |
+| Polish               | `pl` |
+| Portuguese           | `pt` |
+| Russian              | `ru` |
+| Spanish              | `es` |
+| Swedish              | `sv` |
+| Turkish              | `tr` |
+| Ukrainian            | `uk` |
 
 For a list of supported languages, you can use the `getSupportedLanguages` function.
 
@@ -164,5 +180,7 @@ Lovingly made by [Evan Hahn](http://evanhahn.com/) with help from:
 * [Tommy Brunn](https://github.com/Nevon) for Swedish support
 * [Giovanni Pellerano](https://github.com/evilaliv3) for Italian support
 * [Rahma Sghaier](https://twitter.com/sghaierrahma) for Arabic support
+* [Evgenios Kastanias](https://github.com/evgenios) for Greek support
+* [Oleksii Mylotskyi](https://github.com/spalax) for Ukrainian support
 
 Licensed under the WTFPL, so you can do whatever you want. Enjoy!
