@@ -30,6 +30,7 @@ de:
       account: "Account"
       accounts: Accounts
       sign_up: "Registrieren"
+      contacts: "Kontaktanfragen"
     footer:
       impressum: Impressum
       privacy: Datenschutz
@@ -105,6 +106,7 @@ de:
         account:
           index: Accounts
           new: "Neuer Account"
+          edit: "Account bearbeiten"
         user:
           index: "Benutzer"
           new: "Neuer Benutzer"
