@@ -7,6 +7,6 @@ class InvoiceMailerWorker
 
     return if invoice.blank?
 
-    InvoiceMailer.customer_mail(invoice).deliver_now
+    InvoiceMailer.customer(invoice).deliver_now
   end
 end

@@ -1,0 +1,8 @@
+= form_for [:backend, account] do |form|
+  .row
+    .col-xs-12.col-md-6.form-group class=form_error?(account, :name)
+      = form.text_field :name, placeholder: I18n.t(:"helpers.placeholder.account.name"), class: 'form-control'
+      small
+        = form_errors account, :name
+
+  = render "shared/forms/submit", path: backend_accounts_path

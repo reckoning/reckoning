@@ -4,12 +4,12 @@ class InvoiceMailer < ActionMailer::Base
 
   attr_accessor :invoice
 
-  def customer_mail(invoice)
+  def customer(invoice)
     self.invoice = invoice
     send_mail invoice.customer.invoice_email
   end
 
-  def test_mail(invoice, test_mail)
+  def test(invoice, test_mail)
     self.invoice = invoice
     send_mail test_mail
   end
@@ -33,8 +33,8 @@ class InvoiceMailer < ActionMailer::Base
     mail(
       from: from,
       to: to,
-      subject: I18n.t(:"mailer.invoice.customer_mail.subject", name: "#{invoice.account.name}: ", date: date),
-      template_name: 'customer_mail'
+      subject: I18n.t(:"mailer.invoice.customer.subject", name: "#{invoice.account.name}: ", date: date),
+      template_name: 'customer'
     )
   end
 

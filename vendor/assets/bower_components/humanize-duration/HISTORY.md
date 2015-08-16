@@ -1,4 +1,21 @@
-3.3.0 / 2015-05-29
+3.2.1 / 2015-07-22
+==================
+
+* fix: document `largest` option
+
+3.2.0 / 2015-07-15
+==================
+
+* new: Ukrainian support
+
+* fix: things would break in global strict mode
+
+3.1.0 / 2015-06-25
+==================
+
+* new: Greek support
+
+3.0.0 / 2015-05-29
 ==================
 
 * new: `largest` option to get largest units

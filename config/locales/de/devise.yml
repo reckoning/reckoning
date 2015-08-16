@@ -76,6 +76,7 @@ de:
           welcome: 'Willkomen'
           confirm_text: 'Sie können Ihren Account freischalten, indem Sie auf den folgenden Link klicken:'
           confirm_link: 'Meinen Account freischalten'
+          created_via_admin_text: 'Ihr Passwort wurde aus Sicherheitsgründen automatisch erstellt. Damit Sie sich anmelden können, nutzen Sie bitte die "Passwort vergessen" Funktion.'
       reset_password_instructions:
         subject: 'Anleitung um Ihr Passwort zurückzusetzen'
         content:

@@ -7,17 +7,24 @@ module Backend
     # get: /backend/accounts
     def index
       @accounts = Account.all
-                  .order("#{sort_column} #{sort_direction}")
+                  .order(created_at: :desc)
                   .page(params.fetch(:page) { nil })
                   .per(20)
     end
 
     # get: /backend/accounts/new
     def new
+      @account = Account.new
+      account.users.build
     end
 
     # post: /backend/accounts
     def create
+      generated_password = Devise.friendly_token.first(16)
+      user = account.users.first
+      user.created_via_admin = true
+      user.password = generated_password
+      user.password_confirmation = generated_password
       if account.save
         redirect_to backend_accounts_path, notice: resource_message(:account, :create, :success)
       else
@@ -46,25 +53,18 @@ module Backend
       end
     end
 
-    def sort_column
-      (Account.column_names).include?(params[:sort]) ? params[:sort] : "id"
-    end
-    helper_method :sort_column
-
-    private
-
-    def account_params
-      params.require(:account).permit(:name)
+    private def account_params
+      params.require(:account).permit(:name, users_attributes: [:email])
     end
 
-    def account
+    private def account
       @account ||= Account.where(id: params.fetch(:id, nil)).first
-      @account ||= Account.new
+      @account ||= Account.new(account_params)
     end
     helper_method :account
 
-    def set_active_nav
-      @active_nav = 'backend_accounts'
+    private def set_active_nav
+      @active_nav = "backend_accounts"
     end
   end
 end

@@ -14,7 +14,7 @@
 #= require i18n-helper
 #= require moment/moment
 #= require moment-init
-#= require twix/bin/twix
+#= require twix/dist/twix
 #= require accounting/accounting
 #= require accounting-init
 #= require nprogress

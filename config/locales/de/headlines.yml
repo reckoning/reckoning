@@ -48,6 +48,9 @@ de:
         index: Anfragen
       setting:
         edit: 'Einstellung bearbeiten'
+      account:
+        index: "Accounts"
+        new: "Neuen Account anlegen"
 
     timer:
       import: "Zeiten importieren"
