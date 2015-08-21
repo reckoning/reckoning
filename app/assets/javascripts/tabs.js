@@ -1,6 +1,8 @@
 $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function(e) {
   if ($('form').length) {
     $('form input[name=hash]').val(e.target.hash);
+    var formAction = $('form').attr('action').split("#")[0];
+    $('form').attr('action', formAction + e.target.hash);
   }
 });
 
