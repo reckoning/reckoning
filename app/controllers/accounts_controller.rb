@@ -31,7 +31,8 @@ class AccountsController < ApplicationController
     if account.update(account_params)
       redirect_to "#{edit_account_path}#{hash}", flash: { success: resource_message(:account, :update, :success) }
     else
-      render "edit", alert: resource_message(:account, :update, :failure)
+      flash.now[:alert] = resource_message(:account, :update, :failure)
+      render "edit"
     end
   end
 
