@@ -8,7 +8,7 @@
       .col-xs-12.col-md-9
         %h1
           = I18n.t(:"headlines.invoice.show", invoice_ref: invoice.ref_number)
-          - if invoice.charged? && invoice.payment_due_date < Time.now
+          - if invoice.charged? && invoice.payment_due_date < Time.zone.now
             %small
               %span.label.label-danger.due-label
                 = I18n.t(:"labels.invoice.due", date: time_ago_in_words(invoice.payment_due_date))

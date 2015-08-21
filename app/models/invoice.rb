@@ -13,7 +13,7 @@ class Invoice < ActiveRecord::Base
   accepts_nested_attributes_for :positions, allow_destroy: true
 
   before_validation :set_customer
-  before_save :set_rate, :set_value
+  before_save :set_rate, :set_value, :set_payment_due_date
   before_create :set_ref
 
   include ::SimpleStates
