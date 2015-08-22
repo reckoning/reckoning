@@ -47,6 +47,10 @@
         color: lighten($text-color, 30%);
       }
 
+      &:focus {
+        background-color: transparent;
+      }
+
       &:hover {
         background-color: transparent;
 
