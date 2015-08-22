@@ -16,8 +16,8 @@ de:
     add_invoice: "Neue Rechnung"
     show: "Anzeigen"
     regenerate: "Neu generieren"
-    charge: "In Rechnung stellen"
-    pay: "Rechnung als bezahlt markieren"
+    charge: "Fakturieren"
+    pay: "Rechnung bezahlt"
     archive: Archivieren
     unarchive: Reaktivieren
     sign_in: "Anmelden"

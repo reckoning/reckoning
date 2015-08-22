@@ -116,7 +116,7 @@ de:
     invoice_state:
       all: "Alle Rechnungen"
       created: "Neue Rechnungen"
-      charged: "In Rechnung gestellt"
+      charged: "Fakturiert"
       paid: "Bezahlte Rechnungen"
 
   user:
