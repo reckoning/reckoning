@@ -23,6 +23,7 @@ class InvoiceMailer < ActionMailer::Base
     @body = invoice.customer.email_template
     @body = @body.gsub("{date}", date || '')
     @body = @body.gsub("{company}", invoice.customer.name || '')
+    @body = @body.gsub("{project}", invoice.project.name || '')
     @body = @body.gsub("{month}", month || '')
 
     @signature = invoice.account.signature
