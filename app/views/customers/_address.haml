@@ -23,7 +23,7 @@
       = form_errors resource, :fax
 .row
   .col-xs-12.col-md-6
-    .form-group{class: form_error?(resource, :public_email)}
+    .form-group{class: form_error?(resource, :email)}
       = form.text_field :email, placeholder: I18n.t(:"helpers.placeholder.email"), class: 'form-control'
       = form_errors resource, :email
   .col-xs-12.col-md-6
