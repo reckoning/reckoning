@@ -14,7 +14,19 @@
                 = I18n.t(:"labels.invoice.due", date: time_ago_in_words(invoice.payment_due_date))
 
       .col-xs-12.col-md-3
-        .btn-group-responsive.pull-right.resource-nav
+        .btn-group.btn-group-responsive.pull-right.resource-nav
+          - if can? :charge, invoice
+            - charge_confirm = I18n.t(:"messages.confirm.charge")
+            - if invoice.send_via_mail?
+              - charge_confirm = I18n.t(:"messages.confirm.charge_mail")
+            %a.btn.btn-primary{href: charge_invoice_path(invoice), data: { method: "PUT", notyConfirm: charge_confirm } }
+              %i.fa.fa-envelope
+              = I18n.t(:"actions.charge")
+
+          - if can? :pay, invoice
+            = link_to pay_invoice_path(invoice), method: :put, class: "btn btn-primary" do
+              %i.fa.fa-check-square-o
+              = I18n.t(:"actions.pay")
           = link_to I18n.t(:"nav.subnav.back"), back_path(invoices_path), class: "btn btn-default"
 
     .row
