@@ -125,10 +125,10 @@ de:
       all: "Aktive Projekte"
       archived: "Archivierte Projekte"
     invoice_state:
-      all: "Alle Rechnungen"
-      created: "Neue Rechnungen"
-      charged: "Fakturiert"
-      paid: "Bezahlte Rechnungen"
+      all: "Alle"
+      created: "Entwürfe"
+      charged: "Offen"
+      paid: "Bezahlt"
 
   user:
     current_sign_in_at:
