@@ -4,8 +4,8 @@ de:
       invoice:
         project_id: "Projekt"
         states:
-          created: "Erstellt"
-          charged: "Wartet auf Bezahlung"
+          created: "Entwurf"
+          charged: "Offen"
           cancelled: "Storniert"
           paid: "Bezahlt"
           archived: "Archiviert"

@@ -91,5 +91,5 @@ de:
         delete_timer: "Sind Sie sich sicher, dass Sie diesen Eintrag löschen wollen?"
         delete_task: "Sind Sie sich sicher, dass Sie alle Einträge für diese Aufgabe in der aktuellen Woche löschen wollen?"
       delete: "Sind Sie sich sicher, dass Sie den Eintrag löschen wollen?"
-      charge: "Sind Sie sich sicher, dass Sie die Rechnung absenden wollen?<br>Die Rechnung und die damit verbundenen Zeiten können dann nicht mehr verändert werden."
-      charge_mail: "Sind Sie sich sicher, dass Sie die Rechnung absenden wollen?<br>Die Rechnung und die damit verbundenen Zeiten können dann nicht mehr verändert werden.<br><br>Die Rechnung und der Stundenzettel werden per E-Mail an den Kunden geschickt."
+      charge: "Sind Sie sich sicher, dass Sie die Rechnung fakturieren wollen?<br>Die Rechnung und die damit verbundenen Zeiten können dann nicht mehr verändert werden."
+      charge_mail: "Sind Sie sich sicher, dass Sie die Rechnung fakturieren wollen?<br>Die Rechnung und die damit verbundenen Zeiten können dann nicht mehr verändert werden.<br><br>Die Rechnung und der Stundenzettel werden per E-Mail an den Kunden geschickt."
