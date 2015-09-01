@@ -172,7 +172,7 @@ class Invoice < ActiveRecord::Base
       },
       margin: {
         top: 30,
-        bottom: 40,
+        bottom: 42,
         left: 18,
         right: 18
       }
