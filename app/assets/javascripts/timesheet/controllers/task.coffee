@@ -34,7 +34,7 @@ angular.module 'Timesheet'
     $scope.getTasks()
 
     $scope.save = (timer) ->
-      if timer.sumForTask && timer.sumForTask isnt 0
+      if timer.sum_for_task && timer.sum_for_task isnt 0
         timer.value = @calculateTimerValue(timer)
         if timer.uuid
           Timer.update(timer)
@@ -53,7 +53,7 @@ angular.module 'Timesheet'
           num
         else
           num - parseFloat(timerForDate.value)
-      , timer.sumForTask
+      , timer.sum_for_task
 
     $scope.sumForWeek = ->
       sum = 0
