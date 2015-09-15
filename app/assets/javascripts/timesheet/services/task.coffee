@@ -33,6 +33,6 @@ angular.module 'Timesheet'
           task_uuid: taskUuid
           date: date.date
           value: null
-          sumForTask: null
+          sum_for_task: null
     timers
 ]
