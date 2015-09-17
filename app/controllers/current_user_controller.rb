@@ -1,6 +1,10 @@
 class CurrentUserController < ApplicationController
   def otp
     authorize! :update, current_user
+    return if current_user.reload.otp_required_for_login?
+
+    current_user.otp_secret = User.generate_otp_secret
+    current_user.save
   end
 
   def otp_qrcode
@@ -24,7 +28,7 @@ class CurrentUserController < ApplicationController
 
   def enable_otp
     authorize! :update, current_user
-    if current_user.valid_otp?(otp_attempt)
+    if current_user.validate_and_consume_otp!(otp_attempt)
       current_user.otp_required_for_login = true
       @codes = current_user.generate_otp_backup_codes!
       current_user.save!
@@ -38,7 +42,7 @@ class CurrentUserController < ApplicationController
 
   def disable_otp
     authorize! :update, current_user
-    if current_user.valid_otp?(otp_attempt)
+    if current_user.validate_and_consume_otp!(otp_attempt)
       current_user.otp_secret = User.generate_otp_secret
       current_user.otp_required_for_login = false
       current_user.save!
