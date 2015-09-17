@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   end
 
   before_action :authenticate_user!, :set_default_nav
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
   private
 
@@ -62,4 +63,8 @@ class ApplicationController < ActionController::Base
     !current_user.admin? && Rails.application.secrets[:base]["demo"] && current_account.invoices.count >= 2
   end
   helper_method :invoice_limit_reached?
+
+  protected def configure_permitted_parameters
+    devise_parameter_sanitizer.for(:sign_in) << :otp_attempt
+  end
 end
