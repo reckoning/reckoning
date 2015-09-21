@@ -1,10 +1,8 @@
 module Api
   module V1
     class TimersController < Api::BaseController
-      around_action :authenticate_user_from_token!
-      respond_to :json
-
       def index
+        debugger
         authorize! :index, Timer
         scope = current_user.timers
         scope = scope.where(date: date) if date

@@ -2,7 +2,6 @@ module Api
   module V1
     class SessionController < Api::BaseController
       around_action :authenticate_user_from_token!, except: [:create]
-      respond_to :json
 
       def create
         authorize! :index, Task

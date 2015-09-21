@@ -1,9 +1,6 @@
 module Api
   module V1
-    class TasksController < Api::BaseController
-      around_action :authenticate_user_from_token!
-      respond_to :json
-
+    class TasksController < ::Api::BaseController
       def index
         authorize! :index, Task
         scope = current_account.tasks
