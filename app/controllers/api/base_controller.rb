@@ -2,6 +2,7 @@ module Api
   class BaseController < ActionController::Base
     include ActionController::HttpAuthentication::Token
     around_action :authenticate_user_from_token!
+    respond_to :json
 
     check_authorization
 

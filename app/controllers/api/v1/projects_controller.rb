@@ -1,8 +1,6 @@
 module Api
   module V1
     class ProjectsController < Api::BaseController
-      respond_to :json
-
       def index
         authorize! :index, Project
 

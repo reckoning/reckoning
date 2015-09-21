@@ -1,8 +1,6 @@
 module Api
   module V1
     class CustomersController < Api::BaseController
-      respond_to :json
-
       def index
         authorize! :index, Customer
         render json: current_account.customers, each_serializer: CustomerSerializer, status: :ok
