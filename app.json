@@ -3,5 +3,86 @@
   "description": "A Basic Reckoning Setup",
   "repository": "https://github.com/reckoning/app",
   "logo": "https://reckoning.io/assets/logo.png",
-  "keywords": ["ruby", "rails", "invoicing"]
+  "keywords": ["ruby", "rails", "invoicing"],
+  "scripts": {
+    "postdeploy": "rake db:migrate"
+  },
+  "env": {
+    "APP_URL": {
+      "required": true
+    },
+    "DATABASE_URL": {
+      "required": true
+    },
+    "DEVISE_OTP_SECRET": {
+      "required": true
+    },
+    "DEVISE_SECRET": {
+      "required": true
+    },
+    "DOMAIN": {
+      "required": true
+    },
+    "DROPBOX_KEY": {
+      "required": true
+    },
+    "DROPBOX_SECRET": {
+      "required": true
+    },
+    "ERROR_PAGE_URL": {
+      "required": true
+    },
+    "LANG": {
+      "required": true
+    },
+    "MAINTENANCE_PAGE_URL": {
+      "required": true
+    },
+    "RACK_ENV": {
+      "required": true
+    },
+    "RAILS_ENV": {
+      "required": true
+    },
+    "RAILS_SERVE_STATIC_FILES": {
+      "required": true
+    },
+    "REDIS_URL": {
+      "required": true
+    },
+    "SECRET_KEY_BASE": {
+      "required": true
+    },
+    "SETTING_DEMO": {
+      "required": true
+    },
+    "SETTING_REGISTRATION": {
+      "required": true
+    },
+    "SMTP_HOST": {
+      "required": true
+    },
+    "SMTP_PASSWORD": {
+      "required": true
+    },
+    "SMTP_PORT": {
+      "required": true
+    },
+    "SMTP_USER": {
+      "required": true
+    },
+    "STRIPE_PUBLIC": {
+      "required": true
+    },
+    "STRIPE_SECRET": {
+      "required": true
+    },
+    "WTI_KEY": {
+      "required": true
+    }
+  },
+  "addons": [
+    "heroku-postgresql",
+    "heroku-redis"
+  ]
 }
