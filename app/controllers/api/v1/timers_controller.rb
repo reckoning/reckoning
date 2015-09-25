@@ -2,7 +2,6 @@ module Api
   module V1
     class TimersController < Api::BaseController
       def index
-        debugger
         authorize! :index, Timer
         scope = current_user.timers
         scope = scope.where(date: date) if date
