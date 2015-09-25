@@ -36,6 +36,13 @@ module Reckoning
                       max_age: 0
       end
     end
+
+    if ENV['HTTP_USER'].present? && ENV['HTTP_PASSWORD'].present?
+      # Basic authentication for Heroku Stage
+      config.middleware.use '::Rack::Auth::Basic' do |user, password|
+        [user, password] == [ENV['HTTP_USER'], ENV['HTTP_PASSWORD']]
+      end
+    end
   end
 end
 

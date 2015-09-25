@@ -5,7 +5,7 @@
   "logo": "https://reckoning.io/assets/logo.png",
   "keywords": ["ruby", "rails", "invoicing"],
   "scripts": {
-    "postdeploy": "rake db:migrate"
+    "postdeploy": "rake db:setup"
   },
   "env": {
     "APP_URL": {
