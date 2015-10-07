@@ -1,10 +1,9 @@
 - content_for :title do
   = I18n.t(:"meta.title.sign_in")
-
 = form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "form-signin" }) do |f|
-  %h1.form-signin-heading
-    %a{href: root_path}= I18n.t(:"title.default")
-    %small.show=current_account.name if current_account.present?
+  h1.form-signin-heading
+    a href=root_path = I18n.t(:"title.default")
+    small.show = current_account.name if current_account.present?
 
   .form-group
     = f.email_field :email, autofocus: true, placeholder: I18n.t(:"helpers.placeholder.user.email"), class: 'form-control'
@@ -14,25 +13,25 @@
 
   .form-group
     .text-center
-      %a{href: '#', onclick: "App.SignIn.showOtpField($(this)); return false;"}=I18n.t(:otp_enabled, scope: 'devise.otp')
+      a href='#' onclick="App.SignIn.showOtpField($(this)); return false;" = I18n.t(:otp_enabled, scope: 'devise.otp')
     = f.text_field :otp_attempt, autocomplete: :off, autofocus: true, value: '', placeholder: I18n.t(:otp_token, scope: 'devise.otp'), class: 'form-control', style: "display: none;"
 
   - if devise_mapping.rememberable?
     .checkbox
       = f.check_box :remember_me
-      %label{for: "user_remember_me"}
+      label for="user_remember_me"
         = I18n.t(:"helpers.label.user.remember_me")
 
-  %button.btn.btn-lg.btn-primary.btn-loading.btn-block{data: {loading: {text: I18n.t(:"actions.loading")}}}
+  button.btn.btn-lg.btn-primary.btn-loading.btn-block data-loading-text=I18n.t(:"actions.loading")
     = I18n.t(:"actions.sign_in")
   .clearfix
 
   .text-center
-    %a.btn.btn-link{href: new_password_path(resource_name)}
+    a.btn.btn-link href=new_password_path(resource_name)
       = I18n.t(:"actions.reset_password")
 
   - if registration_enabled?
-    %hr
-    %p.text-center=I18n.t(:"info.sign_up")
-    %a.btn.btn-default.btn-block{href: new_registration_path}
+    hr
+    p.text-center = I18n.t(:"info.sign_up")
+    a.btn.btn-default.btn-block href=new_registration_path
       = I18n.t(:"actions.sign_up")
