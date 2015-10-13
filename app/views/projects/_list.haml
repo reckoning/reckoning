@@ -1,4 +1,4 @@
-- customers.each do |customer|
+- @projects_by_customer.each do |customer, projects|
   .panel.panel-list{class: "panel-default"}
     .panel-heading
       .panel-title
@@ -18,9 +18,4 @@
               %a.btn.btn-default{href: new_project_path(customer_uuid: customer), title: I18n.t(:"nav.subnav.new_project_for_customer", customer: customer.name), data: {toggle: 'tooltip'}}
                 %i.fa.fa-plus
     .list-group
-      - scope = customer.projects
-      - if state = params.fetch(:state, nil)
-        - scope = scope.send(state)
-      - else
-        - scope = scope.send(:active)
-      = render partial: "projects/show", collection: scope.order("name asc"), as: :project
+      = render partial: "projects/show", collection: projects.sort_by(&:name), as: :project

@@ -1,0 +1,28 @@
+= form_for account, url: account_path do |form|
+  input name="hash" value="" type="hidden"
+  .row
+    .col-xs-12.col-md-6.form-group
+      .row.form-horizontal
+        .col-xs-8.col-md-8
+          label.pull-right.control-label for="user_tax"
+            = I18n.t(:"activerecord.attributes.user.settings.tax")
+        .col-xs-4.col-md-4
+          .input-group class=form_error?(form.object, :tax)
+            = form.text_field :tax, class: 'form-control'
+            small = form_errors form.object, :tax
+            span.input-group-addon %
+    .col-xs-12.col-md-6.form-group class=form_error?(form.object, :tax_ref)
+      = form.text_field :tax_ref, placeholder: I18n.t(:"helpers.placeholder.user.settings.tax_ref"), class: 'form-control'
+      small = form_errors form.object, :tax_ref
+  .row
+    .col-xs-12.col-md-6.form-group
+      .row.form-horizontal
+        .col-xs-8.col-md-8
+          label.pull-right.control-label for="user_provision"
+            = I18n.t(:"activerecord.attributes.user.settings.provision")
+        .col-xs-4.col-md-4
+          .input-group class=form_error?(form.object, :provision)
+            = form.text_field :provision, class: 'form-control'
+            small = form_errors form.object, :provision
+            span.input-group-addon %
+  = render "shared/forms/submit", path: root_path

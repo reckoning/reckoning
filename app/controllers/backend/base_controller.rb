@@ -1,6 +1,7 @@
 module Backend
   class BaseController < ApplicationController
     before_action :verify_admin
+    layout 'backend'
 
     skip_authorization_check
 
@@ -9,9 +10,7 @@ module Backend
       @settings = Rails.application.secrets
     end
 
-    private
-
-    def verify_admin
+    private def verify_admin
       redirect_to root_url unless current_user.try(:admin?)
     end
   end

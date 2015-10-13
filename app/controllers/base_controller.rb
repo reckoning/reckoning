@@ -25,6 +25,6 @@ class BaseController < ApplicationController
 
   def welcome
     @active_nav = 'welcome'
-    render 'welcome'
+    render 'welcome', layout: 'landing_page'
   end
 end

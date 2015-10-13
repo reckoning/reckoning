@@ -1,0 +1,12 @@
+.row
+  .col-xs-12.col-md-6.form-group
+    - if current_account.dropbox_token.present?
+      a.btn.btn-danger href=deactivate_dropbox_path
+        i.fa.fa-dropbox
+        '
+        = I18n.t(:"actions.dropbox_unlink")
+    - else
+      a.btn.btn-primary href=start_dropbox_path
+        i.fa.fa-dropbox
+        '
+        = I18n.t(:"actions.dropbox_link")

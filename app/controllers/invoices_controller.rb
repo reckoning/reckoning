@@ -17,7 +17,7 @@ class InvoicesController < ApplicationController
     @invoices = @invoices.includes(:customer, :project).references(:customers)
                 .order(sort_column + " " + sort_direction)
                 .page(params.fetch(:page, nil))
-                .per(20)
+                .per(10)
   end
 
   def show
