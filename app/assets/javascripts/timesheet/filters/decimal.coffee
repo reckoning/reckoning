@@ -5,6 +5,6 @@ angular.module 'Timesheet'
     time = parseInt(parts[0], 10) + (parseInt(parts[1], 10) / 60)
     newInput = parseFloat(time)
     if isNaN(newInput)
-      input;
+      "#{input}"
     else
-      newInput
+      "#{newInput}"
