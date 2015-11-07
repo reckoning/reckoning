@@ -50,7 +50,7 @@ module ApplicationHelper
     link_to title, plumb(sort: column, direction: direction, page: nil), class: css_class
   end
 
-  def gravatar_path(size = 20, hash = nil)
+  def gravatar_path(size = 24, hash = nil)
     hash ||= current_user.gravatar_hash
     "//www.gravatar.com/avatar/#{hash}?s=#{size}&d=https%3A%2F%2Fidenticons.github.com%2F#{hash}.png&amp;r=x&amp;s=#{size}"
   end
