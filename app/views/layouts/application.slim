@@ -5,15 +5,9 @@ html lang=I18n.locale
     - if user_signed_in?
       = render "layouts/navigation"
     .container-fluid
-      .row 
-        - if user_signed_in?
-          .col-xs-12.col-md-10.col-md-offset-2
-            == yield
-        - else
-          .col-xs-12
-            == yield
+      == yield
 
-    / = render "layouts/footer"
+    = render "layouts/footer"
     - if Rails.env.production?
       = render "layouts/google_analytics"
       = render "layouts/sentry"

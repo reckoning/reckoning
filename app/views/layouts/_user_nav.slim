@@ -1,10 +1,10 @@
-ul.nav.navbar-nav
+ul.nav.navbar-nav.navbar-right
   li.dropdown.user-menu class=(active_nav?('user') || active_nav?('account'))
     a.dropdown-toggle href='#' data-toggle='dropdown'
       .gravatar
         img src=gravatar_path alt="avatar"
       span.user-email
-        = current_user.email
+        / = current_user.email
       b.caret
     ul.dropdown-menu
       li class=active_nav?('account')
