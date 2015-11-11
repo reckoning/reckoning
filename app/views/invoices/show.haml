@@ -42,10 +42,10 @@
                   %strong
                     = I18n.t(:"labels.panels.title.downloads")
               .list-group
-                = link_to invoice_pdf_path(invoice, invoice.invoice_file), target: "_blank", class: "save-invoice list-group-item" do
+                = link_to pdf_invoice_path(invoice, invoice.invoice_file), target: "_blank", class: "save-invoice list-group-item" do
                   %i.fa.fa-download
                   = I18n.t(:"actions.download_invoice")
-                = link_to timesheet_pdf_path(invoice, invoice.timesheet_file), target: "_blank", class: "save-timesheet list-group-item#{(" hide" if invoice.timers.blank?)}" do
+                = link_to timesheet_pdf_invoice_path(invoice, invoice.timesheet_file), target: "_blank", class: "save-timesheet list-group-item#{(" hide" if invoice.timers.blank?)}" do
                   %i.fa.fa-download
                   = I18n.t(:"actions.download_timesheet")
 
