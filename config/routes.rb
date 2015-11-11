@@ -93,7 +93,7 @@ Reckoning::Application.routes.draw do
     end
   end
 
-  get 'invoices/:id/pdf/:pdf' => 'invoices#pdf', as: :invoice_pdf
+  get 'invoices/:id/pdf/:pdf' => 'invoices#pdf', as: :invoice_pdf, defaults: { format: :pdf }
 
   resource :timesheet, only: [:show] do
     member do
@@ -111,7 +111,7 @@ Reckoning::Application.routes.draw do
     get :datepicker
   end
 
-  get 'timesheets/:id/pdf/:pdf' => 'invoices#timesheet', as: :timesheet_pdf
+  get 'timesheets/:id/pdf/:pdf' => 'invoices#timesheet', as: :timesheet_pdf, defaults: { format: :pdf }
 
   resources :positions, only: [:new, :destroy]
 
