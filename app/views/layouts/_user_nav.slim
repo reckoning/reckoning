@@ -3,8 +3,8 @@ ul.nav.navbar-nav.navbar-right
     a.dropdown-toggle href='#' data-toggle='dropdown'
       .gravatar
         img src=gravatar_path alt="avatar"
-      span.user-email
-        / = current_user.email
+      span.user-email.hidden
+        = current_user.email
       b.caret
     ul.dropdown-menu
       li class=active_nav?('account')
