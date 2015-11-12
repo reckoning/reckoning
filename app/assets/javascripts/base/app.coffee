@@ -13,8 +13,8 @@ angular.module 'Reckoning', [
       NProgress.done()
       response
     responseError: (rejection) ->
-      NProgress.done();
-      $q.reject(rejection);
+      NProgress.done()
+      $q.reject(rejection)
   ]
   spinnerFunction = (data, headersGetter) ->
     NProgress.start()

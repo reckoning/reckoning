@@ -1,7 +1,7 @@
 module ApplicationHelper
   def main_title
     [
-      (current_account.name if current_account.present?),
+      ("#{current_account.name} -" if current_account.present?),
       I18n.t(:"meta.title.default")
     ].compact.join(" ")
   end

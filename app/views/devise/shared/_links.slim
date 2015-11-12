@@ -1,7 +1,7 @@
 .panel.panel-default
   .panel-heading
     .panel-title
-      %strong
+      strong
         = I18n.t(:"panels.title.default")
   .list-group
     - if !%w(sessions).include?(controller_name)

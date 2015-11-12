@@ -2,7 +2,6 @@ de:
   headlines:
     sign_up: "Account erstellen"
     sign_in: "Anmelden"
-    with_account: "bei %{account_name}"
     forgot_password: "Passwort vergessen?"
     change_password: "Passwort ändern"
     unlock: "Account entsperren"
