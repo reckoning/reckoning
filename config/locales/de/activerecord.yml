@@ -11,6 +11,8 @@ de:
           archived: "Archiviert"
       invoice_position:
         description: "Beschreibung"
+      contact:
+        created_at: "vor %{time}"
       user:
         enabled: "Aktiv?"
         admin: "Admin?"

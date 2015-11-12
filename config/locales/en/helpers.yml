@@ -46,8 +46,6 @@ en:
           account_number: ~
           iban: ~
           bic: ~
-        settings:
-          tax_ref: ~
         mailing:
           default_from: ~
           signature: ~

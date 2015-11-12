@@ -1,0 +1,7 @@
+%tr
+  %td
+    = contact.id
+  %td
+    = contact.email
+  %td
+    = I18n.t(:"activerecord.attributes.contact.created_at", time: time_ago_in_words(contact.created_at))

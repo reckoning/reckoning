@@ -9,7 +9,7 @@ class AccountsController < ApplicationController
   def new
     @active_nav = 'registration'
     redirect_to new_user_session_path if current_account.present?
-    @account = Account.new
+    @account = Account.new plan: params[:plan]
     @account.users.build
   end
 
@@ -42,10 +42,28 @@ class AccountsController < ApplicationController
 
   private def account_params
     @account_params ||= params.require(:account).permit(
-      :plan, :tax, :tax_ref, :provision, :bank, :account_number,
-      :bank_code, :bic, :iban, :default_from, :signature,
-      :name, :address, :country, :public_email, :subdomain,
-      :telefon, :fax, :website, users_attributes: [:email, :password, :password_confirmation]
+      :plan,
+      :tax,
+      :vat_id,
+      :provision,
+      :bank,
+      :account_number,
+      :bank_code,
+      :bic,
+      :iban,
+      :default_from,
+      :signature,
+      :name,
+      :address,
+      :country,
+      :public_email,
+      :subdomain,
+      :telefon,
+      :fax,
+      :website,
+      :stripe_email,
+      :stripe_token,
+      users_attributes: [:email, :password, :password_confirmation]
     )
   end
 
@@ -60,7 +78,7 @@ class AccountsController < ApplicationController
   end
 
   private def check_registration_setting
-    return if registration_enabled?
+    return if registration_enabled? || params[:stripe_test].present?
     redirect_to root_path
   end
 end

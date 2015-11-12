@@ -1,6 +1,9 @@
 module NavHelper
-  def active_nav?(nav = "home")
-    return "active" if nav == @active_nav
+  def active_nav?(navs = "home")
+    navs = [navs] unless navs.is_a?(Array)
+    return unless navs.any? { |nav| nav == @active_nav }
+
+    'active'
   end
 
   def hide_nav?(nav = "home")

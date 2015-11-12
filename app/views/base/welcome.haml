@@ -7,7 +7,7 @@
     .col-xs-12.col-md-12
       .page-header
         %h1
-          = I18n.t(:"headlines.welcome")
+          = I18n.t(:"headlines.welcome.base")
           %br
           %small
             = I18n.t(:"sublines.welcome")
@@ -15,8 +15,8 @@
   .row
     %a.anchor#features
     .col-xs-12.col-md-12
-      %h3
-        Aktuelle Features
+      %h2.hide
+        = I18n.t(:"headlines.welcome.screenshots")
       .row
         .col-xs-12.col-md-4
           %a.thumbnail{href: image_path("#{image_prefix}example-1.png")}
@@ -36,6 +36,52 @@
           %h4.text-center
             Datenbank für Kunden & Projekte
 
+  - if registration_enabled?
+    %hr
+
+    .row
+      %a.anchor#features
+      .col-xs-12.col-md-12
+        %h2
+          = I18n.t(:"headlines.welcome.features")
+      .row
+        .col-xs-12.col-md-4
+          :markdown
+            - Rechnungen
+              - Rechnungen für Kunden und einzelne Projekte erfassen.
+              - Rechnungen als PDF erstellen, downloaden und direkt an den Kunden verschicken.
+              - E-Mail Templates für jeden Kunden.
+
+        .col-xs-12.col-md-4
+          :markdown
+            - Zeiterfassung
+              - Zeiten nachträglich in einer Wochenansicht oder für jeden Tag erfassen.
+              - Zeiten direkt beim arbeiten erfassen in dem einfach ein Timer gestartet wird.
+              - Stundenzettel werden automatisch generiert wenn Rechnungspositionen aus Einträgen der Zeiterfassung stammen.
+
+        .col-xs-12.col-md-4
+          :markdown
+            - Projekte & Kunden
+              - Erfassen sie alle ihre Kunden und die einzelnen Projekte.
+              - Legen Sie Budgets für jedes Projekt fest und bekommen sie so Informationen über verbleibene Budgets.
+
+    = render partial: "base/plans" if Plan.base.present?
+
+  %hr
+
+  .row
+    %a.anchor#contact
+    .col-xs-12.col-md-12
+      %h2.hide
+        = I18n.t(:"headlines.welcome.contact")
+      .row
+        .col-xs-12.col-md-6.col-md-offset-3
+          .well
+            - if contact_cookie
+              = render "base/contact_received"
+            - else
+              = render "base/contact_form"
+
   #image-modal.modal.fade
     .modal-dialog
       .modal-content
@@ -45,3 +91,4 @@
           %h4
         .modal-body
           %img{src: "", alt: "example-image"}
+

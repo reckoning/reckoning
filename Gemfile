@@ -6,6 +6,10 @@ gem 'rails', '4.2.4'
 
 gem 'pg'
 
+gem 'stripe', github: 'stripe/stripe-ruby'
+gem 'money'
+gem 'valvat'
+
 gem 'active_model_serializers'
 
 gem 'sidekiq'

@@ -11,9 +11,15 @@ de:
     dashboard: "Dashboard"
     impressum: "Impressum"
     privacy: "Datenschutz"
-    welcome: "Rechnungen schreiben einfach gemacht."
     not_found: "Seite nicht vorhanden"
     server_error: "Server Fehler"
+    welcome:
+      base: "Rechnungen schreiben einfach gemacht."
+      screenshots: "Screenshots"
+      features: "Features"
+      prices: "Preise"
+      contact: Kontakt
+      contact_received: "Vielen Dank für Ihre Anmeldung."
 
     project:
       new: "Neues Projekt"
@@ -37,6 +43,8 @@ de:
         index: "Benutzer"
         edit: 'Benutzer "%{user}" bearbeiten'
         new: 'Neuen Benutzer anlegen'
+      contact:
+        index: Anfragen
       setting:
         edit: 'Einstellung bearbeiten'
       account:
@@ -48,4 +56,5 @@ de:
       import: "Zeiten importieren"
 
   sublines:
+    contact_received: "Sobald es weitere Informationen zu unserem Dienst gibt benachrichtigen wir Sie."
     welcome: "Vereinfache das Erstellen von Rechnungen und konzentriere dich auf die wichtigen Dinge!"

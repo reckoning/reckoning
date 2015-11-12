@@ -6,6 +6,14 @@ GIT
     i18n-js (3.0.0.rc11)
       i18n (~> 0.6)
 
+GIT
+  remote: git://github.com/stripe/stripe-ruby.git
+  revision: ea3a79066965e1d94a6f5821f9acc8b792b13fd9
+  specs:
+    stripe (1.24.0)
+      json (~> 1.8.1)
+      rest-client (~> 1.4)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -46,6 +54,9 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    akami (1.3.1)
+      gyoku (>= 0.4.0)
+      nokogiri
     arel (6.0.3)
     ast (2.1.0)
     astrolabe (1.3.1)
@@ -112,6 +123,7 @@ GEM
       nenv
       rspec-logsplit (>= 0.1.2)
       timers (>= 4.1.1)
+    certifi (2015.08.10)
     chunky_png (1.3.4)
     codeclimate-test-reporter (0.4.8)
       simplecov (>= 0.7.1, < 1.0.0)
@@ -140,6 +152,8 @@ GEM
       railties
       rotp (~> 2)
     docile (1.1.5)
+    domain_name (0.5.24)
+      unf (>= 0.0.5, < 1.0.0)
     dotenv (2.0.2)
     dropbox-sdk (1.6.5)
       json
@@ -161,6 +175,8 @@ GEM
       sass (>= 3.2)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
+    gyoku (1.3.1)
+      builder (>= 2.1.2)
     haml (4.0.7)
       tilt
     haml-rails (0.9.0)
@@ -177,6 +193,10 @@ GEM
       haml (~> 4.0.0)
       nokogiri (~> 1.6.0)
       ruby_parser (~> 3.5)
+    http-cookie (1.0.2)
+      domain_name (~> 0.5)
+    httpi (2.4.0)
+      rack
     i18n (0.7.0)
     intercom-rails (0.2.28)
       activesupport (> 3.0)
@@ -205,12 +225,16 @@ GEM
       railties (~> 4.1)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
+    money (6.5.1)
+      i18n (>= 0.6.4, <= 0.7.0)
     multi_json (1.11.2)
     multipart-post (2.0.0)
     nenv (0.2.0)
+    netrc (0.10.3)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
     non-stupid-digest-assets (1.0.5)
+    nori (2.6.0)
     orm_adapter (0.5.0)
     parser (2.2.2.6)
       ast (>= 1.1, < 3.0)
@@ -264,6 +288,10 @@ GEM
       redis (~> 3.0, >= 3.0.4)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
+    rest-client (1.8.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 3.0)
+      netrc (~> 0.7)
     roo (2.1.1)
       nokogiri (~> 1)
       rubyzip (~> 1.1, < 2.0.0)
@@ -290,8 +318,17 @@ GEM
       sass (~> 3.1)
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
-      tilt (>= 1.1, < 3)
+      tilt (~> 1.1)
+    savon (2.11.1)
+      akami (~> 1.2)
+      builder (>= 2.1.2)
+      gyoku (~> 1.2)
+      httpi (~> 2.3)
+      nokogiri (>= 1.4.0)
+      nori (~> 2.4)
+      wasabi (~> 3.4)
     sentry-raven (0.15.1)
+      certifi
       faraday (>= 0.7.6)
     sexp_processor (4.6.0)
     sidekiq (3.5.0)
@@ -343,11 +380,19 @@ GEM
     uglifier (2.7.2)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.1)
     uniform_notifier (1.9.0)
     url_plumber (0.1.2)
       activesupport (>= 3.0.0)
+    valvat (0.6.10)
+      savon (>= 2.3.0)
     warden (1.2.3)
       rack (>= 1.0)
+    wasabi (3.5.0)
+      httpi (~> 2.0)
+      nokogiri (>= 1.4.2)
     web-console (2.2.1)
       activemodel (>= 4.0)
       binding_of_caller (>= 0.7.2)
@@ -394,6 +439,7 @@ DEPENDENCIES
   mini_magick
   minitest-rails
   mocha
+  money
   non-stupid-digest-assets
   pg
   puma
@@ -414,11 +460,13 @@ DEPENDENCIES
   sinatra (>= 1.3.0)
   slim-rails
   spring
+  stripe!
   thor
   timecop
   typhoeus
   uglifier
   url_plumber
+  valvat
   web-console (~> 2.0)
   web_translate_it
   wicked_pdf

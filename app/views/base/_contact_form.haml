@@ -1,0 +1,12 @@
+- content_for :js_includes do
+  = javascript_include_tag "https://www.google.com/recaptcha/api.js"
+%h3= I18n.t(:"labels.welcome.contact_form")
+= form_for contact do |form|
+  .form-group
+    .g-recaptcha(data-sitekey="6LfePAkTAAAAAMePy9VRE5CZQZM0UoK9uqOFhRI-")
+  .form-group
+    .input-group
+      = form.email_field :email, placeholder: I18n.t(:"helpers.placeholder.user.email"), required: true, class: "form-control"
+      %span.input-group-btn
+        %button.btn.btn-primary
+          = I18n.t(:"actions.send")
