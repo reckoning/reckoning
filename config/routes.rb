@@ -90,10 +90,10 @@ Reckoning::Application.routes.draw do
       put :archive
       put :send_mail
       post :send_test_mail
+      get "/pdf/:pdf" => 'invoices#pdf', as: :pdf, defaults: { format: :pdf }
+      get '/timesheet-pdf/:pdf' => 'invoices#timesheet', as: :timesheet_pdf, defaults: { format: :pdf }
     end
   end
-
-  get 'invoices/:id/pdf/:pdf' => 'invoices#pdf', as: :invoice_pdf
 
   resource :timesheet, only: [:show] do
     member do
@@ -110,8 +110,6 @@ Reckoning::Application.routes.draw do
     get :blank
     get :datepicker
   end
-
-  get 'timesheets/:id/pdf/:pdf' => 'invoices#timesheet', as: :timesheet_pdf
 
   resources :positions, only: [:new, :destroy]
 

@@ -1,0 +1,13 @@
+doctype html
+html lang=I18n.locale
+  head = render "layouts/head"
+  body data-success=flash[:success] data-info=notice data-error=alert
+    - if user_signed_in?
+      = render "layouts/navigation"
+    .container-fluid
+      == yield
+
+    = render "layouts/footer"
+    - if Rails.env.production?
+      = render "layouts/google_analytics"
+      = render "layouts/sentry"

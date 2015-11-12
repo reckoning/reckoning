@@ -1,7 +1,5 @@
-- unless defined?(path)
-  - path = ""
-- unless defined?(active)
-  - active = "basic"
+- path ||= ""
+- active ||= "basic"
 %ul.nav.nav-vertical-tabs
   %li{class: (active == "basic" ? "active" : "")}
     %a{href: "#{path}#basic", data: {toggle: ("tab" if path.blank?)}}
@@ -24,6 +22,6 @@
       = I18n.t("nav.subnav.account.mailing")
       %i.fa.fa-send.fa-fw
   %li{class: (active == "dropbox" ? "active" : "")}
-    %a{href: dropbox_path}
+    %a{href: "#{path}#dropbox", data: {toggle: ("tab" if path.blank?)}}
       = I18n.t("nav.subnav.account.dropbox")
       %i.fa.fa-dropbox.fa-fw

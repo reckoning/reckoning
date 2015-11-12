@@ -1,0 +1,42 @@
+- content_for :title do
+  = I18n.t(:"meta.title.account.edit")
+.row
+  .col-xs-12.col-md-12
+    .row
+      .col-xs-12.col-md-8
+        h1 = I18n.t(:"headlines.account")
+    .row
+      .col-xs-12.col-lg-10.col-md-9.col-sm-9
+        .tab-content
+          .tab-pane.active#basic
+            fieldset
+              legend
+                = I18n.t(:"labels.account.settings.basic")
+              = render "accounts/basic"
+          .tab-pane#address
+            fieldset
+              legend
+                = I18n.t(:"labels.account.settings.address")
+              = render "accounts/address"
+          .tab-pane#banking
+            fieldset
+              legend
+                = I18n.t(:"labels.account.settings.banking")
+              = render "accounts/banking"
+          .tab-pane#taxes
+            fieldset
+              legend
+                = I18n.t(:"labels.account.settings.taxes")
+              = render "accounts/taxes"
+          .tab-pane#mailing
+            fieldset
+              legend
+                = I18n.t(:"labels.account.settings.mailing")
+              = render "accounts/mailing"
+          .tab-pane#dropbox
+            fieldset
+              legend
+                = I18n.t(:"labels.account.settings.dropbox")
+              = render "accounts/dropbox"
+      .col-xs-12.col-lg-2.col-md-3.col-sm-3
+        = render "accounts/nav"

@@ -19,12 +19,6 @@
           a.btn.btn-default href="#/week/{{weekDate()}}"
             = I18n.t(:"labels.timesheet.week")
   .row ng-controller="TimerController as timerCtrl"
-    .col-xs-12.col-md-2
-      .btn-group-responsive.resource-nav
-        button.btn.btn-primary.btn-lg ng-click="openModal()"
-          i.fa.fa-plus
-          '
-          = I18n.t(:"actions.add_timer")
     .col-xs-12.col-md-10
       .animate ng-cloak=true ng-if="timersLoaded && !timers.length"
         .row
@@ -54,3 +48,10 @@
             '
             button.btn.btn-link.btn-lg.default ng-if="!timer.position_uuid" ng-click="openModal(timer)"
               i.fa.fa-edit
+              
+    .col-xs-12.col-md-2
+      .btn-group-responsive.resource-nav
+        button.btn.btn-primary.btn-lg ng-click="openModal()"
+          i.fa.fa-plus
+          '
+          = I18n.t(:"actions.add_timer")
