@@ -4,6 +4,7 @@ january:
   customer_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a76"
   account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
   date: <%= Date.parse("2014-01-30") %>
+  workflow_state: :created
   ref: "00001"
 
 february:
@@ -12,4 +13,5 @@ february:
   customer_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a76"
   account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a74"
   date: <%= Date.parse("2014-02-28") %>
+  workflow_state: :created
   ref: "00002"

@@ -16,24 +16,37 @@ class Invoice < ActiveRecord::Base
   before_save :set_rate, :set_value, :set_payment_due_date
   before_create :set_ref
 
-  include ::SimpleStates
+  include Workflow
+  workflow do
+    state :created do
+      event :charge, transitions_to: :charged
+    end
+    state :charged do
+      event :pay, transitions_to: :paid
+    end
+    state :paid
+  end
 
-  # created -> charged -> paid
-  states :created, :charged, :paid
+  def on_charged_entry(_new_state, _event, *_args)
+    return unless self.send_via_mail?
+    InvoiceMailerWorker.perform_in 1.minute, id
+  end
 
-  event :charge, from: :created, to: :charged, after: :send_via_mail
-  event :pay, from: :charged, to: :paid, after: :set_pay_date
+  def on_paid_entry(_new_state, _event, *_args)
+    self.pay_date = Time.zone.today
+    save
+  end
 
   def self.paid_or_charged
-    where(state: [:charged, :paid])
+    where(workflow_state: [:charged, :paid])
   end
 
   def self.paid
-    where(state: :paid)
+    with_paid_state
   end
 
   def self.charged
-    where(state: :charged)
+    with_charged_state
   end
 
   def self.due
@@ -41,21 +54,11 @@ class Invoice < ActiveRecord::Base
   end
 
   def self.created
-    where state: :created
+    with_created_state
   end
 
   def self.year(year)
     where("date <= ? AND date >= ?", "#{year}-12-31", "#{year}-01-01")
-  end
-
-  def set_pay_date
-    self.pay_date = Time.zone.today
-    save
-  end
-
-  def send_via_mail
-    return unless self.send_via_mail?
-    InvoiceMailerWorker.perform_in 1.minute, id
   end
 
   def ref_number
@@ -97,26 +100,6 @@ class Invoice < ActiveRecord::Base
 
   def send_via_mail?
     customer.email_template.present? && customer.invoice_email.present?
-  end
-
-  private def set_customer
-    project = Project.find_by(id: project_id)
-    customer = Customer.find_by(id: project.customer_id) unless project.blank?
-    return if customer.blank?
-    self.customer_id = customer.id
-  end
-
-  private def set_rate
-    self.rate = project.rate
-  end
-
-  private def set_ref
-    last_invoice = Invoice.where(account_id: account_id).order("ref DESC").first
-    if last_invoice.present?
-      self.ref = last_invoice.ref + 1
-    else
-      self.ref = 1
-    end
   end
 
   def invoice_file
@@ -177,5 +160,25 @@ class Invoice < ActiveRecord::Base
         right: 18
       }
     }
+  end
+
+  private def set_customer
+    project = Project.find_by(id: project_id)
+    customer = Customer.find_by(id: project.customer_id) unless project.blank?
+    return if customer.blank?
+    self.customer_id = customer.id
+  end
+
+  private def set_rate
+    self.rate = project.rate
+  end
+
+  private def set_ref
+    last_invoice = Invoice.where(account_id: account_id).order("ref DESC").first
+    if last_invoice.present?
+      self.ref = last_invoice.ref + 1
+    else
+      self.ref = 1
+    end
   end
 end

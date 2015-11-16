@@ -14,7 +14,7 @@ module ApplicationHelper
   end
 
   def invoice_label(invoice)
-    case invoice.state
+    case invoice.current_state
     when "created"
       "default"
     when "paid"

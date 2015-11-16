@@ -33,7 +33,7 @@ gem 'kaminari'
 
 gem 'dynamic_fields_for_rails'
 
-gem 'simple_states'
+gem 'workflow'
 
 gem 'sass-rails'
 gem 'coffee-rails'
