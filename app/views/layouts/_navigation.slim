@@ -1,6 +1,10 @@
-nav#main-nav.navbar-aside.navbar.navbar-default role="navigation"
+nav#main-nav.navbar.navbar-default role="navigation" class=("navbar-aside" if nav_aside?)
   .container-fluid
     = render "layouts/brand"
-    .collapse.navbar-collapse
-      = render "layouts/links"
-      = render "layouts/user_nav"
+    = render "layouts/user_nav"
+    = render "layouts/links"
+
+    / = render "layouts/brand"
+    / .collapse.navbar-collapse
+    /   = render "layouts/links"
+    /   = render "layouts/user_nav"

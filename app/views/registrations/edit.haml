@@ -6,9 +6,6 @@
     = render "users/header"
 
     .row
-      .col-xs-12.col-lg-2.col-md-3.col-sm-3
-        = render "users/nav"
-
       .col-xs-12.col-lg-10.col-md-9.col-sm-9
         = form_for @user, url: update_user_registration_path do |form|
           %input{name: "hash", value: "", type: :hidden}
@@ -29,3 +26,6 @@
           -# = image_tag("#{two_factor_qrcode_url}.png", :alt => 'Google Authenticator QRCode')
 
           = render "shared/forms/submit", path: root_path
+
+      .col-xs-12.col-lg-2.col-md-3.col-sm-3
+        = render "users/nav"
