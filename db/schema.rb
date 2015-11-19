@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150917142616) do
+ActiveRecord::Schema.define(version: 20151116192053) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(version: 20150917142616) do
     t.datetime "updated_at"
     t.decimal  "value",                        precision: 10, scale: 2, default: 0.0,   null: false
     t.decimal  "rate",                         precision: 10, scale: 2, default: 0.0,   null: false
-    t.string   "state",            limit: 255
+    t.string   "workflow_state",   limit: 255
     t.datetime "pay_date"
     t.integer  "ref"
     t.boolean  "pdf_generating",                                        default: false, null: false
@@ -112,7 +112,7 @@ ActiveRecord::Schema.define(version: 20150917142616) do
     t.decimal  "budget",                          precision: 10, scale: 2, default: 0.0,      null: false
     t.uuid     "customer_id"
     t.boolean  "budget_on_dashboard",                                      default: true
-    t.string   "state",                                                    default: "active", null: false
+    t.string   "workflow_state",                                           default: "active", null: false
     t.decimal  "budget_hours",                    precision: 10, scale: 2, default: 0.0,      null: false
     t.decimal  "round_up",                                                 default: 10.0,     null: false
     t.datetime "start_date"
@@ -175,8 +175,6 @@ ActiveRecord::Schema.define(version: 20150917142616) do
     t.boolean  "otp_required_for_login"
     t.string   "otp_backup_codes",                                                   array: true
     t.boolean  "created_via_admin",                     default: false
-    t.string   "role"
-    t.string   "project_permission_ids"
     t.integer  "consumed_timestep"
   end
 

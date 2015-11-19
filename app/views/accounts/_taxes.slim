@@ -11,9 +11,9 @@
             = form.text_field :tax, class: 'form-control'
             small = form_errors form.object, :tax
             span.input-group-addon %
-    .col-xs-12.col-md-6.form-group class=form_error?(form.object, :tax_ref)
-      = form.text_field :tax_ref, placeholder: I18n.t(:"helpers.placeholder.user.settings.tax_ref"), class: 'form-control'
-      small = form_errors form.object, :tax_ref
+    .col-xs-12.col-md-6.form-group class=form_error?(form.object, :vat_id)
+      = form.text_field :vat_id, placeholder: I18n.t(:"helpers.placeholder.account.vat_id"), class: 'form-control'
+      small = form_errors form.object, :vat_id
   .row
     .col-xs-12.col-md-6.form-group
       .row.form-horizontal

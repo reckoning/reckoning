@@ -9,10 +9,10 @@ class ProjectsController < ApplicationController
 
     state = params.fetch(:state, nil)
     scope = current_account.projects.includes(:customer, :timers)
-    if state.present? && Project.states.include?(state.to_sym)
-      scope = scope.where(state: state)
+    if state.present? && Project.workflow_spec.state_names.include?(state.to_sym)
+      scope = scope.where(workflow_state: state)
     else
-      scope = scope.where(state: :active)
+      scope = scope.where(workflow_state: :active)
     end
 
     @projects = scope.order(sort_column + " " + sort_direction)
@@ -61,9 +61,7 @@ class ProjectsController < ApplicationController
 
   def unarchive
     authorize! :archive, project
-    project.unarchive
-    project.save
-    if project.reload.active?
+    if project.unarchive!
       redirect_to projects_path, flash: { success: I18n.t(:"messages.project.unarchive.success") }
     else
       redirect_to projects_path, alert: I18n.t(:"messages.project.unarchive.failure")

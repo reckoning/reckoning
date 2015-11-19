@@ -7,10 +7,10 @@ module Api
         scope = current_account.projects
 
         state = params.fetch(:state, nil)
-        if state.present? && Project.states.include?(state.to_sym)
-          scope = scope.where("projects.state = ?", state)
+        if state.present? && Project.workflow_spec.state_names.include?(state.to_sym)
+          scope = scope.where("projects.workflow_state = ?", state)
         else
-          scope = scope.where("projects.state = ?", :active)
+          scope = scope.where("projects.workflow_state = ?", :active)
         end
 
         scope = scope.where.not(id: without_ids) if without_ids

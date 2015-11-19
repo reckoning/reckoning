@@ -33,7 +33,7 @@ gem 'kaminari'
 
 gem 'dynamic_fields_for_rails'
 
-gem 'simple_states'
+gem 'workflow'
 
 gem 'sass-rails'
 gem 'coffee-rails'
@@ -69,8 +69,6 @@ gem 'dropbox-sdk'
 gem 'web_translate_it'
 
 gem 'sentry-raven'
-
-gem 'intercom-rails'
 
 gem 'typhoeus'
 

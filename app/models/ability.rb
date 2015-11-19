@@ -11,13 +11,13 @@ class Ability
 
     can [:read, :create, :destroy, :check, :archive, :send], Invoice, account_id: user.account_id
     can :update, Invoice do |invoice|
-      %i(created charged).include?(invoice.state.to_sym) && invoice.account_id == user.account_id
+      %i(created charged).include?(invoice.current_state.to_sym) && invoice.account_id == user.account_id
     end
     can :pay, Invoice do |invoice|
-      %i(charged).include?(invoice.state.to_sym) && invoice.account_id == user.account_id
+      %i(charged).include?(invoice.current_state.to_sym) && invoice.account_id == user.account_id
     end
     can :charge, Invoice do |invoice|
-      %i(created).include?(invoice.state.to_sym) && invoice.account_id == user.account_id
+      %i(created).include?(invoice.current_state.to_sym) && invoice.account_id == user.account_id
     end
 
     can :two_factor_qrcode, User
