@@ -5,6 +5,10 @@ $input-error-bg-color: rgba(198, 15, 19, 0.1);
   color: inherit;
 }
 
+label {
+  color: gray;
+}
+
 .input-group-fields {
   position: relative;
   .form-control:last-child {

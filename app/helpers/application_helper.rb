@@ -6,7 +6,7 @@ module ApplicationHelper
     ].compact.join(" ")
   end
 
-  private def auth_token
+  def auth_token
     if defined?(current_user) && user_signed_in?
       "#{current_user.id}:#{current_user.authentication_token}"
     else

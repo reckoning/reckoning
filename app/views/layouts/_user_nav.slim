@@ -3,7 +3,7 @@ ul.nav.navbar-nav.navbar-right
     a.dropdown-toggle href='#' data-toggle='dropdown'
       .gravatar
         img src=gravatar_path alt="avatar"
-      span.user-email.hidden
+      span.user-email class=("hidden" unless nav_aside?)
         = current_user.email
       b.caret
     ul.dropdown-menu

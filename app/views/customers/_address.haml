@@ -1,32 +1,39 @@
 .row
   .col-xs-12.col-md-6
     .form-group{class: form_error?(resource, :name)}
+      = form.label :name
       = form.text_field :name, placeholder: I18n.t(:"helpers.placeholder.name"), class: 'form-control'
       = form_errors resource, :name
 .row
   .col-xs-12.col-md-6
     .form-group{class: form_error?(resource, :address)}
+      = form.label :address
       = form.text_area :address, placeholder: I18n.t(:"helpers.placeholder.address"), class: 'form-control'
       = form_errors resource, :address
   .col-xs-12.col-md-6
     .form-group{class: form_error?(resource, :country)}
+      = form.label :country
       = form.text_field :country, placeholder: I18n.t(:"helpers.prompt.country"), class: 'form-control'
       = form_errors resource, :country
 .row
   .col-xs-12.col-md-6
     .form-group{class: form_error?(resource, :telefon)}
+      = form.label :telefon
       = form.text_field :telefon, placeholder: I18n.t(:"helpers.placeholder.telefon"), class: 'form-control'
       = form_errors resource, :telefon
   .col-xs-12.col-md-6
     .form-group{class: form_error?(resource, :fax)}
+      = form.label :fax
       = form.text_field :fax, placeholder: I18n.t(:"helpers.placeholder.fax"), class: 'form-control'
       = form_errors resource, :fax
 .row
   .col-xs-12.col-md-6
     .form-group{class: form_error?(resource, :email)}
+      = form.label :email
       = form.text_field :email, placeholder: I18n.t(:"helpers.placeholder.email"), class: 'form-control'
       = form_errors resource, :email
   .col-xs-12.col-md-6
     .form-group{class: form_error?(resource, :website)}
+      = form.label :website
       = form.text_field :website, placeholder: I18n.t(:"helpers.placeholder.website"), class: 'form-control'
       = form_errors resource, :website

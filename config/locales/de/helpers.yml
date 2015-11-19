@@ -1,15 +1,51 @@
 de:
   helpers:
     label:
+      account:
+        subdomain: "Subdomain"
+        name: "Account Name"
+        public_email: "Öffentliche E-Mail-Adresse"
+        tax: "Steuern"
+        provision: "Rückstellung"
+        country: "Land"
+        address: "Adresse"
+        telefon: "Telefon"
+        fax: "Fax"
+        website: "Webseite"
+        vat_id: "USt-Id"
+        bank: "Bank"
+        bank_code: "BLZ"
+        account_number: "Konto"
+        iban: "IBAN"
+        bic: "BIC"
+        default_from: "Absender Für Rechnungs E-Mails"
+        signature: "Signatur"
       project:
         rate: "Stundensatz"
         round_up: "Zeiten aufrunden?"
+        budget: "Budget"
+        budget_hours: "Stunden"
         budget_on_dashboard: "Auf Dashboard anzeigen?"
         start_date: "Start"
         end_date: "Ende"
         round_up: "Zeiten aufrunden?"
       user:
+        name: "Name"
+        email: "E-Mail-Adresse"
+        layout: Seitenlayout
+        country: "Land"
+        address: "Adresse"
+        telefon: "Telefon"
+        fax: "Fax"
+        website: "Webseite"
         remember_me: "Angemeldet bleiben"
+        password: "Passwort"
+        password_confirmation: "Passwort-Bestätigung"
+        current_password: "Aktuelles Passwort"
+        gravatar: "Gravatar E-Mail Adresse"
+        layout_options:
+          top: "Navigation Oben"
+          aside: "Navigation auf der Seite"
       position:
         rate: "€/Std."
         hours: "Stunden"
@@ -21,6 +57,18 @@ de:
         ref: "Rechnungsnummer"
       task:
         billable: "Fakturierbar?"
+      customer:
+        name: "Firma / Name"
+        email: "E-Mail-Adresse"
+        layout: Seitenlayout
+        country: "Land"
+        address: "Adresse"
+        telefon: "Telefon"
+        website: "Webseite"
+        payment_due: "Zahlungsziel (Tage)"
+        email_template: "Inhalt"
+        invoice_email: "Empfänger"
+        default_from: "Absender"
       setting:
         base:
           registration: "Registrierung aktiv?"
@@ -40,7 +88,7 @@ de:
       timer:
         note: "Beschreibung (Optional)"
       test_mail:
-        email: "E-Mail Adresse"
+        email: "E-Mail-Adresse"
       position:
         description: "Beschreibung"
         rate: "0"
@@ -49,12 +97,6 @@ de:
       account:
         name: "Account Name"
         vat_id: "USt-Id"
-      user:
-        email: "E-Mail"
-        password: "Passwort"
-        password_confirmation: "Passwort-Bestätigung"
-        current_password: "Aktuelles Passwort"
-        gravatar: "Gravatar E-Mail Adresse"
         bank_account:
           bank: "Bank"
           bank_code: "BLZ"
@@ -64,6 +106,12 @@ de:
         mailing:
           default_from: "Absender Für Rechnungs E-Mails"
           signature: "Signatur"
+      user:
+        email: "E-Mail"
+        password: "Passwort"
+        password_confirmation: "Passwort-Bestätigung"
+        current_password: "Aktuelles Passwort"
+        gravatar: "Gravatar E-Mail Adresse"
       customer:
         name: "Firma / Name"
         payment_due: "Zahlungsziel (Tage)"
@@ -72,6 +120,8 @@ de:
         default_from: "Absender"
     prompt:
       country: "Bitte wähle ein Land"
+      user:
+        layout: "Bitte wähle die Position der Navigation"
       project:
         customer_id: "Bitte wähle einen Kunden"
       invoice:

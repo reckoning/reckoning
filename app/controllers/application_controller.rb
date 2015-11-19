@@ -47,24 +47,6 @@ class ApplicationController < ActionController::Base
   end
   helper_method :registration_enabled?
 
-  private def nav_aside?
-    nav_layout == "aside"
-  end
-  helper_method :nav_aside?
-
-  private def nav_layout
-    if user_signed_in?
-      # if current_user.layout == "aside"
-        "aside"
-      # else
-        # "full_layout"
-      # end
-    else
-      "top"
-    end
-  end
-  helper_method :nav_layout
-
   private def invoice_limit_reached?
     !current_user.admin? && Rails.application.secrets[:base]["demo"] && current_account.invoices.count >= 2
   end
