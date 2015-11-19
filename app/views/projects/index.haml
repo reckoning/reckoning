@@ -17,15 +17,15 @@
 
     .row
       .col-xs-12.col-md-6
-        = render "shared/tables/filter", resource: "project", name: "state", filters: Project.states.reject {|state| state == :active}, translateable: true
+        = render "shared/tables/filter", resource: "project", name: "state", filters: Project.workflow_spec.state_names.reject {|state| state == :active}, translateable: true
       .col-xs-12.col-md-6
         .pull-right
-          = paginate @customers
+          = paginate @projects
 
-    = render partial: "list", customers: @customers
+    = render partial: "list"
 
-    - if @customers.blank?
+    - if @projects.blank?
       = render partial: "shared/blank"
 
     .pull-right
-      = paginate @customers
+      = paginate @projects

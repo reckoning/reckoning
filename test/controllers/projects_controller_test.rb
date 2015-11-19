@@ -3,8 +3,6 @@ require 'test_helper'
 class ProjectsControllerTest < ActionController::TestCase
   tests ::ProjectsController
 
-  fixtures :all
-
   let(:project) { projects :narendra3 }
 
   describe "unauthorized" do

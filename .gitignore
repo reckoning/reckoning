@@ -10,6 +10,8 @@ pids/*
 # config files
 config/database.yml
 .env
+.powenv
+.byebug_history
 
 latest.dump
 

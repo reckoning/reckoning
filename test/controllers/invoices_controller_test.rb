@@ -3,8 +3,6 @@ require 'test_helper'
 class InvoicesControllerTest < ActionController::TestCase
   tests ::InvoicesController
 
-  fixtures :all
-
   let(:invoice) { invoices :january }
 
   describe "unauthorized" do
@@ -114,7 +112,7 @@ class InvoicesControllerTest < ActionController::TestCase
     end
 
     it "User can charge an invoice" do
-      request.env["HTTP_REFERER"] = "where_i_came_from"
+      @request.env["HTTP_REFERER"] = "where_i_came_from"
       put :charge, id: invoice.id
 
       assert_redirected_to "where_i_came_from"

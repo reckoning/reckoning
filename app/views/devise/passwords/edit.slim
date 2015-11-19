@@ -1,0 +1,16 @@
+- content_for :title do
+  = I18n.t(:"meta.title.password.edit")
+= form_for(resource, as: resource_name, url: user_password_path, html: { class: "form-signin", method: :put }) do |form|
+  = form.hidden_field :reset_password_token
+  h1.form-signin-heading = I18n.t(:"headlines.change_password")
+
+  .form-group class="#{form_error?(resource, :reset_password_token)}#{form_error?(resource, :password)}"
+    = form.password_field :password, required: true, placeholder: I18n.t(:"helpers.placeholder.user.password"), class: 'form-control'
+    = form_errors resource, :reset_password_token
+    = form_errors resource, :password
+
+  .form-group
+    = form.password_field :password_confirmation, required: true, placeholder: I18n.t(:"helpers.placeholder.user.password_confirmation"), class: 'form-control'
+
+  button.btn-block.btn.btn-lg.btn-primary.btn-loading data-loading-text=I18n.t(:"actions.loading")
+    = I18n.t(:"actions.save_password")

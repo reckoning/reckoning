@@ -44,7 +44,7 @@ Reckoning::Application.routes.draw do
       end
     end
 
-    resources :settings, except: [:index, :show]
+    resources :contacts, only: [:index]
 
     authenticate :user, ->(u) { u.admin? } do
       mount Sidekiq::Web => '/workers'
@@ -90,10 +90,10 @@ Reckoning::Application.routes.draw do
       put :archive
       put :send_mail
       post :send_test_mail
+      get "/pdf/:pdf" => 'invoices#pdf', as: :pdf, defaults: { format: :pdf }
+      get '/timesheet-pdf/:pdf' => 'invoices#timesheet', as: :timesheet_pdf, defaults: { format: :pdf }
     end
   end
-
-  get 'invoices/:id/pdf/:pdf' => 'invoices#pdf', as: :invoice_pdf
 
   resource :timesheet, only: [:show] do
     member do
@@ -110,8 +110,6 @@ Reckoning::Application.routes.draw do
     get :blank
     get :datepicker
   end
-
-  get 'timesheets/:id/pdf/:pdf' => 'invoices#timesheet', as: :timesheet_pdf
 
   resources :positions, only: [:new, :destroy]
 
@@ -144,6 +142,12 @@ Reckoning::Application.routes.draw do
       get :deactivate
     end
   end
+
+  resources :contacts, only: [:create]
+
+  get 'impressum' => 'base#impressum'
+  get 'privacy' => 'base#privacy'
+  get 'terms' => 'base#terms'
 
   get '404' => 'errors#not_found'
   get '422' => 'errors#server_error'

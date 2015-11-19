@@ -5,6 +5,9 @@ de:
         rate: "Stundensatz"
         round_up: "Zeiten aufrunden?"
         budget_on_dashboard: "Auf Dashboard anzeigen?"
+        start_date: "Start"
+        end_date: "Ende"
+        round_up: "Zeiten aufrunden?"
       user:
         remember_me: "Angemeldet bleiben"
       position:
@@ -45,6 +48,7 @@ de:
         value: "Betrag in"
       account:
         name: "Account Name"
+        vat_id: "USt-Id"
       user:
         email: "E-Mail"
         password: "Passwort"
@@ -57,8 +61,6 @@ de:
           account_number: "Konto"
           iban: "IBAN"
           bic: "BIC"
-        settings:
-          tax_ref: "Steuernummer"
         mailing:
           default_from: "Absender Für Rechnungs E-Mails"
           signature: "Signatur"
@@ -77,6 +79,8 @@ de:
       timer:
         project: "Bitte wähle ein Projekt"
         task: "Bitte wähle eine Aufgabe"
+      account:
+        plan: "Bitte wähle einen Plan"
     help:
       customer:
         default_from: "Absender für diesen Kunden festlegen, alternativ kann global in Ihrem Benutzerkonto ein Absender definiert werden."

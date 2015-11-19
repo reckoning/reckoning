@@ -15,21 +15,22 @@ class Project < ActiveRecord::Base
 
   accepts_nested_attributes_for :tasks, allow_destroy: true
 
-  include ::SimpleStates
-
-  self.initial_state = :active
-  # active -> archive -> active
-  states :active, :archived
-
-  event :archive, from: :active, to: :archived
-  event :unarchive, from: :archived, to: :active
+  include Workflow
+  workflow do
+    state :active do
+      event :archive, transitions_to: :archived
+    end
+    state :archived do
+      event :unarchive, transitions_to: :active
+    end
+  end
 
   def self.active
-    where(state: :active)
+    with_active_state
   end
 
   def self.archived
-    where(state: :archived)
+    with_archived_state
   end
 
   def self.with_budget
@@ -93,7 +94,7 @@ class Project < ActiveRecord::Base
   end
 
   def budget_percent_invoiced
-    return if budget_hours.present?
+    return if budget_hours.blank?
     timer_values_invoiced / budget_hours * 100
   end
 

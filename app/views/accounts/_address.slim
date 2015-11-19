@@ -1,0 +1,30 @@
+= form_for account, url: account_path do |form|
+  input name="hash" value="" type="hidden"
+  .row
+    .col-xs-12.col-md-6
+      .form-group class=form_error?(form.object, :address)
+        = form.text_area :address, placeholder: I18n.t(:"helpers.placeholder.address"), rows: 2, class: 'form-control'
+        small = form_errors form.object, :address
+    .col-xs-12.col-md-6
+      .form-group class=form_error?(form.object, :country)
+        = form.text_field :country, placeholder: I18n.t(:"helpers.prompt.country"), class: 'form-control'
+        small = form_errors form.object, :country
+  .row
+    .col-xs-12.col-md-6
+      .form-group class=form_error?(form.object, :telefon)
+        = form.text_field :telefon, placeholder: I18n.t(:"helpers.placeholder.telefon"), class: 'form-control'
+        small = form_errors form.object, :telefon
+    .col-xs-12.col-md-6
+      .form-group class=form_error?(form.object, :fax)
+        = form.text_field :fax, placeholder: I18n.t(:"helpers.placeholder.fax"), class: 'form-control'
+        small = form_errors form.object, :fax
+  .row
+    .col-xs-12.col-md-6
+      .form-group class=form_error?(form.object, :public_email)
+        = form.text_field :public_email, placeholder: I18n.t(:"helpers.placeholder.email"), class: 'form-control'
+        small = form_errors form.object, :public_email
+    .col-xs-12.col-md-6
+      .form-group class=form_error?(form.object, :website)
+        = form.text_field :website, placeholder: I18n.t(:"helpers.placeholder.website"), class: 'form-control'
+        small = form_errors form.object, :website
+  = render "shared/forms/submit", path: root_path

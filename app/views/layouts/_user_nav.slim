@@ -1,0 +1,24 @@
+ul.nav.navbar-nav.navbar-right
+  li.dropdown.user-menu class=(active_nav?('user') || active_nav?('account'))
+    a.dropdown-toggle href='#' data-toggle='dropdown'
+      .gravatar
+        img src=gravatar_path alt="avatar"
+      span.user-email.hidden
+        = current_user.email
+      b.caret
+    ul.dropdown-menu
+      li class=active_nav?('account')
+        = link_to I18n.t(:"nav.header.account"), edit_account_path
+      li class=active_nav?('user')
+        = link_to I18n.t(:"nav.header.user"), edit_user_registration_path
+      - if current_user.admin?
+        li.divider
+        - if backend?
+          li
+            = link_to I18n.t(:"nav.header.frontend"), root_path
+        - else
+          li
+            = link_to I18n.t(:"nav.header.backend"), backend_root_path
+      li.divider
+      li
+        = link_to I18n.t(:"actions.sign_out"), destroy_user_session_path, method: :delete

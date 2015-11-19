@@ -1,10 +1,18 @@
 GIT
   remote: git://github.com/fnando/i18n-js.git
-  revision: 968837d676e23a8d630a866f925e09b3a0f8fba6
+  revision: 4cb4558976fcb33d2e861fc332ac738ea366a9ba
   branch: master
   specs:
     i18n-js (3.0.0.rc11)
-      i18n (~> 0.6)
+      i18n (~> 0.6, >= 0.6.6)
+
+GIT
+  remote: git://github.com/stripe/stripe-ruby.git
+  revision: 59e7752a000723444a48e88f6324af96aaa46f2f
+  specs:
+    stripe (1.31.0)
+      json (~> 1.8.1)
+      rest-client (~> 1.4)
 
 GEM
   remote: https://rubygems.org/
@@ -46,13 +54,16 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    akami (1.3.1)
+      gyoku (>= 0.4.0)
+      nokogiri
     arel (6.0.3)
     ast (2.1.0)
     astrolabe (1.3.1)
       parser (~> 2.2)
     attr_encrypted (1.3.4)
       encryptor (>= 1.3.0)
-    autoprefixer-rails (5.2.1.2)
+    autoprefixer-rails (6.1.0.1)
       execjs
       json
     bcrypt (3.1.10)
@@ -61,58 +72,17 @@ GEM
     bootstrap-sass (3.3.5.1)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.3.0)
-    bourbon (4.2.5)
+    bourbon (4.2.6)
       sass (~> 3.4)
       thor (~> 0.19)
     bower-rails (0.10.0)
     builder (3.2.2)
-    bullet (4.14.7)
+    bullet (4.14.10)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.9.0)
-    byebug (6.0.2)
-    cancancan (1.12.0)
-    celluloid (0.17.1.2)
-      bundler
-      celluloid-essentials
-      celluloid-extras
-      celluloid-fsm
-      celluloid-pool
-      celluloid-supervision
-      dotenv
-      nenv
-      rspec-logsplit (>= 0.1.2)
-      timers (>= 4.1.1)
-    celluloid-essentials (0.20.2.1)
-      bundler
-      dotenv
-      nenv
-      rspec-logsplit (>= 0.1.2)
-      timers (>= 4.1.1)
-    celluloid-extras (0.20.1)
-      bundler
-      dotenv
-      nenv
-      rspec-logsplit (>= 0.1.2)
-      timers (>= 4.1.1)
-    celluloid-fsm (0.20.1)
-      bundler
-      dotenv
-      nenv
-      rspec-logsplit (>= 0.1.2)
-      timers (>= 4.1.1)
-    celluloid-pool (0.20.1)
-      bundler
-      dotenv
-      nenv
-      rspec-logsplit (>= 0.1.2)
-      timers (>= 4.1.1)
-    celluloid-supervision (0.20.1.1)
-      bundler
-      dotenv
-      nenv
-      rspec-logsplit (>= 0.1.2)
-      timers (>= 4.1.1)
-    chunky_png (1.3.4)
+    byebug (8.2.0)
+    cancancan (1.13.1)
+    chunky_png (1.3.5)
     codeclimate-test-reporter (0.4.8)
       simplecov (>= 0.7.1, < 1.0.0)
     coffee-rails (4.1.0)
@@ -121,10 +91,11 @@ GEM
     coffee-script (2.4.1)
       coffee-script-source
       execjs
-    coffee-script-source (1.9.1.1)
+    coffee-script-source (1.10.0)
+    concurrent-ruby (1.0.0)
     connection_pool (2.2.0)
     dalli (2.7.4)
-    database_cleaner (1.5.0)
+    database_cleaner (1.5.1)
     debug_inspector (0.0.2)
     devise (3.5.2)
       bcrypt (~> 3.0)
@@ -133,14 +104,15 @@ GEM
       responders
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
-    devise-two-factor (2.0.0)
+    devise-two-factor (2.0.1)
       activesupport
       attr_encrypted (~> 1.3.2)
       devise (~> 3.5.0)
       railties
       rotp (~> 2)
     docile (1.1.5)
-    dotenv (2.0.2)
+    domain_name (0.5.25)
+      unf (>= 0.0.5, < 1.0.0)
     dropbox-sdk (1.6.5)
       json
     dynamic_fields_for_rails (0.6.0)
@@ -154,13 +126,15 @@ GEM
       activesupport (>= 3.0.0)
     faker (1.5.0)
       i18n (~> 0.5)
-    faraday (0.9.1)
+    faraday (0.9.2)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.10)
     font-awesome-sass (4.4.0)
       sass (>= 3.2)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
+    gyoku (1.3.1)
+      builder (>= 2.1.2)
     haml (4.0.7)
       tilt
     haml-rails (0.9.0)
@@ -169,17 +143,17 @@ GEM
       haml (>= 4.0.6, < 5.0)
       html2haml (>= 1.0.1)
       railties (>= 4.0.1)
-    hashr (0.0.22)
-    highline (1.7.6)
-    hitimes (1.2.3)
+    highline (1.7.8)
     html2haml (2.0.0)
       erubis (~> 2.7.0)
       haml (~> 4.0.0)
       nokogiri (~> 1.6.0)
       ruby_parser (~> 3.5)
+    http-cookie (1.0.2)
+      domain_name (~> 0.5)
+    httpi (2.4.1)
+      rack
     i18n (0.7.0)
-    intercom-rails (0.2.28)
-      activesupport (> 3.0)
     jquery-rails (4.0.5)
       rails-dom-testing (~> 1.0)
       railties (>= 4.2.0)
@@ -197,26 +171,29 @@ GEM
       mime-types (>= 1.16, < 3)
     metaclass (0.0.4)
     mime-types (2.6.2)
-    mini_magick (4.3.3)
+    mini_magick (4.3.6)
     mini_portile (0.6.2)
-    minitest (5.8.0)
+    minitest (5.8.2)
     minitest-rails (2.2.0)
       minitest (~> 5.7)
       railties (~> 4.1)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
+    money (6.6.1)
+      i18n (>= 0.6.4, <= 0.7.0)
     multi_json (1.11.2)
     multipart-post (2.0.0)
-    nenv (0.2.0)
+    netrc (0.11.0)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
     non-stupid-digest-assets (1.0.5)
+    nori (2.6.0)
     orm_adapter (0.5.0)
-    parser (2.2.2.6)
+    parser (2.2.3.0)
       ast (>= 1.1, < 3.0)
-    pg (0.18.3)
+    pg (0.18.4)
     powerpack (0.1.1)
-    puma (2.14.0)
+    puma (2.15.3)
     rack (1.6.4)
     rack-cors (0.4.0)
     rack-protection (1.5.3)
@@ -242,8 +219,8 @@ GEM
       rails-deprecated_sanitizer (>= 1.0.1)
     rails-html-sanitizer (1.0.2)
       loofah (~> 2.0)
-    rails-i18n (4.0.5)
-      i18n (~> 0.6)
+    rails-i18n (4.0.6)
+      i18n (~> 0.7)
       railties (~> 4.0)
     rails-perftest (0.0.6)
     rails_12factor (0.0.3)
@@ -258,13 +235,15 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rainbow (2.0.0)
     rake (10.4.2)
-    redcarpet (3.3.2)
-    redis (3.2.1)
-    redis-namespace (1.5.2)
-      redis (~> 3.0, >= 3.0.4)
+    redcarpet (3.3.3)
+    redis (3.2.2)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
-    roo (2.1.1)
+    rest-client (1.8.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 3.0)
+      netrc (~> 0.7)
+    roo (2.2.0)
       nokogiri (~> 1)
       rubyzip (~> 1.1, < 2.0.0)
     rotp (2.1.1)
@@ -272,37 +251,41 @@ GEM
       chunky_png
     rqrcode-rails3 (0.1.7)
       rqrcode (>= 0.4.2)
-    rspec-logsplit (0.1.3)
-    rubocop (0.34.1)
+    rubocop (0.35.1)
       astrolabe (~> 1.3)
-      parser (>= 2.2.2.5, < 3.0)
+      parser (>= 2.2.3.0, < 3.0)
       powerpack (~> 0.1)
       rainbow (>= 1.99.1, < 3.0)
-      ruby-progressbar (~> 1.4)
+      ruby-progressbar (~> 1.7)
+      tins (<= 1.6.0)
     ruby-prof (0.15.8)
     ruby-progressbar (1.7.5)
-    ruby_parser (3.7.1)
+    ruby_parser (3.7.2)
       sexp_processor (~> 4.1)
     rubyzip (1.1.7)
-    sass (3.4.18)
+    sass (3.4.19)
     sass-rails (5.0.4)
       railties (>= 4.0.0, < 5.0)
       sass (~> 3.1)
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
-    sentry-raven (0.15.1)
+    savon (2.11.1)
+      akami (~> 1.2)
+      builder (>= 2.1.2)
+      gyoku (~> 1.2)
+      httpi (~> 2.3)
+      nokogiri (>= 1.4.0)
+      nori (~> 2.4)
+      wasabi (~> 3.4)
+    sentry-raven (0.15.2)
       faraday (>= 0.7.6)
     sexp_processor (4.6.0)
-    sidekiq (3.5.0)
-      celluloid (~> 0.17.0)
+    sidekiq (4.0.0)
+      concurrent-ruby (~> 1.0)
       connection_pool (~> 2.2, >= 2.2.0)
       json (~> 1.0)
       redis (~> 3.2, >= 3.2.1)
-      redis-namespace (~> 1.5, >= 1.5.2)
-    simple_states (1.0.1)
-      activesupport
-      hashr (~> 0.0.10)
     simplecov (0.10.0)
       docile (~> 1.1.0)
       json (~> 1.8)
@@ -321,9 +304,9 @@ GEM
       activesupport (>= 3.1, < 5.0)
       railties (>= 3.1, < 5.0)
       slim (~> 3.0)
-    spring (1.4.0)
-    sprockets (3.3.4)
-      rack (~> 1.0)
+    spring (1.4.1)
+    sprockets (3.4.0)
+      rack (> 1, < 3)
     sprockets-rails (2.3.3)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
@@ -333,8 +316,7 @@ GEM
     thread_safe (0.3.5)
     tilt (2.0.1)
     timecop (0.8.0)
-    timers (4.1.1)
-      hitimes
+    tins (1.6.0)
     trollop (2.1.2)
     typhoeus (0.8.0)
       ethon (>= 0.8.0)
@@ -343,11 +325,19 @@ GEM
     uglifier (2.7.2)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.1)
     uniform_notifier (1.9.0)
     url_plumber (0.1.2)
       activesupport (>= 3.0.0)
+    valvat (0.6.10)
+      savon (>= 2.3.0)
     warden (1.2.3)
       rack (>= 1.0)
+    wasabi (3.5.0)
+      httpi (~> 2.0)
+      nokogiri (>= 1.4.2)
     web-console (2.2.1)
       activemodel (>= 4.0)
       binding_of_caller (>= 0.7.2)
@@ -357,9 +347,9 @@ GEM
       multi_json
       multipart-post (~> 2.0)
       trollop (~> 2.0)
-    wicked_pdf (0.11.0)
-      rails
+    wicked_pdf (1.0.0)
     wkhtmltopdf-heroku (2.12.2.4)
+    workflow (1.2.0)
 
 PLATFORMS
   ruby
@@ -387,13 +377,13 @@ DEPENDENCIES
   haml-rails
   highline
   i18n-js!
-  intercom-rails
   jquery-rails
   js-routes
   kaminari
   mini_magick
   minitest-rails
   mocha
+  money
   non-stupid-digest-assets
   pg
   puma
@@ -410,19 +400,21 @@ DEPENDENCIES
   sass-rails
   sentry-raven
   sidekiq
-  simple_states
   sinatra (>= 1.3.0)
   slim-rails
   spring
+  stripe!
   thor
   timecop
   typhoeus
   uglifier
   url_plumber
+  valvat
   web-console (~> 2.0)
   web_translate_it
   wicked_pdf
   wkhtmltopdf-heroku
+  workflow
 
 BUNDLED WITH
    1.10.6

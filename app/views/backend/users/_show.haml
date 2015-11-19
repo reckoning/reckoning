@@ -6,6 +6,8 @@
   %td
     = last_user_logged_in(user)
   %td
+    = I18n.t(:"activerecord.attributes.user.created_at", time: time_ago_in_words(user.created_at))
+  %td
     = t user.admin?.to_s
   %td
     .btn-group

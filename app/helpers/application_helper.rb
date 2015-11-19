@@ -1,9 +1,17 @@
 module ApplicationHelper
   def main_title
     [
-      (current_account.name if current_account.present?),
+      ("#{current_account.name} -" if defined?(current_account) && current_account.present?),
       I18n.t(:"meta.title.default")
     ].compact.join(" ")
+  end
+
+  private def auth_token
+    if defined?(current_user) && user_signed_in?
+      "#{current_user.id}:#{current_user.authentication_token}"
+    else
+      ""
+    end
   end
 
   def title(label = nil)
@@ -14,7 +22,7 @@ module ApplicationHelper
   end
 
   def invoice_label(invoice)
-    case invoice.state
+    case invoice.current_state
     when "created"
       "default"
     when "paid"

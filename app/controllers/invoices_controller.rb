@@ -10,14 +10,14 @@ class InvoicesController < ApplicationController
     state = params.fetch(:state, nil)
     year = params.fetch(:year, nil)
     @invoices = current_account.invoices
-    if state.present? && Invoice.states.include?(state.to_sym)
+    if state.present? && Invoice.workflow_spec.state_names.include?(state.to_sym)
       @invoices = @invoices.send(state)
     end
     @invoices = @invoices.year(year) if year.present? && year =~ /\d{4}/
     @invoices = @invoices.includes(:customer, :project).references(:customers)
                 .order(sort_column + " " + sort_direction)
                 .page(params.fetch(:page, nil))
-                .per(20)
+                .per(10)
   end
 
   def show
@@ -136,10 +136,8 @@ class InvoicesController < ApplicationController
 
   def charge
     authorize! :charge, invoice
-    invoice.charge
-    invoice.save
     respond_to do |format|
-      if invoice.reload.charged?
+      if invoice.charge!
         flash[:success] = I18n.t(:'messages.invoice.charge.success')
         format.js { render json: {}, status: :ok }
         format.html { redirect_to :back }
@@ -153,9 +151,7 @@ class InvoicesController < ApplicationController
 
   def pay
     authorize! :pay, invoice
-    invoice.pay
-    invoice.save
-    if invoice.reload.paid?
+    if invoice.pay!
       redirect_to :back, flash: { success: I18n.t(:'messages.invoice.pay.success') }
     else
       redirect_to :back, alert: I18n.t(:'messages.invoice.pay.failure')

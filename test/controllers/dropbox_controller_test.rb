@@ -3,8 +3,6 @@ require "test_helper"
 class DropboxControllerTest < ActionController::TestCase
   tests ::DropboxController
 
-  fixtures :all
-
   let(:user) { users :will }
 
   describe "unauthorized" do
