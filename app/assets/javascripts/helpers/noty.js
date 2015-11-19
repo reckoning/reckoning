@@ -4,11 +4,11 @@ window.displayNoty = function(text, timeout, type) {
     text: text,
     timeout: timeout,
     type: type,
-    layout: 'bottom',
+    layout: 'topRight',
     theme: 'bootstrapTheme',
     animation: {
-      open: 'animated fadeInUp',
-      close: 'animated fadeOutDown',
+      open: 'animated bounceInRight',
+      close: 'animated bounceOutRight',
       easing: 'swing',
       speed: 500
     }

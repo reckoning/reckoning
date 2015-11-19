@@ -42,8 +42,14 @@ body {
   position: relative;
   padding-bottom: 60px;
 
-  > .container {
+  > .container-fluid, > .container {
     padding-bottom: 20px;
+  }
+
+  &.aside-nav {
+    > .container-fluid {
+      padding-top: 20px;
+    }
   }
 }
 

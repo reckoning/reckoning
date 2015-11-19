@@ -21,8 +21,6 @@ de:
         created_at: "vor %{time}"
         last_sign_in: "vor %{time}"
         settings:
-          tax: "Steuern"
-          provision: "Rückstellung"
           gdrive_password: "Google Drive Passwort"
           gdrive_email: "Google Drive E-Mail"
           gdrive_collection: "Google Drive Ordner"

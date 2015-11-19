@@ -1,28 +1,20 @@
 = form_for account, url: account_path do |form|
   input name="hash" value="" type="hidden"
   .row
-    .col-xs-12.col-md-6.form-group
-      .row.form-horizontal
-        .col-xs-8.col-md-8
-          label.pull-right.control-label for="user_tax"
-            = I18n.t(:"activerecord.attributes.user.settings.tax")
-        .col-xs-4.col-md-4
-          .input-group class=form_error?(form.object, :tax)
-            = form.text_field :tax, class: 'form-control'
-            small = form_errors form.object, :tax
-            span.input-group-addon %
+    .col-xs-6.col-md-3.form-group
+      = form.label :tax
+      .input-group class=form_error?(form.object, :tax)
+        = form.text_field :tax, class: 'form-control text-right'
+        small = form_errors form.object, :tax
+        span.input-group-addon %
+    .col-xs-6.col-md-3.form-group
+      = form.label :provision
+      .input-group class=form_error?(form.object, :provision)
+        = form.text_field :provision, class: 'form-control text-right'
+        small = form_errors form.object, :provision
+        span.input-group-addon %
     .col-xs-12.col-md-6.form-group class=form_error?(form.object, :vat_id)
+      = form.label :vat_id
       = form.text_field :vat_id, placeholder: I18n.t(:"helpers.placeholder.account.vat_id"), class: 'form-control'
       small = form_errors form.object, :vat_id
-  .row
-    .col-xs-12.col-md-6.form-group
-      .row.form-horizontal
-        .col-xs-8.col-md-8
-          label.pull-right.control-label for="user_provision"
-            = I18n.t(:"activerecord.attributes.user.settings.provision")
-        .col-xs-4.col-md-4
-          .input-group class=form_error?(form.object, :provision)
-            = form.text_field :provision, class: 'form-control'
-            small = form_errors form.object, :provision
-            span.input-group-addon %
   = render "shared/forms/submit", path: root_path

@@ -3,10 +3,12 @@
   .row
     .col-xs-12.col-md-6
       .form-group class=form_error?(form.object, :name)
+        = form.label :name
         = form.text_field :name, placeholder: I18n.t(:"helpers.placeholder.name"), class: 'form-control'
         = form_errors form.object, :name
     .col-xs-12.col-md-4
       .form-group class=form_error?(form.object, :subdomain)
+        = form.label :subdomain
         .input-group
           = form.text_field :subdomain, placeholder: I18n.t(:"helpers.placeholder.subdomain"), class: 'form-subdomain form-control'
           = form.label :subdomain, class: "input-group-addon" do
