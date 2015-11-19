@@ -70,8 +70,6 @@ gem 'web_translate_it'
 
 gem 'sentry-raven'
 
-gem 'intercom-rails'
-
 gem 'typhoeus'
 
 # pdf rendering
