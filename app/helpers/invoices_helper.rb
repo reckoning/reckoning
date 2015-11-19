@@ -6,4 +6,15 @@ module InvoicesHelper
     end
     sum
   end
+
+  def invoice_label(invoice)
+    case invoice.current_state.to_s
+    when "created"
+      "default"
+    when "paid"
+      "success"
+    else
+      "primary"
+    end
+  end
 end

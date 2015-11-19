@@ -5,7 +5,7 @@
     .col-xs-6.visible-xs.visible-sm
       .pull-right
         span class="label label-#{invoice_label(invoice)}"
-          = I18n.t(:"activerecord.attributes.invoice.states.#{invoice.current_state}")
+          = I18n.t(:"activerecord.attributes.invoice.states.#{invoice.current_state.to_s}")
     .col-xs-12.col-md-4.name
       a.plain href=invoice_path(invoice)
         = invoice.title
@@ -16,7 +16,7 @@
         b= number_to_currency invoice.value
     .col-md-1.state.hidden-xs.hidden-sm
       span class="label label-#{invoice_label(invoice)}"
-        = I18n.t(:"activerecord.attributes.invoice.states.#{invoice.current_state}")
+        = I18n.t(:"activerecord.attributes.invoice.states.#{invoice.current_state.to_s}")
     .col-xs-12.col-md-2
       .pull-right.hidden-xs.hidden-sm
         .dropdown
