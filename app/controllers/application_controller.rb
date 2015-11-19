@@ -20,15 +20,6 @@ class ApplicationController < ActionController::Base
   end
   helper_method :current_account
 
-  private def auth_token
-    if user_signed_in?
-      "#{current_user.id}:#{current_user.authentication_token}"
-    else
-      ""
-    end
-  end
-  helper_method :auth_token
-
   private def unauthorized_controllers
     devise_controller?
   end
