@@ -47,6 +47,8 @@ body {
   }
 
   &.aside-nav {
+    padding-bottom: 0;
+    
     > .container-fluid {
       padding-top: 20px;
     }
