@@ -1,6 +1,6 @@
 class TimerSerializer < ActiveModel::Serializer
   attributes :uuid, :date, :value, :position_uuid, :task_uuid, :project_uuid,
-             :task_name, :project_name, :started, :started_at, :start_time,
+             :task_name, :project_name, :links, :started, :started_at, :start_time,
              :start_time_for_task, :sum_for_task, :note
 
   def start_time
@@ -28,6 +28,12 @@ class TimerSerializer < ActiveModel::Serializer
 
   def project_uuid
     object.task.project_id
+  end
+
+  def links
+    {
+      project: { href: project_path(object.task.project_id) }
+    }
   end
 
   def position_uuid
