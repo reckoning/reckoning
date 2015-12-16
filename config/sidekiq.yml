@@ -4,3 +4,5 @@
   - reckoning-mailer
   - reckoning-archive
   - reckoning-archive-all
+
+:logfile: ./log/sidekiq.log
