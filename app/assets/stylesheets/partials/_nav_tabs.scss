@@ -1,4 +1,4 @@
-.nav-tabs-table {
+.nav-tabs-list {
   .nav-tabs {
     margin-bottom: -1px;
   }
@@ -11,7 +11,23 @@
   }
 }
 
-.nav-vertical-tabs {
+.nav-tabs-full-width {
+  .nav-tabs {
+    margin-left: ($padding-horizontal * -1);
+    margin-right: ($padding-horizontal * -1);
+    padding-left: $padding-horizontal;
+    padding-right: $padding-horizontal;
+  }
+
+  &.nav-tabs-list {
+    .panel {
+      margin-top: $padding-horizontal;
+      border-radius: 4px;
+    }
+  }
+}
+
+.nav-tabs-vertical {
   position: relative;
   padding: 15px 0 20px;
 
@@ -34,7 +50,7 @@
 
   li {
     > a {
-      padding: 8px 15px;
+      padding: 8px $padding-horizontal;
       margin: 5px 0;
       border: 1px solid transparent;
       transition: box-shadow $nav-transition-speed, color $nav-transition-speed;

@@ -79,21 +79,21 @@
     .row
       .col-xs-12.col-md-12
     .row
-      .col-xs-12.col-md-12.nav-tabs-table
+      .col-xs-12.col-md-12.nav-tabs-list.nav-tabs-full-width
         ul.nav.nav-tabs role="tablist"
           li.active
-            a href="#invoices" role="tab" data-toggle="tab"
-              = I18n.t(:"labels.defaults.invoices")
-          li
             a href="#timers" role="tab" data-toggle="tab"
               = I18n.t(:"labels.defaults.timers")
+          li
+            a href="#invoices" role="tab" data-toggle="tab"
+              = I18n.t(:"labels.defaults.invoices")
           li
             a href="#tasks" role="tab" data-toggle="tab"
               = I18n.t(:"labels.defaults.tasks")
         .tab-content
-          .tab-pane.active#invoices
-            = render "base/invoices_panel", invoices: project.invoices, context: "default"
-          .tab-pane#timers
+          .tab-pane.active#timers
             = render "timers_panel", timers: project.timers.includes(:task), context: "default"
+          .tab-pane#invoices
+            = render "base/invoices_panel", invoices: project.invoices, context: "default"
           .tab-pane#tasks
             = render "tasks_panel", tasks: project.tasks, context: "default"
