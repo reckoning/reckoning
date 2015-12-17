@@ -43,7 +43,7 @@
     .panel.panel-default.animate ng-repeat="task in currentTasks"
       .panel-body.row
         .col-xs-12.col-md-4.timesheet-task
-          span ng-bind="task.project_name"
+          a ng-href="{{task.links.project.href}}" ng-bind="task.project_name"
           br
           span ng-bind="task.name"
         .col-xs-12.col-md-6.timesheet-days
