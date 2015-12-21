@@ -47,7 +47,7 @@ angular.module 'Timesheet'
     $scope.delete = (timer) ->
       confirm I18n.t('messages.confirm.timesheet.delete_timer'), ->
         Timer.delete(timer.uuid).success (data) ->
-          $modalInstance.close({date: data, status: 'deleted'})
+          $modalInstance.close({data: data, status: 'deleted'})
 
     $scope.$watch 'timer.project_uuid', ->
       project = _.find $scope.projects, (project) -> project.uuid is $scope.timer.project_uuid
