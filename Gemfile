@@ -52,7 +52,7 @@ gem 'redcarpet'
 
 gem 'puma'
 
-gem 'i18n-js', github: 'fnando/i18n-js', branch: :master
+gem 'i18n-js'
 gem 'rails-i18n', '~> 4.0.0'
 
 gem 'thor'
