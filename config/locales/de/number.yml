@@ -7,4 +7,4 @@ de:
     currency:
       format:
         precision: 0
-        format: "%v %s"
+        accounting_format: "%v %s"
