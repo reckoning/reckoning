@@ -87,7 +87,7 @@ window.Chart =
         }]
         headerFormat: '<div class="highcharts-tooltip-header"><b>{point.key.long}</b></div>'
         pointFormatter: ->
-          value = accounting.formatMoney(@y, {symbol: '€', format: '%v %s', decimal: ',', thousand: '.'})
+          value = accounting.formatMoney(@y)
           "<div><div style='float: left;'><span style='color:#{@color}'>\u25CF</span> #{@series.name}: </div><div style='float: right;'><b>#{value}</b></div></div>"
       navigation:
         buttonOptions:
@@ -150,7 +150,7 @@ window.Chart =
         useHTML: true
         style:
           fontSize: null
-        text: "<span class='label label-default highcharts-plotline-budget'>#{I18n.t("labels.chart.project.budget_estimate")}: #{accounting.formatMoney(data.budget, {symbol: '€', format: '%v %s', decimal: ',', thousand: '.'})}</span>"
+        text: "<span class='label label-default highcharts-plotline-budget'>#{I18n.t("labels.chart.project.budget_estimate")}: #{accounting.formatMoney(data.budget)}</span>"
     }]
     options.tooltip.headerFormat = '<div class="highcharts-tooltip-header"><b>{point.key.date}</b></div>'
 
@@ -169,4 +169,3 @@ $ ->
 
   if $('#project-budget-chart').length && projectBudgetChartData
     Chart.budgetChart('#project-budget-chart', projectBudgetChartData)
-

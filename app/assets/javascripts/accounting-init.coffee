@@ -2,7 +2,7 @@ window.initAccounting = ->
   accounting.settings =
     currency:
       symbol: I18n.t('number.currency.format.unit')
-      format: "%v %s"
+      format: I18n.t('number.currency.format.format')
       decimal: I18n.t('number.currency.format.separator')
       thousand: I18n.t('number.currency.format.delimiter')
       precision: I18n.t('number.currency.format.precision')

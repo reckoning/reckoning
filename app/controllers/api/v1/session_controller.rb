@@ -2,9 +2,9 @@ module Api
   module V1
     class SessionController < Api::BaseController
       around_action :authenticate_user_from_token!, except: [:create]
+      skip_authorization_check only: [:create]
 
       def create
-        authorize! :index, Task
         if user && user.valid_password?(user_params.fetch(:password))
           sign_in("user", user)
           render json: user, status: :ok
