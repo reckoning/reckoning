@@ -3,14 +3,21 @@ require 'sidekiq/web'
 Reckoning::Application.routes.draw do
   v1_api_routes = lambda do
     post 'signin' => 'session#create'
-    resource :account
+    resource :account do
+      get :verify_iban
+      get :generate_iban
+    end
+
     resources :customers, only: [:index, :show, :create, :destroy]
+
     resources :projects, only: [:index, :destroy] do
       member do
         put :archive
       end
     end
+
     resources :tasks, only: [:index, :create]
+
     resources :timers, only: [:index, :create, :update, :destroy] do
       member do
         put :start

@@ -4,3 +4,7 @@ de:
       format:
         delimiter: " "
         precision: 1
+    currency:
+      format:
+        precision: 0
+        format: "%v %s"
