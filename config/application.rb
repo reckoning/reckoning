@@ -28,6 +28,7 @@ module Reckoning
 
     config.exceptions_app = routes
 
+    config.middleware.use I18n::JS::Middleware
     config.middleware.insert_before 0, "Rack::Cors", debug: true, logger: -> { Rails.logger } do
       allow do
         origins '*'
