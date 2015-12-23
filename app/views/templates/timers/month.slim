@@ -13,6 +13,7 @@ br
         = I18n.t('actions.today')
       a.btn.btn-default href="#/month/{{nextMonth()}}"
         i.fa.fa-chevron-right
+
 .col-xs-12
   .calendar
     .header
@@ -22,17 +23,15 @@ br
       .day ng-class="{'current-month':day.isCurrentMonth}" ng-repeat="day in week.days"
         .day-number ng-bind="day.day"
         .timers
-          .timer ng-repeat="timer in timersForDate(day.date)"
-            a href="/timesheet/#/day/{{timer.date}}"
-              span.label ng-class="labelClassForTimer(timer)"
-                span.timer-value
-                  span ng-bind="timer.value"
-                  '
-                  |h
-                '
-                ||
-                '
-                span.timer-task ng-bind="timer.task_name"
+          a.timer href="/timesheet/#/day/{{timer.date}}" ng-repeat="timer in timersForDate(day.date)" ng-class="cssClassForTimer(timer)"
+            span.timer-value
+              span ng-bind="timer.value"
+              '
+              |h
+            '
+            ||
+            '
+            span.timer-task ng-bind="timer.task_name"
         a.add-timer title=I18n.t("actions.add_timer") href="/timesheet/#/day/{{day.date}}/new"
           i.fa.fa-plus
             
