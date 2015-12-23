@@ -21,9 +21,9 @@ br
         span ng-bind="day.dayShort"
     .week ng-repeat="week in weeks"
       .day ng-class="{'current-month':day.isCurrentMonth}" ng-repeat="day in week.days"
-        .day-number ng-bind="day.day"
+        a.day-number href="/timesheet/#/day/{{day.date}}" ng-bind="day.day"
         .timers
-          a.timer href="/timesheet/#/day/{{timer.date}}" ng-repeat="timer in timersForDate(day.date)" ng-class="cssClassForTimer(timer)"
+          a.timer href="/timesheet/#/day/{{timer.date}}/edit/{{timer.uuid}}" ng-repeat="timer in timersForDate(day.date)" ng-class="cssClassForTimer(timer)"
             span.timer-value
               span ng-bind="timer.value"
               '
