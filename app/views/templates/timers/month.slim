@@ -31,7 +31,7 @@ br
             '
             ||
             '
-            span.timer-task ng-bind="timer.task_name"
+            span.timer-task ng-bind="timer.task_name" title="{{timer.task_name}}"
         a.add-timer title=I18n.t("actions.add_timer") href="/timesheet/#/day/{{day.date}}/new"
           i.fa.fa-plus
             
