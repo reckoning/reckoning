@@ -43,6 +43,7 @@
     }
 
     .timer {
+      max-width: 100%;
       background-color: $gray-light;
       white-space: nowrap;
       text-overflow: ellipsis;
