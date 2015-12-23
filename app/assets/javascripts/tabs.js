@@ -13,15 +13,15 @@ window.onpopstate = function() {
 
 window.Tabs = {
   openByHash: function() {
-    if ($('.nav-tabs a:first, .nav-vertical-tabs a:first').length === 0) {
+    if ($('.nav-tabs a:first, .nav-tabs-vertical a:first').length === 0) {
       return;
     }
 
     hash = window.location.hash;
     if (hash !== undefined && hash.length > 0 && !(/^#\//).test(hash)) {
-      $('.nav-tabs a[href=' + hash + '], .nav-vertical-tabs a[href=' + hash + ']').tab('show');
+      $('.nav-tabs a[href=' + hash + '], .nav-tabs-vertical a[href=' + hash + ']').tab('show');
     } else {
-      $('.nav-tabs a:first, .nav-vertical-tabs a:first').tab('show');
+      $('.nav-tabs a:first, .nav-tabs-vertical a:first').tab('show');
     }
   }
 };

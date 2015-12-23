@@ -2,7 +2,7 @@
   - path = ""
 - unless defined?(active)
   - active = "basic"
-%ul.nav.nav-vertical-tabs
+%ul.nav.nav-tabs-vertical
   %li{class: (active == "basic" ? "active" : "")}
     %a{href: "#{path}#basic", data: {toggle: ("tab" if path.blank?)}}
       = I18n.t("nav.subnav.user.basic")

@@ -1,4 +1,4 @@
-angular.module 'Timesheet'
+angular.module 'Reckoning'
 .directive 'datepicker', ['$timeout', ($timeout) ->
   restrict: 'E'
   templateUrl: Routes.datepicker_template_path()

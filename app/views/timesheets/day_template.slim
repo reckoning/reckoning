@@ -28,7 +28,7 @@
           .pull-left
             h3 
               a ng-href="{{timer.links.project.href}}" ng-bind="timer.project_name"
-            span ng-bind="timer.task_name"
+            span ng-bind="timer.task_name_with_type"
           .pull-right
             span.timesheet-timer.invoiced ng-if="timer.position_uuid" title=I18n.t(:"labels.timesheet.on_invoice") data-toggle="tooltip"
               span ng-bind="timer.value | toTime"

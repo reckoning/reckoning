@@ -42,9 +42,8 @@ angular.module 'Reckoning'
 
         selectize.addItem(scope.ngModel)
 
-        if scope.selectizeDefault && scope.options && scope.ngModel is undefined
+        if scope.selectizeDefault && scope.options && scope.options.length && scope.ngModel is undefined
           selectize.setValue scope.options[0].uuid
-
 
     scope.$watch 'ngModel', ->
       $timeout ->
