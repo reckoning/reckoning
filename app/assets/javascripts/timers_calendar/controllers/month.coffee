@@ -65,6 +65,12 @@ angular.module 'TimersCalendar'
     $scope.prevMonth = ->
       moment($scope.date).subtract(1, 'month').format('YYYY-MM-DD')
 
+    $scope.nextPage = ->
+      $location.path('/month/' + $scope.nextMonth())
+
+    $scope.prevPage = ->
+      $location.path('/month/' + $scope.prevMonth())
+
     $scope.cssClassForTimer = (timer) ->
       if timer.position_uuid
         'invoiced'

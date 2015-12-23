@@ -4,8 +4,10 @@ class Task < ActiveRecord::Base
 
   validates :project, :name, presence: true
 
-  def project_name
-    project.name_with_customer
+  delegate :name, :label, :customer_name, to: :project, prefix: true
+
+  def label
+    "#{name} (#{I18n.t("labels.task.billable.#{billable}")})"
   end
 
   def timer_values
