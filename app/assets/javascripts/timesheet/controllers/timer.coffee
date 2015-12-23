@@ -66,8 +66,12 @@ angular.module 'Timesheet'
         timer.started = data.started
         timer.started_at = data.started_at
 
-
     if $routeParams.action == "new"
       $scope.openModal()
 
+    $scope.$watch 'timersLoaded', ->
+      if $routeParams.action == "edit"
+        timer = _.find $scope.timers, (item) -> item.uuid is $routeParams.id
+        return unless timer
+        $scope.openModal(timer)
 ]

@@ -46,7 +46,12 @@
     .day-number {
       float: left;
       margin-right: 5px;
-      margin-top: -1px;
+      margin-top: -2px;
+      color: #666;
+
+      &:hover {
+        color: darken(#333, 10%);
+      }
     }
 
     .add-timer {
