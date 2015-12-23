@@ -15,6 +15,8 @@ class Project < ActiveRecord::Base
 
   accepts_nested_attributes_for :tasks, allow_destroy: true
 
+  delegate :name, to: :customer, prefix: true
+
   include Workflow
   workflow do
     state :active do
@@ -23,6 +25,10 @@ class Project < ActiveRecord::Base
     state :archived do
       event :unarchive, transitions_to: :active
     end
+  end
+
+  def label
+    name_with_customer
   end
 
   def self.active
