@@ -3,7 +3,7 @@
     .col-xs-12.col-md-6
       h1
         span ng-bind="startOfWeek()"
-        |. -
+        = ". - "
         span ng-bind="endOfWeek()"
     .col-xs-12.col-md-6
       .pull-right.resource-nav
@@ -43,9 +43,13 @@
     .panel.panel-default.animate ng-repeat="task in currentTasks"
       .panel-body.row
         .col-xs-12.col-md-4.timesheet-task
-          a ng-href="{{task.links.project.href}}" ng-bind="task.project_name"
+          a ng-href="{{task.links.project.href}}" 
+            span ng-bind="task.project_name"
+          small
+            = " | "
+            span ng-bind="task.project_customer_name"
           br
-          span ng-bind="task.name"
+          span ng-bind="task.label"
         .col-xs-12.col-md-6.timesheet-days
           .text-right.timesheet-day ng-repeat="date in dates"
             div ng-repeat="timer in task.timers | forDate:date.date"

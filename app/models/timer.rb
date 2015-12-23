@@ -10,7 +10,9 @@ class Timer < ActiveRecord::Base
 
   validates :date, :value, :task_id, presence: true
 
-  delegate :name, to: :task, prefix: true
+  delegate :name, :label, to: :task, prefix: true
+  delegate :project, to: :task
+  delegate :name, :label, :customer_name, to: :project, prefix: true
 
   def stop_other_timers
     return unless started
@@ -39,10 +41,6 @@ class Timer < ActiveRecord::Base
       started: false,
       value: ((value + timer_value) * task.project.round_up).round / task.project.round_up
     )
-  end
-
-  def project_name
-    task.project.name_with_customer
   end
 
   def self.week_for(date)
