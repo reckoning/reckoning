@@ -5,6 +5,6 @@ class TemplatesController < ApplicationController
   def show
     route = request.path.sub("/template/", "")
     route_parts = route.split("_")
-    render "templates/#{route_parts.reverse.join("/")}"
+    render "templates/#{route_parts.reverse.join('/')}"
   end
 end
