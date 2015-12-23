@@ -11,12 +11,12 @@
 #= require dynamic_fields_for
 #= require i18n
 #= require i18n/translations
-#= require i18n-helper
+#= require i18nHelper
 #= require moment/moment
-#= require moment-init
+#= require momentInit
 #= require twix/dist/twix
 #= require accounting/accounting
-#= require accounting-init
+#= require accountingInit
 #= require nprogress
 #= require fastclick
 #= require pdfjs-dist/build/pdf
@@ -24,16 +24,17 @@
 #= require nvd3
 #= require vendor/highcharts/highcharts
 #= require vendor/highcharts/no-data-to-display
-#= require pdf-viewer
+#= require pdfViewer
 #= require helper
 #= require_tree ./helpers
 #= require tabs
 #= require app
 #= require_tree ./app
-#= require angular-init
+#= require angularInit
 #= require base
 #= require blank
 #= require timesheet
+#= require timersCalendar
 
 window.domain = (location.host.match(/([^.]+)\.\w{2,3}(?:\.\w{2})?$/) || [])[0]
 window.ApiBasePath = "//api.#{domain}"

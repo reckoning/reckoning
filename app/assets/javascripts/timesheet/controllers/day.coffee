@@ -9,7 +9,7 @@ angular.module 'Timesheet'
     $scope.datepickerSelect = $scope.date
 
     $scope.$watch 'datepickerSelect', ->
-      if $scope.datepickerSelect
+      if $scope.datepickerSelect && $scope.datepickerSelect isnt $scope.date
         $location.path('/day/' + $scope.datepickerSelect)
 
     $scope.day = ->

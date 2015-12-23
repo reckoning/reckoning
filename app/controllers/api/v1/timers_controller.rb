@@ -5,7 +5,9 @@ module Api
         authorize! :index, Timer
         scope = current_user.timers
         scope = scope.where(date: date) if date
-        render json: scope.order('created_at ASC'), each_serializer: TimerSerializer, status: :ok
+        scope = scope.where(date: date_range) if date_range
+        scope = scope.for_project(project_uuid) if project_uuid
+        render json: scope.order('timers.created_at ASC'), each_serializer: TimerSerializer, status: :ok
       end
 
       def create
@@ -64,7 +66,24 @@ module Api
       end
 
       private def date
-        params[:date]
+        @date ||= params[:date]
+      end
+
+      private def date_range
+        return if start_date.blank? || end_date.blank?
+        @date_range ||= (start_date..end_date)
+      end
+
+      private def start_date
+        @start_date ||= params[:start_date]
+      end
+
+      private def end_date
+        @end_date ||= params[:end_date]
+      end
+
+      private def project_uuid
+        @project_uuid ||= params[:project_uuid]
       end
 
       private def task

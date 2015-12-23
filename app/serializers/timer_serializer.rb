@@ -1,6 +1,6 @@
 class TimerSerializer < ActiveModel::Serializer
   attributes :uuid, :date, :value, :position_uuid, :task_uuid, :project_uuid,
-             :task_name, :project_name, :links, :started, :started_at, :start_time,
+             :task_name, :task_name_with_type, :task_billable, :project_name, :links, :started, :started_at, :start_time,
              :start_time_for_task, :sum_for_task, :note
 
   def start_time
@@ -18,8 +18,12 @@ class TimerSerializer < ActiveModel::Serializer
     timers.inject(0) { |a, e| a + e.value }
   end
 
-  def task_name
+  def task_name_with_type
     "#{object.task_name} (#{I18n.t("labels.task.billable.#{object.task.billable}")})"
+  end
+
+  def task_billable
+    object.task.billable
   end
 
   def task_uuid

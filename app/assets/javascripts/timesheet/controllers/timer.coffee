@@ -1,11 +1,12 @@
 angular.module 'Timesheet'
 .controller 'TimerController', [
   '$scope'
+  '$routeParams'
   'Timer'
   'Project'
   '$modal'
   '$timeout'
-  ($scope, Timer, Project, $modal, $timeout) ->
+  ($scope, $routeParams, Timer, Project, $modal, $timeout) ->
     $scope.timers = []
     $scope.timersLoaded = false
     $scope.currentTasks = []
@@ -64,4 +65,9 @@ angular.module 'Timesheet'
         timer.value = data.value
         timer.started = data.started
         timer.started_at = data.started_at
+
+
+    if $routeParams.action == "new"
+      $scope.openModal()
+
 ]

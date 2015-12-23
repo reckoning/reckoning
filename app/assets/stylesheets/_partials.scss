@@ -1,3 +1,5 @@
+$padding-horizontal: floor(($grid-gutter-width / 2));
+
 @import "partials/nav";
 @import "partials/nav_tabs";
 @import "partials/typography";
@@ -24,3 +26,4 @@
 @import "partials/chart";
 @import "partials/panel";
 @import "partials/navbar-aside";
+@import "partials/calendar";

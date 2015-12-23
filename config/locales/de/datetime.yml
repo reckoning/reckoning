@@ -12,6 +12,7 @@ de:
       db: "%Y-%m-%d"
       month_year: "%B %Y"
       month: "%B"
+      day: "%A"
       year: "%Y"
       file: "%B-%Y"
       datepicker: 'd. mmmm yyyy'
