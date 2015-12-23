@@ -65,13 +65,11 @@ angular.module 'TimersCalendar'
     $scope.prevMonth = ->
       moment($scope.date).subtract(1, 'month').format('YYYY-MM-DD')
 
-    $scope.labelClassForTimer = (timer) ->
+    $scope.cssClassForTimer = (timer) ->
       if timer.position_uuid
-        'label-success'
+        'invoiced'
       else if timer.task_billable
-        'label-info'
-      else
-        'label-default'
+        'billable'
 
     $scope.timersForDate = (date) ->
       $filter('filter')(@currentTimers, moment(date).format('YYYY-MM-DD'), true)
