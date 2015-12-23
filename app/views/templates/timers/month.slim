@@ -1,0 +1,38 @@
+br
+
+.col-xs-12.col-md-6
+  h2
+    span ng-bind="currentMonth()"
+.col-xs-12.col-md-6
+  .pull-right.resource-nav
+    .btn-group.btn-group-justified-responsive.resource-nav
+      a.btn.btn-default href="#/month/{{prevMonth()}}"
+        i.fa.fa-chevron-left
+      datepicker ng-model="datepickerSelect"
+      a.btn.btn-default href="#/month" ng-disabled="isCurrentMonth()"
+        = I18n.t('actions.today')
+      a.btn.btn-default href="#/month/{{nextMonth()}}"
+        i.fa.fa-chevron-right
+.col-xs-12
+  .calendar
+    .header
+      .day ng-repeat="day in weeks[0].days"
+        span ng-bind="day.dayShort"
+    .week ng-repeat="week in weeks"
+      .day ng-class="{'current-month':day.isCurrentMonth}" ng-repeat="day in week.days"
+        .day-number ng-bind="day.day"
+        .timers
+          .timer ng-repeat="timer in timersForDate(day.date)"
+            a href="/timesheet/#/day/{{timer.date}}"
+              span.label ng-class="labelClassForTimer(timer)"
+                span.timer-value
+                  span ng-bind="timer.value"
+                  '
+                  |h
+                '
+                ||
+                '
+                span.timer-task ng-bind="timer.task_name"
+        a.add-timer title=I18n.t("actions.add_timer") href="/timesheet/#/day/{{day.date}}/new"
+          i.fa.fa-plus
+            

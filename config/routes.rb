@@ -114,8 +114,9 @@ Reckoning::Application.routes.draw do
   end
 
   resource :template, only: [] do
-    get :blank
-    get :datepicker
+    get "blank" => "templates#show"
+    get "datepicker" => "templates#show"
+    get "month_timers" => "templates#show"
   end
 
   resources :positions, only: [:new, :destroy]

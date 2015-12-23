@@ -33,7 +33,7 @@
                 .highlight
                   = number_to_currency(project.timer_values, unit: "h", precision: 2)
                 .subline
-                  a href="#{timesheet_path(project_uuid: project)}/#/day/#{I18n.l(Time.zone.now.to_date, format: :db)}"
+                  a href="#{timesheet_path(project_uuid: project)}/#/day/#{I18n.l(Time.zone.now.to_date, format: :db)}/new"
                     i.fa.fa-clock-o
                     '
                     = I18n.t(:"actions.add_timer")

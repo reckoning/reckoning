@@ -6,6 +6,7 @@
 //= require nvd3
 //= require awesome-bootstrap-checkbox
 //= require selectize/dist/css/default
+//= require simple_calendar
 //= require_self
 
 $footer-border-color: #ccc;
@@ -48,7 +49,7 @@ body {
 
   &.aside-nav {
     padding-bottom: 0;
-    
+
     > .container-fluid {
       padding-top: 20px;
     }

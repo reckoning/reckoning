@@ -1,4 +1,4 @@
-angular.module 'Timesheet'
+angular.module 'Reckoning'
 .filter 'forDate', ->
   (list, date) ->
     _.filter list, (item) ->
