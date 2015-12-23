@@ -7,11 +7,15 @@
 .calendar {
   border: 1px solid #ddd;
   border-radius: 3px;
+  overflow-x: scroll;
 }
 
 .header {
+  white-space: nowrap;
+
   .day {
     width: (100 * 1 / 7) * 100% / 100;
+    min-width: 100px;
     display: inline-block;
     vertical-align: top;
     padding: 5px;
@@ -25,16 +29,25 @@
 }
 
 .week {
+  white-space: nowrap;
+
   .day {
     width: (100 * 1 / 7) * 100% / 100;
     display: inline-block;
     vertical-align: top;
     border: 1px solid #ddd;
     height: 100px;
+    min-width: 100px;
     padding: 5px;
     border-width: 1px 1px 0 0;
     background-color: darken(#f5f5f5, 5%);
     position: relative;
+
+    .day-number {
+      float: left;
+      margin-right: 5px;
+      margin-top: -1px;
+    }
 
     .add-timer {
       position: absolute;
