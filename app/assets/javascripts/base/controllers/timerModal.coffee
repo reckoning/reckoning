@@ -59,9 +59,11 @@ angular.module 'Reckoning'
 
     $scope.delete = (timer) ->
       confirm I18n.t('messages.confirm.timesheet.delete_timer'), ->
-        console.log
         Timer.delete(timer.uuid).success (data) ->
           $uibModalInstance.close({data: data, status: 'deleted'})
+
+    $scope.isStartable = (date) ->
+      moment(date).format('YYYYMMDD') >= moment().format('YYYYMMDD')
 
     $scope.$watch 'timer.project_uuid', ->
       project = _.find $scope.projects, (project) -> project.uuid is $scope.timer.project_uuid
