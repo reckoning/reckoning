@@ -23,7 +23,10 @@ angular.module 'TimersCalendar'
     $scope.weeks = []
 
     $scope.openModal = (date, timer) ->
-      modalTimer = {date: date, started: true}
+      if @isStartable(date)
+        modalTimer = {date: date, started: true}
+      else
+        modalTimer = {date: date, started: false}
       if timer isnt undefined
         angular.copy(timer, modalTimer)
       $uibModal.open
@@ -38,7 +41,8 @@ angular.module 'TimersCalendar'
       , ->
         $scope.getTimers()
 
-
+    $scope.isStartable = (date) ->
+      moment(date).format('YYYYMMDD') >= moment().format('YYYYMMDD')
 
     $scope.getTimers = ->
       startDate = moment(@date).startOf('month').startOf('week').format('YYYY-MM-DD')
@@ -58,7 +62,8 @@ angular.module 'TimersCalendar'
         while itr.hasNext()
           time = itr.next()
           days.push
-            isCurrentMonth: time.format('M') is @date.format('M')
+            isCurrentMonth: time.format('YYYY-MM') is @date.format('YYYY-MM')
+            isCurrentDay: time.format('YYYY-MM-DD') is moment().format('YYYY-MM-DD')
             day: time.format('D')
             date: time.format('YYYY-MM-DD')
             dayShort: time.format('dd')
