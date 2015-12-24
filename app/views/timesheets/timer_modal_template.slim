@@ -19,16 +19,16 @@
       textarea.form-control ng-model="timer.note" placeholder=I18n.t(:"helpers.placeholder.timer.note")
     .col-xs-12.col-md-4
       br.visible-sm.visible-xs
-      .modal-timer ng-if="timer.started"
+      .modal-timer ng-if="timer.uuid && timer.started"
         timer start-time="timer.start_time" max-time-unit="'hour'" {{hours}}:{{mminutes}}
-      input.input-lg.form-control.text-right ng-if="!timer.started" ng-model="timer.value" placeholder="0:00" timefield=true
+      input.input-lg.form-control.text-right ng-if="!(timer.uuid && timer.started)" ng-model="timer.value" placeholder="0:00" timefield=true
 .modal-footer
   .pull-right
     button.btn.btn-default ng-click="cancel()"
       = I18n.t(:"actions.close")
-    button.btn.btn-success ng-click="stopTimer(timer, $event)" ng-if="timer.started"
+    button.btn.btn-success ng-click="stopTimer(timer, $event)" ng-if="timer.uuid && timer.started"
       = I18n.t(:"actions.stop")
-    button.btn.btn-default ng-click="startTimer(timer, $event)" ng-if="!timer.started"
+    button.btn.btn-default ng-click="startTimer(timer, $event)" ng-if="timer.uuid && !timer.started"
       = I18n.t(:"actions.start")
     button.btn.btn-primary.btn-lg ng-disabled="!timer.task_uuid" ng-click="saveTimer(timer)" data-loading-text=I18n.t(:"actions.loading")
       span ng-if="timer.uuid || timer.value.length"
