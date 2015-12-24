@@ -2,11 +2,11 @@ angular.module 'Timesheet'
 .controller 'TimerController', [
   '$scope'
   '$routeParams'
+  '$uibModal'
+  '$timeout'
   'Timer'
   'Project'
-  '$modal'
-  '$timeout'
-  ($scope, $routeParams, Timer, Project, $modal, $timeout) ->
+  ($scope, $routeParams, $uibModal, $timeout, Timer, Project) ->
     $scope.timers = []
     $scope.timersLoaded = false
     $scope.currentTasks = []
@@ -15,7 +15,7 @@ angular.module 'Timesheet'
       modalTimer = {date: @date, started: true}
       if timer isnt undefined
         angular.copy(timer, modalTimer)
-      $modal.open
+      $uibModal.open
         templateUrl: Routes.timer_modal_template_timesheet_path()
         controller: 'TimerModalController'
         resolve:
@@ -24,7 +24,8 @@ angular.module 'Timesheet'
           excludedTaskUuids: -> []
       .result.then (result) ->
         if result.status is 'deleted'
-          $scope.timers.splice($scope.timers.indexOf(result.data), 1)
+          deletedTimer = _.find $scope.timers, (item) -> item.uuid is result.data.uuid
+          $scope.timers.splice($scope.timers.indexOf(deletedTimer), 1)
         else if result.status is 'updated'
           timer.value = result.data.value
           timer.date = result.data.date

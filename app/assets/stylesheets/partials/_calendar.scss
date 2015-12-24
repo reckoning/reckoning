@@ -48,6 +48,7 @@
       margin-right: 5px;
       margin-top: -2px;
       color: #666;
+      text-decoration: none;
 
       &:hover {
         color: darken(#333, 10%);
@@ -58,10 +59,12 @@
       position: absolute;
       bottom: 5px;
       right: 5px;
+      cursor: pointer;
     }
 
     .timer {
       max-width: 100%;
+      cursor: pointer;
       background-color: $gray-light;
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -87,6 +90,14 @@
 
         &:hover {
           background-color: darken($brand-info, 10%)
+        }
+      }
+
+      &.running {
+        background-color: $brand-warning;
+
+        &:hover {
+          background-color: darken($brand-warning, 10%)
         }
       }
 

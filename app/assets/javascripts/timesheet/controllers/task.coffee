@@ -3,17 +3,17 @@ angular.module 'Timesheet'
   '$scope'
   '$filter'
   '$timeout'
+  '$uibModal'
   'Timer'
   'Task'
   'Project'
-  '$modal'
-  ($scope, $filter, $timeout, Timer, Task, Project, $modal) ->
+  ($scope, $filter, $timeout, $uibModal, Timer, Task, Project) ->
     $scope.currentTasks = []
     $scope.currentTasksLoaded = false
     $scope.excludedTaskUuids = []
 
     $scope.openModal = ->
-      $modal.open
+      $uibModal.open
         templateUrl: Routes.task_modal_template_timesheet_path()
         controller: 'TimerModalController'
         resolve:

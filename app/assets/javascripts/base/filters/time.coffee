@@ -1,4 +1,4 @@
-angular.module 'Timesheet'
+angular.module 'Reckoning'
 .filter 'toTime', ->
   (input) ->
     hours = Math.floor(input)

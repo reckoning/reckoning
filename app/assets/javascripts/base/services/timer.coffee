@@ -5,20 +5,22 @@ angular.module 'Reckoning'
   all: (date) ->
     @allPromise.resolve()
     @allPromise = $q.defer()
-    $http.get ApiBasePath + Routes.v1_timers_path(),
+    $http.get(ApiBasePath + Routes.v1_timers_path(),
       timeout: @allPromise
       params:
         date: date
+    )
 
   allInRangeForProject: (projectUuid, startDate, endDate) ->
     @allPromise.resolve()
     @allPromise = $q.defer()
-    $http.get ApiBasePath + Routes.v1_timers_path(),
+    $http.get(ApiBasePath + Routes.v1_timers_path(),
       timeout: @allPromise
       params:
         start_date: startDate
         end_date: endDate
         project_uuid: projectUuid
+    )
 
   create: (timer) ->
     $http.post(ApiBasePath + Routes.v1_timers_path(), timer)
