@@ -5,8 +5,11 @@ angular.module 'TimersCalendar'
   '$location'
   '$window'
   '$filter'
+  '$timeout'
+  '$uibModal'
   'Timer'
-  ($scope, $routeParams, $location, $window, $filter, Timer) ->
+  'Project'
+  ($scope, $routeParams, $location, $window, $filter, $timeout, $uibModal, Timer, Project) ->
     $scope.projectUuid = $window.projectUuid
     if $routeParams.date && moment($routeParams.date, 'YYYY-MM-DD').isValid()
       $scope.date = moment($routeParams.date, 'YYYY-MM-DD').startOf('month')
@@ -19,13 +22,29 @@ angular.module 'TimersCalendar'
     $scope.currentTimersLoaded = false
     $scope.weeks = []
 
+    $scope.openModal = (date, timer) ->
+      modalTimer = {date: date, started: true}
+      if timer isnt undefined
+        angular.copy(timer, modalTimer)
+      $uibModal.open
+        templateUrl: Routes.timer_modal_template_timesheet_path()
+        controller: 'TimerModalController'
+        resolve:
+          timer: -> modalTimer
+          projects: -> Project.all(sort: "last_used")
+          excludedTaskUuids: -> []
+      .result.then (result) ->
+        $scope.getTimers()
+      , ->
+        $scope.getTimers()
+
+
+
     $scope.getTimers = ->
       startDate = moment(@date).startOf('month').startOf('week').format('YYYY-MM-DD')
       endDate = moment(@date).endOf('month').endOf('week').format('YYYY-MM-DD')
       Timer.allInRangeForProject(@projectUuid, startDate, endDate).success (timers) ->
-        console.log timers
-        $scope.currentTimers = _.filter timers, (item) ->
-          parseFloat(item.value) isnt 0.0
+        $scope.currentTimers = timers
         $scope.currentTimersLoaded = true
 
     $scope.setWeeks = ->
@@ -65,14 +84,10 @@ angular.module 'TimersCalendar'
     $scope.prevMonth = ->
       moment($scope.date).subtract(1, 'month').format('YYYY-MM-DD')
 
-    $scope.nextPage = ->
-      $location.path('/month/' + $scope.nextMonth())
-
-    $scope.prevPage = ->
-      $location.path('/month/' + $scope.prevMonth())
-
     $scope.cssClassForTimer = (timer) ->
-      if timer.position_uuid
+      if timer.started
+        'running'
+      else if timer.position_uuid
         'invoiced'
       else if timer.task_billable
         'billable'

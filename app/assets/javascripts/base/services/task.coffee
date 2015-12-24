@@ -1,4 +1,4 @@
-angular.module 'Timesheet'
+angular.module 'Reckoning'
 .factory 'Task', ['$http', '$q', '$filter', ($http, $q, $filter) ->
   allPromise: $q.defer()
 
@@ -6,7 +6,11 @@ angular.module 'Timesheet'
     factory = @
     @allPromise.resolve()
     @allPromise = $q.defer()
-    $http.get(ApiBasePath + Routes.v1_tasks_path(), {timeout: @allPromise, params: {week_date: dates[0].date}}).success (tasks, status, headers, config) ->
+    $http.get(ApiBasePath + Routes.v1_tasks_path(),
+      timeout: @allPromise
+      params:
+        week_date: dates[0].date
+    ).success (tasks, status, headers, config) ->
       currentTasks = []
       if tasks.length
         tasks.forEach (task) ->
