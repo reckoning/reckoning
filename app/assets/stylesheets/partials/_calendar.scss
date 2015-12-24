@@ -114,6 +114,10 @@
       background-color: #f5f5f5;
     }
 
+    &.current-day {
+      background-color: lighten($brand-primary, 30%);
+    }
+
     &:last-child {
       border-width: 1px 0 0 0;
     }

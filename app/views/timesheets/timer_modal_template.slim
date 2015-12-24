@@ -28,12 +28,12 @@
       = I18n.t(:"actions.close")
     button.btn.btn-success ng-click="stopTimer(timer, $event)" ng-if="timer.uuid && timer.started"
       = I18n.t(:"actions.stop")
-    button.btn.btn-default ng-click="startTimer(timer, $event)" ng-if="timer.uuid && !timer.started"
+    button.btn.btn-default ng-click="startTimer(timer, $event)" ng-if="timer.uuid && !timer.started && isStartable(timer.date)"
       = I18n.t(:"actions.start")
     button.btn.btn-primary.btn-lg ng-disabled="!timer.task_uuid" ng-click="saveTimer(timer)" data-loading-text=I18n.t(:"actions.loading")
-      span ng-if="timer.uuid || timer.value.length"
+      span ng-if="timer.uuid || timer.value.length || !isStartable(timer.date)"
         = I18n.t(:"actions.save")
-      span ng-if="!timer.uuid && !timer.value.length"
+      span ng-if="!timer.uuid && !timer.value.length && isStartable(timer.date)"
         = I18n.t(:"actions.begin")
   .pull-left ng-if="timer.uuid"
     button.btn.btn-danger ng-click="delete(timer)"
