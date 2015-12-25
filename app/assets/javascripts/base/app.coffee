@@ -1,7 +1,6 @@
 angular.module 'Reckoning', [
   'ngRoute'
   'ngAnimate'
-  'ngTouch'
   'ui.bootstrap.tpls'
   'ui.bootstrap.modal'
 ]
