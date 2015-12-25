@@ -52,9 +52,10 @@ angular.module 'TimersCalendar'
         $scope.currentTimersLoaded = true
 
     $scope.setWeeks = ->
-      endDate = moment(@date).endOf('month')
-      weekCount = moment(endDate - @date).weeks()
-      date = moment(@date)
+      startDate = moment(@date).startOf('month').startOf('week')
+      endDate = moment(@date).endOf('month').endOf('week')
+      weekCount = moment(endDate - startDate).weeks() - 1
+      date = moment(startDate)
       for weekNumber in [1..weekCount]
         date = date.add(1, 'weeks') if weekNumber > 1
         itr = moment(date.isoWeekday(1)).twix(date.isoWeekday(7)).iterate("days")
