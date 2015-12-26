@@ -4,7 +4,7 @@
   .col-xs-12.col-md-5.col-md-offset-2
     h1 = I18n.t(:"headlines.confirm")
     = form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post}) do |form|
-      .form-group{class: form_error?(resource, :email)}
+      .form-group class=form_error?(resource, :email)
         = form.text_field :email, required: true, placeholder: I18n.t(:"helpers.placeholder.user.email"), class: 'form-control'
         small = form_errors resource, :email
       br
