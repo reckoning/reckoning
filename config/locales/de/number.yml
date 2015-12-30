@@ -6,5 +6,5 @@ de:
         precision: 1
     currency:
       format:
-        precision: 0
+        precision: 2
         accounting_format: "%v %s"
