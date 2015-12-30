@@ -35,6 +35,6 @@
         = I18n.t(:"actions.save")
       span ng-if="!timer.uuid && !timer.value.length && isStartable(timer.date)"
         = I18n.t(:"actions.begin")
-  .pull-left ng-if="timer.uuid"
+  .pull-left ng-if="timer.uuid && !timer.invoiced"
     button.btn.btn-danger ng-click="delete(timer)"
       = I18n.t(:"actions.delete")
