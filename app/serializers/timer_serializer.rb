@@ -33,17 +33,17 @@ class TimerSerializer < ActiveModel::Serializer
     object.task.project_id
   end
 
-  def links
-    {
-      project: { href: project_path(object.task.project_id) }
-    }
-  end
-
   def position_uuid
     object.position_id
   end
 
   def invoiced
     object.position_id.present?
+  end
+
+  def links
+    {
+      project: { href: project_path(object.task.project_id) }
+    }
   end
 end
