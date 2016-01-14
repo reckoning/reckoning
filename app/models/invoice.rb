@@ -57,6 +57,10 @@ class Invoice < ActiveRecord::Base
     with_created_state
   end
 
+  def self.paid_in_year(year)
+    paid.where("pay_date <= ? AND pay_date >= ?", "#{year}-12-31", "#{year}-01-01")
+  end
+
   def self.year(year)
     where("date <= ? AND date >= ?", "#{year}-12-31", "#{year}-01-01")
   end
