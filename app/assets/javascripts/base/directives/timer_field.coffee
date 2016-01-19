@@ -1,4 +1,4 @@
-angular.module 'Timesheet'
+angular.module 'Reckoning'
 .directive 'timefield', ['$filter', ($filter) ->
   require: 'ngModel'
   scope:
