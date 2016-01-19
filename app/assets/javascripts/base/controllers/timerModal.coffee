@@ -18,13 +18,14 @@ angular.module 'Reckoning'
         project = _.find $scope.projects, (project) -> project.uuid is timer.project_uuid
         $scope.tasks = project.tasks
 
-    $scope.saveTimer = (timer) ->
+    $scope.saveTimer = (timer, start) ->
       if timer.uuid
+        timer.started = start
         Timer.update(timer).success (data) ->
           $uibModalInstance.close({data: data, status: 'updated'})
       else
         timer.value = 0 unless timer.value
-        timer.started = false if timer.value > 0
+        timer.started = start
         Timer.create(timer).success (data) ->
           $uibModalInstance.close({data: data, status: 'created'})
 

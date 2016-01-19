@@ -24,17 +24,12 @@
       input.input-lg.form-control.text-right ng-disabled="timer.invoiced" ng-if="!(timer.uuid && timer.started)" ng-model="timer.value" placeholder="0:00" timefield=true
 .modal-footer
   .pull-right
-    button.btn.btn-default ng-click="cancel()"
-      = I18n.t(:"actions.close")
-    button.btn.btn-success ng-click="stopTimer(timer, $event)" ng-if="timer.uuid && timer.started && !timer.invoiced"
-      = I18n.t(:"actions.stop")
-    button.btn.btn-default ng-click="startTimer(timer, $event)" ng-if="timer.uuid && !timer.started && isStartable(timer.date) && !timer.invoiced"
-      = I18n.t(:"actions.start")
-    button.btn.btn-primary.btn-lg ng-class="{'disabled':timer.invoiced}" ng-disabled="timer.invoiced || !timer.task_uuid" ng-click="saveTimer(timer)" data-loading-text=I18n.t(:"actions.loading")
-      span ng-if="timer.uuid || timer.value.length || !isStartable(timer.date)"
-        = I18n.t(:"actions.save")
-      span ng-if="!timer.uuid && !timer.value.length && isStartable(timer.date)"
-        = I18n.t(:"actions.begin")
+    button.btn.btn-primary.btn-lg ng-class="{'disabled':timer.invoiced}" ng-disabled="timer.invoiced || !timer.task_uuid" ng-click="saveTimer(timer, false)" data-loading-text=I18n.t(:"actions.loading")
+      = I18n.t(:"actions.save")
+    button.btn.btn-default.btn-lg title=I18n.t(:"actions.begin") ng-if="((!timer.started) || (timer.started && !timer.uuid)) && isStartable(timer.date)" ng-class="{'disabled':timer.invoiced}" ng-disabled="timer.invoiced || !timer.task_uuid" ng-click="saveTimer(timer, true)" data-loading-text=I18n.t(:"actions.loading")
+      i.fa.fa-play
+    button.btn.btn-default.btn-lg title=I18n.t(:"actions.stop") ng-click="stopTimer(timer, $event)" ng-if="timer.uuid && timer.started && !timer.invoiced"
+      i.fa.fa-stop
   .pull-left ng-if="timer.uuid && !timer.invoiced"
     button.btn.btn-danger ng-click="delete(timer)"
       = I18n.t(:"actions.delete")
