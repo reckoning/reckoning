@@ -1,4 +1,4 @@
-angular.module 'Timesheet'
+angular.module 'Reckoning'
 .filter 'toDecimal', ->
   (input) ->
     parts = input.split(':')
