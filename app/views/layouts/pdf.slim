@@ -7,7 +7,7 @@ html
     = stylesheet_link_tag "http://fonts.googleapis.com/css?family=Droid+Sans:400"
 
     style type="text/css"
-      = Rails.application.assets.find_asset("pdf.css")
+      = Rails.application.assets["pdf.css"].to_s
 
     javascript:
       function number_pages() {
