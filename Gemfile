@@ -72,6 +72,14 @@ gem 'sentry-raven'
 
 gem 'typhoeus'
 
+gem 'peek'
+gem 'peek-sidekiq'
+gem 'peek-git'
+gem 'peek-host'
+gem 'peek-pg'
+gem 'peek-redis'
+gem 'peek-performance_bar'
+
 # pdf rendering
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-heroku'

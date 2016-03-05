@@ -1,6 +1,8 @@
 #= require jquery
 #= require jquery_ujs
 #= require js-routes
+#= require peek
+#= require peek/views/performance_bar
 #= require spin.js/spin
 #= require ladda/js/ladda
 #= require noty
