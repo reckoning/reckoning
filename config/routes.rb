@@ -161,5 +161,7 @@ Reckoning::Application.routes.draw do
   get '422' => 'errors#server_error'
   get '500' => 'errors#server_error'
 
+  mount Peek::Railtie => '/peek'
+
   root to: 'base#index'
 end

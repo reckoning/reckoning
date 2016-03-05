@@ -2,6 +2,7 @@ doctype html
 html lang=I18n.locale
   head = render "layouts/head"
   body data-success=flash[:success] data-info=notice data-error=alert
+    = render 'peek/bar' if params[:peek].present?
     = render "layouts/landing_page/navigation"
     .container
       == yield

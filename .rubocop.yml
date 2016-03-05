@@ -1,6 +1,5 @@
 # https://github.com/bbatsov/rubocop/blob/master/config/default.yml
 AllCops:
-  RunRailsCops: true
   Exclude:
     - 'node_modules/**/*'
     - "db/**/*"
@@ -8,6 +7,9 @@ AllCops:
     - "vendor/**/*"
     - "bin/**/*"
     - "log/**/*"
+
+Rails:
+  Enabled: true
 
 Style/Documentation:
   Enabled: false # for now
@@ -36,7 +38,7 @@ Style/MultilineBlockChain:
 #   "foo",
 #   "bar",
 # ]
-Style/TrailingComma:
+Style/TrailingCommaInLiteral:
   Enabled: false
 
 Metrics/LineLength:

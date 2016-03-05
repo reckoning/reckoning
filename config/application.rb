@@ -38,6 +38,8 @@ module Reckoning
       end
     end
 
+    config.peek.adapter = :redis
+
     if ENV['HTTP_USER'].present? && ENV['HTTP_PASSWORD'].present?
       # Basic authentication for Heroku Stage
       config.middleware.use '::Rack::Auth::Basic' do |user, password|

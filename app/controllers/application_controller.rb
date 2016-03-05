@@ -9,6 +9,10 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!, :set_default_nav
   before_action :configure_permitted_parameters, if: :devise_controller?
 
+  def peek_enabled?
+    true
+  end
+
   private def current_account
     @current_account ||= begin
       if current_user.present?

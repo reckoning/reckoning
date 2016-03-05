@@ -24,7 +24,7 @@ set :shared_paths, [
   'files',
   'log',
   'config/secrets.yml',
-  'config/database.yml',
+  'config/database.yml'
 ]
 
 task :environment do
