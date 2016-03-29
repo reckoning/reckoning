@@ -2,7 +2,6 @@ doctype html
 html lang=I18n.locale
   head = render "layouts/head"
   body data-success=flash[:success] data-info=notice data-error=alert class="#{nav_layout}-nav"
-    = render 'peek/bar' if params[:peek].present? || (user_signed_in? && current_user.admin?)
     - if user_signed_in?
       = render "layouts/navigation"
     .container-fluid
