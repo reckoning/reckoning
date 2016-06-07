@@ -119,13 +119,16 @@ de:
       server_error: Fehler
 
   filter:
+    delete: "Entfernen"
     invoice_year:
-      all: "Alle Jahre"
+      label: "Erstellt in:"
+    invoice_paid_in_year:
+      label: "Gezahlt in:"
     project_state:
-      all: "Aktive Projekte"
+      all: "Alle Projekte"
       archived: "Archivierte Projekte"
     invoice_state:
-      all: "Alle"
+      label: "Status:"
       created: "Entwürfe"
       charged: "Offen"
       paid: "Bezahlt"

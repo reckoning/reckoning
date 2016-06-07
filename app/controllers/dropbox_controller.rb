@@ -8,7 +8,7 @@ class DropboxController < ApplicationController
     DropboxOAuth2Flow::NotApprovedError,
     DropboxOAuth2Flow::ProviderError,
     DropboxError
-  ]
+  ].freeze
 
   def show
     @active_nav = "account"

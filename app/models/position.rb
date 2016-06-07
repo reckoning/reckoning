@@ -11,13 +11,13 @@ class Position < ActiveRecord::Base
 
   def set_value
     return if hours.blank? || hours.zero?
-    if rate.present?
-      self.value = hours * rate
-    elsif invoice.rate.present?
-      self.value = hours * invoice.rate
-    else
-      self.value = hours * invoice.project.rate
-    end
+    self.value = if rate.present?
+                   hours * rate
+                 elsif invoice.rate.present?
+                   hours * invoice.rate
+                 else
+                   hours * invoice.project.rate
+                 end
   end
 
   def set_invoice_value

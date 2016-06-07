@@ -7,9 +7,9 @@ module Backend
     # get: /backend/users
     def index
       @users = User.all
-               .order("#{sort_column} #{sort_direction}")
-               .page(params.fetch(:page) { nil })
-               .per(20)
+                   .order("#{sort_column} #{sort_direction}")
+                   .page(params.fetch(:page) { nil })
+                   .per(20)
     end
 
     # get: /backend/users/new
@@ -63,7 +63,7 @@ module Backend
     end
 
     def sort_column
-      (User.column_names).include?(params[:sort]) ? params[:sort] : "id"
+      User.column_names.include?(params[:sort]) ? params[:sort] : "id"
     end
     helper_method :sort_column
 

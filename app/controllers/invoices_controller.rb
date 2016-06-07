@@ -7,17 +7,12 @@ class InvoicesController < ApplicationController
 
   def index
     authorize! :read, Invoice
-    state = params.fetch(:state, nil)
-    year = params.fetch(:year, nil)
     @invoices = current_account.invoices
-    if state.present? && Invoice.workflow_spec.state_names.include?(state.to_sym)
-      @invoices = @invoices.send(state)
-    end
-    @invoices = @invoices.year(year) if year.present? && year =~ /\d{4}/
-    @invoices = @invoices.includes(:customer, :project).references(:customers)
-                .order(sort_column + " " + sort_direction)
-                .page(params.fetch(:page, nil))
-                .per(10)
+                               .filter(filter_params)
+                               .includes(:customer, :project).references(:customers)
+                               .order(sort_column + " " + sort_direction)
+                               .page(params.fetch(:page, nil))
+                               .per(10)
   end
 
   def show
@@ -101,11 +96,11 @@ class InvoicesController < ApplicationController
 
   def new
     authorize! :create, Invoice
-    if project
-      @invoice ||= project.invoices.new
-    else
-      @invoice ||= current_account.invoices.new
-    end
+    @invoice ||= if project
+                   project.invoices.new
+                 else
+                   current_account.invoices.new
+                 end
     invoice.positions << Position.new
   end
 
@@ -136,16 +131,16 @@ class InvoicesController < ApplicationController
 
   def charge
     authorize! :charge, invoice
+
+    if invoice.charge!
+      flash[:success] = I18n.t(:'messages.invoice.charge.success')
+    else
+      flash[:alert] = I18n.t(:'messages.invoice.charge.failure')
+    end
+
     respond_to do |format|
-      if invoice.charge!
-        flash[:success] = I18n.t(:'messages.invoice.charge.success')
-        format.js { render json: {}, status: :ok }
-        format.html { redirect_to :back }
-      else
-        flash[:alert] = I18n.t(:'messages.invoice.charge.failure')
-        format.js { render json: {}, status: :ok }
-        format.html { redirect_to :back }
-      end
+      format.js { render json: {}, status: :ok }
+      format.html { redirect_to :back }
     end
   end
 
@@ -160,18 +155,16 @@ class InvoicesController < ApplicationController
 
   def destroy
     authorize! :destroy, invoice
+
     if invoice.destroy
       flash[:success] = resource_message(:invoice, :destroy, :success)
-      respond_to do |format|
-        format.js { render json: {}, status: :ok }
-        format.html { redirect_to invoices_path }
-      end
     else
       flash[:alert] = resource_message(:invoice, :destroy, :failure)
-      respond_to do |format|
-        format.js { render json: {}, status: :ok }
-        format.html { redirect_to invoices_path }
-      end
+    end
+
+    respond_to do |format|
+      format.js { render json: {}, status: :ok }
+      format.html { redirect_to invoices_path }
     end
   end
 
@@ -200,6 +193,11 @@ class InvoicesController < ApplicationController
       ]
     )
   end
+
+  private def filter_params
+    params.permit(:state, :year, :paid_in_year)
+  end
+  helper_method :filter_params
 
   private def project
     @project ||= current_account.projects.find_by(id: params.fetch(:project_uuid, nil))

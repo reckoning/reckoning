@@ -1,11 +1,9 @@
 module PositionHelper
   def positions_for_select
     positions = Position.all
-    if positions.present?
-      return positions.map { |position| [position.description, position.description] }
-    else
-      return []
-    end
+    return [] if positions.blank?
+
+    positions.map { |position| [position.description, position.description] }
   end
 
   def timer_position_fields(form)

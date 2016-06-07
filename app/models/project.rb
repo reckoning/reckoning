@@ -1,10 +1,10 @@
 class Project < ActiveRecord::Base
   DEFAULT_ROUND_UP_OPTIONS = {
-    "Nicht aufrunden": 10.0,
-    "Auf 15 Minuten": 4.0,
-    "Auf 30 Minuten": 5.0,
-    "Auf 1 Stunde": 1.0
-  }
+    "Nicht aufrunden" => 10.0,
+    "Auf 15 Minuten" => 4.0,
+    "Auf 30 Minuten" => 5.0,
+    "Auf 1 Stunde" => 1.0
+  }.freeze
 
   belongs_to :customer
   has_many :invoices, dependent: :destroy

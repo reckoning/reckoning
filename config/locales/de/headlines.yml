@@ -25,6 +25,7 @@ de:
       new: "Neues Projekt"
       edit: "Projekt bearbeiten"
       index: "Projekte"
+      index_archived: "Archivierte Projekte"
 
     invoice:
       new: "Neue Rechnung"

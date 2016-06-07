@@ -33,11 +33,10 @@ class CurrentUserController < ApplicationController
       @codes = current_user.generate_otp_backup_codes!
       current_user.save!
       flash.now[:success] = I18n.t(:"messages.enable.success", scope: 'devise.otp')
-      render "otp"
     else
       flash.now[:alert] = I18n.t(:"messages.enable.failure", scope: 'devise.otp')
-      render "otp"
     end
+    render "otp"
   end
 
   def disable_otp

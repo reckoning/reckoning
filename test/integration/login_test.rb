@@ -21,7 +21,7 @@ class LoginTest < ActionDispatch::IntegrationTest
 
     assert_equal root_path, path
 
-    assert_select ".user-email", "#{user.email}"
+    assert_select ".user-email", user.email.to_s
 
     assert_equal I18n.t(:"devise.sessions.signed_in"), flash[:notice]
   end

@@ -7,7 +7,10 @@
     .row
       .col-xs-12.col-md-8
         %h1
-          = I18n.t(:"headlines.project.index")
+          - if params.fetch(:state, nil)
+            = I18n.t(:"headlines.project.index_archived")
+          - else
+            = I18n.t(:"headlines.project.index")
 
       .col-xs-12.col-md-4
         .btn-group.btn-group-justified-responsive.pull-right.resource-nav
@@ -17,7 +20,13 @@
 
     .row
       .col-xs-12.col-md-6
-        = render "shared/tables/filter", resource: "project", name: "state", filters: Project.workflow_spec.state_names.reject {|state| state == :active}, translateable: true
+        .filter-menu.btn-group
+          - if params.fetch(:state, nil)
+            %a.btn.btn-default{href: url_for(state: nil)}
+              = I18n.t(:"filter.project_state.all")
+          - else
+            %a.btn.btn-default{href: url_for(state: :archived)}
+              = I18n.t(:"filter.project_state.archived")
       .col-xs-12.col-md-6
         .pull-right
           = paginate @projects

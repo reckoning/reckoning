@@ -1,4 +1,4 @@
 module Reckoning
-  CODENAME = "nimoy"
-  VERSION = "v2.0.3"
+  CODENAME = "nimoy".freeze
+  VERSION = "v2.0.3".freeze
 end

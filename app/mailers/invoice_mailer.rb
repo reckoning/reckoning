@@ -1,6 +1,6 @@
 # encoding: utf-8
 class InvoiceMailer < ActionMailer::Base
-  default from: "#{Rails.application.secrets[:mailer]['default_from']}"
+  default from: (Rails.application.secrets[:mailer]['default_from']).to_s
 
   attr_accessor :invoice
 

@@ -1,5 +1,5 @@
 module ActiveRecord
   class Base
-    alias_method :uuid, :id
+    alias uuid id
   end
 end

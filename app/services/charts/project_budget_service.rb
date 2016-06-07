@@ -59,14 +59,14 @@ module Charts
       end
     end
 
-    private def weeks(&block)
+    private def weeks
       index = 0
       days = (Date.parse(start_date.to_s)..Date.parse(end_date.to_s)).to_a
       day_offset = days.first.wday - 1
       day_offset.times { days.unshift(nil) }
       days.each_slice(7) do |week_days|
         week_days.compact!
-        block.call(week_days.first, week_days.last, index)
+        yield(week_days.first, week_days.last, index)
         index += 1
       end
     end

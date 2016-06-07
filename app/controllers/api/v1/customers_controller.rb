@@ -26,13 +26,11 @@ module Api
         if customer.invoices.present?
           Rails.logger.info "Customer Destroy Failed: Invoices present"
           render json: ValidationError.new("customer.destroy_failure_dependency"), status: :bad_request
+        elsif customer.destroy
+          render json: { message: I18n.t(:"messages.customer.destroy.success") }, status: :ok
         else
-          if customer.destroy
-            render json: { message: I18n.t(:"messages.customer.destroy.success") }, status: :ok
-          else
-            Rails.logger.info "Customer Destroy Failed: #{customer.errors.full_messages.to_yaml}"
-            render json: ValidationError.new("customer.destroy", customer.errors), status: :bad_request
-          end
+          Rails.logger.info "Customer Destroy Failed: #{customer.errors.full_messages.to_yaml}"
+          render json: ValidationError.new("customer.destroy", customer.errors), status: :bad_request
         end
       end
 

@@ -23,7 +23,7 @@ module Reckoning
     config.i18n.fallbacks = [:de]
 
     config.action_view.field_error_proc = proc { |html_tag, _instance|
-      "#{html_tag}".html_safe
+      html_tag.to_s.html_safe
     }
 
     config.exceptions_app = routes

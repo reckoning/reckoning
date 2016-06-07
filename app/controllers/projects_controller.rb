@@ -9,15 +9,15 @@ class ProjectsController < ApplicationController
 
     state = params.fetch(:state, nil)
     scope = current_account.projects.includes(:customer, :timers)
-    if state.present? && Project.workflow_spec.state_names.include?(state.to_sym)
-      scope = scope.where(workflow_state: state)
-    else
-      scope = scope.where(workflow_state: :active)
-    end
+    scope = if state.present? && Project.workflow_spec.state_names.include?(state.to_sym)
+              scope.where(workflow_state: state)
+            else
+              scope.where(workflow_state: :active)
+            end
 
     @projects = scope.order(sort_column + " " + sort_direction)
-                .page(params.fetch(:page, nil))
-                .per(20)
+                     .page(params.fetch(:page, nil))
+                     .per(20)
     @projects_by_customer = @projects.group_by(&:customer)
   end
 
@@ -28,11 +28,11 @@ class ProjectsController < ApplicationController
 
   def new
     authorize! :create, Project
-    if customer
-      @project ||= customer.projects.new
-    else
-      @project ||= current_account.projects.new
-    end
+    @project ||= if customer
+                   customer.projects.new
+                 else
+                   current_account.projects.new
+                 end
   end
 
   def edit

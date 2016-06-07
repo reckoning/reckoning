@@ -14,11 +14,11 @@ class User < ActiveRecord::Base
   validates :email, email: true
 
   def update_gravatar_hash
-    if gravatar.blank?
-      hash = Digest::MD5.hexdigest(id.to_s)
-    else
-      hash = Digest::MD5.hexdigest(gravatar.downcase.strip)
-    end
+    hash = if gravatar.blank?
+             Digest::MD5.hexdigest(id.to_s)
+           else
+             Digest::MD5.hexdigest(gravatar.downcase.strip)
+           end
     self.gravatar_hash = hash
   end
 

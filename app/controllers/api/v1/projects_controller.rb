@@ -7,20 +7,20 @@ module Api
         scope = current_account.projects
 
         state = params.fetch(:state, nil)
-        if state.present? && Project.workflow_spec.state_names.include?(state.to_sym)
-          scope = scope.where("projects.workflow_state = ?", state)
-        else
-          scope = scope.where("projects.workflow_state = ?", :active)
-        end
+        scope = if state.present? && Project.workflow_spec.state_names.include?(state.to_sym)
+                  scope.where("projects.workflow_state = ?", state)
+                else
+                  scope.where("projects.workflow_state = ?", :active)
+                end
 
         scope = scope.where.not(id: without_ids) if without_ids
 
         sort = params.fetch(:sort, nil)
-        if sort.present? && sort == "last_used"
-          scope = scope.includes(:timers).order("timers.created_at desc nulls last")
-        else
-          scope = scope.order("name asc")
-        end
+        scope = if sort.present? && sort == "last_used"
+                  scope.includes(:timers).order("timers.created_at desc nulls last")
+                else
+                  scope.order("name asc")
+                end
 
         render json: scope, each_serializer: ProjectSerializer
       end
@@ -31,13 +31,11 @@ module Api
         if project.invoices.present?
           Rails.logger.info "Project Destroy Failed: Invoices present"
           render json: ValidationError.new("project.destroy_failure_dependency"), status: :bad_request
+        elsif project.destroy
+          render json: { message: I18n.t(:"messages.project.destroy.success") }, status: :ok
         else
-          if project.destroy
-            render json: { message: I18n.t(:"messages.project.destroy.success") }, status: :ok
-          else
-            Rails.logger.info "Project Destroy Failed: #{project.errors.full_messages.to_yaml}"
-            render json: ValidationError.new("project.destroy", project.errors), status: :bad_request
-          end
+          Rails.logger.info "Project Destroy Failed: #{project.errors.full_messages.to_yaml}"
+          render json: ValidationError.new("project.destroy", project.errors), status: :bad_request
         end
       end
 
