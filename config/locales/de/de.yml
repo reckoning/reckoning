@@ -31,6 +31,7 @@ de:
       accounts: Accounts
       sign_up: "Registrieren"
       contacts: "Kontaktanfragen"
+      expenses: "Ausgaben"
     footer:
       impressum: Impressum
       privacy: Datenschutz
@@ -46,6 +47,7 @@ de:
       new_user: "Neuer Benutzer"
       new_account: "Neuer Account"
       update_password: "Passwort ändern"
+      new_expense: "Neue Ausgabe"
       user:
         basic: Allgemein
         security: Zugangsdaten
@@ -95,6 +97,10 @@ de:
         show: "Rechnung %{invoice_ref}"
         new: "Neue Rechnung"
         edit: "Rechnung bearbeiten"
+      expense:
+        index: "Ausgaben"
+        new: "Neue Ausgabe"
+        edit: "Ausgabe bearbeiten"
       account:
         edit: "Account bearbeiten"
       user:
@@ -120,6 +126,8 @@ de:
 
   filter:
     delete: "Entfernen"
+    expense_year:
+      label: "Gekauft in:"
     invoice_year:
       label: "Erstellt in:"
     invoice_paid_in_year:

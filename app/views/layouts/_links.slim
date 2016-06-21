@@ -5,4 +5,8 @@ ul.nav.navbar-nav
     = link_to I18n.t(:"nav.header.projects"), projects_path
   li class=active_nav?('timesheet')
     a href="#{timesheet_path}/#/day/#{I18n.l(Time.zone.now.to_date, format: :db)}" data-no-turbolink=true target="_self"
-      = I18n.t(:"nav.header.timesheet")
+      = I18n.t(:"nav.header.timesheet")  
+  
+  - if can? :read, :expenses
+    li class=active_nav?('expenses')
+      = link_to I18n.t(:"nav.header.expenses"), expenses_path

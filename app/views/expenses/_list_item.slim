@@ -1,0 +1,12 @@
+.list-group-item
+  .row
+    .col-xs-2
+      = I18n.l expense.date, format: :date 
+    .col-xs-7
+      a href=edit_expense_path(expense) title=I18n.t(:"actions.edit")
+        b= expense.description  
+    .col-xs-3
+      - if expense.receipt.present?
+        i.fa.fa-file title=I18n.t(:"expenses.file_attached")
+      .pull-right.expense-price
+        = number_to_currency expense.value

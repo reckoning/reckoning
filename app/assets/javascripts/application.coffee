@@ -44,6 +44,13 @@ window.ApiBasePath = "//api.#{domain}"
 $(document).on 'show.bs.collapse', '.navbar-collapse', ->
   $('.navbar-collapse.in').not(this).collapse('hide')
 
+$(document).on "upload:start", "form", (e) ->
+  $(@).find("input[type=submit]").attr("disabled", true)
+
+$(document).on "upload:complete", "form", (e) ->
+  if !$(@).find("input.uploading").length
+    $(@).find("input[type=submit]").removeAttr("disabled")
+
 $ ->
   FastClick.attach(document.body)
 

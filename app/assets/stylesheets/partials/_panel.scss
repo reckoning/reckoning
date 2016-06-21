@@ -3,6 +3,10 @@
     color: lighten($text-color, 20%);
   }
 
+  .panel-title {
+    font-size: 17px;
+  }
+
   .panel-progress {
     border-top: 1px solid $panel-inner-border;
     background-color: $panel-default-heading-bg;

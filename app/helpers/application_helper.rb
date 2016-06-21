@@ -21,25 +21,6 @@ module ApplicationHelper
     ].compact.join(" | ")
   end
 
-  def first_invoice_year
-    first_invoice = current_account.invoices.order('date').first
-    return unless first_invoice.present?
-    first_invoice.date.year
-  end
-
-  def current_years
-    current_year = Time.zone.now.year
-    current_year = (Time.zone.now + 1.year).year if Time.zone.now.month == 12
-    years = if first_invoice_year
-              (first_invoice_year..current_year)
-            else
-              ((Time.zone.now - 1.year).year..current_year)
-            end
-    years.to_a.reverse.map do |year|
-      { name: year, link: year }
-    end
-  end
-
   def sortable(column, title = nil)
     title ||= column.titleize
     css_class = column == sort_column ? "current #{sort_direction}" : nil

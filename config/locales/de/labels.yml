@@ -70,6 +70,8 @@ de:
     contact:
       email: "E-Mail"
       created_at: "Empfangen"
+    expenses:
+      date: "Datum"
     user:
       current_sign_in_at: "Letzte Aktivität vor"
       admin: "Admin?"

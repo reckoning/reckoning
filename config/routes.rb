@@ -134,14 +134,7 @@ Reckoning::Application.routes.draw do
     end
   end
 
-  resources :weeks, only: [:create, :update] do
-    collection do
-      post :add_task
-    end
-    member do
-      put 'remove_task/:task_id' => 'weeks#remove_task', as: :remove_task
-    end
-  end
+  resources :expenses, except: [:show]
 
   resource :dropbox, controller: "dropbox", only: [:show] do
     collection do

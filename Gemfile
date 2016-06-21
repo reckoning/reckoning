@@ -88,6 +88,7 @@ gem 'wkhtmltopdf-heroku'
 gem 'rails_12factor', group: :production
 gem 'non-stupid-digest-assets'
 
+gem "carrierwave"
 gem 'pry-rails', group: :development
 
 group :test do

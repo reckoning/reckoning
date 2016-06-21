@@ -39,6 +39,11 @@ de:
       edit: "Kunde bearbeiten"
       index: "Kunden"
 
+    expense:
+      index: "Ausgaben"
+      new: "Neue Ausgabe"
+      edit: "Ausgabe bearbeiten"
+
     backend:
       user:
         index: "Benutzer"

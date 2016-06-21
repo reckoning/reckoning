@@ -1,0 +1,44 @@
+- content_for :title do
+  = I18n.t(:"meta.title.expense.index")
+
+.row#expenses
+  .col-xs-12.col-md-12
+
+    .row
+      .col-xs-12.col-md-8
+        h1= I18n.t(:"headlines.expense.index")
+
+      .col-xs-12.col-md-4
+        .btn-group.btn-group-justified-responsive.pull-right.resource-nav
+          a.btn.btn-primary href=new_expense_path
+            i.fa.fa-plus
+            '
+            = I18n.t(:"nav.subnav.new_expense")
+    
+    .row
+      .col-xs-6.col-md-4
+        = render "shared/tables/filter", resource: "expense", name: "year", filters: current_expenses_years
+      .col-xs-6.col-md-4.expenses-sum
+        = "Summe: "
+        strong= number_to_currency(@expenses_sum)
+      .col-xs-12.col-md-4
+        .pull-right
+          = paginate @expenses
+    
+    hr  
+    .panel.panel-list.panel-default.expense
+      .panel-heading
+        .row
+          .col-xs-2 Datum
+          .col-xs-7 Beschreibung
+          .col-xs-3 
+            |Beleg
+            .pull-right Wert
+      .list-group
+        = render partial: "expenses/list_item", collection: @expenses, as: :expense
+
+    - if @expenses.blank?
+      = render partial: "shared/blank"
+
+    .pull-right
+      = paginate @expenses

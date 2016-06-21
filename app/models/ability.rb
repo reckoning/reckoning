@@ -27,6 +27,14 @@ class Ability
     can :manage, Timer, user_id: user.id
     can :manage, :timesheet
 
+    can :read, :expenses do
+      user.account.feature_expenses?
+    end
+
+    can :manage, Expense do |expense|
+      expense.account_id == user.account_id && user.account.feature_expenses?
+    end
+
     setup_admin_abilities if user.admin?
   end
 

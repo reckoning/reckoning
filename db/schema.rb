@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151119202121) do
+ActiveRecord::Schema.define(version: 20160621205026) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,13 +27,14 @@ ActiveRecord::Schema.define(version: 20151119202121) do
     t.hstore   "services"
     t.hstore   "mailing"
     t.hstore   "contact_information"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
     t.datetime "trail_end_at"
     t.boolean  "trail_used"
     t.string   "stripe_email"
     t.string   "stripe_token"
     t.string   "vat_id"
+    t.boolean  "feature_expenses",    default: false
   end
 
   create_table "contacts", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
@@ -55,6 +56,17 @@ ActiveRecord::Schema.define(version: 20151119202121) do
     t.uuid     "account_id",                      null: false
   end
 
+  create_table "expenses", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.string   "expense_type",                                        null: false
+    t.decimal  "value",        precision: 10, scale: 2, default: 0.0, null: false
+    t.string   "description"
+    t.datetime "date",                                                null: false
+    t.uuid     "account_id",                                          null: false
+    t.string   "receipt"
+    t.datetime "created_at",                                          null: false
+    t.datetime "updated_at",                                          null: false
+  end
+
   create_table "invoices", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.date     "date"
     t.datetime "created_at"
@@ -71,15 +83,6 @@ ActiveRecord::Schema.define(version: 20151119202121) do
     t.uuid     "customer_id"
     t.uuid     "project_id"
     t.uuid     "account_id",                                                            null: false
-  end
-
-  create_table "permissions", force: :cascade do |t|
-    t.string   "resource_type"
-    t.uuid     "resource_id"
-    t.boolean  "write",         default: false, null: false
-    t.uuid     "user_id"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
   end
 
   create_table "plans", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|

@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  expense_type: afa
+  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+  value: 9.99
+  description: MyString
+  date: 2015-11-23 19:01:57
+
+two:
+  expense_type: gwg
+  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+  value: 9.99
+  description: MyString
+  date: 2015-11-23 19:01:57

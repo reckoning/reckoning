@@ -7,6 +7,10 @@ de:
       paid_invoices: "Bezahlte Rechnungen"
       last_invoices: "Letztes Jahr"
       budgets: "Budget"
+      expenses:
+        title: "Ausgaben"
+        current: "Aktuell"
+        last: "Letztes Jahr"
       provision: "Steuer-Rückstellung"
       last_provision: "Steuer-Rückstellung %{year}"
       timers_chart: "Stunden in den letzten 30 Tagen"

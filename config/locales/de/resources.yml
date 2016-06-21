@@ -4,6 +4,7 @@ de:
     project: "Projekt"
     customer: "Kunde"
     account: "Account"
+    expense: "Ausgabe"
     messages:
       create:
         success: "%{resource} erfolgreich erstellt."

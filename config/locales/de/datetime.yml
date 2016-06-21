@@ -1,5 +1,8 @@
 de:
   datepicker:
+    formats:
+      default: "d. mmmm yyyy"
+      submit: "yyyy-mm-dd"
     labels:
       next_month: 'Nächster Monat'
       prev_month: 'Vorheriger Monat'
@@ -7,13 +10,13 @@ de:
       select_year: 'Jahr auswählen'
   date:
     formats:
-      datepicker: 'd. mmmm yyyy'
-      datepicker_submit: "yyyy-mm-dd"
       db: "%Y-%m-%d"
       month_year: "%B %Y"
       month: "%B"
       day: "%A"
       year: "%Y"
       file: "%B-%Y"
-      datepicker: 'd. mmmm yyyy'
-      datepicker_submit: "yyyy-mm-dd"
+  time:
+    formats:
+      date: "%d.%m.%Y"
+      datepicker: "%d. %B %Y"

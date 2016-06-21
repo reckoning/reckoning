@@ -69,6 +69,12 @@ de:
         email_template: "Inhalt"
         invoice_email: "Empfänger"
         default_from: "Absender"
+      expense:
+        date: "Eingangsdatum"
+        description: "Beschreibung"
+        value: "Betrag"
+        receipt: "Beleg"
+        receipt_missing: "Kein Beleg hinzugefügt"
       setting:
         base:
           registration: "Registrierung aktiv?"
@@ -131,6 +137,8 @@ de:
         task: "Bitte wähle eine Aufgabe"
       account:
         plan: "Bitte wähle einen Plan"
+      expense:
+        expense_type: "Bitte wähle einen Typ"
     help:
       customer:
         default_from: "Absender für diesen Kunden festlegen, alternativ kann global in Ihrem Benutzerkonto ein Absender definiert werden."

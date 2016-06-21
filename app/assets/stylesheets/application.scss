@@ -57,6 +57,13 @@ body {
   }
 }
 
+.spacer {
+  display: inline-block;
+  &.horizontal {
+    width: 20px;
+  }
+}
+
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }

@@ -1,0 +1,19 @@
+- content_for :title do
+  = I18n.t(:"meta.title.expense.edit")
+
+.row#edit-expense
+
+  .col-xs-12.col-md-12
+
+    .row
+      .col-xs-12.col-md-8
+        h1= I18n.t(:"headlines.expense.edit")
+
+      .col-xs-12.col-md-4
+        .btn-group.btn-group-responsive.pull-right.resource-nav
+          = link_to I18n.t(:"nav.subnav.back"), expenses_path, class: "btn btn-default"
+          a.btn.btn-danger href=expense_path(expense) data-redirect=expenses_path data-method="DELETE" data-notyConfirm=I18n.t(:"messages.confirm.delete")
+            i.fa.fa-trash
+            '
+            = I18n.t(:"actions.delete")
+    = render "form"

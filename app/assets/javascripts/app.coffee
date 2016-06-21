@@ -14,6 +14,27 @@ $(document).ajaxSend (event, jqxhr, settings) ->
 $ ->
   $('select.js-selectize').selectize()
 
+  $('select.js-expense-selectize').selectize
+    render:
+      option_create: selectizeCreateTemplate
+    create: (input, callback) ->
+      xhr.abort() if xhr
+      xhr = $.ajax
+        url: ApiBasePath + Routes.v1_expense_types_path()
+        data: {name: input}
+        method: 'POST'
+        dataType: 'json'
+        success: (result) =>
+          data = {
+            value: result.uuid,
+            text: result.name
+          }
+          @addOption data
+          @addItem result.uuid
+          callback data
+        error: ->
+          callback()
+
   $('select.js-customer-selectize').selectize
     render:
       option_create: selectizeCreateTemplate

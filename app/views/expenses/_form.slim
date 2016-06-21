@@ -1,0 +1,47 @@
+= form_for expense, html: {id: 'expense-form' } do |form|
+  .row
+    .col-xs-12.col-md-6
+      .form-group.selectize class=form_error?(expense, :expense_type)
+        select.js-expense-selectize name="expense[expense_type]" id="expense_expense_type" placeholder=I18n.t(:"helpers.prompt.expense.expense_type")
+          option
+          - Expense::VALID_TYPES.each do |type|
+            option value=type selected=(true if type.to_s == expense.expense_type)
+              = type
+        = form_errors expense, :expense_type
+        
+    .col-xs-12.col-md-6
+      .form-group class=form_error?(expense, :date)
+        .input-group.datepicker
+          = form.label :date, class: "input-group-addon"
+          = form.date_field :date, value: I18n.l(Time.zone.now, format: :datepicker), class: 'form-control', "data-value" => form.object.date
+          span.input-group-btn
+            button.btn.btn-default type="button"
+              i.fa.fa-calendar
+        = form_errors expense, :date, 'input-group-btn-feedback'
+        
+    .col-xs-12.col-md-6
+      .form-group class=form_error?(expense, :description)
+        = form.label :description
+        = form.text_field :description, class: 'form-control'
+        = form_errors expense, :description
+    
+    .col-xs-12.col-md-6
+      .form-group class=form_error?(expense, :receipt)
+        = form.label :receipt
+        = form.hidden_field :receipt_cache
+        .input-group
+          = form.file_field :receipt, class: 'form-control'
+          span.input-group-addon
+            - if expense.receipt.present?
+              = File.basename(expense.receipt.url)       
+            - else
+              = I18n.t("helpers.label.expense.receipt_missing")
+        = form_errors expense, :receipt
+        
+    .col-xs-12.col-md-6
+      .form-group class=form_error?(expense, :value)
+        = form.label :value
+        = form.number_field :value, class: 'form-control', step: "0.01"
+        = form_errors expense, :value
+        
+  = render "shared/forms/submit", path: expenses_path

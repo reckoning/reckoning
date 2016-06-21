@@ -6,6 +6,7 @@ class Account < ActiveRecord::Base
   has_many :projects, through: :customers
   has_many :tasks, through: :projects
   has_many :timers, through: :tasks
+  has_many :expenses, dependent: :destroy
 
   store_accessor :settings, :tax, :provision
   store_accessor :bank_account, :bank, :account_number, :bank_code, :iban, :bic

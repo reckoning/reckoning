@@ -15,8 +15,8 @@ window.Datepicker =
       labelMonthPrev: I18n.t('labels.datepicker.previous_month')
       labelMonthSelect: I18n.t('labels.datepicker.months')
       labelYearSelect: I18n.t('labels.datepicker.years')
-      format: I18n.t('date.formats.datepicker')
-      formatSubmit: I18n.t('date.formats.datepicker_submit')
+      format: I18n.t('datepicker.formats.default')
+      formatSubmit: I18n.t('datepicker.formats.submit')
       selectYears: true
       firstDay: I18n.t('date.first_day_of_week')
       today: I18n.t('actions.today')

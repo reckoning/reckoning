@@ -15,28 +15,30 @@
             .list-group-item
               = I18n.t(:"dashboard.panels.all_invoices")
               %strong.pull-right
-                = number_to_currency(invoices_sum(@charged_invoices + @paid_invoices))
+                = number_to_currency(sum(@charged_invoices + @paid_invoices))
             .list-group-item
               = I18n.t(:"dashboard.panels.charged_invoices")
               %strong.pull-right
-                = number_to_currency(invoices_sum(@charged_invoices))
+                = number_to_currency(sum(@charged_invoices))
             .list-group-item
               = I18n.t(:"dashboard.panels.paid_invoices")
               %strong.pull-right
-                = number_to_currency(invoices_sum(@paid_invoices))
+                = number_to_currency(sum(@paid_invoices))
             - if current_account.provision.present?
               .list-group-item
                 = I18n.t(:"dashboard.panels.provision")
                 %strong.pull-right
-                  = number_to_currency(invoices_sum(@paid_invoices) / 100 * current_account.provision.to_i)
+                  = number_to_currency((sum(@paid_invoices) - sum(@expenses)) / 100 * current_account.provision.to_i)
               .list-group-item
                 = I18n.t(:"dashboard.panels.last_provision", year: (Time.now - 1.year).year)
                 %strong.pull-right
-                  = number_to_currency(invoices_sum(@last_invoices) / 100 * current_account.provision.to_i)
+                  = number_to_currency((sum(@last_invoices) - sum(@last_expenses)) / 100 * current_account.provision.to_i)
             .list-group-item.disabled
               = I18n.t(:"dashboard.panels.last_invoices")
               %strong.pull-right
-                = number_to_currency(invoices_sum(@last_invoices))
+                = number_to_currency(sum(@last_invoices))
+
+        = render "expenses_panel" if @expenses.present? || @last_expenses.present?
 
         = render "budgets_panel", budgets: @budgets
 

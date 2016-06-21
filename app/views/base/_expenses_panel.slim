@@ -1,0 +1,13 @@
+.panel.panel-default#budgets-panel
+  .panel-heading
+    .panel-title
+      strong= I18n.t(:"dashboard.panels.expenses.title")
+  .list-group
+    - if @expenses.present?
+      .list-group-item
+        = I18n.t(:"dashboard.panels.expenses.current")
+        strong.pull-right= number_to_currency(sum(@expenses))
+    - if @last_expenses.present?
+      .list-group-item
+        = I18n.t(:"dashboard.panels.expenses.last")
+        strong.pull-right= number_to_currency(sum(@last_expenses))
