@@ -5,6 +5,8 @@ class Expense < ActiveRecord::Base
 
   mount_uploader :receipt, ReceiptUploader
 
+  validates :value, :description, :date, :expense_type, :seller, presence: true
+
   def self.year(year)
     where("date <= ? AND date >= ?", "#{year}-12-31", "#{year}-01-01")
   end

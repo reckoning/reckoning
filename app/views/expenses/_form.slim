@@ -24,7 +24,13 @@
         = form.label :description
         = form.text_field :description, class: 'form-control'
         = form_errors expense, :description
-    
+        
+    .col-xs-12.col-md-6
+      .form-group class=form_error?(expense, :seller)
+        = form.label :seller
+        = form.text_field :seller, class: 'form-control'
+        = form_errors expense, :seller
+        
     .col-xs-12.col-md-6
       .form-group class=form_error?(expense, :receipt)
         = form.label :receipt

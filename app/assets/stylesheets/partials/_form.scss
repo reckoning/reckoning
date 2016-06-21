@@ -17,6 +17,19 @@ label {
   }
 }
 
+.form-control-feedback {
+  bottom: 10px;
+  top: auto !important;
+  right: 10px;
+  width: 14px;
+  height: 14px;
+  pointer-events: all;
+}
+
+form .selectize .form-control-feedback {
+  right: 30px;
+}
+
 .datepicker {
   .form-control[disabled],
   .form-control[readonly],
@@ -73,15 +86,6 @@ form {
     margin: 0;
     box-shadow: none;
     background-color: transparent;
-  }
-
-  .selectize {
-    .form-control-feedback {
-      top: 0;
-      right: 30px;
-      z-index: 1;
-      padding-top: 10px;
-    }
   }
 
   .has-error {

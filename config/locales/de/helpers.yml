@@ -73,6 +73,7 @@ de:
         date: "Eingangsdatum"
         description: "Beschreibung"
         value: "Betrag"
+        seller: "Verkäufer/Händler"
         receipt: "Beleg"
         receipt_missing: "Kein Beleg hinzugefügt"
       setting:
