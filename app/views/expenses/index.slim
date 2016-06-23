@@ -5,37 +5,59 @@
   .col-xs-12.col-md-12
 
     .row
-      .col-xs-12.col-md-8
+      .col-xs-12.col-md-6
         h1= I18n.t(:"headlines.expense.index")
 
-      .col-xs-12.col-md-4
+      .col-xs-12.col-md-6
         .btn-group.btn-group-justified-responsive.pull-right.resource-nav
           a.btn.btn-primary href=new_expense_path
             i.fa.fa-plus
             '
             = I18n.t(:"nav.subnav.new_expense")
+          a.btn.btn-default href=url_for(stored_params(:index).merge({format: :pdf})) target="_blank"
+            i.fa.fa-down
+            '
+            = I18n.t(:"nav.subnav.export_expenses_pdf")
+          a.btn.btn-default href=url_for(stored_params(:index).merge({format: :csv})) target="_blank"
+            i.fa.fa-down
+            '
+            = I18n.t(:"nav.subnav.export")
+          a.btn.btn-default href=new_expense_import_path
+            i.fa.fa-down
+            '
+            = I18n.t(:"nav.subnav.import")
     
     .row
-      .col-xs-6.col-md-4
+      .col-xs-12
         = render "shared/tables/filter", resource: "expense", name: "year", filters: current_expenses_years
-      .col-xs-6.col-md-4.expenses-sum
-        = "Summe: "
-        strong= number_to_currency(@expenses_sum)
-      .col-xs-12.col-md-4
+        '
+        = render "shared/tables/filter", resource: "expense", name: "type", filters: Expense::VALID_TYPES, translateable: true
+        
+    .row
+      .col-xs-12.col-md-6.expenses-sum
+        .pull-right
+          = I18n.t("labels.defaults.sum")
+          = ":"
+          '
+          strong= number_to_currency(@expenses_sum)
+      .col-xs-12.col-md-6
         .pull-right
           = paginate @expenses
     
     hr  
-    .panel.panel-list.panel-default.expense
-      .panel-heading
-        .row
-          .col-xs-2 Datum
-          .col-xs-7 Beschreibung
-          .col-xs-3 
-            |Beleg
-            .pull-right Wert
-      .list-group
-        = render partial: "expenses/list_item", collection: @expenses, as: :expense
+    - if @expenses.present?
+      .panel.panel-list.panel-default.expense
+        .panel-heading
+          .row
+            .col-xs-1= I18n.t("activerecord.attributes.expense.date")
+            .col-xs-4= I18n.t("activerecord.attributes.expense.description")
+            .col-xs-3= I18n.t("activerecord.attributes.expense.seller")
+            .col-xs-2= I18n.t("activerecord.attributes.expense.expense_type")
+            .col-xs-2 
+              = I18n.t("activerecord.attributes.expense.receipt")
+              .pull-right= I18n.t("activerecord.attributes.expense.value")
+        .list-group
+          = render partial: "expenses/list_item", collection: @expenses, as: :expense
 
     - if @expenses.blank?
       = render partial: "shared/blank"

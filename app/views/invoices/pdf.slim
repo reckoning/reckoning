@@ -89,8 +89,6 @@
           - value_label = I18n.t(:"pdf.invoice.sum")
         tr.sum
           td colspan=3
-            strong
-              = value_label
+            b= value_label
           td.value
-            strong
-              = number_to_currency(value)
+            b= number_to_currency(value)

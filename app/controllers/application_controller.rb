@@ -56,6 +56,17 @@ class ApplicationController < ActionController::Base
   end
   helper_method :invoice_limit_reached?
 
+  private def store_current_params
+    key = (params[:controller].to_s + "_" + params[:action].to_s).to_sym
+    session[key] = params.reject { |k| %w(controller action).include?(k.to_s) }
+  end
+
+  private def stored_params(action, controller = params[:controller])
+    key = (controller.to_s + "_" + action.to_s).to_sym
+    (session[key] || {}).reject { |k| k.to_s == "format" }
+  end
+  helper_method :stored_params
+
   protected def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_in) << :otp_attempt
   end

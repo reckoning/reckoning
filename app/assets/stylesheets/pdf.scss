@@ -22,10 +22,6 @@ table {
   thead th {
     padding: 6px 0;
     border-bottom: 2px solid #cacaca;
-
-    &.align-right {
-      text-align: right;
-    }
   }
 
   td {
@@ -34,6 +30,10 @@ table {
 
   td, th {
     font-size: .8em;
+
+    &.align-right {
+      text-align: right;
+    }
   }
 
   tfoot tr:first-child td {
@@ -140,4 +140,16 @@ tr {
   .bank-information {
     width: 34%;
   }
+}
+
+.alwaysbreak {
+  page-break-before: always;
+}
+
+.nobreak:before {
+  clear:both;
+}
+
+.nobreak {
+  page-break-inside: avoid;
 }

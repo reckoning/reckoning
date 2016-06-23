@@ -1,12 +1,4 @@
 module InvoicesHelper
-  def sum(items)
-    sum = 0
-    items.each do |item|
-      sum += item.value
-    end
-    sum
-  end
-
   def invoice_label(invoice)
     case invoice.current_state.to_s
     when "created"

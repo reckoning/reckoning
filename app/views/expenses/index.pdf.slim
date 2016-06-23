@@ -1,0 +1,132 @@
+#pdf-body
+  h2= I18n.t("pdf.expenses.headlines.gwg")
+  table.table.table-condensed
+    thead
+      th colspan=3
+        = I18n.t("filter.expense_type.gwg")
+    tbody
+      - resource.gwg.each do |expense|
+        tr
+          td
+            = I18n.l expense.date
+          td
+            = expense.description
+          td.align-right
+            = number_to_currency expense.usable_value
+      tr.sum.border
+        td colspan=3
+          = I18n.t("labels.defaults.sum")
+          '
+          b= number_to_currency resource.gwg.sum(&:usable_value)
+  
+  .sum
+    = I18n.t("pdf.expenses.sublines.gwg")
+    '
+    u style="float: right;"
+      b= number_to_currency resource.gwg.sum(&:usable_value)
+  
+  .alwaysbreak
+  
+  h2= I18n.t("pdf.expenses.headlines.telecommunication")
+  - resource.telecommunication.group_by(&:description).each do |description, expenses|
+    table.table.table-condensed
+      thead
+        th colspan=2
+          = description
+      tbody
+        - expenses.each do |expense|
+          tr
+            td
+              = I18n.l expense.date
+            td.align-right
+              = number_to_currency expense.usable_value
+        tr.sum.border
+          td colspan=3
+            = I18n.t("labels.defaults.sum")
+            '
+            b= number_to_currency expenses.sum(&:value)
+        - private_use_percent = expenses.sum(&:private_use_percent) / expenses.size
+        - if private_use_percent != 0
+          tr.sum
+            td colspan=3
+              = I18n.t("pdf.expenses.business_amount", percent: 100 - private_use_percent)
+              '
+              b= number_to_currency expenses.sum(&:usable_value)
+  .sum
+    = I18n.t("pdf.expenses.sublines.telecommunication")
+    '
+    u style="float: right;"
+      b= number_to_currency resource.telecommunication.sum(&:usable_value)
+      
+  .alwaysbreak
+  
+  h2= I18n.t("pdf.expenses.headlines.other")
+  
+  - resource.current.group_by(&:description).each do |description, expenses|
+    table.table.table-condensed
+      thead
+        th colspan=2
+          = description
+      tbody
+        - expenses.each do |expense|
+          tr
+            td
+              = I18n.l expense.date
+            td.align-right
+              = number_to_currency expense.usable_value
+        tr.sum.border
+          td colspan=3
+            = I18n.t("labels.defaults.sum")
+            '
+            b= number_to_currency expenses.sum(&:value)
+        - private_use_percent = expenses.sum(&:private_use_percent) / expenses.size
+        - if private_use_percent != 0
+          tr.sum
+            td colspan=3
+              = I18n.t("pdf.expenses.business_amount", percent: 100 - private_use_percent)
+              '
+              b= number_to_currency expenses.sum(&:usable_value)
+              
+  table.table.table-condensed
+    thead
+      th colspan=3
+        = I18n.t("filter.expense_type.misc")
+    tbody
+      - resource.misc.each do |expense|
+        tr
+          td
+            = I18n.l expense.date
+          td
+            = expense.description
+          td.align-right
+            = number_to_currency expense.usable_value
+      tr.sum.border
+        td colspan=3
+          = I18n.t("labels.defaults.sum")
+          '
+          b= number_to_currency resource.misc.sum(&:usable_value)
+
+  table.table.table-condensed
+    thead
+      th colspan=3
+        = I18n.t("filter.expense_type.licenses")
+    tbody
+      - resource.licenses.each do |expense|
+        tr
+          td
+            = I18n.l expense.date
+          td
+            = expense.description
+          td.align-right
+            = number_to_currency expense.usable_value
+      tr.sum.border
+        td colspan=3
+          = I18n.t("labels.defaults.sum")
+          '
+          b= number_to_currency resource.licenses.sum(&:usable_value)
+          
+  .sum
+    = I18n.t("pdf.expenses.sublines.other")
+    '
+    u style="float: right;"
+      b= number_to_currency (resource.current.sum(&:usable_value) + resource.misc.sum(&:usable_value) + resource.licenses.sum(&:usable_value))

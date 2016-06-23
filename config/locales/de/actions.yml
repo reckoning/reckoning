@@ -3,6 +3,7 @@ de:
     loading: "Bitte warten..."
     ok: 'OK'
     cancel: "Abbrechen"
+    copy: "Kopieren"
     edit: "Bearbeiten"
     delete: "Löschen"
     save: "Speichern"

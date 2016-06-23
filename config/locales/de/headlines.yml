@@ -43,6 +43,7 @@ de:
       index: "Ausgaben"
       new: "Neue Ausgabe"
       edit: "Ausgabe bearbeiten"
+      import: "CSV-Import"
 
     backend:
       user:

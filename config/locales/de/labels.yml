@@ -6,6 +6,7 @@ de:
       value: "Betrag"
       date: "Monat/Jahr"
       name: "Name"
+      sum: "Summe"
       customer: "Kunde"
       company: "Firma"
       ref: "R.-Nr."

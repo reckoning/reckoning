@@ -2,26 +2,38 @@ class ExpensesController < ApplicationController
   include ResourceHelper
 
   before_action :set_active_nav
+  before_action :store_current_params, only: [:index]
 
   def index
     authorize! :read, :expenses
     expenses = current_account.expenses
                               .filter(filter_params)
-    @expenses_sum = expenses.sum(:value)
-    @expenses = expenses.order(sort_column + " " + sort_direction)
-                        .page(params.fetch(:page, nil))
-                        .per(20)
+
+    respond_to do |format|
+      format.csv do
+        send_data expenses.to_csv
+      end
+      format.pdf do
+        render ExpensePdf.new(current_account, expenses, filter_params).pdf
+      end
+      format.html do
+        @expenses_sum = expenses.sum(:usable_value)
+        @expenses = expenses.order(sort_column + " " + sort_direction)
+                            .page(params.fetch(:page, nil))
+                            .per(20)
+      end
+    end
   end
 
   def new
     authorize! :create, Expense
-    @expense = current_account.expenses.new
+    @expense = current_account.expenses.new(prefill_params)
   end
 
   def create
     authorize! :create, Expense
     if expense.save
-      redirect_to expenses_path, flash: { success: resource_message(:expense, :create, :success) }
+      redirect_to "#{expenses_path(stored_params(:index))}#expense-#{expense.id}", flash: { success: resource_message(:expense, :create, :success) }
     else
       flash.now[:alert] = resource_message(:expense, :create, :failure)
       render "new"
@@ -35,7 +47,7 @@ class ExpensesController < ApplicationController
   def update
     authorize! :update, expense
     if expense.update_attributes(expense_params)
-      redirect_to expenses_path, flash: { success: resource_message(:expense, :update, :success) }
+      redirect_to "#{expenses_path(stored_params(:index))}#expense-#{expense.id}", flash: { success: resource_message(:expense, :update, :success) }
     else
       flash.now[:alert] = resource_message(:expense, :update, :failure)
       render "edit"
@@ -53,12 +65,12 @@ class ExpensesController < ApplicationController
 
     respond_to do |format|
       format.js { render json: {}, status: :ok }
-      format.html { redirect_to expenses_path }
+      format.html { redirect_to expenses_path(stored_params(:index)) }
     end
   end
 
   private def filter_params
-    params.permit(:year)
+    params.permit(:year, :type)
   end
   helper_method :filter_params
 
@@ -77,7 +89,13 @@ class ExpensesController < ApplicationController
 
   private def expense_params
     @expense_params ||= params.require(:expense).permit(
-      :expense_type, :description, :seller, :date, :receipt, :value
+      :expense_type, :description, :seller, :date, :receipt, :value, :private_use_percent
+    )
+  end
+
+  private def prefill_params
+    @prefill_params ||= params.permit(
+      :expense_type, :description, :seller, :date, :value, :private_use_percent
     )
   end
 

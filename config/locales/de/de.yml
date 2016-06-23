@@ -48,6 +48,9 @@ de:
       new_account: "Neuer Account"
       update_password: "Passwort ändern"
       new_expense: "Neue Ausgabe"
+      export_expenses_pdf: "Als PDF Exportieren"
+      export: "CSV-Export"
+      import: "CSV-Import"
       user:
         basic: Allgemein
         security: Zugangsdaten
@@ -101,6 +104,7 @@ de:
         index: "Ausgaben"
         new: "Neue Ausgabe"
         edit: "Ausgabe bearbeiten"
+        import: "CSV-Import für Ausgaben"
       account:
         edit: "Account bearbeiten"
       user:
@@ -126,6 +130,14 @@ de:
 
   filter:
     delete: "Entfernen"
+    expense_type:
+      label: "Typ:"
+      gwg: "Geringwertige Wirtschaftsgüter"
+      afa: "AFA"
+      licenses: "Lizenzen & Software"
+      telecommunication: "Telefon / Internet"
+      current: "Laufende Ausgaben"
+      misc: "Sonstige Ausgaben"
     expense_year:
       label: "Gekauft in:"
     invoice_year:

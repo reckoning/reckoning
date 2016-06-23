@@ -6,7 +6,7 @@
           option
           - Expense::VALID_TYPES.each do |type|
             option value=type selected=(true if type.to_s == expense.expense_type)
-              = type
+              = I18n.t(:"filter.expense_type.#{type}")
         = form_errors expense, :expense_type
         
     .col-xs-12.col-md-6
@@ -50,4 +50,11 @@
         = form.number_field :value, class: 'form-control', step: "0.01"
         = form_errors expense, :value
         
-  = render "shared/forms/submit", path: expenses_path
+    .col-xs-6.col-md-3
+      .form-group
+        = form.label :private_use_percent
+        .input-group
+          = form.number_field :private_use_percent, class: 'form-control text-right', max: 100, min: 0
+          span.input-group-addon %
+        
+  = render "shared/forms/submit", path: expenses_path(stored_params(:index))

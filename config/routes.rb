@@ -135,6 +135,7 @@ Reckoning::Application.routes.draw do
   end
 
   resources :expenses, except: [:show]
+  resources :expense_imports, only: [:new, :create]
 
   resource :dropbox, controller: "dropbox", only: [:show] do
     collection do

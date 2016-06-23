@@ -13,6 +13,13 @@ de:
         description: "Beschreibung"
       contact:
         created_at: "vor %{time}"
+      expense:
+        date: "Datum"
+        description: "Beschreibung"
+        value: "Betrag"
+        seller: "Verkäufer/Händler"
+        expense_type: "Typ"
+        receipt: "Beleg"
       user:
         enabled: "Aktiv?"
         admin: "Admin?"

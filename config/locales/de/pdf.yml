@@ -20,3 +20,15 @@ de:
     timesheet:
       headline: "Stunden von<br>%{from} bis %{to}"
       sum: "Gesamt"
+
+    expenses:
+      sum: "Summe"
+      business_amount: "Beruflicher Anteil %{percent}%"
+      headlines:
+        gwg: "Geringwertige Wirtschaftsgüter"
+        telecommunication: "Telefon / Internet"
+        other: "Allgemeine Ausgaben"
+      sublines:
+        gwg: "Gesamtkosten für geringwertige Wirtschaftsgüter:"
+        telecommunication: "Gesamtkosten für Telefon / Internet:"
+        other: "Gesamtkosten allgemeiner Ausgaben:"

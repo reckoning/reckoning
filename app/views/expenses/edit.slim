@@ -11,7 +11,11 @@
 
       .col-xs-12.col-md-4
         .btn-group.btn-group-responsive.pull-right.resource-nav
-          = link_to I18n.t(:"nav.subnav.back"), expenses_path, class: "btn btn-default"
+          = link_to I18n.t(:"nav.subnav.back"), "#{expenses_path(stored_params(:index))}#expense-#{expense.id}", class: "btn btn-default"
+          a.btn.btn-warning href=new_expense_path(expense.to_prefill_params)
+            i.fa.fa-copy
+            '
+            = I18n.t(:"actions.copy")
           a.btn.btn-danger href=expense_path(expense) data-redirect=expenses_path data-method="DELETE" data-notyConfirm=I18n.t(:"messages.confirm.delete")
             i.fa.fa-trash
             '

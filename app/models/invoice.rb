@@ -1,6 +1,8 @@
 class Invoice < ActiveRecord::Base
   DEFAULT_PAYMENT_DUE_DAYS = 14
 
+  include PdfOptions
+
   belongs_to :account
   belongs_to :customer
   belongs_to :project
@@ -155,36 +157,6 @@ class Invoice < ActiveRecord::Base
       ApplicationController.new.render_to_string("invoices/timesheet", inline_pdf_options),
       whicked_pdf_options
     )
-  end
-
-  def pdf_options(file)
-    {
-      pdf: file
-    }.merge(inline_pdf_options).merge(whicked_pdf_options)
-  end
-
-  def inline_pdf_options
-    {
-      layout: "layouts/pdf",
-      locals: { resource: self }
-    }
-  end
-
-  def whicked_pdf_options
-    {
-      header: {
-        content: ApplicationController.new.render_to_string("shared/pdf_header", inline_pdf_options)
-      },
-      footer: {
-        content: ApplicationController.new.render_to_string("shared/pdf_footer", inline_pdf_options)
-      },
-      margin: {
-        top: 30,
-        bottom: 42,
-        left: 18,
-        right: 18
-      }
-    }
   end
 
   private def set_customer

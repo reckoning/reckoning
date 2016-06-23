@@ -11,6 +11,18 @@ $(document).on 'click', 'code[data-target]', (ev) ->
 $(document).ajaxSend (event, jqxhr, settings) ->
   jqxhr.setRequestHeader 'Authorization', "Token token=\"#{AuthToken}\""
 
+
+document.addEventListener 'keydown', (e) ->
+  return true if $('form') is undefined
+  if navigator.platform.match("Mac")
+    superKeyPressed = e.metaKey
+  else
+    superKeyPressed = e.ctrlKey
+  if e.keyCode == 83 && superKeyPressed
+    e.preventDefault()
+    $('form:first').submit()
+, false
+
 $ ->
   $('select.js-selectize').selectize()
 

@@ -35,6 +35,10 @@ class Ability
       expense.account_id == user.account_id && user.account.feature_expenses?
     end
 
+    can :manage, ExpenseImport do |_expense|
+      user.account.feature_expenses?
+    end
+
     setup_admin_abilities if user.admin?
   end
 

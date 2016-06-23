@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160621222008) do
+ActiveRecord::Schema.define(version: 20160622101842) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,15 +57,17 @@ ActiveRecord::Schema.define(version: 20160621222008) do
   end
 
   create_table "expenses", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
-    t.string   "expense_type",                                        null: false
-    t.decimal  "value",        precision: 10, scale: 2, default: 0.0, null: false
+    t.string   "expense_type",                                               null: false
+    t.decimal  "value",               precision: 10, scale: 2, default: 0.0, null: false
     t.string   "description"
-    t.datetime "date",                                                null: false
-    t.uuid     "account_id",                                          null: false
+    t.date     "date",                                                       null: false
+    t.uuid     "account_id",                                                 null: false
     t.string   "receipt"
-    t.datetime "created_at",                                          null: false
-    t.datetime "updated_at",                                          null: false
+    t.datetime "created_at",                                                 null: false
+    t.datetime "updated_at",                                                 null: false
     t.string   "seller"
+    t.integer  "private_use_percent",                          default: 0,   null: false
+    t.decimal  "usable_value",        precision: 10, scale: 2, default: 0.0, null: false
   end
 
   create_table "invoices", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
