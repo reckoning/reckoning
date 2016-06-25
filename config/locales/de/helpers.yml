@@ -20,7 +20,7 @@ de:
         bic: "BIC"
         default_from: "Absender Für Rechnungs E-Mails"
         signature: "Signatur"
-        feature_expenses: "Ausgaben Feature aktiviert?" 
+        feature_expenses: "Ausgaben Feature aktiviert?"
       project:
         rate: "Stundensatz"
         round_up: "Zeiten aufrunden?"
@@ -78,6 +78,7 @@ de:
         receipt: "Beleg"
         receipt_missing: "Kein Beleg hinzugefügt"
         private_use_percent: "Private Nutzung?"
+        remove_receipt: "Beleg entfernen?"
       setting:
         base:
           registration: "Registrierung aktiv?"

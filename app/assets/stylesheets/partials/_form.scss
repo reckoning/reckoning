@@ -171,3 +171,32 @@ textarea {
   min-height: 50px;
   max-height: 300px;
 }
+
+p.placeholder {
+  margin-top: 10px;
+  padding-top: 22px;
+}
+
+.pdf-viewer {
+  margin-top: 22px;
+}
+
+.checkbox.checkbox-right {
+  text-align: right;
+
+  label {
+    padding-right: 25px;
+
+    &::before {
+      left: auto;
+      right: 0;
+    }
+
+    &::after {
+      left: auto;
+      right: 0;
+      padding-right: 3px;
+      padding-left: 0;
+    }
+  }
+}

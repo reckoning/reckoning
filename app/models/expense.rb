@@ -3,7 +3,7 @@ class Expense < ActiveRecord::Base
 
   VALID_TYPES = %i(gwg afa licenses telecommunication current misc).freeze
 
-  mount_uploader :receipt, ReceiptUploader
+  attachment :receipt, content_type: ["application/pdf", "image/jpeg", "image/png"]
 
   validates :value, :description, :date, :expense_type, :seller, :private_use_percent, presence: true
 

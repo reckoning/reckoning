@@ -18,7 +18,7 @@
             button.btn.btn-default type="button"
               i.fa.fa-calendar
         = form_errors expense, :date, 'input-group-btn-feedback'
-        
+  .row
     .col-xs-12.col-md-6
       .form-group class=form_error?(expense, :description)
         = form.label :description
@@ -31,30 +31,38 @@
         = form.text_field :seller, class: 'form-control'
         = form_errors expense, :seller
         
-    .col-xs-12.col-md-6
-      .form-group class=form_error?(expense, :receipt)
-        = form.label :receipt
-        = form.hidden_field :receipt_cache
-        .input-group
-          = form.file_field :receipt, class: 'form-control'
-          span.input-group-addon
-            - if expense.receipt.present?
-              = File.basename(expense.receipt.url)       
-            - else
-              = I18n.t("helpers.label.expense.receipt_missing")
-        = form_errors expense, :receipt
-        
+  .row
     .col-xs-12.col-md-6
       .form-group class=form_error?(expense, :value)
         = form.label :value
         = form.number_field :value, class: 'form-control', step: "0.01"
         = form_errors expense, :value
         
-    .col-xs-6.col-md-3
+    .col-xs-12.col-md-3
       .form-group
         = form.label :private_use_percent
         .input-group
           = form.number_field :private_use_percent, class: 'form-control text-right', max: 100, min: 0
           span.input-group-addon %
-        
+          
+  .row
+    .col-xs-12.col-md-3
+      .form-group class=form_error?(expense, :receipt)
+        = form.label :receipt
+        = form.attachment_field :receipt, class: 'form-control', direct: true, presigned: true
+        = form_errors expense, :receipt
+      - if expense.receipt.present?
+        .form-group
+          .checkbox.checkbox-right
+            = form.check_box :remove_receipt
+            label for="expense_remove_receipt"
+              = I18n.t(:"helpers.label.expense.remove_receipt")
+    .col-xs-12.col-md-3
+      - if expense.receipt.present?
+        a href=attachment_url(expense, :receipt) target="_blank"
+          - if expense.receipt_content_type == "application/pdf"
+            .pdf-viewer data-pdf-path=attachment_url(expense, :receipt)
+      - else
+        p.placeholder
+          = I18n.t("helpers.label.expense.receipt_missing")
   = render "shared/forms/submit", path: expenses_path(stored_params(:index))

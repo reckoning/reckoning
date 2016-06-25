@@ -31,6 +31,7 @@ $font-size-h6: floor(($font-size-base * 0.85));
 @import "font-awesome";
 @import "partials";
 @import "invoice";
+@import "pdf_preview";
 @import "dashboard";
 @import "welcome";
 

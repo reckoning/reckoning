@@ -88,7 +88,9 @@ gem 'wkhtmltopdf-heroku'
 gem 'rails_12factor', group: :production
 gem 'non-stupid-digest-assets'
 
-gem "carrierwave"
+gem "refile", require: 'refile/rails'
+gem "refile-s3"
+
 gem 'pry-rails', group: :development
 
 group :test do

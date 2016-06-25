@@ -27,6 +27,7 @@
 #= require vendor/highcharts/highcharts
 #= require vendor/highcharts/no-data-to-display
 #= require pdfViewer
+#= require refile
 #= require helper
 #= require_tree ./helpers
 #= require tabs
@@ -47,9 +48,20 @@ $(document).on 'show.bs.collapse', '.navbar-collapse', ->
 $(document).on "upload:start", "form", (e) ->
   $(@).find("input[type=submit]").attr("disabled", true)
 
+$(document).on "upload:progress", "input", (e) ->
+  console.log(e)
+  console.log(@)
+
 $(document).on "upload:complete", "form", (e) ->
   if !$(@).find("input.uploading").length
-    $(@).find("input[type=submit]").removeAttr("disabled")
+    $(@).find("[type=submit]").removeAttr("disabled")
+
+$(document).on "upload:start", "form", (e) ->
+  $(@).find("[type=submit]").attr("disabled", true)
+
+$(document).on "upload:complete", "form", (e) ->
+  if !$(@).find("input.uploading").length
+    $(@).find("[type=submit]").removeAttr("disabled")
 
 $ ->
   FastClick.attach(document.body)
