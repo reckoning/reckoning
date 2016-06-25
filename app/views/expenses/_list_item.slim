@@ -12,5 +12,7 @@
     .col-xs-12.col-md-2
       - if expense.receipt.present?
         i.fa.fa-file title=I18n.t(:"expenses.file_attached")
+      - elsif expense.needs_receipt?
+        i.fa.fa-file.text-danger title=I18n.t(:"expenses.needs_receipt")
       .pull-right.expense-price
         = number_to_currency expense.usable_value

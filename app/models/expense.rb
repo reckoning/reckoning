@@ -2,6 +2,7 @@ class Expense < ActiveRecord::Base
   belongs_to :account
 
   VALID_TYPES = %i(gwg afa licenses telecommunication current misc).freeze
+  NEEDS_RECEIPT_TYPES = VALID_TYPES.reject { |type| %i(telecommunication current).include?(type) }.freeze
 
   attachment :receipt, content_type: ["application/pdf", "image/jpeg", "image/png"]
 
@@ -43,6 +44,10 @@ class Expense < ActiveRecord::Base
 
   def calculate_usable_value
     self.usable_value = (value * (100 - private_use_percent).to_f) / 100.0
+  end
+
+  def needs_receipt?
+    NEEDS_RECEIPT_TYPES.include?(expense_type.to_sym)
   end
 
   def to_prefill_params
