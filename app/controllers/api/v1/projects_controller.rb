@@ -41,7 +41,7 @@ module Api
 
       def archive
         authorize! :archive, project
-        project.archive
+        project.archive!
         project.save
         if project.reload.archived?
           render json: { message: I18n.t(:"messages.project.archive.success") }, status: :ok
