@@ -84,12 +84,12 @@ gem 'peek-performance_bar'
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-heroku'
 
+gem "refile", require: 'refile/rails'
+gem "refile-s3"
+
 # heroku production
 gem 'rails_12factor', group: :production
 gem 'non-stupid-digest-assets'
-
-gem "refile", require: 'refile/rails'
-gem "refile-s3"
 
 gem 'pry-rails', group: :development
 

@@ -22,7 +22,7 @@ Reckoning is a simple tool for invoicing
 To run Reckoning on your local machine you need to install:
 
 - postgresql with activated hstore on the used database
-- WKHTMLTOPDF to generate Invoices 
+- WKHTMLTOPDF to generate Invoices
 
 ## ToDo:
 
@@ -30,13 +30,15 @@ To run Reckoning on your local machine you need to install:
 
 ## Future features
 
+[![Stories in Ready](https://badge.waffle.io/mortik/reckoning.png?label=ready&title=Ready)](http://waffle.io/mortik/reckoning)
+
 - Project Landingpages
 - Integrations: Google Drive, Harvest Import etc.
 - Custom Logos and Colors for Invoices
 - Templates for Invoices
-- Expanses 
+- Expanses
 - ...
-  
+
 ## Contributing
 
 1. Fork it
@@ -44,4 +46,4 @@ To run Reckoning on your local machine you need to install:
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
-6. 
+6.
