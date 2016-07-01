@@ -1,7 +1,6 @@
-- unless defined?(path)
-  - path = ""
-- unless defined?(active)
-  - active = "basic"
+:ruby
+  path = "" unless defined?(path)
+  active = "basic" unless defined?(active)
 %ul.nav.nav-tabs-vertical
   %li{class: (active == "basic" ? "active" : "")}
     %a{href: "#{path}#basic", data: {toggle: ("tab" if path.blank?)}}

@@ -1,18 +1,22 @@
-- translateable ||= false
-- current_filter = filter_params.fetch(name, nil)
+ruby:
+  translateable ||= false
+  current_filter = filter_params.fetch(name, nil)
 .dropdown.filter-menu.btn-group
   - if current_filter
-    - reset_params = filter_params.dup
-    - reset_params.delete(name)
+    ruby:
+      reset_params = filter_params.dup
+      reset_params.delete(name)
     a.btn.btn-danger href=url_for(reset_params) title=I18n.t(:"filter.delete")
       i.fa.fa-times
   a.btn.btn-default.dropdown-toggle href='#' data-toggle='dropdown'
     = I18n.t(:"filter.#{resource}_#{name}.label")
     - if current_filter
-      - if translateable
-        - current_value = I18n.t(:"filter.#{resource}_#{name}.#{current_filter}")
-      - else
-        - current_value = current_filter
+      ruby:
+        if translateable
+          current_value = I18n.t(:"filter.#{resource}_#{name}.#{current_filter}")
+        else
+          current_value = current_filter
+        end
       '
       b
         = current_value
@@ -20,11 +24,14 @@
     span.caret
   ul.dropdown-menu role='menu'
     - filters.each do |filter|
-      - if filter.is_a?(Hash)
-        - filter = OpenStruct.new filter
-        - value = filter.name
-      - value ||= filter.to_s
+      ruby:
+        if filter.is_a?(Hash)
+          filter = OpenStruct.new filter
+          value = filter.name
+        end
+        value ||= filter.to_s
       li class=("active" if current_filter == value)
-        - link = filter.link if defined?(filter.link)
-        - link ||= I18n.t(:"filter.#{resource}_#{name}.#{value}")
+        ruby: 
+          link = filter.link if defined?(filter.link)
+          link ||= I18n.t(:"filter.#{resource}_#{name}.#{value}")
         = link_to link, plumb(name.to_s => value)
