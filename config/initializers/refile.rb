@@ -1,4 +1,4 @@
-unless Rails.env.test?
+if Rails.env.production?
   require "refile/s3"
 
   aws = {

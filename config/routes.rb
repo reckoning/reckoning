@@ -127,10 +127,12 @@ Reckoning::Application.routes.draw do
       put :unarchive
     end
 
-    resources :tasks, only: [:index, :create] do
-      collection do
-        get :uninvoiced
-      end
+    resources :tasks, only: [:index, :create]
+  end
+
+  resources :timers, only: [] do
+    collection do
+      get :uninvoiced
     end
   end
 

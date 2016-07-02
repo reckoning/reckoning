@@ -3,10 +3,11 @@ module Api
     class TimersController < Api::BaseController
       def index
         authorize! :index, Timer
-        scope = current_user.timers
+        scope = current_account.timers
         scope = scope.where(date: date) if date
         scope = scope.where(date: date_range) if date_range
         scope = scope.for_project(project_uuid) if project_uuid
+        scope = scope.uninvoiced if params[:uninvoiced].present?
         render json: scope.order('timers.created_at ASC'), each_serializer: TimerSerializer, status: :ok
       end
 

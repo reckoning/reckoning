@@ -1,4 +1,3 @@
-#= require underscore
 #= require angular
 #= require angular-route
 #= require humanize-duration

@@ -11,8 +11,8 @@
   .col-xs-12.col-md-2.form-group
     .input-group{class: form_error?(fields.object, :hours)}
       = fields.label :hours, class: "input-group-addon"
-      = fields.text_field :hours, disabled: true, class: 'form-control invoice-position-hours', id: false
       = fields.hidden_field :hours, class: 'invoice-position-hours'
+      = fields.text_field :hours, disabled: true, class: 'form-control invoice-position-hours', id: false
     = form_errors fields.object, :hours
   .col-xs-12.col-md-2.form-group
     .input-group{class: form_error?(fields.object, :value)}

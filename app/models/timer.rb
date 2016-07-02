@@ -53,6 +53,10 @@ class Timer < ActiveRecord::Base
     where.not(position_id: nil)
   end
 
+  def self.uninvoiced
+    where(position_id: nil)
+  end
+
   def self.not_empty
     where.not(value: [nil, 0, "0.0", "0"])
   end

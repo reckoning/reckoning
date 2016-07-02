@@ -1,0 +1,15 @@
+.list-group
+  - timers.each do |timer|
+    %a.list-group-item{href: '#', onclick: "toggleCheckbox($(this)); return false;", data: {activeclass: "list-group-item-info"}}
+      .checkbox.pull-right
+        = check_box_tag "timer_ids[]", {name: timer.task.name, task_id: timer.task_id, id: timer.id, value: timer.value.to_f}.to_json, false, id: dom_id(timer)
+        %label{for: dom_id(timer)}
+      %strong
+        = timer.task.name
+      = I18n.l timer.date
+      %span.label.label-primary
+        = number_to_currency timer.value, unit: "h"
+
+  - if timers.blank?
+    .list-group-item
+      Keine Einträge vorhanden

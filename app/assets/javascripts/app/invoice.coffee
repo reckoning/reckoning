@@ -40,15 +40,15 @@ window.App.Invoice.updateRate = (ev) ->
 
 window.App.Invoice.loadPositions = ($element) ->
   laddaButton.start() if laddaButton
-  project_id = $('#invoice_project_id').val()
-  unless project_id.length
+  project_uuid = $('#invoice_project_uuid').val()
+  unless project_uuid.length
     displayAlert I18n.t("messages.invoice.load_positions.missing")
     laddaButton.stop() if laddaButton
     return
 
   xhr.abort() if xhr
   xhr = $.ajax
-    url: Routes.uninvoiced_project_tasks_path(project_id)
+    url: Routes.uninvoiced_timers_path(project_uuid: project_uuid)
     dataType: 'json'
     context: $('#add-positions-modal')
     success: (result) ->
@@ -60,30 +60,33 @@ window.App.Invoice.loadPositions = ($element) ->
       laddaButton.stop() if laddaButton
 
 window.App.Invoice.addPositions = ($form) ->
-  fields = $form.serializeArray()
   $positions = $('#positions')
-  $.each fields, (i, field) ->
-  fields = $form.serializeArray()
-  $positions = $('#positions')
-  $.each fields, (i, field) ->
-    data = JSON.parse(field.value)
+  timers = $form.serializeArray().map (field) =>
+    JSON.parse(field.value)
+  groupedTimers = _.groupBy timers, (timer) => timer.task_id
 
+  _.values(groupedTimers).forEach (timers) =>
     time = new Date().getTime()
     regexp = new RegExp($positions.data('id'), 'g')
     $fields = $($positions.data('fields').replace(regexp, time))
     $positions.append($fields)
 
-    $fields.find('input[name*=description]').val(data.name)
-    $fields.find('input[name*=hours]').val(data.value.toFixed(2))
-    $fields.find('span.invoice-position-hours').text(data.value.toFixed(2))
-    $fields.find('select[name*=timer_ids]').val(data.timer_ids)
+    sum = _.reduce timers, (memo, timer) =>
+      memo + timer.value
+    , 0.0
+    timer_ids = timers.map (timer) => timer.id
+
+    $fields.find('input[name*=description]').val(timers[0].name)
+    $fields.find('input[name*=hours]').val(sum.toFixed(2))
+    $fields.find('span.invoice-position-hours').text(sum.toFixed(2))
+    $fields.find('select[name*=timer_ids]').val(timer_ids)
     App.Invoice.updateValue({}, $fields, 0)
 
   $('#add-positions-modal').modal('hide')
 
 $(document).on 'change', ".invoice-position-hours", App.Invoice.updateValue
 $(document).on 'change', ".invoice-position-rate", App.Invoice.updateValue
-$(document).on 'change', "#invoice_project_id", App.Invoice.updateRate
+$(document).on 'change', "#invoice_project_uuid", App.Invoice.updateRate
 
 $ ->
   if $('#invoice-form').length
@@ -91,9 +94,9 @@ $ ->
     if button
       window.laddaButton = Ladda.create(button)
 
-    project_select = $('#invoice_project_id')[0].selectize
-    project_id = $('#invoice_project_id').val()
-    if project_id.length
-      App.Invoice.projectRate = project_select.options[project_id].rate
+    project_select = $('#invoice_project_uuid')[0].selectize
+    project_uuid = $('#invoice_project_uuid').val()
+    if project_uuid.length
+      App.Invoice.projectRate = project_select.options[project_uuid].rate
 
-    $('#invoice_project_id').data('pre', App.Invoice.projectRate)
+    $('#invoice_project_uuid').data('pre', App.Invoice.projectRate)

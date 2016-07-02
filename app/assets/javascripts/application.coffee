@@ -20,6 +20,7 @@
 #= require accounting/accounting
 #= require accountingInit
 #= require nprogress
+#= require underscore
 #= require fastclick
 #= require pdfjs-dist/build/pdf
 #= require d3
