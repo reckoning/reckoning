@@ -14,33 +14,8 @@ class Timer < ActiveRecord::Base
   delegate :project, to: :task
   delegate :name, :label, :customer_name, to: :project, prefix: true
 
-  def stop_other_timers
-    return unless started
-
-    self.started_at = Time.zone.now
-
-    Timer.where(user_id: user_id, started: true).find_each do |timer|
-      timer.value = timer.value + ((Time.zone.now - timer.started_at) / 1.hour)
-      timer.started = false
-      timer.save
-    end
-  end
-
-  def start
-    return if started?
-
-    update(started: true)
-  end
-
-  def stop
-    return unless started?
-
-    timer_value = ((Time.zone.now - started_at) / 1.hour)
-
-    update(
-      started: false,
-      value: ((value + timer_value) * task.project.round_up).round / task.project.round_up
-    )
+  def self.without(timer_uuids)
+    where.not(id: timer_uuids)
   end
 
   def self.week_for(date)
@@ -102,6 +77,35 @@ class Timer < ActiveRecord::Base
   #   else raise "Unknown file type: #{file.original_filename}"
   #   end
   # end
+
+  def stop_other_timers
+    return unless started
+
+    self.started_at = Time.zone.now
+
+    Timer.where(user_id: user_id, started: true).find_each do |timer|
+      timer.value = timer.value + ((Time.zone.now - timer.started_at) / 1.hour)
+      timer.started = false
+      timer.save
+    end
+  end
+
+  def start
+    return if started?
+
+    update(started: true)
+  end
+
+  def stop
+    return unless started?
+
+    timer_value = ((Time.zone.now - started_at) / 1.hour)
+
+    update(
+      started: false,
+      value: ((value + timer_value) * task.project.round_up).round / task.project.round_up
+    )
+  end
 
   def convert_value
     return if value.blank? || started

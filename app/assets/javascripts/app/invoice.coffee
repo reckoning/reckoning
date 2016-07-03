@@ -46,9 +46,13 @@ window.App.Invoice.loadPositions = ($element) ->
     laddaButton.stop() if laddaButton
     return
 
+  timer_uuids = []
+  $("#positions").find('select[name*=timer_ids]').each ->
+    timer_uuids = timer_uuids.concat($(@).val()) if $(@).val()
+
   xhr.abort() if xhr
   xhr = $.ajax
-    url: Routes.uninvoiced_timers_path(project_uuid: project_uuid)
+    url: Routes.uninvoiced_timers_path(project_uuid: project_uuid, timer_uuids: timer_uuids)
     dataType: 'json'
     context: $('#add-positions-modal')
     success: (result) ->
@@ -72,7 +76,7 @@ window.App.Invoice.addPositions = ($form) ->
   $positions = $('#positions')
   timers = $form.serializeArray().map (field) =>
     JSON.parse(field.value)
-  groupedTimers = _.groupBy timers, (timer) => timer.task_id
+  groupedTimers = _.groupBy timers, (timer) => timer.task_uuid
 
   _.values(groupedTimers).forEach (timers) =>
     time = new Date().getTime()
@@ -83,12 +87,12 @@ window.App.Invoice.addPositions = ($form) ->
     sum = _.reduce timers, (memo, timer) =>
       memo + timer.value
     , 0.0
-    timer_ids = timers.map (timer) => timer.id
+    timer_uuids = timers.map (timer) => timer.uuid
 
     $fields.find('input[name*=description]').val(timers[0].name)
     $fields.find('input[name*=hours]').val(sum.toFixed(2))
     $fields.find('span.invoice-position-hours').text(sum.toFixed(2))
-    $fields.find('select[name*=timer_ids]').val(timer_ids)
+    $fields.find('select[name*=timer_ids]').val(timer_uuids)
     App.Invoice.updateValue({}, $fields, 0)
 
   $('#add-positions-modal').modal('hide')
