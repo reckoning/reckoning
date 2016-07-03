@@ -48,6 +48,7 @@ GEM
       nokogiri
     arel (6.0.3)
     ast (2.3.0)
+    atomic (1.1.99)
     attr_encrypted (3.0.1)
       encryptor (~> 3.0.0)
     autoprefixer-rails (6.3.7)
@@ -84,6 +85,8 @@ GEM
       execjs
     coffee-script-source (1.10.0)
     concurrent-ruby (1.0.2)
+    concurrent-ruby-ext (1.0.2)
+      concurrent-ruby (~> 1.0.2)
     connection_pool (2.2.0)
     coveralls (0.7.1)
       multi_json (~> 1.3)
