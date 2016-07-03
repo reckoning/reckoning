@@ -1,3 +1,5 @@
+# encoding: utf-8
+# frozen_string_literal: true
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   check_authorization unless: :unauthorized_controllers
@@ -8,10 +10,6 @@ class ApplicationController < ActionController::Base
 
   before_action :authenticate_user!, :set_default_nav
   before_action :configure_permitted_parameters, if: :devise_controller?
-
-  def peek_enabled?
-    true
-  end
 
   private def current_account
     @current_account ||= begin
@@ -68,6 +66,6 @@ class ApplicationController < ActionController::Base
   helper_method :stored_params
 
   protected def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:sign_in) << :otp_attempt
+    devise_parameter_sanitizer.permit(:sign_in, keys: [:otp_attempt])
   end
 end

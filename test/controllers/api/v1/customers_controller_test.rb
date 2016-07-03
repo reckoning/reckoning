@@ -1,8 +1,15 @@
+# encoding: utf-8
+# frozen_string_literal: true
 require 'test_helper'
 
 module Api
   module V1
     class CustomersControllerTest < ActionController::TestCase
+      setup do
+        @request.headers['Accept'] = Mime::JSON
+        @request.headers['Content-Type'] = Mime::JSON.to_s
+      end
+
       tests ::Api::V1::CustomersController
 
       fixtures :all

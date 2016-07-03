@@ -15,3 +15,7 @@ de:
       destroy:
         success: "%{resource} erfolgreich gelöscht."
         failure: "%{resource} konnte nicht gelöscht werden."
+      archive:
+        success: "%{resource} erfolgreich archiviert."
+        failure: "%{resource} konnte nicht archiviert werden."
+

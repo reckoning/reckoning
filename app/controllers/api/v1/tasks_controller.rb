@@ -1,3 +1,5 @@
+# encoding: utf-8
+# frozen_string_literal: true
 module Api
   module V1
     class TasksController < ::Api::BaseController
@@ -10,16 +12,17 @@ module Api
                        .where(timers: { user_id: current_user.id })
                        .where(timers: { date: [date.beginning_of_week..date.end_of_week] })
         end
-        render json: scope.order('tasks.id ASC'), each_serializer: TaskSerializer, status: :ok
+        @tasks = scope.order('tasks.id ASC')
       end
 
       def create
-        authorize! :create, task
-        if task.save
-          render json: task, status: :created
+        @task = Task.new task_params
+        authorize! :create, @task
+        if @task.save
+          render status: :created
         else
-          Rails.logger.info "Task Create Failed: #{task.errors.full_messages.to_yaml}"
-          render json: task.errors, status: :bad_request
+          Rails.logger.info "Task Create Failed: #{@task.errors.full_messages.to_yaml}"
+          render json: ValidationError.new("task.create", @task.errors), status: :bad_request
         end
       end
 
@@ -33,11 +36,6 @@ module Api
 
       private def task_params
         @task_params ||= params.permit(:name).merge(project_id: project.id)
-      end
-
-      private def task
-        @task ||= Task.where(project_id: current_account.project_ids, id: params.fetch(:id, nil)).first
-        @task ||= Task.new task_params
       end
     end
   end

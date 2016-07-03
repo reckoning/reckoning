@@ -1,8 +1,6 @@
 #= require jquery
 #= require jquery_ujs
 #= require js-routes
-#= require peek
-#= require peek/views/performance_bar
 #= require spin.js/spin
 #= require ladda/js/ladda
 #= require noty
@@ -39,6 +37,7 @@
 #= require blank
 #= require timesheet
 #= require timersCalendar
+
 
 window.domain = (location.host.match(/([^.]+)\.\w{2,3}(?:\.\w{2})?$/) || [])[0]
 window.ApiBasePath = "//api.#{domain}"

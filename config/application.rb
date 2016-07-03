@@ -1,3 +1,5 @@
+# encoding: utf-8
+# frozen_string_literal: true
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
@@ -24,13 +26,13 @@ module Reckoning
     config.i18n.fallbacks = [:de]
 
     config.action_view.field_error_proc = proc { |html_tag, _instance|
-      html_tag.to_s.html_safe
+      safe_join(html_tag.to_s)
     }
 
     config.exceptions_app = routes
 
     config.middleware.use I18n::JS::Middleware
-    config.middleware.insert_before 0, "Rack::Cors", debug: true, logger: -> { Rails.logger } do
+    config.middleware.insert_before 0, Rack::Cors, debug: true, logger: -> { Rails.logger } do
       allow do
         origins '*'
         resource '*', headers: :any,
@@ -38,8 +40,6 @@ module Reckoning
                       max_age: 0
       end
     end
-
-    config.peek.adapter = :redis
 
     if ENV['HTTP_USER'].present? && ENV['HTTP_PASSWORD'].present?
       # Basic authentication for Heroku Stage

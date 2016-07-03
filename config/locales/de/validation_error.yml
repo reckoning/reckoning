@@ -1,8 +1,13 @@
 de:
   validation_error:
     customer:
+      create: "Kunde konnte nicht erstellt werden."
       destroy: "Kunde konnte nicht gelöscht werden."
       destroy_failure_dependency: "Bitte löschen Sie zuerst alle Rechnungen für diesen Kunden."
     project:
       destroy: "Projekt konnte nicht gelöscht werden."
       destroy_failure_dependency: "Bitte löschen Sie zuerst alle Rechnungen für dieses Projekt."
+      archive: "Projekt konnte nicht archiviert werden."
+    sessions:
+      create: "Anmeldung fehlgeschlagen."
+      authentication: "Ungültige Anmeldedaten."

@@ -26,18 +26,18 @@
       .timesheet-timer-panel.panel.panel-default.animate ng-repeat="timer in timers" style="overflow: hidden"
         .panel-body
           .pull-left
-            h3 
+            h3
               a ng-href="{{timer.links.project.href}}"
-                span ng-bind="timer.project_name"
-              small 
+                span ng-bind="timer.projectName"
+              small
                 = " | "
-                span ng-bind="timer.project_customer_name"
-            span ng-bind="timer.task_label"
+                span ng-bind="timer.projectLabel"
+            span ng-bind="timer.taskLabel"
           .pull-right
             span.timesheet-timer.invoiced ng-if="timer.invoiced" title=I18n.t(:"labels.timesheet.on_invoice") data-toggle="tooltip"
               span ng-bind="timer.value | toTime"
             span.timesheet-timer.started ng-if="timer.started"
-              timer start-time="timer.start_time" max-time-unit="'hour'" {{hours}}:{{mminutes}}
+              timer start-time="timer.startTime" max-time-unit="'hour'" {{hours}}:{{mminutes}}
               '
               button.btn.btn-success.btn-lg ng-click="stopTimer(timer, $event)"
                 i.fa.fa-circle-o-notch.fa-spin
@@ -53,7 +53,7 @@
             '
             button.btn.btn-link.btn-lg.default ng-if="!timer.invoiced" ng-click="openModal(timer)"
               i.fa.fa-edit
-              
+
     .col-xs-12.col-md-2
       .btn-group-responsive.resource-nav
         button.btn.btn-primary.btn-lg ng-click="openModal()"

@@ -1,3 +1,5 @@
+# encoding: utf-8
+# frozen_string_literal: true
 require 'dropbox_sdk'
 
 class DropboxController < ApplicationController

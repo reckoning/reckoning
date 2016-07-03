@@ -1,4 +1,9 @@
 dependencies:
+  pre:
+    - sudo apt-get remove wkhtmltopdf
+    - sudo add-apt-repository ppa:ecometrica/servers -y
+    - sudo apt-get update
+    - sudo apt-get install wkhtmltopdf
   post:
     - bundle exec thor setup:dev_env
 test:

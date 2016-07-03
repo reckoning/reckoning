@@ -1,3 +1,5 @@
+# encoding: utf-8
+# frozen_string_literal: true
 class PasswordsController < ApplicationController
   before_action :set_user, only: [:edit, :update]
   before_action :set_active_nav

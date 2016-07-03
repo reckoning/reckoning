@@ -14,8 +14,8 @@ angular.module 'Reckoning'
       $scope.projects = projects.data
       $scope.timer = timer
 
-      if timer.project_uuid
-        project = _.find $scope.projects, (project) -> project.uuid is timer.project_uuid
+      if timer.projectUuid
+        project = _.find $scope.projects, (project) -> project.uuid is timer.projectUuid
         $scope.tasks = project.tasks
 
     $scope.saveTimer = (timer, start) ->
@@ -35,22 +35,22 @@ angular.module 'Reckoning'
     $scope.startTimer = (timer) ->
       Timer.start(timer.uuid).success (data) ->
         timer.started = data.started
-        timer.start_time = data.start_time
-        timer.started_at = data.started_at
+        timer.startTime = data.startTime
+        timer.startedAt = data.startedAt
 
     $scope.stopTimer = (timer) ->
       Timer.stop(timer.uuid).success (data) ->
         timer.value = data.value
         timer.started = data.started
-        timer.started_at = data.started_at
+        timer.startedAt = data.startedAt
 
     $scope.addTask = ->
-      task = _.find $scope.tasks, (task) -> task.uuid is $scope.timer.task_uuid
+      task = _.find $scope.tasks, (task) -> task.uuid is $scope.timer.taskUuid
       $uibModalInstance.close(task)
 
     $scope.createTask = (input, selectize) ->
       Task.create(
-        project_uuid: $scope.timer.project_uuid,
+        project_uuid: $scope.timer.projectUuid,
         name: input
       ).success (newTask, status, headers, config) ->
         $timeout ->
@@ -67,7 +67,7 @@ angular.module 'Reckoning'
       moment(date).format('YYYYMMDD') >= moment().format('YYYYMMDD')
 
     $scope.$watch 'timer.project_uuid', ->
-      project = _.find $scope.projects, (project) -> project.uuid is $scope.timer.project_uuid
+      project = _.find $scope.projects, (project) -> project.uuid is $scope.timer.projectUuid
       $scope.tasks = _.filter project?.tasks, (item) ->
         !_.contains($scope.excludedTaskUuids, item.uuid)
 ]

@@ -1,7 +1,10 @@
+# encoding: utf-8
+# frozen_string_literal: true
 class Invoice < ActiveRecord::Base
   DEFAULT_PAYMENT_DUE_DAYS = 14
 
   include PdfOptions
+  include ActionView::Helpers::OutputSafetyHelper
 
   belongs_to :account
   belongs_to :customer
@@ -93,12 +96,12 @@ class Invoice < ActiveRecord::Base
   end
 
   def title
-    [
-      "<b>",
-      customer.name,
-      "</b> - ",
-      project.name
-    ].join('').html_safe
+    output = []
+    output << "<b>"
+    output << customer.name
+    output << "</b> - "
+    output << project.name
+    safe_join(output)
   end
 
   def set_payment_due_date

@@ -1,3 +1,5 @@
+# encoding: utf-8
+# frozen_string_literal: true
 class Project < ActiveRecord::Base
   DEFAULT_ROUND_UP_OPTIONS = {
     "Nicht aufrunden" => 10.0,

@@ -1,3 +1,6 @@
+
+# encoding: utf-8
+# frozen_string_literal: true
 ENV["RAILS_ENV"] = "test"
 require File.expand_path('../../config/environment', __FILE__)
 
@@ -21,7 +24,6 @@ Sidekiq::Testing.fake!
 
 # helper
 require "support/session_helper"
-
 require "database_cleaner"
 
 # database cleaner
@@ -30,7 +32,7 @@ DatabaseCleaner.strategy = :transaction
 # rubocop:disable Style/ClassAndModuleChildren
 class ActionController::TestCase
   fixtures :all
-  include Devise::TestHelpers
+  include Devise::Test::ControllerHelpers
   include SessionHelper
   ActiveRecord::Migration.check_pending!
 

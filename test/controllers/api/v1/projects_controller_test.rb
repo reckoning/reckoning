@@ -1,8 +1,15 @@
+# encoding: utf-8
+# frozen_string_literal: true
 require 'test_helper'
 
 module Api
   module V1
     class ProjectsControllerTest < ActionController::TestCase
+      setup do
+        @request.headers['Accept'] = Mime::JSON
+        @request.headers['Content-Type'] = Mime::JSON.to_s
+      end
+
       tests ::Api::V1::ProjectsController
 
       fixtures :all
@@ -25,6 +32,12 @@ module Api
 
         before do
           add_authorization will
+        end
+
+        it "renders a projects list" do
+          get :index
+
+          assert_response :ok
         end
 
         it "User can destroy project" do

@@ -1,3 +1,5 @@
+# encoding: utf-8
+# frozen_string_literal: true
 class Plan < ActiveRecord::Base
   validates :code, :quantity, :base_price, :interval, :stripe_plan_id, presence: true
 
@@ -23,6 +25,10 @@ class Plan < ActiveRecord::Base
     return false
   end
 
+  def description
+    I18n.t("plans.name.#{code}", price: price)
+  end
+
   def amount
     base_price * quantity
   end
@@ -39,7 +45,9 @@ class Plan < ActiveRecord::Base
     end
   end
 
-  def to_serialized_json
-    PlanSerializer.new(self, {}).to_json
+  def to_builder
+    Jbuilder.new do |plan|
+      plan.call(self, :uuid, :code, :name, :description, :price, :quantity, :interval, :featured)
+    end
   end
 end

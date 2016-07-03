@@ -1,3 +1,5 @@
+# encoding: utf-8
+# frozen_string_literal: true
 module InvoicesHelper
   def invoice_label(invoice)
     case invoice.current_state.to_s

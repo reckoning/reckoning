@@ -1,36 +1,40 @@
+# encoding: utf-8
+# frozen_string_literal: true
 module Api
   module V1
     class CustomersController < Api::BaseController
       def index
         authorize! :index, Customer
-        render json: current_account.customers, each_serializer: CustomerSerializer, status: :ok
+        @customers = current_account.customers
       end
 
       def show
-        authorize! :show, customer
-        render json: customer, status: :ok
+        @customer = current_account.customers.find(params[:id])
+        authorize! :show, @customer
       end
 
       def create
-        authorize! :create, customer
-        if customer.save
-          render json: customer, status: :created
+        @customer = current_account.customers.new(customer_params)
+        authorize! :create, @customer
+        if @customer.save
+          render status: :created
         else
-          Rails.logger.info "Customer Create Failed: #{customer.errors.full_messages.to_yaml}"
-          render json: customer.errors, status: :bad_request
+          Rails.logger.info "Customer Create Failed: #{@customer.errors.full_messages.to_yaml}"
+          render json: ValidationError.new("customer.create", @customer.errors), status: :bad_request
         end
       end
 
       def destroy
-        authorize! :destroy, customer
-        if customer.invoices.present?
+        @customer = current_account.customers.find(params[:id])
+        authorize! :destroy, @customer
+        if @customer.invoices.present?
           Rails.logger.info "Customer Destroy Failed: Invoices present"
           render json: ValidationError.new("customer.destroy_failure_dependency"), status: :bad_request
-        elsif customer.destroy
-          render json: { message: I18n.t(:"messages.customer.destroy.success") }, status: :ok
+        elsif @customer.destroy
+          render json: { message: resource_message(:customer, :destroy, :success) }, status: :ok
         else
           Rails.logger.info "Customer Destroy Failed: #{customer.errors.full_messages.to_yaml}"
-          render json: ValidationError.new("customer.destroy", customer.errors), status: :bad_request
+          render json: ValidationError.new("customer.destroy", @customer.errors), status: :bad_request
         end
       end
 
@@ -39,11 +43,6 @@ module Api
           :payment_due, :email_template, :invoice_email, :default_from, :name,
           :address, :country, :email, :telefon, :fax, :website
         )
-      end
-
-      private def customer
-        @customer ||= Customer.where(id: params.fetch(:id, nil)).first
-        @customer ||= current_account.customers.new customer_params
       end
     end
   end

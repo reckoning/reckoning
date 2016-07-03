@@ -1,3 +1,5 @@
+# encoding: utf-8
+# frozen_string_literal: true
 Reckoning::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -39,6 +41,5 @@ Reckoning::Application.configure do
   config.assets.initialize_on_precompile = true
 
   config.active_support.test_order = :sorted
-
   config.active_record.raise_in_transactional_callbacks = true
 end

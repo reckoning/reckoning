@@ -1,3 +1,5 @@
+# encoding: utf-8
+# frozen_string_literal: true
 Reckoning::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -10,7 +12,7 @@ Reckoning::Application.configure do
   config.eager_load = false
 
   # Show full error reports and disable caching.
-  config.consider_all_requests_local       = true
+  config.consider_all_requests_local       = false
   config.action_controller.perform_caching = false
 
   # Don't care if the mailer can't send.

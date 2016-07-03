@@ -1,3 +1,5 @@
+# encoding: utf-8
+# frozen_string_literal: true
 module Api
   module V1
     class ProjectsController < Api::BaseController
@@ -16,38 +18,38 @@ module Api
         scope = scope.where.not(id: without_ids) if without_ids
 
         sort = params.fetch(:sort, nil)
-        scope = if sort.present? && sort == "last_used"
-                  scope.includes(:timers).order("timers.created_at desc nulls last")
-                else
-                  scope.order("name asc")
-                end
-
-        render json: scope, each_serializer: ProjectSerializer
+        @projects = if sort.present? && sort == "last_used"
+                      scope.includes(:timers).order("timers.created_at desc nulls last")
+                    else
+                      scope.order("name asc")
+                    end
       end
 
       def destroy
-        authorize! :destroy, project
+        @project = current_account.projects.find(params[:id])
+        authorize! :destroy, @project
 
-        if project.invoices.present?
+        if @project.invoices.present?
           Rails.logger.info "Project Destroy Failed: Invoices present"
           render json: ValidationError.new("project.destroy_failure_dependency"), status: :bad_request
-        elsif project.destroy
-          render json: { message: I18n.t(:"messages.project.destroy.success") }, status: :ok
+        elsif @project.destroy
+          render json: { message: resource_message(:project, :destroy, :success) }, status: :ok
         else
-          Rails.logger.info "Project Destroy Failed: #{project.errors.full_messages.to_yaml}"
-          render json: ValidationError.new("project.destroy", project.errors), status: :bad_request
+          Rails.logger.info "Project Destroy Failed: #{@project.errors.full_messages.to_yaml}"
+          render json: ValidationError.new("project.destroy", @project.errors), status: :bad_request
         end
       end
 
       def archive
-        authorize! :archive, project
-        project.archive!
-        project.save
-        if project.reload.archived?
-          render json: { message: I18n.t(:"messages.project.archive.success") }, status: :ok
+        @project = current_account.projects.find(params[:id])
+        authorize! :archive, @project
+        if !@project.archived?
+          @project.archive!
+          @project.save
+          render json: { message: resource_message(:project, :archive, :success) }, status: :ok
         else
-          Rails.logger.info "Project Archive Failed: #{project.errors.full_messages.to_yaml}"
-          render json: ValidationError.new("project.archive", project.errors), status: :bad_request
+          Rails.logger.info "Project Archive Failed"
+          render json: ValidationError.new("project.archive"), status: :bad_request
         end
       end
 
@@ -69,11 +71,6 @@ module Api
             :_destroy
           ]
         )
-      end
-
-      private def project
-        @project ||= Project.where(id: params.fetch(:id, nil)).first
-        @project ||= current_account.projects.new project_params
       end
     end
   end

@@ -1,3 +1,5 @@
+# encoding: utf-8
+# frozen_string_literal: true
 module NavHelper
   def active_nav?(navs = "home")
     navs = [navs] unless navs.is_a?(Array)

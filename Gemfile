@@ -1,8 +1,10 @@
+# encoding: utf-8
+# frozen_string_literal: true
 source 'https://rubygems.org'
 
-ruby '2.3.0'
+ruby '2.3.1'
 
-gem 'rails', '4.2.5.1'
+gem 'rails', '4.2.6'
 
 gem 'pg'
 
@@ -10,11 +12,9 @@ gem 'stripe', github: 'stripe/stripe-ruby'
 gem 'money'
 gem 'valvat'
 
-gem 'active_model_serializers'
-
 gem 'sidekiq'
 # for sidekiq web
-gem 'sinatra', '>= 1.3.0', require: nil
+gem 'sinatra', require: nil
 
 gem 'haml'
 gem 'haml-rails'
@@ -22,6 +22,7 @@ gem 'slim-rails'
 
 gem 'devise'
 gem 'devise-two-factor'
+
 gem 'rqrcode-rails3'
 gem 'mini_magick'
 gem 'cancancan'
@@ -31,29 +32,31 @@ gem 'dalli'
 gem 'url_plumber'
 gem 'kaminari'
 
+gem 'jbuilder', '~> 2.5'
+
 gem 'dynamic_fields_for_rails'
 
 gem 'workflow'
 
-gem 'sass-rails'
-gem 'coffee-rails'
-gem 'bourbon'
+gem 'sass-rails', '~> 5.0'
 
+gem 'coffee-rails', '~> 4.2'
+gem 'jquery-rails'
+gem 'turbolinks', '~> 5'
+gem 'js-routes'
+
+gem 'bourbon'
 gem 'bootstrap-sass'
 gem 'font-awesome-sass'
 
-gem 'jquery-rails'
-
-gem 'js-routes'
-
-gem 'uglifier'
+gem 'uglifier', '>= 1.3.0'
 
 gem 'redcarpet'
 
-gem 'puma'
+gem 'puma', '~> 3.0'
 
 gem "i18n-js", ">= 3.0.0.rc11"
-gem 'rails-i18n', '~> 4.0.0'
+gem 'rails-i18n'
 
 gem 'thor'
 gem 'highline'
@@ -72,14 +75,6 @@ gem 'sentry-raven'
 
 gem 'typhoeus'
 
-gem 'peek'
-gem 'peek-sidekiq'
-gem 'peek-git'
-gem 'peek-host'
-gem 'peek-pg'
-gem 'peek-redis'
-gem 'peek-performance_bar'
-
 # pdf rendering
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-heroku'
@@ -91,9 +86,17 @@ gem "refile-s3"
 gem 'rails_12factor', group: :production
 gem 'non-stupid-digest-assets'
 
-gem 'pry-rails', group: :development
+group :development do
+  gem 'pry-rails'
+  gem 'rubocop', require: false
+  gem 'web-console'
+  gem 'listen', '~> 3.0.5'
+  gem 'spring'
+  gem 'spring-watcher-listen', '~> 2.0.0'
+end
 
 group :test do
+  gem 'faker'
   gem 'rails-perftest'
   gem 'minitest-rails'
   gem 'ruby-prof'
@@ -105,14 +108,6 @@ group :test do
 end
 
 group :development, :test do
-  gem 'rubocop', require: false
-
-  # generate fake data
-  gem 'faker'
-
-  # debugging
   gem 'bullet'
-  gem 'byebug'
-  gem 'web-console', '~> 2.0'
-  gem 'spring'
+  gem 'byebug', platform: :mri
 end

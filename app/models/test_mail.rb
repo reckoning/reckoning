@@ -1,3 +1,5 @@
+# encoding: utf-8
+# frozen_string_literal: true
 class TestMail
   include ActiveModel::Validations
   include ActiveModel::Conversion

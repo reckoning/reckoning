@@ -1,3 +1,5 @@
+# encoding: utf-8
+# frozen_string_literal: true
 require 'roo'
 
 class Timer < ActiveRecord::Base
@@ -48,40 +50,24 @@ class Timer < ActiveRecord::Base
     where.not(tasks: { billable: true }).references(:task)
   end
 
-  # def self.import(file, project_id)
-  #   spreadsheet = open_spreadsheet(file)
-  #   header = spreadsheet.row(1)
-  #   project = Project.where(id: project_id).first
-  #   if project.present? && valid_csv?(header)
-  #     (2..spreadsheet.last_row).each do |i|
-  #       row = Hash[[header, spreadsheet.row(i)].transpose]
-  #       date = Date.parse(row['date'])
-  #       task = Task.where(project_id: project.id, name: row['task']).first_or_create
-  #       week = Week.where(user_id: project.customer.user_id, start_date: date.beginning_of_week).first_or_create
-  #       week.tasks << task unless week.tasks.include?(task)
-  #       where(date: row['date'], value: row['value'].gsub(',', '.'), task_id: task.id, week_id: week.id).first_or_create
-  #     end
-  #     return true
-  #   else
-  #     return false
-  #   end
-  # end
+  def start_time
+    (started_at - value.to_d.hours).to_i * 1000 if started_at
+  end
 
-  # def self.valid_csv?(header)
-  #   %w(date value task).reject { |h| header.include?(h) }.empty?
-  # end
-  #
-  # def self.open_spreadsheet(file)
-  #   case File.extname(file.original_filename)
-  #   when ".csv" then Roo::CSV.new(file.path)
-  #   else raise "Unknown file type: #{file.original_filename}"
-  #   end
-  # end
+  def start_time_for_task
+    task.start_time(date)
+  end
+
+  def sum_for_task
+    task.timers_sum(date)
+  end
+
+  def invoiced
+    position_id.present?
+  end
 
   def stop_other_timers
     return unless started
-
-    self.started_at = Time.zone.now
 
     Timer.where(user_id: user_id, started: true).find_each do |timer|
       timer.value = timer.value + ((Time.zone.now - timer.started_at) / 1.hour)
@@ -93,7 +79,7 @@ class Timer < ActiveRecord::Base
   def start
     return if started?
 
-    update(started: true)
+    update(started: true, started_at: Time.zone.now)
   end
 
   def stop

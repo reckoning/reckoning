@@ -29,10 +29,10 @@ angular.module 'Timesheet'
         else if result.status is 'updated'
           timer.value = result.data.value
           timer.date = result.data.date
-          timer.project_uuid = result.data.project_uuid
-          timer.project_name = result.data.project_name
-          timer.task_uuid = result.data.task_uuid
-          timer.task_name = result.data.task_name
+          timer.projectUuid = result.data.projectUuid
+          timer.projectName = result.data.projectName
+          timer.taskUuid = result.data.taskUuid
+          timer.taskName = result.data.taskName
           timer.note = result.data.note
         else if result.status is 'created'
           $scope.timers.forEach (item) ->
@@ -43,14 +43,14 @@ angular.module 'Timesheet'
       Timer.all(@date).success (data, status, headers, config) ->
         $scope.timers = data
         data.forEach (timer) ->
-          task = {uuid: timer.task_uuid}
+          task = {uuid: timer.taskUuid}
           $scope.currentTasks.push task
         $scope.timersLoaded = true
 
     $scope.getTimers()
 
     $scope.startedValue = (timer) ->
-      ms = moment().diff(moment(timer.started_at))
+      ms = moment().diff(moment(timer.startedAt))
       moment.duration(ms).asHours() + parseFloat(timer.value)
 
     $scope.startTimer = (timer) ->
@@ -58,14 +58,14 @@ angular.module 'Timesheet'
         $scope.timers.forEach (item) ->
           item.started = false
         timer.started = data.started
-        timer.start_time = data.start_time
-        timer.started_at = data.started_at
+        timer.startTime = data.startTime
+        timer.startedAt = data.startedAt
 
     $scope.stopTimer = (timer) ->
       Timer.stop(timer.uuid).success (data) ->
         timer.value = data.value
         timer.started = data.started
-        timer.started_at = data.started_at
+        timer.startedAt = data.startedAt
 
     if $routeParams.action == "new"
       $scope.openModal()

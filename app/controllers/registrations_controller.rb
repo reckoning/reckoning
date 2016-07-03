@@ -1,3 +1,5 @@
+# encoding: utf-8
+# frozen_string_literal: true
 class RegistrationsController < Devise::RegistrationsController
   before_action :set_user, only: [:edit, :update]
 

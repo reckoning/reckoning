@@ -2,8 +2,7 @@ doctype html
 html lang=I18n.locale
   head = render "layouts/head"
   body data-success=flash[:success] data-info=notice data-error=alert
-  	= render 'peek/bar' if user_signed_in? && current_user.admin?
-    - if user_signed_in? || content_for?(:main_nav)
+  	- if user_signed_in? || content_for?(:main_nav)
       = render "layouts/backend/navigation"
     .container-fluid
       == yield

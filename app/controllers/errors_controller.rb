@@ -1,3 +1,5 @@
+# encoding: utf-8
+# frozen_string_literal: true
 class ErrorsController < ActionController::Base
   def not_found
     respond_to do |format|

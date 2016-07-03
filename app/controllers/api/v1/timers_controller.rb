@@ -1,3 +1,5 @@
+# encoding: utf-8
+# frozen_string_literal: true
 module Api
   module V1
     class TimersController < Api::BaseController
@@ -8,57 +10,54 @@ module Api
         scope = scope.where(date: date_range) if date_range
         scope = scope.for_project(project_uuid) if project_uuid
         scope = scope.uninvoiced if params[:uninvoiced].present?
-        render json: scope.order('timers.created_at ASC'), each_serializer: TimerSerializer, status: :ok
+        @timers = scope
       end
 
       def create
-        authorize! :create, timer
-        if timer.save
-          render json: timer, status: :created
+        @timer ||= current_user.timers.new timer_params
+        authorize! :create, @timer
+        if @timer.save
+          render status: :created
         else
-          Rails.logger.info "Timer Create Failed: #{timer.errors.full_messages.to_yaml}"
-          render json: timer.errors, status: :bad_request
+          Rails.logger.info "Timer Create Failed: #{@timer.errors.full_messages.to_yaml}"
+          render json: ValidationError.new("timer.create", @timer.errors), status: :bad_request
         end
       end
 
       def update
-        authorize! :update, timer
-        if timer.update(timer_params)
-          render json: timer, status: :ok
-        else
-          Rails.logger.info "Timer Update Failed: #{timer.errors.full_messages.to_yaml}"
-          render json: timer.errors, status: :bad_request
+        @timer = current_user.timers.find(params[:id])
+        authorize! :update, @timer
+        unless @timer.update(timer_params)
+          Rails.logger.info "Timer Update Failed: #{@timer.errors.full_messages.to_yaml}"
+          render json: ValidationError.new("timer.update", @timer.errors), status: :bad_request
         end
       end
 
       def stop
-        authorize! :stop, timer
-        if timer.stop
-          render json: timer, status: :ok
-        else
-          Rails.logger.info "Timer Stop Failed: #{timer.to_yaml}"
+        @timer = current_user.timers.find(params[:id])
+        authorize! :stop, @timer
+        unless @timer.stop
+          Rails.logger.info "Timer Stop Failed: #{@timer.to_yaml}"
           render json: { message: I18n.t(:"messages.timer.stop.failure") }, status: :bad_request
         end
       end
 
       def start
-        authorize! :start, timer
-        if timer.start
-          render json: timer, status: :ok
-        else
-          Rails.logger.info "Timer Start Failed: #{timer.to_yaml}"
+        @timer = current_user.timers.find(params[:id])
+        authorize! :start, @timer
+        unless @timer.start
+          Rails.logger.info "Timer Start Failed: #{@timer.to_yaml}"
           render json: { message: I18n.t(:"messages.timer.start.failure") }, status: :bad_request
         end
       end
 
       def destroy
-        authorize! :destroy, timer
-        if timer.position.blank?
-          if timer.destroy
-            render json: timer, status: :ok
-          else
-            Rails.logger.info "Timer Destroy Failed: #{timer.errors.full_messages.to_yaml}"
-            render json: timer.errors, status: :bad_request
+        @timer = current_user.timers.find(params[:id])
+        authorize! :destroy, @timer
+        if @timer.position.blank?
+          unless @timer.destroy
+            Rails.logger.info "Timer Destroy Failed: #{@timer.errors.full_messages.to_yaml}"
+            render json: ValidationError.new("timer.destroy", @timer.errors), status: :bad_request
           end
         else
           Rails.logger.info "Timer Destroy Failed: Timer allready on Invoice"
@@ -76,19 +75,19 @@ module Api
       end
 
       private def start_date
-        @start_date ||= params[:start_date]
+        @start_date ||= params[:startDate]
       end
 
       private def end_date
-        @end_date ||= params[:end_date]
+        @end_date ||= params[:endDate]
       end
 
       private def project_uuid
-        @project_uuid ||= params[:project_uuid]
+        @project_uuid ||= params[:projectUuid]
       end
 
       private def task
-        @task ||= current_account.tasks.find(params.delete(:task_uuid))
+        @task ||= current_account.tasks.find(params.delete(:taskUuid))
       end
 
       private def timer_params
@@ -96,11 +95,6 @@ module Api
           task_id: task.id,
           user_id: current_user.id
         )
-      end
-
-      private def timer
-        @timer ||= Timer.where(user_id: current_user.id, id: params.fetch(:id, nil)).first
-        @timer ||= Timer.new timer_params
       end
     end
   end

@@ -1,13 +1,9 @@
+# encoding: utf-8
+# frozen_string_literal: true
 require 'sidekiq/web'
 
 Reckoning::Application.routes.draw do
   v1_api_routes = lambda do
-    post 'signin' => 'session#create'
-    resource :account do
-      get :verify_iban
-      get :generate_iban
-    end
-
     resources :customers, only: [:index, :show, :create, :destroy]
 
     resources :projects, only: [:index, :destroy] do
@@ -26,10 +22,6 @@ Reckoning::Application.routes.draw do
     end
   end
 
-  v1_backend_api_routes = lambda do
-    resources :accounts
-  end
-
   scope module: :api, constraints: { subdomain: "api" } do
     scope :v1, defaults: { format: :json }, as: :v1 do
       scope module: :v1, &v1_api_routes
@@ -37,12 +29,6 @@ Reckoning::Application.routes.draw do
   end
 
   namespace :backend do
-    scope module: "api", constraints: { subdomain: "api" } do
-      scope :v1, defaults: { format: :json }, as: :v1 do
-        scope module: :v1, &v1_backend_api_routes
-      end
-    end
-
     resources :accounts, except: [:show]
 
     resources :users, except: [:show] do
@@ -109,8 +95,6 @@ Reckoning::Application.routes.draw do
       get :timer_modal_template
       get :task_modal_template
     end
-    # get :new_import
-    # post :csv_import
   end
 
   resource :template, only: [] do
@@ -156,8 +140,6 @@ Reckoning::Application.routes.draw do
   get '404' => 'errors#not_found'
   get '422' => 'errors#server_error'
   get '500' => 'errors#server_error'
-
-  mount Peek::Railtie => '/peek'
 
   root to: 'base#index'
 end
