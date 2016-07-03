@@ -1,14 +1,19 @@
 .list-group
   - timers.each do |timer|
     %a.list-group-item{href: '#', onclick: "toggleCheckbox($(this)); return false;", data: {activeclass: "list-group-item-info"}}
-      .checkbox.pull-right
-        = check_box_tag "timer_ids[]", {name: timer.task.name, task_id: timer.task_id, id: timer.id, value: timer.value.to_f}.to_json, false, id: dom_id(timer)
-        %label{for: dom_id(timer)}
-      %strong
-        = timer.task.name
-      = I18n.l timer.date
-      %span.label.label-primary
-        = number_to_currency timer.value, unit: "h"
+      .row
+        .col-xs-6.col-md-2
+          = I18n.l timer.date
+        .col-xs-6.col-md-7
+          %strong
+            = timer.task.name
+        .col-xs-6.col-md-2.text-right
+          %span.label.label-primary
+            = number_to_currency timer.value, unit: "h"
+        .col-xs-6.col-md-1
+          .checkbox.pull-right
+            = check_box_tag "timer_ids[]", {name: timer.task.name, task_id: timer.task_id, id: timer.id, value: timer.value.to_f}.to_json, false, id: dom_id(timer)
+            %label{for: dom_id(timer)}
 
   - if timers.blank?
     .list-group-item

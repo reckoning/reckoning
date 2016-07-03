@@ -72,7 +72,9 @@
       .modal-body
         %form#add-positions{onsubmit: "App.Invoice.addPositions($(this)); return false;"}
       .modal-footer
-        %button.btn.btn-default{type: "button", data: {dismiss: "modal"}}
+        %button.btn.btn-default(type="button" data-select-all)
+          %i.fa.fa-check-square-o
+        %button.btn.btn-default(type="button" data-dismiss="modal")
           = I18n.t(:"actions.close")
         %button.btn.btn-primary{form: "add-positions", data: {loading: {text: I18n.t(:"actions.loading")}}}
           = I18n.t(:"actions.add")

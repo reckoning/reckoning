@@ -59,6 +59,15 @@ window.App.Invoice.loadPositions = ($element) ->
     complete: ->
       laddaButton.stop() if laddaButton
 
+window.App.Invoice.selectAllTimers = (ev) ->
+  $("#add-positions").find(".list-group-item").each ->
+    toggleCheckbox($(@))
+
+  $icon = $(ev.target).closest("button[data-select-all]").find("i")
+  $icon.toggleClass("fa-check-square-o")
+  $icon.toggleClass("fa-square-o")
+
+
 window.App.Invoice.addPositions = ($form) ->
   $positions = $('#positions')
   timers = $form.serializeArray().map (field) =>
@@ -87,6 +96,7 @@ window.App.Invoice.addPositions = ($form) ->
 $(document).on 'change', ".invoice-position-hours", App.Invoice.updateValue
 $(document).on 'change', ".invoice-position-rate", App.Invoice.updateValue
 $(document).on 'change', "#invoice_project_uuid", App.Invoice.updateRate
+$(document).on 'click', "#add-positions-modal button[data-select-all]", App.Invoice.selectAllTimers
 
 $ ->
   if $('#invoice-form').length

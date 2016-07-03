@@ -9,6 +9,8 @@ de:
     save: "Speichern"
     create: "Erstellen"
     add: "Hinzufügen"
+    select_all: "Alle auswählen"
+    deselect_all: "Alle abwählen"
     subscribe: "Akzeptieren"
     timer_import: "Zeiten importieren"
     add_position: "Position hinzufügen"
