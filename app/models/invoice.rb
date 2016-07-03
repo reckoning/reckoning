@@ -4,6 +4,7 @@ class Invoice < ActiveRecord::Base
   DEFAULT_PAYMENT_DUE_DAYS = 14
 
   include PdfOptions
+  include ActionView::Helpers::TagHelper
   include ActionView::Helpers::OutputSafetyHelper
 
   belongs_to :account
@@ -97,9 +98,8 @@ class Invoice < ActiveRecord::Base
 
   def title
     output = []
-    output << "<b>"
-    output << customer.name
-    output << "</b> - "
+    output << content_tag(:strong, customer.name)
+    output << " - "
     output << project.name
     safe_join(output)
   end
