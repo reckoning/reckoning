@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 
 ruby '2.3.1'
 
-gem 'rails', '4.2.6'
+gem 'rails', '5.0.0'
 
 gem 'pg'
 
@@ -12,9 +12,9 @@ gem 'stripe', github: 'stripe/stripe-ruby'
 gem 'money'
 gem 'valvat'
 
-gem 'sidekiq'
+gem 'sidekiq', github: 'mperham/sidekiq', branch: 'rails5'
 # for sidekiq web
-gem 'sinatra', require: nil
+gem 'sinatra', require: nil, github: 'sinatra/sinatra'
 
 gem 'haml'
 gem 'haml-rails'
@@ -56,7 +56,7 @@ gem 'redcarpet'
 gem 'puma', '~> 3.0'
 
 gem "i18n-js", ">= 3.0.0.rc11"
-gem 'rails-i18n'
+gem 'rails-i18n', github: 'svenfuchs/rails-i18n'
 
 gem 'thor'
 gem 'highline'
@@ -79,7 +79,7 @@ gem 'typhoeus'
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-heroku'
 
-gem "refile", require: 'refile/rails'
+gem "refile", require: 'refile/rails', github: 'refile/refile'
 gem "refile-s3"
 
 # heroku production
