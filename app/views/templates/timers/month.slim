@@ -29,12 +29,12 @@ br
                 span ng-if="timer.started"
                   i.fa.fa-circle-o-notch.fa-spin
                   '
-                  timer start-time="timer.start_time" max-time-unit="'hour'" {{hours}}:{{mminutes}}
+                  timer start-time="timer.startTime" max-time-unit="'hour'" {{hours}}:{{mminutes}}
                 span ng-if="!timer.started"
                   span.timer-value
                     span ng-bind="timer.value | toTime"
                 = " | "
-                span.timer-task ng-bind="timer.task_name" title="{{timer.task_name}}"
+                span.timer-task ng-bind="timer.taskName" title="{{timer.taskName}}"
             a.add-timer ng-click="openModal(day.date)" title=I18n.t("actions.add_timer")
               i.fa.fa-plus
-                
+

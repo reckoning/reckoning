@@ -93,9 +93,9 @@ angular.module 'TimersCalendar'
     $scope.cssClassForTimer = (timer) ->
       if timer.started
         'running'
-      else if timer.position_uuid
+      else if timer.positionUuid
         'invoiced'
-      else if timer.task_billable
+      else if timer.taskBillable
         'billable'
 
     $scope.timersForDate = (date) ->
