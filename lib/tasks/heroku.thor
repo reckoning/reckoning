@@ -9,7 +9,7 @@ class Heroku < Thor
     create_backup
 
     p "Deploying..."
-    run_clean "git push git@heroku.com:#{app}.git live:master"
+    run "git push git@heroku.com:#{app}.git live:master"
 
     if options[:migrate]
       run_migrate
@@ -22,7 +22,7 @@ class Heroku < Thor
   desc "download_backup", "Start Backup Download"
   def download_backup
     p "Starting Download for App #{app}"
-    run_clean "curl -o latest.dump $(heroku pg:backups public-url --app #{app})"
+    run "curl -o latest.dump $(heroku pg:backups public-url --app #{app})"
     p "Download for App #{app} finished"
   end
 
@@ -38,13 +38,13 @@ class Heroku < Thor
 
   desc "console", "Start Rails Console"
   def console
-    run_clean "heroku run rails c --app #{app}"
+    run "heroku run rails c --app #{app}"
   end
 
   desc "logs", "Show Logs"
   option :n, type: :numeric, default: 300
   def logs
-    run_clean "heroku logs -n #{options[:n]} -t --app #{app}"
+    run "heroku logs -n #{options[:n]} -t --app #{app}"
   end
 
   desc "migrate", "Migrate Database"
@@ -72,30 +72,26 @@ class Heroku < Thor
     private def run_migrate
       p "Migrate DB"
       toggle_maintenance('on')
-      run_clean "heroku run rake db:migrate --app #{app}"
+      run "heroku run rake db:migrate --app #{app}"
       toggle_maintenance('off')
     end
 
     private def toggle_maintenance(state)
-      run_clean "heroku maintenance:#{state} --app #{app}"
+      run "heroku maintenance:#{state} --app #{app}"
     end
 
     private def restart_app
       p "Restart #{app}"
-      run_clean "heroku restart --app #{app}"
+      run "heroku restart --app #{app}"
     end
 
     private def create_backup
       p "Backup DB"
-      run_clean "heroku pg:backups capture DATABASE_URL --app #{app}"
+      run "heroku pg:backups capture DATABASE_URL --app #{app}"
     end
 
     private def app
       @app ||= "reckoningio"
-    end
-
-    private def run_clean(command)
-      Bundler.with_clean_env { run(command) }
     end
   end
 end

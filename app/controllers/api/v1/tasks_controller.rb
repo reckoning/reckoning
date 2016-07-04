@@ -27,11 +27,11 @@ module Api
       end
 
       private def week_date
-        params[:week_date]
+        params[:weekDate]
       end
 
       private def project
-        @project ||= current_account.projects.find(params.delete(:project_uuid))
+        @project ||= current_account.projects.find(params.delete(:projectUuid))
       end
 
       private def task_params

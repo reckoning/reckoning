@@ -17,9 +17,9 @@ angular.module 'Reckoning'
     $http.get(ApiBasePath + Routes.v1_timers_path(),
       timeout: @allPromise
       params:
-        start_date: startDate
-        end_date: endDate
-        project_uuid: projectUuid
+        startDate: startDate
+        endDate: endDate
+        projectUuid: projectUuid
     )
 
   create: (timer) ->

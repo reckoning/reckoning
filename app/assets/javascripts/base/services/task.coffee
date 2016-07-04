@@ -9,7 +9,7 @@ angular.module 'Reckoning'
     $http.get(ApiBasePath + Routes.v1_tasks_path(),
       timeout: @allPromise
       params:
-        week_date: dates[0].date
+        weekDate: dates[0].date
     ).success (tasks, status, headers, config) ->
       currentTasks = []
       if tasks.length
@@ -34,9 +34,9 @@ angular.module 'Reckoning'
           timers.push timer
       else
         timers.push
-          task_uuid: taskUuid
+          taskUuid: taskUuid
           date: date.date
           value: null
-          sum_for_task: null
+          sumForTask: null
     timers
 ]

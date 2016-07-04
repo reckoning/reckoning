@@ -43,11 +43,11 @@
     .panel.panel-default.animate ng-repeat="task in currentTasks"
       .panel-body.row
         .col-xs-12.col-md-4.timesheet-task
-          a ng-href="{{task.links.project.href}}" 
-            span ng-bind="task.project_name"
+          a ng-href="{{task.links.project.href}}"
+            span ng-bind="task.projectName"
           small
             = " | "
-            span ng-bind="task.project_customer_name"
+            span ng-bind="task.projectLabel"
           br
           span ng-bind="task.label"
         .col-xs-12.col-md-6.timesheet-days
@@ -55,11 +55,11 @@
             div ng-repeat="timer in task.timers | forDate:date.date"
               div ng-if="$last"
                 .timesheet-timer.invoiced ng-if="timer.invoiced"
-                  span title=I18n.t(:"labels.timesheet.on_invoice") data-toggle="tooltip" ng-bind="timer.sum_for_task | toTime"
-                .timesheet-timer.started ng-if="timer.start_time_for_task"
-                  timer start-time="timer.start_time_for_task" max-time-unit="'hour'" {{hours}}:{{mminutes}}
-                .timesheet-timer ng-if="!timer.start_time_for_task && !timer.invoiced"
-                  input.form-control type="text" ng-model="timer.sum_for_task" timefield=true ng-disabled="timer.invoiced" ng-blur="save(timer)"
+                  span title=I18n.t(:"labels.timesheet.on_invoice") data-toggle="tooltip" ng-bind="timer.sumForTask | toTime"
+                .timesheet-timer.started ng-if="timer.startTimeForTask"
+                  timer start-time="timer.startTimeForTask" max-time-unit="'hour'" {{hours}}:{{mminutes}}
+                .timesheet-timer ng-if="!timer.startTimeForTask && !timer.invoiced"
+                  input.form-control type="text" ng-model="timer.sumForTask" timefield=true ng-disabled="timer.invoiced" ng-blur="save(timer)"
         .col-xs-3.col-xs-offset-7.col-md-offset-0.col-md-1
           .text-right.timesheet-row-sum
             span ng-bind="sumForTask(task) | toTime"

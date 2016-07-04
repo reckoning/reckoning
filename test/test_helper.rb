@@ -1,13 +1,10 @@
-
 # encoding: utf-8
 # frozen_string_literal: true
+require 'coveralls'
+Coveralls.wear!('rails')
+
 ENV["RAILS_ENV"] = "test"
 require File.expand_path('../../config/environment', __FILE__)
-
-if ENV['CODECLIMATE_REPO_TOKEN'].present?
-  require "codeclimate-test-reporter"
-  CodeClimate::TestReporter.start
-end
 
 require "rails/test_help"
 require "minitest/rails"

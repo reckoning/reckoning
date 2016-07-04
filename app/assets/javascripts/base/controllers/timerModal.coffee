@@ -46,11 +46,14 @@ angular.module 'Reckoning'
 
     $scope.addTask = ->
       task = _.find $scope.tasks, (task) -> task.uuid is $scope.timer.taskUuid
+      project = _.find $scope.projects, (project) -> project.uuid is $scope.timer.projectUuid
+      task.projectName = project.name
+      task.projectLabel = project.label
       $uibModalInstance.close(task)
 
     $scope.createTask = (input, selectize) ->
       Task.create(
-        project_uuid: $scope.timer.projectUuid,
+        projectUuid: $scope.timer.projectUuid,
         name: input
       ).success (newTask, status, headers, config) ->
         $timeout ->
@@ -66,7 +69,7 @@ angular.module 'Reckoning'
     $scope.isStartable = (date) ->
       moment(date).format('YYYYMMDD') >= moment().format('YYYYMMDD')
 
-    $scope.$watch 'timer.project_uuid', ->
+    $scope.$watch 'timer.projectUuid', ->
       project = _.find $scope.projects, (project) -> project.uuid is $scope.timer.projectUuid
       $scope.tasks = _.filter project?.tasks, (item) ->
         !_.contains($scope.excludedTaskUuids, item.uuid)

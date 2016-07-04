@@ -34,7 +34,7 @@ angular.module 'Timesheet'
     $scope.getTasks()
 
     $scope.save = (timer) ->
-      if timer.sum_for_task && timer.sum_for_task isnt 0
+      if timer.sumForTask && timer.sumForTask isnt 0
         timer.value = @calculateTimerValue(timer)
         if timer.uuid
           Timer.update(timer)
@@ -46,7 +46,7 @@ angular.module 'Timesheet'
           Timer.delete(timer.uuid)
 
     $scope.calculateTimerValue = (timer) ->
-      task = _.find @currentTasks, (task) -> task.uuid is timer.task_uuid
+      task = _.find @currentTasks, (task) -> task.uuid is timer.taskUuid
       timersForDate = $filter('filter')(task.timers, timer.date, true)
       _.reduce timersForDate, (num, timerForDate) ->
         if timerForDate.uuid is timer.uuid

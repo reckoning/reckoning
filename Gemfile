@@ -97,6 +97,7 @@ end
 
 group :test do
   gem 'faker'
+  gem 'coveralls', require: false
   gem 'rails-perftest'
   gem 'minitest-rails'
   gem 'ruby-prof'
