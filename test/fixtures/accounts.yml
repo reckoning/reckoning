@@ -4,6 +4,10 @@ enterprise:
   contact_information:
     address: "Sector 001"
 
-defaint:
+defiant:
   id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a74"
   name: Defiant
+  contact_information:
+    telefon: "222"
+    email: "info@defiant.sf"
+    fax: "111"

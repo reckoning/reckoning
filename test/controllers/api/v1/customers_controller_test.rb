@@ -43,7 +43,7 @@ module Api
 
           assert_response :forbidden
 
-          assert_equal customer, Customer.where(id: customer.id).first
+          assert_equal customer, Customer.find_by(id: customer.id)
         end
       end
 
@@ -84,7 +84,7 @@ module Api
 
           assert_response :ok
 
-          refute_equal klingon, Customer.where(id: klingon.id).first
+          refute_equal klingon, Customer.find_by(id: klingon.id)
         end
       end
     end

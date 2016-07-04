@@ -1,8 +1,7 @@
 # Reckoning
 
 [![Circle CI](https://circleci.com/gh/reckoning/app.svg?style=svg)](https://circleci.com/gh/reckoning/app)
-[![Code Climate](https://codeclimate.com/github/reckoning/app/badges/gpa.svg)](https://codeclimate.com/github/reckoning/app)
-[![Test Coverage](https://codeclimate.com/github/reckoning/app/badges/coverage.svg)](https://codeclimate.com/github/reckoning/app)
+[![Coverage Status](https://coveralls.io/repos/github/mortik/reckoning/badge.svg?branch=live)](https://coveralls.io/github/mortik/reckoning?branch=live)
 
 Reckoning is a simple tool for invoicing
 

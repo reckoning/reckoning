@@ -4,20 +4,20 @@ require 'test_helper'
 
 module Api
   module V1
-    class ProjectsControllerTest < ActionController::TestCase
+    class TasksControllerTest < ActionController::TestCase
       setup do
         @request.headers['Accept'] = Mime::JSON
         @request.headers['Content-Type'] = Mime::JSON.to_s
       end
 
-      tests ::Api::V1::ProjectsController
+      tests ::Api::V1::TasksController
 
       fixtures :all
 
-      let(:project) { projects :narendra3 }
+      let(:task) { tasks :away_mission }
 
       describe "unauthorized" do
-        it "Unauthrized user cant view projects index" do
+        it "Unauthrized user cant view tasks index" do
           get :index
 
           assert_response :forbidden
@@ -25,35 +25,34 @@ module Api
           assert_equal "authentication.missing", json["code"]
         end
 
-        it "Unauthrized user cant destroy project" do
-          delete :destroy, id: project.id
+        it "Unauthrized user cant create new task" do
+          post :create, task: { name: "foo" }
 
           assert_response :forbidden
-
-          assert_equal project, Project.where(id: project.id).first
         end
       end
 
       describe "happy path" do
         let(:will) { users :will }
-        let(:outpost6) { projects :outpost6 }
 
         before do
           add_authorization will
         end
 
-        it "renders a projects list" do
+        it "renders a tasks list" do
           get :index
 
           assert_response :ok
         end
 
-        it "destroys a project" do
-          delete :destroy, id: outpost6.id
+        it "creates a new task" do
+          post :create, name: "foo", projectUuid: task.project_id
 
-          assert_response :ok
+          assert_response :created
 
-          assert_not_equal outpost6, Project.find_by(id: outpost6.id)
+          json = JSON.parse response.body
+          assert json["uuid"]
+          assert_equal "foo", json["name"]
         end
       end
     end

@@ -1,7 +1,9 @@
+# encoding: utf-8
 # frozen_string_literal: true
 json.uuid project.uuid
 json.name project.name
 json.label project.label
+json.customer_name project.customer_name
 json.tasks project.tasks.includes(:timers).order("timers.created_at DESC") do |task|
   json.partial! "api/v1/projects/tasks", task: task
 end

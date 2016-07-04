@@ -88,19 +88,16 @@ Reckoning::Application.routes.draw do
     end
   end
 
-  resource :timesheet, only: [:show] do
-    member do
-      get :day_template
-      get :week_template
-      get :timer_modal_template
-      get :task_modal_template
-    end
-  end
+  resource :timesheet, only: [:show]
 
   resource :template, only: [] do
     get "blank" => "templates#show"
     get "datepicker" => "templates#show"
     get "month_timers" => "templates#show"
+    get "day_timesheets" => "templates#show"
+    get "week_timesheets" => "templates#show"
+    get "timer_modal_timesheets" => "templates#show"
+    get "task_modal_timesheets" => "templates#show"
   end
 
   resources :positions, only: [:new, :destroy]

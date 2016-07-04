@@ -14,7 +14,7 @@ angular.module 'Timesheet'
 
     $scope.openModal = ->
       $uibModal.open
-        templateUrl: Routes.task_modal_template_timesheet_path()
+        templateUrl: Routes.task_modal_timesheets_template_path()
         controller: 'TimerModalController'
         resolve:
           timer: -> {date: $scope.date}
@@ -53,7 +53,7 @@ angular.module 'Timesheet'
           num
         else
           num - parseFloat(timerForDate.value)
-      , timer.sum_for_task
+      , timer.sumForTask
 
     $scope.sumForWeek = ->
       sum = 0

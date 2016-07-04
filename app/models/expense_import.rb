@@ -1,15 +1,16 @@
 # encoding: utf-8
 # frozen_string_literal: true
 class ExpenseImport
-  extend ActiveModel::Naming
-  include ActiveModel::Conversion
-  include ActiveModel::Model
   include ActiveModel::Validations
+  include ActiveModel::Conversion
+  extend ActiveModel::Naming
 
   attr_accessor :file, :account_id
 
   def initialize(attributes = {})
-    attributes.each { |name, value| send("#{name}=", value) }
+    attributes.each do |name, value|
+      send("#{name}=", value)
+    end
   end
 
   def persisted?

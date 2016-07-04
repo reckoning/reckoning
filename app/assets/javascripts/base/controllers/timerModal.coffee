@@ -48,7 +48,7 @@ angular.module 'Reckoning'
       task = _.find $scope.tasks, (task) -> task.uuid is $scope.timer.taskUuid
       project = _.find $scope.projects, (project) -> project.uuid is $scope.timer.projectUuid
       task.projectName = project.name
-      task.projectLabel = project.label
+      task.projectCustomerName = project.customerName
       $uibModalInstance.close(task)
 
     $scope.createTask = (input, selectize) ->

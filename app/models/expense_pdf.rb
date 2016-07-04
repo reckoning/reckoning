@@ -1,6 +1,9 @@
 # encoding: utf-8
 # frozen_string_literal: true
 class ExpensePdf
+  include ActiveModel::Conversion
+  extend ActiveModel::Naming
+
   include PdfOptions
 
   attr_accessor :account, :filter
@@ -16,6 +19,10 @@ class ExpensePdf
     self.misc = expenses.select { |expense| expense.expense_type == "misc" }
     self.current = expenses.select { |expense| expense.expense_type == "current" }
     self.licenses = expenses.select { |expense| expense.expense_type == "licenses" }
+  end
+
+  def persisted?
+    false
   end
 
   def pdf

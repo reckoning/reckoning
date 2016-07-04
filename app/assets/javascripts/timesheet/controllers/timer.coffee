@@ -16,7 +16,7 @@ angular.module 'Timesheet'
       if timer isnt undefined
         angular.copy(timer, modalTimer)
       $uibModal.open
-        templateUrl: Routes.timer_modal_template_timesheet_path()
+        templateUrl: Routes.timer_modal_timesheets_template_path()
         controller: 'TimerModalController'
         resolve:
           timer: -> modalTimer

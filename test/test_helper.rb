@@ -42,6 +42,19 @@ class ActionController::TestCase
   end
 end
 
+class ActionView::TestCase
+  fixtures :all
+  include Devise::Test::ControllerHelpers
+
+  before do
+    DatabaseCleaner.start
+  end
+
+  after do
+    DatabaseCleaner.clean
+  end
+end
+
 class ActiveSupport::TestCase
   ActiveRecord::Migration.check_pending!
 
