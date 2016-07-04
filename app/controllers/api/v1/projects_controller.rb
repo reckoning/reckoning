@@ -18,7 +18,7 @@ module Api
         scope = scope.where.not(id: without_ids) if without_ids
 
         sort = params.fetch(:sort, nil)
-        @projects = if sort.present? && sort == "last_used"
+        @projects = if sort.present? && sort == "used"
                       scope.includes(:timers).order("timers.created_at desc nulls last")
                     else
                       scope.order("name asc")

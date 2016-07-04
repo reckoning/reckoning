@@ -1,5 +1,6 @@
 #= require jquery
 #= require jquery_ujs
+#= require turbolinks
 #= require js-routes
 #= require spin.js/spin
 #= require ladda/js/ladda
@@ -19,7 +20,6 @@
 #= require accountingInit
 #= require nprogress
 #= require underscore
-#= require fastclick
 #= require pdfjs-dist/build/pdf
 #= require d3
 #= require nvd3
@@ -46,26 +46,13 @@ $(document).on 'show.bs.collapse', '.navbar-collapse', ->
   $('.navbar-collapse.in').not(this).collapse('hide')
 
 $(document).on "upload:start", "form", (e) ->
-  $(@).find("input[type=submit]").attr("disabled", true)
-
-$(document).on "upload:progress", "input", (e) ->
-  console.log(e)
-  console.log(@)
-
-$(document).on "upload:complete", "form", (e) ->
-  if !$(@).find("input.uploading").length
-    $(@).find("[type=submit]").removeAttr("disabled")
-
-$(document).on "upload:start", "form", (e) ->
   $(@).find("[type=submit]").attr("disabled", true)
 
 $(document).on "upload:complete", "form", (e) ->
   if !$(@).find("input.uploading").length
     $(@).find("[type=submit]").removeAttr("disabled")
 
-$ ->
-  FastClick.attach(document.body)
-
+document.addEventListener "turbolinks:load", ->
   $('.btn.btn-loading').click ->
     $(this).button('loading')
 

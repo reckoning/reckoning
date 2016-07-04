@@ -14,5 +14,5 @@ window.I18nHelper =
 
       @initialized = true
 
-$ ->
+document.addEventListener "turbolinks:load", ->
   I18nHelper.init()

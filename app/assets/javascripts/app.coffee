@@ -11,7 +11,6 @@ $(document).on 'click', 'code[data-target]', (ev) ->
 $(document).ajaxSend (event, jqxhr, settings) ->
   jqxhr.setRequestHeader 'Authorization', "Token token=\"#{AuthToken}\""
 
-
 document.addEventListener 'keydown', (e) ->
   return true if $('form') is undefined
   if navigator.platform.match("Mac")
@@ -23,7 +22,7 @@ document.addEventListener 'keydown', (e) ->
     $('form:first').submit()
 , false
 
-$ ->
+document.addEventListener "turbolinks:load", ->
   $('select.js-selectize').selectize()
 
   $('select.js-expense-selectize').selectize

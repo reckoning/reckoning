@@ -1,10 +1,4 @@
 - content_for :title do
   = I18n.t(:"meta.title.timesheet.index")
-.row#timesheet.timesheet ng-strict-di=true
+.row#timesheet.timesheet ng-strict-di=true data-turbolinks="false"
   .row ng-view=true
-
-/ .row
-/   .col-xs-12.col-md-12
-/     .btn-group.pull-right.resource-nav
-/       %a.btn.btn-primary{href: new_import_timers_path}
-/         = I18n.t(:"actions.timer_import")

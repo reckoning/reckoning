@@ -1,5 +1,10 @@
+.turbolinks-progress-bar {
+  background-color: $navbar-active !important;
+}
+
 #nprogress .bar {
   background: $navbar-active !important;
+  height: 3px !important;
 }
 
 #nprogress {
@@ -13,12 +18,6 @@
     border-left-color: $navbar-active !important;
   }
 }
-
-// @media (max-width: $screen-sm-max) {
-//   #nprogress .spinner {
-//     right: 100px !important;
-//   }
-// }
 
 @media (max-width: $screen-md-min) {
   #nprogress .spinner {

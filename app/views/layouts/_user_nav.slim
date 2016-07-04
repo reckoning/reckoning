@@ -18,7 +18,8 @@ ul.nav.navbar-nav.navbar-right
             = link_to I18n.t(:"nav.header.frontend"), root_path
         - else
           li
-            = link_to I18n.t(:"nav.header.backend"), backend_root_path
+            a href=backend_root_path data-turbolinks="false"
+              = I18n.t(:"nav.header.backend")
       li.divider
       li
         = link_to I18n.t(:"actions.sign_out"), destroy_user_session_path, method: :delete
