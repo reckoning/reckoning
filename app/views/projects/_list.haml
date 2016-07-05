@@ -7,6 +7,8 @@
             %a{href: edit_customer_path(customer)}
               %strong
                 = customer.name
+            - if customer.employment_date && customer.weekly_hours
+              = "Überstunden: #{decimal_to_time(customer.overtime)}"
           .col-md-2.hidden-xs.hidden-sm
             %span
               = I18n.t(:"labels.defaults.budget")

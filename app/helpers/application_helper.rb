@@ -16,6 +16,17 @@ module ApplicationHelper
     end
   end
 
+  def decimal_to_time(time_decimal)
+    hours = time_decimal.to_i
+    minutes = (time_decimal % 1 * 60)
+    if hours != 0 || minutes != 0
+      minutes = format("%02d", minutes)
+      "#{hours}:#{minutes}"
+    else
+      "0:00"
+    end
+  end
+
   def title(label = nil)
     [
       label,

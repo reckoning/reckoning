@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160624213509) do
+ActiveRecord::Schema.define(version: 20160705071255) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,7 +53,10 @@ ActiveRecord::Schema.define(version: 20160624213509) do
     t.string   "default_from",        limit: 255
     t.hstore   "contact_information"
     t.string   "name",                limit: 255
-    t.uuid     "account_id",                      null: false
+    t.uuid     "account_id",                                  null: false
+    t.integer  "workdays",                        default: 0
+    t.date     "employment_date"
+    t.integer  "weekly_hours"
   end
 
   create_table "expenses", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|

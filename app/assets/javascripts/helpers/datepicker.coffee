@@ -44,6 +44,6 @@ window.Datepicker =
 
     picker
 
-$ ->
+document.addEventListener "turbolinks:load", ->
   $('.datepicker').each ->
     Datepicker.init($(@).find('input'))
