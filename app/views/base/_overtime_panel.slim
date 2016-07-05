@@ -1,0 +1,13 @@
+.panel.panel-default#overtime-panel
+  .panel-heading
+    .panel-title
+      strong
+        = I18n.t(:"dashboard.panels.overtime")
+  .list-group
+    - current_account.customers.each do |customer|
+      - overtime = customer.overtime(current_user.id)
+      - if overtime
+        .list-group-item(class="list-group-item-#{overtime_label(overtime, customer.weekly_hours)}")
+          = customer.name
+          strong.pull-right
+            = number_to_currency(overtime, unit: "h", precision: 2)

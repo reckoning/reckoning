@@ -16,17 +16,6 @@ module ApplicationHelper
     end
   end
 
-  def decimal_to_time(time_decimal)
-    hours = time_decimal.to_i
-    minutes = (time_decimal % 1 * 60)
-    if hours != 0 || minutes != 0
-      minutes = format("%02d", minutes)
-      "#{hours}:#{minutes}"
-    else
-      "0:00"
-    end
-  end
-
   def title(label = nil)
     [
       label,
@@ -44,5 +33,16 @@ module ApplicationHelper
   def gravatar_path(size = 24, hash = nil)
     hash ||= current_user.gravatar_hash
     "//www.gravatar.com/avatar/#{hash}?s=#{size}&d=https%3A%2F%2Fidenticons.github.com%2F#{hash}.png&amp;r=x&amp;s=#{size}"
+  end
+
+  def overtime_label(overtime, weekly_hours)
+    hours_per_day = weekly_hours / 5
+    if overtime < (hours_per_day * 1.25)
+      "success"
+    elsif overtime < (hours_per_day * 2.5)
+      "warning"
+    else
+      "danger"
+    end
   end
 end

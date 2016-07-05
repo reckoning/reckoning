@@ -12,9 +12,7 @@ class Customer < ActiveRecord::Base
   validates :name, presence: true
   validates :email, email: true, allow_blank: true
 
-  before_save :calculate_workdays
-
-  def calculate_workdays
+  def workdays
     return if employment_date.blank?
     days = 0
     date = Time.current.to_date
@@ -22,10 +20,11 @@ class Customer < ActiveRecord::Base
       days += 1 unless date.saturday? || date.sunday?
       date -= 1.day
     end
-    self.workdays = days
+    days
   end
 
-  def overtime
-    (timers.sum(:value) - (workdays / 5 * weekly_hours)).to_f
+  def overtime(user_id)
+    return if workdays.blank? || weekly_hours.blank?
+    (timers.where(user_id: user_id).sum(:value) - (workdays / 5.0 * weekly_hours)).to_f
   end
 end

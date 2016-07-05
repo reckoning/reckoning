@@ -70,6 +70,9 @@ de:
         email_template: "Inhalt"
         invoice_email: "Empfänger"
         default_from: "Absender"
+        customer_type: "Typ"
+        weekly_hours: "Wochenstunden"
+        employment_date: "Anstellungsdatum"
       expense:
         date: "Eingangsdatum"
         description: "Beschreibung"

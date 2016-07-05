@@ -15,6 +15,10 @@ class User < ActiveRecord::Base
 
   validates :email, email: true
 
+  def has_overtime?
+    account.customers.any? { |customer| customer.overtime(id) }
+  end
+
   def update_gravatar_hash
     hash = if gravatar.blank?
              Digest::MD5.hexdigest(id.to_s)

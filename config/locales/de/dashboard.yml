@@ -7,6 +7,7 @@ de:
       paid_invoices: "Bezahlte Rechnungen"
       last_invoices: "Letztes Jahr"
       budgets: "Budget"
+      overtime: "Überstunden"
       expenses:
         title: "Ausgaben"
         current: "Aktuell"

@@ -6,6 +6,7 @@
       = I18n.t(:"headlines.dashboard")
     .row
       .col-xs-12.col-md-4
+        = render "overtime_panel" if current_user.has_overtime?
         .panel.panel-default
           .panel-heading
             .panel-title
