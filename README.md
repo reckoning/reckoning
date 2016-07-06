@@ -1,7 +1,6 @@
 # Reckoning
 
-[![Circle CI](https://circleci.com/gh/reckoning/app.svg?style=svg)](https://circleci.com/gh/reckoning/app)
-[![Coverage Status](https://coveralls.io/repos/github/mortik/reckoning/badge.svg?branch=live)](https://coveralls.io/github/mortik/reckoning?branch=live)
+[![Build Status](https://travis-ci.org/mortik/reckoning.svg?branch=live)](https://travis-ci.org/mortik/reckoning)[![Coverage Status](https://coveralls.io/repos/github/mortik/reckoning/badge.svg?branch=live)](https://coveralls.io/github/mortik/reckoning?branch=live)
 
 Reckoning is a simple tool for invoicing
 
