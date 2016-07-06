@@ -159,7 +159,8 @@ window.Chart =
 $(document).on 'mouseleave', '.chart', ->
   $(@).find('.highcharts-xaxis-labels span').removeClass('hover')
 
-$ ->
+
+document.addEventListener "turbolinks:load", ->
   Highcharts.setOptions
     lang:
       noData: I18n.t("labels.chart.no_data")

@@ -21,7 +21,7 @@ class Task < ActiveRecord::Base
   end
 
   def start_time(date)
-    started_timer = timers.find_by(date: date, started: true)
+    started_timer = timers.where(date: date).where.not(started_at: nil).first
     return unless started_timer
     (started_timer.started_at - started_timer.sum_for_task.hours).to_i * 1000 if started_timer.started_at
   end

@@ -80,8 +80,6 @@ window.PdfViewer.load = function() {
   }
 };
 
-(function() {
-  $(function() {
-    PdfViewer.load();
-  });
-}).call(this);
+document.addEventListener("turbolinks:load", function() {
+  PdfViewer.load();
+});

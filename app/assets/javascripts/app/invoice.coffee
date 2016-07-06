@@ -102,7 +102,7 @@ $(document).on 'change', ".invoice-position-rate", App.Invoice.updateValue
 $(document).on 'change', "#invoice_project_uuid", App.Invoice.updateRate
 $(document).on 'click', "#add-positions-modal button[data-select-all]", App.Invoice.selectAllTimers
 
-$ ->
+document.addEventListener "turbolinks:load", ->
   if $('#invoice-form').length
     button = document.querySelector('.ladda-button')
     if button

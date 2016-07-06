@@ -18,5 +18,5 @@ $(document).on 'change', "#project_budget", App.Project.updateBudget
 $(document).on 'change', "#project_budget_hours", App.Project.updateBudget
 $(document).on 'change', "#project_rate", App.Project.updateRate
 
-$ ->
+document.addEventListener "turbolinks:load", ->
   App.Project.rate = $('#project_rate').val()

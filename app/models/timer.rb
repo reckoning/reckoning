@@ -66,12 +66,16 @@ class Timer < ActiveRecord::Base
     position_id.present?
   end
 
-  def stop_other_timers
-    return unless started
+  def started?
+    started_at.present?
+  end
 
-    Timer.where(user_id: user_id, started: true).find_each do |timer|
+  def stop_other_timers
+    return unless started?
+
+    Timer.where(user_id: user_id).where.not(started_at: nil).find_each do |timer|
       timer.value = timer.value + ((Time.zone.now - timer.started_at) / 1.hour)
-      timer.started = false
+      timer.started_at = nil
       timer.save
     end
   end
@@ -79,7 +83,7 @@ class Timer < ActiveRecord::Base
   def start
     return if started?
 
-    update(started: true, started_at: Time.zone.now)
+    update(started_at: Time.zone.now)
   end
 
   def stop
@@ -88,20 +92,14 @@ class Timer < ActiveRecord::Base
     timer_value = ((Time.zone.now - started_at) / 1.hour)
 
     update(
-      started: false,
-      value: ((value + timer_value) * task.project.round_up).round / task.project.round_up
+      started_at: nil,
+      value: (((value + timer_value) * task.project.round_up) / task.project.round_up)
     )
   end
 
   def convert_value
-    return if value.blank? || started
+    return if value.blank? || started?
 
     self.value = (value.hours - (value.hours % 60)) / 3600
-  end
-
-  def value_as_time
-    hours = value.to_i
-    minutes = format('%02d', ((value % 1) * 60).round)
-    "#{hours}:#{minutes}"
   end
 end

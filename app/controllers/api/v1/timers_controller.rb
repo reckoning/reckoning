@@ -17,6 +17,7 @@ module Api
         @timer ||= current_user.timers.new timer_params
         authorize! :create, @timer
         if @timer.save
+          @timer.start if start_timer?
           render status: :created
         else
           Rails.logger.info "Timer Create Failed: #{@timer.errors.full_messages.to_yaml}"
@@ -90,8 +91,12 @@ module Api
         @task ||= current_account.tasks.find(params.delete(:taskUuid))
       end
 
+      private def start_timer?
+        params.delete(:started)
+      end
+
       private def timer_params
-        @timer_params ||= params.permit(:date, :value, :started, :note).merge(
+        @timer_params ||= params.permit(:date, :value, :note).merge(
           task_id: task.id,
           user_id: current_user.id
         )

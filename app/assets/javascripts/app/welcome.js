@@ -1,4 +1,4 @@
-$(function() {
+document.addEventListener("turbolinks:load", function() {
   if($('#welcome').length) {
     $('.thumbnail').click(function(ev) {
       var image = $(this).attr('href');

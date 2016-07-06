@@ -1,4 +1,4 @@
-$ ->
+document.addEventListener "turbolinks:load", ->
   return unless window.location.pathname.match /// /signup ///
 
   handler = StripeCheckout.configure

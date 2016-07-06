@@ -105,7 +105,7 @@ module Api
         end
 
         it "stops a timer" do
-          timer.update(started: true, started_at: Time.current.to_date)
+          timer.update(started_at: Time.current.to_date)
           put :stop, id: timer.id
 
           assert_response :ok

@@ -1,7 +1,15 @@
 # encoding: utf-8
 # frozen_string_literal: true
+require 'simplecov'
+require 'simplecov-console'
 require 'coveralls'
-Coveralls.wear!('rails')
+
+formatters = [
+  SimpleCov::Formatter::Console,
+  Coveralls::SimpleCov::Formatter
+]
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(formatters)
+SimpleCov.start('rails')
 
 ENV["RAILS_ENV"] = "test"
 require File.expand_path('../../config/environment', __FILE__)

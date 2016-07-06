@@ -5,7 +5,7 @@ json.date timer.date
 json.value timer.value
 json.sum_for_task timer.sum_for_task
 json.note timer.note
-json.started timer.started
+json.started timer.started?
 json.started_at timer.started_at
 json.start_time timer.start_time
 json.start_time_for_task timer.start_time_for_task
