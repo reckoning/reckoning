@@ -18,3 +18,7 @@ deploy:
     secure: JneINAX1cOqZeI5LZCVfLZ5oFCqQFXa9kLykq8X9jl1K01vGmcCDW+gCx5mH+mBNSLBs1JQYG50mvMe18S3Yzvs4/gB9dNyQQ/OTISOAgy4ecQXdT3ar2UZpImLckzEhO05uXm0coN2B9PSNmBsZ3s/etuG334wxvW6oSemyNYZ9GnwbcXooLuwTVW7aXC7xg7kkuyfGDse7nJnwMAS18OX5bOXLv6Ytm8LU8d4gYvnKbw/3miqXHO1G/H15Zb85Kxb4wmpZNjxDhlqvn+JJRzlgTdz2JqZystWha6+2Fg1BJTh6GHMlbZBnBJ1uj6XXHMzlswmNxvXCtxOU9uaxJq6KzhDokBGjLlb+syNin1iIKpeJSIHi4Uug07fEUT9XLbUHoedNh7dID+KeIJ1niyJsmFJ8FGre23vLsrQKERIIguXRr4xdiH8ejCkEpiiMyBvSLVDj2qyy/GzfRt/gZFML2OSKgm31a3Ioc1x6NFPQyhifyW93z7LvEe2+nwKcnMQ5nHKzMRnLwQoVGOQglHMhDAxVlCJhFIP2t4zIOcvU8LqO71Kdy9wbFRUi2LK0S4AwIsKJsAC93QBaeTjcH4SbhxRtPtD2V1gkAoRn5O/93vfb0oPARqv1+IpOOOp65D7KXMvF+gpZKImzwabSu8XTKa5yeu0LN2nKX8JBPzA=
   on: live
   app: reckoningio
+  run:
+    - "rake db:migrate"
+    - restart
+    - "rake cleanup"
