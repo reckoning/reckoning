@@ -2,10 +2,12 @@
 # frozen_string_literal: true
 require 'simplecov'
 require 'simplecov-console'
+require 'simplecov-html'
 require 'coveralls'
 
 formatters = [
   SimpleCov::Formatter::Console,
+  SimpleCov::Formatter::HTMLFormatter,
   Coveralls::SimpleCov::Formatter
 ]
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(formatters)
