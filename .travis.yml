@@ -15,7 +15,7 @@ before_install:
 deploy:
   provider: heroku
   api_key:
-    secure: TtNSQ6cQDRazmN7FhFYFTP38Gj4lRIfmiWRr7CxW5mOwt42kPp60qd+B89/BvRe+KgRTfr8H+uopYRaWWdysGpMbFAnKP309GjF2YIORm5Qgo6BsTxkzrDgS9jOL0PotM+V8ObCCnyGKU3+0wRLHSZDf/OPJkS2/4TBnp4lXppb3TFnfa1c5OnehLPjAW0QfzCIfaYuApDHu8jC4H0A/f3dCq4/quy98pEHAUQyzB0GnWNZVLStUDKU4CLjhf2e/RYUlTdCOtL+v/5o5NG98QJTroMHHVRpwZeCeaioBm4U2sjy+hnWjpOV39t6X6q++IF/zACrlO77OzhsAVwSPQCqzs7K/C/P9WKFBO3RqrAL3VCLkZAPLaL+MJY8/JFZDrUsokU6US07fGghj8ZnSMadindH5Ucxm3YHVhq3ytulTRA8Vrk3T6UfYNiVvsivuRRbRYIV5/xploW3TSoK/2aowVnPt0HPsJxXSTRa4W1izgTf6hqWH7J/l3OYM9Tl07PiX8xRcnsS/ELWi/CbKbFHod9a1FthaLUDb/6pJ3HQD5cyqog/7DK4YBmsHuZ2slTZqwTakeIKtxHa/hGEoNobT+IfldyTnL3I8OPmf5qMxk//UuxuUkno5NxZ93McIiiuWjQv7I4As3/g3N0/0z+u//JY3cKj9M39tIyIK8hg=
+    secure: aIAoG592OjeAamb+QVOqfpt0hAPrasyKc30/4fNXtvNBpRH00nOFVmh0EWI7bppkV10a7ANVVPyx+4qBfgA01DzGzr4E6zfd2vhq4aGan6Czb5rOSjlkGs9bdMITHV0QY3a77qcPHuYNIlXxajX4KgN+g2G750b+lpZkqnv/9lY=
   on: master
   app: reckoningio
   run:
