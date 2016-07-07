@@ -5,10 +5,10 @@
   .col-xs-12.col-md-12
 
     .row
-      .col-xs-12.col-md-6
+      .col-xs-12.col-md-5
         h1= I18n.t(:"headlines.expense.index")
 
-      .col-xs-12.col-md-6
+      .col-xs-12.col-md-7
         .btn-group.btn-group-justified-responsive.pull-right.resource-nav
           a.btn.btn-primary href=new_expense_path
             i.fa.fa-plus
@@ -28,14 +28,12 @@
             = I18n.t(:"nav.subnav.import")
     
     .row
-      .col-xs-12
+      .col-xs-12.col-md-6
         = render "shared/tables/filter", resource: "expense", name: "year", filters: current_expenses_years
         '
         = render "shared/tables/filter", resource: "expense", name: "type", filters: Expense::VALID_TYPES, translateable: true
-        
-    .row
-      .col-xs-12.col-md-6.expenses-sum
-        .pull-right
+        '
+        span.expenses-sum
           = I18n.t("labels.defaults.sum")
           = ":"
           '
@@ -43,8 +41,7 @@
       .col-xs-12.col-md-6
         .pull-right
           = paginate @expenses
-    
-    hr  
+
     - if @expenses.present?
       .panel.panel-list.panel-default.expense
         .panel-heading

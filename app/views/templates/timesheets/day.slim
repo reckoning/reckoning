@@ -13,7 +13,7 @@
           a.btn.btn-default href="#/day/{{nextDay()}}"
             i.fa.fa-chevron-right
         '
-        .btn-group.btn-group-justified-responsive.resource-nav
+        .btn-group.resource-nav.hidden-xs
           a.btn.btn-default href="#/day/{{dayDate()}}" class="active"
             = I18n.t(:"labels.timesheet.day")
           a.btn.btn-default href="#/week/{{weekDate()}}"
@@ -31,7 +31,7 @@
                 span ng-bind="timer.projectName"
               small
                 = " | "
-                span ng-bind="timer.projectLabel"
+                span ng-bind="timer.projectCustomerName"
             span ng-bind="timer.taskLabel"
           .pull-right
             span.timesheet-timer.invoiced ng-if="timer.invoiced" title=I18n.t(:"labels.timesheet.on_invoice") data-toggle="tooltip"

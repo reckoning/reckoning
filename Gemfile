@@ -100,6 +100,7 @@ group :test do
   gem 'coveralls', require: false
   gem 'simplecov', require: false
   gem 'simplecov-console', require: false
+  gem 'simplecov-html', require: false
   gem 'rails-perftest'
   gem 'minitest-rails'
   gem 'ruby-prof'
@@ -113,4 +114,5 @@ end
 group :development, :test do
   gem 'bullet'
   gem 'byebug', platform: :mri
+  gem 'jasmine-rails'
 end

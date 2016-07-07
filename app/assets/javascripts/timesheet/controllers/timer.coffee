@@ -31,6 +31,7 @@ angular.module 'Timesheet'
           timer.date = result.data.date
           timer.projectUuid = result.data.projectUuid
           timer.projectName = result.data.projectName
+          timer.projectCustomerName = result.data.projectCustomerName
           timer.taskUuid = result.data.taskUuid
           timer.taskName = result.data.taskName
           timer.note = result.data.note

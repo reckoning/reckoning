@@ -17,7 +17,7 @@ json.task_label timer.task_label
 json.task_billable timer.task.billable
 json.project_uuid timer.task.project_id
 json.project_name timer.project_name
-json.project_label timer.project_label
+json.project_customer_name timer.project_customer_name
 json.created_at timer.created_at
 json.updated_at timer.updated_at
 json.links do
