@@ -1,6 +1,7 @@
 # Reckoning
 
-[![Build Status](https://travis-ci.org/reckoning/app.svg?branch=master)](https://travis-ci.org/reckoning/app)[![![Coverage Status](https://coveralls.io/repos/github/reckoning/app/badge.svg?branch=master)](https://coveralls.io/github/reckoning/app?branch=master)
+[![Build Status](https://travis-ci.org/reckoning/app.svg?branch=master)](https://travis-ci.org/reckoning/app)
+[![Coverage Status](https://coveralls.io/repos/github/reckoning/app/badge.svg?branch=master)](https://coveralls.io/github/reckoning/app?branch=master)
 
 Reckoning is a simple tool for invoicing
 
