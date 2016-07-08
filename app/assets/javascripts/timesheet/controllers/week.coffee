@@ -19,6 +19,9 @@ angular.module 'Timesheet'
       else
         @date
 
+    $scope.projectPath = (projectUuid) ->
+      Routes.project_path(projectUuid)
+
     $scope.$watch 'datepickerSelect', ->
       if $scope.datepickerSelect
         $location.path('/week/' + $scope.datepickerSelect)

@@ -43,7 +43,7 @@
     .panel.panel-default.animate ng-repeat="task in currentTasks"
       .panel-body.row
         .col-xs-12.col-md-4.timesheet-task
-          a ng-href="{{task.links.project.href}}"
+          a ng-href="{{projectPath(timer.projectUuid)}}"
             span ng-bind="task.projectName"
           small
             = " | "

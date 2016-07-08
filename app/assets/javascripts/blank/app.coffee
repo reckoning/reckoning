@@ -1,4 +1,6 @@
 angular.module 'Blank', ['Reckoning']
 
-angular.element(document.getElementById("blank")).ready ->
-  angular.bootstrap document.getElementById("blank"), ['Blank']
+
+document.addEventListener "turbolinks:load", ->
+  angular.element(document.getElementById("blank")).ready ->
+    angular.bootstrap document.getElementById("blank"), ['Blank']

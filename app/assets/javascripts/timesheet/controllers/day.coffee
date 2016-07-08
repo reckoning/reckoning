@@ -12,6 +12,9 @@ angular.module 'Timesheet'
       if $scope.datepickerSelect && $scope.datepickerSelect isnt $scope.date
         $location.path('/day/' + $scope.datepickerSelect)
 
+    $scope.projectPath = (projectUuid) ->
+      Routes.project_path(projectUuid)
+
     $scope.day = ->
       date = moment($scope.date)
       date.format('dddd - D. MMMM YYYY')
