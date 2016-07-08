@@ -65,6 +65,9 @@ window.Chart =
         labels:
           format: '{value.short}'
           useHTML: true
+          reserveSpace: false
+          autoRotation: 0
+          step: 1
         plotBands: [{
           color: 'rgba(155, 200, 255, 0.2)'
           from: currentWeek.start
