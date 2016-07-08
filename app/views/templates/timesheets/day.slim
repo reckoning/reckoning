@@ -27,7 +27,7 @@
         .panel-body
           .pull-left
             h3
-              a ng-href="{{timer.links.project.href}}"
+              a ng-href="{{projectPath(timer.projectUuid)}}"
                 span ng-bind="timer.projectName"
               small
                 = " | "
