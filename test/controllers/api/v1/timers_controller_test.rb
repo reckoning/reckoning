@@ -6,8 +6,8 @@ module Api
   module V1
     class TimersControllerTest < ActionController::TestCase
       setup do
-        @request.headers['Accept'] = Mime::JSON
-        @request.headers['Content-Type'] = Mime::JSON.to_s
+        @request.headers['Accept'] = Mime[:json]
+        @request.headers['Content-Type'] = Mime[:json].to_s
       end
 
       tests ::Api::V1::TimersController
@@ -26,31 +26,31 @@ module Api
         end
 
         it "Unauthrized user cant create new timer" do
-          post :create, timer: { date: Time.current, value: 1.0, taskUuid: timer.task_id }
+          post :create, params: { timer: { date: Time.current, value: 1.0, taskUuid: timer.task_id } }
 
           assert_response :forbidden
         end
 
         it "Unauthrized user cant update a timer" do
-          put :update, id: timer.id
+          put :update, params: { id: timer.id }
 
           assert_response :forbidden
         end
 
         it "Unauthrized user cant start a timer" do
-          put :start, id: timer.id
+          put :start, params: { id: timer.id }
 
           assert_response :forbidden
         end
 
         it "Unauthrized user cant stop a timer" do
-          put :stop, id: timer.id
+          put :stop, params: { id: timer.id }
 
           assert_response :forbidden
         end
 
         it "Unauthrized user cant destroy timer" do
-          delete :destroy, id: timer.id
+          delete :destroy, params: { id: timer.id }
 
           assert_response :forbidden
 
@@ -74,7 +74,7 @@ module Api
 
         it "creates a new timer" do
           date = Time.current.to_date
-          post :create, date: date, value: 1.0, taskUuid: timer.task_id
+          post :create, params: { date: date, value: 1.0, taskUuid: timer.task_id }
 
           assert_response :created
 
@@ -85,7 +85,7 @@ module Api
         end
 
         it "updates a timer" do
-          patch :update, id: timer.id, value: 2.0, taskUuid: timer.task_id
+          patch :update, params: { id: timer.id, value: 2.0, taskUuid: timer.task_id }
 
           assert_response :ok
 
@@ -95,7 +95,7 @@ module Api
         end
 
         it "starts a timer" do
-          put :start, id: timer.id
+          put :start, params: { id: timer.id }
 
           assert_response :ok
 
@@ -106,7 +106,7 @@ module Api
 
         it "stops a timer" do
           timer.update(started_at: Time.current.to_date)
-          put :stop, id: timer.id
+          put :stop, params: { id: timer.id }
 
           assert_response :ok
 
@@ -115,7 +115,7 @@ module Api
         end
 
         it "destroys a timer" do
-          delete :destroy, id: timer.id
+          delete :destroy, params: { id: timer.id }
 
           assert_response :ok
 

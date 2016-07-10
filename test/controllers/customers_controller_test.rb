@@ -10,14 +10,14 @@ class CustomersControllerTest < ActionController::TestCase
 
   describe "unauthorized" do
     it "Unauthrized user cant view customer edit" do
-      get :edit, id: customer.id
+      get :edit, params: { id: customer.id }
 
       assert_response :found
       assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
     end
 
     it "Unauthrized user cant update customer" do
-      put :update, id: customer.id, customer: { name: "bar" }
+      put :update, params: { id: customer.id, customer: { name: "bar" } }
 
       assert_response :found
       assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
@@ -30,13 +30,13 @@ class CustomersControllerTest < ActionController::TestCase
     end
 
     it "User can view the edit customer page" do
-      get :edit, id: customer.id
+      get :edit, params: { id: customer.id }
 
       assert_response :ok
     end
 
     it "User can update customer" do
-      put :update, id: customer.id, customer: { name: "bar" }
+      put :update, params: { id: customer.id, customer: { name: "bar" } }
 
       assert_response :found
       assert_equal I18n.t(:"resources.messages.update.success", resource: I18n.t(:"resources.customer")), flash[:success]

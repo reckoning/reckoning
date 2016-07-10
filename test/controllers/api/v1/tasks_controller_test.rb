@@ -6,8 +6,8 @@ module Api
   module V1
     class TasksControllerTest < ActionController::TestCase
       setup do
-        @request.headers['Accept'] = Mime::JSON
-        @request.headers['Content-Type'] = Mime::JSON.to_s
+        @request.headers['Accept'] = Mime[:json]
+        @request.headers['Content-Type'] = Mime[:json].to_s
       end
 
       tests ::Api::V1::TasksController
@@ -26,7 +26,7 @@ module Api
         end
 
         it "Unauthrized user cant create new task" do
-          post :create, task: { name: "foo" }
+          post :create, params: { task: { name: "foo" } }
 
           assert_response :forbidden
         end
@@ -46,7 +46,7 @@ module Api
         end
 
         it "creates a new task" do
-          post :create, name: "foo", projectUuid: task.project_id
+          post :create, params: { name: "foo", projectUuid: task.project_id }
 
           assert_response :created
 

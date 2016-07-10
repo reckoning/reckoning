@@ -1,13 +1,8 @@
 GIT
-  remote: git://github.com/mperham/sidekiq.git
-  revision: 871626c9b37a7a51213216379fd3eebfb4f305a3
-  branch: rails5
+  remote: git://github.com/rails/rails-perftest.git
+  revision: 8f8d84489b79ece2afac3f7ddcda2e08c80b9346
   specs:
-    sidekiq (4.2.0)
-      concurrent-ruby (~> 1.0)
-      connection_pool (~> 2.2, >= 2.2.0)
-      redis (~> 3.2, >= 3.2.1)
-      sinatra (>= 1.4.7)
+    rails-perftest (0.0.6)
 
 GIT
   remote: git://github.com/refile/refile.git
@@ -274,7 +269,6 @@ GEM
     rails-i18n (5.0.0)
       i18n (~> 0.7)
       railties (~> 5.0)
-    rails-perftest (0.0.6)
     rails_12factor (0.0.3)
       rails_serve_static_assets
       rails_stdout_logging
@@ -339,6 +333,11 @@ GEM
     sentry-raven (1.2.0)
       faraday (>= 0.7.6, < 0.10.x)
     sexp_processor (4.7.0)
+    sidekiq (4.1.4)
+      concurrent-ruby (~> 1.0)
+      connection_pool (~> 2.2, >= 2.2.0)
+      redis (~> 3.2, >= 3.2.1)
+      sinatra (>= 1.4.7)
     simplecov (0.12.0)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
@@ -460,7 +459,7 @@ DEPENDENCIES
   rack-cors
   rails (= 5.0.0)
   rails-i18n
-  rails-perftest
+  rails-perftest!
   rails_12factor
   redcarpet
   refile!
@@ -471,7 +470,7 @@ DEPENDENCIES
   ruby-prof
   sass-rails (~> 5.0)
   sentry-raven
-  sidekiq!
+  sidekiq
   simplecov
   simplecov-console
   simplecov-html

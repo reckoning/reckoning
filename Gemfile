@@ -12,7 +12,7 @@ gem 'stripe', github: 'stripe/stripe-ruby'
 gem 'money'
 gem 'valvat'
 
-gem 'sidekiq', github: 'mperham/sidekiq', branch: 'rails5'
+gem 'sidekiq'
 # for sidekiq web
 gem 'sinatra', require: nil, github: 'sinatra/sinatra'
 
@@ -101,7 +101,7 @@ group :test do
   gem 'simplecov', require: false
   gem 'simplecov-console', require: false
   gem 'simplecov-html', require: false
-  gem 'rails-perftest'
+  gem 'rails-perftest', github: 'rails/rails-perftest'
   gem 'minitest-rails'
   gem 'ruby-prof'
   gem 'database_cleaner'

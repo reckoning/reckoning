@@ -142,17 +142,18 @@ class InvoicesController < ApplicationController
 
     respond_to do |format|
       format.js { render json: {}, status: :ok }
-      format.html { redirect_to :back }
+      format.html { redirect_back(fallback_location: root_path) }
     end
   end
 
   def pay
     authorize! :pay, invoice
     if invoice.pay!
-      redirect_to :back, flash: { success: I18n.t(:'messages.invoice.pay.success') }
+      flash[:success] = I18n.t(:'messages.invoice.pay.success')
     else
-      redirect_to :back, alert: I18n.t(:'messages.invoice.pay.failure')
+      flash[:alert] = I18n.t(:'messages.invoice.pay.failure')
     end
+    redirect_back(fallback_location: root_path)
   end
 
   def destroy

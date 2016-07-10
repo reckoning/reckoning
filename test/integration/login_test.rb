@@ -13,11 +13,13 @@ class LoginTest < ActionDispatch::IntegrationTest
     assert_select "#new_user"
     assert_response :success
 
-    post_via_redirect "/signin",
-                      user: {
-                        email: user.email,
-                        password: "enterprise"
-                      }
+    post "/signin", params: {
+      user: {
+        email: user.email,
+        password: "enterprise"
+      }
+    }
+    follow_redirect!
 
     assert_equal nil, flash[:alert]
 
@@ -34,11 +36,12 @@ class LoginTest < ActionDispatch::IntegrationTest
     assert_select "#new_user"
 
     # user submits form
-    post "/signin",
-         user: {
-           email: user.email,
-           password: "foo"
-         }
+    post "/signin", params: {
+      user: {
+        email: user.email,
+        password: "foo"
+      }
+    }
 
     assert_response :ok
 
