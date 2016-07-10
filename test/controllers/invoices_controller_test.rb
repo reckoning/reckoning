@@ -23,21 +23,21 @@ class InvoicesControllerTest < ActionController::TestCase
     end
 
     it "Unauthrized user cant create new invoice" do
-      post :create, invoice: { project_id: "foo", date: Time.zone.today }
+      post :create, params: { invoice: { project_id: "foo", date: Time.zone.today } }
 
       assert_response :found
       assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
     end
 
     it "Unauthrized user cant view invoice edit" do
-      get :edit, id: invoice.id
+      get :edit, params: { id: invoice.id }
 
       assert_response :found
       assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
     end
 
     it "Unauthrized user cant destroy invoice" do
-      delete :destroy, id: invoice.id
+      delete :destroy, params: { id: invoice.id }
 
       assert_response :found
       assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
@@ -46,7 +46,7 @@ class InvoicesControllerTest < ActionController::TestCase
     end
 
     it "Unauthrized user cant update invoice" do
-      put :update, id: invoice.id, invoice: { date: Time.zone.today - 1 }
+      put :update, params: { id: invoice.id, invoice: { date: Time.zone.today - 1 } }
 
       assert_response :found
       assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
@@ -85,27 +85,27 @@ class InvoicesControllerTest < ActionController::TestCase
     end
 
     it "User can view the edit invoice page" do
-      get :edit, id: invoice.id
+      get :edit, params: { id: invoice.id }
 
       assert_response :ok
     end
 
     it "User can create a new invoice" do
-      post :create, invoice: { project_id: invoice.project.id, date: Time.zone.today }
+      post :create, params: { invoice: { project_id: invoice.project.id, date: Time.zone.today } }
 
       assert_response :found
       assert_equal I18n.t(:"resources.messages.create.success", resource: I18n.t(:"resources.invoice")), flash[:success]
     end
 
     it "User can update invoice" do
-      put :update, id: invoice.id, invoice: { project_id: invoice.project.id, date: Time.zone.today - 1 }
+      put :update, params: { id: invoice.id, invoice: { project_id: invoice.project.id, date: Time.zone.today - 1 } }
 
       assert_response :found
       assert_equal I18n.t(:"resources.messages.update.success", resource: I18n.t(:"resources.invoice")), flash[:success]
     end
 
     it "User can destroy invoice" do
-      delete :destroy, id: invoice.id
+      delete :destroy, params: { id: invoice.id }
 
       assert_response :found
       assert_equal I18n.t(:"resources.messages.destroy.success", resource: I18n.t(:"resources.invoice")), flash[:success]
@@ -115,7 +115,7 @@ class InvoicesControllerTest < ActionController::TestCase
 
     it "User can charge an invoice" do
       @request.env["HTTP_REFERER"] = "where_i_came_from"
-      put :charge, id: invoice.id
+      put :charge, params: { id: invoice.id }
 
       assert_redirected_to "where_i_came_from"
       assert invoice.reload.charged?, invoice.inspect
