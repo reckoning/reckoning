@@ -22,6 +22,7 @@ angular.module 'Timesheet'
           timer: -> modalTimer
           projects: -> Project.all(sort: "last_used")
           excludedTaskUuids: -> []
+          withoutProjectSelect: -> false
       .result.then (result) ->
         if result.status is 'deleted'
           deletedTimer = _.find $scope.timers, (item) -> item.uuid is result.data.uuid

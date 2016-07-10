@@ -6,14 +6,16 @@
     span ng-if="!timer.uuid"
       = I18n.t(:"labels.modals.title.timesheet.add_timer")
 .modal-body
-  select selectize="true" ng-disabled="timer.invoiced" selectize-default="true" label-field="label" options="projects" ng-model="timer.projectUuid" placeholder=I18n.t(:"helpers.prompt.timer.project")
 
-  hr
+  .row
+    .col-xs-12
+      select selectize="true" ng-disabled="timer.invoiced" selectize-default="true" label-field="label" options="projects" ng-model="timer.projectUuid" placeholder=I18n.t(:"helpers.prompt.timer.project") ng-if="!withoutProjectSelect"
 
-  select selectize="true" ng-disabled="timer.invoiced" selectize-default="true" create="createTask" options="tasks" ng-model="timer.taskUuid" placeholder=I18n.t(:"helpers.prompt.timer.task")
+      hr ng-if="!withoutProjectSelect"
 
-  hr
+      select selectize="true" ng-disabled="timer.invoiced" selectize-default="true" create="createTask" options="tasks" ng-model="timer.taskUuid" placeholder=I18n.t(:"helpers.prompt.timer.task")
 
+      hr
   .row
     .col-xs-12.col-md-8
       textarea.form-control ng-disabled="timer.invoiced" ng-model="timer.note" placeholder=I18n.t(:"helpers.placeholder.timer.note")

@@ -8,9 +8,11 @@ angular.module 'Reckoning'
   'timer'
   'projects'
   'excludedTaskUuids'
-  ($scope, $timeout, $uibModalInstance, Task, Timer, timer, projects, excludedTaskUuids) ->
+  'withoutProjectSelect'
+  ($scope, $timeout, $uibModalInstance, Task, Timer, timer, projects, excludedTaskUuids, withoutProjectSelect) ->
     $timeout ->
       $scope.excludedTaskUuids = excludedTaskUuids
+      $scope.withoutProjectSelect = withoutProjectSelect
       $scope.projects = projects.data
       $scope.timer = timer
 
