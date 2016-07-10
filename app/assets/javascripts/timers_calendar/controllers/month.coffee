@@ -24,9 +24,9 @@ angular.module 'TimersCalendar'
 
     $scope.openModal = (date, timer) ->
       if @isStartable(date)
-        modalTimer = {date: date, started: true}
+        modalTimer = {date: date, started: true, projectUuid: @projectUuid}
       else
-        modalTimer = {date: date, started: false}
+        modalTimer = {date: date, started: false, projectUuid: @projectUuid}
       if timer isnt undefined
         angular.copy(timer, modalTimer)
       $uibModal.open
@@ -36,6 +36,7 @@ angular.module 'TimersCalendar'
           timer: -> modalTimer
           projects: -> Project.all(sort: "used")
           excludedTaskUuids: -> []
+          withoutProjectSelect: -> true
       .result.then (result) ->
         $scope.getTimers()
       , ->

@@ -20,6 +20,7 @@ angular.module 'Timesheet'
           timer: -> {date: $scope.date}
           projects: -> Project.all(sort: "last_used")
           excludedTaskUuids: -> $scope.excludedTaskUuids
+          withoutProjectSelect: -> false
       .result.then (data) ->
         task = Task.new($scope.dates, data)
         $scope.excludedTaskUuids.push task.uuid

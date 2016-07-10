@@ -22,8 +22,7 @@
             .panel-title
               strong= I18n.t(:"labels.panels.charts.project_budget")
           .panel-body
-            .chart.chart-big
-              .chart-inner#project-budget-chart
+            .chart.chart-big#project-budget-chart
             .row
               .col-xs-12.panel-progress
                 .progress.progress-slim.text-center
@@ -95,6 +94,6 @@
           .tab-pane.active#timers
             = render "timers_panel", timers: project.timers.includes(:task), context: "default"
           .tab-pane#invoices
-            = render "base/invoices_panel", invoices: project.invoices, context: "default"
+            = render "base/invoices_panel", invoices: project.invoices.includes(:customer), context: "default"
           .tab-pane#tasks
             = render "tasks_panel", tasks: project.tasks, context: "default"
