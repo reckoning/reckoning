@@ -19,9 +19,6 @@ angular.module 'Timesheet'
       date = moment($scope.date)
       date.format('dddd - D. MMMM YYYY')
 
-    $scope.isCurrentDay = ->
-      $scope.date is $scope.currentDate
-
     $scope.weekDate = ->
       date = moment(@date)
       date.startOf('isoWeek').format('YYYY-MM-DD')
