@@ -26,7 +26,8 @@ module Reckoning
     config.i18n.fallbacks = [:de]
 
     config.action_view.field_error_proc = proc { |html_tag, _instance|
-      safe_join(html_tag.to_s)
+      # rubocop:disable Rails/OutputSafety
+      html_tag.to_s.html_safe
     }
 
     config.exceptions_app = routes
