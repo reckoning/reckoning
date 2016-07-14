@@ -13,6 +13,9 @@ angular.module 'Timesheet'
       date = moment($scope.date)
       date.startOf('isoWeek').format('D')
 
+    $scope.navigateToToday = () ->
+      $location.path('/week/')
+
     $scope.dayDate = ->
       if @isCurrentWeek()
         @currentDate
