@@ -15,6 +15,9 @@ angular.module 'Timesheet'
     $scope.projectPath = (projectUuid) ->
       Routes.project_path(projectUuid)
 
+    $scope.navigateToToday = () ->
+      $location.path('/day/')
+
     $scope.day = ->
       date = moment($scope.date)
       date.format('dddd - D. MMMM YYYY')

@@ -11,7 +11,7 @@
           a.btn.btn-default href="#/week/{{prevWeek()}}"
             i.fa.fa-chevron-left
           datepicker ng-model="datepickerSelect"
-          a.btn.btn-default href="#/week"
+          a.btn.btn-default ng-click="navigateToToday()"
             = I18n.t('actions.today')
           a.btn.btn-default href="#/week/{{nextWeek()}}"
             i.fa.fa-chevron-right
@@ -43,7 +43,7 @@
     .panel.panel-default.animate ng-repeat="task in currentTasks"
       .panel-body.row
         .col-xs-12.col-md-4.timesheet-task
-          a ng-href="{{projectPath(timer.projectUuid)}}"
+          a ng-href="{{projectPath(task.projectUuid)}}"
             span ng-bind="task.projectName"
           small
             = " | "
