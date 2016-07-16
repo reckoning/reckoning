@@ -9,7 +9,10 @@ angular.module 'Reckoning'
   'projects'
   'excludedTaskUuids'
   'withoutProjectSelect'
-  ($scope, $timeout, $uibModalInstance, Task, Timer, timer, projects, excludedTaskUuids, withoutProjectSelect) ->
+  (
+    $scope, $timeout, $uibModalInstance,
+    Task, Timer, timer, projects, excludedTaskUuids, withoutProjectSelect
+  ) ->
     $timeout ->
       $scope.excludedTaskUuids = excludedTaskUuids
       $scope.withoutProjectSelect = withoutProjectSelect
@@ -17,7 +20,8 @@ angular.module 'Reckoning'
       $scope.timer = timer
 
       if timer.projectUuid
-        project = _.find $scope.projects, (project) -> project.uuid is timer.projectUuid
+        project = _.find $scope.projects, (project) ->
+          project.uuid is timer.projectUuid
         $scope.tasks = project.tasks
 
     $scope.saveTimer = (timer, start) ->
@@ -47,8 +51,10 @@ angular.module 'Reckoning'
         timer.startedAt = data.startedAt
 
     $scope.addTask = ->
-      task = _.find $scope.tasks, (task) -> task.uuid is $scope.timer.taskUuid
-      project = _.find $scope.projects, (project) -> project.uuid is $scope.timer.projectUuid
+      task = _.find $scope.tasks, (task) ->
+        task.uuid is $scope.timer.taskUuid
+      project = _.find $scope.projects, (project) ->
+        project.uuid is $scope.timer.projectUuid
       task.projectName = project.name
       task.projectCustomerName = project.customerName
       $uibModalInstance.close(task)
@@ -68,11 +74,11 @@ angular.module 'Reckoning'
         Timer.delete(timer.uuid).success (data) ->
           $uibModalInstance.close({data: data, status: 'deleted'})
 
-    $scope.isStartable = (date) ->
-      moment(date).format('YYYYMMDD') >= moment().format('YYYYMMDD')
+    $scope.isStartable = (date) -> Timer.isStartable(date)
 
     $scope.$watch 'timer.projectUuid', ->
-      project = _.find $scope.projects, (project) -> project.uuid is $scope.timer.projectUuid
+      project = _.find $scope.projects, (project) ->
+        project.uuid is $scope.timer.projectUuid
       $scope.tasks = _.filter project?.tasks, (item) ->
         !_.contains($scope.excludedTaskUuids, item.uuid)
 ]
