@@ -8,7 +8,7 @@
           a.btn.btn-default href="#/day/{{prevDay()}}"
             i.fa.fa-chevron-left
           datepicker ng-model="datepickerSelect"
-          a.btn.btn-default href="#/day"
+          a.btn.btn-default ng-click="navigateToToday()"
             = I18n.t('actions.today')
           a.btn.btn-default href="#/day/{{nextDay()}}"
             i.fa.fa-chevron-right
@@ -46,7 +46,7 @@
             span.timesheet-timer ng-if="!timer.started && !timer.invoiced"
               span ng-bind="timer.value | toTime"
               '
-              button.btn.btn-default.btn-lg ng-click="startTimer(timer, $event)"
+              button.btn.btn-default.btn-lg ng-click="startTimer(timer, $event)" ng-if="isStartable(timer.date)"
                 i.fa.fa-circle-o-notch
                 '
                 = I18n.t(:"actions.start")

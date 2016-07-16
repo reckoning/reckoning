@@ -4,12 +4,25 @@ angular.module 'Timesheet'
   '$routeParams'
   '$uibModal'
   '$timeout'
+  '$window'
   'Timer'
   'Project'
-  ($scope, $routeParams, $uibModal, $timeout, Timer, Project) ->
+  ($scope, $routeParams, $uibModal, $timeout, $window, Timer, Project) ->
     $scope.timers = []
     $scope.timersLoaded = false
     $scope.currentTasks = []
+
+    $window.onfocus = ->
+      return if !$scope.date
+      Timer.all($scope.date).success (data, status, headers, config) ->
+        data.forEach (timer) ->
+          found = $scope.timers.find((item) -> item.uuid is timer.uuid)
+          if found
+            Timer.updateData(found, timer)
+          else
+            $scope.timers.push timer
+
+    $scope.isStartable = (date) -> Timer.isStartable(date)
 
     $scope.openModal = (timer) ->
       modalTimer = {date: @date, started: true}
@@ -25,17 +38,11 @@ angular.module 'Timesheet'
           withoutProjectSelect: -> false
       .result.then (result) ->
         if result.status is 'deleted'
-          deletedTimer = _.find $scope.timers, (item) -> item.uuid is result.data.uuid
+          deletedTimer = _.find $scope.timers, (item) ->
+            item.uuid is result.data.uuid
           $scope.timers.splice($scope.timers.indexOf(deletedTimer), 1)
         else if result.status is 'updated'
-          timer.value = result.data.value
-          timer.date = result.data.date
-          timer.projectUuid = result.data.projectUuid
-          timer.projectName = result.data.projectName
-          timer.projectCustomerName = result.data.projectCustomerName
-          timer.taskUuid = result.data.taskUuid
-          timer.taskName = result.data.taskName
-          timer.note = result.data.note
+          Timer.updateData(timer, result.data)
         else if result.status is 'created'
           $scope.timers.forEach (item) ->
             item.started = false

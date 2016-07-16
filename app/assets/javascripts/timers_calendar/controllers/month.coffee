@@ -9,7 +9,10 @@ angular.module 'TimersCalendar'
   '$uibModal'
   'Timer'
   'Project'
-  ($scope, $routeParams, $location, $window, $filter, $timeout, $uibModal, Timer, Project) ->
+  (
+    $scope, $routeParams, $location, $window, $filter, $timeout, $uibModal,
+    Timer, Project
+  ) ->
     $scope.projectUuid = $window.projectUuid
     if $routeParams.date && moment($routeParams.date, 'YYYY-MM-DD').isValid()
       $scope.date = moment($routeParams.date, 'YYYY-MM-DD').startOf('month')
@@ -46,11 +49,20 @@ angular.module 'TimersCalendar'
       moment(date).format('YYYYMMDD') >= moment().format('YYYYMMDD')
 
     $scope.getTimers = ->
-      startDate = moment(@date).startOf('month').startOf('week').format('YYYY-MM-DD')
-      endDate = moment(@date).endOf('month').endOf('week').format('YYYY-MM-DD')
-      Timer.allInRangeForProject(@projectUuid, startDate, endDate).success (timers) ->
-        $scope.currentTimers = timers
-        $scope.currentTimersLoaded = true
+      startDate = moment(@date)
+        .startOf('month')
+        .startOf('week')
+        .format('YYYY-MM-DD')
+      endDate = moment(@date)
+        .endOf('month')
+        .endOf('week')
+        .format('YYYY-MM-DD')
+
+      Timer
+        .allInRangeForProject(@projectUuid, startDate, endDate)
+        .success (timers) ->
+          $scope.currentTimers = timers
+          $scope.currentTimersLoaded = true
 
     $scope.setWeeks = ->
       startDate = moment(@date).startOf('month').startOf('week')
@@ -59,7 +71,9 @@ angular.module 'TimersCalendar'
       date = moment(startDate)
       for weekNumber in [1..weekCount]
         date = date.add(1, 'weeks') if weekNumber > 1
-        itr = moment(date.isoWeekday(1)).twix(date.isoWeekday(7)).iterate("days")
+        itr = moment(date.isoWeekday(1))
+          .twix(date.isoWeekday(7))
+          .iterate("days")
         days = []
         while itr.hasNext()
           time = itr.next()
