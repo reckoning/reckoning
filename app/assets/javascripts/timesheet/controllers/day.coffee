@@ -4,7 +4,10 @@ angular.module 'Timesheet'
   '$routeParams'
   '$location'
   ($scope, $routeParams, $location) ->
-    $scope.date = if $routeParams.date && moment($routeParams.date).isValid() then $routeParams.date else moment().format('YYYY-MM-DD')
+    date = moment().format('YYYY-MM-DD')
+    if $routeParams.date && moment($routeParams.date).isValid()
+      date = $routeParams.date
+    $scope.date = date
     $scope.currentDate = moment().format('YYYY-MM-DD')
     $scope.datepickerSelect = $scope.date
 
