@@ -46,6 +46,8 @@ Reckoning::Application.routes.draw do
     root to: 'base#dashboard'
   end
 
+  mount ActionCable.server => '/cable'
+
   devise_for :users,
              skip: [:sessions, :registrations],
              controllers: { registrations: "registrations" }

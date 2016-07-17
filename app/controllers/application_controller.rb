@@ -54,6 +54,15 @@ class ApplicationController < ActionController::Base
   end
   helper_method :invoice_limit_reached?
 
+  private def api_domain
+    if Rails.env.development?
+      "reckoning.dev"
+    else
+      "reckoning.io"
+    end
+  end
+  helper_method :api_domain
+
   private def store_current_params
     key = (params[:controller].to_s + "_" + params[:action].to_s).to_sym
     session[key] = params.reject { |k| %w(controller action).include?(k.to_s) }

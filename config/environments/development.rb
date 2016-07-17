@@ -43,6 +43,8 @@ Reckoning::Application.configure do
     domain: Rails.application.secrets[:domain]
   }
 
+  config.action_cable.allowed_request_origins = ['http://reckoning.dev', 'http://localhost:8240', 'http://0.0.0.0:8240']
+
   config.after_initialize do
     Bullet.enable = true
     Bullet.bullet_logger = true

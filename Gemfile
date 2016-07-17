@@ -83,7 +83,6 @@ gem "refile", require: 'refile/rails', github: 'refile/refile'
 gem "refile-s3"
 
 # heroku production
-gem 'rails_12factor', group: :production
 gem 'non-stupid-digest-assets'
 
 group :development do
