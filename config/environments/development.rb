@@ -23,7 +23,6 @@ Reckoning::Application.configure do
 
   # Raise an error on page load if there are pending migrations
   config.active_record.migration_error = :page_load
-  config.active_record.raise_in_transactional_callbacks = true
 
   # Debug mode disables concatenation and preprocessing of assets.
   # This option may cause significant delays in view rendering with a large
@@ -43,6 +42,8 @@ Reckoning::Application.configure do
     authentication: 'login',
     domain: Rails.application.secrets[:domain]
   }
+
+  config.action_cable.allowed_request_origins = ['http://reckoning.dev', 'http://localhost:8240', 'http://0.0.0.0:8240']
 
   config.after_initialize do
     Bullet.enable = true

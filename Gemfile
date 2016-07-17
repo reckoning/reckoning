@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 
 ruby '2.3.1'
 
-gem 'rails', '4.2.6'
+gem 'rails', '5.0.0'
 
 gem 'pg'
 
@@ -14,7 +14,7 @@ gem 'valvat'
 
 gem 'sidekiq'
 # for sidekiq web
-gem 'sinatra', require: nil
+gem 'sinatra', require: nil, github: 'sinatra/sinatra'
 
 gem 'haml'
 gem 'haml-rails'
@@ -79,11 +79,10 @@ gem 'typhoeus'
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-heroku'
 
-gem "refile", require: 'refile/rails'
+gem "refile", require: 'refile/rails', github: 'refile/refile'
 gem "refile-s3"
 
 # heroku production
-gem 'rails_12factor', group: :production
 gem 'non-stupid-digest-assets'
 
 group :development do
@@ -101,7 +100,7 @@ group :test do
   gem 'simplecov', require: false
   gem 'simplecov-console', require: false
   gem 'simplecov-html', require: false
-  gem 'rails-perftest'
+  gem 'rails-perftest', github: 'rails/rails-perftest'
   gem 'minitest-rails'
   gem 'ruby-prof'
   gem 'database_cleaner'
@@ -114,5 +113,4 @@ end
 group :development, :test do
   gem 'bullet'
   gem 'byebug', platform: :mri
-  gem 'jasmine-rails'
 end

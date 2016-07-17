@@ -18,6 +18,7 @@ module Api
         authorize! :create, @timer
         if @timer.save
           @timer.start if start_timer?
+          send_realtime_update(@timer)
           render status: :created
         else
           Rails.logger.info "Timer Create Failed: #{@timer.errors.full_messages.to_yaml}"
@@ -32,6 +33,7 @@ module Api
           Rails.logger.info "Timer Update Failed: #{@timer.errors.full_messages.to_yaml}"
           render json: ValidationError.new("timer.update", @timer.errors), status: :bad_request
         end
+        send_realtime_update(@timer)
       end
 
       def stop
@@ -41,6 +43,7 @@ module Api
           Rails.logger.info "Timer Stop Failed: #{@timer.to_yaml}"
           render json: { message: I18n.t(:"messages.timer.stop.failure") }, status: :bad_request
         end
+        send_realtime_update(@timer)
       end
 
       def start
@@ -50,6 +53,7 @@ module Api
           Rails.logger.info "Timer Start Failed: #{@timer.to_yaml}"
           render json: { message: I18n.t(:"messages.timer.start.failure") }, status: :bad_request
         end
+        send_realtime_update(@timer)
       end
 
       def destroy
@@ -60,6 +64,7 @@ module Api
             Rails.logger.info "Timer Destroy Failed: #{@timer.errors.full_messages.to_yaml}"
             render json: ValidationError.new("timer.destroy", @timer.errors), status: :bad_request
           end
+          send_realtime_update(@timer)
         else
           Rails.logger.info "Timer Destroy Failed: Timer allready on Invoice"
           render json: { message: I18n.t(:"messages.timer.destroy.failure") }, status: :bad_request
@@ -93,6 +98,10 @@ module Api
 
       private def start_timer?
         params.delete(:started)
+      end
+
+      private def send_realtime_update(timer)
+        ActionCable.server.broadcast "timers_#{current_user.id}_#{timer.date}", timer.to_builder.target!
       end
 
       private def timer_params

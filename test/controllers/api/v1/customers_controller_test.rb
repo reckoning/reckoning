@@ -6,8 +6,8 @@ module Api
   module V1
     class CustomersControllerTest < ActionController::TestCase
       setup do
-        @request.headers['Accept'] = Mime::JSON
-        @request.headers['Content-Type'] = Mime::JSON.to_s
+        @request.headers['Accept'] = Mime[:json]
+        @request.headers['Content-Type'] = Mime[:json].to_s
       end
 
       tests ::Api::V1::CustomersController
@@ -27,19 +27,19 @@ module Api
         end
 
         it "Unauthrized user cant view customer" do
-          get :show, id: customer.id
+          get :show, params: { id: customer.id }
 
           assert_response :forbidden
         end
 
         it "Unauthrized user cant create new customer" do
-          post :create, customer: { name: "foo" }
+          post :create, params: { customer: { name: "foo" } }
 
           assert_response :forbidden
         end
 
         it "Unauthrized user cant destroy customer" do
-          delete :destroy, id: customer.id
+          delete :destroy, params: { id: customer.id }
 
           assert_response :forbidden
 
@@ -59,7 +59,7 @@ module Api
         end
 
         it "renders a customer" do
-          get :show, id: customer.id
+          get :show, params: { id: customer.id }
 
           assert_response :ok
 
@@ -69,7 +69,7 @@ module Api
         end
 
         it "creates a new customer" do
-          post :create, name: "foo"
+          post :create, params: { name: "foo" }
 
           assert_response :created
 
@@ -80,7 +80,7 @@ module Api
 
         it "User can destroy customer" do
           klingon = customers :klingon
-          delete :destroy, id: klingon.id
+          delete :destroy, params: { id: klingon.id }
 
           assert_response :ok
 

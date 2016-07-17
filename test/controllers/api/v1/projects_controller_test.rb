@@ -6,8 +6,8 @@ module Api
   module V1
     class ProjectsControllerTest < ActionController::TestCase
       setup do
-        @request.headers['Accept'] = Mime::JSON
-        @request.headers['Content-Type'] = Mime::JSON.to_s
+        @request.headers['Accept'] = Mime[:json]
+        @request.headers['Content-Type'] = Mime[:json].to_s
       end
 
       tests ::Api::V1::ProjectsController
@@ -26,7 +26,7 @@ module Api
         end
 
         it "Unauthrized user cant destroy project" do
-          delete :destroy, id: project.id
+          delete :destroy, params: { id: project.id }
 
           assert_response :forbidden
 
@@ -49,7 +49,7 @@ module Api
         end
 
         it "destroys a project" do
-          delete :destroy, id: outpost6.id
+          delete :destroy, params: { id: outpost6.id }
 
           assert_response :ok
 

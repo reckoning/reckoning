@@ -22,7 +22,7 @@ Reckoning::Application.configure do
   # config.action_dispatch.rack_cache = true
 
   # Disable Rails's static asset server (Apache or nginx will already do this).
-  config.serve_static_files = false
+  config.public_file_server.enabled = false
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier
@@ -82,6 +82,18 @@ Reckoning::Application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
+
+  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  if ENV["RAILS_LOG_TO_STDOUT"].present?
+    logger           = ActiveSupport::Logger.new(STDOUT)
+    logger.formatter = config.log_formatter
+    config.logger = ActiveSupport::TaggedLogging.new(logger)
+  end
+
+  config.action_controller.default_url_options = { host: Rails.application.secrets[:domain] }
+
+  config.action_cable.url = "ws://reckoning.io/cable"
+  config.action_cable.allowed_request_origins = ['http://recioning.io']
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.default_url_options = { host: Rails.application.secrets[:domain] }
