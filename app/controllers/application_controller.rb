@@ -28,10 +28,10 @@ class ApplicationController < ActionController::Base
   end
 
   private def set_user_cookie
-    cookies.signed[:cable] = {
+    cookies.signed[:cable] = YAML.dump(
       uuid: current_user.id,
       expires_at: 30.minutes.from_now
-    }
+    )
   end
 
   private def set_default_nav
