@@ -3,6 +3,8 @@
 require 'roo'
 
 class Timer < ActiveRecord::Base
+  include Rails.application.routes.url_helpers
+
   belongs_to :task, touch: true
   belongs_to :user
   belongs_to :position
@@ -101,5 +103,35 @@ class Timer < ActiveRecord::Base
     return if value.blank? || started?
 
     self.value = (value.hours - (value.hours % 60)) / 3600
+  end
+
+  def to_builder
+    Jbuilder.new do |timer|
+      timer.uuid uuid
+      timer.date date
+      timer.value value
+      timer.sum_for_task sum_for_task
+      timer.note note
+      timer.started started?
+      timer.started_at started_at
+      timer.start_time start_time
+      timer.start_time_for_task start_time_for_task
+      timer.position_uuid position_id
+      timer.invoiced invoiced
+      timer.task_uuid task_id
+      timer.task_name task_name
+      timer.task_label task_label
+      timer.task_billable task.billable
+      timer.project_uuid task.project_id
+      timer.project_name project_name
+      timer.project_customer_name project_customer_name
+      timer.created_at created_at
+      timer.updated_at updated_at
+      timer.links do
+        timer.project do
+          timer.href v1_project_path(task.project_id)
+        end
+      end
+    end
   end
 end

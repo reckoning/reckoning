@@ -2,6 +2,7 @@
 #= require jquery_ujs
 #= require turbolinks
 #= require js-routes
+#= require action_cable
 #= require spin.js/spin
 #= require ladda/js/ladda
 #= require noty
@@ -31,16 +32,13 @@
 #= require_tree ./helpers
 #= require tabs
 #= require app
+#= require cable
 #= require_tree ./app
 #= require angularInit
 #= require base
 #= require blank
 #= require timesheet
 #= require timersCalendar
-
-
-window.domain = (location.host.match(/([^.]+)\.\w{2,3}(?:\.\w{2})?$/) || [])[0]
-window.ApiBasePath = "//api.#{domain}"
 
 $(document).on 'show.bs.collapse', '.navbar-collapse', ->
   $('.navbar-collapse.in').not(this).collapse('hide')
