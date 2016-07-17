@@ -10,8 +10,9 @@ module ApplicationCable
     end
 
     protected def find_verified_user
-      verified_user = User.find_by(id: cookies.signed['user.uuid'])
-      if verified_user && cookies.signed['user.expires_at'] > Time.zone.now
+      user_data = cookies.signed[:cable]
+      verified_user = User.find_by(id: user_data['uuid'])
+      if verified_user && user_data['expires_at'] > Time.zone.now
         verified_user
       else
         reject_unauthorized_connection
