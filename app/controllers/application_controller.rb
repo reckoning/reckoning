@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
 
   before_action :authenticate_user!, :set_default_nav
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :set_user_cookie, if: :user_signed_in?
 
   private def current_account
     @current_account ||= begin
@@ -24,6 +25,13 @@ class ApplicationController < ActionController::Base
 
   private def unauthorized_controllers
     devise_controller?
+  end
+
+  private def set_user_cookie
+    cookies.signed[:cable] = {
+      uuid: current_user.id,
+      expires_at: 30.minutes.from_now
+    }
   end
 
   private def set_default_nav
