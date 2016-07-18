@@ -3,4 +3,4 @@ javascript:
   I18n.locale = "#{I18n.locale}";
   AuthToken = "#{auth_token}";
   StripeKey = "#{Rails.application.secrets[:stripe]['public_key']}";
-  ApiBasePath = "//api.#{api_domain}"
+  ApiBasePath = "#{(api_domain if defined?(api_domain))}"

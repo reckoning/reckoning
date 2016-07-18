@@ -63,22 +63,18 @@ class ApplicationController < ActionController::Base
   helper_method :invoice_limit_reached?
 
   private def api_domain
-    if Rails.env.development?
-      "reckoning.dev"
-    else
-      "reckoning.io"
-    end
+    "//api.#{Rails.application.secrets[:domain]}"
   end
   helper_method :api_domain
 
   private def store_current_params
     key = (params[:controller].to_s + "_" + params[:action].to_s).to_sym
-    session[key] = params.reject { |k| %w(controller action).include?(k.to_s) }
+    session[key] = params.reject { |k| %w(controller action format).include?(k.to_s) }
   end
 
   private def stored_params(action, controller = params[:controller])
     key = (controller.to_s + "_" + action.to_s).to_sym
-    (session[key] || {}).reject { |k| k.to_s == "format" }
+    (session[key] || {}).to_unsafe_h
   end
   helper_method :stored_params
 
