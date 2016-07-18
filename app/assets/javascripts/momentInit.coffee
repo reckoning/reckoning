@@ -1,5 +1,4 @@
 window.initMoment = ->
-  I18nHelper.init()
   moment.locale I18n.locale,
     months: I18nHelper.monthNames
     monthsShort: I18nHelper.abbrMonthNames

@@ -13,6 +13,3 @@ window.I18nHelper =
       @abbrMonthNames = names
 
       @initialized = true
-
-document.addEventListener "turbolinks:load", ->
-  I18nHelper.init()

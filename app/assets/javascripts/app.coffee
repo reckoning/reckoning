@@ -69,5 +69,6 @@ document.addEventListener "turbolinks:load", ->
 
   $('[data-toggle=tooltip]').tooltip()
 
+  I18nHelper.init()
   initMoment()
   initAccounting()
