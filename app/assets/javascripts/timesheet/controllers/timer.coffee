@@ -28,6 +28,7 @@ angular.module 'Timesheet'
     $scope.isStartable = (date) -> Timer.isStartable(date)
 
     $scope.openModal = (timer) ->
+      $scope.startedAction = true
       modalTimer = {date: @date, started: true}
       if timer isnt undefined
         angular.copy(timer, modalTimer)
@@ -40,16 +41,11 @@ angular.module 'Timesheet'
           excludedTaskUuids: -> []
           withoutProjectSelect: -> false
       .result.then (result) ->
-        # if result.status is 'deleted'
-        #   deletedTimer = _.find $scope.timers, (item) ->
-        #     item.uuid is result.data.uuid
-        #   $scope.timers.splice($scope.timers.indexOf(deletedTimer), 1)
-        # else if result.status is 'updated'
-        #   Timer.updateData(timer, result.data)
-        # else if result.status is 'created'
-        #   $scope.timers.forEach (item) ->
-        #     item.started = false
-        #   $scope.timers.push result.data
+        setTimeout ->
+          $scope.startedAction = false
+        , 2000
+
+        $scope.getTimers()
 
     $scope.getTimers = ->
       Timer.all(@date).success (data, status, headers, config) ->
@@ -74,12 +70,20 @@ angular.module 'Timesheet'
         timer.startTime = data.startTime
         timer.startedAt = data.startedAt
 
+        setTimeout ->
+          $scope.startedAction = false
+        , 2000
+
     $scope.stopTimer = (timer) ->
       $scope.startedAction = true
       Timer.stop(timer.uuid).success (data) ->
         timer.value = data.value
         timer.started = data.started
         timer.startedAt = data.startedAt
+
+        setTimeout ->
+          $scope.startedAction = false
+        , 2000
 
     if $routeParams.action == "new"
       $scope.openModal()
