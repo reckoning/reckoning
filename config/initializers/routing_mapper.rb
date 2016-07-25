@@ -1,3 +1,5 @@
+# encoding: utf-8
+# frozen_string_literal: true
 # rubocop:disable Style/ClassAndModuleChildren
 class ActionDispatch::Routing::Mapper
   def draw(routes_name)
