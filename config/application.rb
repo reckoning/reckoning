@@ -33,21 +33,6 @@ module Reckoning
     config.exceptions_app = routes
 
     config.middleware.use I18n::JS::Middleware
-    config.middleware.insert_before 0, Rack::Cors, debug: true, logger: -> { Rails.logger } do
-      allow do
-        origins '*'
-        resource '*', headers: :any,
-                      methods: [:get, :post, :delete, :put, :options, :head],
-                      max_age: 0
-      end
-    end
-
-    if ENV['HTTP_USER'].present? && ENV['HTTP_PASSWORD'].present?
-      # Basic authentication for Heroku Stage
-      config.middleware.use '::Rack::Auth::Basic' do |user, password|
-        [user, password] == [ENV['HTTP_USER'], ENV['HTTP_PASSWORD']]
-      end
-    end
   end
 end
 

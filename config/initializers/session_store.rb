@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 # Be sure to restart your server when you modify this file.
 
-Reckoning::Application.config.session_store :cookie_store, key: '_reckoning_session'
+Rails.application.config.session_store :cookie_store, key: '_reckoning_session'
 
 # Use the database for sessions instead of the cookie-based default,
 # which shouldn't be used to store highly confidential information
