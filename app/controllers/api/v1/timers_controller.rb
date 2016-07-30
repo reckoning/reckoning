@@ -33,6 +33,7 @@ module Api
           Rails.logger.info "Timer Update Failed: #{@timer.errors.full_messages.to_yaml}"
           render json: ValidationError.new("timer.update", @timer.errors), status: :bad_request
         end
+        @timer.start if start_timer?
         send_realtime_update(@timer)
       end
 

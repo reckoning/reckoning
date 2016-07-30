@@ -131,6 +131,7 @@ de:
         email_template: "Inhalt"
         invoice_email: "Empfänger"
         default_from: "Absender"
+        weekly_hours: "Wochenstunden"
     prompt:
       country: "Bitte wähle ein Land"
       user:
