@@ -1,37 +1,37 @@
-.modal-header
-  button.close ng-click="cancel()" aria-hidden="true" &times;
-  h3.modal-title
-    span ng-if="timer.uuid"
-      = I18n.t(:"labels.modals.title.timesheet.edit_timer")
-    span ng-if="!timer.uuid"
-      = I18n.t(:"labels.modals.title.timesheet.add_timer")
-.modal-body
+form
+  .modal-header
+    button.close ng-click="cancel()" aria-hidden="true" &times;
+    h3.modal-title
+      span ng-if="timer.uuid"
+        = I18n.t(:"labels.modals.title.timesheet.edit_timer")
+      span ng-if="!timer.uuid"
+        = I18n.t(:"labels.modals.title.timesheet.add_timer")
+  .modal-body
+    .row
+      .col-xs-12
+        select selectize="true" ng-disabled="timer.invoiced" selectize-default="true" label-field="label" options="projects" ng-model="timer.projectUuid" placeholder=I18n.t(:"helpers.prompt.timer.project") ng-if="!withoutProjectSelect"
 
-  .row
-    .col-xs-12
-      select selectize="true" ng-disabled="timer.invoiced" selectize-default="true" label-field="label" options="projects" ng-model="timer.projectUuid" placeholder=I18n.t(:"helpers.prompt.timer.project") ng-if="!withoutProjectSelect"
+        hr ng-if="!withoutProjectSelect"
 
-      hr ng-if="!withoutProjectSelect"
+        select selectize="true" ng-disabled="timer.invoiced" selectize-default="true" create="createTask" options="tasks" ng-model="timer.taskUuid" placeholder=I18n.t(:"helpers.prompt.timer.task")
 
-      select selectize="true" ng-disabled="timer.invoiced" selectize-default="true" create="createTask" options="tasks" ng-model="timer.taskUuid" placeholder=I18n.t(:"helpers.prompt.timer.task")
-
-      hr
-  .row
-    .col-xs-12.col-md-8
-      textarea.form-control ng-disabled="timer.invoiced" ng-model="timer.note" placeholder=I18n.t(:"helpers.placeholder.timer.note")
-    .col-xs-12.col-md-4
-      br.visible-sm.visible-xs
-      .modal-timer ng-if="timer.uuid && timer.started"
-        timer start-time="timer.startTime" max-time-unit="'hour'" {{hours}}:{{mminutes}}
-      input.input-lg.form-control.text-right ng-disabled="timer.invoiced" ng-if="!(timer.uuid && timer.started)" ng-model="timer.value" placeholder="0:00" timefield=true
-.modal-footer
-  .pull-right
-    button.btn.btn-primary.btn-lg ng-class="{'disabled':timer.invoiced}" ng-disabled="timer.invoiced || !timer.taskUuid" ng-click="saveTimer(timer, false)" data-loading-text=I18n.t(:"actions.loading")
-      = I18n.t(:"actions.save")
-    button.btn.btn-default.btn-lg title=I18n.t(:"actions.begin") ng-if="((!timer.started) || (timer.started && !timer.uuid)) && isStartable(timer.date)" ng-class="{'disabled':timer.invoiced}" ng-disabled="timer.invoiced || !timer.taskUuid" ng-click="saveTimer(timer, true)" data-loading-text=I18n.t(:"actions.loading")
-      i.fa.fa-play
-    button.btn.btn-default.btn-lg title=I18n.t(:"actions.stop") ng-click="stopTimer(timer, $event)" ng-if="timer.uuid && timer.started && !timer.invoiced"
-      i.fa.fa-stop
-  .pull-left ng-if="timer.uuid && !timer.invoiced"
-    button.btn.btn-danger ng-click="delete(timer)"
-      = I18n.t(:"actions.delete")
+        hr
+    .row
+      .col-xs-12.col-md-8
+        textarea.form-control ng-disabled="timer.invoiced" ng-model="timer.note" placeholder=I18n.t(:"helpers.placeholder.timer.note")
+      .col-xs-12.col-md-4
+        br.visible-sm.visible-xs
+        .modal-timer ng-if="timer.uuid && timer.started"
+          timer start-time="timer.startTime" max-time-unit="'hour'" {{hours}}:{{mminutes}}
+        input.input-lg.form-control.text-right ng-disabled="timer.invoiced" ng-if="!(timer.uuid && timer.started)" ng-model="timer.value" placeholder="0:00" timefield=true
+  .modal-footer
+    .pull-right
+      button.btn.btn-primary.btn-lg ng-class="{'disabled':timer.invoiced}" ng-disabled="timer.invoiced || !timer.taskUuid" ng-click="saveTimer(timer, false)" data-loading-text=I18n.t(:"actions.loading")
+        = I18n.t(:"actions.save")
+      button.btn.btn-default.btn-lg title=I18n.t(:"actions.begin") ng-if="((!timer.started) || (timer.started && !timer.uuid)) && isStartable(timer.date)" ng-class="{'disabled':timer.invoiced}" ng-disabled="timer.invoiced || !timer.taskUuid" ng-click="saveTimer(timer, true)" data-loading-text=I18n.t(:"actions.loading")
+        i.fa.fa-play
+      button.btn.btn-default.btn-lg title=I18n.t(:"actions.stop") ng-click="stopTimer(timer, $event)" ng-if="timer.uuid && timer.started && !timer.invoiced"
+        i.fa.fa-stop
+    .pull-left ng-if="timer.uuid && !timer.invoiced"
+      button.btn.btn-danger ng-click="delete(timer)"
+        = I18n.t(:"actions.delete")

@@ -2,31 +2,8 @@
 # frozen_string_literal: true
 require 'sidekiq/web'
 
-Reckoning::Application.routes.draw do
-  v1_api_routes = lambda do
-    resources :customers, only: [:index, :show, :create, :destroy]
-
-    resources :projects, only: [:index, :destroy] do
-      member do
-        put :archive
-      end
-    end
-
-    resources :tasks, only: [:index, :create]
-
-    resources :timers, only: [:index, :create, :update, :destroy] do
-      member do
-        put :start
-        put :stop
-      end
-    end
-  end
-
-  scope module: :api, constraints: { subdomain: "api" } do
-    scope :v1, defaults: { format: :json }, as: :v1 do
-      scope module: :v1, &v1_api_routes
-    end
-  end
+Rails.application.routes.draw do
+  draw :api_routes
 
   namespace :backend do
     resources :accounts, except: [:show]

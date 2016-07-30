@@ -16,10 +16,10 @@ class TimersController < ApplicationController
   end
 
   private def project_uuid
-    @project_uuid ||= params[:project_uuid]
+    @project_uuid ||= params[:projectUuid]
   end
 
   private def timer_uuids
-    @timer_uuids ||= params[:timer_uuids]
+    @timer_uuids ||= params[:timerUuids]
   end
 end

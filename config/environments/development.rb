@@ -1,6 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
-Reckoning::Application.configure do
+Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded on
@@ -28,7 +28,9 @@ Reckoning::Application.configure do
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
-  config.assets.initialize_on_precompile = true
+
+  # Suppress logger output for asset requests.
+  config.assets.quiet = true
 
   config.action_mailer.perform_deliveries = true
   config.action_mailer.delivery_method = :smtp

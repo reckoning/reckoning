@@ -25,6 +25,7 @@ gem 'devise-two-factor'
 
 gem 'rqrcode-rails3'
 gem 'mini_magick'
+
 gem 'cancancan'
 
 gem 'dalli'
