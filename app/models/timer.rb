@@ -18,14 +18,14 @@ class Timer < ActiveRecord::Base
   delegate :project, to: :task
   delegate :name, :label, :customer_name, to: :project, prefix: true
 
-  def self.without(timer_uuids)
+  def self.without_uuids(timer_uuids)
     where.not(id: timer_uuids)
   end
 
   def self.week_for(date)
     week_start = date.beginning_of_week
     week_end = date.end_of_week
-    where date: [week_start..week_end]
+    where(date: [week_start..week_end])
   end
 
   def self.with_positions
