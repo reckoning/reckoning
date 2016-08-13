@@ -173,7 +173,11 @@ class InvoicesController < ApplicationController
 
   private def sort_column
     @sort_column ||= begin
-      (Invoice.column_names + %w(customers.name)).include?(params[:sort]) ? params[:sort] : "ref"
+      if (Invoice.column_names + %w(customers.name)).include?(params[:sort])
+        params[:sort]
+      else
+        "ref"
+      end
     end
   end
   helper_method :sort_column

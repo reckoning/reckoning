@@ -7,7 +7,7 @@ class TimersController < ApplicationController
       format.js do
         scope = current_account.timers.uninvoiced
         scope = scope.for_project(project_uuid) if project_uuid
-        scope = scope.without(timer_uuids) if timer_uuids
+        scope = scope.without_uuids(timer_uuids) if timer_uuids
         timers = scope.order(date: :asc)
         render json: { body: render_to_string(partial: "list", locals: { timers: timers }) }
       end

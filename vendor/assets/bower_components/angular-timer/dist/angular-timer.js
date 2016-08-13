@@ -1,8 +1,8 @@
 /**
- * angular-timer - v1.3.3 - 2015-05-28 9:05 AM
+ * angular-timer - v1.3.4 - 2016-05-01 9:52 PM
  * https://github.com/siddii/angular-timer
  *
- * Copyright (c) 2015 Siddique Hameed
+ * Copyright (c) 2016 Siddique Hameed
  * Licensed MIT <https://github.com/siddii/angular-timer/blob/master/LICENSE.txt>
  */
 var timerModule = angular.module('timer', [])
@@ -19,7 +19,19 @@ var timerModule = angular.module('timer', [])
         autoStart: '&autoStart',
         language: '@?',
         fallback: '@?',
-        maxTimeUnit: '='
+        maxTimeUnit: '=',
+        seconds: '=?',
+        minutes: '=?',
+        hours: '=?',
+        days: '=?',
+        months: '=?',
+        years: '=?',
+        secondsS: '=?',
+        minutesS: '=?',
+        hoursS: '=?',
+        daysS: '=?',
+        monthsS: '=?',
+        yearsS: '=?'
       },
       controller: ['$scope', '$element', '$attrs', '$timeout', 'I18nService', '$interpolate', 'progressBarService', function ($scope, $element, $attrs, $timeout, I18nService, $interpolate, progressBarService) {
 
@@ -64,7 +76,7 @@ var timerModule = angular.module('timer', [])
         $scope.startTime = null;
         $scope.endTime = null;
         $scope.timeoutId = null;
-        $scope.countdown = $scope.countdownattr && parseInt($scope.countdownattr, 10) >= 0 ? parseInt($scope.countdownattr, 10) : undefined;
+        $scope.countdown = angular.isNumber($scope.countdownattr) && parseInt($scope.countdownattr, 10) >= 0 ? parseInt($scope.countdownattr, 10) : undefined;
         $scope.isRunning = false;
 
         $scope.$on('timer-start', function () {
@@ -112,8 +124,8 @@ var timerModule = angular.module('timer', [])
         $scope.start = $element[0].start = function () {
           $scope.startTime = $scope.startTimeAttr ? moment($scope.startTimeAttr) : moment();
           $scope.endTime = $scope.endTimeAttr ? moment($scope.endTimeAttr) : null;
-          if (!$scope.countdown) {
-            $scope.countdown = $scope.countdownattr && parseInt($scope.countdownattr, 10) > 0 ? parseInt($scope.countdownattr, 10) : undefined;
+          if (!angular.isNumber($scope.countdown)) {
+            $scope.countdown = angular.isNumber($scope.countdownattr) && parseInt($scope.countdownattr, 10) > 0 ? parseInt($scope.countdownattr, 10) : undefined;
           }
           resetTimeout();
           tick();
@@ -147,7 +159,7 @@ var timerModule = angular.module('timer', [])
         $scope.reset = $element[0].reset = function () {
           $scope.startTime = $scope.startTimeAttr ? moment($scope.startTimeAttr) : moment();
           $scope.endTime = $scope.endTimeAttr ? moment($scope.endTimeAttr) : null;
-          $scope.countdown = $scope.countdownattr && parseInt($scope.countdownattr, 10) > 0 ? parseInt($scope.countdownattr, 10) : undefined;
+          $scope.countdown = angular.isNumber($scope.countdownattr) && parseInt($scope.countdownattr, 10) > 0 ? parseInt($scope.countdownattr, 10) : undefined;
           resetTimeout();
           tick();
           $scope.isRunning = false;
@@ -305,7 +317,7 @@ var timerModule = angular.module('timer', [])
             $scope.$digest();
           }, $scope.interval - adjustment);
 
-          $scope.$emit('timer-tick', {timeoutId: $scope.timeoutId, millis: $scope.millis});
+          $scope.$emit('timer-tick', {timeoutId: $scope.timeoutId, millis: $scope.millis, timerElement: $element[0]});
 
           if ($scope.countdown > 0) {
             $scope.countdown--;

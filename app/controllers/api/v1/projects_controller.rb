@@ -6,13 +6,13 @@ module Api
       def index
         authorize! :index, Project
 
-        scope = current_account.projects
+        scope = current_account.projects.includes(:customer)
 
         state = params.fetch(:state, nil)
         scope = if state.present? && Project.workflow_spec.state_names.include?(state.to_sym)
-                  scope.where("projects.workflow_state = ?", state)
+                  scope.where(workflow_state: state)
                 else
-                  scope.where("projects.workflow_state = ?", :active)
+                  scope.where(workflow_state: :active)
                 end
 
         scope = scope.where.not(id: without_ids) if without_ids
@@ -21,7 +21,7 @@ module Api
         @projects = if sort.present? && sort == "used"
                       scope.includes(:timers).order("timers.created_at desc nulls last")
                     else
-                      scope.order("name asc")
+                      scope.order(name: :asc)
                     end
       end
 

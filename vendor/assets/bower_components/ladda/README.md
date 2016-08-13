@@ -19,12 +19,13 @@ Ladda buttons must be given the class ```ladda-button``` and the button label ne
 <button class="ladda-button" data-style="expand-right"><span class="ladda-label">Submit</span></button>
 ```
 
-Buttons accepts three attributes:
+Buttons accept the following attributes:
 - **data-style**: one of the button styles, full list in [demo](http://lab.hakim.se/ladda/) *[required]*
 - **data-color**: green/red/blue/purple/mint
 - **data-size**: xs/s/l/xl, defaults to medium
 - **data-spinner-size**: 40, pixel dimensions of spinner, defaults to dynamic size based on the button height
 - **data-spinner-color**: A hex code or any [named CSS color](http://css-tricks.com/snippets/css/named-colors-and-hex-equivalents/).
+- **data-spinner-lines**: 12, the number of lines the for the spinner, defaults to 12
 
 #### JavaScript
 
@@ -32,10 +33,10 @@ If you will be using the loading animation for a form that is submitted to the s
 
 ```javascript
 // Automatically trigger the loading animation on click
-Ladda.bind( 'input[type=submit]' );
+Ladda.bind( 'button[type=submit]' );
 
 // Same as the above but automatically stops after two seconds
-Ladda.bind( 'input[type=submit]', { timeout: 2000 } );
+Ladda.bind( 'button[type=submit]', { timeout: 2000 } );
 ```
 
 If you want JavaScript control over your buttons you can use the following approach:
@@ -75,10 +76,10 @@ If you will be using the loading animation for a form that is submitted to the s
 
 ```javascript
 // Automatically trigger the loading animation on click
-$( 'input[type=submit]' ).ladda( 'bind' );
+$( 'button[type=submit]' ).ladda( 'bind' );
 
 // Same as the above but automatically stops after two seconds
-$( 'input[type=submit]' ).ladda( 'bind', { timeout: 2000 } );
+$( 'button[type=submit]' ).ladda( 'bind', { timeout: 2000 } );
 ```
 
 If you want JavaScript control over your buttons you can use the following approach:
@@ -138,4 +139,4 @@ The project is tested in Chrome and Firefox. It Should Work™ in the current st
 
 MIT licensed
 
-Copyright (C) 2015 Hakim El Hattab, http://hakim.se
+Copyright (C) 2016 Hakim El Hattab, http://hakim.se
