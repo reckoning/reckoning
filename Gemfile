@@ -15,6 +15,7 @@ gem 'valvat'
 gem 'sidekiq'
 # for sidekiq web
 gem 'sinatra', require: nil, github: 'sinatra/sinatra'
+gem 'rack-protection', github: 'sinatra/rack-protection'
 
 gem 'haml'
 gem 'haml-rails'
