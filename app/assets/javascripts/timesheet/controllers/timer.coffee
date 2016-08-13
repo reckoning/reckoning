@@ -37,7 +37,7 @@ angular.module 'Timesheet'
         controller: 'TimerModalController'
         resolve:
           timer: -> modalTimer
-          projects: -> Project.all(sort: "last_used")
+          projects: -> Project.all(sort: "used")
           excludedTaskUuids: -> []
           withoutProjectSelect: -> false
       .result.then (result) ->

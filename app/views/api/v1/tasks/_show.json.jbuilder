@@ -8,7 +8,7 @@ json.project_uuid task.project_id
 json.project_name task.project_name
 json.project_customer_name task.project_customer_name
 json.timers task.timers.where(user_id: current_user.id).order("created_at ASC") do |timer|
-  json.partial! "api/v1/projects/timers", timer: timer
+  json.partial! "api/v1/tasks/timers", timer: timer
 end
 json.created_at task.created_at
 json.updated_at task.updated_at

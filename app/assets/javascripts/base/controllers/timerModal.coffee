@@ -25,6 +25,8 @@ angular.module 'Reckoning'
         $scope.tasks = project.tasks
 
     $scope.saveTimer = (timer, start) ->
+      return if timer.invoiced || !timer.taskUuid
+
       if start
         timer.startedAt = moment()
         timer.startTime = timer.startedAt
