@@ -11,22 +11,28 @@
     "Giovanni Pellerano (https://github.com/evilaliv3)",
     "Rahma Sghaier (https://twitter.com/sghaierrahma)",
     "Evgenios Kastanias (https://github.com/evgenios)",
-    "Oleksii Mylotskyi (https://github.com/spalax)"
+    "Oleksii Mylotskyi (https://github.com/spalax)",
+    "Matthew Brandly (https://github.com/brandly)",
+    "Patrik Simek (https://github.com/patriksimek)",
+    "Toni Helminen (https://github.com/tonihelminen)",
+    "Vidmantas Drasutis (https://github.com/drasius2)",
+    "Manh Tuan (https://github.com/J2TeaM)",
+    "Leonard Lee (https://github.com/sheeeng)",
+    "Jesse Jackson (https://github.com/jsejcksn)"
   ],
-  "version": "3.3.0",
+  "version": "3.9.1",
   "description": "Convert millisecond durations to English and many other languages.",
   "homepage": "https://github.com/EvanHahn/HumanizeDuration.js",
   "main": "humanize-duration.js",
   "scripts": {
-    "test": "mocha",
-    "hint": "jshint humanize-duration.js"
+    "pretest": "standard",
+    "test": "mocha"
   },
   "devDependencies": {
-    "coffee-script": "^1.9.2",
-    "csv-parse": "^0.1.1",
-    "jshint": "^2.7.0",
-    "mocha": "^2.2.4",
-    "ms": "^0.7.1"
+    "csv-parse": "^1.1.1",
+    "mocha": "^2.5.3",
+    "ms": "^0.7.1",
+    "standard": "^7.1.2"
   },
   "keywords": [
     "humanize",
@@ -44,5 +50,13 @@
     "url": "git://github.com/EvanHahn/HumanizeDuration.js.git"
   },
   "bugs": "https://github.com/EvanHahn/HumanizeDuration.js/issues",
-  "license": "Unlicense"
+  "license": "Unlicense",
+  "standard": {
+    "globals": [
+      "define",
+      "describe",
+      "it",
+      "before"
+    ]
+  }
 }

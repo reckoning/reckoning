@@ -11,9 +11,16 @@
     "Giovanni Pellerano (https://github.com/evilaliv3)",
     "Rahma Sghaier (https://twitter.com/sghaierrahma)",
     "Evgenios Kastanias (https://github.com/evgenios)",
-    "Oleksii Mylotskyi (https://github.com/spalax)"
+    "Oleksii Mylotskyi (https://github.com/spalax)",
+    "Matthew Brandly (https://github.com/brandly)",
+    "Patrik Simek (https://github.com/patriksimek)",
+    "Toni Helminen (https://github.com/tonihelminen)",
+    "Vidmantas Drasutis (https://github.com/drasius2)",
+    "Manh Tuan (https://github.com/J2TeaM)",
+    "Leonard Lee (https://github.com/sheeeng)",
+    "Jesse Jackson (https://github.com/jsejcksn)"
   ],
-  "version": "3.3.0",
+  "version": "3.9.1",
   "description": "Convert millisecond durations to English and many other languages.",
   "main": "humanize-duration.js",
   "homepage": "https://github.com/EvanHahn/HumanizeDuration.js",
@@ -40,13 +47,13 @@
     "type": "git",
     "url": "git://github.com/EvanHahn/HumanizeDuration.js.git"
   },
-  "_release": "3.3.0",
+  "_release": "3.9.1",
   "_resolution": {
     "type": "version",
-    "tag": "v3.3.0",
-    "commit": "17a5b828a20e35b29f4849bd2142e5556aab6cc5"
+    "tag": "v3.9.1",
+    "commit": "7c1b0ea37855b0a80ec26549fba040aac8340e92"
   },
-  "_source": "git://github.com/EvanHahn/HumanizeDuration.js.git",
-  "_target": "~3.3.0",
+  "_source": "https://github.com/EvanHahn/HumanizeDuration.js.git",
+  "_target": "~3.9.1",
   "_originalSource": "humanize-duration"
 }

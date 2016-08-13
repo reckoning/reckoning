@@ -10,7 +10,7 @@
 
 /*!
  @package noty - jQuery Notification Plugin
- @version version: 2.3.6
+ @version version: 2.3.8
  @contributors https://github.com/needim/noty/graphs/contributors
 
  @documentation Examples and Documentation - http://needim.github.com/noty/
@@ -40,15 +40,10 @@
             if($.noty.themes[this.options.theme])
                 this.options.theme = $.noty.themes[this.options.theme];
             else
-                options.themeClassName = this.options.theme;
-
-            delete options.layout;
-            delete options.theme;
+                this.options.themeClassName = this.options.theme;
 
             this.options = $.extend({}, this.options, this.options.layout.options);
             this.options.id = 'noty_' + (new Date().getTime() * Math.floor(Math.random() * 1000000));
-
-            this.options = $.extend({}, this.options, options);
 
             // Build the noty dom initial structure
             this._build();
@@ -150,10 +145,19 @@
 
             if (typeof self.options.animation.open == 'string') {
                 self.$bar.css('height', self.$bar.innerHeight());
+                self.$bar.on('click',function(e){
+                    self.wasClicked = true;
+                });
                 self.$bar.show().addClass(self.options.animation.open).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
                     if(self.options.callback.afterShow) self.options.callback.afterShow.apply(self);
                     self.showing = false;
                     self.shown = true;
+                    if(self.hasOwnProperty('wasClicked')){
+                        self.$bar.off('click',function(e){
+                            self.wasClicked = true;
+                        });
+                        self.close();
+                    }
                 });
 
             } else {
@@ -416,7 +420,7 @@
             if(notification.options.theme.modal && notification.options.theme.modal.css)
                 modal.css(notification.options.theme.modal.css);
 
-            modal.prependTo($('body')).fadeIn(self.options.animation.fadeSpeed);
+            modal.prependTo($('body')).fadeIn(notification.options.animation.fadeSpeed);
 
             if($.inArray('backdrop', notification.options.closeWith) > -1)
                 modal.on('click', function(e) {
