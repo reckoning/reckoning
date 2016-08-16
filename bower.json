@@ -23,7 +23,7 @@
     "twix": "~1.1.1",
     "nprogress": "~0.2.0",
     "fastclick": "~1.0.6",
-    "awesome-bootstrap-checkbox": "~1.0.0-alpha.4",
+    "awesome-bootstrap-checkbox": "~0.3.7",
     "angular": "~1.5.8",
     "underscore": "~1.8.2",
     "angular-sanitize": "~1.5.8",
