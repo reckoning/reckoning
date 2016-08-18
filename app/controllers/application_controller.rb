@@ -74,7 +74,7 @@ class ApplicationController < ActionController::Base
 
   private def stored_params(action, controller = params[:controller])
     key = (controller.to_s + "_" + action.to_s).to_sym
-    (session[key] || {}).to_unsafe_h
+    (session[key] || ActionController::Parameters.new).to_unsafe_h
   end
   helper_method :stored_params
 
