@@ -133,8 +133,7 @@ window.displayError = function(text, timeout) {
   displayNoty(text, timeout, 'error');
 };
 
-$(function() {
-
+document.addEventListener("turbolinks:load", function() {
   $("[data-notyConfirm]").click(function(ev) {
     displayConfirm(ev, $(this));
     return false;
