@@ -6,8 +6,12 @@
 
     .row
       .col-xs-12.col-md-5
-        h1= I18n.t(:"headlines.expense.index")
-
+        h1
+          = I18n.t(:"headlines.expense.index")
+          '
+          small
+            = I18n.t(:"headlines.invoice.sum", sum: number_to_currency(@expenses_sum))
+            
       .col-xs-12.col-md-7
         .btn-group.btn-group-justified-responsive.pull-right.resource-nav
           a.btn.btn-primary href=new_expense_path
@@ -32,12 +36,6 @@
         = render "shared/tables/filter", resource: "expense", name: "year", filters: current_expenses_years
         '
         = render "shared/tables/filter", resource: "expense", name: "type", filters: Expense::VALID_TYPES, translateable: true
-        '
-        span.expenses-sum
-          = I18n.t("labels.defaults.sum")
-          = ":"
-          '
-          strong= number_to_currency(@expenses_sum)
       .col-xs-12.col-md-6
         .pull-right
           = paginate @expenses
