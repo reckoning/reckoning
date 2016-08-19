@@ -13,7 +13,8 @@ de:
     sign_up: "Noch nicht registriert?"
   nav:
     header:
-      home: "Rechnungen"
+      home: "Dashboard"
+      invoices: "Rechnungen"
       customers: "Kunden"
       projects: "Projekte"
       timesheet: "Zeiten"

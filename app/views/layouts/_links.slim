@@ -1,6 +1,8 @@
 ul.nav.navbar-nav
+  li class=active_nav?('home')
+    = link_to I18n.t(:"nav.header.home"), root_path
   li class=active_nav?('invoices')
-    = link_to I18n.t(:"nav.header.home"), invoices_path
+    = link_to I18n.t(:"nav.header.invoices"), invoices_path
   li class=active_nav?('projects')
     = link_to I18n.t(:"nav.header.projects"), projects_path
   li class=active_nav?('timesheet')
