@@ -1,0 +1,35 @@
+= form_for vessel do |form|
+  .row
+    .col-xs-12.col-md-6
+      .form-group.selectize class=form_error?(vessel, :manufacturer)
+        = form.select :manufacturer, manufacturers.collect {|m| [ m ] }, {include_blank: ""}, {placeholder: I18n.t(:"helpers.prompt.vessel.manufacturer"), class: "js-manufacturer-selectize"}
+        = form_errors vessel, :manufacturer
+    .col-xs-12.col-md-6
+      .form-group class=form_error?(vessel, :vessel_type)
+        = form.text_field :vessel_type, placeholder: I18n.t(:"helpers.placeholder.vessel.type"), class: 'form-control'
+        = form_errors vessel, :vessel_type
+  .row
+    .col-xs-12.col-md-6
+      .form-group class=form_error?(vessel, :initial_milage)
+        .input-group
+          = form.label :initial_milage, class: "input-group-addon"
+          = form.number_field :initial_milage, step: "0.01", placeholder: I18n.t(:"helpers.placeholder.vessel.initial_milage"), class: 'form-control'
+          span.input-group-addon
+            = I18n.t("labels.defaults.km")
+        = form_errors vessel, :initial_milage
+    .col-xs-12.col-md-6
+      .form-group class=form_error?(vessel, :license_plate)
+        .input-group
+          = form.label :license_plate, class: "input-group-addon"
+          = form.text_field :license_plate, placeholder: I18n.t(:"helpers.placeholder.vessel.license_plate"), class: 'form-control'
+        = form_errors vessel, :license_plate
+  
+  br
+  hr
+
+  .btn-group-responsive
+    button.btn.btn-primary.btn-lg type="submit"
+      = I18n.t(:"actions.save")
+    '
+    a.btn.btn-default href=logbook_path data-notyConfirm=I18n.t(:"messages.confirm.form.cancel")
+      = I18n.t(:"actions.cancel")

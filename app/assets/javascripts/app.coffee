@@ -67,6 +67,11 @@ document.addEventListener "turbolinks:load", ->
         error: ->
           callback()
 
+  $('select.js-manufacturer-selectize').selectize
+    render:
+      option_create: selectizeCreateTemplate
+    create: true
+
   $('[data-toggle=tooltip]').tooltip()
 
   I18nHelper.init()

@@ -83,6 +83,9 @@ de:
         receipt_missing: "Kein Beleg hinzugefügt"
         private_use_percent: "Private Nutzung?"
         remove_receipt: "Beleg entfernen?"
+      vessel:
+        license_plate: "Kennzeichen"
+        initial_milage: "Start Laufleistung"
       setting:
         base:
           registration: "Registrierung aktiv?"
@@ -133,6 +136,10 @@ de:
         invoice_email: "Empfänger"
         default_from: "Absender"
         weekly_hours: "Wochenstunden"
+      vessel:
+        manufacturer: "Hersteller"
+        type: "Typ"
+        license_plate: "z.B. KI-RK-2233"
     prompt:
       country: "Bitte wähle ein Land"
       user:
@@ -148,6 +155,8 @@ de:
         plan: "Bitte wähle einen Plan"
       expense:
         expense_type: "Bitte wähle einen Typ"
+      vessel:
+        manufacturer: "Bitte wähle einen Hersteller"
     help:
       customer:
         default_from: "Absender für diesen Kunden festlegen, alternativ kann global in Ihrem Benutzerkonto ein Absender definiert werden."

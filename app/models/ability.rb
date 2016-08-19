@@ -45,6 +45,10 @@ class Ability
       user.account.feature_logbook?
     end
 
+    can :manage, Vessel do |vessel|
+      vessel.account_id == user.account_id && user.account.feature_logbook?
+    end
+
     setup_admin_abilities if user.admin?
   end
 

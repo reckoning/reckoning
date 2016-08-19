@@ -2,6 +2,7 @@ de:
   labels:
     defaults:
       na: "N/V"
+      km: "Km"
       actions: "Aktionen"
       value: "Betrag"
       date: "Monat/Jahr"

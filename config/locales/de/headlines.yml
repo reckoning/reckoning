@@ -48,6 +48,10 @@ de:
       edit: "Ausgabe bearbeiten"
       import: "CSV-Import"
 
+    vessel:
+      new: "Neues Fahrzeug"
+      edit: "Fahrzeug bearbeiten"
+
     backend:
       user:
         index: "Benutzer"

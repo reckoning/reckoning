@@ -109,6 +109,9 @@ de:
         new: "Neue Ausgabe"
         edit: "Ausgabe bearbeiten"
         import: "CSV-Import für Ausgaben"
+      vessel:
+        new: "Neues Fahrzeug"
+        edit: "Fahrzeug bearbeiten"
       account:
         edit: "Account bearbeiten"
       user:

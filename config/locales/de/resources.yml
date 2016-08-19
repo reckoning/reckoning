@@ -5,6 +5,7 @@ de:
     customer: "Kunde"
     account: "Account"
     expense: "Ausgabe"
+    vessel: "Fahrzeug"
     messages:
       create:
         success: "%{resource} erfolgreich erstellt."
