@@ -21,6 +21,7 @@ de:
         default_from: "Absender Für Rechnungs E-Mails"
         signature: "Signatur"
         feature_expenses: "Ausgaben Feature aktiviert?"
+        feature_logbook: "Fahrtenbuch Feature aktiviert?"
       project:
         rate: "Stundensatz"
         round_up: "Zeiten aufrunden?"

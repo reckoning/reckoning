@@ -56,7 +56,7 @@ module Backend
     end
 
     private def account_params
-      params.require(:account).permit(:plan, :name, :feature_expenses, users_attributes: [:email])
+      params.require(:account).permit(:plan, :name, :feature_expenses, :feature_logbook, users_attributes: [:email])
     end
 
     private def account

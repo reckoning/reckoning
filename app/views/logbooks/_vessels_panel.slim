@@ -1,0 +1,19 @@
+.panel.panel-default#vessels-panel
+  .panel-heading
+    .panel-title
+      strong
+        = I18n.t(:"logbook.panels.vessels")
+      
+      a.pull-right href=new_vessel_path title=I18n.t("actions.add_vessel")
+        i.fa.fa-plus
+  .list-group
+    - vessels.each do |vessel|
+      a.list-group-item.vessel href=vessel_path(vessel)
+        span.label.label-primary
+          = vessel.license_plate
+        span.pull-right
+          i.fa.fa-location-arrow title=vessel.last_location
+        hr
+        = vessel.name
+        strong.pull-right
+          = number_to_currency(vessel.milage, unit: "Km", precision: 1)

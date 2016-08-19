@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160706182501) do
+ActiveRecord::Schema.define(version: 20160818193048) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
   enable_extension "uuid-ossp"
 
-  create_table "accounts", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+  create_table "accounts", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "name"
     t.string   "subdomain"
     t.string   "plan"
@@ -35,15 +34,16 @@ ActiveRecord::Schema.define(version: 20160706182501) do
     t.string   "stripe_token"
     t.string   "vat_id"
     t.boolean  "feature_expenses",    default: false
+    t.boolean  "feature_logbook",     default: false
   end
 
-  create_table "contacts", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+  create_table "contacts", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "email"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "customers", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+  create_table "customers", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "address_id"
@@ -58,30 +58,30 @@ ActiveRecord::Schema.define(version: 20160706182501) do
     t.integer  "weekly_hours"
   end
 
-  create_table "expenses", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
-    t.string   "expense_type",                                                null: false
-    t.decimal  "value",                precision: 10, scale: 2, default: 0.0, null: false
+  create_table "expenses", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.string   "expense_type",                                                  null: false
+    t.decimal  "value",                precision: 10, scale: 2, default: "0.0", null: false
     t.string   "description"
-    t.date     "date",                                                        null: false
-    t.uuid     "account_id",                                                  null: false
+    t.date     "date",                                                          null: false
+    t.uuid     "account_id",                                                    null: false
     t.string   "receipt"
-    t.datetime "created_at",                                                  null: false
-    t.datetime "updated_at",                                                  null: false
+    t.datetime "created_at",                                                    null: false
+    t.datetime "updated_at",                                                    null: false
     t.string   "seller"
-    t.integer  "private_use_percent",                           default: 0,   null: false
-    t.decimal  "usable_value",         precision: 10, scale: 2, default: 0.0, null: false
+    t.integer  "private_use_percent",                           default: 0,     null: false
+    t.decimal  "usable_value",         precision: 10, scale: 2, default: "0.0", null: false
     t.string   "receipt_id"
     t.string   "receipt_filename"
     t.integer  "receipt_size"
     t.string   "receipt_content_type"
   end
 
-  create_table "invoices", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+  create_table "invoices", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.date     "date"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "value",                        precision: 10, scale: 2, default: 0.0,   null: false
-    t.decimal  "rate",                         precision: 10, scale: 2, default: 0.0,   null: false
+    t.decimal  "value",                        precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal  "rate",                         precision: 10, scale: 2, default: "0.0", null: false
     t.string   "workflow_state",   limit: 255
     t.datetime "pay_date"
     t.integer  "ref"
@@ -94,7 +94,7 @@ ActiveRecord::Schema.define(version: 20160706182501) do
     t.uuid     "account_id",                                                            null: false
   end
 
-  create_table "plans", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+  create_table "plans", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "code"
     t.decimal  "base_price"
     t.integer  "quantity"
@@ -106,7 +106,7 @@ ActiveRecord::Schema.define(version: 20160706182501) do
     t.datetime "updated_at",     null: false
   end
 
-  create_table "positions", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+  create_table "positions", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.decimal  "hours",       precision: 10, scale: 2
     t.text     "description"
     t.datetime "created_at"
@@ -116,22 +116,22 @@ ActiveRecord::Schema.define(version: 20160706182501) do
     t.uuid     "invoice_id"
   end
 
-  create_table "projects", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+  create_table "projects", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "name",                limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "rate",                            precision: 10, scale: 2, default: 0.0,      null: false
-    t.decimal  "budget",                          precision: 10, scale: 2, default: 0.0,      null: false
+    t.decimal  "rate",                            precision: 10, scale: 2, default: "0.0",    null: false
+    t.decimal  "budget",                          precision: 10, scale: 2, default: "0.0",    null: false
     t.uuid     "customer_id"
     t.boolean  "budget_on_dashboard",                                      default: true
     t.string   "workflow_state",                                           default: "active", null: false
-    t.decimal  "budget_hours",                    precision: 10, scale: 2, default: 0.0,      null: false
-    t.decimal  "round_up",                                                 default: 10.0,     null: false
+    t.decimal  "budget_hours",                    precision: 10, scale: 2, default: "0.0",    null: false
+    t.decimal  "round_up",                                                 default: "10.0",   null: false
     t.datetime "start_date"
     t.datetime "end_date"
   end
 
-  create_table "tasks", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+  create_table "tasks", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "name",       limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -139,7 +139,7 @@ ActiveRecord::Schema.define(version: 20160706182501) do
     t.boolean  "billable",               default: true, null: false
   end
 
-  create_table "timers", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+  create_table "timers", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.date     "date"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -151,7 +151,15 @@ ActiveRecord::Schema.define(version: 20160706182501) do
     t.decimal  "value",       precision: 30, scale: 18
   end
 
-  create_table "users", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+  create_table "tours", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "account_id",  null: false
+    t.text     "description"
+    t.uuid     "vessel_id",   null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "email",                     limit: 255, default: "",    null: false
     t.string   "encrypted_password",        limit: 255, default: "",    null: false
     t.string   "reset_password_token",      limit: 255
@@ -188,12 +196,38 @@ ActiveRecord::Schema.define(version: 20160706182501) do
     t.boolean  "created_via_admin",                     default: false
     t.integer  "consumed_timestep"
     t.string   "layout",                                default: "top"
+    t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
+    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+    t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
   end
 
-  add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
-  add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-  add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
+  create_table "vessels", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.string   "manufacturer",                                            null: false
+    t.string   "vessel_type",                                             null: false
+    t.decimal  "buying_price",   precision: 10, scale: 2, default: "0.0", null: false
+    t.date     "buying_date"
+    t.decimal  "initial_milage", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal  "milage",         precision: 10, scale: 2, default: "0.0", null: false
+    t.string   "image_id"
+    t.string   "license_plate",                                           null: false
+    t.uuid     "account_id",                                              null: false
+    t.datetime "created_at",                                              null: false
+    t.datetime "updated_at",                                              null: false
+  end
+
+  create_table "waypoints", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "tour_id",                                              null: false
+    t.uuid     "driver_id",                                            null: false
+    t.decimal  "milage",      precision: 10, scale: 2, default: "0.0", null: false
+    t.float    "latitude"
+    t.float    "longitude"
+    t.datetime "time",                                                 null: false
+    t.text     "description"
+    t.datetime "created_at",                                           null: false
+    t.datetime "updated_at",                                           null: false
+    t.string   "location"
+  end
 
 end

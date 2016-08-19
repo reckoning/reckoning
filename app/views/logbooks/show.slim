@@ -1,0 +1,23 @@
+- content_for :title do
+  = I18n.t(:"meta.title.logbook")
+.row#logbook
+  .col-xs-12.col-md-12
+    .row
+      .col-xs-12.col-md-8
+        h1
+          = I18n.t(:"headlines.logbook")
+      .col-xs-12.col-md-4
+        .btn-group.btn-group-justified-responsive.pull-right.resource-nav
+          a.btn.btn-primary href=new_tour_path
+            i.fa.fa-plus
+            '
+            = I18n.t(:"nav.subnav.new_tour")
+    .row
+      .col-xs-12.col-md-4
+        = render "vessels_panel", vessels: @vessels
+        
+      .col-xs-12.col-md-8
+        = render "tours_panel", tours: @tours
+        
+        - if @tours.blank?
+          = render "shared/blank"

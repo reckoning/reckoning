@@ -41,6 +41,10 @@ class Ability
       user.account.feature_expenses?
     end
 
+    can :read, :logbook do
+      user.account.feature_logbook?
+    end
+
     setup_admin_abilities if user.admin?
   end
 

@@ -13,6 +13,9 @@ de:
     privacy: "Datenschutz"
     not_found: "Seite nicht vorhanden"
     server_error: "Server Fehler"
+
+    logbook: "Fahrtenbuch"
+
     welcome:
       base: "Rechnungen schreiben einfach gemacht."
       screenshots: "Screenshots"

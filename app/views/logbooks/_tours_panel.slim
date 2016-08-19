@@ -1,0 +1,11 @@
+.panel.panel-default
+  .list-group.tours-list
+    - tours.each do |tour|
+      .list-group-item
+        a href=tour_path(tour)
+          span.label.label-primary
+            = tour.vessel.license_plate
+          '
+          = I18n.l(tour.created_at)
+        a.btn.btn-primary.pull-right.tours-list-button href=new_tour_waypoint_path(tour)
+          |Neuer Wegpunkt

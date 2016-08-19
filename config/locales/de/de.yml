@@ -33,6 +33,7 @@ de:
       sign_up: "Registrieren"
       contacts: "Kontaktanfragen"
       expenses: "Ausgaben"
+      logbook: "Fahrtenbuch"
     footer:
       impressum: Impressum
       privacy: Datenschutz
@@ -45,6 +46,7 @@ de:
       new_customer: "Neuer Kunde"
       new_project: "Neues Projekt"
       new_project_for_customer: "Neues Projekt für %{customer}"
+      new_tour: "Tour starten"
       new_user: "Neuer Benutzer"
       new_account: "Neuer Account"
       update_password: "Passwort ändern"
@@ -83,6 +85,7 @@ de:
     title:
       default: "Reckoning.io"
       dashboard: "Dashboard"
+      logbook: "Fahrtenbuch"
       devise:
         otp: "Zwei-Faktor Autorisierung"
       timesheet:

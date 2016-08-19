@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  id: "90dfbd1f-aa6b-463c-a0ca-56d8ea204c01"
+  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+  description: MyText
+
+two:
+  id: "90dfbd1f-aa6b-463c-a0ca-56d8ea204c02"
+  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+  description: MyText

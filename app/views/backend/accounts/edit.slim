@@ -18,10 +18,15 @@
           = form.text_field :name, placeholder: I18n.t(:"helpers.placeholder.account.name"), class: 'form-control'
           small
             = form_errors account, :name
-        .col-xs-12.col-md-6.form-group
+        .col-xs-12
           .checkbox
             = form.check_box :feature_expenses
             label for="account_feature_expenses"
               = I18n.t(:"helpers.label.account.feature_expenses")
+        .col-xs-12
+          .checkbox
+            = form.check_box :feature_logbook
+            label for="account_feature_logbook"
+              = I18n.t(:"helpers.label.account.feature_logbook")
 
       = render "shared/forms/submit", path: backend_accounts_path

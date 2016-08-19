@@ -99,6 +99,12 @@ Rails.application.routes.draw do
   resources :expenses, except: [:show]
   resources :expense_imports, only: [:new, :create]
 
+  resource :logbook, only: [:show]
+  resources :vessels, except: [:index, :edit, :update, :destroy]
+  resources :tours, except: [:index, :edit, :update, :destroy] do
+    resources :waypoints, only: [:new, :create]
+  end
+
   resource :dropbox, controller: "dropbox", only: [:show] do
     collection do
       get :start
