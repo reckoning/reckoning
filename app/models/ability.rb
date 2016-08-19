@@ -53,6 +53,10 @@ class Ability
       tour.account_id == user.account_id && user.account.feature_logbook?
     end
 
+    can :manage, Waypoint do |waypoint|
+      waypoint.tour.account_id == user.account_id && user.account.feature_logbook?
+    end
+
     setup_admin_abilities if user.admin?
   end
 

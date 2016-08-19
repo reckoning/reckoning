@@ -1,0 +1,56 @@
+- content_for :js_includes do
+  = javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{Rails.application.secrets[:google_api_key]}"
+- content_for :title do
+  = I18n.t(:"meta.title.waypoint.new")
+
+.row#new-tour
+  .col-xs-12.col-md-12
+
+    .row
+      .col-xs-12.col-md-8
+        h1
+          = I18n.t(:"headlines.waypoint.new")
+
+      .col-xs-12.col-md-4
+        .btn-group.btn-group-justified-responsive.pull-right.resource-nav
+          = link_to I18n.t(:"nav.subnav.back"), :back, class: "btn btn-default"
+
+    = form_for [:tour, waypoint] do |form|
+      .row
+        .col-xs-12.col-md-6
+          .form-group class="#{form_error?(waypoint, :location)}#{form_error?(waypoint, :latitude)}#{form_error?(waypoint, :longitude)}"
+            .input-group
+              span.input-group-btn
+                a.btn.btn-primary.ladda-button href="" data-geolocation=true data-style="expand-right" data-form="form#new_waypoint"
+                  i.fa.fa-location-arrow
+              = form.text_field :location, class: "form-control", disabled: true, id: "waypoint-place"
+            = form_errors waypoint, :latitude
+            = form_errors waypoint, :longitude
+            = form_errors waypoint, :location
+          = form.hidden_field :location
+          = form.hidden_field :latitude
+          = form.hidden_field :longitude
+      .row
+        .col-xs-12.col-md-6
+          .form-group.selectize class=form_error?(waypoint, :driver_id)
+            = form.collection_select :driver_id, drivers, :id, :name, {include_blank: ""}, {placeholder: I18n.t(:"helpers.prompt.waypoint.driver_id"), class: "js-selectize"}
+            = form_errors waypoint, :driver_id
+      .row
+        .col-xs-12.col-md-6
+          .form-group class=form_error?(waypoint, :milage)
+            .input-group
+              = form.label :milage, class: "input-group-addon"
+              = form.number_field :milage, class: 'form-control'
+              span.input-group-addon
+                = I18n.t("labels.defaults.km")
+            = form_errors waypoint, :milage
+      
+      br
+      hr
+
+      .btn-group-responsive
+        button.btn.btn-primary.btn-lg type="submit"
+          = I18n.t(:"actions.save")
+        '
+        a.btn.btn-default href=logbook_path data-notyConfirm=I18n.t(:"messages.confirm.form.cancel")
+          = I18n.t(:"actions.cancel")
