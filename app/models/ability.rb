@@ -49,6 +49,10 @@ class Ability
       vessel.account_id == user.account_id && user.account.feature_logbook?
     end
 
+    can :manage, Tour do |tour|
+      tour.account_id == user.account_id && user.account.feature_logbook?
+    end
+
     setup_admin_abilities if user.admin?
   end
 

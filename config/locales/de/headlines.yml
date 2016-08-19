@@ -48,6 +48,10 @@ de:
       edit: "Ausgabe bearbeiten"
       import: "CSV-Import"
 
+    tour:
+      new: "Tour starten"
+      show: "Tour vom %{date}"
+
     vessel:
       new: "Neues Fahrzeug"
       edit: "Fahrzeug bearbeiten"

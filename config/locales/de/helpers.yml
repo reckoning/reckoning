@@ -86,6 +86,8 @@ de:
       vessel:
         license_plate: "Kennzeichen"
         initial_milage: "Start Laufleistung"
+      waypoint:
+        milage: "Aktuelle Laufleistung"
       setting:
         base:
           registration: "Registrierung aktiv?"
@@ -140,6 +142,8 @@ de:
         manufacturer: "Hersteller"
         type: "Typ"
         license_plate: "z.B. KI-RK-2233"
+      tour:
+        description: "Beschreibung"
     prompt:
       country: "Bitte wähle ein Land"
       user:
@@ -157,6 +161,10 @@ de:
         expense_type: "Bitte wähle einen Typ"
       vessel:
         manufacturer: "Bitte wähle einen Hersteller"
+      tour:
+        vessel_id: "Bitte wähle ein Fahrzeug"
+      waypoint:
+        driver_id: "Bitte wähle einen Fahrer/In"
     help:
       customer:
         default_from: "Absender für diesen Kunden festlegen, alternativ kann global in Ihrem Benutzerkonto ein Absender definiert werden."

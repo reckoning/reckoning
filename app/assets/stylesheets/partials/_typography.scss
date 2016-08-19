@@ -4,6 +4,11 @@ h1, .navbar-brand, h2 {
 
 h1, h2, h3, h4 {
   margin-top: 0;
+  small {
+    .label {
+      padding: .4em .6em .2em;
+    }
+  }
 }
 
 address {

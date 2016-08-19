@@ -39,6 +39,7 @@
 #= require blank
 #= require timesheet
 #= require timersCalendar
+#= require geoLocation
 
 $(document).on 'show.bs.collapse', '.navbar-collapse', ->
   $('.navbar-collapse.in').not(this).collapse('hide')
