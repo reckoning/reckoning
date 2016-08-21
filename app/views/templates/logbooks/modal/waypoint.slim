@@ -18,6 +18,9 @@
             label.input-group-addon for="waypoint-location"
                = I18n.t(:"helpers.label.waypoint.location")
             input.form-control#waypoint-location type="text" ng-model="waypoint.location" disabled="disabled"  
+            span.input-group-btn
+              button.btn.btn-primary.ladda-button type="button" ng-click="getPosition($event)"
+                i.fa.fa-location-arrow
     .row
       .col-xs-12.col-md-6
         .form-group

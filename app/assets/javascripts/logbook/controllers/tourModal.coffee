@@ -20,17 +20,27 @@ angular.module 'Logbook'
       $scope.vessels = vessels
       $scope.drivers = drivers
       $scope.minimumMilage = 0
+      $scope.laddatButton = null
 
       if !$scope.waypoint.latitude || !$scope.waypoint.longitude
-        console.log('fetching current position...')
-        $geolocation.getCurrentPosition({
-          timeout: 60000
-        }).then (position) ->
-          console.log('current position fetched!')
-          updatePosition(position.coords.latitude, position.coords.longitude)
-        , (error) ->
-          console.log(error)
-          displayError(error.message)
+        $scope.getPosition()
+
+    $scope.getPosition = ($event) ->
+      if $event
+        console.log($($event.currentTarget)[0])
+        $scope.laddaButton = Ladda.create($($event.target)[0])
+        $scope.laddaButton.start()
+      console.log('fetching current position...')
+      $geolocation.getCurrentPosition({
+        timeout: 60000
+      }).then (position) ->
+        console.log('current position fetched!')
+        updatePosition(position.coords.latitude, position.coords.longitude)
+        $scope.laddaButton.stop() if $scope.laddaButton
+      , (response) ->
+        console.log(response)
+        displayError(response.error.message)
+        $scope.laddaButton.stop() if $scope.laddaButton
 
     updatePosition = (lat, lng) ->
       $scope.waypoint.latitude = lat
