@@ -123,6 +123,7 @@ de:
           edit_tour: "Tour bearbeiten"
           add_waypoint: "Wegpunkt hinzufügen"
           edit_waypoint: "Wegpunkt bearbeiten"
+          current_position: "Aktuelle Position"
         positions: "Position aus Zeiten erstellen"
 
     panels:

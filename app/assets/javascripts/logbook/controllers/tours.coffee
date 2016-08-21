@@ -19,7 +19,9 @@ angular.module 'Logbook'
     $scope.$on 'tourStarted', ->
       $scope.getTours()
 
-    $scope.openModal = (tour) ->
+    $scope.openModal = ($event, tour) ->
+      $event.preventDefault()
+      $event.stopPropagation()
       waypoint = {
         tourId: tour.id
         milage: tour.vesselMilage

@@ -18,7 +18,9 @@ angular.module 'Logbook'
       if $scope.datepickerSelect && $scope.datepickerSelect isnt $scope.date
         $location.path('/day/' + $scope.datepickerSelect)
 
-    $scope.openModal = ->
+    $scope.openModal = ($event) ->
+      $event.preventDefault()
+      $event.stopPropagation()
       $uibModal.open
         templateUrl: Routes.tour_modal_logbooks_template_path()
         controller: 'TourModalController'

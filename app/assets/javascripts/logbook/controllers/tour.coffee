@@ -60,7 +60,9 @@ angular.module 'Logbook'
         Tour.destroy($scope.tour).then ->
           $location.path("/")
 
-    $scope.openModal = ->
+    $scope.openModal = ($event) ->
+      $event.preventDefault()
+      $event.stopPropagation()
       $uibModal.open
         templateUrl: Routes.tour_modal_logbooks_template_path()
         controller: 'TourModalController'
@@ -71,7 +73,9 @@ angular.module 'Logbook'
       .result.then ->
         $scope.getTour()
 
-    $scope.openWaypointModal = (waypoint) ->
+    $scope.openWaypointModal = ($event, waypoint) ->
+      $event.preventDefault()
+      $event.stopPropagation()
       waypoint ?= {
         tourId: $scope.tour.id
         milage: $scope.tour.vesselMilage

@@ -15,7 +15,9 @@ angular.module 'Logbook'
 
     $scope.getVessels()
 
-    $scope.openModal = (vessel) ->
+    $scope.openModal = ($event, vessel) ->
+      $event.preventDefault()
+      $event.stopPropagation()
       $uibModal.open
         templateUrl: Routes.vessel_modal_logbooks_template_path()
         controller: 'VesselModalController'
@@ -24,5 +26,15 @@ angular.module 'Logbook'
           manufacturers: -> Manufacturer.all()
       .result.then ->
         $scope.getVessels()
+
+    $scope.openMap = ($event, vessel) ->
+      $event.preventDefault()
+      $event.stopPropagation()
+      $uibModal.open
+        templateUrl: Routes.map_modal_logbooks_template_path()
+        controller: 'MapModalController'
+        resolve:
+          location: -> vessel.lastLocation
+          name: -> vessel.fullName
 
 ]
