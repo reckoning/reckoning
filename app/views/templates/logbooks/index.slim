@@ -1,14 +1,21 @@
 .col-xs-12.col-md-12
   .row
-    .col-xs-12.col-md-8
+    .col-xs-12.col-md-7
       h1
         = I18n.t(:"headlines.logbook")
-    .col-xs-12.col-md-4
-      .btn-group.btn-group-justified-responsive.pull-right.resource-nav
-        a.btn.btn-primary href="" ng-click="openModal()"
-          i.fa.fa-plus
-          '
-          = I18n.t(:"nav.subnav.new_tour")
+        '
+        .visible-xs-block
+        small ng-bind="day()"
+    .col-xs-12.col-md-5
+      .pull-right.resource-nav
+        .btn-group.btn-group-justified-responsive.resource-nav
+          a.btn.btn-default href="#/day/{{prevDay()}}"
+            i.fa.fa-chevron-left
+          datepicker ng-model="datepickerSelect"
+          a.btn.btn-default ng-click="navigateToToday()"
+            = I18n.t('actions.today')
+          a.btn.btn-default href="#/day/{{nextDay()}}"
+            i.fa.fa-chevron-right
   .row      
     .col-xs-12.col-md-8 ng-controller="ToursController as toursCtrl"
       .tour-panel.panel.panel-default.animate ng-repeat="tour in tours"
@@ -22,9 +29,14 @@
       .animate ng-cloak=true ng-if="toursLoaded && !tours.length"
         .row
           = render file: 'templates/blank'
-          
-    .col-xs-12.col-md-4 ng-controller="VesselsController as vesselsCtrl"
-      .panel.panel-default#vessels-panel
+
+    .col-xs-12.col-md-4.text-right
+      .btn-group-responsive.resource-nav
+        button.btn.btn-lg.btn-primary type="button" ng-click="openModal()"
+          i.fa.fa-plus
+          '
+          = I18n.t(:"nav.subnav.new_tour")
+      .panel.panel-default#vessels-panel.text-left ng-controller="VesselsController as vesselsCtrl"
         .panel-heading
           .panel-title
             strong
