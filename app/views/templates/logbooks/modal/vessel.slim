@@ -46,7 +46,7 @@
           .input-group
             label.input-group-addon for="buying-date"
               = I18n.t(:"helpers.label.vessel.buying_date")
-            input.form-control#buying-date type="text" ng-model="vessel.buyingDate" placeholder=I18n.t(:"helpers.placeholder.vessel.buying_date")
+            input.form-control#buying-date datepicker=true type="text" ng-model="vessel.buyingDate" placeholder=I18n.t(:"helpers.placeholder.vessel.buying_date")
       .col-xs-12.col-md-6
         .form-group
           .input-group
