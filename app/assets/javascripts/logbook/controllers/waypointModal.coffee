@@ -21,10 +21,15 @@ angular.module 'Logbook'
       $scope.waypoint.milage ?= minimumMilage
 
       if !$scope.waypoint.latitude || !$scope.waypoint.longitude
+        console.log('fetching current position...')
         $geolocation.getCurrentPosition({
           timeout: 60000
         }).then (position) ->
+          console.log('current position fetched!')
           updatePosition(position.coords.latitude, position.coords.longitude)
+        , (error) ->
+          console.log(error)
+          displayError(error.message)
 
     updatePosition = (lat, lng) ->
       $scope.waypoint.latitude = lat

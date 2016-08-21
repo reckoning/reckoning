@@ -5,16 +5,25 @@
         = I18n.t(:"headlines.logbook")
     .col-xs-12.col-md-4
       .btn-group.btn-group-justified-responsive.pull-right.resource-nav
-        button.btn.btn-primary ng-click="openModal()"
+        a.btn.btn-primary href="" ng-click="openModal()"
           i.fa.fa-plus
           '
           = I18n.t(:"nav.subnav.new_tour")
-  .row
-    .col-xs-12.col-md-4 ng-controller="VesselsController as vesselsCtrl"
-      .animate ng-cloak=true ng-if="vesselsLoaded && !vessels.length"
+  .row      
+    .col-xs-12.col-md-8 ng-controller="ToursController as toursCtrl"
+      .tour-panel.panel.panel-default.animate ng-repeat="tour in tours"
+        .panel-body
+          .pull-left
+            h3
+              a href="#/tours/{{tour.id}}" ng-bind="tour.createdAt | toShortDate"  
+            span.label.label-primary ng-bind="tour.vesselLicensePlate"
+          a.btn.btn-primary.pull-right.tours-list-button href="" ng-click="openModal(tour)"
+            = I18n.t("actions.add_waypoint")            
+      .animate ng-cloak=true ng-if="toursLoaded && !tours.length"
         .row
           = render file: 'templates/blank'
-
+          
+    .col-xs-12.col-md-4 ng-controller="VesselsController as vesselsCtrl"
       .panel.panel-default#vessels-panel
         .panel-heading
           .panel-title
@@ -31,16 +40,3 @@
             hr
             span ng-bind="vessel.name"
             strong.pull-right ng-bind="vessel.milage"
-            
-    .col-xs-12.col-md-8 ng-controller="ToursController as toursCtrl"
-      .animate ng-cloak=true ng-if="toursLoaded && !tours.length"
-        .row
-          = render file: 'templates/blank'
-      .tour-panel.panel.panel-default.animate ng-repeat="tour in tours"
-        .panel-body
-          .pull-left
-            h3
-              a href="#/tours/{{tour.id}}" ng-bind="tour.createdAt | toShortDate"  
-            span.label.label-primary ng-bind="tour.vesselLicensePlate"
-          button.btn.btn-primary.pull-right.tours-list-button ng-click="openModal(tour)"
-            = I18n.t("actions.add_waypoint")
