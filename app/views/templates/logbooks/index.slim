@@ -11,7 +11,7 @@
         .btn-group.btn-group-justified-responsive.resource-nav
           a.btn.btn-default href="#/day/{{prevDay()}}"
             i.fa.fa-chevron-left
-          datepicker ng-model="datepickerSelect"
+          datepicker-button ng-model="datepickerSelect"
           a.btn.btn-default ng-click="navigateToToday()"
             = I18n.t('actions.today')
           a.btn.btn-default href="#/day/{{nextDay()}}"

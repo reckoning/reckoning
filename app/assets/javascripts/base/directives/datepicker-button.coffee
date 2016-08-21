@@ -1,5 +1,5 @@
 angular.module 'Reckoning'
-.directive 'datepicker-button', ['$timeout', ($timeout) ->
+.directive 'datepickerButton', ['$timeout', ($timeout) ->
   restrict: 'E'
   templateUrl: Routes.datepicker_template_path()
   require: '?ngModel'
@@ -10,7 +10,8 @@ angular.module 'Reckoning'
   link: (scope, element, attrs, ngModel) ->
     picker = Datepicker.init element, true
 
-    picker.set('select', scope.ngModel, { format: 'yyyy-mm-dd' })
+    $timeout ->
+      picker.set('select', scope.ngModel, { format: 'yyyy-mm-dd' })
 
     scope.openDatepicker = (event) ->
       event.stopPropagation()
