@@ -4,3 +4,5 @@
 #= require angular-timer
 #= require angular-animate
 #= require angular-bootstrap
+#= require ngGeolocation
+#= require ngMap

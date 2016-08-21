@@ -19,6 +19,7 @@ de:
     add_timer: "Neuer Timer"
     add_invoice: "Neue Rechnung"
     add_vessel: "Neues Fahrzeug"
+    add_waypoint: "Neuer Wegpunkt"
     show: "Anzeigen"
     regenerate: "Neu generieren"
     charge: "Fakturieren"

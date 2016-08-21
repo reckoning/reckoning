@@ -35,7 +35,9 @@
     "pickadate": "~3.5.6",
     "nvd3": "~1.8.0",
     "pdfjs-dist": "~1.5.376",
-    "accounting.js": "openexchangerates/accounting.js#^0.4.1"
+    "accounting.js": "openexchangerates/accounting.js#^0.4.1",
+    "ngGeolocation": "^0.0.8",
+    "ngmap": "^1.17.3"
   },
   "resolutions": {
     "bootstrap": ">=3.0 <4.0"

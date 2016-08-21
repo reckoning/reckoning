@@ -86,8 +86,12 @@ de:
       vessel:
         license_plate: "Kennzeichen"
         initial_milage: "Start Laufleistung"
+        buying_price: "Kaufpreis"
+        buying_date: "Kaufdatum"
+        type: "Typ"
       waypoint:
-        milage: "Aktuelle Laufleistung"
+        milage: "Laufleistung"
+        location: "Aktuelle Position"
       setting:
         base:
           registration: "Registrierung aktiv?"
@@ -140,10 +144,13 @@ de:
         weekly_hours: "Wochenstunden"
       vessel:
         manufacturer: "Hersteller"
-        type: "Typ"
+        type: "z.B. A4 Avant"
         license_plate: "z.B. KI-RK-2233"
+        buying_date: "z.B. 01.01.1970"
       tour:
-        description: "Beschreibung"
+        description: "Beschreibung der Tour"
+      waypoint:
+        description: "Notiz"
     prompt:
       country: "Bitte wähle ein Land"
       user:

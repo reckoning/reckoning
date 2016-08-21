@@ -1,10 +1,19 @@
 #logbook {
-  a.list-group-item.vessel {
+  .list-group-item {
+
+    &[ng-click] {
+      cursor: pointer;
+    }
+
     hr {
       margin-top: 8px;
       margin-bottom: 5px;
     }
   }
+}
+
+form input[type="number"] {
+  text-align: right;
 }
 
 .tours-list {
@@ -13,4 +22,28 @@
     margin-top: -11px;
     padding: 10px 15px;
   }
+}
+
+.angular-google-map-container {
+  height: 400px;
+}
+
+.map {
+  background-color: #ccc;
+  position: relative;
+  min-height: 300px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  overflow: hidden;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  margin-bottom: 15px;
+
+  .loader {
+    top: 30px;
+  }
+}
+
+.gm-style {
+  border-radius: 4px;
 }

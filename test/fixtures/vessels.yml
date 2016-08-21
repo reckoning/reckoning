@@ -9,6 +9,8 @@ one:
   license_plate: PI-CA-2305
   image_id: MyString
   account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+  buying_date: 2016-08-14 20:34:37
+  buying_price: 9.99
 
 two:
   id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a20"
@@ -19,3 +21,5 @@ two:
   license_plate: KI-RK-2233
   image_id: MyString
   account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+  buying_date: 2016-08-14 20:34:37
+  buying_price: 9.99

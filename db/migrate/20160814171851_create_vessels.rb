@@ -3,8 +3,8 @@ class CreateVessels < ActiveRecord::Migration[5.0]
     create_table :vessels, id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
       t.string :manufacturer, null: false
       t.string :vessel_type, null: false
-      t.decimal :buying_price, precision: 10, scale: 2, default: 0.0, null: false
-      t.date :buying_date
+      t.decimal :buying_price, precision: 10, scale: 2, default: 0.0
+      t.date :buying_date, null: false
       t.decimal :initial_milage, precision: 10, scale: 2, default: 0.0, null: false
       t.decimal :milage, precision: 10, scale: 2, default: 0.0, null: false
       t.string :image_id

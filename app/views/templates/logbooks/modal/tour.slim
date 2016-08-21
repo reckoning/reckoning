@@ -1,0 +1,46 @@
+.modal-header
+  button.close type="button" ng-click="cancel()" aria-hidden="true" &times;
+  h2.modal-title
+    span ng-if="!tour.id"
+      = I18n.t(:"labels.modals.title.logbook.add_tour")
+    span ng-if="tour.id"
+      = I18n.t(:"labels.modals.title.logbook.edit_tour")
+.modal-body
+  form#tour-form ng-submit="save(tour, waypoint)"
+    .map ng-cloak=true ng-if="!tour.id"
+      ng-map.animate ng-cloak=true ng-if="waypoint.latitude" center="{{waypoint.latitude}},{{waypoint.longitude}}" zoom="16"
+        marker position="{{waypoint.latitude}},{{waypoint.longitude}}" on-dragend="updateMarker()" title=I18n.t("labels.defaults.current_position") animation="DROP" draggable="true"
+      .loader.animate ng-cloak=true ng-if="!waypoint.latitude"
+    .row ng-cloak=true ng-if="!tour.id"
+      .col-xs-12
+        .form-group
+          .input-group
+            label.input-group-addon for="waypoint-location"
+               = I18n.t(:"helpers.label.waypoint.location")
+            input.form-control#waypoint-location type="text" ng-model="waypoint.location" disabled="disabled"  
+    .row
+      .col-xs-12.col-md-6
+        .form-group.selectize
+          select selectize="true" selectize-default="true" options="vessels" ng-model="tour.vesselId" placeholder=I18n.t(:"helpers.prompt.tour.vessel_id")
+      .col-xs-12.col-md-6 ng-cloak=true ng-if="!tour.id"
+        .form-group
+          .input-group
+            label.input-group-addon for="waypoint-milage"
+               = I18n.t(:"helpers.label.waypoint.milage")
+            input.form-control#waypoint-milage type="number" ng-model="waypoint.milage" min="{{minimumMilage}}" step="0.01"
+            span.input-group-addon
+              = I18n.t("labels.defaults.km")
+    .row ng-cloak=true ng-if="!tour.id"
+      .col-xs-12.col-md-6
+        .form-group.selectize
+          select selectize="true" selectize-default="true" options="drivers" ng-model="waypoint.driverId" placeholder=I18n.t(:"helpers.prompt.waypoint.driver_id")
+    .row
+      .col-xs-12
+        .form-group
+          textarea.form-control ng-model="tour.description" placeholder=I18n.t("helpers.placeholder.tour.description")
+          
+    button.hide
+.modal-footer
+  .pull-right
+    button.btn.btn-primary.btn-lg form="tour-form" data-loading-text=I18n.t(:"actions.loading")
+      = I18n.t(:"actions.save")

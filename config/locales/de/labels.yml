@@ -14,6 +14,7 @@ de:
       state: "Status"
       hours: "Stunden"
       rate: "€/Std."
+      euro: "€"
       budget: "Budget"
       remaining_budget: "Verbrauch"
       value: "Betrag"
@@ -30,6 +31,7 @@ de:
       timers: Zeiten
       invoices: Rechnungen
       created_at: Erstellt
+      current_position: "Aktuelle Position"
     datepicker:
       next_month: "Nächster Monat"
       previous_month: "Vorheriger Monat"
@@ -114,6 +116,13 @@ de:
           add_timer: "Zeit hinzufügen"
           edit_timer: "Zeit bearbeiten"
           add_task: "Aufgabe hinzufügen"
+        logbook:
+          add_vessel: "Fahrzeug hinzufügen"
+          edit_vessel: "Fahrzeug bearbeiten"
+          add_tour: "Tour starten"
+          edit_tour: "Tour bearbeiten"
+          add_waypoint: "Wegpunkt hinzufügen"
+          edit_waypoint: "Wegpunkt bearbeiten"
         positions: "Position aus Zeiten erstellen"
 
     panels:
