@@ -15,7 +15,7 @@
       .btn-group.btn-group-justified-responsive.pull-right.resource-nav
         a.btn.btn-default href="#/"
           = I18n.t(:"nav.subnav.back")
-        a.btn.btn-primary href="" ng-click="openModal()"
+        a.btn.btn-primary href="" ng-click="openModal($event)"
           = I18n.t(:"actions.edit")
         a.btn.btn-danger href="" ng-click="delete()"
           = I18n.t(:"actions.delete")
@@ -36,7 +36,7 @@
             button.btn.btn-primary.pull-right ng-click="openWaypointModal(waypoint)"
               = I18n.t("actions.edit")
             .clearfix
-          .list-group-item ng-click="openWaypointModal()"
+          .list-group-item ng-click="openWaypointModal($event)"
             .text-center
               i.fa.fa-plus
               '

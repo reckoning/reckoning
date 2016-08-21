@@ -83,6 +83,7 @@ Rails.application.routes.draw do
     template "tour_logbooks"
     template "tour_modal_logbooks"
     template "waypoint_modal_logbooks"
+    template "map_modal_logbooks"
   end
 
   resources :positions, only: [:new, :destroy]

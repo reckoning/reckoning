@@ -4,3 +4,4 @@ json.latitude waypoint.latitude
 json.longitude waypoint.longitude
 json.location waypoint.location
 json.driver_id waypoint.driver_id
+json.time waypoint.time

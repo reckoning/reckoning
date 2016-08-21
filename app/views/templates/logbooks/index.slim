@@ -24,7 +24,7 @@
             h3
               a href="#/tours/{{tour.id}}" ng-bind="tour.createdAt | toShortDate"  
             span.label.label-primary ng-bind="tour.vesselLicensePlate"
-          a.btn.btn-primary.pull-right.tours-list-button href="" ng-click="openModal(tour)"
+          a.btn.btn-primary.pull-right.tours-list-button href="" ng-click="openModal($event, tour)"
             = I18n.t("actions.add_waypoint")            
       .animate ng-cloak=true ng-if="toursLoaded && !tours.length"
         .row
@@ -32,7 +32,7 @@
 
     .col-xs-12.col-md-4.text-right
       .btn-group-responsive.resource-nav
-        button.btn.btn-lg.btn-primary type="button" ng-click="openModal()"
+        button.btn.btn-lg.btn-primary type="button" ng-click="openModal($event)"
           i.fa.fa-plus
           '
           = I18n.t(:"nav.subnav.new_tour")
@@ -42,13 +42,16 @@
             strong
               = I18n.t(:"logbook.panels.vessels")
             
-            a.pull-right href="" ng-click="openModal()" title=I18n.t("actions.add_vessel")
+            a.pull-right href="" ng-click="openModal($event)" title=I18n.t("actions.add_vessel")
               i.fa.fa-plus
         .list-group
-          .list-group-item.vessel.animate ng-click="openModal(vessel)" ng-repeat="vessel in vessels"
+          .list-group-item.vessel.animate ng-click="openModal($event, vessel)" ng-repeat="vessel in vessels"
             span.label.label-primary ng-bind="vessel.licensePlate"
-            span.pull-right ng-if="vessel.lastLocation"
+            span.pull-right ng-if="vessel.lastLocation" ng-click="openMap($event, vessel)"
               i.fa.fa-location-arrow title="{{vessel.lastLocation.location}}"
             hr
             span ng-bind="vessel.name"
-            strong.pull-right ng-bind="vessel.milage"
+            strong.pull-right 
+              span ng-bind="vessel.milage"
+              '
+              = I18n.t("labels.defaults.km")
