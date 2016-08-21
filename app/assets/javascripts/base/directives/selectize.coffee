@@ -13,7 +13,7 @@ angular.module 'Reckoning'
     ngModel: '='
   link: (scope, element, attrs, ngModel) ->
     scope.labelField ?= 'name'
-    scope.valueField ?= 'uuid'
+    scope.valueField ?= 'id'
 
     createItem = (input) ->
       scope.$parent[scope.create](input, @)
@@ -43,7 +43,7 @@ angular.module 'Reckoning'
         selectize.addItem(scope.ngModel)
 
         if scope.selectizeDefault && scope.options && scope.options.length && scope.ngModel is undefined
-          selectize.setValue scope.options[0].uuid
+          selectize.setValue scope.options[0].id
 
     scope.$watch 'ngModel', ->
       $timeout ->
@@ -60,5 +60,5 @@ angular.module 'Reckoning'
         ngModel.$setViewValue(value)
 
     if scope.selectizeDefault && scope.options && !scope.ngModel
-      selectize.setValue scope.options[0].uuid
+      selectize.setValue scope.options[0].id
 ]

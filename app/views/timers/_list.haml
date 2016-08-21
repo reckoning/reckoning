@@ -12,7 +12,7 @@
             = number_to_currency timer.value, unit: "h"
         .col-xs-6.col-md-1
           .checkbox.pull-right
-            = check_box_tag "timer_ids[]", {name: timer.task.name, task_uuid: timer.task_id, uuid: timer.id, value: timer.value.to_f}.to_json, false, id: dom_id(timer)
+            = check_box_tag "timer_ids[]", {name: timer.task.name, task_id: timer.task_id, id: timer.id, value: timer.value.to_f}.to_json, false, id: dom_id(timer)
             %label{for: dom_id(timer)}
 
   - if timers.blank?

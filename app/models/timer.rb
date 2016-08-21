@@ -18,8 +18,8 @@ class Timer < ActiveRecord::Base
   delegate :project, to: :task
   delegate :name, :label, :customer_name, to: :project, prefix: true
 
-  def self.without_uuids(timer_uuids)
-    where.not(id: timer_uuids)
+  def self.without_ids(timer_ids)
+    where.not(id: timer_ids)
   end
 
   def self.week_for(date)
@@ -107,7 +107,7 @@ class Timer < ActiveRecord::Base
 
   def to_builder
     Jbuilder.new do |timer|
-      timer.uuid uuid
+      timer.id id
       timer.date date
       timer.value value
       timer.sum_for_task sum_for_task
@@ -116,13 +116,13 @@ class Timer < ActiveRecord::Base
       timer.started_at started_at
       timer.start_time start_time
       timer.start_time_for_task start_time_for_task
-      timer.position_uuid position_id
+      timer.position_id position_id
       timer.invoiced invoiced
-      timer.task_uuid task_id
+      timer.task_id task_id
       timer.task_name task_name
       timer.task_label task_label
       timer.task_billable task.billable
-      timer.project_uuid task.project_id
+      timer.project_id task.project_id
       timer.project_name project_name
       timer.project_customer_name project_customer_name
       timer.created_at created_at

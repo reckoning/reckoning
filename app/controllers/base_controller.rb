@@ -6,6 +6,7 @@ class BaseController < ApplicationController
   before_action :authenticate_user!, only: [:fail]
 
   def index
+    @active_nav = 'home'
     if user_signed_in?
       dashboard
     elsif current_account.present?

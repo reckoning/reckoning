@@ -74,23 +74,23 @@ module Api
 
         it "creates a new timer" do
           date = Time.current.to_date
-          post :create, params: { date: date, value: 1.0, taskUuid: timer.task_id }
+          post :create, params: { date: date, value: 1.0, taskId: timer.task_id }
 
           assert_response :created
 
           json = JSON.parse response.body
-          assert json["uuid"]
+          assert json["id"]
           assert_equal "1.0", json["value"]
           assert_equal I18n.l(date, format: :db), json["date"]
         end
 
         it "updates a timer" do
-          patch :update, params: { id: timer.id, value: 2.0, taskUuid: timer.task_id }
+          patch :update, params: { id: timer.id, value: 2.0, taskId: timer.task_id }
 
           assert_response :ok
 
           json = JSON.parse response.body
-          assert json["uuid"]
+          assert json["id"]
           assert_equal "2.0", json["value"]
         end
 

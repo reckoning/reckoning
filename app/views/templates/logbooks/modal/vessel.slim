@@ -1,0 +1,65 @@
+.modal-header
+  button.close type="button" ng-click="cancel()" aria-hidden="true" &times;
+  h2.modal-title
+    span ng-if="vessel.id"
+      = I18n.t(:"labels.modals.title.logbook.edit_vessel")
+    span ng-if="!vessel.id"
+      = I18n.t(:"labels.modals.title.logbook.add_vessel")
+.modal-body
+  form#vessel-form ng-submit="save(vessel)"
+    .row
+      .col-xs-12.col-md-6
+        .form-group.selectize
+          select selectize="true" selectize-default="true" create="createManufacturer" label-field="label" options="manufacturers" ng-model="vessel.manufacturer" placeholder=I18n.t(:"helpers.prompt.vessel.manufacturer")
+      .col-xs-12.col-md-6      
+        .form-group
+          .input-group
+            label.input-group-addon for="vessel-type"
+              = I18n.t(:"helpers.label.vessel.type")
+            input.form-control#vessel-type type="text" ng-model="vessel.vesselType" placeholder=I18n.t(:"helpers.placeholder.vessel.type")
+    .row
+      .col-xs-12.col-md-6
+        .form-group
+          .input-group
+            label.input-group-addon for="initial-milage"
+               = I18n.t(:"helpers.label.vessel.initial_milage")
+            input.form-control#initial-milage type="number" ng-model="vessel.initialMilage" step="0.01"
+            span.input-group-addon
+              = I18n.t("labels.defaults.km")
+      .col-xs-12.col-md-6 ng-if="vessel.id"
+        .form-group
+          .input-group
+            label.input-group-addon for="milage"
+               = I18n.t(:"helpers.label.waypoint.milage")
+            input.form-control#milage type="number" ng-model="vessel.milage" step="0.01"
+            span.input-group-addon
+              = I18n.t("labels.defaults.km")
+      .col-xs-12.col-md-6
+        .form-group
+          .input-group
+            label.input-group-addon for="license-plate"
+               = I18n.t(:"helpers.label.vessel.license_plate")
+            input.form-control#license-plate type="text" ng-model="vessel.licensePlate" placeholder=I18n.t(:"helpers.placeholder.vessel.license_plate")
+    .row
+      .col-xs-12.col-md-6
+        .form-group
+          .input-group
+            label.input-group-addon for="buying-date"
+              = I18n.t(:"helpers.label.vessel.buying_date")
+            input.form-control#buying-date type="text" ng-model="vessel.buyingDate" placeholder=I18n.t(:"helpers.placeholder.vessel.buying_date")
+      .col-xs-12.col-md-6
+        .form-group
+          .input-group
+            label.input-group-addon for="buying-price"
+              = I18n.t(:"helpers.label.vessel.buying_price")
+            input.form-control#buying-price type="number" ng-model="vessel.buyingPrice" min="0"
+            span.input-group-addon
+              = I18n.t("labels.defaults.euro")
+  button.hide
+.modal-footer
+  .pull-right
+    button.btn.btn-primary.btn-lg form="vessel-form" data-loading-text=I18n.t(:"actions.loading")
+      = I18n.t(:"actions.save")
+  .pull-left ng-if="vessel.id"
+    button.btn.btn-danger type="button" ng-click="delete(vessel)"
+      = I18n.t(:"actions.delete")

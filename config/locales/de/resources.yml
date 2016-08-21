@@ -5,6 +5,8 @@ de:
     customer: "Kunde"
     account: "Account"
     expense: "Ausgabe"
+    vessel: "Fahrzeug"
+    tour: "Tour"
     messages:
       create:
         success: "%{resource} erfolgreich erstellt."
@@ -18,4 +20,3 @@ de:
       archive:
         success: "%{resource} erfolgreich archiviert."
         failure: "%{resource} konnte nicht archiviert werden."
-

@@ -93,7 +93,7 @@ class ProjectsController < ApplicationController
   helper_method :customers
 
   private def customer
-    @customer ||= current_account.customers.find_by(id: params.fetch(:customer_uuid, nil))
+    @customer ||= current_account.customers.find_by(id: params.fetch(:customer_id, nil))
   end
 
   private def project_params

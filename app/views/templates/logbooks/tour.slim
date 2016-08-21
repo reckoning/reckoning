@@ -1,0 +1,43 @@
+.col-xs-12.col-md-12.animate ng-cloak=true ng-if="tourLoaded"
+  .row
+    .col-xs-12.col-md-8
+      h1
+        span ng-bind="headline()"
+        br
+        small
+          span.label.label-primary ng-bind="tour.vesselLicensePlate"
+          '
+          span ng-bind="tour.vesselName"
+          
+      p.lead.animate ng-cloak=true ng-bind="tour.description" ng-if="tour.description"
+          
+    .col-xs-12.col-md-4
+      .btn-group.btn-group-justified-responsive.pull-right.resource-nav
+        a.btn.btn-default href="#/"
+          = I18n.t(:"nav.subnav.back")
+        button.btn.btn-primary type="button" ng-click="openModal()"
+          = I18n.t(:"actions.edit")
+        button.btn.btn-danger type="button" ng-click="delete()"
+          = I18n.t(:"actions.delete")
+  .row
+    .col-xs-12
+  .row
+    .col-xs-12
+      .panel.panel-default
+        .panel-heading.panel-heading-map
+          ng-map zoom="14" center="{{map.center}}" style="height:90%"
+            directions travel-mode="DRIVING" waypoints="{{waypoints}}" origin="{{origin}}" destination="{{destination}}"
+    
+        .list-group.tours-list
+          .list-group-item ng-repeat="waypoint in tour.waypoints"
+            strong ng-bind="waypoint.time | toShortDate"
+            = " | "
+            span ng-bind="waypoint.location"
+            button.btn.btn-primary.pull-right ng-click="openWaypointModal(waypoint)"
+              = I18n.t("actions.edit")
+            .clearfix
+          .list-group-item ng-click="openWaypointModal()"
+            .text-center
+              i.fa.fa-plus
+              '
+              = I18n.t("actions.add_waypoint")

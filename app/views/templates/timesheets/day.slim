@@ -19,7 +19,7 @@
           a.btn.btn-default href="#/week/{{weekDate()}}"
             = I18n.t(:"labels.timesheet.week")
   .row ng-controller="TimerController as timerCtrl"
-    .col-xs-12.col-md-10
+    .col-xs-12.col-md-9
       .animate ng-cloak=true ng-if="timersLoaded && !timers.length"
         .row
           = render file: 'templates/blank'
@@ -27,7 +27,7 @@
         .panel-body
           .pull-left
             h3
-              a ng-href="{{projectPath(timer.projectUuid)}}"
+              a ng-href="{{projectPath(timer.projectId)}}"
                 span ng-bind="timer.projectName"
               small
                 = " | "
@@ -35,7 +35,7 @@
             span ng-bind="timer.taskLabel"
           .pull-right
             span.timesheet-timer.invoiced ng-if="timer.invoiced" title=I18n.t(:"labels.timesheet.on_invoice") data-toggle="tooltip"
-              span ng-bind="timer.value | toTime"
+              span ng-bind="timer.value | toHours"
             span.timesheet-timer.started ng-if="timer.started"
               timer start-time="timer.startTime" max-time-unit="'hour'" {{hours}}:{{mminutes}}
               '
@@ -44,7 +44,7 @@
                 '
                 = I18n.t(:"actions.stop")
             span.timesheet-timer ng-if="!timer.started && !timer.invoiced"
-              span ng-bind="timer.value | toTime"
+              span ng-bind="timer.value | toHours"
               '
               button.btn.btn-default.btn-lg ng-click="startTimer(timer, $event)" ng-if="isStartable(timer.date)"
                 i.fa.fa-circle-o-notch
@@ -54,7 +54,7 @@
             button.btn.btn-link.btn-lg.default ng-if="!timer.invoiced" ng-click="openModal(timer)"
               i.fa.fa-edit
 
-    .col-xs-12.col-md-2
+    .col-xs-12.col-md-3.text-right
       .btn-group-responsive.resource-nav
         button.btn.btn-primary.btn-lg ng-click="openModal()"
           i.fa.fa-plus

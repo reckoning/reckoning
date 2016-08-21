@@ -13,6 +13,9 @@ de:
     privacy: "Datenschutz"
     not_found: "Seite nicht vorhanden"
     server_error: "Server Fehler"
+
+    logbook: "Fahrtenbuch"
+
     welcome:
       base: "Rechnungen schreiben einfach gemacht."
       screenshots: "Screenshots"
@@ -44,6 +47,14 @@ de:
       new: "Neue Ausgabe"
       edit: "Ausgabe bearbeiten"
       import: "CSV-Import"
+
+    tour:
+      new: "Tour starten"
+      show: "Tour vom %{date}"
+
+    vessel:
+      new: "Neues Fahrzeug"
+      edit: "Fahrzeug bearbeiten"
 
     backend:
       user:

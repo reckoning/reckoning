@@ -64,7 +64,7 @@ module Api
           assert_response :ok
 
           json = JSON.parse response.body
-          assert_equal customer.id, json["uuid"]
+          assert_equal customer.id, json["id"]
           assert_equal customer.name, json["name"]
         end
 
@@ -74,7 +74,7 @@ module Api
           assert_response :created
 
           json = JSON.parse response.body
-          assert json["uuid"]
+          assert json["id"]
           assert_equal "foo", json["name"]
         end
 

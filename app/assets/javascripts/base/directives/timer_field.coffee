@@ -6,13 +6,13 @@ angular.module 'Reckoning'
   link: (scope, element, attrs, ngModel) ->
     element.bind 'focusout', ->
       if ngModel.$modelValue
-        element.val($filter('toTime')(ngModel.$modelValue))
+        element.val($filter('toHours')(ngModel.$modelValue))
     ngModel.$parsers.push (input) ->
-      $filter('toDecimal')(input || '')
+      $filter('hoursToDecimal')(input || '')
 
     ngModel.$formatters.push (input) ->
       if input
-        $filter('toTime')(input)
+        $filter('toHours')(input)
       else
         input
 ]

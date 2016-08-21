@@ -17,7 +17,7 @@
 #= require moment/moment
 #= require momentInit
 #= require twix/dist/twix
-#= require accounting/accounting
+#= require accounting.js/accounting
 #= require accountingInit
 #= require nprogress
 #= require underscore
@@ -39,6 +39,8 @@
 #= require blank
 #= require timesheet
 #= require timersCalendar
+#= require logbook
+#= require geoLocation
 
 $(document).on 'show.bs.collapse', '.navbar-collapse', ->
   $('.navbar-collapse.in').not(this).collapse('hide')

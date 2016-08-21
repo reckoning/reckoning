@@ -13,7 +13,8 @@ de:
     sign_up: "Noch nicht registriert?"
   nav:
     header:
-      home: "Rechnungen"
+      home: "Dashboard"
+      invoices: "Rechnungen"
       customers: "Kunden"
       projects: "Projekte"
       timesheet: "Zeiten"
@@ -32,6 +33,7 @@ de:
       sign_up: "Registrieren"
       contacts: "Kontaktanfragen"
       expenses: "Ausgaben"
+      logbook: "Fahrtenbuch"
     footer:
       impressum: Impressum
       privacy: Datenschutz
@@ -44,6 +46,7 @@ de:
       new_customer: "Neuer Kunde"
       new_project: "Neues Projekt"
       new_project_for_customer: "Neues Projekt für %{customer}"
+      new_tour: "Tour starten"
       new_user: "Neuer Benutzer"
       new_account: "Neuer Account"
       update_password: "Passwort ändern"
@@ -82,6 +85,7 @@ de:
     title:
       default: "Reckoning.io"
       dashboard: "Dashboard"
+      logbook: "Fahrtenbuch"
       devise:
         otp: "Zwei-Faktor Autorisierung"
       timesheet:
@@ -105,6 +109,12 @@ de:
         new: "Neue Ausgabe"
         edit: "Ausgabe bearbeiten"
         import: "CSV-Import für Ausgaben"
+      tour:
+        new: "Tour starten"
+        show: "Tour vom %{date}"
+      vessel:
+        new: "Neues Fahrzeug"
+        edit: "Fahrzeug bearbeiten"
       account:
         edit: "Account bearbeiten"
       user:

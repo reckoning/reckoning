@@ -10,7 +10,7 @@ angular.module 'Timesheet'
   ($scope, $filter, $timeout, $uibModal, Timer, Task, Project) ->
     $scope.currentTasks = []
     $scope.currentTasksLoaded = false
-    $scope.excludedTaskUuids = []
+    $scope.excludedTaskIds = []
 
     $scope.openModal = ->
       $uibModal.open
@@ -19,38 +19,38 @@ angular.module 'Timesheet'
         resolve:
           timer: -> {date: $scope.date}
           projects: -> Project.all(sort: "last_used")
-          excludedTaskUuids: -> $scope.excludedTaskUuids
+          excludedTaskIds: -> $scope.excludedTaskIds
           withoutProjectSelect: -> false
       .result.then (data) ->
         task = Task.new($scope.dates, data)
-        $scope.excludedTaskUuids.push task.uuid
+        $scope.excludedTaskIds.push task.id
         $scope.currentTasks.push task
 
     $scope.getTasks = ->
       Task.all(@dates).success (tasks) ->
         $scope.currentTasks = tasks
         tasks.forEach (task) ->
-          $scope.excludedTaskUuids.push task.uuid if !_.contains($scope.excludedTaskUuids, task.uuid)
+          $scope.excludedTaskIds.push task.id if !_.contains($scope.excludedTaskIds, task.id)
         $scope.currentTasksLoaded = true
     $scope.getTasks()
 
     $scope.save = (timer) ->
       if timer.sumForTask && timer.sumForTask isnt 0
         timer.value = @calculateTimerValue(timer)
-        if timer.uuid
+        if timer.id
           Timer.update(timer)
         else
           Timer.create(timer).success (newTimer, status, headers, config) ->
-            timer.uuid = newTimer.uuid
+            timer.id = newTimer.id
       else
-        if timer.uuid
-          Timer.delete(timer.uuid)
+        if timer.id
+          Timer.delete(timer.id)
 
     $scope.calculateTimerValue = (timer) ->
-      task = _.find @currentTasks, (task) -> task.uuid is timer.taskUuid
+      task = _.find @currentTasks, (task) -> task.id is timer.taskId
       timersForDate = $filter('filter')(task.timers, timer.date, true)
       _.reduce timersForDate, (num, timerForDate) ->
-        if timerForDate.uuid is timer.uuid
+        if timerForDate.id is timer.id
           num
         else
           num - parseFloat(timerForDate.value)
@@ -82,9 +82,9 @@ angular.module 'Timesheet'
     $scope.removeTask = (task) ->
       confirm I18n.t('messages.confirm.timesheet.delete_task'), ->
         task.timers.forEach (timer) ->
-          if timer.uuid
-            Timer.delete(timer.uuid)
+          if timer.id
+            Timer.delete(timer.id)
         $timeout ->
           $scope.currentTasks.splice($scope.currentTasks.indexOf(task), 1)
-          $scope.excludedTaskUuids.splice($scope.excludedTaskUuids.indexOf(task.uuid), 1)
+          $scope.excludedTaskIds.splice($scope.excludedTaskIds.indexOf(task.id), 1)
 ]

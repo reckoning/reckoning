@@ -207,7 +207,7 @@ class InvoicesController < ApplicationController
   helper_method :filter_params
 
   private def project
-    @project ||= current_account.projects.find_by(id: params.fetch(:project_uuid, nil))
+    @project ||= current_account.projects.find_by(id: params.fetch(:project_id, nil))
   end
 
   private def invoice

@@ -46,12 +46,12 @@ module Api
         end
 
         it "creates a new task" do
-          post :create, params: { name: "foo", projectUuid: task.project_id }
+          post :create, params: { name: "foo", projectId: task.project_id }
 
           assert_response :created
 
           json = JSON.parse response.body
-          assert json["uuid"]
+          assert json["id"]
           assert_equal "foo", json["name"]
         end
       end

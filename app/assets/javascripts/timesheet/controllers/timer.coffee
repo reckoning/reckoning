@@ -38,7 +38,7 @@ angular.module 'Timesheet'
         resolve:
           timer: -> modalTimer
           projects: -> Project.all(sort: "used")
-          excludedTaskUuids: -> []
+          excludedTaskIds: -> []
           withoutProjectSelect: -> false
       .result.then (result) ->
         console.log(result)
@@ -52,7 +52,7 @@ angular.module 'Timesheet'
       Timer.all(@date).success (data, status, headers, config) ->
         $scope.timers = data
         data.forEach (timer) ->
-          task = {uuid: timer.taskUuid}
+          task = {id: timer.taskId}
           $scope.currentTasks.push task
         $scope.timersLoaded = true
 
@@ -64,7 +64,7 @@ angular.module 'Timesheet'
 
     $scope.startTimer = (timer) ->
       $scope.startedAction = true
-      Timer.start(timer.uuid).success (data) ->
+      Timer.start(timer.id).success (data) ->
         $scope.timers.forEach (item) ->
           item.started = false
         timer.started = data.started
@@ -77,7 +77,7 @@ angular.module 'Timesheet'
 
     $scope.stopTimer = (timer) ->
       $scope.startedAction = true
-      Timer.stop(timer.uuid).success (data) ->
+      Timer.stop(timer.id).success (data) ->
         timer.value = data.value
         timer.started = data.started
         timer.startedAt = data.startedAt
@@ -91,7 +91,7 @@ angular.module 'Timesheet'
 
     $scope.$watch 'timersLoaded', ->
       if $routeParams.action == "edit"
-        timer = _.find $scope.timers, (item) -> item.uuid is $routeParams.id
+        timer = _.find $scope.timers, (item) -> item.id is $routeParams.id
         return unless timer
         $scope.openModal(timer)
 ]

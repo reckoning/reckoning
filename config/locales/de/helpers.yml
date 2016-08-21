@@ -21,6 +21,7 @@ de:
         default_from: "Absender Für Rechnungs E-Mails"
         signature: "Signatur"
         feature_expenses: "Ausgaben Feature aktiviert?"
+        feature_logbook: "Fahrtenbuch Feature aktiviert?"
       project:
         rate: "Stundensatz"
         round_up: "Zeiten aufrunden?"
@@ -82,6 +83,15 @@ de:
         receipt_missing: "Kein Beleg hinzugefügt"
         private_use_percent: "Private Nutzung?"
         remove_receipt: "Beleg entfernen?"
+      vessel:
+        license_plate: "Kennzeichen"
+        initial_milage: "Start Laufleistung"
+        buying_price: "Kaufpreis"
+        buying_date: "Kaufdatum"
+        type: "Typ"
+      waypoint:
+        milage: "Laufleistung"
+        location: "Aktuelle Position"
       setting:
         base:
           registration: "Registrierung aktiv?"
@@ -132,6 +142,15 @@ de:
         invoice_email: "Empfänger"
         default_from: "Absender"
         weekly_hours: "Wochenstunden"
+      vessel:
+        manufacturer: "Hersteller"
+        type: "z.B. A4 Avant"
+        license_plate: "z.B. KI-RK-2233"
+        buying_date: "z.B. 01.01.1970"
+      tour:
+        description: "Beschreibung der Tour"
+      waypoint:
+        description: "Notiz"
     prompt:
       country: "Bitte wähle ein Land"
       user:
@@ -147,6 +166,12 @@ de:
         plan: "Bitte wähle einen Plan"
       expense:
         expense_type: "Bitte wähle einen Typ"
+      vessel:
+        manufacturer: "Bitte wähle einen Hersteller"
+      tour:
+        vessel_id: "Bitte wähle ein Fahrzeug"
+      waypoint:
+        driver_id: "Bitte wähle einen Fahrer/In"
     help:
       customer:
         default_from: "Absender für diesen Kunden festlegen, alternativ kann global in Ihrem Benutzerkonto ein Absender definiert werden."

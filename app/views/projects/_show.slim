@@ -26,7 +26,7 @@
                 a href=project_path(project)
                   = I18n.t(:"actions.show")
               li
-                a href=new_invoice_path(project_uuid: project)
+                a href=new_invoice_path(project_id: project)
                   i.fa.fa-plus
                   '
                   = I18n.t(:"actions.add_invoice")
@@ -44,7 +44,7 @@
         .btn-group.btn-group-justified.visible-xs.visible-sm
           a.btn.btn-default href=project_path(project)
             = I18n.t(:"actions.show")
-          a.btn.btn-default href=new_invoice_path(project_uuid: project) title=I18n.t(:"actions.add_invoice")
+          a.btn.btn-default href=new_invoice_path(project_id: project) title=I18n.t(:"actions.add_invoice")
             i.fa.fa-plus
             span.hidden-xs.hidden-sm= I18n.t(:"actions.add_invoice")
           a.btn.btn-default href=edit_project_path(project) title=I18n.t(:"actions.edit")

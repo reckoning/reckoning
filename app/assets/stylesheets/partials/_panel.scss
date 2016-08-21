@@ -1,6 +1,10 @@
 .panel {
   .panel-heading {
     color: lighten($text-color, 20%);
+
+    &.panel-heading-map {
+      padding: 0;
+    }
   }
 
   .panel-title {

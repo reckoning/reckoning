@@ -1,6 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
-json.uuid project.uuid
+json.id project.id
 json.name project.name
 json.customer_name project.customer_name
 json.label project.label

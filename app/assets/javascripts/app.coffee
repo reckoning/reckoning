@@ -37,11 +37,11 @@ document.addEventListener "turbolinks:load", ->
         dataType: 'json'
         success: (result) =>
           data = {
-            value: result.uuid,
+            value: result.id,
             text: result.name
           }
           @addOption data
-          @addItem result.uuid
+          @addItem result.id
           callback data
         error: ->
           callback()
@@ -58,11 +58,11 @@ document.addEventListener "turbolinks:load", ->
         dataType: 'json'
         success: (result) =>
           data = {
-            value: result.uuid,
+            value: result.id,
             text: result.name
           }
           @addOption data
-          @addItem result.uuid
+          @addItem result.id
           callback data
         error: ->
           callback()

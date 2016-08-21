@@ -11,7 +11,7 @@ angular.module 'Reckoning'
         date: date
     )
 
-  allInRangeForProject: (projectUuid, startDate, endDate) ->
+  allInRangeForProject: (projectId, startDate, endDate) ->
     @allPromise.resolve()
     @allPromise = $q.defer()
     $http.get(ApiBasePath + Routes.v1_timers_path(),
@@ -19,23 +19,23 @@ angular.module 'Reckoning'
       params:
         startDate: startDate
         endDate: endDate
-        projectUuid: projectUuid
+        projectId: projectId
     )
 
   create: (timer) ->
     $http.post(ApiBasePath + Routes.v1_timers_path(), timer)
 
   update: (timer) ->
-    $http.put(ApiBasePath + Routes.v1_timer_path(timer.uuid), timer)
+    $http.put(ApiBasePath + Routes.v1_timer_path(timer.id), timer)
 
-  start: (timerUuid) ->
-    $http.put(ApiBasePath + Routes.start_v1_timer_path(timerUuid))
+  start: (timerId) ->
+    $http.put(ApiBasePath + Routes.start_v1_timer_path(timerId))
 
-  stop: (timerUuid) ->
-    $http.put(ApiBasePath + Routes.stop_v1_timer_path(timerUuid))
+  stop: (timerId) ->
+    $http.put(ApiBasePath + Routes.stop_v1_timer_path(timerId))
 
-  delete: (timerUuid) ->
-    $http.delete(ApiBasePath + Routes.v1_timer_path(timerUuid))
+  delete: (timerId) ->
+    $http.delete(ApiBasePath + Routes.v1_timer_path(timerId))
 
   isStartable: (date) ->
     moment(date).format('YYYYMMDD') >= moment().format('YYYYMMDD')
@@ -45,10 +45,10 @@ angular.module 'Reckoning'
     timer.invoiced = data.invoiced
     timer.links = data.links
     timer.note = data.note
-    timer.positionUuid = data.positionUuid
+    timer.positionId = data.positionId
     timer.projectCustomerName = data.projectCustomerName
     timer.projectName = data.projectName
-    timer.projectUuid = data.projectUuid
+    timer.projectId = data.projectId
     timer.startTime = data.startTime
     timer.startTimeForTask = data.startTimeForTask
     timer.started = data.started
@@ -57,9 +57,9 @@ angular.module 'Reckoning'
     timer.taskBillable = data.taskBillable
     timer.taskLabel = data.taskLabel
     timer.taskName = data.taskName
-    timer.taskUuid = data.taskUuid
+    timer.taskId = data.taskId
     timer.updatedAt = data.updatedAt
-    timer.uuid = data.uuid
+    timer.id = data.id
     timer.value = data.value
     timer.createdAt = data.createdAt
 

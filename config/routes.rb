@@ -70,13 +70,19 @@ Rails.application.routes.draw do
   resource :timesheet, only: [:show]
 
   resource :template, only: [] do
-    get "blank" => "templates#show"
-    get "datepicker" => "templates#show"
-    get "month_timers" => "templates#show"
-    get "day_timesheets" => "templates#show"
-    get "week_timesheets" => "templates#show"
-    get "timer_modal_timesheets" => "templates#show"
-    get "task_modal_timesheets" => "templates#show"
+    template "blank"
+    template "datepicker"
+    template "month_timers"
+    template "day_timesheets"
+    template "week_timesheets"
+    template "timer_modal_timesheets"
+    template "task_modal_timesheets"
+    template "index_logbooks"
+    template "vessel_logbooks"
+    template "vessel_modal_logbooks"
+    template "tour_logbooks"
+    template "tour_modal_logbooks"
+    template "waypoint_modal_logbooks"
   end
 
   resources :positions, only: [:new, :destroy]
@@ -98,6 +104,8 @@ Rails.application.routes.draw do
 
   resources :expenses, except: [:show]
   resources :expense_imports, only: [:new, :create]
+
+  resource :logbook, only: [:show]
 
   resource :dropbox, controller: "dropbox", only: [:show] do
     collection do
