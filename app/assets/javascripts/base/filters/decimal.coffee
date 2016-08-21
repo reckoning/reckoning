@@ -1,5 +1,5 @@
 angular.module 'Reckoning'
-.filter 'toDecimal', ->
+.filter 'hoursToDecimal', ->
   (input) ->
     parts = input.split(':')
     time = parseInt(parts[0], 10) + (parseInt(parts[1], 10) / 60)
@@ -8,3 +8,9 @@ angular.module 'Reckoning'
       "#{input}"
     else
       "#{newInput}"
+.filter 'toDecimal', ->
+  (input) ->
+    if input
+      parseFloat(input, 10)
+    else
+      null

@@ -14,7 +14,7 @@ angular.module 'Reckoning'
       currentTasks = []
       if tasks.length
         tasks.forEach (task) ->
-          task.timers = factory.fillTimers(dates, task.uuid, task.timers)
+          task.timers = factory.fillTimers(dates, task.id, task.timers)
           currentTasks.push task
       currentTasks
 
@@ -22,10 +22,10 @@ angular.module 'Reckoning'
     $http.post(ApiBasePath + Routes.v1_tasks_path(), params)
 
   new: (dates, task) ->
-    task.timers = @fillTimers(dates, task.uuid, [])
+    task.timers = @fillTimers(dates, task.id, [])
     task
 
-  fillTimers: (dates, taskUuid, loadedTimers) ->
+  fillTimers: (dates, taskId, loadedTimers) ->
     timers = []
     dates.forEach (date) ->
       timersForDate = $filter('filter')(loadedTimers, date.date, true)
@@ -34,7 +34,7 @@ angular.module 'Reckoning'
           timers.push timer
       else
         timers.push
-          taskUuid: taskUuid
+          taskId: taskId
           date: date.date
           value: null
           sumForTask: null

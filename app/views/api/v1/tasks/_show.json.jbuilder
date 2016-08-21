@@ -1,10 +1,10 @@
 # encoding: utf-8
 # frozen_string_literal: true
-json.uuid task.uuid
+json.id task.id
 json.name task.name
 json.label task.label
 json.billable task.billable
-json.project_uuid task.project_id
+json.project_id task.project_id
 json.project_name task.project_name
 json.project_customer_name task.project_customer_name
 json.timers task.timers.where(user_id: current_user.id).order("created_at ASC") do |timer|

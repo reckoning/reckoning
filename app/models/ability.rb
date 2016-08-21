@@ -11,16 +11,7 @@ class Ability
 
     can :connect, :dropbox
 
-    can [:read, :create, :destroy, :check, :archive, :send], Invoice, account_id: user.account_id
-    can :update, Invoice do |invoice|
-      %i(created charged).include?(invoice.current_state.to_sym) && invoice.account_id == user.account_id
-    end
-    can :pay, Invoice do |invoice|
-      %i(charged).include?(invoice.current_state.to_sym) && invoice.account_id == user.account_id
-    end
-    can :charge, Invoice do |invoice|
-      %i(created).include?(invoice.current_state.to_sym) && invoice.account_id == user.account_id
-    end
+    setup_invoice_abilities(user)
 
     can :two_factor_qrcode, User
     can :manage, Customer, account_id: user.account_id
@@ -29,35 +20,55 @@ class Ability
     can :manage, Timer, user_id: user.id
     can :manage, :timesheet
 
-    can :read, :expenses do
-      user.account.feature_expenses?
+    setup_expenses_abilities(user.account_id) if user.account.feature_expenses?
+
+    setup_logbook_abilities(user.account_id) if user.account.feature_logbook?
+
+    setup_admin_abilities if user.admin?
+  end
+
+  def setup_invoice_abilities(user)
+    can [:read, :create, :destroy, :check, :archive, :send], Invoice, account_id: user.account_id
+
+    can :update, Invoice do |invoice|
+      %i(created charged).include?(invoice.current_state.to_sym) && invoice.account_id == user.account_id
     end
+
+    can :pay, Invoice do |invoice|
+      %i(charged).include?(invoice.current_state.to_sym) && invoice.account_id == user.account_id
+    end
+
+    can :charge, Invoice do |invoice|
+      %i(created).include?(invoice.current_state.to_sym) && invoice.account_id == user.account_id
+    end
+  end
+
+  def setup_expenses_abilities(account_id)
+    can :read, :expenses
 
     can :manage, Expense do |expense|
-      expense.account_id == user.account_id && user.account.feature_expenses?
+      expense.account_id == account_id
     end
 
-    can :manage, ExpenseImport do |_expense|
-      user.account.feature_expenses?
-    end
+    can :manage, ExpenseImport
+  end
 
-    can :read, :logbook do
-      user.account.feature_logbook?
-    end
+  def setup_logbook_abilities(account_id)
+    can :read, :logbook
 
     can :manage, Vessel do |vessel|
-      vessel.account_id == user.account_id && user.account.feature_logbook?
+      vessel.account_id == account_id
     end
 
     can :manage, Tour do |tour|
-      tour.account_id == user.account_id && user.account.feature_logbook?
+      tour.account_id == account_id
     end
 
     can :manage, Waypoint do |waypoint|
-      waypoint.tour.account_id == user.account_id && user.account.feature_logbook?
+      waypoint.tour && waypoint.tour.account_id == account_id
     end
 
-    setup_admin_abilities if user.admin?
+    can :index, :manufacturer
   end
 
   def setup_admin_abilities

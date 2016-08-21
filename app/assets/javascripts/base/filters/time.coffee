@@ -1,5 +1,5 @@
 angular.module 'Reckoning'
-.filter 'toTime', ->
+.filter 'toHours', ->
   (input) ->
     hours = Math.floor(input)
     minutes = Math.round((input % 1) * 60)
@@ -11,3 +11,6 @@ angular.module 'Reckoning'
       hours + ':' + padded
     else
       '0:00'
+.filter 'toShortDate', ->
+  (input) ->
+    I18n.l("time.formats.short", input)

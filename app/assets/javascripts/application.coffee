@@ -17,7 +17,7 @@
 #= require moment/moment
 #= require momentInit
 #= require twix/dist/twix
-#= require accounting/accounting
+#= require accounting.js/accounting
 #= require accountingInit
 #= require nprogress
 #= require underscore

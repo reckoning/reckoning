@@ -15,7 +15,7 @@
               = I18n.t(:"labels.defaults.hours")
           .col-xs-4.col-md-2
             .panel-list-action.pull-right
-              %a.btn.btn-default{href: new_project_path(customer_uuid: customer), title: I18n.t(:"nav.subnav.new_project_for_customer", customer: customer.name), data: {toggle: 'tooltip'}}
+              %a.btn.btn-default{href: new_project_path(customer_id: customer), title: I18n.t(:"nav.subnav.new_project_for_customer", customer: customer.name), data: {toggle: 'tooltip'}}
                 %i.fa.fa-plus
     .list-group
       = render partial: "projects/show", collection: projects.sort_by(&:name), as: :project

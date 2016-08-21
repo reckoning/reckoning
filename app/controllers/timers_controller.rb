@@ -6,8 +6,8 @@ class TimersController < ApplicationController
     respond_to do |format|
       format.js do
         scope = current_account.timers.uninvoiced
-        scope = scope.for_project(project_uuid) if project_uuid
-        scope = scope.without_uuids(timer_uuids) if timer_uuids
+        scope = scope.for_project(project_id) if project_id
+        scope = scope.without_ids(timer_ids) if timer_ids
         timers = scope.order(date: :asc)
         render json: { body: render_to_string(partial: "list", locals: { timers: timers }) }
       end
@@ -15,11 +15,11 @@ class TimersController < ApplicationController
     end
   end
 
-  private def project_uuid
-    @project_uuid ||= params[:projectUuid]
+  private def project_id
+    @project_id ||= params[:project_id]
   end
 
-  private def timer_uuids
-    @timer_uuids ||= params[:timerUuids]
+  private def timer_ids
+    @timer_ids ||= params[:timer_ids]
   end
 end

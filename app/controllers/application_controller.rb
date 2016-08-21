@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
 
   private def set_user_cookie
     cookies.signed[:cable] = YAML.dump(
-      uuid: current_user.id,
+      id: current_user.id,
       expires_at: 30.minutes.from_now
     )
   end

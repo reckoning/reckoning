@@ -47,7 +47,7 @@ class Plan < ActiveRecord::Base
 
   def to_builder
     Jbuilder.new do |plan|
-      plan.call(self, :uuid, :code, :name, :description, :price, :quantity, :interval, :featured)
+      plan.call(self, :id, :code, :name, :description, :price, :quantity, :interval, :featured)
     end
   end
 end

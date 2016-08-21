@@ -8,7 +8,7 @@ module Api
         scope = current_account.timers
         scope = scope.where(date: date) if date
         scope = scope.where(date: date_range) if date_range
-        scope = scope.for_project(project_uuid) if project_uuid
+        scope = scope.for_project(project_id) if project_id
         scope = scope.uninvoiced if params[:uninvoiced].present?
         @timers = scope
       end
@@ -82,19 +82,19 @@ module Api
       end
 
       private def start_date
-        @start_date ||= params[:startDate]
+        @start_date ||= params[:start_date]
       end
 
       private def end_date
-        @end_date ||= params[:endDate]
+        @end_date ||= params[:end_date]
       end
 
-      private def project_uuid
-        @project_uuid ||= params[:projectUuid]
+      private def project_id
+        @project_id ||= params[:project_id]
       end
 
       private def task
-        @task ||= current_account.tasks.find(params.delete(:taskUuid))
+        @task ||= current_account.tasks.find(params.delete(:task_id))
       end
 
       private def start_timer?

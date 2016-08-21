@@ -13,7 +13,7 @@ angular.module 'TimersCalendar'
     $scope, $routeParams, $location, $window, $filter, $timeout, $uibModal,
     Timer, Project
   ) ->
-    $scope.projectUuid = $window.projectUuid
+    $scope.projectId = $window.projectId
     if $routeParams.date && moment($routeParams.date, 'YYYY-MM-DD').isValid()
       $scope.date = moment($routeParams.date, 'YYYY-MM-DD').startOf('month')
     else
@@ -27,9 +27,9 @@ angular.module 'TimersCalendar'
 
     $scope.openModal = (date, timer) ->
       if @isStartable(date)
-        modalTimer = {date: date, started: true, projectUuid: @projectUuid}
+        modalTimer = {date: date, started: true, projectId: @projectId}
       else
-        modalTimer = {date: date, started: false, projectUuid: @projectUuid}
+        modalTimer = {date: date, started: false, projectId: @projectId}
       if timer isnt undefined
         angular.copy(timer, modalTimer)
       $uibModal.open
@@ -38,7 +38,7 @@ angular.module 'TimersCalendar'
         resolve:
           timer: -> modalTimer
           projects: -> Project.all(sort: "used")
-          excludedTaskUuids: -> []
+          excludedTaskIds: -> []
           withoutProjectSelect: -> true
       .result.then (result) ->
         $scope.getTimers()
@@ -59,7 +59,7 @@ angular.module 'TimersCalendar'
         .format('YYYY-MM-DD')
 
       Timer
-        .allInRangeForProject(@projectUuid, startDate, endDate)
+        .allInRangeForProject(@projectId, startDate, endDate)
         .success (timers) ->
           $scope.currentTimers = timers
           $scope.currentTimersLoaded = true
@@ -108,7 +108,7 @@ angular.module 'TimersCalendar'
     $scope.cssClassForTimer = (timer) ->
       if timer.started
         'running'
-      else if timer.positionUuid
+      else if timer.positionId
         'invoiced'
       else if timer.taskBillable
         'billable'

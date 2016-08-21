@@ -43,7 +43,7 @@
     .panel.panel-default.animate ng-repeat="task in currentTasks"
       .panel-body.row
         .col-xs-12.col-md-4.timesheet-task
-          a ng-href="{{projectPath(task.projectUuid)}}"
+          a ng-href="{{projectPath(task.projectId)}}"
             span ng-bind="task.projectName"
           small
             = " | "
@@ -55,14 +55,14 @@
             div ng-repeat="timer in task.timers | forDate:date.date"
               div ng-if="$last"
                 .timesheet-timer.invoiced ng-if="timer.invoiced"
-                  span title=I18n.t(:"labels.timesheet.on_invoice") data-toggle="tooltip" ng-bind="timer.sumForTask | toTime"
+                  span title=I18n.t(:"labels.timesheet.on_invoice") data-toggle="tooltip" ng-bind="timer.sumForTask | toHours"
                 .timesheet-timer.started ng-if="timer.startTimeForTask"
                   timer start-time="timer.startTimeForTask" max-time-unit="'hour'" {{hours}}:{{mminutes}}
                 .timesheet-timer ng-if="!timer.startTimeForTask && !timer.invoiced"
                   input.form-control type="text" ng-model="timer.sumForTask" timefield=true ng-disabled="timer.invoiced" ng-blur="save(timer)"
         .col-xs-3.col-xs-offset-7.col-md-offset-0.col-md-1
           .text-right.timesheet-row-sum
-            span ng-bind="sumForTask(task) | toTime"
+            span ng-bind="sumForTask(task) | toHours"
         .col-xs-2.col-md-1
           .text-right.timesheet-task-actions
             button.btn.btn-link.btn-lg.default ng-click="removeTask(task)"
@@ -70,9 +70,9 @@
     .timesheet-footer.row.animate ng-cloak=true ng-if="currentTasksLoaded && currentTasks.length"
       .col-xs-12.col-md-offset-4.col-md-6.timesheet-days
         .timesheet-day.timesheet-col-sum ng-repeat="date in dates"
-          span ng-bind="sumForDate(date) | toTime"
+          span ng-bind="sumForDate(date) | toHours"
       .col-xs-12.col-md-1.timesheet-sum
         .text-right
           span.visible-xs-inline-block = I18n.t(:"labels.timesheet.sum")
           '
-          span ng-bind="sumForWeek() | toTime"
+          span ng-bind="sumForWeek() | toHours"

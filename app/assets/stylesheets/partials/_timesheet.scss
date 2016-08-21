@@ -4,8 +4,6 @@
 }
 
 .timesheet {
-  padding: 0 15px;
-
   .timesheet-day {
     width: 14.28%;
     padding: 0 1px;
@@ -165,7 +163,9 @@
       border-top: 1px solid $gray-lighter;
     }
   }
+}
 
+.timesheet, .logbook, .timers-calendar {
   .animate.ng-move,
   .animate.ng-enter {
     -webkit-transition:all linear 0.5s;
