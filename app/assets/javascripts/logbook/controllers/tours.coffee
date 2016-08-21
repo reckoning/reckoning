@@ -10,7 +10,7 @@ angular.module 'Logbook'
     $scope.toursLoaded = false
 
     $scope.getTours = ->
-      Tour.all().then (tours) ->
+      Tour.all(@date).then (tours) ->
         $scope.tours = tours
         $scope.toursLoaded = true
 

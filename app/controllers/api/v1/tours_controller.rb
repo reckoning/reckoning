@@ -5,7 +5,9 @@ module Api
     class ToursController < ::Api::BaseController
       def index
         authorize! :index, Tour
-        @tours = Tour.where(account_id: current_account.id).order(created_at: :desc)
+        scope = Tour.where(account_id: current_account.id)
+        scope = scope.where(created_at: (date.beginning_of_day..date.end_of_day)) if date
+        @tours = scope.order(created_at: :desc)
       end
 
       def show
@@ -43,6 +45,10 @@ module Api
           render json: ValidationError.new("tour.destroy", @tour.errors), status: :bad_request
         end
         send_realtime_update(@tour)
+      end
+
+      private def date
+        @date ||= Date.parse(params[:date]) if params[:date].present?
       end
 
       private def tour

@@ -16,12 +16,14 @@ angular.module 'Reckoning'
       updatedAt: attrs.updatedAt || null
     }
 
-  all: ->
+  all: (date) ->
     factory = @
     @allPromise.resolve()
     @allPromise = $q.defer()
     $http.get(ApiBasePath + Routes.v1_tours_path(),
       timeout: @allPromise
+      params:
+        date: date
     ).then (response) ->
       response.data.map((tour) ->
         factory.new(tour)

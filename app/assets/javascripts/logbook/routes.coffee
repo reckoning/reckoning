@@ -4,6 +4,9 @@ angular.module 'Logbook'
     .when '/',
       templateUrl: Routes.index_logbooks_template_path()
       controller: 'LogbookController'
+    .when '/day/:date',
+      templateUrl: Routes.index_logbooks_template_path()
+      controller: 'LogbookController'
     .when '/tours/:id',
       templateUrl: Routes.tour_logbooks_template_path()
       controller: 'TourController'
