@@ -2,11 +2,8 @@
 #= require pickadate/lib/picker.date
 
 window.Datepicker =
-  init: ($element, withoutInput) ->
-    I18nHelper.init()
-
-    withoutInput ?= false
-    options =
+  options: ->
+    {
       monthsFull: I18nHelper.monthNames
       monthsShort: I18nHelper.abbrMonthNames
       weekdaysFull: I18n.t('date.day_names')
@@ -22,6 +19,13 @@ window.Datepicker =
       today: I18n.t('actions.today')
       clear: ' '
       close: ' '
+    }
+
+  init: ($element, withoutInput) ->
+    I18nHelper.init()
+
+    withoutInput ?= false
+    options = @options()
 
     if withoutInput
       options.clear = false
