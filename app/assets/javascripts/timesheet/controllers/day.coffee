@@ -4,11 +4,11 @@ angular.module 'Timesheet'
   '$routeParams'
   '$location'
   ($scope, $routeParams, $location) ->
-    date = moment().format('YYYY-MM-DD')
+    date = I18n.l("date.formats.db", moment().toDate())
     if $routeParams.date && moment($routeParams.date).isValid()
       date = $routeParams.date
     $scope.date = date
-    $scope.currentDate = moment().format('YYYY-MM-DD')
+    $scope.currentDate = I18n.l("date.formats.db", moment().toDate())
     $scope.datepickerSelect = $scope.date
 
     $scope.$watch 'datepickerSelect', ->
@@ -23,19 +23,19 @@ angular.module 'Timesheet'
 
     $scope.day = ->
       date = moment($scope.date)
-      date.format('dddd - D. MMMM YYYY')
+      I18n.l("date.formats.timesheet_day", date.toDate())
 
     $scope.weekDate = ->
       date = moment(@date)
-      date.startOf('isoWeek').format('YYYY-MM-DD')
+      I18n.l("date.formats.db", date.startOf('isoWeek').toDate())
 
     $scope.startOfWeek = ->
       date = moment($scope.date)
-      date.startOf('isoWeek').format('YYYY-MM-DD')
+      I18n.l("date.formats.db", date.startOf('isoWeek').toDate())
 
     $scope.nextDay = ->
-      moment($scope.date).add(1, 'day').format('YYYY-MM-DD')
+      I18n.l("date.formats.db", moment($scope.date).add(1, 'day').toDate())
 
     $scope.prevDay = ->
-      moment($scope.date).subtract(1, 'day').format('YYYY-MM-DD')
+      I18n.l("date.formats.db", moment($scope.date).subtract(1, 'day').toDate())
 ]

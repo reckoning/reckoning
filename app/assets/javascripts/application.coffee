@@ -13,7 +13,6 @@
 #= require dynamic_fields_for
 #= require i18n
 #= require i18n/translations
-#= require i18nHelper
 #= require moment/moment
 #= require momentInit
 #= require twix/dist/twix

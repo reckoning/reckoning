@@ -33,7 +33,7 @@ angular.module 'Logbook'
 
     $scope.day = ->
       date = moment($scope.date)
-      date.format('dddd - D. MMMM YYYY')
+      I18n.l("date.formats.timesheet_day", date.toDate())
 
     $scope.navigateToToday = () ->
       $location.path('/day/')

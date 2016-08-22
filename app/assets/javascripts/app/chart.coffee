@@ -24,7 +24,17 @@ window.Chart =
     categories = []
     for month, i in labels
       date = moment(month)
-      categories.push {short: date.format("MMM"), long: date.format("MMMM"), date: date.format("DD. MMMM YYYY")}
+      dateFormattedShort = I18n.l("date.formats.month_short", date.toDate())
+      dateFormattedLong = I18n.l("date.formats.month", date.toDate())
+      dateFormatted = I18n.l("date.formats.chart", date.toDate())
+      console.log(dateFormatted)
+      console.log(dateFormattedShort)
+      console.log(dateFormattedLong)
+      categories.push {
+        short: dateFormattedShort,
+        long: dateFormattedLong,
+        date: dateFormatted
+      }
     categories
 
   getCurrentWeek: (labels) ->

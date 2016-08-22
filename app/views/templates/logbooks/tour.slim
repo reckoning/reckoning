@@ -33,7 +33,7 @@
             strong ng-bind="waypoint.time | toShortDate"
             = " | "
             span ng-bind="waypoint.location"
-            button.btn.btn-primary.pull-right ng-click="openWaypointModal(waypoint)"
+            button.btn.btn-primary.pull-right ng-click="openWaypointModal($event, waypoint)"
               = I18n.t("actions.edit")
             .clearfix
           .list-group-item ng-click="openWaypointModal($event)"
