@@ -82,7 +82,7 @@ angular.module 'TimersCalendar'
             isCurrentDay: time.format('YYYY-MM-DD') is moment().format('YYYY-MM-DD')
             day: time.format('D')
             date: time.format('YYYY-MM-DD')
-            dayShort: time.format('dd')
+            dayShort: I18n.l("date.formats.day_short", time.toDate())
 
         @weeks.push
           days: days
@@ -97,7 +97,7 @@ angular.module 'TimersCalendar'
       date.format('YYYY-MM-DD') is currentDate.format('YYYY-MM-DD')
 
     $scope.currentMonth = ->
-      moment($scope.date).format('MMMM YYYY')
+      I18n.l("date.formats.month_year", moment($scope.date).toDate())
 
     $scope.nextMonth = ->
       moment($scope.date).add(1, 'month').format('YYYY-MM-DD')

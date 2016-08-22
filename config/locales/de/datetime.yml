@@ -9,11 +9,19 @@ de:
       select_month: 'Monat auswählen'
       select_year: 'Jahr auswählen'
   date:
+    first_day_of_week: 1
     formats:
       db: "%Y-%m-%d"
+      timesheet_day: "%A - %d. %B %Y"
+      timesheet_day_short: "%e. %b"
+      timesheet_week: "%e. %B %Y"
+      chart: "%d. %B %Y"
       month_year: "%B %Y"
       month: "%B"
+      month_short: "%b"
       day: "%A"
+      day_number: "%e"
+      day_short: "%a"
       year: "%Y"
       file: "%B-%Y"
   time:

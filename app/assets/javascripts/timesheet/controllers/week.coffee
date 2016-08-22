@@ -4,14 +4,14 @@ angular.module 'Timesheet'
   '$routeParams'
   '$location'
   ($scope, $routeParams, $location) ->
-    $scope.date = if $routeParams.date && moment($routeParams.date).isValid() then $routeParams.date else moment().startOf('isoWeek').format('YYYY-MM-DD')
-    $scope.currentDate = moment().format('YYYY-MM-DD')
+    $scope.date = if $routeParams.date && moment($routeParams.date).isValid() then $routeParams.date else I18n.l("date.formats.db", moment().startOf('isoWeek').toDate())
+    $scope.currentDate = I18n.l("date.formats.db", moment().toDate())
     $scope.datepickerSelect = $scope.date
     $scope.dates = []
 
     $scope.startOfWeek = ->
       date = moment($scope.date)
-      date.startOf('isoWeek').format('D')
+      I18n.l("date.formats.day_number", date.startOf('isoWeek').toDate())
 
     $scope.navigateToToday = () ->
       $location.path('/week/')
@@ -35,7 +35,7 @@ angular.module 'Timesheet'
 
     $scope.endOfWeek = ->
       date = moment($scope.date)
-      date.endOf('isoWeek').format('D. MMMM YYYY')
+      I18n.l("date.formats.timesheet_week", date.endOf('isoWeek').toDate())
 
     $scope.currentWeek = ->
       $scope.date = moment().startOf('isoWeek').format('YYYY-MM-DD')
@@ -55,8 +55,8 @@ angular.module 'Timesheet'
         time = itr.next()
         $scope.dates.push
           date: time.format('YYYY-MM-DD')
-          day: time.format('ddd')
-          short: time.format('D. MMM')
+          day: I18n.l("date.formats.day_short", time.toDate())
+          short: I18n.l("date.formats.timesheet_day_short", time.toDate())
           isCurrentDate: time.isSame(moment().toDate(), 'day')
 
     $scope.setDates()
