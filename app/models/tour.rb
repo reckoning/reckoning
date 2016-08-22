@@ -11,7 +11,7 @@ class Tour < ApplicationRecord
   accepts_nested_attributes_for :waypoints
 
   def last_driver
-    waypoints.order(time: :asc).last.driver
+    waypoints.order(time: :asc).last.driver if waypoints.present?
   end
 
   def to_builder
