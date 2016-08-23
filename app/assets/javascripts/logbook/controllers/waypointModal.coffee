@@ -59,7 +59,6 @@ angular.module 'Logbook'
       , () ->
         $scope.loading = false
 
-
     $scope.delete = (waypoint) ->
       $scope.loading = true
       options = { date: $filter('toShortDate')(waypoint.time) }

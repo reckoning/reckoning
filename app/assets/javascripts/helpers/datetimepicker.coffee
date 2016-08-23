@@ -1,5 +1,6 @@
 #= require pickadate/lib/picker
 #= require pickadate/lib/picker.date
+#= require pickadate/lib/picker.time
 
 window.Datepicker =
   options: ->
@@ -46,6 +47,41 @@ window.Datepicker =
 
     picker
 
+window.Timepicker =
+  options: ->
+    {
+      format: I18n.t('timepicker.formats.default')
+      clear: ' '
+      interval: 10
+    }
+
+  init: ($element, withoutInput) ->
+    withoutInput ?= false
+    options = @options()
+
+    if withoutInput
+      options.clear = false
+      options.container = "body"
+      options.containerHidden = "body"
+
+    console.log(options)
+    @setup $element, options
+
+  setup: ($element, options) ->
+    $pickerElement = $element.pickatime options
+
+    picker = $pickerElement.pickatime('picker')
+
+    $element.parent().find('.input-group-btn .btn').on 'click', (event) ->
+      event.stopPropagation()
+      event.preventDefault()
+      picker.open()
+
+    picker
+
 document.addEventListener "turbolinks:load", ->
   $('.datepicker').each ->
     Datepicker.init($(@).find('input'))
+
+  $('.timepicker').each ->
+    Timepicker.init($(@).find('input'))

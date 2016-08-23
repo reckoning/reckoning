@@ -6,6 +6,8 @@ class Waypoint < ApplicationRecord
   belongs_to :driver,
              class_name: "User"
 
+  attr_accessor :time_date, :time_hours
+
   validates :time, :account_id, :tour_id, :driver_id, presence: true
   validates :milage, :latitude, :longitude, :location, presence: true
 
@@ -14,7 +16,9 @@ class Waypoint < ApplicationRecord
   after_save :update_vessel
 
   def set_time
-    self.time = Time.zone.now
+    return if time_date.blank? || time_hours.blank?
+
+    self.time = Time.zone.parse("#{time_date} #{time_hours}")
   end
 
   def update_vessel

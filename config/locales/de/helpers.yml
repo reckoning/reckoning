@@ -92,6 +92,8 @@ de:
       waypoint:
         milage: "Laufleistung"
         location: "Aktuelle Position"
+        time_date: "Datum"
+        time_hours: "Zeit"
       setting:
         base:
           registration: "Registrierung aktiv?"
