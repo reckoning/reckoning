@@ -1,4 +1,7 @@
 de:
+  timepicker:
+    formats:
+      default: "HH:i"
   datepicker:
     formats:
       default: "d. mmmm yyyy"

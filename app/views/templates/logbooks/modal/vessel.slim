@@ -58,8 +58,8 @@
   button.hide
 .modal-footer
   .pull-right
-    button.btn.btn-primary.btn-lg form="vessel-form" data-loading-text=I18n.t(:"actions.loading")
+    button.btn.btn-primary.btn-lg form="vessel-form" ng-disabled="loading" data-loading-text=I18n.t(:"actions.loading")
       = I18n.t(:"actions.save")
   .pull-left ng-if="vessel.id"
-    button.btn.btn-danger type="button" ng-click="delete(vessel)"
+    button.btn.btn-danger type="button" ng-disabled="loading" ng-click="delete(vessel)"
       = I18n.t(:"actions.delete")

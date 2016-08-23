@@ -34,7 +34,8 @@ module Api
 
       private def waypoint_params
         @waypoint_params ||= params.permit(
-          :milage, :driver_id, :location, :latitude, :longitude, :tour_id
+          :milage, :driver_id, :location, :latitude, :longitude,
+          :tour_id, :time_date, :time_hours
         ).merge(account_id: current_account.id)
       end
     end

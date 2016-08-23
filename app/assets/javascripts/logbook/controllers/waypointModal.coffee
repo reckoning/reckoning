@@ -20,13 +20,13 @@ angular.module 'Logbook'
       $scope.minimumMilage = minimumMilage
       $scope.waypoint.milage ?= minimumMilage
       $scope.laddaButton = null
+      $scope.loading = false
 
       if !$scope.waypoint.latitude || !$scope.waypoint.longitude
         $scope.getPosition()
 
     $scope.getPosition = ($event) ->
       if $event
-        console.log($($event.currentTarget)[0])
         $scope.laddaButton = Ladda.create($($event.currentTarget)[0])
         $scope.laddaButton.start()
       console.log('fetching current position...')
@@ -37,7 +37,6 @@ angular.module 'Logbook'
         updatePosition(position.coords.latitude, position.coords.longitude)
         $scope.laddaButton.stop() if $scope.laddaButton
       , (response) ->
-        console.log(response)
         displayError(response.error.message)
         $scope.laddaButton.stop() if $scope.laddaButton
 
@@ -53,14 +52,22 @@ angular.module 'Logbook'
           $scope.waypoint.location = result[0].formatted_address
 
     $scope.save = (waypoint) ->
+      $scope.loading = true
       Waypoint.save(waypoint).then ->
         $uibModalInstance.close()
+        $scope.loading = false
+      , () ->
+        $scope.loading = false
 
     $scope.delete = (waypoint) ->
+      $scope.loading = true
       options = { date: $filter('toShortDate')(waypoint.time) }
       confirm I18n.t('messages.confirm.logbook.delete_waypoint', options), ->
         Waypoint.destroy(waypoint).then ->
           $uibModalInstance.close()
+          $scope.loading = false
+        , () ->
+          $scope.loading = false
 
     $scope.updateMarker = (marker) ->
       updatePosition(marker.latLng.lat(), marker.latLng.lng())

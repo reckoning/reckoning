@@ -14,3 +14,10 @@ angular.module 'Reckoning'
       parseFloat(input, 10)
     else
       null
+
+.filter 'toAlpha', ->
+  aToZ = (input) ->
+    (if input >= 26 then aToZ((input / 26 >> 0) - 1) else '') +
+        String.fromCharCode(65 + (input % 26 >> 0))
+  (input) ->
+    aToZ(input)
