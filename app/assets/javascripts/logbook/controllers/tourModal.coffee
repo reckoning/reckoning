@@ -21,6 +21,7 @@ angular.module 'Logbook'
       $scope.drivers = drivers
       $scope.minimumMilage = 0
       $scope.laddatButton = null
+      $scope.loading = false
 
       if !$scope.waypoint.latitude || !$scope.waypoint.longitude
         $scope.getPosition()
@@ -54,6 +55,7 @@ angular.module 'Logbook'
           $scope.waypoint.location = result[0].formatted_address
 
     $scope.save = (tour, waypoint) ->
+      $scope.loading = true
       Tour.save(tour).then (savedTour) ->
         if tour.id
           $uibModalInstance.close()
@@ -61,6 +63,11 @@ angular.module 'Logbook'
           waypoint.tourId = savedTour.id
           Waypoint.save(waypoint).then ->
             $uibModalInstance.close()
+            $scope.loading = false
+          , () ->
+            $scope.loading = false
+      , () ->
+        $scope.loading = false
 
     $scope.updateMarker = (marker) ->
       updatePosition(marker.latLng.lat(), marker.latLng.lng())

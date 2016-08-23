@@ -41,8 +41,8 @@
     button.hide
 .modal-footer
   .pull-right
-    button.btn.btn-primary.btn-lg form="waypoint-form" data-loading-text=I18n.t(:"actions.loading")
+    button.btn.btn-primary.btn-lg ng-disabled="loading" form="waypoint-form" data-loading-text=I18n.t(:"actions.loading")
       = I18n.t(:"actions.save")
   .pull-left ng-if="waypoint.id"
-    button.btn.btn-danger type="button" ng-click="delete(waypoint)"
+    button.btn.btn-danger type="button" ng-disabled="loading" ng-click="delete(waypoint)"
       = I18n.t(:"actions.delete")

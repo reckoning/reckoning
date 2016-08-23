@@ -15,16 +15,25 @@ angular.module 'Logbook'
     $timeout ->
       $scope.manufacturers = manufacturers
       $scope.vessel = vessel
+      $scope.loading = false
 
     $scope.save = (vessel) ->
+      $scope.loading = true
       Vessel.save(vessel).then (savedVessel) ->
         $uibModalInstance.close(savedVessel)
+        $scope.loading = false
+      , () ->
+        $scope.loading = false
 
     $scope.delete = (vessel) ->
+      $scope.loading = true
       options = { name: vessel.fullName }
       confirm I18n.t('messages.confirm.logbook.delete_vessel', options), ->
         Vessel.destroy(vessel).then ->
           $uibModalInstance.close()
+          $scope.loading = false
+        , () ->
+          $scope.loading = false
 
     $scope.createManufacturer = (input, selectize) ->
       manufacturer = Manufacturer.createFromString(input)

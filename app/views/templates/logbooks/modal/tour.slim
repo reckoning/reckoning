@@ -45,5 +45,5 @@
     button.hide
 .modal-footer
   .pull-right
-    button.btn.btn-primary.btn-lg form="tour-form" data-loading-text=I18n.t(:"actions.loading")
+    button.btn.btn-primary.btn-lg form="tour-form" ng-disabled="loading" data-loading-text=I18n.t(:"actions.loading")
       = I18n.t(:"actions.save")
