@@ -23,7 +23,7 @@
           .input-group
             label.input-group-addon for="initial-milage"
                = I18n.t(:"helpers.label.vessel.initial_milage")
-            input.form-control#initial-milage type="number" ng-model="vessel.initialMilage" step="0.01"
+            input.form-control#initial-milage type="number" ng-model="vessel.initialMilage"
             span.input-group-addon
               = I18n.t("labels.defaults.km")
       .col-xs-12.col-md-6 ng-if="vessel.id"
@@ -31,7 +31,7 @@
           .input-group
             label.input-group-addon for="milage"
                = I18n.t(:"helpers.label.waypoint.milage")
-            input.form-control#milage type="number" ng-model="vessel.milage" step="0.01"
+            input.form-control#milage type="number" ng-model="vessel.milage"
             span.input-group-addon
               = I18n.t("labels.defaults.km")
       .col-xs-12.col-md-6

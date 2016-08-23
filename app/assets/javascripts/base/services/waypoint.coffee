@@ -9,7 +9,7 @@ angular.module 'Reckoning'
       longitude: attrs.longitude || null
       driverId: attrs.driverId || null
       description: attrs.description || null
-      milage: $filter('toDecimal')(attrs.milage)
+      milage: $filter('toNumber')(attrs.milage)
       time: moment(attrs.time).toDate()
       timeDate: moment(attrs.time).format('YYYY-MM-DD')
       timeHours: moment(attrs.time).format('HH:mm')

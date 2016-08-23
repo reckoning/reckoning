@@ -10,8 +10,8 @@ angular.module 'Reckoning'
     new: (attrs = {}) ->
       {
         id: attrs.id || null
-        initialMilage: $filter('toDecimal')(attrs.initialMilage)
-        milage: $filter('toDecimal')(attrs.milage)
+        initialMilage: $filter('toNumber')(attrs.initialMilage)
+        milage: $filter('toNumber')(attrs.milage)
         name: attrs.name || null
         fullName: attrs.fullName || null
         manufacturer: attrs.manufacturer || null
