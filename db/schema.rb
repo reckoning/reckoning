@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160821005434) do
+ActiveRecord::Schema.define(version: 20160823195952) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -208,8 +208,8 @@ ActiveRecord::Schema.define(version: 20160821005434) do
     t.string   "vessel_type",                                             null: false
     t.decimal  "buying_price",   precision: 10, scale: 2, default: "0.0"
     t.date     "buying_date",                                             null: false
-    t.decimal  "initial_milage", precision: 10, scale: 2, default: "0.0", null: false
-    t.decimal  "milage",         precision: 10, scale: 2, default: "0.0", null: false
+    t.integer  "initial_milage",                          default: 0,     null: false
+    t.integer  "milage",                                  default: 0,     null: false
     t.string   "image_id"
     t.string   "license_plate",                                           null: false
     t.uuid     "account_id",                                              null: false
@@ -218,17 +218,17 @@ ActiveRecord::Schema.define(version: 20160821005434) do
   end
 
   create_table "waypoints", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.uuid     "tour_id",                                              null: false
-    t.uuid     "driver_id",                                            null: false
-    t.decimal  "milage",      precision: 10, scale: 2, default: "0.0", null: false
+    t.uuid     "tour_id",                 null: false
+    t.uuid     "driver_id",               null: false
+    t.integer  "milage",      default: 0, null: false
     t.float    "latitude"
     t.float    "longitude"
-    t.datetime "time",                                                 null: false
+    t.datetime "time",                    null: false
     t.text     "description"
-    t.datetime "created_at",                                           null: false
-    t.datetime "updated_at",                                           null: false
-    t.string   "location",                                             null: false
-    t.uuid     "account_id",                                           null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.string   "location",                null: false
+    t.uuid     "account_id",              null: false
   end
 
 end
