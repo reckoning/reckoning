@@ -5,7 +5,8 @@
     br 
     small 
       strong ng-bind="name"
-      = " | "
+      span.hidden-xs= " | "
+      br.visible-xs-block
       span ng-bind="location.time | toShortDate" ng-if="location.time"
 .modal-body
   .map

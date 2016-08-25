@@ -7,6 +7,11 @@ module Api
         authorize! :index, User
         @users = User.where(account_id: current_account.id)
       end
+
+      def current
+        authorize! :read, User
+        @user = current_user
+      end
     end
   end
 end

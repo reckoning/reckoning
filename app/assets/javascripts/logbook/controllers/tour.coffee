@@ -52,7 +52,7 @@ angular.module 'Logbook'
 
     $scope.headline = ->
       I18n.t('headlines.tour.show',
-        date: $filter('toShortDate')(@tour.createdAt)
+        date: $filter('toShortDate')(@tour.waypoints[0].time)
       )
 
     $scope.delete = ->
@@ -70,6 +70,7 @@ angular.module 'Logbook'
           tour: -> $scope.tour
           vessels: -> Vessel.all()
           drivers: -> User.all()
+          currentUser: -> User.current()
       .result.then ->
         $scope.getTour()
 
