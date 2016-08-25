@@ -5,8 +5,8 @@ before_script:
 - bundle exec thor setup:dev_env
 - bundle exec rake db:setup db:migrate
 script:
-- bundle exec rake
 - bundle exec rubocop
+- bundle exec rake
 before_install:
 - sudo apt-get update -qq
 - sudo apt-get install -qq fontconfig libxrender1
