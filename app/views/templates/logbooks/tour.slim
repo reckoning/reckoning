@@ -28,16 +28,13 @@
           ng-map zoom="14" center="{{map.center}}" style="height:90%"
             directions travel-mode="DRIVING" waypoints="{{waypoints}}" origin="{{origin}}" destination="{{destination}}"
     
-        .list-group.tours-list
-          .list-group-item ng-repeat="waypoint in tour.waypoints"
-            .label ng-bind="$index | toAlpha" ng-class="{'label-danger': $last, 'label-success': !$last}"
-            '
+        .list-group.waypoints-list
+          .list-group-item.waypoint ng-repeat="waypoint in tour.waypoints"
+            .waypoint-label.label ng-bind="$index | toAlpha" ng-class="{'label-danger': $last, 'label-success': !$last}"
             strong ng-bind="waypoint.time | toShortDate"
-            = " | "
-            span ng-bind="waypoint.location"
-            button.btn.btn-primary.pull-right ng-click="openWaypointModal($event, waypoint)"
+            .waypoint-location ng-bind="waypoint.location"
+            button.btn.btn-primary.waypoint-button ng-click="openWaypointModal($event, waypoint)"
               = I18n.t("actions.edit")
-            .clearfix
           .list-group-item ng-click="openWaypointModal($event)"
             .text-center
               i.fa.fa-plus

@@ -51,6 +51,12 @@ $(document).on "upload:complete", "form", (e) ->
   if !$(@).find("input.uploading").length
     $(@).find("[type=submit]").removeAttr("disabled")
 
+
+$(document).on "focus", ".modal input, .modal textarea, .modal select", ->
+  $('.modal').animate
+    scrollTop: $(@).offset().top
+  , 1000
+
 document.addEventListener "turbolinks:load", ->
   $('.btn.btn-loading').click ->
     $(this).button('loading')

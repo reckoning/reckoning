@@ -9,6 +9,7 @@
       br.visible-xs-block
       span ng-bind="location.time | toShortDate" ng-if="location.time"
 .modal-body
+  p ng-bind="location.location"
   .map
     ng-map.animate ng-cloak=true ng-if="location.latitude" center="{{location.latitude}},{{location.longitude}}" zoom="16"
       marker position="{{location.latitude}},{{location.longitude}}" title=I18n.t("labels.defaults.current_position") animation="DROP"
