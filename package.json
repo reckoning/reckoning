@@ -15,7 +15,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepush": "bundle exec rake && bundle exec rubocop"
+    "prepush": "bundle exec rubocop && bundle exec rake"
   },
   "repository": {
     "type": "git",

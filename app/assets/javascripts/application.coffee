@@ -53,9 +53,7 @@ $(document).on "upload:complete", "form", (e) ->
 
 
 $(document).on "focus", ".modal input, .modal textarea, .modal select", ->
-  $('.modal').animate
-    scrollTop: $(@).offset().top
-  , 1000
+  $(@)[0].scrollIntoView(true)
 
 document.addEventListener "turbolinks:load", ->
   $('.btn.btn-loading').click ->
