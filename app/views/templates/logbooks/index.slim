@@ -20,11 +20,13 @@
     .col-xs-12.col-md-8 ng-controller="ToursController as toursCtrl"
       .tour-panel.panel.panel-default.animate ng-repeat="tour in tours"
         .panel-body
-          .pull-left
+          a.tour-item href="#/tours/{{tour.id}}" 
             h3
-              a href="#/tours/{{tour.id}}" ng-bind="tour.createdAt | toShortDate"  
+              span ng-bind="tour.waypoints[0].time | toShortDate"   
+            br.visible-xs-block 
+            '
             span.label.label-primary ng-bind="tour.vesselLicensePlate"
-          a.btn.btn-primary.pull-right.tours-list-button href="" ng-click="openModal($event, tour)"
+          a.btn.btn-primary.pull-right.tour-button href="" ng-click="openModal($event, tour)"
             = I18n.t("actions.add_waypoint")            
       .animate ng-cloak=true ng-if="toursLoaded && !tours.length"
         .row
@@ -36,6 +38,7 @@
           i.fa.fa-plus
           '
           = I18n.t(:"nav.subnav.new_tour")
+      br.visible-xs-block
       .panel.panel-default#vessels-panel.text-left ng-controller="VesselsController as vesselsCtrl"
         .panel-heading
           .panel-title

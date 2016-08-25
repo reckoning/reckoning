@@ -1,6 +1,5 @@
 angular.module 'Reckoning'
 .factory 'Waypoint', ['$http', '$q', '$filter', ($http, $q, $filter) ->
-  allPromise: $q.defer()
 
   new: (attrs = {}) ->
     {

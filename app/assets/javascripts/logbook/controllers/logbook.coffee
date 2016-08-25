@@ -28,6 +28,7 @@ angular.module 'Logbook'
           tour: -> Tour.new()
           vessels: -> Vessel.all()
           drivers: -> User.all()
+          currentUser: -> User.current()
       .result.then ->
         $scope.$broadcast('tourStarted')
 

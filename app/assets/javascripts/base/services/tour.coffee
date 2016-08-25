@@ -1,6 +1,7 @@
 angular.module 'Reckoning'
 .factory 'Tour', ['$http', '$q', '$filter', ($http, $q, $filter) ->
   allPromise: $q.defer()
+  getPromise: $q.defer()
 
   new: (attrs = {}) ->
     {
@@ -31,8 +32,10 @@ angular.module 'Reckoning'
 
   get: (id) ->
     factory = @
-    $http.get(
-      ApiBasePath + Routes.v1_tour_path(id)
+    @getPromise.resolve()
+    @getPromise = $q.defer()
+    $http.get(ApiBasePath + Routes.v1_tour_path(id),
+      timeout: @getPromise
     ).then (response) ->
       factory.new(response.data)
 

@@ -10,13 +10,15 @@ angular.module 'Logbook'
   'tour'
   'vessels'
   'drivers'
+  'currentUser'
   (
     $scope, $timeout, $uibModalInstance, $geolocation,
-    GeoCoder, Tour, Waypoint, tour, vessels, drivers
+    GeoCoder, Tour, Waypoint, tour, vessels, drivers, currentUser
   ) ->
     $timeout ->
       $scope.tour = tour
-      $scope.waypoint = Waypoint.new()
+      $scope.tour.vesselId = vessels[0].id if vessels.length > 0
+      $scope.waypoint = Waypoint.new({ driverId: currentUser.id })
       $scope.vessels = vessels
       $scope.drivers = drivers
       $scope.minimumMilage = 0
@@ -28,7 +30,6 @@ angular.module 'Logbook'
 
     $scope.getPosition = ($event) ->
       if $event
-        console.log($($event.currentTarget)[0])
         $scope.laddaButton = Ladda.create($($event.target)[0])
         $scope.laddaButton.start()
       console.log('fetching current position...')
@@ -39,7 +40,6 @@ angular.module 'Logbook'
         updatePosition(position.coords.latitude, position.coords.longitude)
         $scope.laddaButton.stop() if $scope.laddaButton
       , (response) ->
-        console.log(response)
         displayError(response.error.message)
         $scope.laddaButton.stop() if $scope.laddaButton
 

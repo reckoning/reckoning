@@ -12,6 +12,47 @@
   }
 }
 
+.tour-panel {
+  .label {
+    font-size: 90%;
+    margin-bottom: 5px;
+    display: inline-block;
+  }
+
+  .panel-body {
+    position: relative;
+    min-height: 64px;
+    padding: 0;
+    padding-right: 146px;
+  }
+
+  a.tour-item {
+    display: block;
+    padding: 15px;
+    min-height: 64px;
+
+    h3 {
+      color: $text-color;
+    }
+
+    &:hover {
+      h3 {
+        color: darken($text-color, 15%)
+      }
+    }
+  }
+
+  .tour-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+  }
+
+  h3 {
+    display: inline-block;
+  }
+}
+
 form input[type="number"] {
   text-align: right;
 }
@@ -21,6 +62,26 @@ form input[type="number"] {
     margin-right: -16px;
     margin-top: -11px;
     padding: 10px 15px;
+  }
+}
+
+.waypoints-list {
+  .waypoint {
+    padding-right: 124px;
+  }
+
+  .waypoint-location {
+    margin-top: 5px;
+  }
+
+  .waypoint-label {
+    margin-right: 5px;
+  }
+
+  .waypoint-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
   }
 }
 

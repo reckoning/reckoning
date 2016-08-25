@@ -42,14 +42,12 @@ angular.module 'Reckoning'
     save: (vessel) ->
       factory = @
       if vessel.id
-        $http.put(
-          ApiBasePath + Routes.v1_vessel_path(vessel.id)
+        $http.put(ApiBasePath + Routes.v1_vessel_path(vessel.id),
           vessel
         ).then (response) ->
           factory.new(response.data)
       else
-        $http.post(
-          ApiBasePath + Routes.v1_vessels_path()
+        $http.post(ApiBasePath + Routes.v1_vessels_path(),
           vessel
         ).then (response) ->
           factory.new(response.data)

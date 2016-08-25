@@ -22,7 +22,11 @@ v1_api_routes = lambda do
   resources :tours, only: [:index, :show, :create, :update, :destroy]
   resources :waypoints, only: [:create, :update, :destroy]
   resources :manufacturers, only: [:index]
-  resources :users, only: [:index]
+  resources :users, only: [:index] do
+    collection do
+      get :current
+    end
+  end
 end
 
 scope :v1, defaults: { format: :json }, as: :v1 do
