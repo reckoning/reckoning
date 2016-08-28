@@ -52,7 +52,7 @@ window.Timepicker =
     {
       format: I18n.t('timepicker.formats.default')
       clear: ' '
-      interval: 10
+      interval: 5
     }
 
   init: ($element, withoutInput) ->
