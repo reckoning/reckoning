@@ -10,10 +10,14 @@
           span ng-bind="tour.vesselName"
           
       p.lead.animate ng-cloak=true ng-bind="tour.description" ng-if="tour.description"
-          
+      p.animate ng-cloak=true ng-if="tour.distance && tour.duration"
+        span ng-bind="tour.distance | toKilometre"
+        = " | "
+        span ng-bind="tour.duration | toTimeInWords"
+      
     .col-xs-12.col-md-4
       .btn-group.btn-group-justified-responsive.pull-right.resource-nav
-        a.btn.btn-default href="#/"
+        a.btn.btn-default href="#/day/{{date()}}"
           = I18n.t(:"nav.subnav.back")
         a.btn.btn-primary href="" ng-click="openModal($event)"
           = I18n.t(:"actions.edit")
@@ -21,11 +25,9 @@
           = I18n.t(:"actions.delete")
   .row
     .col-xs-12
-  .row
-    .col-xs-12
       .panel.panel-default
         .panel-heading.panel-heading-map
-          ng-map zoom="14" center="{{map.center}}" style="height:90%"
+          ng-map zoom="14" center="{{map.center}}" style="height: 400px;" scrollwheel="false"
             directions travel-mode="DRIVING" waypoints="{{waypoints}}" origin="{{origin}}" destination="{{destination}}"
     
         .list-group.waypoints-list

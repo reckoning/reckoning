@@ -14,3 +14,13 @@ angular.module 'Reckoning'
 .filter 'toShortDate', ->
   (input) ->
     I18n.l("time.formats.short", input)
+.filter 'toTimeInWords', ->
+  (input) ->
+    time = parseInt(input, 10) / 3600
+    hours = Math.floor(time)
+    minutes = Math.round((time % 1) * 60)
+    result = ""
+    if hours > 0
+      result += "#{hours} #{I18n.t('hours', { count: hours })} "
+    result += "#{minutes} #{I18n.t('minutes', { count: minutes })}"
+    result

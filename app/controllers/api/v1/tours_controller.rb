@@ -6,7 +6,11 @@ module Api
       def index
         authorize! :index, Tour
         scope = Tour.where(account_id: current_account.id)
-        scope = scope.where(created_at: (date.beginning_of_day..date.end_of_day)) if date
+        if date
+          scope = scope.includes(:waypoints)
+                       .where(waypoints: { time: (date.beginning_of_day..date.end_of_day) })
+                       .references(:waypoints)
+        end
         @tours = scope.order(created_at: :desc)
       end
 
@@ -61,7 +65,7 @@ module Api
 
       private def tour_params
         @tour_params ||= params.permit(
-          :description, :vessel_id,
+          :description, :vessel_id, :distance, :duration,
           waypoints_attributes: [:milage, :driver_id, :location, :latitude, :longitude]
         ).merge(account_id: current_account.id)
       end

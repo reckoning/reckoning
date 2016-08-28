@@ -64,7 +64,6 @@ window.Timepicker =
       options.container = "body"
       options.containerHidden = "body"
 
-    console.log(options)
     @setup $element, options
 
   setup: ($element, options) ->

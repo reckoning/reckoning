@@ -26,3 +26,6 @@ angular.module 'Reckoning'
       parseInt(input, 10)
     else
       null
+.filter 'toKilometre', ->
+  (input) ->
+    I18n.toCurrency((parseInt(input, 10) / 1000), { unit: 'Km' })

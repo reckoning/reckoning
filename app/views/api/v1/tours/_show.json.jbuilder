@@ -2,6 +2,8 @@
 # frozen_string_literal: true
 json.id tour.id
 json.description tour.description
+json.distance tour.distance
+json.duration tour.duration
 json.vessel_id tour.vessel.id
 json.vessel_license_plate tour.vessel.license_plate
 json.vessel_name tour.vessel.name
