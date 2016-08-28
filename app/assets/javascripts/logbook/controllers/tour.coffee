@@ -9,9 +9,10 @@ angular.module 'Logbook'
   'Vessel'
   'Waypoint'
   'User'
+  'NgMap'
   (
     $scope, $filter, $uibModal, $routeParams,
-    $location, Tour, Vessel, Waypoint, User
+    $location, Tour, Vessel, Waypoint, User, NgMap
   ) ->
     $scope.tour = {}
     $scope.tourLoaded = false
@@ -19,6 +20,7 @@ angular.module 'Logbook'
     $scope.waypoints = []
     $scope.destination = {}
     $scope.map = {}
+    $scope.mapObject = {}
 
     setupRoute = (tour) ->
       $scope.map = {
@@ -42,13 +44,30 @@ angular.module 'Logbook'
     latLng = (waypoint) ->
       "#{waypoint.latitude},#{waypoint.longitude}"
 
+    calculateDistance = (tour) ->
+      NgMap.getMap().then (map) ->
+        legs = map.directionsRenderers[0].directions.routes[0].legs
+        tour.distance = legs.reduce (sum, leg) ->
+          sum + leg.distance.value
+        , 0
+        tour.duration = legs.reduce (sum, leg) ->
+          sum + leg.duration.value
+        , 0
+        Tour.save(tour)
+
     $scope.getTour = ->
       Tour.get($routeParams.id).then (tour) ->
         $scope.tour = tour
         $scope.tourLoaded = true
         setupRoute(tour)
+        setTimeout ->
+          calculateDistance(tour)
+        , 500
 
     $scope.getTour()
+
+    $scope.date = ->
+      I18n.l('date.formats.db', @tour.waypoints[0].time)
 
     $scope.headline = ->
       I18n.t('headlines.tour.show',

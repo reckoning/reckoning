@@ -8,7 +8,7 @@
 .modal-body
   form#tour-form ng-submit="save(tour, waypoint)"
     .map ng-cloak=true ng-if="!tour.id"
-      ng-map.animate ng-cloak=true ng-if="waypoint.latitude" center="{{waypoint.latitude}},{{waypoint.longitude}}" zoom="16"
+      ng-map.animate ng-cloak=true ng-if="waypoint.latitude" center="{{waypoint.latitude}},{{waypoint.longitude}}" zoom="16" scrollwheel="false"
         marker position="{{waypoint.latitude}},{{waypoint.longitude}}" on-dragend="updateMarker()" title=I18n.t("labels.defaults.current_position") animation="DROP" draggable="true"
       .loader.animate ng-cloak=true ng-if="!waypoint.latitude"
     .row ng-cloak=true ng-if="!tour.id"

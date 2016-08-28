@@ -13,6 +13,8 @@ angular.module 'Reckoning'
       vesselLicensePlate: attrs.vesselLicensePlate || null
       vesselMilage: attrs.vesselMilage || null
       lastDriverId: attrs.lastDriverId || null
+      distance: attrs.distance || null
+      duration: attrs.duration || null
       createdAt: attrs.createdAt || null
       updatedAt: attrs.updatedAt || null
     }

@@ -1,4 +1,10 @@
 de:
+  hours:
+    one: "Stunde"
+    other: "Stunden"
+  minutes:
+    one: "Minute"
+    other: "Minuten"
   timepicker:
     formats:
       default: "HH:i"
