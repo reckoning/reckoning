@@ -47,7 +47,7 @@ module Api
       private def vessel_params
         @vessel_params ||= params.permit(
           :manufacturer, :vessel_type, :license_plate, :initial_milage,
-          :buying_price, :buying_date, :image
+          :milage, :buying_price, :buying_date, :image
         ).merge(account_id: current_account.id)
       end
     end
