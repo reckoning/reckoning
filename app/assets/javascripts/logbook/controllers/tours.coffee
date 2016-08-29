@@ -74,6 +74,7 @@ angular.module 'Logbook'
           minimumMilage: -> tour.vesselMilage
           waypoint: -> Waypoint.new(waypoint)
           drivers: -> User.all()
+          waypoints: -> Waypoint.all({ limit: 20 })
       .result.then ->
         $scope.getTours ->
           setTimeout ->

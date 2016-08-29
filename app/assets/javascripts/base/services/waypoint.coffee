@@ -1,5 +1,6 @@
 angular.module 'Reckoning'
 .factory 'Waypoint', ['$http', '$q', '$filter', ($http, $q, $filter) ->
+  allPromise: $q.defer()
 
   new: (attrs = {}) ->
     {
@@ -17,6 +18,16 @@ angular.module 'Reckoning'
       createdAt: attrs.createdAt || null
       updatedAt: attrs.updatedAt || null
     }
+
+  all: (params) ->
+    factory = @
+    @allPromise.resolve()
+    @allPromise = $q.defer()
+    $http.get(ApiBasePath + Routes.v1_waypoints_path(),
+      timeout: @allPromise
+      params: params
+    ).then (response) ->
+      response.data.map((waypoint) -> factory.new(waypoint))
 
   save: (waypoint) ->
     factory = @

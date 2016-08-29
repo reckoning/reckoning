@@ -7,7 +7,8 @@ angular.module 'Logbook'
   'Tour'
   'Vessel'
   'User'
-  ($scope, $uibModal, $routeParams, $location, Tour, Vessel, User) ->
+  'Waypoint'
+  ($scope, $uibModal, $routeParams, $location, Tour, Vessel, User, Waypoint) ->
     date = moment().format('YYYY-MM-DD')
     if $routeParams.date && moment($routeParams.date).isValid()
       date = $routeParams.date
@@ -29,6 +30,7 @@ angular.module 'Logbook'
           vessels: -> Vessel.all()
           drivers: -> User.all()
           currentUser: -> User.current()
+          waypoints: -> Waypoint.all({ limit: 20 })
       .result.then ->
         $scope.$broadcast('tourStarted')
 

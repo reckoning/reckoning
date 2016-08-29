@@ -10,18 +10,21 @@ angular.module 'Logbook'
   'minimumMilage'
   'waypoint'
   'drivers'
+  'waypoints'
   (
     $scope, $timeout, $uibModalInstance, $geolocation, $filter,
-    GeoCoder, Waypoint, minimumMilage, waypoint, drivers
+    GeoCoder, Waypoint, minimumMilage, waypoint, drivers, waypoints
   ) ->
-    $timeout ->
-      $scope.waypoint = waypoint
-      $scope.drivers = drivers
-      $scope.minimumMilage = minimumMilage
-      $scope.waypoint.milage ?= minimumMilage
-      $scope.laddaButton = null
-      $scope.loading = false
+    $scope.waypoint = waypoint
+    $scope.drivers = drivers
+    $scope.currentLocation = Waypoint.new()
+    $scope.locations = waypoints
+    $scope.minimumMilage = minimumMilage
+    $scope.waypoint.milage ?= minimumMilage
+    $scope.laddaButton = null
+    $scope.loading = false
 
+    $timeout ->
       if !$scope.waypoint.latitude || !$scope.waypoint.longitude
         $scope.getPosition()
 
@@ -41,15 +44,25 @@ angular.module 'Logbook'
         $scope.laddaButton.stop() if $scope.laddaButton
 
     updatePosition = (lat, lng) ->
-      $scope.waypoint.latitude = lat
-      $scope.waypoint.longitude = lng
+      $scope.currentLocation.latitude = lat
+      $scope.currentLocation.longitude = lng
       GeoCoder.geocode(
         location:
           lat: lat
           lng: lng
       ).then (result) ->
         if result.length > 0
-          $scope.waypoint.location = result[0].formatted_address
+          $scope.currentLocation.location = result[0].formatted_address
+          $scope.locations.unshift($scope.currentLocation)
+          $scope.waypoint.location = $scope.currentLocation.location
+
+    $scope.$watch 'waypoint.location', ->
+      location = _.find $scope.locations, (location) ->
+        location.location is $scope.waypoint.location
+
+      if location
+        $scope.waypoint.latitude = location.latitude
+        $scope.waypoint.longitude = location.longitude
 
     $scope.save = (waypoint) ->
       $scope.loading = true

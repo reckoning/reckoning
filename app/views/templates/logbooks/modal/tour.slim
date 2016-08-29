@@ -17,10 +17,23 @@
           .input-group
             label.input-group-addon for="waypoint-location"
                = I18n.t(:"helpers.label.waypoint.location")
-            input.form-control#waypoint-location type="text" ng-model="waypoint.location" disabled="disabled"  
+            select selectize="true" options="locations" ng-model="waypoint.location" label-field="location" value-field="location"
             span.input-group-btn
               button.btn.btn-primary.ladda-button type="button" ng-click="getPosition($event)"
                 i.fa.fa-location-arrow
+    .row
+      .col-xs-12.col-md-6
+        .form-group
+          .input-group
+            label.input-group-addon for="time-date"
+              = I18n.t(:"helpers.label.waypoint.time_date")
+            input.form-control#time-date datepicker=true type="text" ng-model="waypoint.timeDate" placeholder=I18n.t(:"helpers.placeholder.waypoint.time_date")
+      .col-xs-12.col-md-6
+        .form-group
+          .input-group
+            label.input-group-addon for="time-hours"
+              = I18n.t(:"helpers.label.waypoint.time_hours")
+            input.form-control#time-hours timepicker=true type="text" ng-model="waypoint.timeHours" placeholder=I18n.t(:"helpers.placeholder.waypoint.time_hours")
     .row
       .col-xs-12.col-md-6
         .form-group.selectize

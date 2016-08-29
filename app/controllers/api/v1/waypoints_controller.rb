@@ -3,6 +3,13 @@
 module Api
   module V1
     class WaypointsController < ::Api::BaseController
+      def index
+        authorize! :read, Waypoint
+        scope = Waypoint.where(account_id: current_account.id)
+        scope = scope.limit(limit) if limit.present?
+        @waypoints = scope.all
+      end
+
       def create
         @waypoint ||= Waypoint.new waypoint_params
         authorize! :create, @waypoint
@@ -30,6 +37,10 @@ module Api
           Rails.logger.info "Waypoint Destroy Failed: #{@waypoint.errors.full_messages.to_yaml}"
           render json: ValidationError.new("waypoint.destroy", @waypoint.errors), status: :bad_request
         end
+      end
+
+      private def limit
+        @limit ||= params[:limit]
       end
 
       private def waypoint_params
