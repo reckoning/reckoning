@@ -91,7 +91,7 @@ de:
         type: "Typ"
       waypoint:
         milage: "Laufleistung"
-        location: "Aktuelle Position"
+        location: "Position"
         time_date: "Datum"
         time_hours: "Zeit"
       setting:

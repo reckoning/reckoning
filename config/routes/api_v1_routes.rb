@@ -20,7 +20,7 @@ v1_api_routes = lambda do
 
   resources :vessels, only: [:index, :create, :update, :destroy]
   resources :tours, only: [:index, :show, :create, :update, :destroy]
-  resources :waypoints, only: [:create, :update, :destroy]
+  resources :waypoints, only: [:index, :create, :update, :destroy]
   resources :manufacturers, only: [:index]
   resources :users, only: [:index] do
     collection do

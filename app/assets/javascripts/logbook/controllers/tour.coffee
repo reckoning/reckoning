@@ -90,6 +90,7 @@ angular.module 'Logbook'
           vessels: -> Vessel.all()
           drivers: -> User.all()
           currentUser: -> User.current()
+          waypoints: -> Waypoint.all({ limit: 20 })
       .result.then ->
         $scope.getTour()
 
@@ -108,6 +109,7 @@ angular.module 'Logbook'
           minimumMilage: -> $scope.tour.vesselMilage
           waypoint: -> Waypoint.new(waypoint)
           drivers: -> User.all()
+          waypoints: -> Waypoint.all({ limit: 20 })
       .result.then ->
         $scope.getTour()
 ]
