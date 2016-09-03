@@ -27,7 +27,7 @@
     .col-xs-12
       .panel.panel-default
         .panel-heading.panel-heading-map
-          ng-map zoom="14" center="{{map.center}}" style="height: 400px;" scrollwheel="false"
+          ng-map zoom="14" center="{{map.center}}" style="height: 400px;" scrollwheel="false" draggable="false"
             directions travel-mode="DRIVING" waypoints="{{waypoints}}" origin="{{origin}}" destination="{{destination}}"
     
         .list-group.waypoints-list
