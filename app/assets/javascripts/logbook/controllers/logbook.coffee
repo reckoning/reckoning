@@ -30,7 +30,7 @@ angular.module 'Logbook'
           vessels: -> Vessel.all()
           drivers: -> User.all()
           currentUser: -> User.current()
-          waypoints: -> Waypoint.all({ limit: 20 })
+          waypoints: -> Waypoint.all()
       .result.then ->
         $scope.$broadcast('tourStarted')
 

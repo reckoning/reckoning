@@ -6,7 +6,6 @@ module Api
       def index
         authorize! :read, Waypoint
         scope = Waypoint.where(account_id: current_account.id)
-        scope = scope.limit(limit) if limit.present?
         @waypoints = scope.order(created_at: :desc).all
       end
 
