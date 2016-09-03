@@ -20,7 +20,7 @@
     .col-xs-12.col-md-8 ng-controller="ToursController as toursCtrl"
       .tour-panel.panel.panel-default.animate ng-repeat="tour in tours"
         .panel-heading.panel-heading-map
-          ng-map zoom="14" center="{{originFor(tour)}}" style="height: 150px;" scrollwheel="false"
+          ng-map zoom="14" center="{{originFor(tour)}}" style="height: 150px;" scrollwheel="false" draggable="false"
             directions travel-mode="DRIVING" waypoints="{{waypointsFor(tour)}}" origin="{{originFor(tour)}}" destination="{{destinationFor(tour)}}"
         .panel-body
           a.tour-item href="#/tours/{{tour.id}}" 

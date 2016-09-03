@@ -18,7 +18,12 @@ angular.module 'Logbook'
   ) ->
     $scope.tour = tour
     $scope.tour.vesselId = vessels[0].id if vessels.length > 0
-    $scope.waypoint = Waypoint.new({ driverId: currentUser.id })
+    $scope.waypoint = Waypoint.new({
+      driverId: currentUser.id
+      latitude: waypoints[0].latitude if waypoints.length > 0
+      longitude: waypoints[0].longitude if waypoints.length > 0
+      location: waypoints[0].location if waypoints.length > 0
+    })
     $scope.vessels = vessels
     $scope.drivers = drivers
     $scope.currentLocation = Waypoint.new()
