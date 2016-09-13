@@ -15,7 +15,7 @@ class Customer < ActiveRecord::Base
   def workdays
     return if employment_date.blank?
     days = 0
-    date = Time.current.to_date
+    date = Time.current.to_date - 1.day
     while date > employment_date
       days += 1 unless date.saturday? || date.sunday?
       date -= 1.day
