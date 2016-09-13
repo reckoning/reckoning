@@ -15,7 +15,7 @@ class Customer < ActiveRecord::Base
   def workdays
     return if employment_date.blank?
     days = 0
-    date = Time.current.to_date - 1.day
+    date = Time.current.to_date
     while date > employment_date
       days += 1 unless date.saturday? || date.sunday?
       date -= 1.day
@@ -25,6 +25,10 @@ class Customer < ActiveRecord::Base
 
   def overtime(user_id)
     return if workdays.blank? || weekly_hours.blank?
-    (timers.where(user_id: user_id).sum(:value) - (workdays / 5.0 * weekly_hours)).to_f
+    (timers.where(user_id: user_id).sum(:value) - scheduled_hours).to_f
+  end
+
+  def scheduled_hours
+    (workdays / 5.0 * weekly_hours)
   end
 end
