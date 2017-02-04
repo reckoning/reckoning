@@ -25,7 +25,7 @@ set :user, 'reckoning'
 set :forward_agent, true
 
 set :deploy_to, '/home/reckoning'
-set :repository, 'https://github.com/mortik/reckoning'
+set :repository, 'https://github.com/reckoning/app.git'
 set :rails_env, 'production'
 set :branch, 'master'
 
@@ -44,12 +44,12 @@ task deploy: :environment do
     invoke :'bundle:install'
 
     # invoke :'rails:db_migrate'
-    invoke :'rails:assets_precompile'
+    # invoke :'rails:assets_precompile'
     invoke :'deploy:cleanup'
 
     on :launch do
-      # invoke :'server:start'
-      invoke :'server:phased_restart'
+      invoke :'server:start'
+      # invoke :'server:phased_restart'
     end
   end
 end
