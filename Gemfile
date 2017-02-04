@@ -94,6 +94,10 @@ group :development do
   gem 'listen', '~> 3.0.5'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+
+  # deployment
+  gem 'mina', require: false
+  gem 'mina-multistage', require: false
 end
 
 group :test do

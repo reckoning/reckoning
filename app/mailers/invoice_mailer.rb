@@ -1,7 +1,7 @@
 # encoding: utf-8
 # frozen_string_literal: true
 class InvoiceMailer < ActionMailer::Base
-  default from: (Rails.application.secrets[:mailer]['default_from']).to_s
+  default from: Rails.application.secrets[:mailer_default_from].to_s
 
   attr_accessor :invoice
 
@@ -43,6 +43,6 @@ class InvoiceMailer < ActionMailer::Base
   def from
     @from ||= invoice.customer.default_from if invoice.customer.default_from.present?
     @from ||= invoice.account.default_from if invoice.account.default_from.present?
-    @from ||= Rails.application.secrets[:mailer]["default_from"]
+    @from ||= Rails.application.secrets[:mailer_default_from]
   end
 end

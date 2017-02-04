@@ -95,11 +95,11 @@ Reckoning::Application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.default_url_options = { host: Rails.application.secrets[:domain] }
   config.action_mailer.smtp_settings = {
-    address: Rails.application.secrets[:mailer]["host"],
-    port: Rails.application.secrets[:mailer]["port"],
+    address: Rails.application.secrets[:mailer_host],
+    port: Rails.application.secrets[:mailer_port],
     enable_starttls_auto: true,
-    user_name: Rails.application.secrets[:mailer]["user"],
-    password: Rails.application.secrets[:mailer]["password"],
+    user_name: Rails.application.secrets[:mailer_user],
+    password: Rails.application.secrets[:mailer_password],
     authentication: 'login',
     domain: Rails.application.secrets[:domain]
   }

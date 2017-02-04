@@ -53,12 +53,12 @@ class ApplicationController < ActionController::Base
   helper_method :backend?
 
   private def registration_enabled?
-    Rails.application.secrets[:base]["registration"]
+    Rails.application.secrets[:registration]
   end
   helper_method :registration_enabled?
 
   private def invoice_limit_reached?
-    !current_user.admin? && Rails.application.secrets[:base]["demo"] && current_account.invoices.count >= 2
+    !current_user.admin? && Rails.application.secrets[:demo] && current_account.invoices.count >= 2
   end
   helper_method :invoice_limit_reached?
 

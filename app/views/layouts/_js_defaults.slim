@@ -2,6 +2,6 @@ javascript:
   I18n.defaultLocale = "#{I18n.default_locale}";
   I18n.locale = "#{I18n.locale}";
   AuthToken = "#{auth_token}";
-  StripeKey = "#{Rails.application.secrets[:stripe]['public_key']}";
+  StripeKey = "#{Rails.application.secrets[:stripe_public_key]}";
   ApiBasePath = "#{(api_domain if defined?(api_domain))}"
   GoogleApiKey = "#{Rails.application.secrets[:google_api_key]}"
