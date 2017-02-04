@@ -23,19 +23,21 @@ module Api
       def update
         @waypoint = Waypoint.find_by(id: params[:id], account_id: current_account.id)
         authorize! :update, @waypoint
-        unless @waypoint.update(waypoint_params)
-          Rails.logger.info "Waypoint Update Failed: #{@waypoint.errors.full_messages.to_yaml}"
-          render json: ValidationError.new("waypoint.update", @waypoint.errors), status: :bad_request
-        end
+
+        return if @waypoint.update(waypoint_params)
+
+        Rails.logger.info "Waypoint Update Failed: #{@waypoint.errors.full_messages.to_yaml}"
+        render json: ValidationError.new("waypoint.update", @waypoint.errors), status: :bad_request
       end
 
       def destroy
         @waypoint = Waypoint.find_by(id: params[:id], account_id: current_account.id)
         authorize! :destroy, @waypoint
-        unless @waypoint.destroy
-          Rails.logger.info "Waypoint Destroy Failed: #{@waypoint.errors.full_messages.to_yaml}"
-          render json: ValidationError.new("waypoint.destroy", @waypoint.errors), status: :bad_request
-        end
+
+        return if @waypoint.destroy
+
+        Rails.logger.info "Waypoint Destroy Failed: #{@waypoint.errors.full_messages.to_yaml}"
+        render json: ValidationError.new("waypoint.destroy", @waypoint.errors), status: :bad_request
       end
 
       private def limit

@@ -35,8 +35,7 @@ module Backend
     end
 
     # get: /backend/accounts/:id/edit
-    def edit
-    end
+    def edit; end
 
     # patch: /backend/accounts/:id
     def update

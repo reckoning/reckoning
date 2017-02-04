@@ -8,14 +8,14 @@ gem 'rails', '5.0.0'
 
 gem 'pg'
 
-gem 'stripe', github: 'stripe/stripe-ruby'
 gem 'money'
+gem 'stripe', github: 'stripe/stripe-ruby'
 gem 'valvat'
 
 gem 'sidekiq'
 # for sidekiq web
-gem 'sinatra', require: nil, github: 'sinatra/sinatra'
 gem 'rack-protection', github: 'sinatra/rack-protection'
+gem 'sinatra', require: nil, github: 'sinatra/sinatra'
 
 gem 'haml'
 gem 'haml-rails'
@@ -24,15 +24,15 @@ gem 'slim-rails'
 gem 'devise'
 gem 'devise-two-factor'
 
-gem 'rqrcode-rails3'
 gem 'mini_magick'
+gem 'rqrcode-rails3'
 
 gem 'cancancan'
 
 gem 'dalli'
 
-gem 'url_plumber'
 gem 'kaminari'
+gem 'url_plumber'
 
 gem 'jbuilder', '~> 2.5'
 
@@ -44,11 +44,11 @@ gem 'sass-rails', '~> 5.0'
 
 gem 'coffee-rails', '~> 4.2'
 gem 'jquery-rails'
-gem 'turbolinks', '~> 5'
 gem 'js-routes'
+gem 'turbolinks', '~> 5'
 
-gem 'bourbon'
 gem 'bootstrap-sass'
+gem 'bourbon'
 gem 'font-awesome-sass'
 
 gem 'uglifier', '>= 1.3.0'
@@ -60,8 +60,8 @@ gem 'puma', '~> 3.0'
 gem "i18n-js", ">= 3.0.0.rc11"
 gem 'rails-i18n'
 
-gem 'thor'
 gem 'highline'
+gem 'thor'
 
 gem 'bower-rails'
 
@@ -88,12 +88,12 @@ gem "refile-s3"
 gem 'non-stupid-digest-assets'
 
 group :development do
+  gem 'listen', '~> 3.0.5'
   gem 'pry-rails'
   gem 'rubocop', require: false
-  gem 'web-console'
-  gem 'listen', '~> 3.0.5'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'web-console'
 
   # deployment
   gem 'mina', require: false
@@ -101,19 +101,19 @@ group :development do
 end
 
 group :test do
-  gem 'faker'
+  gem "codeclimate-test-reporter", require: false
   gem 'coveralls', require: false
+  gem 'database_cleaner'
+  gem 'factory_girl'
+  gem 'faker'
+  gem 'minitest-rails'
+  gem 'mocha', require: false
+  gem 'rails-perftest', github: 'rails/rails-perftest'
+  gem 'ruby-prof'
   gem 'simplecov', require: false
   gem 'simplecov-console', require: false
   gem 'simplecov-html', require: false
-  gem 'rails-perftest', github: 'rails/rails-perftest'
-  gem 'minitest-rails'
-  gem 'ruby-prof'
-  gem 'database_cleaner'
-  gem 'factory_girl'
-  gem 'mocha', require: false
   gem 'timecop'
-  gem "codeclimate-test-reporter", require: false
 end
 
 group :development, :test do

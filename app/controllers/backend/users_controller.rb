@@ -15,8 +15,7 @@ module Backend
     end
 
     # get: /backend/users/new
-    def new
-    end
+    def new; end
 
     # post: /backend/users
     def create
@@ -44,8 +43,7 @@ module Backend
     end
 
     # get: /backend/users/:id/edit
-    def edit
-    end
+    def edit; end
 
     # patch: /backend/users/:id
     def update
