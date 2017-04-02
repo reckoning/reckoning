@@ -9,13 +9,12 @@ gem 'rails', '5.0.2'
 gem 'pg'
 
 gem 'money'
-gem 'stripe', github: 'stripe/stripe-ruby'
+gem 'stripe', git: 'https://github.com/stripe/stripe-ruby'
 gem 'valvat'
 
 gem 'sidekiq'
 # for sidekiq web
-gem 'rack-protection', github: 'sinatra/rack-protection'
-gem 'sinatra', require: nil, github: 'sinatra/sinatra'
+gem 'sinatra', require: nil, git: 'https://github.com/sinatra/sinatra'
 
 gem 'haml'
 gem 'haml-rails'
@@ -81,11 +80,13 @@ gem 'typhoeus'
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-heroku'
 
-gem "refile", require: 'refile/rails', github: 'refile/refile'
+gem "refile", require: 'refile/rails', git: 'https://github.com/refile/refile'
 gem "refile-s3"
 
 # heroku production
 gem 'non-stupid-digest-assets'
+
+gem 'nokogiri', '>= 1.7.1'
 
 group :development do
   gem 'listen', '~> 3.0.5'
@@ -108,7 +109,7 @@ group :test do
   gem 'faker'
   gem 'minitest-rails'
   gem 'mocha', require: false
-  gem 'rails-perftest', github: 'rails/rails-perftest'
+  gem 'rails-perftest', git: 'https://github.com/rails/rails-perftest'
   gem 'ruby-prof'
   gem 'simplecov', require: false
   gem 'simplecov-console', require: false
