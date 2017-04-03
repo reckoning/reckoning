@@ -52,6 +52,10 @@ class Timer < ActiveRecord::Base
     where.not(tasks: { billable: true }).references(:task)
   end
 
+  def self.running
+    where.not(started_at: nil)
+  end
+
   def start_time
     (started_at - value.to_d.hours).to_i * 1000 if started_at
   end
@@ -103,6 +107,11 @@ class Timer < ActiveRecord::Base
     return if value.blank? || started?
 
     self.value = (value.hours - (value.hours % 60)) / 3600
+  end
+
+  def current_value
+    timer_value = ((Time.zone.now - started_at) / 1.hour)
+    value + timer_value
   end
 
   def to_builder

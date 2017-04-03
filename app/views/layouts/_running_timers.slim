@@ -1,0 +1,15 @@
+- if timers.present?
+  .current-timers
+    h2
+      small Running Timer
+    - timers.each do |timer|
+      .panel.panel-default.timer(data-timer-value=timer.value data-timer-started-at=timer.started_at)
+        .panel-body
+          h3
+            = timer.task.project.name
+          a.pull-right href=timesheet_path(anchor: "/day/#{timer.date}")
+            = to_time(timer.current_value)
+            '
+            i.fa.fa-circle-o-notch.fa-spin
+
+

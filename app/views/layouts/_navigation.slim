@@ -1,9 +1,10 @@
-nav#main-nav.navbar.navbar-default role="navigation" class=("navbar-aside" if nav_aside?)
+nav#main-nav.navbar.navbar-default role="navigation" class=(nav_aside? ? "navbar-aside" : "navbar-horizontal")
   .container-fluid
     = render "layouts/brand"
     .collapse.navbar-collapse.main-navbar
       = render "layouts/user_nav"
       = render "layouts/links"
+      = render "layouts/running_timers", timers: current_account.timers.running
 
     / = render "layouts/brand"
     / .collapse.navbar-collapse

@@ -12,6 +12,57 @@ $nav-transition-speed: .3s;
   }
 }
 
+.current-timers {
+  .timer {
+    h3 {
+      display: inline-block;
+      margin-bottom: 0;
+    }
+
+    .panel-body {
+      padding: 10px;
+
+      > a {
+        font-size: 120%;
+      }
+    }
+  }
+}
+
+.navbar-aside {
+  .current-timers {
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+    margin-left: -15px;
+    margin-right: -15px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+.navbar-horizontal {
+  .current-timers {
+    display: inline-block;
+    margin-top: 2px;
+    float: right;
+
+    h2 {
+      display: inline-block;
+      padding-right: 5px;
+    }
+    .timer {
+      display: inline-block;
+      margin-bottom: 0;
+      margin-right: 5px;
+
+      h3 {
+        padding-right: 5px;
+      }
+    }
+  }
+}
+
 #main-nav {
   border-radius: 0;
   z-index: 100;
