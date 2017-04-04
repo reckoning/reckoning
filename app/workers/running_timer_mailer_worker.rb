@@ -9,6 +9,8 @@ class RunningTimerMailerWorker
 
     return if timer.blank?
 
+    timer.update(notified: true)
+
     TimerMailer.notify(timer).deliver_now
   end
 end

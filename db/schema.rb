@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160827094030) do
+ActiveRecord::Schema.define(version: 20170404185112) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -146,9 +146,10 @@ ActiveRecord::Schema.define(version: 20160827094030) do
     t.uuid     "position_id"
     t.uuid     "task_id"
     t.datetime "started_at"
-    t.uuid     "user_id",                               null: false
+    t.uuid     "user_id",                                               null: false
     t.text     "note"
     t.decimal  "value",       precision: 30, scale: 18
+    t.boolean  "notified",                              default: false
   end
 
   create_table "tours", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|

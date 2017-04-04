@@ -56,6 +56,10 @@ class Timer < ActiveRecord::Base
     where.not(started_at: nil)
   end
 
+  def self.unnotified
+    where(notified: false)
+  end
+
   def start_time
     (started_at - value.to_d.hours).to_i * 1000 if started_at
   end
@@ -82,6 +86,7 @@ class Timer < ActiveRecord::Base
     Timer.where(user_id: user_id).where.not(started_at: nil).find_each do |timer|
       timer.value = timer.value + ((Time.zone.now - timer.started_at) / 1.hour)
       timer.started_at = nil
+      timer.notified = false
       timer.save
     end
   end
@@ -99,6 +104,7 @@ class Timer < ActiveRecord::Base
 
     update(
       started_at: nil,
+      notified: false,
       value: (((value + timer_value) * task.project.round_up) / task.project.round_up)
     )
   end
