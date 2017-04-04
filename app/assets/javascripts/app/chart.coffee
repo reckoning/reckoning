@@ -27,9 +27,6 @@ window.Chart =
       dateFormattedShort = I18n.l("date.formats.month_short", date.toDate())
       dateFormattedLong = I18n.l("date.formats.month", date.toDate())
       dateFormatted = I18n.l("date.formats.chart", date.toDate())
-      console.log(dateFormatted)
-      console.log(dateFormattedShort)
-      console.log(dateFormattedLong)
       categories.push {
         short: dateFormattedShort,
         long: dateFormattedLong,

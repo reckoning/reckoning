@@ -10,9 +10,9 @@ module ApplicationCable
     end
 
     protected def find_verified_user
-      user_data = YAML.safe_load(cookies.signed[:cable])
-      verified_user = User.find_by(id: user_data[:id])
-      if verified_user && user_data[:expires_at] > Time.zone.now
+      user_data = JSON.parse(cookies.signed[:cable])
+      verified_user = User.find_by(id: user_data["id"])
+      if verified_user && Time.zone.parse(user_data["expires_at"]) > Time.zone.now
         verified_user
       else
         reject_unauthorized_connection
