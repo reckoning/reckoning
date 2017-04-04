@@ -13,6 +13,8 @@ gem 'stripe', git: 'https://github.com/stripe/stripe-ruby'
 gem 'valvat'
 
 gem 'sidekiq'
+gem 'sidekiq-failures'
+gem 'sidekiq-scheduler'
 # for sidekiq web
 gem 'sinatra', require: nil, git: 'https://github.com/sinatra/sinatra'
 

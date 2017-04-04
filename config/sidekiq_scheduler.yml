@@ -1,0 +1,6 @@
+RunningTimerWorker:
+  cron: [
+    "0 0 6 * * * Europe/Berlin",
+    "0 0 22 * * * Europe/Berlin"
+  ]
+  description: "Checks for Running Timers at 6am and 10pm and Notifies Users"

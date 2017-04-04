@@ -3,6 +3,7 @@
 :queues:
   - reckoning-billing
   - reckoning-mailer
+  - reckoning-timer
   - reckoning-archive
   - reckoning-archive-all
 

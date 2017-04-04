@@ -43,6 +43,6 @@ class InvoiceMailer < ActionMailer::Base
   def from
     @from ||= invoice.customer.default_from if invoice.customer.default_from.present?
     @from ||= invoice.account.default_from if invoice.account.default_from.present?
-    @from ||= Rails.application.secrets[:mailer_default_from]
+    @from ||= Rails.application.secrets[:mailer_default_from].to_s
   end
 end

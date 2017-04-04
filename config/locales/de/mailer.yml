@@ -3,3 +3,7 @@ de:
     invoice:
       customer:
         subject: "%{name}Rechnung %{date}"
+    timer:
+      notify:
+        subject: "Lang laufender Timer"
+        body: "Einer Ihrer Timer läuft seit mehr als 12 Stunden"

@@ -3,3 +3,7 @@ en:
     invoice:
       customer:
         subject: ~
+    timer:
+      notify:
+        subject: "Long running Timer"
+        body: "One of your Timers is running longer than 12 hours"
