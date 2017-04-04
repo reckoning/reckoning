@@ -6,7 +6,8 @@ class RunningTimerWorker
 
   def perform
     Timer.unnotified.running.find_each do |timer|
-      if timer.started_at < (Time.zone.now - 12.hours)
+      if timer.started_at < (Time.zone.now - 12.hours) ||
+         (timer.current_value > 12 && timer.started_at < (Time.zone.now - 4.hours))
         RunningTimerMailerWorker.perform_async timer.id
       end
     end
