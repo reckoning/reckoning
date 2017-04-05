@@ -48,8 +48,8 @@ task deploy: :environment do
     invoke :'deploy:cleanup'
 
     on :launch do
-      # invoke :'server:start'
-      invoke :'server:phased_restart'
+      invoke :'server:restart'
+      # invoke :'server:phased_restart'
     end
   end
 end
