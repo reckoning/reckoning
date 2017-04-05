@@ -5,11 +5,12 @@ class RunningTimerMailerWorker
   sidekiq_options queue: (ENV['MAILER_QUEUE'] || 'reckoning-mailer').to_sym
 
   def perform(timer_id)
-    timer = Timer.find timer_id
+    timer = Timer.find(timer_id)
 
     return if timer.blank?
 
-    timer.update(notified: true)
+    # rubocop:disable Rails/SkipsModelValidations
+    timer.update_columns(notified: true)
 
     TimerMailer.notify(timer).deliver_now
   end
