@@ -1,9 +1,29 @@
 window.App.Timer =
+  $containerElement: null
   intervalId: null
   timer: null
-  update: =>
-    $valueElement = $('[data-timer-started-at]').find('.timer-value')
+  $element: null
+  setupTimer: (timer) ->
+    clearInterval(App.Timer.intervalId) if App.Timer.intervalId
+
+    App.Timer.timer = timer
+
+    App.Timer.update()
+
+    $projectElement = App.Timer.$containerElement.find('.timer-project')
+    $projectElement.html(timer.projectName)
+    App.Timer.$containerElement.show()
+
+    App.Timer.intervalId = setInterval(App.Timer.update, 5000)
+
+  removeTimer: ->
+    App.Timer.$containerElement.hide()
+    clearInterval(App.Timer.intervalId) if App.Timer.intervalId
+
+  update: ->
     timer = App.Timer.timer
+    $valueElement = App.Timer.$element.find('.timer-value')
+
     now = moment()
     startedAt = moment(timer.startedAt)
     duration = moment.duration(now.diff(startedAt));
@@ -25,28 +45,24 @@ window.App.Timer =
       '0:00'
 
 document.addEventListener 'turbolinks:load', ->
-  if $('[data-timer-started-at]').length
-    $element = $('[data-timer-started-at]')
+  App.Timer.$containerElement = $('.current-timers')
+  if App.Timer.$containerElement.find('.timer').length
+    App.Timer.$element = App.Timer.$containerElement.find('.timer')
 
-    App.Timer.timer =
-      date: $element.data('timer-date')
-      startedAt: $element.data('timer-started-at')
-      value: $element.data('timer-value')
-
-    App.Timer.intervalId = setInterval(App.Timer.update, 5000)
+    newTimer = App.Timer.$element.data('timer')
+    if newTimer
+      App.Timer.setupTimer(newTimer)
 
     window.App.cable.subscriptions.create
-      channel: 'TimersChannel',
-      room: App.Timer.timer.date
+      channel: 'TimersChannel'
+      room: 'all'
     ,
       connected: ->
-        console.log('connected')
+        console.log('connected from timer')
       received: (data) ->
-        console.log('update')
-        App.Timer.timer = JSON.parse(data)
-        if App.Timer.timer.startedAt
-          App.Timer.element.show()
-          App.Timer.intervalId = setInterval(App.Timer.update, 5000)
-        else
-          App.Timer.element.hide()
-          clearInterval(App.Timer.intervalId)
+        console.log('update for timer')
+        newTimer = JSON.parse(data)
+        if newTimer.startedAt
+          App.Timer.setupTimer(newTimer)
+        else if App.Timer.timer && newTimer.id == App.Timer.timer.id
+          App.Timer.removeTimer()

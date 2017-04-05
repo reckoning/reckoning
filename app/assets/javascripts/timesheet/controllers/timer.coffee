@@ -41,7 +41,6 @@ angular.module 'Timesheet'
           excludedTaskIds: -> []
           withoutProjectSelect: -> false
       .result.then (result) ->
-        console.log(result)
         setTimeout ->
           $scope.startedAction = false
         , 2000

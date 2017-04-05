@@ -103,6 +103,7 @@ module Api
 
       private def send_realtime_update(timer)
         ActionCable.server.broadcast "timers_#{current_user.id}_#{timer.date}", timer.to_builder.target!
+        ActionCable.server.broadcast "timers_#{current_user.id}_all", timer.to_builder.target!
       end
 
       private def timer_params
