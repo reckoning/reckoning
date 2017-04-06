@@ -2,13 +2,18 @@ language: ruby
 cache: bundler
 sudo: required
 before_script:
-- bundle exec thor setup:dev_env
-- bundle exec rake db:setup db:migrate
+  - bundle exec thor setup:dev_env
+  - bundle exec rake db:setup db:migrate
 script:
-- bundle exec rubocop
-- bundle exec rake
+  - bundle exec rubocop
+  - bundle exec rake
 before_install:
-- sudo apt-get update -qq
-- sudo apt-get install -qq fontconfig libxrender1
-- wget http://download.gna.org/wkhtmltopdf/0.12/0.12.1/wkhtmltox-0.12.1_linux-precise-amd64.deb
-- sudo dpkg -i wkhtmltox-0.12.1_linux-precise-amd64.deb
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq fontconfig libxrender1
+  - wget http://download.gna.org/wkhtmltopdf/0.12/0.12.1/wkhtmltox-0.12.1_linux-precise-amd64.deb
+  - sudo dpkg -i wkhtmltox-0.12.1_linux-precise-amd64.deb
+deploy:
+  - provider: script
+    script: bundle exec mina live deploy
+    on:
+      branch: master
