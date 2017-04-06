@@ -66,7 +66,10 @@ document.addEventListener 'turbolinks:load', ->
       received: (data) ->
         console.log('update for timer')
         newTimer = JSON.parse(data)
-        if newTimer.startedAt
+        if newTimer.deleted
+          App.Timer.removeTimer()
+        else if newTimer.startedAt
           App.Timer.setupTimer(newTimer)
         else if App.Timer.timer && newTimer.id == App.Timer.timer.id
           App.Timer.removeTimer()
+

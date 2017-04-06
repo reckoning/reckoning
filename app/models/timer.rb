@@ -142,6 +142,7 @@ class Timer < ActiveRecord::Base
       timer.project_customer_name project_customer_name
       timer.created_at created_at
       timer.updated_at updated_at
+      timer.deleted destroyed?
       timer.links do
         timer.project do
           timer.href v1_project_path(task.project_id)

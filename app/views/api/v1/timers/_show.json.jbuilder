@@ -20,6 +20,7 @@ json.project_name timer.project_name
 json.project_customer_name timer.project_customer_name
 json.created_at timer.created_at
 json.updated_at timer.updated_at
+json.deleted timer.destroyed?
 json.links do
   json.project do
     json.href v1_project_path(timer.task.project_id)
