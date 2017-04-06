@@ -14,7 +14,7 @@ window.App.Timer =
     $projectElement.html(timer.projectName)
     App.Timer.$containerElement.show()
 
-    App.Timer.intervalId = setInterval(App.Timer.update, 5000)
+    App.Timer.intervalId = setInterval(App.Timer.update, 1000)
 
   removeTimer: ->
     App.Timer.$containerElement.hide()
@@ -34,15 +34,19 @@ window.App.Timer =
 
   transform: (input) ->
     hours = Math.floor(input)
-    minutes = Math.round((input % 1) * 60)
-    if hours isnt 0 || minutes isnt 0
-      if minutes < 10
-        padded = '0' + minutes.toString()
-      else
-        padded = minutes.toString()
-      hours + ':' + padded
+    minutes = parseInt((input % 1) * 60, 10)
+    if minutes <= 0
+      tail = '00'
+    else if minutes < 10
+      tail = '0' + minutes.toString()
     else
-      '0:00'
+      tail = minutes.toString()
+    if hours <= 0
+      head = 0
+    else
+      head = hours
+
+    head + ':' + tail
 
 document.addEventListener 'turbolinks:load', ->
   App.Timer.$containerElement = $('.current-timers')
