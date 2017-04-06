@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'highline/import'
 
 class Setup < Thor
@@ -20,12 +21,12 @@ class Setup < Thor
         puts "E-Mail can't be blank!"
         exit
       end
-      password = HighLine.ask("Password: ") {|q| q.echo = '*'}
+      password = HighLine.ask("Password: ") { |q| q.echo = '*' }
       if password.blank?
         puts "Password can't be blank!"
         exit
       end
-      password_confirmation = HighLine.ask("Password (again): ") {|q| q.echo = '*'}
+      password_confirmation = HighLine.ask("Password (again): ") { |q| q.echo = '*' }
     end
 
     if password_confirmation != password
