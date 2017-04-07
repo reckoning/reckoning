@@ -6,6 +6,7 @@ module Api
       def index
         authorize! :index, Task
         scope = current_account.tasks
+                               .includes(project: [:customer]).references(:project)
         if week_date
           date = Date.parse(week_date)
           scope = scope.includes(:timers).references(:timers)
@@ -27,7 +28,7 @@ module Api
       end
 
       private def week_date
-        params[:week_date]
+        params[:weekDate]
       end
 
       private def project

@@ -4,9 +4,6 @@ angular.module 'Reckoning', [
   'ui.bootstrap.tpls'
   'ui.bootstrap.modal'
 ]
-.run ['$http', '$browser', ($http, $browser) ->
-  $http.defaults.headers.common['Authorization'] = "Token token=\"#{AuthToken}\""
-]
 .config ['$httpProvider', ($httpProvider) ->
   $httpProvider.interceptors.push ['$q', ($q) ->
     response: (response) ->
@@ -19,5 +16,6 @@ angular.module 'Reckoning', [
   spinnerFunction = (data, headersGetter) ->
     NProgress.start()
     data
+  $httpProvider.defaults.headers.common['Authorization'] = "Token token=\"#{AuthToken}\""
   $httpProvider.defaults.transformRequest.push(spinnerFunction)
 ]
