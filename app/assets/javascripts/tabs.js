@@ -19,7 +19,7 @@ window.Tabs = {
 
     hash = window.location.hash;
     if (hash !== undefined && hash.length > 0 && !(/^#\//).test(hash)) {
-      $('.nav-tabs a[href=' + hash + '], .nav-tabs-vertical a[href=' + hash + ']').tab('show');
+      $('.nav-tabs a[href="' + hash + '"], .nav-tabs-vertical a[href="' + hash + '"]').tab('show');
     } else {
       $('.nav-tabs a:first, .nav-tabs-vertical a:first').tab('show');
     }

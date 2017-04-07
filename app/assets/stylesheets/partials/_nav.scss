@@ -41,12 +41,16 @@ $nav-transition-speed: .3s;
   .current-timers {
     display: inline-block;
     margin-top: 2px;
-    float: right;
+    position: absolute;
+    right: 100px;
+    top: 0;
 
     h2 {
       display: inline-block;
       padding-right: 5px;
+      padding-top: 2px;
     }
+
     .timer {
       display: inline-block;
       margin-bottom: 0;
@@ -185,6 +189,20 @@ $nav-transition-speed: .3s;
   .navbar-aside {
     .current-timers {
       padding: 0;
+    }
+  }
+  .navbar-horizontal {
+    .current-timers {
+      position: relative;
+      right: auto;
+      top: auto;
+      display: block;
+      margin-bottom: 4px;
+
+      .timer {
+        display: block;
+        margin-right: 0;
+      }
     }
   }
 }
