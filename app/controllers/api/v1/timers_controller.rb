@@ -82,15 +82,15 @@ module Api
       end
 
       private def start_date
-        @start_date ||= params[:start_date]
+        @start_date ||= params[:startDate]
       end
 
       private def end_date
-        @end_date ||= params[:end_date]
+        @end_date ||= params[:endDate]
       end
 
       private def project_id
-        @project_id ||= params[:project_id]
+        @project_id ||= params[:projectId]
       end
 
       private def task

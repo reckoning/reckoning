@@ -54,7 +54,7 @@ module Api
       end
 
       private def without_ids
-        @without_ids ||= params[:without_ids]
+        @without_ids ||= params[:withoutIds]
       end
 
       private def project_params
