@@ -9,7 +9,7 @@ gem 'rails', '5.0.2'
 gem 'pg'
 
 gem 'money'
-gem 'stripe', git: 'https://github.com/stripe/stripe-ruby'
+gem 'stripe'
 gem 'valvat'
 
 gem 'sidekiq'
@@ -111,7 +111,7 @@ group :test do
   gem 'faker'
   gem 'minitest-rails'
   gem 'mocha', require: false
-  gem 'rails-perftest', git: 'https://github.com/rails/rails-perftest'
+  gem 'rails-perftest'
   gem 'ruby-prof'
   gem 'simplecov', require: false
   gem 'simplecov-console', require: false
