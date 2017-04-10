@@ -10,6 +10,7 @@ module Api
         scope = scope.where(date: date_range) if date_range
         scope = scope.for_project(project_id) if project_id
         scope = scope.uninvoiced if params[:uninvoiced].present?
+        scope = scope.running if params[:running].present?
         @timers = scope
       end
 

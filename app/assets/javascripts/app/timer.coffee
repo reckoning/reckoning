@@ -3,6 +3,14 @@ window.App.Timer =
   intervalId: null
   timer: null
   $element: null
+  fetch: ->
+    fetch ApiBasePath + Routes.v1_timers_path(running: true),
+      headers: ApiHeaders
+    .then (response) ->
+      response.json()
+    .then (data) ->
+      App.Timer.timer = data[0] if data.length > 0
+
   setupTimer: (timer) ->
     clearInterval(App.Timer.intervalId) if App.Timer.intervalId
 
@@ -63,6 +71,7 @@ document.addEventListener 'turbolinks:load', ->
     ,
       connected: ->
         console.log('connected from timer')
+        App.Timer.fetch()
       received: (data) ->
         console.log('update for timer')
         newTimer = JSON.parse(data)

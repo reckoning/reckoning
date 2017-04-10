@@ -29,13 +29,14 @@ document.addEventListener "turbolinks:load", ->
     render:
       option_create: selectizeCreateTemplate
     create: (input, callback) ->
-      xhr.abort() if xhr
-      xhr = $.ajax
-        url: ApiBasePath + Routes.v1_expense_types_path()
-        data: {name: input}
-        method: 'POST'
-        dataType: 'json'
-        success: (result) =>
+      fetch: ->
+        fetch ApiBasePath + Routes.v1_expense_types_path(),
+          headers: ApiHeaders
+          method: 'POST'
+          body: {name: input}
+        .then (response) ->
+          response.json()
+        .then (result) ->
           data = {
             value: result.id,
             text: result.name
@@ -43,20 +44,22 @@ document.addEventListener "turbolinks:load", ->
           @addOption data
           @addItem result.id
           callback data
-        error: ->
+
+        .catch (error) ->
           callback()
 
   $('select.js-customer-selectize').selectize
     render:
       option_create: selectizeCreateTemplate
     create: (input, callback) ->
-      xhr.abort() if xhr
-      xhr = $.ajax
-        url: ApiBasePath + Routes.v1_customers_path()
-        data: {name: input}
-        method: 'POST'
-        dataType: 'json'
-        success: (result) =>
+      fetch: ->
+        fetch ApiBasePath + Routes.v1_customers_path(),
+          headers: ApiHeaders
+          method: 'POST'
+          body: {name: input}
+        .then (response) ->
+          response.json()
+        .then (result) ->
           data = {
             value: result.id,
             text: result.name
@@ -64,7 +67,8 @@ document.addEventListener "turbolinks:load", ->
           @addOption data
           @addItem result.id
           callback data
-        error: ->
+
+        .catch (error) ->
           callback()
 
   $('[data-toggle=tooltip]').tooltip()

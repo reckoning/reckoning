@@ -18,6 +18,7 @@ angular.module 'Timesheet'
     ,
       connected: () ->
         console.log('connected')
+        $scope.getTimers()
       received: () ->
         console.log('update')
         if !$scope.startedAction
