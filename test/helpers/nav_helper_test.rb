@@ -30,7 +30,7 @@ class NavHelperTest < ActionView::TestCase
       assert_equal "active", active_nav?("foo")
 
       @active_nav = "foo"
-      assert_equal nil, active_nav?("bar")
+      assert_nil active_nav?("bar")
 
       @active_nav = "foo"
       assert_equal "active", active_nav?(%w(bar foo))
@@ -71,7 +71,7 @@ class NavHelperTest < ActionView::TestCase
       assert_equal "hide", hide_nav?("foo")
 
       @active_nav = "foo"
-      assert_equal nil, hide_nav?("bar")
+      assert_nil hide_nav?("bar")
     end
   end
 

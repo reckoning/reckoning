@@ -21,7 +21,7 @@ class LoginTest < ActionDispatch::IntegrationTest
     }
     follow_redirect!
 
-    assert_equal nil, flash[:alert]
+    assert_nil flash[:alert]
 
     assert_equal root_path, path
 
