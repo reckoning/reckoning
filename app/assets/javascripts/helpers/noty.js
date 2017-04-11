@@ -1,6 +1,5 @@
 // Noty
 window.displayNoty = function(text, type, timeout = 3000) {
-  console.log(timeout)
   noty({
     text: text,
     type: type,
