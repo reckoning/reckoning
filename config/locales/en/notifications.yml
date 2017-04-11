@@ -1,0 +1,4 @@
+en:
+  notifications:
+    timer:
+      running: "One of your Timers is running longer than 12 hours"
