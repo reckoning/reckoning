@@ -414,7 +414,6 @@ GEM
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
     wicked_pdf (1.1.0)
-    wkhtmltopdf-heroku (2.12.3.0)
     workflow (1.2.0)
 
 PLATFORMS
@@ -493,7 +492,6 @@ DEPENDENCIES
   web-console
   web_translate_it
   wicked_pdf
-  wkhtmltopdf-heroku
   workflow
 
 RUBY VERSION
