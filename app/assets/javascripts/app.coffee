@@ -28,6 +28,9 @@ document.addEventListener 'turbolinks:load', ->
   Cable = new App.Cable()
   App.cable = Cable.consumer
 
+  Timer = new App.Timer($('.current-timers'))
+  Timer.init()
+
 $(document).on 'click', '[data-geolocation]', (ev) ->
   ev.preventDefault()
   GeoLocation = new App.GeoLocation($(ev.target))

@@ -1,36 +1,71 @@
-window.App.Timer =
-  $containerElement: null
+class App.Timer
+  container: null
   intervalId: null
   timer: null
-  $element: null
+  element: null
+  constructor: (container) ->
+    @container = container
+    @element = @container.find('.timer')
+
+  init: ->
+    newTimer = @element.data('timer')
+    if newTimer
+      @set(newTimer)
+
+    @setupCable()
+
+  setupCable: ->
+    App.cable.subscriptions.create
+      channel: 'TimersChannel'
+      room: 'all'
+    ,
+      connected: @connected
+      received: @received
+
+  connected: =>
+    console.log('Timer connected')
+    @fetch()
+
+  received: (data) =>
+    console.log('Timer received')
+    newTimer = JSON.parse(data)
+    if newTimer.deleted
+      @remove()
+    else if newTimer.startedAt
+      @set(newTimer)
+    else if @timer && newTimer.id == @timer.id
+      @remove()
+
   fetch: ->
     fetch ApiBasePath + Routes.v1_timers_path(running: true),
       headers: ApiHeaders
     .then (response) ->
       response.json()
-    .then (data) ->
-      App.Timer.timer = data[0] if data.length > 0
+    .then (data) =>
+      @timer = data[0] if data.length > 0
 
-  setupTimer: (timer) ->
-    clearInterval(App.Timer.intervalId) if App.Timer.intervalId
+  set: (timer) ->
+    clearInterval(@intervalId) if @intervalId
 
-    App.Timer.timer = timer
+    @timer = timer
 
-    App.Timer.update()
+    @update()
 
-    $projectElement = App.Timer.$containerElement.find('.timer-project')
+    $projectElement = @container.find('.timer-project')
     $projectElement.html(timer.projectName)
-    App.Timer.$containerElement.show()
+    @container.show()
 
-    App.Timer.intervalId = setInterval(App.Timer.update, 1000)
+    @intervalId = setInterval =>
+      @update()
+    , 1000
 
-  removeTimer: ->
-    App.Timer.$containerElement.hide()
-    clearInterval(App.Timer.intervalId) if App.Timer.intervalId
+  remove: ->
+    @container.hide()
+    clearInterval(@intervalId) if @intervalId
 
   update: ->
-    timer = App.Timer.timer
-    $valueElement = App.Timer.$element.find('.timer-value')
+    timer = @timer
+    $valueElement = @element.find('.timer-value')
 
     now = moment()
     startedAt = moment(timer.startedAt)
@@ -38,7 +73,7 @@ window.App.Timer =
 
     initialValue = parseFloat(timer.value)
 
-    $valueElement.html(App.Timer.transform(initialValue + duration.asHours()))
+    $valueElement.html(@transform(initialValue + duration.asHours()))
 
   transform: (input) ->
     hours = Math.floor(input)
@@ -55,29 +90,3 @@ window.App.Timer =
       head = hours
 
     head + ':' + tail
-
-document.addEventListener 'turbolinks:load', ->
-  App.Timer.$containerElement = $('.current-timers')
-  if App.Timer.$containerElement.find('.timer').length
-    App.Timer.$element = App.Timer.$containerElement.find('.timer')
-
-    newTimer = App.Timer.$element.data('timer')
-    if newTimer
-      App.Timer.setupTimer(newTimer)
-
-    App.cable.subscriptions.create
-      channel: 'TimersChannel'
-      room: 'all'
-    ,
-      connected: ->
-        console.log('connected from timer')
-        App.Timer.fetch()
-      received: (data) ->
-        console.log('update for timer')
-        newTimer = JSON.parse(data)
-        if newTimer.deleted
-          App.Timer.removeTimer()
-        else if newTimer.startedAt
-          App.Timer.setupTimer(newTimer)
-        else if App.Timer.timer && newTimer.id == App.Timer.timer.id
-          App.Timer.removeTimer()
