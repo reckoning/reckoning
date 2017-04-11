@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <title>Notification Types</title>
+    <title>No Animation</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="demonstration of some noty capabilities">
 
@@ -23,6 +23,7 @@
     </style>
 
     <link rel="stylesheet" type="text/css" href="buttons.css"/>
+    <link rel="stylesheet" type="text/css" href="animate.css"/>
 
 </head>
 <body>
@@ -40,41 +41,32 @@
 
 <script type="text/javascript">
 
-    function generate(type, layout) {
+    function generate(type) {
         var n = noty({
             text        : type,
             type        : type,
             dismissQueue: true,
-            layout      : layout,
+            closeWith: ['click'],
+            layout      : 'topCenter',
             theme       : 'relax',
-            buttons     : [
-                {addClass: 'btn btn-primary', text: 'Ok', onClick: function ($noty) {
-                    $noty.close();
-                    noty({dismissQueue: true, force: true, layout: layout, theme: 'defaultTheme', text: 'You clicked "Ok" button', type: 'success'});
-                }
-                },
-                {addClass: 'btn btn-danger', text: 'Cancel', onClick: function ($noty) {
-                    $noty.close();
-                    noty({dismissQueue: true, force: true, layout: layout, theme: 'defaultTheme', text: 'You clicked "Cancel" button', type: 'error'});
-                }
-                }
-            ]
+            animation: {
+                open: null,
+                close: null
+            }
         });
-        console.log('html: ' + n.options.id);
-    }
-
-    function generateAll() {
-        generate('alert', 'topCenter');
-        generate('information', 'topLeft');
-        generate('error', 'topRight');
-        generate('warning', 'center');
-        generate('notification', 'centerRight');
-        generate('success', 'centerLeft');
+        console.log(type + ' - ' + n.options.id);
+        return n;
     }
 
     $(document).ready(function () {
 
-        generateAll();
+        var alert = generate('alert');
+        var information = generate('information');
+        var error = generate('error');
+        var warning = generate('warning');
+        var notification = generate('notification');
+        var success = generate('success');
+
 
     });
 

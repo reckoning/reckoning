@@ -31,6 +31,8 @@ document.addEventListener 'turbolinks:load', ->
   Timer = new App.Timer($('.current-timers'))
   Timer.init()
 
+  new App.Notifications()
+
 $(document).on 'click', '[data-geolocation]', (ev) ->
   ev.preventDefault()
   GeoLocation = new App.GeoLocation($(ev.target))

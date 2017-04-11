@@ -1,5 +1,5 @@
-$.noty.themes.relax = {
-  name    : 'relax',
+$.noty.themes.metroui = {
+  name    : 'metroui',
   helpers : {},
   modal   : {
     css: {
@@ -19,7 +19,7 @@ $.noty.themes.relax = {
     this.$bar.css({
       overflow    : 'hidden',
       margin      : '4px 0',
-      borderRadius: '2px',
+      borderRadius: '0',
       position    : 'relative'
     });
 
@@ -37,14 +37,14 @@ $.noty.themes.relax = {
 
     this.$message.css({
       textAlign: 'center',
-      padding  : '10px',
+      padding  : '1.25rem',
       width    : 'auto',
       position : 'relative'
     });
 
     this.$closeButton.css({
       position  : 'absolute',
-      top       : 4, right: 4,
+      top       : '.25rem', right: '.25rem',
       width     : 10, height: 10,
       background: "url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAQAAAAnOwc2AAAAxUlEQVR4AR3MPUoDURSA0e++uSkkOxC3IAOWNtaCIDaChfgXBMEZbQRByxCwk+BasgQRZLSYoLgDQbARxry8nyumPcVRKDfd0Aa8AsgDv1zp6pYd5jWOwhvebRTbzNNEw5BSsIpsj/kurQBnmk7sIFcCF5yyZPDRG6trQhujXYosaFoc+2f1MJ89uc76IND6F9BvlXUdpb6xwD2+4q3me3bysiHvtLYrUJto7PD/ve7LNHxSg/woN2kSz4txasBdhyiz3ugPGetTjm3XRokAAAAASUVORK5CYII=)",
       display   : 'none',
@@ -78,11 +78,8 @@ $.noty.themes.relax = {
     switch (this.options.layout.name) {
       case 'top':
         this.$bar.css({
-          borderBottom: '2px solid #eee',
-          borderLeft  : '2px solid #eee',
-          borderRight : '2px solid #eee',
-          borderTop   : '2px solid #eee',
-          boxShadow   : "0 2px 4px rgba(0, 0, 0, 0.1)"
+          border   : 'none',
+          boxShadow: "0 0 5px 0 rgba(0, 0, 0, 0.3)"
         });
         break;
       case 'topCenter':
@@ -90,8 +87,8 @@ $.noty.themes.relax = {
       case 'bottomCenter':
       case 'inline':
         this.$bar.css({
-          border   : '1px solid #eee',
-          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
+          border   : 'none',
+          boxShadow: "0 0 5px 0 rgba(0, 0, 0, 0.3)"
         });
         this.$message.css({textAlign: 'center'});
         break;
@@ -102,24 +99,21 @@ $.noty.themes.relax = {
       case 'centerLeft':
       case 'centerRight':
         this.$bar.css({
-          border   : '1px solid #eee',
-          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
+          border   : 'none',
+          boxShadow: "0 0 5px 0 rgba(0, 0, 0, 0.3)"
         });
         this.$message.css({textAlign: 'left'});
         break;
       case 'bottom':
         this.$bar.css({
-          borderTop   : '2px solid #eee',
-          borderLeft  : '2px solid #eee',
-          borderRight : '2px solid #eee',
-          borderBottom: '2px solid #eee',
-          boxShadow   : "0 -2px 4px rgba(0, 0, 0, 0.1)"
+          border   : 'none',
+          boxShadow: "0 0 5px 0 rgba(0, 0, 0, 0.3)"
         });
         break;
       default:
         this.$bar.css({
-          border   : '2px solid #eee',
-          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
+          border   : 'none',
+          boxShadow: "0 0 5px 0 rgba(0, 0, 0, 0.3)"
         });
         break;
     }
@@ -127,27 +121,27 @@ $.noty.themes.relax = {
     switch (this.options.type) {
       case 'alert':
       case 'notification':
-        this.$bar.css({backgroundColor: '#FFF', borderColor: '#dedede', color: '#444'});
+        this.$bar.css({backgroundColor: '#fff', border: 'none', color: '#1d1d1d'});
         break;
       case 'warning':
-        this.$bar.css({backgroundColor: '#FFEAA8', borderColor: '#FFC237', color: '#826200'});
-        this.$buttons.css({borderTop: '1px solid #FFC237'});
+        this.$bar.css({backgroundColor: '#FA6800', border: 'none', color: '#fff'});
+        this.$buttons.css({borderTop: '1px solid #FA6800'});
         break;
       case 'error':
-        this.$bar.css({backgroundColor: '#FF8181', borderColor: '#e25353', color: '#FFF'});
+        this.$bar.css({backgroundColor: '#CE352C', border: 'none', color: '#fff'});
         this.$message.css({fontWeight: 'bold'});
-        this.$buttons.css({borderTop: '1px solid darkred'});
+        this.$buttons.css({borderTop: '1px solid #CE352C'});
         break;
       case 'information':
-        this.$bar.css({backgroundColor: '#78C5E7', borderColor: '#3badd6', color: '#FFF'});
-        this.$buttons.css({borderTop: '1px solid #0B90C4'});
+        this.$bar.css({backgroundColor: '#1BA1E2', border: 'none', color: '#fff'});
+        this.$buttons.css({borderTop: '1px solid #1BA1E2'});
         break;
       case 'success':
-        this.$bar.css({backgroundColor: '#BCF5BC', borderColor: '#7cdd77', color: 'darkgreen'});
+        this.$bar.css({backgroundColor: '#60A917', border: 'none', color: '#fff'});
         this.$buttons.css({borderTop: '1px solid #50C24E'});
         break;
       default:
-        this.$bar.css({backgroundColor: '#FFF', borderColor: '#CCC', color: '#444'});
+        this.$bar.css({backgroundColor: '#fff', border: 'none', color: '#1d1d1d'});
         break;
     }
   },

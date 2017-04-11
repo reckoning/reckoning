@@ -96,19 +96,6 @@ code[data-target] {
   cursor: pointer;
 }
 
-.noty_buttons {
-  margin-bottom: 10px;
-  text-align: center;
-
-  button {
-    margin-right: 5px;
-  }
-
-  &:last-child {
-    margin-right: 0;
-  }
-}
-
 .tooltip > .tooltip-inner {
   min-width: 120px;
 }

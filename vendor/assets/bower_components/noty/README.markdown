@@ -1,8 +1,11 @@
 # noty - A jQuery Notification Plugin
 
-![noty v2 logo](http://ned.im/noty/images/projects/noty-v2-logo.png "noty v2")
+![noty v2 logo](http://ned.im/noty/img/projects/noty-v2-logo.png "noty v2")
 
 ***
+ Need some help on **push5** branch. Trying to implement html5 notifications with service worker support.
+***
+
 
 ## Hi
 

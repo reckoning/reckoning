@@ -16,7 +16,7 @@
   ],
   "dependencies": {
     "ladda": "~1.0.0",
-    "noty": "~2.3.2",
+    "noty": "~2.4.1",
     "selectize": "~0.12.0",
     "moment": "~2.14.1",
     "animate.css": "~3.5.1",
