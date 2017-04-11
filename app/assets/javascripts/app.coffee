@@ -1,4 +1,37 @@
-window.App ?= {}
+window.App ||= {}
+
+App.init = ->
+  $('[data-toggle=tooltip]').tooltip()
+
+  $('.btn.btn-loading').click ->
+    $(@).button('loading')
+
+document.addEventListener 'turbolinks:load', ->
+  App.init()
+
+  Selectize = new App.Selectize()
+  Selectize.init()
+
+  Moment = new App.Moment()
+  Moment.init()
+
+  Accounting = new App.Accounting()
+  Accounting.init()
+
+  pdfViewers = $('.pdf-viewer')
+  if pdfViewers.length > 0
+    PDFJS.workerSrc = PDFJSWorkerPath
+    for viewer in pdfViewers
+      PDFViewer = new App.PDFViewer($(viewer))
+      PDFViewer.init()
+
+  Cable = new App.Cable()
+  App.cable = Cable.consumer
+
+$(document).on 'click', '[data-geolocation]', (ev) ->
+  ev.preventDefault()
+  GeoLocation = new App.GeoLocation($(ev.target))
+  GeoLocation.start()
 
 $(document).on 'click', 'a.disabled', (ev) ->
   ev.preventDefault()
@@ -22,56 +55,15 @@ document.addEventListener 'keydown', (e) ->
     $('form:first').submit()
 , false
 
-document.addEventListener "turbolinks:load", ->
-  $('select.js-selectize').selectize()
+$(document).on 'show.bs.collapse', '.navbar-collapse', ->
+  $('.navbar-collapse.in').not(this).collapse('hide')
 
-  $('select.js-expense-selectize').selectize
-    render:
-      option_create: selectizeCreateTemplate
-    create: (input, callback) ->
-      fetch: ->
-        fetch ApiBasePath + Routes.v1_expense_types_path(),
-          headers: ApiHeaders
-          method: 'POST'
-          body: {name: input}
-        .then (response) ->
-          response.json()
-        .then (result) ->
-          data = {
-            value: result.id,
-            text: result.name
-          }
-          @addOption data
-          @addItem result.id
-          callback data
+$(document).on "upload:start", "form", (e) ->
+  $(@).find("[type=submit]").attr("disabled", true)
 
-        .catch (error) ->
-          callback()
+$(document).on "upload:complete", "form", (e) ->
+  if !$(@).find("input.uploading").length
+    $(@).find("[type=submit]").removeAttr("disabled")
 
-  $('select.js-customer-selectize').selectize
-    render:
-      option_create: selectizeCreateTemplate
-    create: (input, callback) ->
-      fetch: ->
-        fetch ApiBasePath + Routes.v1_customers_path(),
-          headers: ApiHeaders
-          method: 'POST'
-          body: {name: input}
-        .then (response) ->
-          response.json()
-        .then (result) ->
-          data = {
-            value: result.id,
-            text: result.name
-          }
-          @addOption data
-          @addItem result.id
-          callback data
-
-        .catch (error) ->
-          callback()
-
-  $('[data-toggle=tooltip]').tooltip()
-
-  initMoment()
-  initAccounting()
+$(document).on "focus", ".modal input, .modal textarea, .modal select", ->
+  $(@)[0].scrollIntoView(true)

@@ -65,7 +65,7 @@ document.addEventListener 'turbolinks:load', ->
     if newTimer
       App.Timer.setupTimer(newTimer)
 
-    window.App.cable.subscriptions.create
+    App.cable.subscriptions.create
       channel: 'TimersChannel'
       room: 'all'
     ,
@@ -81,4 +81,3 @@ document.addEventListener 'turbolinks:load', ->
           App.Timer.setupTimer(newTimer)
         else if App.Timer.timer && newTimer.id == App.Timer.timer.id
           App.Timer.removeTimer()
-

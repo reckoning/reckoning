@@ -56,11 +56,6 @@ Reckoning::Application.configure do
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.assets.prefix = "/assets"
   # config.action_controller.asset_host = Rails.application.secrets[:url]
-
-  # Precompile additional assets.
-  # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
-  config.assets.precompile += %w(pdf.css pdfjs-dist/build/pdf.worker.js)
-  config.assets.precompile += Dir[Rails.root.join('vendor', 'assets', 'bower_components', '**', 'img', '*')]
   config.assets.initialize_on_precompile = true
 
   # Ignore bad email addresses and do not raise email delivery errors.
