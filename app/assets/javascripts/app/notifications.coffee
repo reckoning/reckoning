@@ -13,4 +13,4 @@ class App.Notifications
   received: (data) =>
     console.log('Notification received')
     notification = JSON.parse(data)
-    displayNoty(notification.text, notification.type, notification.timeout);
+    displayNoty(notification.text, notification.type, notification.timeout)
