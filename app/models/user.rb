@@ -10,7 +10,6 @@ class User < ActiveRecord::Base
   has_many :timers
 
   before_save :update_gravatar_hash
-  before_save :ensure_authentication_token
   before_create :setup_otp_secret
 
   validates :email, email: true
@@ -28,11 +27,6 @@ class User < ActiveRecord::Base
     self.gravatar_hash = hash
   end
 
-  def ensure_authentication_token
-    return if authentication_token.present?
-    self.authentication_token = generate_authentication_token
-  end
-
   def setup_otp_secret
     self.otp_secret = User.generate_otp_secret
   end
@@ -40,12 +34,5 @@ class User < ActiveRecord::Base
   def send_welcome
     token = set_reset_password_token
     UserMailer.welcome_mail(self, token).deliver
-  end
-
-  private def generate_authentication_token
-    loop do
-      token = Devise.friendly_token
-      break token unless User.find_by(authentication_token: token)
-    end
   end
 end
