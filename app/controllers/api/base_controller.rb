@@ -20,12 +20,15 @@ module Api
     attr_reader :current_account
     helper_method :current_account
 
-    private def authenticate_user_from_token!
-      auth_params, _options = token_and_options(request)
-      user_id, auth_token = auth_params && auth_params.split(':', 2)
-      user = user_id && User.find(user_id)
+    def decoded_auth_token
+      auth_token, _options = token_and_options(request)
+      @decoded_auth_token ||= JsonWebToken.decode(auth_token)
+    end
 
-      if user && Devise.secure_compare(user.authentication_token, auth_token)
+    private def authenticate_user_from_token!
+      user ||= User.find(decoded_auth_token[:id]) if decoded_auth_token
+
+      if user
         sign_in user, store: false
         @current_user = user
         @current_account = user.account

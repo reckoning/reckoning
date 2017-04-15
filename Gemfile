@@ -24,6 +24,7 @@ gem 'slim-rails'
 
 gem 'devise'
 gem 'devise-two-factor'
+gem 'jwt'
 
 gem 'mini_magick'
 gem 'rqrcode-rails3'

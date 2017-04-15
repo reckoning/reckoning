@@ -3,6 +3,7 @@
 module Api
   module V1
     class TimersController < Api::BaseController
+      # rubocop:disable Metrics/CyclomaticComplexity
       def index
         authorize! :index, Timer
         scope = current_account.timers
@@ -11,7 +12,8 @@ module Api
         scope = scope.for_project(project_id) if project_id
         scope = scope.uninvoiced if params[:uninvoiced].present?
         scope = scope.running if params[:running].present?
-        @timers = scope
+        scope = scope.limit(limit) if limit
+        @timers = scope.order(updated_at: :desc)
       end
 
       def create
@@ -92,6 +94,10 @@ module Api
 
       private def project_id
         @project_id ||= params[:projectId]
+      end
+
+      private def limit
+        @limit ||= params[:limit]
       end
 
       private def task
