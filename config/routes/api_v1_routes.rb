@@ -1,6 +1,8 @@
 # encoding: utf-8
 # frozen_string_literal: true
 v1_api_routes = lambda do
+  resource :sessions, only: [:create, :destroy]
+
   resources :customers, only: [:index, :show, :create, :destroy]
 
   resources :projects, only: [:index, :destroy] do

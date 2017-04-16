@@ -1,7 +1,7 @@
 # encoding: utf-8
 # frozen_string_literal: true
 class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception
+  protect_from_forgery prepend: true
   check_authorization unless: :unauthorized_controllers
 
   rescue_from CanCan::AccessDenied do |exception|

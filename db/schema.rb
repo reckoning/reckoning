@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170415214658) do
+ActiveRecord::Schema.define(version: 20170417085324) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,11 +38,15 @@ ActiveRecord::Schema.define(version: 20170415214658) do
   end
 
   create_table "auth_tokens", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.uuid     "user_id",     null: false
+    t.uuid     "user_id",                        null: false
     t.string   "token"
     t.text     "description"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.string   "scope",       default: "system"
+    t.string   "user_agent"
+    t.integer  "expires"
+    t.index ["token"], name: "index_auth_tokens_on_token", using: :btree
   end
 
   create_table "contacts", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|

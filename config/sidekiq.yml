@@ -6,5 +6,6 @@
   - reckoning-timer
   - reckoning-archive
   - reckoning-archive-all
+  - reckoning-cleanup
 
 :logfile: ./log/sidekiq.log

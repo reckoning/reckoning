@@ -122,9 +122,9 @@ Rails.application.routes.draw do
   get 'privacy' => 'base#privacy'
   get 'terms' => 'base#terms'
 
-  get '404' => 'errors#not_found'
-  get '422' => 'errors#server_error'
-  get '500' => 'errors#server_error'
+  match '404' => 'errors#not_found', via: :all
+  match '422' => 'errors#server_error', via: :all
+  match '500' => 'errors#server_error', via: :all
 
   root to: 'base#index'
 end

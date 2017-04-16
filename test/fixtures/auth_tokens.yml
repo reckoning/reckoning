@@ -1,5 +1,0 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-data_first:
-  user_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a72"
-  token: MyString

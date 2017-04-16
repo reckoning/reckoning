@@ -9,10 +9,12 @@ module ApplicationHelper
   end
 
   def auth_token
-    if defined?(current_user) && user_signed_in?
-      JsonWebToken.encode(id: current_user.id)
-    else
-      ""
+    @auth_token ||= begin
+      if defined?(current_user) && user_signed_in?
+        AuthToken.system.not_expired.find_or_create_by(user_id: current_user.id).token
+      else
+        ""
+      end
     end
   end
 

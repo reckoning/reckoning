@@ -20,15 +20,15 @@ module Api
         it "Unauthrized user cant view tasks index" do
           get :index
 
-          assert_response :forbidden
+          assert_response :unauthorized
           json = JSON.parse response.body
-          assert_equal "authentication.missing", json["code"]
+          assert_equal "unauthorized", json["code"]
         end
 
         it "Unauthrized user cant create new task" do
           post :create, params: { task: { name: "foo" } }
 
-          assert_response :forbidden
+          assert_response :unauthorized
         end
       end
 

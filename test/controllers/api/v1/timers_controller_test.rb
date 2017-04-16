@@ -20,39 +20,39 @@ module Api
         it "Unauthrized user cant view timers index" do
           get :index
 
-          assert_response :forbidden
+          assert_response :unauthorized
           json = JSON.parse response.body
-          assert_equal "authentication.missing", json["code"]
+          assert_equal "unauthorized", json["code"]
         end
 
         it "Unauthrized user cant create new timer" do
           post :create, params: { timer: { date: Time.current, value: 1.0, taskUuid: timer.task_id } }
 
-          assert_response :forbidden
+          assert_response :unauthorized
         end
 
         it "Unauthrized user cant update a timer" do
           put :update, params: { id: timer.id }
 
-          assert_response :forbidden
+          assert_response :unauthorized
         end
 
         it "Unauthrized user cant start a timer" do
           put :start, params: { id: timer.id }
 
-          assert_response :forbidden
+          assert_response :unauthorized
         end
 
         it "Unauthrized user cant stop a timer" do
           put :stop, params: { id: timer.id }
 
-          assert_response :forbidden
+          assert_response :unauthorized
         end
 
         it "Unauthrized user cant destroy timer" do
           delete :destroy, params: { id: timer.id }
 
-          assert_response :forbidden
+          assert_response :unauthorized
 
           assert_equal timer, Timer.find_by(id: timer.id)
         end

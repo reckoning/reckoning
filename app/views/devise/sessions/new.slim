@@ -12,9 +12,7 @@
     = f.password_field :password, placeholder: I18n.t(:"helpers.placeholder.user.password"), class: 'form-control'
 
   .form-group
-    .text-center
-      a href='#' onclick="App.SignIn.showOtpField($(this)); return false;" = I18n.t(:otp_enabled, scope: 'devise.otp')
-    = f.text_field :otp_attempt, autocomplete: :off, autofocus: true, value: '', placeholder: I18n.t(:otp_token, scope: 'devise.otp'), class: 'form-control', style: "display: none;"
+    = f.text_field :otp_attempt, autocomplete: :off, autofocus: true, value: '', placeholder: I18n.t(:otp_token, scope: 'devise.otp'), class: 'form-control'
 
   - if devise_mapping.rememberable?
     .checkbox

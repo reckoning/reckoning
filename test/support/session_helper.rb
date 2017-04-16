@@ -7,6 +7,7 @@ module SessionHelper
   end
 
   def http_authorization(user)
-    ActionController::HttpAuthentication::Token.encode_credentials(JsonWebToken.encode(id: user.id))
+    token = AuthToken.find_or_create_by(user_id: user.id)
+    ActionController::HttpAuthentication::Token.encode_credentials(token.token)
   end
 end

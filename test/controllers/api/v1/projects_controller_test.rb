@@ -20,15 +20,15 @@ module Api
         it "Unauthrized user cant view projects index" do
           get :index
 
-          assert_response :forbidden
+          assert_response :unauthorized
           json = JSON.parse response.body
-          assert_equal "authentication.missing", json["code"]
+          assert_equal "unauthorized", json["code"]
         end
 
         it "Unauthrized user cant destroy project" do
           delete :destroy, params: { id: project.id }
 
-          assert_response :forbidden
+          assert_response :unauthorized
 
           assert_equal project, Project.where(id: project.id).first
         end

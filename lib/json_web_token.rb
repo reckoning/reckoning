@@ -2,16 +2,17 @@
 # frozen_string_literal: true
 class JsonWebToken
   class << self
-    def encode(payload, exp = 24.hours.from_now)
-      payload[:exp] = exp.to_i
-      JWT.encode(payload, Rails.application.secrets.secret_key_base)
+    def encode(payload)
+      JWT.encode(payload, Rails.application.secrets[:devise_jwt])
     end
 
     def decode(token)
-      body = JWT.decode(token, Rails.application.secrets.secret_key_base)[0]
+      body = JWT.decode(token, Rails.application.secrets[:devise_jwt])[0]
       HashWithIndifferentAccess.new body
-      # rubocop:disable Lint/HandleExceptions
-    rescue
+      # rubocop:disable Lint/RescueException
+    rescue Exception => e
+      Rails.logger.debug(e)
+      nil
     end
   end
 end

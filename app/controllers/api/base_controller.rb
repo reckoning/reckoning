@@ -5,7 +5,9 @@ require 'json_web_token'
 module Api
   class BaseController < ActionController::Base
     include ActionController::HttpAuthentication::Token
-    around_action :authenticate_user_from_token!
+    before_action :authenticate_user_from_token!
+    before_action :authenticate_user!
+
     respond_to :json
 
     check_authorization
@@ -19,48 +21,31 @@ module Api
     end
     helper_method :resource_message
 
-    attr_reader :current_account
-    helper_method :current_account
-
     private def authenticate_user_from_token!
       auth_params, _options = token_and_options(request)
-      user = lookup_by_jwt(auth_params)
-      user ||= lookup_by_auth_token(auth_params)
+      auth_token = JsonWebToken.decode(auth_params)
+      if auth_token && auth_token[:user_id]
+        user = User.find(auth_token[:user_id])
+        token = AuthToken.find_by(user_id: auth_token[:user_id], token: auth_params, scope: [:api, :system])
+      end
 
-      if user
+      if user && token && Devise.secure_compare(token.token, auth_params)
         sign_in user, store: false
-        @current_user = user
-        @current_account = user.account
-
-        yield
       else
-        message = "HTTP Token: Access denied."
-        render json: { code: "authentication.missing", message: message }, status: :forbidden
+        render json: { code: "unauthorized", message: I18n.t("devise.failure.unauthenticated") }, status: :unauthorized
+        return
       end
     end
 
-    private def decoded_auth_token(auth_params)
-      @decoded_auth_token ||= JsonWebToken.decode(auth_params)
-    end
-
-    private def lookup_by_jwt(auth_params)
-      token = decoded_auth_token(auth_params)
-      User.find(token[:id]) if token
-    end
-
-    private def lookup_auth_token(user, auth_token)
-      AuthToken.where(user_id: user.id).to_a.find do |token|
-        Devise.secure_compare(token, auth_token)
+    private def current_account
+      @current_account ||= begin
+        if current_user.present?
+          current_user.account
+        elsif request.subdomain.present? && request.subdomain != "www" && request.subdomain != "api"
+          Account.where(subdomain: request.subdomain).first
+        end
       end
     end
-
-    private def lookup_by_auth_token(auth_params)
-      user_id, auth_token = auth_params && auth_params.split(':', 2)
-      user = user_id && User.find(user_id)
-
-      return if !user || !lookup_auth_token(user, auth_token)
-
-      user
-    end
+    helper_method :current_account
   end
 end

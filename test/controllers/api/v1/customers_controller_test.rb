@@ -21,27 +21,27 @@ module Api
         it "Unauthrized user cant view customers index" do
           get :index
 
-          assert_response :forbidden
+          assert_response :unauthorized
           json = JSON.parse response.body
-          assert_equal "authentication.missing", json["code"]
+          assert_equal "unauthorized", json["code"]
         end
 
         it "Unauthrized user cant view customer" do
           get :show, params: { id: customer.id }
 
-          assert_response :forbidden
+          assert_response :unauthorized
         end
 
         it "Unauthrized user cant create new customer" do
           post :create, params: { customer: { name: "foo" } }
 
-          assert_response :forbidden
+          assert_response :unauthorized
         end
 
         it "Unauthrized user cant destroy customer" do
           delete :destroy, params: { id: customer.id }
 
-          assert_response :forbidden
+          assert_response :unauthorized
 
           assert_equal customer, Customer.find_by(id: customer.id)
         end
