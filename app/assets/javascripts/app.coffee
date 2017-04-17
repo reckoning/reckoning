@@ -6,15 +6,13 @@ App.init = ->
   $('.btn.btn-loading').click ->
     $(@).button('loading')
 
-document.addEventListener 'turbolinks:load', ->
-  App.init()
-
   Selectize = new App.Selectize()
   Selectize.init()
 
   Moment = new App.Moment()
   Moment.init()
 
+App.initInternal = ->
   Accounting = new App.Accounting()
   Accounting.init()
 
@@ -32,6 +30,10 @@ document.addEventListener 'turbolinks:load', ->
   Timer.init()
 
   new App.Notifications()
+
+document.addEventListener 'turbolinks:load', ->
+  App.init()
+  App.initInternal() if AuthToken
 
 $(document).on 'click', '[data-geolocation]', (ev) ->
   ev.preventDefault()
