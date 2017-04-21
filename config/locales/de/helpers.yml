@@ -18,7 +18,7 @@ de:
         account_number: "Konto"
         iban: "IBAN"
         bic: "BIC"
-        default_from: "Absender Für Rechnungs E-Mails"
+        default_from: "Absender für Rechnungs-E-Mails"
         signature: "Signatur"
         feature_expenses: "Ausgaben Feature aktiviert?"
         feature_logbook: "Fahrtenbuch Feature aktiviert?"
@@ -44,7 +44,7 @@ de:
         password: "Passwort"
         password_confirmation: "Passwort-Bestätigung"
         current_password: "Aktuelles Passwort"
-        gravatar: "Gravatar E-Mail Adresse"
+        gravatar: "Gravatar E-Mail"
         layout_options:
           top: "Navigation Oben"
           aside: "Navigation auf der Seite"
@@ -129,14 +129,15 @@ de:
           iban: "IBAN"
           bic: "BIC"
         mailing:
-          default_from: "Absender Für Rechnungs E-Mails"
+          default_from: "Absender für Rechnungs-E-Mails"
           signature: "Signatur"
       user:
         email: "E-Mail"
         password: "Passwort"
+        otp_token: "Einmal-Token (Optional)"
         password_confirmation: "Passwort-Bestätigung"
         current_password: "Aktuelles Passwort"
-        gravatar: "Gravatar E-Mail Adresse"
+        gravatar: "Gravatar E-Mail"
       customer:
         name: "Firma / Name"
         payment_due: "Zahlungsziel (Tage)"
