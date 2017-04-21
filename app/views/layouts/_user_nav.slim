@@ -2,7 +2,7 @@ ul.nav.navbar-nav.navbar-right
   li.dropdown.user-menu class=(active_nav?('user') || active_nav?('account'))
     a.dropdown-toggle href='#' data-toggle='dropdown'
       .gravatar
-        img src=gravatar_path alt="avatar"
+        img src=current_user.avatar alt="avatar"
       span.user-email class=("hidden" unless nav_aside?)
         = current_user.email
       b.caret
