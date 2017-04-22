@@ -49,6 +49,7 @@ module Charts
         start_date = project.start_date if project.start_date.present?
         start_date ||= Time.zone.parse(scope.order(:created_at).first.try(:date).to_s) if scope.order(:created_at).first.present?
         start_date ||= (Time.zone.now - 12.months)
+        start_date = Time.zone.now if start_date > Time.zone.now
         start_date.to_date
       end
     end
@@ -56,7 +57,7 @@ module Charts
     private def end_date
       @end_date ||= begin
         end_date = project.end_date if project.end_date.present?
-        end_date ||= Time.zone.now
+        end_date ||= (Time.zone.now + 1.week)
         end_date.to_date
       end
     end
