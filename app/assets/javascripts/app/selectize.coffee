@@ -6,44 +6,44 @@ class App.Selectize
       render:
         option_create: selectizeCreateTemplate
       create: (input, callback) ->
-        fetch: ->
-          fetch ApiBasePath + Routes.v1_expense_types_path(),
-            headers: ApiHeaders
-            method: 'POST'
-            body: {name: input}
-          .then (response) ->
-            response.json()
-          .then (result) ->
-            data = {
-              value: result.id,
-              text: result.name
-            }
-            @addOption data
-            @addItem result.id
-            callback data
+        fetch ApiBasePath + Routes.v1_expense_types_path(),
+          headers: ApiHeaders
+          method: 'POST'
+          body: JSON.stringify({name: input})
+        .then (response) ->
+          response.json()
+        .then (result) ->
+          $selectize = $('select.js-expense-selectize')[0].selectize
+          data = {
+            value: result.id,
+            text: result.name
+          }
+          $selectize.addOption data
+          $selectize.addItem result.id
+          callback data
 
-          .catch (error) ->
-            callback()
+        .catch (error) ->
+          callback()
 
     $('select.js-customer-selectize').selectize
       render:
         option_create: selectizeCreateTemplate
       create: (input, callback) ->
-        fetch: ->
-          fetch ApiBasePath + Routes.v1_customers_path(),
-            headers: ApiHeaders
-            method: 'POST'
-            body: {name: input}
-          .then (response) ->
-            response.json()
-          .then (result) ->
-            data = {
-              value: result.id,
-              text: result.name
-            }
-            @addOption data
-            @addItem result.id
-            callback data
+        fetch ApiBasePath + Routes.v1_customers_path(),
+          headers: ApiHeaders
+          method: 'POST'
+          body: JSON.stringify({name: input})
+        .then (response) ->
+          response.json()
+        .then (result) ->
+          $selectize = $('select.js-customer-selectize')[0].selectize
+          data = {
+            value: result.id,
+            text: result.name
+          }
+          $selectize.addOption data
+          $selectize.addItem result.id
+          callback data
 
-          .catch (error) ->
-            callback()
+        .catch (error) ->
+          callback()
