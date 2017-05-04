@@ -3,7 +3,7 @@
 require 'test_helper'
 
 class LoginTest < ActionDispatch::IntegrationTest
-  fixtures :all
+  fixtures :users
 
   let(:user) { users(:will) }
 

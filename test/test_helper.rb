@@ -3,12 +3,10 @@
 require 'simplecov'
 require 'simplecov-console'
 require 'simplecov-html'
-require 'coveralls'
 
 formatters = [
   SimpleCov::Formatter::Console,
-  SimpleCov::Formatter::HTMLFormatter,
-  Coveralls::SimpleCov::Formatter
+  SimpleCov::Formatter::HTMLFormatter
 ]
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(formatters)
 SimpleCov.start('rails')

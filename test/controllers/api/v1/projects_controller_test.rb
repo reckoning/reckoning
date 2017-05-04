@@ -12,7 +12,7 @@ module Api
 
       tests ::Api::V1::ProjectsController
 
-      fixtures :all
+      fixtures :projects, :users
 
       let(:project) { projects :narendra3 }
 

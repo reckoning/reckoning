@@ -4,6 +4,7 @@ narendra3:
   name: "Narendra 3"
   workflow_state: :active
   rate: 99.0
+  budget: 9999
 
 outpost6:
   id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a80"
@@ -11,3 +12,4 @@ outpost6:
   name: "Outpost 6"
   workflow_state: :active
   rate: 79.0
+  budget: 9999

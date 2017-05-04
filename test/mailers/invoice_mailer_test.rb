@@ -3,7 +3,7 @@
 require 'test_helper'
 
 class InvoiceMailerTest < ActionMailer::TestCase
-  fixtures :all
+  fixtures :invoices, :customers, :accounts, :projects
 
   let(:invoice) { invoices :january }
 
