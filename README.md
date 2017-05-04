@@ -1,7 +1,8 @@
 # Reckoning
 
-[![Build Status](https://travis-ci.org/reckoning/app.svg?branch=master)](https://travis-ci.org/reckoning/app)
-[![Coverage Status](https://coveralls.io/repos/github/reckoning/app/badge.svg?branch=master)](https://coveralls.io/github/reckoning/app?branch=master)
+[![CircleCI](https://circleci.com/gh/reckoning/app/tree/master.svg?style=svg)](https://circleci.com/gh/reckoning/app/tree/master)
+[![Code Climate](https://codeclimate.com/github/reckoning/app/badges/gpa.svg)](https://codeclimate.com/github/reckoning/app)
+[![Test Coverage](https://codeclimate.com/github/reckoning/app/badges/coverage.svg)](https://codeclimate.com/github/reckoning/app/coverage)
 
 Reckoning is a simple tool for invoicing
 
