@@ -16,7 +16,7 @@ class Customer < ActiveRecord::Base
     return if employment_date.blank?
     days = 0
     date = Time.current.to_date
-    while date > employment_date
+    while date >= employment_date
       days += 1 unless date.saturday? || date.sunday?
       date -= 1.day
     end
