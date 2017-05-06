@@ -10,33 +10,19 @@ class AuthToken < ApplicationRecord
 
   before_validation :generate_authentication_token, on: :create
 
-  def self.system
-    where(scope: "system")
-  end
-
-  def self.not_expired
-    where("? < expires", Time.zone.now.to_i)
-  end
-
-  def system?
-    scope == "system"
+  def to_jwt_payload
+    {
+      token: token,
+      user_id: user_id,
+      exp: expires
+    }.compact
   end
 
   private def generate_authentication_token
-    # System Tokens should expire after 24 hours
-    self.expires = Time.zone.now.to_i + (24 * 3600) if system?
     loop do
       auth_token = Devise.friendly_token
       next if AuthToken.find_by(user_id: user_id, token: auth_token)
-
-      payload = {
-        token: auth_token,
-        user_id: user_id,
-        exp: expires,
-        iss: "Reckoning.io"
-      }.compact
-
-      self.token = JsonWebToken.encode(payload)
+      self.token = auth_token
       break
     end
   end

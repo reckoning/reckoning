@@ -16,6 +16,6 @@ angular.module 'Reckoning', [
   spinnerFunction = (data, headersGetter) ->
     NProgress.start()
     data
-  $httpProvider.defaults.headers.common['Authorization'] = "Bearer \"#{AuthToken}\""
+  $httpProvider.defaults.headers.common['Authorization'] = 'Bearer ' + AuthToken
   $httpProvider.defaults.transformRequest.push(spinnerFunction)
 ]

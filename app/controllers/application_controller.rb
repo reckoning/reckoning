@@ -1,6 +1,8 @@
 # encoding: utf-8
 # frozen_string_literal: true
 class ApplicationController < ActionController::Base
+  include Concerns::Accounts
+
   protect_from_forgery prepend: true
   check_authorization unless: :unauthorized_controllers
 
@@ -11,17 +13,6 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!, :set_default_nav
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :set_user_cookie, if: :user_signed_in?
-
-  private def current_account
-    @current_account ||= begin
-      if current_user.present?
-        current_user.account
-      elsif request.subdomain.present? && request.subdomain != "www" && request.subdomain != "api"
-        Account.where(subdomain: request.subdomain).first
-      end
-    end
-  end
-  helper_method :current_account
 
   private def unauthorized_controllers
     devise_controller?

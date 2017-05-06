@@ -48,9 +48,6 @@ $(document).on 'click', 'code[data-target]', (ev) ->
   $target = $($element.data('target'))
   $target.val($target.val() + $element.text())
 
-$(document).ajaxSend (event, jqxhr, settings) ->
-  jqxhr.setRequestHeader 'Authorization', "Bearer \"#{AuthToken}\""
-
 document.addEventListener 'keydown', (e) ->
   return true if $('form') is undefined
   if navigator.platform.match("Mac")

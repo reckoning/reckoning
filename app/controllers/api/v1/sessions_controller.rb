@@ -3,8 +3,9 @@
 module Api
   module V1
     class SessionsController < Api::BaseController
+      include ActionController::HttpAuthentication::Token
+
       skip_authorization_check
-      before_action :authenticate_user_from_token!, except: [:create]
       before_action :authenticate_user!, except: [:create]
 
       respond_to :json
@@ -17,20 +18,27 @@ module Api
           sign_in(:user, resource, store: false)
           token = AuthToken.create(
             user_id: resource.id,
-            scope: :api,
             user_agent: request.user_agent,
-            description: login_params[:description]
+            description: login_params[:description],
+            expires: login_params[:expires]
           )
-          render json: { auth_token: token.token }
+          render json: { auth_token: JsonWebToken.encode(token.to_jwt_payload) }
           return
         end
         invalid_login_attempt
       end
 
       def destroy
-        token = AuthToken.find_by(user_id: current_user.id, scope: :api)
-        token && token.destroy
+        auth_token = AuthToken.find_by(user_id: current_user.id, token: jwt_token[:token])
+        auth_token && auth_token.destroy
         render json: { code: "sessions.destroy", message: I18n.t("devise.sessions.signed_out") }
+      end
+
+      private def jwt_token
+        @jwt_token ||= begin
+          auth_params, _options = token_and_options(request)
+          JsonWebToken.decode(auth_params)
+        end
       end
 
       private def validate_otp(resource)
@@ -40,7 +48,7 @@ module Api
       end
 
       private def login_params
-        @login_params ||= params.permit(:email, :password, :otp_token, :description)
+        @login_params ||= params.permit(:email, :password, :otp_token, :description, :expires)
       end
 
       private def invalid_login_attempt
