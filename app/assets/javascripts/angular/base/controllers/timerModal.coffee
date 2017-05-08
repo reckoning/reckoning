@@ -38,7 +38,6 @@ angular.module 'Reckoning'
       else
         timer.value = 0 unless timer.value
         Timer.create(timer).success (data) ->
-          console.log($uibModalInstance)
           $uibModalInstance.close({data: data, status: 'created'})
 
     $scope.cancel = ->

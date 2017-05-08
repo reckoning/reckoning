@@ -6,6 +6,9 @@ Devise.setup do |config|
   config.warden do |manager|
     manager.default_strategies(scope: :user).unshift :two_factor_authenticatable
     manager.default_strategies(scope: :user).unshift :two_factor_backupable
+    manager.strategies.add(:jwt, Devise::Strategies::JWT)
+    manager.default_strategies(scope: :user).unshift :jwt
+    manager.failure_app = JSONFailureApp
   end
 
   # ==> Mailer Configuration

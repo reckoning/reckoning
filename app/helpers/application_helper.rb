@@ -10,8 +10,11 @@ module ApplicationHelper
 
   def auth_token
     @auth_token ||= begin
-      if defined?(current_user) && user_signed_in?
-        AuthToken.system.not_expired.find_or_create_by(user_id: current_user.id).token
+      if user_signed_in?
+        JsonWebToken.encode(
+          exp: Time.zone.now.to_i + Rails.application.secrets[:jwt_expiration],
+          user_id: current_user.id
+        )
       else
         ""
       end

@@ -1,18 +1,19 @@
 # encoding: utf-8
 # frozen_string_literal: true
-class JsonWebToken
-  class << self
-    def encode(payload)
-      JWT.encode(payload, Rails.application.secrets[:devise_jwt])
-    end
+module JsonWebToken
+  module_function
 
-    def decode(token)
-      body = JWT.decode(token, Rails.application.secrets[:devise_jwt])[0]
-      HashWithIndifferentAccess.new body
-      # rubocop:disable Lint/RescueException
-    rescue Exception => e
-      Rails.logger.debug(e)
-      nil
-    end
+  def encode(payload)
+    payload = payload.dup
+    payload[:iss] = "Reckoning.io"
+
+    JWT.encode(payload, Rails.application.secrets[:devise_jwt])
+  end
+
+  def decode(token)
+    decoded_token = JWT.decode(token, Rails.application.secrets[:devise_jwt])
+    HashWithIndifferentAccess.new(decoded_token.first)
+  rescue
+    nil
   end
 end
