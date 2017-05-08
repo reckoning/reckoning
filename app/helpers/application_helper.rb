@@ -12,7 +12,7 @@ module ApplicationHelper
     @auth_token ||= begin
       if user_signed_in?
         JsonWebToken.encode(
-          exp: Time.zone.now.to_i + (1 * 1800),
+          exp: Time.zone.now.to_i + Rails.application.secrets[:jwt_expiration],
           user_id: current_user.id
         )
       else
