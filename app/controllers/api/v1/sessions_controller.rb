@@ -16,13 +16,7 @@ module Api
 
         if resource.valid_password?(login_params[:password]) && validate_otp(resource)
           sign_in(:user, resource, store: false)
-          token = AuthToken.create(
-            user_id: resource.id,
-            user_agent: request.user_agent,
-            description: login_params[:description],
-            expires: login_params[:expires]
-          )
-          render json: { auth_token: JsonWebToken.encode(token.to_jwt_payload) }
+          render json: { auth_token: JsonWebToken.encode(new_auth_token(resource.id).to_jwt_payload) }
           return
         end
         invalid_login_attempt
@@ -32,6 +26,17 @@ module Api
         auth_token = AuthToken.find_by(user_id: current_user.id, token: jwt_token[:token])
         auth_token && auth_token.destroy
         render json: { code: "sessions.destroy", message: I18n.t("devise.sessions.signed_out") }
+      end
+
+      private def new_auth_token(user_id)
+        @new_auth_token ||= begin
+          AuthToken.create(
+            user_id: user_id,
+            user_agent: request.user_agent,
+            description: login_params[:description],
+            expires: login_params[:expires]
+          )
+        end
       end
 
       private def jwt_token
