@@ -12,7 +12,29 @@ class App.Timer
     if newTimer
       @set(newTimer)
 
+    @setupVisibilityCheck()
     @setupCable()
+
+  setupVisibilityCheck: ->
+    document.addEventListener("visibilitychange", @visibilitychange)
+    document.addEventListener("mozvisibilitychange", @visibilitychange)
+    document.addEventListener("webkitvisibilitychange", @visibilitychange)
+    document.addEventListener("msvisibilitychange", @visibilitychange)
+    document.onfocusin = @visibilitychange
+    window.onpageshow = @visibilitychange
+
+  visibilitychange: (evt) =>
+    now = new Date().getTime()
+    console.log('Page View')
+    fetchInterval: 15 * (60 * 1000) #only fetch after 15 mins.
+    if now - @lastVisibilityTrigger > fetchInterval
+      @lastVisibilityTrigger = now
+      console.log('Reloading Running Timer')
+      @fetch()
+      if App.cable.connection.disconnected
+        @setupCable()
+    else
+      @lastVisibilityTrigger = now
 
   setupCable: ->
     App.cable.subscriptions.create
