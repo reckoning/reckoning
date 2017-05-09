@@ -26,7 +26,7 @@ class App.Timer
   visibilitychange: (evt) =>
     now = new Date().getTime()
     console.log('Page View')
-    fetchInterval: 15 * (60 * 1000) #only fetch after 15 mins.
+    fetchInterval = 15 * (60 * 1000) #only fetch after 15 mins.
     if now - @lastVisibilityTrigger > fetchInterval
       @lastVisibilityTrigger = now
       console.log('Reloading Running Timer')
