@@ -1,7 +1,3 @@
 RunningTimerWorker:
   every: 10m
   description: "Checks for Running Timers every hour and Notifies Users"
-
-CleanupAuthTokensWorker:
-  every: 1d
-  description: "Cleanup expired Auth Tokens"
