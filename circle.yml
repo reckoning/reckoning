@@ -6,8 +6,8 @@ dependencies:
     - bundle exec thor setup:dev_env
 test:
   override:
-    - bundle exec rake
     - bundle exec rubocop
+    - bundle exec rake
     - bundle exec codeclimate-test-reporter
 deployment:
   production:
