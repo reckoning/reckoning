@@ -5,8 +5,6 @@ require 'test_helper'
 
 module Charts
   class ProjectBudgetServiceTest < ActiveSupport::TestCase
-    fixtures :projects, :timers
-
     let(:project) { projects :narendra3 }
 
     before do

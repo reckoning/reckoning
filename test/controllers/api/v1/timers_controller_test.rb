@@ -13,8 +13,6 @@ module Api
 
       tests ::Api::V1::TimersController
 
-      fixtures :all
-
       let(:timer) { timers :threehours }
 
       describe "unauthorized" do

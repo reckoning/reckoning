@@ -1,13 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  id: "90dfbd1f-aa6b-463c-a0ca-56d8ea204c01"
-  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+planet-transfer:
+  account: enterprise
   description: MyText
-  vessel_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a10"
+  vessel: galileo
 
-two:
-  id: "90dfbd1f-aa6b-463c-a0ca-56d8ea204c02"
-  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+testflight:
+  account: enterprise
   description: MyText
-  vessel_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a10"
+  vessel: galileo

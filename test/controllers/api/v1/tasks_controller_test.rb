@@ -13,8 +13,6 @@ module Api
 
       tests ::Api::V1::TasksController
 
-      fixtures :all
-
       let(:task) { tasks :away_mission }
 
       describe "unauthorized" do

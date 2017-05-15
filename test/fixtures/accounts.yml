@@ -1,11 +1,9 @@
 enterprise:
-  id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
   name: Enterprise
   contact_information:
     address: "Sector 001"
 
 defiant:
-  id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a74"
   name: Defiant
   contact_information:
     telefon: "222"

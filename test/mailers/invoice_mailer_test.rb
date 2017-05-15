@@ -4,8 +4,6 @@
 require 'test_helper'
 
 class InvoiceMailerTest < ActionMailer::TestCase
-  fixtures :invoices, :customers, :accounts, :projects
-
   let(:invoice) { invoices :january }
 
   before do

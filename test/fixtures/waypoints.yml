@@ -1,25 +1,21 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
-  id: "80dfbd1f-aa6b-463c-a0ca-56d8ea204a10"
   milage: 9.99
   latitude: 9.99
   longitude: 9.99
   location: 'foo'
   time: 2016-08-14 20:34:37
-  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
-  tour_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea204c01"
-  driver_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a72"
-  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+  account: enterprise
+  tour: planet-transfer
+  driver: data
+  account: enterprise
 
 two:
-  id: "80dfbd1f-aa6b-463c-a0ca-56d8ea204a20"
   milage: 9.99
   latitude: 9.99
   longitude: 9.99
   location: 'foo'
   time: 2016-08-14 20:34:37
-  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
-  tour_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea204c02"
-  driver_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a72"
-  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+  account: enterprise
+  tour: testflight
+  driver: data
+  account: enterprise

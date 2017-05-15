@@ -4,8 +4,6 @@
 require 'test_helper'
 
 class TimerMailerTest < ActionMailer::TestCase
-  fixtures :timers, :users
-
   let(:timer) { timers :twohours }
 
   it "sends email user with long running timer" do
