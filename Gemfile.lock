@@ -328,8 +328,6 @@ GEM
       connection_pool (~> 2.2, >= 2.2.0)
       rack-protection (>= 1.5.0)
       redis (~> 3.3, >= 3.3.3)
-    sidekiq-failures (0.4.5)
-      sidekiq (>= 2.16.0)
     sidekiq-scheduler (2.1.4)
       redis (~> 3)
       rufus-scheduler (~> 3.2)
@@ -472,7 +470,6 @@ DEPENDENCIES
   sass-rails
   sentry-raven
   sidekiq
-  sidekiq-failures
   sidekiq-scheduler
   simplecov
   simplecov-console
