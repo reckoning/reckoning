@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 class User < ActiveRecord::Base
   devise :two_factor_authenticatable, :two_factor_backupable, :confirmable, :lockable, :recoverable,
          :registerable, :rememberable, :trackable, :validatable,

@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 json.id tour.id
 json.description tour.description
 json.distance tour.distance

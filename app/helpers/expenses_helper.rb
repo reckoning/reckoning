@@ -1,9 +1,10 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 module ExpensesHelper
   def first_expenses_year
     first_invoice = current_account.invoices.order('date').first
-    return unless first_invoice.present?
+    return if first_invoice.blank?
     first_invoice.date.year
   end
 

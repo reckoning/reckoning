@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 class ApplicationController < ActionController::Base
   include Concerns::Accounts
 
@@ -34,7 +35,7 @@ class ApplicationController < ActionController::Base
   end
 
   private def sort_direction
-    %w(asc desc).include?(params[:direction]) ? params[:direction] : "desc"
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
   end
   helper_method :sort_direction
 
@@ -60,7 +61,7 @@ class ApplicationController < ActionController::Base
 
   private def store_current_params
     key = (params[:controller].to_s + "_" + params[:action].to_s).to_sym
-    session[key] = params.reject { |k| %w(controller action format).include?(k.to_s) }
+    session[key] = params.reject { |k| %w[controller action format].include?(k.to_s) }
   end
 
   private def stored_params(action, controller = params[:controller])

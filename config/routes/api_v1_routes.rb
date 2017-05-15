@@ -1,28 +1,29 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 v1_api_routes = lambda do
-  resource :sessions, only: [:create, :destroy]
+  resource :sessions, only: %i[create destroy]
 
-  resources :customers, only: [:index, :show, :create, :destroy]
+  resources :customers, only: %i[index show create destroy]
 
-  resources :projects, only: [:index, :destroy] do
+  resources :projects, only: %i[index destroy] do
     member do
       put :archive
     end
   end
 
-  resources :tasks, only: [:index, :create]
+  resources :tasks, only: %i[index create]
 
-  resources :timers, only: [:index, :create, :update, :destroy] do
+  resources :timers, only: %i[index create update destroy] do
     member do
       put :start
       put :stop
     end
   end
 
-  resources :vessels, only: [:index, :create, :update, :destroy]
-  resources :tours, only: [:index, :show, :create, :update, :destroy]
-  resources :waypoints, only: [:index, :create, :update, :destroy]
+  resources :vessels, only: %i[index create update destroy]
+  resources :tours, only: %i[index show create update destroy]
+  resources :waypoints, only: %i[index create update destroy]
   resources :manufacturers, only: [:index]
   resources :users, only: [:index] do
     collection do

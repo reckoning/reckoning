@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 json.id task.id
 json.name task.name
 json.label task.label

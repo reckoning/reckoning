@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 class Waypoint < ApplicationRecord
   belongs_to :account
   belongs_to :tour, touch: true

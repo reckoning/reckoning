@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 class Account < ActiveRecord::Base
   has_many :users, dependent: :destroy
   has_many :invoices, dependent: :destroy
@@ -18,7 +19,7 @@ class Account < ActiveRecord::Base
 
   validates :name, :users, :plan, presence: true
   validates :subdomain, uniqueness: true, allow_blank: true
-  validates :subdomain, exclusion: { in: %w(www app admin api backend reckoning) }
+  validates :subdomain, exclusion: { in: %w[www app admin api backend reckoning] }
   validates_associated :users
   validates :stripe_token, :stripe_email, presence: true, on: :create, if: :on_paid_plan?
   validates :vat_id, valvat: { lookup: :fail_if_down, allow_blank: true }

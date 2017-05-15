@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 class InvoiceTestMailerWorker
   include Sidekiq::Worker
   sidekiq_options queue: (ENV['MAILER_QUEUE'] || 'reckoning-mailer').to_sym

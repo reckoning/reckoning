@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 class ExpensesController < ApplicationController
   include ResourceHelper
 
@@ -82,7 +83,7 @@ class ExpensesController < ApplicationController
   helper_method :sort_column
 
   private def sort_direction
-    %w(asc desc).include?(params[:direction]) ? params[:direction] : "desc"
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
   end
 
   private def set_active_nav

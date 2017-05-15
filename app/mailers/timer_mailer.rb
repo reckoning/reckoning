@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 class TimerMailer < ActionMailer::Base
   include Rails.application.routes.url_helpers
 

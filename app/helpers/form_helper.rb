@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 module FormHelper
   def form_error?(obj, method)
     obj.errors[method].empty? ? '' : 'has-error has-feedback'

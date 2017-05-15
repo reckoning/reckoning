@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 class Vessel < ApplicationRecord
   belongs_to :account
   has_many :tours, dependent: :destroy

@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 module Charts
   class ProjectBudgetService < BaseService
     attr_accessor :project, :ticks

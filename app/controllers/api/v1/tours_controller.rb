@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 module Api
   module V1
     class ToursController < ::Api::BaseController
@@ -66,7 +67,7 @@ module Api
       private def tour_params
         @tour_params ||= params.permit(
           :description, :vessel_id, :distance, :duration,
-          waypoints_attributes: [:milage, :driver_id, :location, :latitude, :longitude]
+          waypoints_attributes: %i[milage driver_id location latitude longitude]
         ).merge(account_id: current_account.id)
       end
     end

@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 class Tour < ApplicationRecord
   belongs_to :account
   belongs_to :vessel

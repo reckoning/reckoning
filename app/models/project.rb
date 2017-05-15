@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 class Project < ActiveRecord::Base
   DEFAULT_ROUND_UP_OPTIONS = {
     "Nicht aufrunden" => 10.0,
@@ -52,7 +53,7 @@ class Project < ActiveRecord::Base
   def timer_values
     values = 0.0
     timers.each do |timer|
-      values += timer.value.to_d unless timer.value.blank?
+      values += timer.value.to_d if timer.value.present?
     end
     values
   end
@@ -60,7 +61,7 @@ class Project < ActiveRecord::Base
   def timer_values_billable
     values = 0.0
     timers.billable.each do |timer|
-      values += timer.value.to_d unless timer.value.blank?
+      values += timer.value.to_d if timer.value.present?
     end
     values
   end

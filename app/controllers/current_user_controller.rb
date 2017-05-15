@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 class CurrentUserController < ApplicationController
   def otp
     authorize! :update, current_user

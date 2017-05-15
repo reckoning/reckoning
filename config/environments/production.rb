@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 Reckoning::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
