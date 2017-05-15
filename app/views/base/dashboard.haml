@@ -47,7 +47,7 @@
         - if @charged_invoices.present?
           = render "invoices_panel", panel_title: I18n.t(:"dashboard.panels.charged_invoices"), invoices: @charged_invoices, context: 'warning'
         :javascript
-          window.invoicesChartData = #{@invoices_chart_data.to_json}
+          window.invoicesChartData = #{@invoices_chart_data.to_json.html_safe}
         .panel.panel-default
           .panel-heading
             .panel-title
