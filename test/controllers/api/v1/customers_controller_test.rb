@@ -13,8 +13,6 @@ module Api
 
       tests ::Api::V1::CustomersController
 
-      fixtures :all
-
       let(:data) { users :data }
       let(:customer) { customers :starfleet }
 

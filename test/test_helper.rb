@@ -18,16 +18,16 @@ require File.expand_path('../../config/environment', __FILE__)
 require "rails/test_help"
 require "minitest/rails"
 
-require "faker"
-
 require "active_record/fixtures"
+require "database_cleaner"
+
+require "faker"
 
 require 'sidekiq/testing'
 Sidekiq::Testing.fake!
 
 # helper
 require "support/session_helper"
-require "database_cleaner"
 
 # database cleaner
 DatabaseCleaner.strategy = :transaction
@@ -62,6 +62,7 @@ class ActionView::TestCase
 end
 
 class ActiveSupport::TestCase
+  fixtures :all
   ActiveRecord::Migration.check_pending!
 
   before do
@@ -74,5 +75,17 @@ class ActiveSupport::TestCase
 
   after do
     Sidekiq::Worker.clear_all
+  end
+end
+
+class ActionMailer::TestCase
+  fixtures :all
+
+  before do
+    DatabaseCleaner.start
+  end
+
+  after do
+    DatabaseCleaner.clean
   end
 end

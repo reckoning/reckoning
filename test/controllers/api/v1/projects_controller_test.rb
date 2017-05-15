@@ -13,8 +13,6 @@ module Api
 
       tests ::Api::V1::ProjectsController
 
-      fixtures :projects, :users
-
       let(:project) { projects :narendra3 }
 
       describe "unauthorized" do

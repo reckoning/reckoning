@@ -5,8 +5,6 @@ require 'test_helper'
 
 module Charts
   class InvoicesServiceTest < ActiveSupport::TestCase
-    fixtures :accounts, :invoices
-
     let(:account) { accounts :enterprise }
 
     before do

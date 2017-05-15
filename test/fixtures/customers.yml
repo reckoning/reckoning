@@ -1,13 +1,11 @@
 starfleet:
-  id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a76"
-  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+  account: enterprise
   name: "Starfleet"
   contact_information:
     address: "San Fransisco"
 
 klingon:
-  id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a81"
-  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+  account: enterprise
   name: "Klingon"
   contact_information:
     address: "Qo'nos"

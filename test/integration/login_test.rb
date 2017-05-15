@@ -4,8 +4,6 @@
 require 'test_helper'
 
 class LoginTest < ActionDispatch::IntegrationTest
-  fixtures :users
-
   let(:user) { users(:will) }
 
   it "login with valid credentials redirects and gives correct success message" do

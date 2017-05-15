@@ -1,17 +1,15 @@
 january:
-  id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a77"
-  project_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a79"
-  customer_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a76"
-  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+  project: narendra3
+  customer: starfleet
+  account: enterprise
   date: <%= Date.parse("#{Time.current.year}-01-30") %>
   workflow_state: :created
   ref: "00001"
 
 february:
-  id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a78"
-  project_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a79"
-  customer_id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a76"
-  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a74"
+  project: narendra3
+  customer: starfleet
+  account: defiant
   date: <%= Date.parse("#{Time.current.year}-02-28") %>
   workflow_state: :created
   ref: "00002"

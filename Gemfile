@@ -17,7 +17,7 @@ gem 'sidekiq'
 gem 'sidekiq-failures'
 gem 'sidekiq-scheduler'
 # for sidekiq web
-gem 'sinatra', require: nil, git: 'https://github.com/sinatra/sinatra'
+gem 'sinatra', require: nil
 
 gem 'haml'
 gem 'haml-rails'
@@ -37,18 +37,18 @@ gem 'dalli'
 gem 'kaminari'
 gem 'url_plumber'
 
-gem 'jbuilder', '~> 2.5'
+gem 'jbuilder'
 
 gem 'dynamic_fields_for_rails'
 
 gem 'workflow'
 
-gem 'sass-rails', '~> 5.0'
+gem 'sass-rails'
 
-gem 'coffee-rails', '~> 4.2'
+gem 'coffee-rails'
 gem 'jquery-rails'
 gem 'js-routes'
-gem 'turbolinks', '~> 5'
+gem 'turbolinks'
 
 gem 'bootstrap-sass'
 gem 'bourbon'
@@ -58,7 +58,7 @@ gem 'uglifier', '>= 1.3.0'
 
 gem 'redcarpet'
 
-gem 'puma', '~> 3.0'
+gem 'puma'
 
 gem "i18n-js", ">= 3.0.0.rc11"
 gem 'rails-i18n'
@@ -92,11 +92,11 @@ gem 'non-stupid-digest-assets'
 gem 'nokogiri', '>= 1.7.1'
 
 group :development do
-  gem 'listen', '~> 3.0.5'
+  gem 'listen'
   gem 'pry-rails'
   gem 'rubocop', require: false
   gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'spring-watcher-listen'
   gem 'web-console'
 
   # deployment
@@ -105,7 +105,7 @@ group :development do
 end
 
 group :test do
-  gem "codeclimate-test-reporter", "~> 1.0.0"
+  gem 'codeclimate-test-reporter'
   gem 'database_cleaner'
   gem 'factory_girl'
   gem 'faker'

@@ -5,34 +5,30 @@ DEFAULTS: &DEFAULTS
   layout: "aside"
 
 data:
-  id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a72"
   email: "data@star.fleet"
-  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+  account: enterprise
   name: "Data"
   authentication_token: "data"
   <<: *DEFAULTS
 
 will:
-  id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
   email: "will@star.fleet"
-  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+  account: enterprise
   authentication_token: "will_riker"
   name: "Will Riker"
   <<: *DEFAULTS
 
 jeanluc:
-  id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a74"
   email: "jeanluc@star.fleet"
   admin: true
-  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a73"
+  account: enterprise
   authentication_token: "jeanluc_picard"
   name: "Jeanluc Picard"
   <<: *DEFAULTS
 
 worf:
-  id: "80dfbd1f-aa6b-463c-a0ca-56d8ea205a75"
   email: "worf@star.fleet"
-  account_id: "90dfbd1f-aa6b-463c-a0ca-56d8ea205a74"
+  account: defiant
   authentication_token: "worf"
   name: "Worf"
   <<: *DEFAULTS

@@ -7,18 +7,6 @@ GIT
       rest-client (~> 1.8)
       sinatra (>= 1.4.5)
 
-GIT
-  remote: https://github.com/sinatra/sinatra
-  revision: f716739811a0591ed1cc68f55fe92720f841fc19
-  specs:
-    rack-protection (2.0.0)
-      rack
-    sinatra (2.0.0)
-      mustermann (~> 1.0)
-      rack (~> 2.0)
-      rack-protection (= 2.0.0)
-      tilt (~> 2.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -67,15 +55,15 @@ GEM
     ast (2.3.0)
     attr_encrypted (3.0.3)
       encryptor (~> 3.0.0)
-    autoprefixer-rails (7.0.1)
+    autoprefixer-rails (7.1.0)
       execjs
-    aws-sdk (2.9.16)
-      aws-sdk-resources (= 2.9.16)
-    aws-sdk-core (2.9.16)
+    aws-sdk (2.9.17)
+      aws-sdk-resources (= 2.9.17)
+    aws-sdk-core (2.9.17)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.9.16)
-      aws-sdk-core (= 2.9.16)
+    aws-sdk-resources (2.9.17)
+      aws-sdk-core (= 2.9.17)
     aws-sigv4 (1.0.0)
     bcrypt (3.1.11)
     bindex (0.5.0)
@@ -107,7 +95,7 @@ GEM
     connection_pool (2.2.1)
     dalli (2.7.6)
     database_cleaner (1.6.1)
-    devise (4.2.1)
+    devise (4.3.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 4.1.0, < 5.2)
@@ -195,9 +183,10 @@ GEM
       activerecord
       kaminari-core (= 1.0.1)
     kaminari-core (1.0.1)
-    listen (3.0.8)
+    listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
+      ruby_dep (~> 1.2)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mail (2.6.5)
@@ -243,8 +232,10 @@ GEM
     pry-rails (0.3.6)
       pry (>= 0.10.4)
     puma (3.8.2)
-    rack (2.0.2)
+    rack (2.0.3)
     rack-cors (0.4.1)
+    rack-protection (2.0.0)
+      rack
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (5.0.3)
@@ -308,6 +299,7 @@ GEM
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-prof (0.16.2)
     ruby-progressbar (1.8.1)
+    ruby_dep (1.5.0)
     ruby_parser (3.9.0)
       sexp_processor (~> 4.1)
     rubyzip (1.2.1)
@@ -352,6 +344,11 @@ GEM
       hirb
       simplecov
     simplecov-html (0.10.0)
+    sinatra (2.0.0)
+      mustermann (~> 1.0)
+      rack (~> 2.0)
+      rack-protection (= 2.0.0)
+      tilt (~> 2.0)
     slim (3.0.8)
       temple (>= 0.7.6, < 0.9)
       tilt (>= 1.3.3, < 2.1)
@@ -429,8 +426,8 @@ DEPENDENCIES
   bullet
   byebug
   cancancan
-  codeclimate-test-reporter (~> 1.0.0)
-  coffee-rails (~> 4.2)
+  codeclimate-test-reporter
+  coffee-rails
   dalli
   database_cleaner
   devise
@@ -444,12 +441,12 @@ DEPENDENCIES
   haml-rails
   highline
   i18n-js (>= 3.0.0.rc11)
-  jbuilder (~> 2.5)
+  jbuilder
   jquery-rails
   js-routes
   jwt
   kaminari
-  listen (~> 3.0.5)
+  listen
   mina
   mina-multistage
   mini_magick
@@ -460,7 +457,7 @@ DEPENDENCIES
   non-stupid-digest-assets
   pg
   pry-rails
-  puma (~> 3.0)
+  puma
   rack-cors
   rails (= 5.0.3)
   rails-i18n
@@ -472,7 +469,7 @@ DEPENDENCIES
   rqrcode-rails3
   rubocop
   ruby-prof
-  sass-rails (~> 5.0)
+  sass-rails
   sentry-raven
   sidekiq
   sidekiq-failures
@@ -480,14 +477,14 @@ DEPENDENCIES
   simplecov
   simplecov-console
   simplecov-html
-  sinatra!
+  sinatra
   slim-rails
   spring
-  spring-watcher-listen (~> 2.0.0)
+  spring-watcher-listen
   stripe
   thor
   timecop
-  turbolinks (~> 5)
+  turbolinks
   typhoeus
   uglifier (>= 1.3.0)
   url_plumber
