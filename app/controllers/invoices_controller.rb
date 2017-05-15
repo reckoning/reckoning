@@ -1,10 +1,11 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 class InvoicesController < ApplicationController
   include ResourceHelper
 
   before_action :set_active_nav
-  before_action :check_limit, only: [:new, :create]
+  before_action :check_limit, only: %i[new create]
   before_action :check_dependencies, only: [:new]
 
   def index
@@ -173,7 +174,7 @@ class InvoicesController < ApplicationController
 
   private def sort_column
     @sort_column ||= begin
-      if (Invoice.column_names + %w(customers.name)).include?(params[:sort])
+      if (Invoice.column_names + %w[customers.name]).include?(params[:sort])
         params[:sort]
       else
         "ref"

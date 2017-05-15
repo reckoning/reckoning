@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 class Ability
   include CanCan::Ability
 
@@ -28,18 +29,18 @@ class Ability
   end
 
   def setup_invoice_abilities(user)
-    can [:read, :create, :destroy, :check, :archive, :send], Invoice, account_id: user.account_id
+    can %i[read create destroy check archive send], Invoice, account_id: user.account_id
 
     can :update, Invoice do |invoice|
-      %i(created charged).include?(invoice.current_state.to_sym) && invoice.account_id == user.account_id
+      %i[created charged].include?(invoice.current_state.to_sym) && invoice.account_id == user.account_id
     end
 
     can :pay, Invoice do |invoice|
-      %i(charged).include?(invoice.current_state.to_sym) && invoice.account_id == user.account_id
+      %i[charged].include?(invoice.current_state.to_sym) && invoice.account_id == user.account_id
     end
 
     can :charge, Invoice do |invoice|
-      %i(created).include?(invoice.current_state.to_sym) && invoice.account_id == user.account_id
+      %i[created].include?(invoice.current_state.to_sym) && invoice.account_id == user.account_id
     end
   end
 

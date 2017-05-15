@@ -1,12 +1,13 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 class AccountsController < ApplicationController
   include ResourceHelper
 
-  before_action :check_registration_setting, only: [:new, :create]
-  before_action :set_active_nav, except: [:new, :create]
-  before_action :authenticate_user!, except: [:new, :create]
-  skip_authorization_check only: [:new, :create]
+  before_action :check_registration_setting, only: %i[new create]
+  before_action :set_active_nav, except: %i[new create]
+  before_action :authenticate_user!, except: %i[new create]
+  skip_authorization_check only: %i[new create]
 
   def new
     @active_nav = 'registration'
@@ -65,7 +66,7 @@ class AccountsController < ApplicationController
       :website,
       :stripe_email,
       :stripe_token,
-      users_attributes: [:email, :password, :password_confirmation]
+      users_attributes: %i[email password password_confirmation]
     )
   end
 

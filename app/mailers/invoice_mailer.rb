@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 class InvoiceMailer < ActionMailer::Base
   default from: Rails.application.secrets[:mailer_default_from].to_s
 
@@ -30,7 +31,7 @@ class InvoiceMailer < ActionMailer::Base
     @signature = invoice.account.signature
 
     attachments["#{invoice.invoice_file}.pdf"] = invoice.inline_pdf
-    attachments["#{invoice.timesheet_file}.pdf"] = invoice.inline_timesheet_pdf unless invoice.timers.blank?
+    attachments["#{invoice.timesheet_file}.pdf"] = invoice.inline_timesheet_pdf if invoice.timers.present?
 
     mail(
       from: from,

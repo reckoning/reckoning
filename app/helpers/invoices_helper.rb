@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 module InvoicesHelper
   def invoice_label(invoice)
     case invoice.current_state.to_s
@@ -14,7 +15,7 @@ module InvoicesHelper
 
   def first_invoice_year
     first_invoice = current_account.invoices.order('date').first
-    return unless first_invoice.present?
+    return if first_invoice.blank?
     first_invoice.date.year
   end
 

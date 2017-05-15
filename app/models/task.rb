@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 class Task < ActiveRecord::Base
   belongs_to :project
   has_many :timers, dependent: :destroy

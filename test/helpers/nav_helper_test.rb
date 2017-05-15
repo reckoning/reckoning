@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 require 'test_helper'
 
 # rubocop:disable Style/ClassAndModuleChildren
@@ -33,7 +34,7 @@ class NavHelperTest < ActionView::TestCase
       assert_nil active_nav?("bar")
 
       @active_nav = "foo"
-      assert_equal "active", active_nav?(%w(bar foo))
+      assert_equal "active", active_nav?(%w[bar foo])
     end
   end
 

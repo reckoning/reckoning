@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 class Invoice < ActiveRecord::Base
   DEFAULT_PAYMENT_DUE_DAYS = 14
 
@@ -44,7 +45,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def self.paid_or_charged
-    where(workflow_state: [:charged, :paid])
+    where(workflow_state: %i[charged paid])
   end
 
   def self.paid
@@ -78,7 +79,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def self.filter_year(year)
-    return all if year.blank? || !(year =~ /\d{4}/)
+    return all if year.blank? || year !~ /\d{4}/
     year(year)
   end
 
@@ -88,7 +89,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def self.filter_paid_in_year(paid_in_year)
-    return all if paid_in_year.blank? || !(paid_in_year =~ /\d{4}/)
+    return all if paid_in_year.blank? || paid_in_year !~ /\d{4}/
     paid_in_year(paid_in_year)
   end
 
@@ -164,7 +165,7 @@ class Invoice < ActiveRecord::Base
 
   private def set_customer
     project = Project.find_by(id: project_id)
-    customer = Customer.find_by(id: project.customer_id) unless project.blank?
+    customer = Customer.find_by(id: project.customer_id) if project.present?
     return if customer.blank?
     self.customer_id = customer.id
   end

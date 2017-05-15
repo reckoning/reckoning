@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 module Api
   module V1
     class ProjectsController < Api::BaseController
@@ -64,11 +65,11 @@ module Api
           :rate,
           :budget,
           :budget_on_dashboard,
-          tasks_attributes: [
-            :id,
-            :name,
-            :project_id,
-            :_destroy
+          tasks_attributes: %i[
+            id
+            name
+            project_id
+            _destroy
           ]
         )
       end

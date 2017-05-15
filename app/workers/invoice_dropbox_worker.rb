@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 require 'dropbox_sdk'
 
 class InvoiceDropboxWorker
@@ -22,7 +23,7 @@ class InvoiceDropboxWorker
     ]).join("/")
     client.put_file(path, invoice.inline_pdf, true)
 
-    return unless invoice.timers.blank?
+    return if invoice.timers.present?
     path = (base_path + [
       "#{invoice.timesheet_file}.pdf"
     ]).join("/")

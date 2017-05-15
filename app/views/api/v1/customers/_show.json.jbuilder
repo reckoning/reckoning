@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 json.id customer.id
 json.name customer.name
 json.created_at customer.created_at

@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 class ProjectsController < ApplicationController
   include ResourceHelper
 
@@ -71,7 +72,7 @@ class ProjectsController < ApplicationController
   end
 
   private def sort_column
-    if (Project.column_names + %w(customers.name)).include?(params[:sort])
+    if (Project.column_names + %w[customers.name]).include?(params[:sort])
       params[:sort]
     else
       "customers.name"
@@ -80,7 +81,7 @@ class ProjectsController < ApplicationController
   helper_method :sort_column
 
   private def sort_direction
-    %w(asc desc).include?(params[:direction]) ? params[:direction] : "asc"
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
 
   private def set_active_nav
@@ -99,8 +100,8 @@ class ProjectsController < ApplicationController
   private def project_params
     @project_params ||= params.require(:project).permit(
       :customer_id, :name, :rate, :budget, :budget_hours, :round_up,
-      :budget_on_dashboard, :start_date, :end_date, tasks_attributes: [
-        :id, :name, :project_id, :billable, :_destroy
+      :budget_on_dashboard, :start_date, :end_date, tasks_attributes: %i[
+        id name project_id billable _destroy
       ]
     )
   end

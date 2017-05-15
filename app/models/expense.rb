@@ -1,10 +1,11 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 class Expense < ActiveRecord::Base
   belongs_to :account
 
-  VALID_TYPES = %i(gwg afa licenses telecommunication current misc).freeze
-  NEEDS_RECEIPT_TYPES = VALID_TYPES.reject { |type| %i(telecommunication current).include?(type) }.freeze
+  VALID_TYPES = %i[gwg afa licenses telecommunication current misc].freeze
+  NEEDS_RECEIPT_TYPES = VALID_TYPES.reject { |type| %i[telecommunication current].include?(type) }.freeze
 
   attachment :receipt, content_type: ["application/pdf", "image/jpeg", "image/png"]
 
@@ -13,7 +14,7 @@ class Expense < ActiveRecord::Base
   before_save :calculate_usable_value
 
   def self.accessible_attributes
-    %w(description seller value usable_value private_use_percent created_at updated_at date expense_type)
+    %w[description seller value usable_value private_use_percent created_at updated_at date expense_type]
   end
 
   def self.to_csv(options = {})
@@ -35,7 +36,7 @@ class Expense < ActiveRecord::Base
   end
 
   def self.filter_year(year)
-    return all if year.blank? || !(year =~ /\d{4}/)
+    return all if year.blank? || year !~ /\d{4}/
     year(year)
   end
 

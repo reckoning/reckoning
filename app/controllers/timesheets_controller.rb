@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 class TimesheetsController < ApplicationController
   before_action :set_active_nav
 

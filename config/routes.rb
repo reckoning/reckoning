@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
@@ -16,7 +17,7 @@ Rails.application.routes.draw do
 
     resources :contacts, only: [:index]
 
-    authenticate :user, ->(u) { u.admin? } do
+    authenticate :user, (->(u) { u.admin? }) do
       mount Sidekiq::Web => '/workers'
     end
 
@@ -26,7 +27,7 @@ Rails.application.routes.draw do
   mount ActionCable.server => '/cable'
 
   devise_for :users,
-             skip: [:sessions, :registrations],
+             skip: %i[sessions registrations],
              controllers: { registrations: "registrations" }
 
   as :user do
@@ -47,9 +48,9 @@ Rails.application.routes.draw do
     post :disable_otp
   end
 
-  resource :account, only: [:edit, :update]
+  resource :account, only: %i[edit update]
 
-  resource :password, only: [:edit, :update]
+  resource :password, only: %i[edit update]
 
   resources :invoices do
     collection do
@@ -86,15 +87,15 @@ Rails.application.routes.draw do
     template "map_modal_logbooks"
   end
 
-  resources :positions, only: [:new, :destroy]
+  resources :positions, only: %i[new destroy]
 
-  resources :customers, only: [:edit, :update]
+  resources :customers, only: %i[edit update]
   resources :projects, except: [:destroy] do
     member do
       put :unarchive
     end
 
-    resources :tasks, only: [:index, :create]
+    resources :tasks, only: %i[index create]
   end
 
   resources :timers, only: [] do
@@ -104,7 +105,7 @@ Rails.application.routes.draw do
   end
 
   resources :expenses, except: [:show]
-  resources :expense_imports, only: [:new, :create]
+  resources :expense_imports, only: %i[new create]
 
   resource :logbook, only: [:show]
 

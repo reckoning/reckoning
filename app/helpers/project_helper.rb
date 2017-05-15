@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 module ProjectHelper
   def budget_progress(project)
     if project.budget_percent.to_f > 90.0

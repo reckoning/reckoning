@@ -1,5 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
+
 json.id vessel.id
 json.initial_milage vessel.initial_milage
 json.milage vessel.milage
