@@ -16,9 +16,6 @@ require File.expand_path('../../config/environment', __FILE__)
 
 require "rails/test_help"
 require "minitest/rails"
-require "minitest/hell"
-require "minitest/mock"
-require 'mocha/mini_test'
 
 require "faker"
 
