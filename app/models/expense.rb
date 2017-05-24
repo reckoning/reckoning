@@ -1,7 +1,7 @@
 # encoding: utf-8
 # frozen_string_literal: true
 
-class Expense < ActiveRecord::Base
+class Expense < ApplicationRecord
   belongs_to :account
 
   VALID_TYPES = %i[gwg afa licenses telecommunication current misc].freeze

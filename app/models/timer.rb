@@ -3,7 +3,7 @@
 
 require 'roo'
 
-class Timer < ActiveRecord::Base
+class Timer < ApplicationRecord
   include Rails.application.routes.url_helpers
 
   belongs_to :task, touch: true

@@ -1,7 +1,7 @@
 # encoding: utf-8
 # frozen_string_literal: true
 
-class Account < ActiveRecord::Base
+class Account < ApplicationRecord
   has_many :users, dependent: :destroy
   has_many :invoices, dependent: :destroy
   has_many :positions, through: :invoices

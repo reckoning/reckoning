@@ -75,3 +75,6 @@ Style/TrivialAccessors:
 Rails/Delegate:
   Exclude:
     - lib/**/*
+
+Lint/ScriptPermission:
+  Enabled: false
