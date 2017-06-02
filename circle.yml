@@ -6,6 +6,7 @@ dependencies:
     - bundle exec thor setup:dev_env
 test:
   override:
+    - bundle exec bundle-audit update && bundle exec bundle-audit check
     - bundle exec rubocop
     - bundle exec rake
     - bundle exec codeclimate-test-reporter
