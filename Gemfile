@@ -119,7 +119,7 @@ group :test do
 end
 
 group :development, :test do
-  gem 'bundler-audit'
   gem 'bullet'
+  gem 'bundler-audit'
   gem 'byebug', platform: :mri
 end

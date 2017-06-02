@@ -1,7 +1,7 @@
 # encoding: utf-8
 # frozen_string_literal: true
 
-class Invoice < ActiveRecord::Base
+class Invoice < ApplicationRecord
   DEFAULT_PAYMENT_DUE_DAYS = 14
 
   include PdfOptions

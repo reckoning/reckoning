@@ -1,7 +1,7 @@
 # encoding: utf-8
 # frozen_string_literal: true
 
-class Plan < ActiveRecord::Base
+class Plan < ApplicationRecord
   validates :code, :quantity, :base_price, :interval, :stripe_plan_id, presence: true
 
   before_validation :prefill_from_base_plan, on: :create

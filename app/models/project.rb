@@ -1,7 +1,7 @@
 # encoding: utf-8
 # frozen_string_literal: true
 
-class Project < ActiveRecord::Base
+class Project < ApplicationRecord
   DEFAULT_ROUND_UP_OPTIONS = {
     "Nicht aufrunden" => 10.0,
     "Auf 15 Minuten" => 4.0,
