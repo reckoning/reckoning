@@ -10,7 +10,7 @@ class RunningTimerWorker
       if timer.started_at < (Time.zone.now - 12.hours) ||
          (timer.current_value > 12 && timer.started_at < (Time.zone.now - 4.hours))
         RunningTimerMailerWorker.perform_async timer.id
-        ActionCable.server.broadcast "notifications_#{current_user.id}_all", RunningTimerNotification.new.to_builder.target!
+        ActionCable.server.broadcast "notifications_#{timer.user_id}_all", RunningTimerNotification.new.to_builder.target!
       end
     end
   end
