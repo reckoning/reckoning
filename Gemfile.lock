@@ -326,6 +326,8 @@ GEM
       nokogiri (>= 1.4.0)
       nori (~> 2.4)
       wasabi (~> 3.4)
+    secure_headers (3.6.4)
+      useragent
     sentry-raven (2.5.1)
       faraday (>= 0.7.6, < 1.0)
     sexp_processor (4.9.0)
@@ -398,6 +400,7 @@ GEM
     uniform_notifier (1.10.0)
     url_plumber (0.1.2)
       activesupport (>= 3.0.0)
+    useragent (0.16.8)
     valvat (0.7.0)
       savon (>= 2.3.0)
     warden (1.2.7)
@@ -475,6 +478,7 @@ DEPENDENCIES
   rubocop
   ruby-prof
   sass-rails
+  secure_headers
   sentry-raven
   sidekiq
   sidekiq-scheduler
