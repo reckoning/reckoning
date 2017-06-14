@@ -9,8 +9,6 @@ gem 'rails', '5.1.1'
 
 gem 'pg'
 
-gem 'secure_headers'
-
 gem 'money'
 gem 'stripe'
 gem 'valvat'
