@@ -16,7 +16,7 @@ SecureHeaders::Configuration.default do |config|
   config.x_xss_protection = '1; mode=block'
   config.x_download_options = 'noopen'
   config.x_permitted_cross_domain_policies = 'none'
-  config.referrer_policy = 'origin-when-cross-origin'
+  config.referrer_policy = 'no-referrer'
   config.clear_site_data = %w[
     cache
     cookies
