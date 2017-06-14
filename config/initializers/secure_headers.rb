@@ -33,10 +33,10 @@ SecureHeaders::Configuration.default do |config|
     block_all_mixed_content: true,
     child_src: %w['self'],
     connect_src: %w[wss:],
-    font_src: %w['self' data:],
+    font_src: %w['self' data: fonts.gstatic.com],
     frame_ancestors: %w['none'],
     object_src: %w['self'],
-    script_src: %w['self' 'unsafe-inline'],
+    script_src: %w['self' 'unsafe-inline' cdn.ravenjs.com www.google-analytics.com],
     style_src: %w['self' 'unsafe-inline' fonts.googleapis.com],
     upgrade_insecure_requests: true,
     report_uri: %w[https://mortik.report-uri.io/r/default/csp/enforce]
