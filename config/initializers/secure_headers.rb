@@ -36,8 +36,8 @@ SecureHeaders::Configuration.default do |config|
     font_src: %w['self' data:],
     frame_ancestors: %w['none'],
     object_src: %w['self'],
-    script_src: %w['self', 'unsafe-inline'],
-    style_src: %w['self', 'unsafe-inline', 'fonts.googleapis.com'],
+    script_src: %w['self', unsafe-inline],
+    style_src: %w['self', unsafe-inline fonts.googleapis.com],
     upgrade_insecure_requests: true,
     report_uri: %w[https://mortik.report-uri.io/r/default/csp/enforce]
   }
