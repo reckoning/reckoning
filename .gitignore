@@ -9,7 +9,6 @@ pids/*
 
 # config files
 config/database.yml
-config/secrets.yml
 .env
 .powenv
 .byebug_history
