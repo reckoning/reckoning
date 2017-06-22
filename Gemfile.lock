@@ -398,7 +398,7 @@ GEM
     uniform_notifier (1.10.0)
     url_plumber (0.1.2)
       activesupport (>= 3.0.0)
-    valvat (0.7.0)
+    valvat (0.7.1)
       savon (>= 2.3.0)
     warden (1.2.7)
       rack (>= 1.0)
