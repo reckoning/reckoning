@@ -10,7 +10,6 @@ class Timer < ApplicationRecord
   belongs_to :user
   belongs_to :position
 
-  before_save :convert_value
   before_save :stop_other_timers
 
   validates :date, :value, :task_id, presence: true
@@ -85,7 +84,7 @@ class Timer < ApplicationRecord
     return unless started?
 
     Timer.where(user_id: user_id).where.not(started_at: nil).find_each do |timer|
-      timer.value = timer.value + ((Time.zone.now - timer.started_at) / 1.hour)
+      timer.value = timer.value + running_hours
       timer.started_at = nil
       timer.notified = false
       timer.save
@@ -101,24 +100,27 @@ class Timer < ApplicationRecord
   def stop
     return unless started?
 
-    timer_value = ((Time.zone.now - started_at) / 1.hour)
+    new_value = value + running_hours
+    new_value = round_timer(new_value) unless task.project.round_up.zero?
 
     update(
       started_at: nil,
       notified: false,
-      value: (((value + timer_value) * task.project.round_up) / task.project.round_up)
+      value: new_value
     )
   end
 
-  def convert_value
-    return if value.blank? || started?
+  def round_timer(value)
+    (((value * 60.minutes) / task.project.round_up).round * task.project.round_up) / 3600
+  end
 
-    self.value = (value.hours - (value.hours % 60)) / 3600
+  def running_hours
+    seconds = (Time.zone.now - started_at).seconds
+    seconds / 1.hour
   end
 
   def current_value
-    timer_value = ((Time.zone.now - started_at) / 1.hour)
-    value + timer_value
+    value + running_hours
   end
 
   def to_builder

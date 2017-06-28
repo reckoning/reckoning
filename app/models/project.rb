@@ -3,10 +3,10 @@
 
 class Project < ApplicationRecord
   DEFAULT_ROUND_UP_OPTIONS = {
-    "Nicht aufrunden" => 10.0,
-    "Auf 15 Minuten" => 4.0,
-    "Auf 30 Minuten" => 5.0,
-    "Auf 1 Stunde" => 1.0
+    "Nicht aufrunden" => 0.minutes,
+    "Auf 15 Minuten" => 15.minutes,
+    "Auf 30 Minuten" => 30.minutes,
+    "Auf 1 Stunde" => 60.minutes
   }.freeze
 
   belongs_to :customer

@@ -2,7 +2,8 @@ angular.module 'Reckoning'
 .filter 'toHours', ->
   (input) ->
     hours = Math.floor(input)
-    minutes = parseInt((input % 1) * 60, 10)
+    minutes = parseInt(Math.round((input % 1) * 60), 10)
+    console.log(minutes)
     if minutes <= 0
       tail = '00'
     else if minutes < 10
