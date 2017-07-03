@@ -3,6 +3,14 @@ de:
     default: "Zugriff verweigert!"
   messages:
     error: "Es ist ein Fehler aufgetreten."
+    record_not_found:
+      base: "Eintrag konnte nicht gefunden werden"
+      customer: "Kunde mit der ID: \"%{id}\" konnte nicht gefunden werden"
+      project: "Projekt mit der ID: \"%{id}\" konnte nicht gefunden werden"
+      timer: "Erfasste Zeit mit der ID: \"%{id}\" konnte nicht gefunden werden"
+      tour: "Tour mit der ID: \"%{id}\" konnte nicht gefunden werden"
+      vessel: "Fahrzeug mit der ID: \"%{id}\" konnte nicht gefunden werden"
+      waypoint: "Wegpunkt mit der ID: \"%{id}\" konnte nicht gefunden werden"
     missing_address: "Bitte vervollständigen Sie zuerst Ihre Daten"
     timesheet:
       add_task:

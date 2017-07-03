@@ -4,6 +4,10 @@
 module Api
   module V1
     class WaypointsController < ::Api::BaseController
+      rescue_from ActiveRecord::RecordNotFound do |_exception|
+        not_found(I18n.t('messages.record_not_found.waypoint', id: params[:id]))
+      end
+
       def index
         authorize! :read, Waypoint
         scope = Waypoint.where(account_id: current_account.id)

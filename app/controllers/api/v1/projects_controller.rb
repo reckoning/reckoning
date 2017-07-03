@@ -4,6 +4,10 @@
 module Api
   module V1
     class ProjectsController < Api::BaseController
+      rescue_from ActiveRecord::RecordNotFound do |_exception|
+        not_found(I18n.t('messages.record_not_found.project', id: params[:id]))
+      end
+
       def index
         authorize! :index, Project
 

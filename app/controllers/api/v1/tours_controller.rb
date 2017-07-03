@@ -4,6 +4,10 @@
 module Api
   module V1
     class ToursController < ::Api::BaseController
+      rescue_from ActiveRecord::RecordNotFound do |_exception|
+        not_found(I18n.t('messages.record_not_found.tour', id: params[:id]))
+      end
+
       def index
         authorize! :index, Tour
         scope = Tour.where(account_id: current_account.id)

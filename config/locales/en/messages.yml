@@ -3,6 +3,14 @@ en:
     default: ~
   messages:
     error: ~
+    record_not_found:
+      base: "Entry could not be found"
+      customer: "Customer with ID: \"%{id}\" could not be found"
+      project: "Project with ID: \"%{id}\" could not be found"
+      timer: "Timer with ID: \"%{id}\" could not be found"
+      tour: "Tour with ID: \"%{id}\" could not be found"
+      vessel: "Vessel with ID: \"%{id}\" could not be found"
+      waypoint: "Waypoint with ID: \"%{id}\" could not be found"
     timesheet:
       add_task:
         success: ~

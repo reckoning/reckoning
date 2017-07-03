@@ -4,6 +4,10 @@
 module Api
   module V1
     class VesselsController < ::Api::BaseController
+      rescue_from ActiveRecord::RecordNotFound do |_exception|
+        not_found(I18n.t('messages.record_not_found.vessel', id: params[:id]))
+      end
+
       def index
         authorize! :index, Vessel
         @vessels = Vessel.where(account_id: current_account.id).order(updated_at: :desc)
