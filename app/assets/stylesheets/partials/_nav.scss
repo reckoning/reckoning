@@ -180,9 +180,10 @@ $nav-transition-speed: .3s;
 
 .navbar-default .navbar-toggle,
 .navbar-toggle {
-  float: none;
   position: absolute;
+  left: 10px;
   border-color: transparent;
+  float: none;
 
   &:hover,
   &:focus {
@@ -221,7 +222,11 @@ $nav-transition-speed: .3s;
   }
 }
 
-@media (max-width: $screen-xs-min) {
+@media (max-width: $screen-sm-min) {
+  .navbar-default {
+    min-width: 100%;
+  }
+
   .navbar-brand {
     text-overflow: ellipsis;
     overflow: hidden;
@@ -236,6 +241,7 @@ $nav-transition-speed: .3s;
       padding: 0;
     }
   }
+
   .navbar-horizontal {
     .current-timers {
       position: relative;

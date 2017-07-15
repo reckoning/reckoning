@@ -44,6 +44,7 @@ body {
   height: auto;
   position: relative;
   padding-bottom: 60px;
+  padding-top: 70px;
 
   > .container-fluid, > .container {
     padding-bottom: 20px;
@@ -102,7 +103,7 @@ code[data-target] {
 
 .list-group-item {
   &.project-group-item {
-      border-top-color: #eee;
+    border-top-color: #eee;
   }
 
   .label {
