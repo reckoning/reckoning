@@ -2,8 +2,7 @@
   = I18n.t(:"meta.title.sign_up")
 - content_for :js_includes do
   = javascript_include_tag "https://checkout.stripe.com/checkout.js"
-- content_for :hide_footer, true
-
+- content_for :hide_navigation, true
 = form_for @account, url: registration_path, html: {class: "form-registration"} do |form|
   %h1.form-registration-heading
     %a{href: root_path}= I18n.t(:"title.default")

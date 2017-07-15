@@ -59,8 +59,17 @@ document.addEventListener 'keydown', (e) ->
     $('form:first').submit()
 , false
 
+$(document).on 'click', 'body > .container-fluid', ->
+  $('.navbar-default .navbar-collapse').collapse('hide')
+
 $(document).on 'show.bs.collapse', '.navbar-collapse', ->
+  $('.navbar.navbar-default').css('left', '300px')
+  $('body > .container-fluid').css('left', '300px')
   $('.navbar-collapse.in').not(this).collapse('hide')
+
+$(document).on 'hide.bs.collapse', '.navbar-collapse', ->
+  $('.navbar.navbar-default').css('left', '')
+  $('body > .container-fluid').css('left', '')
 
 $(document).on "upload:start", "form", (e) ->
   $(@).find("[type=submit]").attr("disabled", true)

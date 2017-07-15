@@ -4,12 +4,3 @@
       = form.label :name
       = form.text_field :name, placeholder: I18n.t(:"helpers.placeholder.name"), class: 'form-control'
       = form_errors resource, :name
-  .col-xs-6.col-md-3
-    = form.label :layout
-    .selectize{class: form_error?(resource, :layout)}
-      %select.js-selectize{name: "user[layout]", id: "user_layout"}
-        %option
-        - %w(top aside).each do |layout|
-          %option{value: layout, selected: (true if layout == resource.layout)}
-            = I18n.t("helpers.label.user.layout_options.#{layout}")
-      = form_errors resource, :layout
