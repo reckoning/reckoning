@@ -44,18 +44,11 @@ body {
   min-width: 320px;
   height: auto;
   position: relative;
-  padding-bottom: 60px;
+  padding-bottom: 0;
 
   > .container-fluid, > .container {
     padding-bottom: 20px;
-  }
-
-  &.aside-nav {
-    padding-bottom: 0;
-
-    > .container-fluid {
-      padding-top: 20px;
-    }
+    padding-top: 20px;
   }
 }
 

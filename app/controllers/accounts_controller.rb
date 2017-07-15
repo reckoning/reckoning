@@ -14,6 +14,7 @@ class AccountsController < ApplicationController
     redirect_to new_user_session_path if current_account.present?
     @account = Account.new plan: params[:plan]
     @account.users.build
+    render layout: 'landing_page'
   end
 
   def create
@@ -21,7 +22,7 @@ class AccountsController < ApplicationController
     if account.save
       redirect_to new_user_session_path, flash: { success: resource_message(:account, :create, :success) }
     else
-      render "new", alert: resource_message(:account, :create, :failure)
+      render "new", alert: resource_message(:account, :create, :failure), layout: 'landing_page'
     end
   end
 
