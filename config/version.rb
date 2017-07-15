@@ -3,5 +3,5 @@
 
 module Reckoning
   CODENAME = 'pluto'
-  VERSION = 'v3.0.1'
+  VERSION = 'v3.0.2'
 end
