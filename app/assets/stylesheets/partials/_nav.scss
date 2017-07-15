@@ -222,7 +222,7 @@ $nav-transition-speed: .3s;
   }
 }
 
-@media (max-width: $screen-sm-min) {
+@media (max-width: $screen-sm-max) {
   .navbar-default {
     min-width: 100%;
   }

@@ -52,6 +52,7 @@
 @media (max-width: $screen-sm-max) {
   body {
     overflow-x: hidden;
+    padding-top: 70px;
   }
 
   body > .container-fluid {
@@ -81,11 +82,15 @@
 }
 
 @media (min-width: $screen-sm-max) {
+  body > .container-fluid {
+    left: 0 !important;
+  }
+
   .navbar {
     &.navbar-aside {
       position: fixed;
       top: 0;
-      left: 0;
+      left: 0 !important;
       width: 100/6/100 * 100%;
       height: 100%;
     }
