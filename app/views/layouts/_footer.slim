@@ -1,9 +1,10 @@
-footer#main-footer
-  .row
-    .col-xs-12.col-md-6.copyright
-      |Copyright &copy; 2014
-      '
-      = link_to "Marten Klitzke - mortik.", "mailto:info@mortik.de", target: "_blank", data: { no_turbolink: 'true'}
+- unless content_for?(:hide_footer)
+  footer#main-footer
+    .row
+      .col-xs-12.col-md-6.copyright
+        |Copyright &copy; 2014
+        '
+        = link_to "Marten Klitzke - mortik.", "mailto:info@mortik.de", target: "_blank", data: { no_turbolink: 'true'}
 
-    .col-xs-12.col-md-6.version
-      = I18n.t(:"version", version: Reckoning::CODENAME, version_number: Reckoning::VERSION)
+      .col-xs-12.col-md-6.version
+        = I18n.t(:"version", version: Reckoning::CODENAME, version_number: Reckoning::VERSION)

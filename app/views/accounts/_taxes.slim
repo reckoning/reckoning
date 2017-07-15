@@ -1,13 +1,13 @@
 = form_for account, url: account_path do |form|
   input name="hash" value="" type="hidden"
   .row
-    .col-xs-6.col-md-3.form-group
+    .col-xs-12.col-sm-6.col-md-3.form-group
       = form.label :tax
       .input-group class=form_error?(form.object, :tax)
         = form.text_field :tax, class: 'form-control text-right'
         small = form_errors form.object, :tax
         span.input-group-addon %
-    .col-xs-6.col-md-3.form-group
+    .col-xs-12.col-sm-6.col-md-3.form-group
       = form.label :provision
       .input-group class=form_error?(form.object, :provision)
         = form.text_field :provision, class: 'form-control text-right'

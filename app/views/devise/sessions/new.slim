@@ -1,5 +1,6 @@
 - content_for :title do
   = I18n.t(:"meta.title.sign_in")
+- content_for :hide_navigation, true
 = form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "form-signin" }) do |f|
   h1.form-signin-heading
     a href=root_path = I18n.t(:"title.default")
