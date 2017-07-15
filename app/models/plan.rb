@@ -40,15 +40,22 @@ class Plan < ApplicationRecord
 
   def price
     if discount
-      format("%g", Money.new(amount * (100 - discount) / 100))
+      Money.new(amount * (100 - discount))
     else
-      format("%g", Money.new(amount))
+      Money.new(amount)
     end
   end
 
   def to_builder
     Jbuilder.new do |plan|
-      plan.call(self, :id, :code, :name, :description, :price, :quantity, :interval, :featured)
+      plan.id id
+      plan.code code
+      plan.name name
+      plan.description description
+      plan.price price.cents
+      plan.quantity quantity
+      plan.interval interval
+      plan.featured featured
     end
   end
 end
