@@ -29,14 +29,6 @@ $nav-transition-speed: .3s;
   }
 }
 
-.navbar-aside {
-  .current-timers {
-    left: 0;
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-}
-
 .navbar-horizontal {
   .current-timers {
     display: inline-block;
@@ -67,6 +59,10 @@ $nav-transition-speed: .3s;
   border-radius: 0;
   z-index: 100;
   box-shadow: #EeEeEe 0 1px 5px;
+}
+
+.navbar-default {
+  min-width: 320px;
 }
 
 .navbar-nav > li.user-menu {
@@ -223,10 +219,6 @@ $nav-transition-speed: .3s;
 }
 
 @media (max-width: $screen-sm-max) {
-  .navbar-default {
-    min-width: 100%;
-  }
-
   .navbar-brand {
     text-overflow: ellipsis;
     overflow: hidden;
@@ -234,12 +226,6 @@ $nav-transition-speed: .3s;
     text-align: center;
     display: block;
     float: none;
-  }
-
-  .navbar-aside {
-    .current-timers {
-      padding: 0;
-    }
   }
 
   .navbar-horizontal {

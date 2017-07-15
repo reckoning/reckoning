@@ -46,6 +46,12 @@
       width: 96%;
       border-radius: 4px;
     }
+
+    .current-timers {
+      left: 0;
+      padding-left: 15px;
+      padding-right: 15px;
+    }
   }
 }
 
@@ -64,6 +70,10 @@
   .navbar {
     &.navbar-aside {
       transition: left ease 0.5s;
+
+      .current-timers {
+        padding: 0;
+      }
 
       .navbar-collapse {
         position: fixed;
