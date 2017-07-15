@@ -2,6 +2,6 @@
 # frozen_string_literal: true
 
 module Reckoning
-  CODENAME = 'nimoy'
-  VERSION = 'v2.1.0'
+  CODENAME = 'pluto'
+  VERSION = 'v3.0.1'
 end
