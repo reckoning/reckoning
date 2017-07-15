@@ -38,34 +38,6 @@ class NavHelperTest < ActionView::TestCase
     end
   end
 
-  describe "nav_aside?" do
-    before do
-      @logged_in = true
-    end
-
-    test "should return true if nav_layout is aside" do
-      assert_equal true, nav_aside?
-      @logged_in = false
-    end
-  end
-
-  describe "nav_layout" do
-    test "should fallback to top layout if no user is logged in" do
-      assert_equal "top", nav_layout
-    end
-
-    describe "with session" do
-      before do
-        @logged_in = true
-      end
-
-      test "should return current_user layout if logged in" do
-        assert_equal "aside", nav_layout
-        @logged_in = false
-      end
-    end
-  end
-
   describe "hide_nav?" do
     test "should return hide class for active nav element" do
       @active_nav = "foo"

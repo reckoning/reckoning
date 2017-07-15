@@ -29,14 +29,6 @@ $nav-transition-speed: .3s;
   }
 }
 
-.navbar-aside {
-  .current-timers {
-    left: 0;
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-}
-
 .navbar-horizontal {
   .current-timers {
     display: inline-block;
@@ -178,19 +170,64 @@ $nav-transition-speed: .3s;
   }
 }
 
-@media (max-width: $screen-xs-min) {
+.navbar-default .navbar-toggle,
+.navbar-toggle {
+  position: absolute;
+  left: 10px;
+  border-color: transparent;
+  float: none;
+
+  &:hover,
+  &:focus {
+    border-color: transparent;
+    background-color: transparent;
+  }
+
+  .icon-bar {
+    width: 22px;
+    transition: all 0.2s;
+  }
+
+  .top-bar {
+    transform: rotate(45deg);
+    transform-origin: 10% 10%;
+  }
+
+  .middle-bar {
+    opacity: 0;
+  }
+
+  .bottom-bar {
+    transform: rotate(-45deg);
+    transform-origin: 10% 90%;
+  }
+
+  &.collapsed {
+    .top-bar,
+    .bottom-bar {
+      transform: rotate(0);
+    }
+
+    .middle-bar {
+      opacity: 1;
+    }
+  }
+}
+
+@media (max-width: $screen-sm-max) {
+  .navbar-default {
+    min-width: 320px;
+  }
+
   .navbar-brand {
     text-overflow: ellipsis;
     overflow: hidden;
-    max-width: 85%;
     white-space: nowrap;
+    text-align: center;
+    display: block;
+    float: none;
   }
 
-  .navbar-aside {
-    .current-timers {
-      padding: 0;
-    }
-  }
   .navbar-horizontal {
     .current-timers {
       position: relative;
