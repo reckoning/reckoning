@@ -46,6 +46,22 @@ class Account < ApplicationRecord
     self.trail_end_at = Time.zone.now + 30.days
   end
 
+  def provision_value
+    return if provision.blank?
+
+    current_invoices = invoices.includes(:customer, :project).order('date DESC').paid_in_year(Time.zone.now.year)
+    current_expenses = expenses.year(Time.zone.now.year)
+    (current_invoices.sum(:value) - current_expenses.sum(:usable_value)) / 100 * provision.to_i
+  end
+
+  def last_provision_value
+    return if provision.blank?
+
+    last_invoices = invoices.includes(:customer, :project).order('date DESC').paid_in_year(Time.zone.now.year - 1)
+    last_expenses = expenses.year(Time.zone.now.year - 1)
+    (last_invoices.sum(:value) - last_expenses.sum(:usable_value)) / 100 * provision.to_i
+  end
+
   def dropbox?
     dropbox_token.present?
   end
