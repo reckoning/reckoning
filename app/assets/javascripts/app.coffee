@@ -63,11 +63,16 @@ $(document).on 'click', 'body > .container-fluid', ->
   $('.navbar-default .navbar-collapse').collapse('hide')
 
 $(document).on 'show.bs.collapse', '.navbar-collapse', ->
-  $('.navbar.navbar-default').css('left', '300px')
-  $('body > .container-fluid').css('left', '300px')
   $('.navbar-collapse.in').not(this).collapse('hide')
 
+  return if $('body.landing-page').length
+
+  $('.navbar.navbar-default').css('left', '85vw')
+  $('body > .container-fluid').css('left', '85vw')
+
 $(document).on 'hide.bs.collapse', '.navbar-collapse', ->
+  return if $('body.landing-page').length
+
   $('.navbar.navbar-default').css('left', '')
   $('body > .container-fluid').css('left', '')
 

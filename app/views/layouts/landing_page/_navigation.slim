@@ -2,7 +2,7 @@
   nav#main-nav.navbar.navbar-default role="navigation"
     .container
       = render "layouts/brand"
-      .collapse.navbar-collapse.main-navbar
+      #main-navbar.collapse.navbar-collapse
         ul.nav.navbar-nav.navbar-right
           - if registration_enabled?
             li class=hide_nav?('registration')
