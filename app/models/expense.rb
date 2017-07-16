@@ -58,8 +58,17 @@ class Expense < ApplicationRecord
     where(expense_type: type)
   end
 
+  def afa_value
+    return if afa_type.blank? || (date.year + afa_type) < Time.zone.now.year
+    value / afa_type
+  end
+
   def calculate_usable_value
-    self.usable_value = (value * (100 - private_use_percent).to_f) / 100.0
+    self.usable_value = if expense_type == :afa
+                          afa_value
+                        else
+                          (value * (100 - private_use_percent).to_f) / 100.0
+                        end
   end
 
   def needs_receipt?
