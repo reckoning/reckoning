@@ -147,6 +147,7 @@ de:
       licenses: "Lizenzen & Software"
       telecommunication: "Telefon / Internet"
       home_office: "Büro / Arbeitszimmer"
+      work_related_deductions: "Werbungskosten"
       current: "Laufende Ausgaben"
       misc: "Sonstige Ausgaben"
     expense_year:

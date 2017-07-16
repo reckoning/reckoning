@@ -4,7 +4,7 @@
 class Expense < ApplicationRecord
   belongs_to :account
 
-  VALID_TYPES = %i[gwg afa licenses telecommunication home_office current misc].freeze
+  VALID_TYPES = %i[gwg afa licenses telecommunication work_related_deductions home_office current misc].freeze
   NEEDS_RECEIPT_TYPES = VALID_TYPES.reject { |type| %i[telecommunication current].include?(type) }.freeze
 
   attachment :receipt, content_type: ["application/pdf", "image/jpeg", "image/png"]
