@@ -29,11 +29,11 @@
               .list-group-item
                 = I18n.t(:"dashboard.panels.provision")
                 %strong.pull-right
-                  = number_to_currency((@paid_invoices.sum(:value) - @expenses.sum(:value)) / 100 * current_account.provision.to_i)
+                  = number_to_currency((@paid_invoices.sum(:value) - @expenses.sum(:usable_value)) / 100 * current_account.provision.to_i)
               .list-group-item
                 = I18n.t(:"dashboard.panels.last_provision", year: (Time.now - 1.year).year)
                 %strong.pull-right
-                  = number_to_currency((@last_invoices.sum(:value) - @last_expenses.sum(:value)) / 100 * current_account.provision.to_i)
+                  = number_to_currency((@last_invoices.sum(:value) - @last_expenses.sum(:usable_value)) / 100 * current_account.provision.to_i)
             .list-group-item.disabled
               = I18n.t(:"dashboard.panels.last_invoices")
               %strong.pull-right
