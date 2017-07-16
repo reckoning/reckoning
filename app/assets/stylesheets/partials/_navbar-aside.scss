@@ -57,19 +57,18 @@
 
 @media (max-width: $screen-sm-max) {
   body {
-    overflow-x: hidden;
     padding-top: 70px;
   }
 
   body > .container-fluid {
-    position: relative;
-    transition: left ease 0.5s;
-    left: 0;
+    margin-left: 0;
+    transition: margin-left ease 0.5s;
+    min-width: 100vw;
   }
 
   .navbar {
     &.navbar-aside {
-      transition: left ease 0.5s;
+      transition: margin-left ease 0.5s;
 
       .current-timers {
         padding: 0;

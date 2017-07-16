@@ -67,14 +67,16 @@ $(document).on 'show.bs.collapse', '.navbar-collapse', ->
 
   return if $('body.landing-page').length
 
-  $('.navbar.navbar-default').css('left', '85vw')
-  $('body > .container-fluid').css('left', '85vw')
+  $('.navbar.navbar-default').css('margin-left', '85vw')
+  $('body').css('overflow', 'hidden')
+  $('body > .container-fluid').css('margin-left', '85vw')
 
 $(document).on 'hide.bs.collapse', '.navbar-collapse', ->
   return if $('body.landing-page').length
 
-  $('.navbar.navbar-default').css('left', '')
-  $('body > .container-fluid').css('left', '')
+  $('.navbar.navbar-default').css('margin-left', '')
+  $('body').css('overflow', '')
+  $('body > .container-fluid').css('margin-left', '')
 
 $(document).on "upload:start", "form", (e) ->
   $(@).find("[type=submit]").attr("disabled", true)
