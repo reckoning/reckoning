@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170716195434) do
+ActiveRecord::Schema.define(version: 20170716201217) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "uuid-ossp"
@@ -35,6 +35,9 @@ ActiveRecord::Schema.define(version: 20170716195434) do
     t.string "vat_id"
     t.boolean "feature_expenses", default: false
     t.boolean "feature_logbook", default: false
+    t.integer "office_space"
+    t.integer "deductible_office_space"
+    t.integer "deductible_office_percent"
   end
 
   create_table "auth_tokens", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|

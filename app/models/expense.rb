@@ -5,6 +5,7 @@ class Expense < ApplicationRecord
   belongs_to :account
 
   VALID_TYPES = %i[gwg afa licenses telecommunication work_related_deductions home_office current misc].freeze
+  # TODO: needs to be complete AFA Table
   VALID_AFA_TYPES = [{
     value: 3,
     label: I18n.t(:"expenses.afa_types.computer")
@@ -18,7 +19,7 @@ class Expense < ApplicationRecord
     value: 13,
     label: I18n.t(:"expenses.afa_types.office_furniture")
   }].freeze
-  NEEDS_RECEIPT_TYPES = VALID_TYPES.reject { |type| %i[telecommunication current].include?(type) }.freeze
+  NEEDS_RECEIPT_TYPES = VALID_TYPES.reject { |type| %i[home_office telecommunication current].include?(type) }.freeze
 
   attachment :receipt, content_type: ["application/pdf", "image/jpeg", "image/png"]
 
@@ -63,11 +64,22 @@ class Expense < ApplicationRecord
     value / afa_type
   end
 
+  def home_office_value
+    return if account.deductible_office_percent.blank?
+    (value * account.deductible_office_percent) / 100.0
+  end
+
+  def deductible_value
+    (value * (100 - private_use_percent).to_f) / 100.0
+  end
+
   def calculate_usable_value
     self.usable_value = if expense_type == 'afa'
                           afa_value
+                        elsif expense_type == 'home_office'
+                          home_office_value
                         else
-                          (value * (100 - private_use_percent).to_f) / 100.0
+                          deductible_value
                         end
   end
 

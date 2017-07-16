@@ -67,6 +67,8 @@ class AccountsController < ApplicationController
       :website,
       :stripe_email,
       :stripe_token,
+      :office_space,
+      :deductible_office_space,
       users_attributes: %i[email password password_confirmation]
     )
   end

@@ -22,6 +22,8 @@ de:
         signature: "Signatur"
         feature_expenses: "Ausgaben Feature aktiviert?"
         feature_logbook: "Fahrtenbuch Feature aktiviert?"
+        office_space: "Bürofläche Gesamt"
+        deductible_office_space: "Bürofläche abziehbar"
       project:
         rate: "Stundensatz"
         round_up: "Zeiten aufrunden?"
@@ -122,6 +124,8 @@ de:
       account:
         name: "Account Name"
         vat_id: "USt-Id"
+        office_space: "in m²"
+        deductible_office_space: "in m²"
         bank_account:
           bank: "Bank"
           bank_code: "BLZ"
