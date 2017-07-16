@@ -146,6 +146,7 @@ de:
       afa: "AFA"
       licenses: "Lizenzen & Software"
       telecommunication: "Telefon / Internet"
+      home_office: "Büro / Arbeitszimmer"
       current: "Laufende Ausgaben"
       misc: "Sonstige Ausgaben"
     expense_year:
