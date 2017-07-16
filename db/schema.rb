@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170716193428) do
+ActiveRecord::Schema.define(version: 20170716195434) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "uuid-ossp"
@@ -85,7 +85,7 @@ ActiveRecord::Schema.define(version: 20170716193428) do
     t.string "receipt_filename"
     t.integer "receipt_size"
     t.string "receipt_content_type"
-    t.string "afa_type"
+    t.integer "afa_type"
   end
 
   create_table "holidays", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
