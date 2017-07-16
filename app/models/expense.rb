@@ -24,6 +24,7 @@ class Expense < ApplicationRecord
   attachment :receipt, content_type: ["application/pdf", "image/jpeg", "image/png"]
 
   validates :value, :description, :date, :expense_type, :seller, :private_use_percent, presence: true
+  validates :afa_type, presence: true, if: ->(expense) { expense.expense_type == 'afa' }
 
   before_save :calculate_usable_value
 
