@@ -1,3 +1,8 @@
 de:
   expenses:
     file_attached: "Beleg vorhanden"
+    afa_types:
+      computer: "Workstations, Personalcomputer, Notebooks und deren Peripheriegeräte (Drucker, Scanner, Bildschirme u.ä.)"
+      smartphone: Mobilfunkendgeräte
+      tv: "Foto-, Film-, Video- und Audiogeräte (Fernseher, CD-Player, Recorder, Lautsprecher, Radios, Verstärker, Kameras, Monitore u.ä.)"
+      office_furniture: Büromöbel

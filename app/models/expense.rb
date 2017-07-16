@@ -5,6 +5,19 @@ class Expense < ApplicationRecord
   belongs_to :account
 
   VALID_TYPES = %i[gwg afa licenses telecommunication work_related_deductions home_office current misc].freeze
+  VALID_AFA_TYPES = [{
+    value: 3,
+    label: I18n.t(:"expenses.afa_types.computer")
+  }, {
+    value: 5,
+    label: I18n.t(:"expenses.afa_types.smartphone")
+  }, {
+    value: 7,
+    label: I18n.t(:"expenses.afa_types.tv")
+  }, {
+    value: 13,
+    label: I18n.t(:"expenses.afa_types.office_furniture")
+  }].freeze
   NEEDS_RECEIPT_TYPES = VALID_TYPES.reject { |type| %i[telecommunication current].include?(type) }.freeze
 
   attachment :receipt, content_type: ["application/pdf", "image/jpeg", "image/png"]

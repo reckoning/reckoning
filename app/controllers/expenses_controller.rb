@@ -92,13 +92,13 @@ class ExpensesController < ApplicationController
 
   private def expense_params
     @expense_params ||= params.require(:expense).permit(
-      :expense_type, :description, :seller, :date, :receipt, :remove_receipt, :value, :private_use_percent
+      :expense_type, :afa_type, :description, :seller, :date, :receipt, :remove_receipt, :value, :private_use_percent
     )
   end
 
   private def prefill_params
     @prefill_params ||= params.permit(
-      :expense_type, :description, :seller, :date, :value, :private_use_percent
+      :expense_type, :afa_type, :description, :seller, :date, :value, :private_use_percent
     )
   end
 

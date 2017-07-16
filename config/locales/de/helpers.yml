@@ -169,6 +169,7 @@ de:
         plan: "Bitte wähle einen Plan"
       expense:
         expense_type: "Bitte wähle einen Typ"
+        afa_type: "Bitte wähle einen AFA-Typ"
       vessel:
         manufacturer: "Bitte wähle einen Hersteller"
       tour:
