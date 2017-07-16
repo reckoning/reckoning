@@ -64,7 +64,7 @@ class Expense < ApplicationRecord
   end
 
   def calculate_usable_value
-    self.usable_value = if expense_type == :afa
+    self.usable_value = if expense_type == 'afa'
                           afa_value
                         else
                           (value * (100 - private_use_percent).to_f) / 100.0
