@@ -216,7 +216,7 @@ $nav-transition-speed: .3s;
 
 @media (max-width: $screen-sm-max) {
   .navbar-default {
-    min-width: 320px;
+    min-width: 100vw;
   }
 
   .navbar-brand {
@@ -241,5 +241,11 @@ $nav-transition-speed: .3s;
         margin-right: 0;
       }
     }
+  }
+}
+
+@media (max-width: 320px) {
+  .navbar-default {
+    min-width: 320px;
   }
 }

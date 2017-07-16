@@ -46,6 +46,10 @@ body {
   position: relative;
   padding-bottom: 0;
 
+  &.landing-page {
+    padding-top: 0 !important;
+  }
+
   > .container-fluid, > .container {
     padding-bottom: 20px;
     padding-top: 20px;

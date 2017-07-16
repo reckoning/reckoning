@@ -76,16 +76,19 @@
       }
 
       .navbar-collapse {
-        position: fixed;
+        position: absolute;
         display: block;
-        margin-left: -315px;
+        margin-right: 0;
+        margin-left: -85vw;
         background-color: #f8f8f8;
         border-right: 1px solid #e7e7e7;
         border-top: none;
-        width: 300px;
+        width: 85vw;
         top: 0;
-        height: 100% !important;
-        max-height: 100%;
+        left: 0;
+        right: auto;
+        height: 100vh !important;
+        max-height: 100vh;
       }
     }
   }
