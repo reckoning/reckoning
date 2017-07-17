@@ -20,7 +20,11 @@ class ExpensesController < ApplicationController
         render ExpensePdf.new(current_account, expenses, filter_params).pdf
       end
       format.html do
-        @expenses_sum = expenses.sum(:usable_value)
+        @expenses_sum = expenses.without_insurances.sum(:usable_value)
+        if filter_params[:type] == 'insurances'
+          @expenses_sum = expenses.sum(:usable_value)
+        end
+
         @expenses = expenses.order(sort_column + " " + sort_direction)
                             .page(params.fetch(:page, nil))
                             .per(20)

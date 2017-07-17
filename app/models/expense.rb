@@ -51,6 +51,10 @@ class Expense < ApplicationRecord
     where("date <= ? AND date >= ?", "#{year}-12-31", "#{year}-01-01")
   end
 
+  def self.without_insurances
+    where.not(expense_type: 'insurances')
+  end
+
   def self.filter(filter_params)
     filter_year(filter_params.fetch(:year, nil))
       .filter_type(filter_params.fetch(:type, nil))

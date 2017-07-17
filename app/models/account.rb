@@ -50,7 +50,7 @@ class Account < ApplicationRecord
     return if provision.blank?
 
     current_invoices = invoices.includes(:customer, :project).order('date DESC').paid_in_year(Time.zone.now.year)
-    current_expenses = expenses.year(Time.zone.now.year)
+    current_expenses = expenses.without_insurances.year(Time.zone.now.year)
     (current_invoices.sum(:value) - current_expenses.sum(:usable_value)) / 100 * provision.to_i
   end
 
@@ -58,7 +58,7 @@ class Account < ApplicationRecord
     return if provision.blank?
 
     last_invoices = invoices.includes(:customer, :project).order('date DESC').paid_in_year(Time.zone.now.year - 1)
-    last_expenses = expenses.year(Time.zone.now.year - 1)
+    last_expenses = expenses.without_insurances.year(Time.zone.now.year - 1)
     (last_invoices.sum(:value) - last_expenses.sum(:usable_value)) / 100 * provision.to_i
   end
 

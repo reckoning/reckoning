@@ -9,7 +9,7 @@ class ExpensePdf
 
   attr_accessor :account, :filter
   attr_accessor :telecommunication, :home_office, :gwg, :travel_costs, :business_expenses, :training
-  attr_accessor :misc, :current, :licenses
+  attr_accessor :misc, :current, :licenses, :non_cash_contribution, :insurances
 
   def initialize(account, expenses, filter)
     self.account = account
