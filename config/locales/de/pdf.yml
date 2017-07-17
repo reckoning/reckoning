@@ -31,8 +31,10 @@ de:
         other: "Allgemeine Ausgaben"
         home_office: "Arbeitszimmer"
         business_expenses: "Spesen"
-        travel_costs: "Reisekosten"
-        training: "Kosten für Fortbildung"
+        travel_costs: "Reisen"
+        training: "Fortbildung"
+        non_cash_contribution: "Sach-, Leistungs-, Nutzungseinlagen"
+        insurances: "Versicherungen"
       sublines:
         home_office: "%{deductible_office_space}m² von %{office_space}m² Gesamtfläche"
       footer:
@@ -41,5 +43,7 @@ de:
         other: "Gesamtkosten allgemeiner Ausgaben:"
         home_office: "Gesamtkosten Arbeitszimmer:"
         business_expenses: "Gesamtkosten Spesen"
-        travel_costs: "Gesamte Reisekosten"
-        training: "Gesamtkosten für Fortbildung"
+        travel_costs: "Gesamt Reisekosten"
+        training: "Gesamtkosten Fortbildung"
+        non_cash_contribution: "Gesamt Sach-, Leistungs-, Nutzungseinlagen"
+        insurances: "Gesamtkosten Versicherungen"

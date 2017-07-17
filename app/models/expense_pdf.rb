@@ -24,6 +24,8 @@ class ExpensePdf
     self.travel_costs = expenses.select { |expense| expense.expense_type == 'travel_costs' }
     self.business_expenses = expenses.select { |expense| expense.expense_type == 'business_expenses' }
     self.training = expenses.select { |expense| expense.expense_type == 'training' }
+    self.non_cash_contribution = expenses.select { |expense| expense.expense_type == 'non_cash_contribution' }
+    self.insurances = expenses.select { |expense| expense.expense_type == 'insurances' }
   end
 
   def persisted?

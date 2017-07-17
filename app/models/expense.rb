@@ -7,7 +7,7 @@ class Expense < ApplicationRecord
   VALID_TYPES = %i[
     gwg afa licenses telecommunication training business_expenses
     work_related_deductions home_office current misc
-    travel_costs
+    travel_costs non_cash_contribution insurances
   ].freeze
   # TODO: needs to be complete AFA Table
   VALID_AFA_TYPES = [{
@@ -23,7 +23,9 @@ class Expense < ApplicationRecord
     value: 13,
     label: I18n.t(:"expenses.afa_types.office_furniture")
   }].freeze
-  NEEDS_RECEIPT_TYPES = VALID_TYPES.reject { |type| %i[home_office telecommunication current business_expenses].include?(type) }.freeze
+  NEEDS_RECEIPT_TYPES = VALID_TYPES.reject do |type|
+    %i[home_office telecommunication current business_expenses non_cash_contribution insurances].include?(type)
+  end.freeze
 
   attachment :receipt, content_type: ["application/pdf", "image/jpeg", "image/png"]
 

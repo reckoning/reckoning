@@ -62,9 +62,9 @@
 
     .alwaysbreak
 
-  - if resource.travel_costs.present?
-    h2= I18n.t("pdf.expenses.headlines.travel_costs")
-    - resource.travel_costs.group_by(&:description).each do |description, expenses|
+  - if resource.insurances.present?
+    h2= I18n.t("pdf.expenses.headlines.insurances")
+    - resource.insurances.group_by(&:description).each do |description, expenses|
       table.table.table-condensed
         thead
           th colspan=2
@@ -81,13 +81,56 @@
               = I18n.t("labels.defaults.sum")
               '
               b= number_to_currency expenses.sum(&:value)
-          - private_use_percent = expenses.sum(&:private_use_percent) / expenses.size
-          - if private_use_percent != 0
-            tr.sum
-              td colspan=3
-                = I18n.t("pdf.expenses.business_amount", percent: 100 - private_use_percent)
-                '
-                b= number_to_currency expenses.sum(&:usable_value)
+
+    .sum
+      = I18n.t("pdf.expenses.footer.insurances")
+      '
+      u style="float: right;"
+        b= number_to_currency resource.insurances.sum(&:usable_value)
+
+    .alwaysbreak
+
+  - if resource.non_cash_contribution.present?
+    h2= I18n.t("pdf.expenses.headlines.non_cash_contribution")
+    - resource.non_cash_contribution.group_by(&:description).each do |description, expenses|
+      table.table.table-condensed
+        thead
+          th colspan=2
+            = description
+        tbody
+          - expenses.each do |expense|
+            tr
+              td
+                = I18n.l expense.date
+              td.align-right
+                = number_to_currency expense.usable_value
+          tr.sum.border
+            td colspan=3
+              = I18n.t("labels.defaults.sum")
+              '
+              b= number_to_currency expenses.sum(&:value)
+
+    .sum
+      = I18n.t("pdf.expenses.footer.non_cash_contribution")
+      '
+      u style="float: right;"
+        b= number_to_currency resource.non_cash_contribution.sum(&:usable_value)
+
+    .alwaysbreak
+
+  - if resource.travel_costs.present?
+    h2= I18n.t("pdf.expenses.headlines.travel_costs")
+    table.table.table-condensed
+      thead
+        th colspan=2
+      tbody
+        - resource.travel_costs.each do |expense|
+          tr
+            td
+              = expense.description
+            td.align-right style="min-width: 100px;"
+              = number_to_currency expense.usable_value
+
     .sum
       = I18n.t("pdf.expenses.footer.travel_costs")
       '
@@ -98,30 +141,17 @@
 
   - if resource.business_expenses.present?
     h2= I18n.t("pdf.expenses.headlines.business_expenses")
-    - resource.business_expenses.group_by(&:description).each do |description, expenses|
-      table.table.table-condensed
-        thead
-          th colspan=2
-            = description
-        tbody
-          - expenses.each do |expense|
-            tr
-              td
-                = I18n.l expense.date
-              td.align-right
-                = number_to_currency expense.usable_value
-          tr.sum.border
-            td colspan=3
-              = I18n.t("labels.defaults.sum")
-              '
-              b= number_to_currency expenses.sum(&:value)
-          - private_use_percent = expenses.sum(&:private_use_percent) / expenses.size
-          - if private_use_percent != 0
-            tr.sum
-              td colspan=3
-                = I18n.t("pdf.expenses.business_amount", percent: 100 - private_use_percent)
-                '
-                b= number_to_currency expenses.sum(&:usable_value)
+    table.table.table-condensed
+      thead
+        th colspan=2
+      tbody
+        - resource.business_expenses.each do |expense|
+          tr
+            td
+              = expense.description
+            td.align-right style="min-width: 100px;"
+              = number_to_currency expense.usable_value
+
     .sum
       = I18n.t("pdf.expenses.footer.business_expenses")
       '
@@ -132,30 +162,17 @@
 
   - if resource.training.present?
     h2= I18n.t("pdf.expenses.headlines.training")
-    - resource.training.group_by(&:description).each do |description, expenses|
-      table.table.table-condensed
-        thead
-          th colspan=2
-            = description
-        tbody
-          - expenses.each do |expense|
-            tr
-              td
-                = I18n.l expense.date
-              td.align-right
-                = number_to_currency expense.usable_value
-          tr.sum.border
-            td colspan=3
-              = I18n.t("labels.defaults.sum")
-              '
-              b= number_to_currency expenses.sum(&:value)
-          - private_use_percent = expenses.sum(&:private_use_percent) / expenses.size
-          - if private_use_percent != 0
-            tr.sum
-              td colspan=3
-                = I18n.t("pdf.expenses.business_amount", percent: 100 - private_use_percent)
-                '
-                b= number_to_currency expenses.sum(&:usable_value)
+    table.table.table-condensed
+      thead
+        th colspan=2
+      tbody
+        - resource.training.each do |expense|
+          tr
+            td
+              = expense.description
+            td.align-right style="min-width: 100px;"
+              = number_to_currency expense.usable_value
+
     .sum
       = I18n.t("pdf.expenses.footer.training")
       '
