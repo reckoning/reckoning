@@ -61,30 +61,33 @@
   }
 
   body > .container-fluid {
-    margin-left: 0;
-    transition: margin-left ease 0.5s;
+    left: 0;
+    position: relative;
+    transition: left ease 0.5s, right ease 0.5s;
     min-width: 100vw;
   }
 
   .navbar {
     &.navbar-aside {
-      transition: margin-left ease 0.5s;
+      transition: left ease 0.5s, right ease 0.5s;
 
       .current-timers {
         padding: 0;
       }
 
       .navbar-collapse {
-        position: absolute;
+        transition: left ease 0.5s;
+        position: fixed;
         display: block;
         margin-right: 0;
-        margin-left: -85vw;
+        margin-left: 0;
         background-color: #f8f8f8;
         border-right: 1px solid #e7e7e7;
         border-top: none;
         width: 85vw;
         top: 0;
-        left: 0;
+        bottom: 0;
+        left: -85vw;
         right: auto;
         height: 100vh !important;
         max-height: 100vh;
