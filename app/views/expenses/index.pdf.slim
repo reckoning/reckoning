@@ -181,7 +181,7 @@
 
     .alwaysbreak
 
-  - if resource.account.office_space.present?
+  - if resource.account.office_space.present? && resource.home_office.present?
     h2
       = I18n.t("pdf.expenses.headlines.home_office")
       .subline
@@ -217,70 +217,73 @@
 
     .alwaysbreak
 
-  - if resource.current.present?
+  - if resource.current.present? || resource.misc.present? || resource.licenses.present?
     h2= I18n.t("pdf.expenses.headlines.other")
-    - resource.current.group_by(&:description).each do |description, expenses|
+    - if resource.current.present?
+      - resource.current.group_by(&:description).each do |description, expenses|
+        table.table.table-condensed
+          thead
+            th colspan=2
+              = description
+          tbody
+            - expenses.each do |expense|
+              tr
+                td
+                  = I18n.l expense.date
+                td.align-right
+                  = number_to_currency expense.usable_value
+            tr.sum.border
+              td colspan=3
+                = I18n.t("labels.defaults.sum")
+                '
+                b= number_to_currency expenses.sum(&:value)
+            - private_use_percent = expenses.sum(&:private_use_percent) / expenses.size
+            - if private_use_percent != 0
+              tr.sum
+                td colspan=3
+                  = I18n.t("pdf.expenses.business_amount", percent: 100 - private_use_percent)
+                  '
+                  b= number_to_currency expenses.sum(&:usable_value)
+
+    - if resource.misc.present?
       table.table.table-condensed
         thead
-          th colspan=2
-            = description
+          th colspan=3
+            = I18n.t("filter.expense_type.misc")
         tbody
-          - expenses.each do |expense|
+          - resource.misc.each do |expense|
             tr
               td
                 = I18n.l expense.date
+              td
+                = expense.description
               td.align-right
                 = number_to_currency expense.usable_value
           tr.sum.border
             td colspan=3
               = I18n.t("labels.defaults.sum")
               '
-              b= number_to_currency expenses.sum(&:value)
-          - private_use_percent = expenses.sum(&:private_use_percent) / expenses.size
-          - if private_use_percent != 0
-            tr.sum
-              td colspan=3
-                = I18n.t("pdf.expenses.business_amount", percent: 100 - private_use_percent)
-                '
-                b= number_to_currency expenses.sum(&:usable_value)
+              b= number_to_currency resource.misc.sum(&:usable_value)
 
-    table.table.table-condensed
-      thead
-        th colspan=3
-          = I18n.t("filter.expense_type.misc")
-      tbody
-        - resource.misc.each do |expense|
-          tr
-            td
-              = I18n.l expense.date
-            td
-              = expense.description
-            td.align-right
-              = number_to_currency expense.usable_value
-        tr.sum.border
-          td colspan=3
-            = I18n.t("labels.defaults.sum")
-            '
-            b= number_to_currency resource.misc.sum(&:usable_value)
-
-    table.table.table-condensed
-      thead
-        th colspan=3
-          = I18n.t("filter.expense_type.licenses")
-      tbody
-        - resource.licenses.each do |expense|
-          tr
-            td
-              = I18n.l expense.date
-            td
-              = expense.description
-            td.align-right
-              = number_to_currency expense.usable_value
-        tr.sum.border
-          td colspan=3
-            = I18n.t("labels.defaults.sum")
-            '
-            b= number_to_currency resource.licenses.sum(&:usable_value)
+    - if resource.licenses.present?
+      table.table.table-condensed
+        thead
+          th colspan=3
+            = I18n.t("filter.expense_type.licenses")
+        tbody
+          - resource.licenses.each do |expense|
+            tr
+              td
+                = I18n.l expense.date
+              td
+                = expense.description
+              td.align-right
+                = number_to_currency expense.usable_value
+          tr.sum.border
+            td colspan=3
+              = I18n.t("labels.defaults.sum")
+              '
+              b= number_to_currency resource.licenses.sum(&:usable_value)
 
     .sum
       = I18n.t("pdf.expenses.footer.other")
