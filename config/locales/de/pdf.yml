@@ -24,11 +24,22 @@ de:
     expenses:
       sum: "Summe"
       business_amount: "Beruflicher Anteil %{percent}%"
+      office_space_amount: "Abziehbarer Anteil %{percent}%"
       headlines:
         gwg: "Geringwertige Wirtschaftsgüter"
         telecommunication: "Telefon / Internet"
         other: "Allgemeine Ausgaben"
+        home_office: "Arbeitszimmer"
+        business_expenses: "Spesen"
+        travel_costs: "Reisekosten"
+        training: "Kosten für Fortbildung"
       sublines:
+        home_office: "%{deductible_office_space}m² von %{office_space}m² Gesamtfläche"
+      footer:
         gwg: "Gesamtkosten für geringwertige Wirtschaftsgüter:"
         telecommunication: "Gesamtkosten für Telefon / Internet:"
         other: "Gesamtkosten allgemeiner Ausgaben:"
+        home_office: "Gesamtkosten Arbeitszimmer:"
+        business_expenses: "Gesamtkosten Spesen"
+        travel_costs: "Gesamte Reisekosten"
+        training: "Gesamtkosten für Fortbildung"

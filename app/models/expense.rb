@@ -4,7 +4,11 @@
 class Expense < ApplicationRecord
   belongs_to :account
 
-  VALID_TYPES = %i[gwg afa licenses telecommunication work_related_deductions home_office current misc].freeze
+  VALID_TYPES = %i[
+    gwg afa licenses telecommunication training business_expenses
+    work_related_deductions home_office current misc
+    travel_costs
+  ].freeze
   # TODO: needs to be complete AFA Table
   VALID_AFA_TYPES = [{
     value: 3,
@@ -19,7 +23,7 @@ class Expense < ApplicationRecord
     value: 13,
     label: I18n.t(:"expenses.afa_types.office_furniture")
   }].freeze
-  NEEDS_RECEIPT_TYPES = VALID_TYPES.reject { |type| %i[home_office telecommunication current].include?(type) }.freeze
+  NEEDS_RECEIPT_TYPES = VALID_TYPES.reject { |type| %i[home_office telecommunication current business_expenses].include?(type) }.freeze
 
   attachment :receipt, content_type: ["application/pdf", "image/jpeg", "image/png"]
 
@@ -29,7 +33,7 @@ class Expense < ApplicationRecord
   before_save :calculate_usable_value
 
   def self.accessible_attributes
-    %w[description seller value usable_value private_use_percent created_at updated_at date expense_type]
+    %w[description seller value usable_value private_use_percent created_at updated_at date expense_type afa_type]
   end
 
   def self.to_csv(options = {})

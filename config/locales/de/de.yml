@@ -150,6 +150,9 @@ de:
       work_related_deductions: "Werbungskosten"
       current: "Laufende Ausgaben"
       misc: "Sonstige Ausgaben"
+      travel_costs: "Reisekosten"
+      business_expenses: "Spesen"
+      training: "Fortbildung"
     expense_year:
       label: "Gekauft in:"
     invoice_year:

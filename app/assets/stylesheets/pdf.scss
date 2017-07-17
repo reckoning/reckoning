@@ -89,6 +89,15 @@ address {
   }
 }
 
+h1,
+h2,
+h3,
+h4 {
+  .subline {
+    font-size: 70%;
+  }
+}
+
 tr {
   page-break-inside: avoid;
 }
