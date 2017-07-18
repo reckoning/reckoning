@@ -9,7 +9,7 @@
         h1
           = I18n.t(:"headlines.expense.index")
           '
-          small.visible-xs-block
+          small.visible-xs-block.visible-md-inline.visible-sm-inline.visible-lg-inline
             = I18n.t(:"headlines.invoice.sum", sum: number_to_currency(@expenses_sum))
 
       .col-xs-12.col-md-7
