@@ -73,6 +73,16 @@
 
       .current-timers {
         padding: 0;
+        position: fixed;
+        bottom: 0;
+
+        .panel {
+          margin-bottom: 0;
+          margin-left: 4px;
+          margin-right: 4px;
+          border-radius: 4px 4px 0 0;
+          border-bottom: none;
+        }
       }
 
       .navbar-collapse {

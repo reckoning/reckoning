@@ -29,32 +29,6 @@ $nav-transition-speed: .3s;
   }
 }
 
-.navbar-horizontal {
-  .current-timers {
-    display: inline-block;
-    margin-top: 2px;
-    position: absolute;
-    right: 100px;
-    top: 0;
-
-    h2 {
-      display: inline-block;
-      padding-right: 5px;
-      padding-top: 2px;
-    }
-
-    .timer {
-      display: inline-block;
-      margin-bottom: 0;
-      margin-right: 5px;
-
-      h3 {
-        padding-right: 5px;
-      }
-    }
-  }
-}
-
 #main-nav {
   border-radius: 0;
   z-index: 100;
@@ -226,21 +200,6 @@ $nav-transition-speed: .3s;
     text-align: center;
     display: block;
     float: none;
-  }
-
-  .navbar-horizontal {
-    .current-timers {
-      position: relative;
-      right: auto;
-      top: auto;
-      display: block;
-      margin-bottom: 4px;
-
-      .timer {
-        display: block;
-        margin-right: 0;
-      }
-    }
   }
 }
 
