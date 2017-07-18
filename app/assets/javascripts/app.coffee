@@ -68,7 +68,6 @@ $(document).on 'show.bs.collapse', '.navbar-collapse', ->
   return if $('body.landing-page').length
 
   $('.navbar.navbar-default .navbar-collapse').css('left', '0')
-  $('body, html').css('overflow', 'hidden')
   $('.navbar.navbar-default').css('left', '85vw')
   $('.navbar.navbar-default').css('right', '-85vw')
   $('body > .container-fluid').css('left', '85vw')
@@ -78,7 +77,6 @@ $(document).on 'hide.bs.collapse', '.navbar-collapse', ->
   return if $('body.landing-page').length
 
   $('.navbar.navbar-default .navbar-collapse').css('left', '-85vw')
-  $('body, html').css('overflow', '')
   $('.navbar.navbar-default').css('left', '')
   $('.navbar.navbar-default').css('right', '')
   $('body > .container-fluid').css('left', '')

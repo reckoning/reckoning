@@ -27,7 +27,7 @@ class ExpensesController < ApplicationController
 
         @expenses = expenses.order(sort_column + " " + sort_direction)
                             .page(params.fetch(:page, nil))
-                            .per(20)
+                            .per(40)
       end
     end
   end

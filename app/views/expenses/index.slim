@@ -9,9 +9,9 @@
         h1
           = I18n.t(:"headlines.expense.index")
           '
-          small
+          small.visible-xs-block
             = I18n.t(:"headlines.invoice.sum", sum: number_to_currency(@expenses_sum))
-            
+
       .col-xs-12.col-md-7
         .btn-group.btn-group-justified-responsive.pull-right.resource-nav
           a.btn.btn-primary href=new_expense_path
@@ -22,17 +22,17 @@
             i.fa.fa-down
             '
             = I18n.t(:"nav.subnav.export_expenses_pdf")
-          a.btn.btn-default href=url_for(stored_params(:index).merge({format: :csv})) target="_blank"
+          a.btn.btn-default.hidden-xs href=url_for(stored_params(:index).merge({format: :csv})) target="_blank"
             i.fa.fa-down
             '
             = I18n.t(:"nav.subnav.export")
-          a.btn.btn-default href=new_expense_import_path
+          a.btn.btn-default.hidden-xs href=new_expense_import_path
             i.fa.fa-down
             '
             = I18n.t(:"nav.subnav.import")
-    
+
     .row
-      .col-xs-12.col-md-6
+      .col-xs-12.col-md-6.filters
         = render "shared/tables/filter", resource: "expense", name: "year", filters: current_expenses_years
         '
         = render "shared/tables/filter", resource: "expense", name: "type", filters: Expense::VALID_TYPES, translateable: true
@@ -44,11 +44,12 @@
       .panel.panel-list.panel-default.expense
         .panel-heading
           .row
-            .col-xs-1= I18n.t("activerecord.attributes.expense.date")
-            .col-xs-4= I18n.t("activerecord.attributes.expense.description")
-            .col-xs-3= I18n.t("activerecord.attributes.expense.seller")
-            .col-xs-2= I18n.t("activerecord.attributes.expense.expense_type")
-            .col-xs-2 
+            .col-md-2.hidden-xs
+              = I18n.t("activerecord.attributes.expense.date")
+            .col-md-5.hidden-xs
+              = I18n.t("activerecord.attributes.expense.description")
+            .col-md-2.hidden-xs= I18n.t("activerecord.attributes.expense.expense_type")
+            .col-md-3.hidden-xs
               = I18n.t("activerecord.attributes.expense.receipt")
               .pull-right= I18n.t("activerecord.attributes.expense.value")
         .list-group
