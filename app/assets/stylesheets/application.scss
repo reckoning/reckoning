@@ -108,3 +108,28 @@ code[data-target] {
     font-size: 90%;
   }
 }
+
+.filters {
+  .dropdown {
+    &:last-child {
+      .dropdown-menu {
+        right: 0;
+        left: auto;
+      }
+    }
+
+    @media (max-width: $screen-sm-max) {
+      &:last-child .dropdown-menu,
+      .dropdown-menu {
+        position: fixed;
+        top: auto;
+        left: 0.5vw;
+        right: 0.5vw;
+        bottom: 0;
+        width: 99vw;
+        border-radius: 4px 4px 0 0;
+        border-bottom: none;
+      }
+    }
+  }
+}
