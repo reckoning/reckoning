@@ -25,8 +25,7 @@
         = render "shared/tables/filter", resource: "invoice", name: "year", filters: current_invoice_years
         = render "shared/tables/filter", resource: "invoice", name: "paid_in_year", filters: current_invoice_years
       .col-xs-12.col-md-6
-        .pull-right
-          = paginate @invoices
+        = paginate @invoices
 
     - if @invoices.present?
       = render partial: "invoices/list", :@invoices => @invoices
@@ -39,6 +38,6 @@
           .btn-group-responsive
             = link_to archive_invoices_path, method: :put, class: "btn btn-default" do
               = I18n.t(:"nav.subnav.archive_invoices")
+          %br
       .col-xs-12.col-md-6
-        .pull-right
-          = paginate @invoices
+        = paginate @invoices

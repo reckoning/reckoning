@@ -28,13 +28,13 @@
             %a.btn.btn-default{href: url_for(state: :archived)}
               = I18n.t(:"filter.project_state.archived")
       .col-xs-12.col-md-6
-        .pull-right
-          = paginate @projects
+        = paginate @projects
 
     = render partial: "list"
 
     - if @projects.blank?
       = render partial: "shared/blank"
 
-    .pull-right
-      = paginate @projects
+    .row
+      .col-xs-12
+        = paginate @projects
