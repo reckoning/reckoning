@@ -14,7 +14,7 @@ gem 'stripe'
 gem 'valvat'
 
 gem 'sidekiq'
-gem 'sidekiq-scheduler'
+gem 'sidekiq-cron'
 # for sidekiq web
 gem 'sinatra', require: nil
 
