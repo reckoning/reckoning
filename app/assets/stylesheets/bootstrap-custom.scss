@@ -4,6 +4,10 @@
 
 $grid-float-breakpoint: $screen-sm-max;
 
+$screen-xl: 1800px;
+$screen-xl-min: $screen-xl;
+$screen-lg-max: ($screen-xl-min - 1);
+
 // Reset and dependencies
 @import "bootstrap/normalize";
 @import "bootstrap/print";
