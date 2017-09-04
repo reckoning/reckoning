@@ -13,6 +13,7 @@ gem 'money'
 gem 'stripe'
 gem 'valvat'
 
+gem 'redis-namespace'
 gem 'sidekiq'
 gem 'sidekiq-cron'
 # for sidekiq web
@@ -97,6 +98,7 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen'
   gem 'web-console'
+  gem 'mailcatcher'
 
   # deployment
   gem 'mina', require: false

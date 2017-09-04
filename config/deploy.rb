@@ -39,7 +39,7 @@ task deploy: :environment do
   deploy do
     invoke :'git:clone'
     command %(rbenv install -s)
-    command %(gem update --system 2.6.10)
+    command %(gem update --system)
     command %(gem install bundler --silent)
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
@@ -50,7 +50,6 @@ task deploy: :environment do
 
     on :launch do
       invoke :'server:restart'
-      # invoke :'server:phased_restart'
     end
   end
 end
