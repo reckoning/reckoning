@@ -176,7 +176,7 @@ GEM
       railties (>= 3.2)
       sprockets-rails
     json (2.1.0)
-    jwt (1.5.6)
+    jwt (2.0.0)
     kaminari (1.0.1)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.0.1)
