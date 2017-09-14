@@ -77,11 +77,6 @@ task console: :environment do
 end
 
 namespace :server do
-  task phased_restart: :environment do
-    command %(bundle exec pumactl -P tmp/pids/puma.pid -S tmp/sockets/puma.state phased-restart)
-    command %(sudo supervisorctl restart reckoning:reckoning-worker)
-  end
-
   task :restart do
     comment 'Restart Application'
     command %(sudo supervisorctl restart reckoning:*)
