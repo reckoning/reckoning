@@ -16,6 +16,7 @@ module Api
         scope = scope.where(date: date_range) if date_range
         scope = scope.for_project(project_id) if project_id
         scope = scope.uninvoiced if params[:uninvoiced].present?
+        scope = scope.billable if params[:billable].present?
         scope = scope.running if params[:running].present?
         scope = scope.limit(limit) if limit
         @timers = scope.order(updated_at: :desc)

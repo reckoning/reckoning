@@ -6,7 +6,7 @@ class TimersController < ApplicationController
     authorize! :index, Timer
     respond_to do |format|
       format.js do
-        scope = current_account.timers.uninvoiced
+        scope = current_account.timers.uninvoiced.billable
         scope = scope.for_project(project_id) if project_id
         scope = scope.without_ids(timer_ids) if timer_ids
         timers = scope.order(date: :asc)
