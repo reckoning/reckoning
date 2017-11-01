@@ -28,7 +28,8 @@ class CustomersController < ApplicationController
   private def customer_params
     @customer_params ||= params.require(:customer).permit(
       :payment_due, :email_template, :invoice_email, :default_from, :name,
-      :address, :country, :email, :telefon, :fax, :website, :employment_date, :weekly_hours
+      :address, :country, :email, :telefon, :fax, :website, :employment_date, :weekly_hours,
+      :employment_end_date
     )
   end
 

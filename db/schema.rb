@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170716201217) do
+ActiveRecord::Schema.define(version: 20171101093939) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "uuid-ossp"
   enable_extension "plpgsql"
   enable_extension "hstore"
+  enable_extension "uuid-ossp"
 
   create_table "accounts", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string "name"
@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(version: 20170716201217) do
     t.uuid "account_id", null: false
     t.date "employment_date"
     t.integer "weekly_hours"
+    t.date "employment_end_date"
   end
 
   create_table "expenses", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -89,16 +90,6 @@ ActiveRecord::Schema.define(version: 20170716201217) do
     t.integer "receipt_size"
     t.string "receipt_content_type"
     t.integer "afa_type"
-  end
-
-  create_table "holidays", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.date "date"
-    t.string "name_de"
-    t.string "name_en"
-    t.string "country_code"
-    t.string "state"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "invoices", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -154,22 +145,6 @@ ActiveRecord::Schema.define(version: 20170716201217) do
     t.decimal "round_up", default: "10.0", null: false
     t.datetime "start_date"
     t.datetime "end_date"
-  end
-
-  create_table "sick_days", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.date "date"
-    t.uuid "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "states", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.string "name_de"
-    t.string "name_en"
-    t.string "code"
-    t.string "country_code"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "tasks", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|

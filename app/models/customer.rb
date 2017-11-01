@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 class Customer < ApplicationRecord
@@ -14,7 +13,7 @@ class Customer < ApplicationRecord
   validates :email, email: true, allow_blank: true
 
   def workdays
-    return if employment_date.blank?
+    return if employment_date.blank? || !employed?
     days = 0
     date = Time.current.to_date
     while date >= employment_date
@@ -22,6 +21,10 @@ class Customer < ApplicationRecord
       date -= 1.day
     end
     days
+  end
+
+  def employed?
+    employment_date.present? && (employment_end_date.blank? || employment_end_date >= Time.zone.today)
   end
 
   def overtime(user_id)
