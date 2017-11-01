@@ -51,14 +51,14 @@ window.displayConfirm = (ev, $element) ->
       if $element.data('method') is undefined
         window.location = $element.attr('href')
       else
-        $.ajax
-          url: $element.attr('href')
+        fetch $element.attr('href'),
           method: $element.data('method')
-          complete: (result) ->
-            if $element.data('redirect') is undefined
-              window.location.reload()
-            else
-              window.location = $element.data('redirect')
+          headers: ApiHeaders
+        .then (response) ->
+          if $element.data('redirect') is undefined
+            window.location.reload()
+          else
+            window.location = $element.data('redirect')
       return false
 
   cancelButton =
