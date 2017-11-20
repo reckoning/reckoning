@@ -38,9 +38,12 @@ desc "Deploys the current version to the server."
 task deploy: :environment do
   deploy do
     invoke :'git:clone'
+    comment 'Install Latest Ruby Version'
     command %(rbenv install -s)
+    comment 'Update Rubygems'
     command %(gem update --system)
-    command %(gem install bundler --silent)
+    comment 'Update/Install Bundler'
+    command %(gem install bundler --conservative --silent)
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
 
