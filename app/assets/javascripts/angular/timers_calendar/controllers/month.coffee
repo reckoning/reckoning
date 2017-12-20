@@ -25,6 +25,13 @@ angular.module 'TimersCalendar'
     $scope.currentTimersLoaded = false
     $scope.weeks = []
 
+    $scope.businessDays = 0
+
+    for day in [1..$scope.date.daysInMonth()]
+      dayDate = moment("#{$scope.date.year()}-#{$scope.date.month() + 1}-#{day}", "YYYY-MM-D")
+      if dayDate.isoWeekday() < 6
+        $scope.businessDays += 1
+
     $scope.openModal = (date, timer) ->
       if @isStartable(date)
         modalTimer = {date: date, started: true, projectId: @projectId}
