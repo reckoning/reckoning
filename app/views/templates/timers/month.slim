@@ -5,6 +5,12 @@ br
     .col-xs-12.col-md-6
       h2
         span ng-bind="currentMonth()"
+        small
+          = " ("
+          span ng-bind="businessDays"
+          '
+          = I18n.t('labels.defaults.week_days')
+          = ")"
     .col-xs-12.col-md-6
       .pull-right.resource-nav
         .btn-group.btn-group-justified-responsive.resource-nav

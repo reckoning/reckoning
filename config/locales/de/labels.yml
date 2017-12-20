@@ -31,6 +31,7 @@ de:
       timers: Zeiten
       invoices: Rechnungen
       created_at: Erstellt
+      week_days: Wochentage
       current_position: "Aktuelle Position"
     datepicker:
       next_month: "Nächster Monat"
