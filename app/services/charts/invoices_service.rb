@@ -13,8 +13,8 @@ module Charts
     end
 
     def generate_datasets
-      start_year = Time.zone.now - 1.year
-      end_year = Time.zone.now
+      start_year = (Time.zone.now - 1.year).beginning_of_year
+      end_year = Time.zone.now.end_of_year
 
       return unless scope.exists?(date: start_year..end_year)
 
