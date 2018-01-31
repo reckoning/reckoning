@@ -12,7 +12,7 @@ de:
         telefon: "Telefon"
         fax: "Fax"
         website: "Webseite"
-        vat_id: "USt-Id"
+        vat_id: "Steuernummer"
         bank: "Bank"
         bank_code: "BLZ"
         account_number: "Konto"
@@ -123,7 +123,7 @@ de:
         value: "Betrag in"
       account:
         name: "Account Name"
-        vat_id: "USt-Id"
+        vat_id: "Steuernummer"
         office_space: "in m²"
         deductible_office_space: "in m²"
         bank_account:

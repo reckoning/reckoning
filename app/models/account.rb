@@ -22,7 +22,6 @@ class Account < ApplicationRecord
   validates :subdomain, exclusion: { in: %w[www app admin api backend reckoning] }
   validates_associated :users
   validates :stripe_token, :stripe_email, presence: true, on: :create, if: :on_paid_plan?
-  validates :vat_id, valvat: { lookup: :fail_if_down, allow_blank: true }
 
   accepts_nested_attributes_for :users
 
