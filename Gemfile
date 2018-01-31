@@ -2,15 +2,14 @@
 
 source 'https://rubygems.org'
 
-ruby '2.4.2'
+ruby '2.5.0'
 
 gem 'rails', '5.1.4'
 
-gem 'pg'
+gem 'pg', '~> 0.21'
 
 gem 'money'
 gem 'stripe'
-gem 'valvat'
 
 gem 'redis-namespace'
 gem 'sidekiq'
@@ -107,7 +106,6 @@ end
 group :test do
   gem 'codeclimate-test-reporter'
   gem 'database_cleaner'
-  gem 'factory_girl'
   gem 'faker'
   gem 'minitest-rails'
   gem 'mocha', require: false

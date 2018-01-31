@@ -39,12 +39,12 @@
   }
 
   &:before {
-    @include background-image(linear-gradient($body-bg, rgba($body-bg, 0)));
+    background-image: linear-gradient($body-bg, rgba($body-bg, 0));
     top: 0;
   }
 
   &:after {
-    @include background-image(linear-gradient(rgba($body-bg, 0), $body-bg));
+    background-image: linear-gradient(rgba($body-bg, 0), $body-bg);
     bottom: 0;
   }
 
@@ -104,7 +104,7 @@
   div:first-child > & {
     box-shadow: inset -1px 0 0 $gray-lighter;
     color: lighten(#000, 60%);
-    @include background-image(linear-gradient(to left, #f6f6f6 0%, $body-bg 8px));
+    background-image: linear-gradient(to left, #f6f6f6 0%, $body-bg 8px);
 
     li {
       > a {
@@ -134,7 +134,7 @@
 
   div:last-child > & {
     box-shadow: inset 1px 0 0 $gray-lighter;
-    @include background-image(linear-gradient(to right, #f6f6f6 0%, $body-bg 8px));
+    background-image: linear-gradient(to right, #f6f6f6 0%, $body-bg 8px);
 
     li {
       > a {
