@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 require 'dropbox_sdk'
@@ -16,7 +15,7 @@ class InvoiceDropboxAllWorker
         invoice.update_attributes(pdf_generated_at: Time.zone.now)
 
         InvoiceDropboxWorker.perform_async invoice.id
-      rescue => e
+      rescue StandardError => e
         Rails.logger.debug e.inspect
       ensure
         invoice.update_attributes(pdf_generating: false)

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 require 'dropbox_sdk'
@@ -50,7 +49,7 @@ class DropboxController < ApplicationController
       current_account.save
 
       redirect_to "#{edit_account_path}#{hash}", flash: { success: I18n.t(:"messages.dropbox.deactivate.success") }
-    rescue
+    rescue StandardError
       redirect_to "#{edit_account_path}#{hash}", alert: I18n.t(:"messages.dropbox.deactivate.failure")
     end
   end

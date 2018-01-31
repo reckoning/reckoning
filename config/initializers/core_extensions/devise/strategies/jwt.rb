@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 module Devise
@@ -25,7 +24,7 @@ module Devise
 
       protected def claims
         ::JsonWebToken.decode(auth_params)
-      rescue
+      rescue StandardError
         nil
       end
     end

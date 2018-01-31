@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 module Charts
@@ -30,10 +29,8 @@ module Charts
         start_date = Time.zone.parse("#{year}-#{month}-1").beginning_of_month
         end_date = Time.zone.parse("#{year}-#{month}-1").end_of_month
         break if end_date > Time.zone.now
-
         dataset[:data] << scope.where(date: start_date.to_date..end_date).all.sum(:value)
       end
-
       dataset
     end
 
@@ -42,12 +39,10 @@ module Charts
       start_of_year = Time.zone.parse("#{year}-1-1").to_date.beginning_of_month
       (1..12).each do |month|
         end_date = Time.zone.parse("#{year}-#{month}-1").to_date.end_of_month
-
         dataset[:data] << scope.where(date: start_of_year..end_date).all.sum(:value)
         dataset[:zone] ||= month - 1 if month >= (Time.zone.now - 1.month).month && Time.zone.now.year == end_date.year
       end
       dataset[:zone] ||= dataset[:data].count - 1
-
       dataset
     end
 

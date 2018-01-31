@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 module JsonWebToken
@@ -14,7 +13,7 @@ module JsonWebToken
   def decode(token)
     decoded_token = JWT.decode(token, Rails.application.secrets[:devise_jwt], true, algorithm: 'HS512')
     HashWithIndifferentAccess.new(decoded_token.first)
-  rescue
+  rescue StandardError
     nil
   end
 end
