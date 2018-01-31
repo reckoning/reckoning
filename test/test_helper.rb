@@ -88,3 +88,4 @@ class ActionMailer::TestCase
     DatabaseCleaner.clean
   end
 end
+# rubocop:enable Style/ClassAndModuleChildren

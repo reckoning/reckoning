@@ -7,7 +7,7 @@ class User < ApplicationRecord
          otp_backup_code_length: 32, otp_number_of_backup_codes: 10
 
   belongs_to :account
-  has_many :timers
+  has_many :timers, dependent: :destroy
 
   before_save :update_gravatar_hash
   before_create :setup_otp_secret

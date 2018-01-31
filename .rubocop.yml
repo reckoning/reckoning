@@ -19,13 +19,13 @@ Style/Documentation:
 Style/RaiseArgs:
   Enabled: false
 
-Style/FileName:
+Naming/FileName:
   Enabled: false
 
 Style/StringLiterals:
   Enabled: false
 
-Style/PredicateName:
+Naming/PredicateName:
   Enabled: false
 
 # User.all.map do |user|

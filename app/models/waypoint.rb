@@ -4,6 +4,7 @@ class Waypoint < ApplicationRecord
   belongs_to :account
   belongs_to :tour, touch: true
   belongs_to :driver,
+             inverse_of: false,
              class_name: "User"
 
   attr_accessor :time_date, :time_hours

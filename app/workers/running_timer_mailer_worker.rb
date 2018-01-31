@@ -11,6 +11,7 @@ class RunningTimerMailerWorker
 
     # rubocop:disable Rails/SkipsModelValidations
     timer.update_columns(notified: true)
+    # rubocop:enable Rails/SkipsModelValidations
 
     TimerMailer.notify(timer).deliver_now
   end

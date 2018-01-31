@@ -29,6 +29,7 @@ module Reckoning
     config.action_view.field_error_proc = proc { |html_tag, _instance|
       # rubocop:disable Rails/OutputSafety
       html_tag.to_s.html_safe
+      # rubocop:enable Rails/OutputSafety
     }
 
     config.exceptions_app = routes

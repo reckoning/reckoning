@@ -20,6 +20,7 @@ module Api
         scope = scope.limit(limit) if limit
         @timers = scope.order(updated_at: :desc)
       end
+      # rubocop:enable Metrics/CyclomaticComplexity
 
       def create
         @timer ||= current_user.timers.new timer_params

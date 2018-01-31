@@ -8,18 +8,16 @@ class InvoiceDropboxAllWorker
 
   def perform(account_id)
     Invoice.where(account_id: account_id).each do |invoice|
-      begin
-        invoice.generate
-        invoice.generate_timesheet if invoice.timers.present?
+      invoice.generate
+      invoice.generate_timesheet if invoice.timers.present?
 
-        invoice.update_attributes(pdf_generated_at: Time.zone.now)
+      invoice.update_attributes(pdf_generated_at: Time.zone.now)
 
-        InvoiceDropboxWorker.perform_async invoice.id
-      rescue StandardError => e
-        Rails.logger.debug e.inspect
-      ensure
-        invoice.update_attributes(pdf_generating: false)
-      end
+      InvoiceDropboxWorker.perform_async invoice.id
+    rescue StandardError => e
+      Rails.logger.debug e.inspect
+    ensure
+      invoice.update_attributes(pdf_generating: false)
     end
   end
 end

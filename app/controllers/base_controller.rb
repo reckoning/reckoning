@@ -3,7 +3,7 @@
 class BaseController < ApplicationController
   include NumberHelper
   skip_authorization_check
-  before_action :authenticate_user!, only: [:fail]
+  before_action :authenticate_user!, only: []
 
   def index
     @active_nav = 'home'

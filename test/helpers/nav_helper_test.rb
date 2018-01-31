@@ -6,6 +6,7 @@ require 'test_helper'
 class ActionController::TestRequest
   attr_accessor :referer
 end
+# rubocop:enable Style/ClassAndModuleChildren
 
 class NavHelperTest < ActionView::TestCase
   include NavHelper
