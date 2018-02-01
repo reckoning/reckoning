@@ -1,5 +1,6 @@
 dependencies:
   pre:
+    - sudo rm /home/travis && sudo ln -s /home/ubuntu /home/travis
     - sudo apt-get update
     - sudo apt-get install wkhtmltopdf
   post:
