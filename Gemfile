@@ -11,6 +11,7 @@ gem 'pg', '~> 0.21'
 gem 'money'
 gem 'stripe'
 
+gem 'redis', '~> 3.0'
 gem 'redis-namespace'
 gem 'sidekiq'
 gem 'sidekiq-cron'
