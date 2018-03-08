@@ -129,4 +129,13 @@ namespace :db do
     system %(scp #{fetch(:user)}@#{fetch(:domain)}:#{fetch(:deploy_to)}/shared/dumps/latest.dump dumps/)
     comment "Download finished"
   end
+
+  # to import login with root and use:
+  # pg_restore --verbose --clean --no-acl --no-owner -h 127.0.0.1 -U reckoning -d reckoning dumps/latest.dump
+  # from shared dir
+  task :upload_backup do
+    comment "Uploading latest backup..."
+    system %(scp dumps/latest.dump #{fetch(:user)}@#{fetch(:domain)}:#{fetch(:deploy_to)}/shared/dumps/)
+    comment "Upload finished"
+  end
 end
