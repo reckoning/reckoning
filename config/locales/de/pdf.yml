@@ -34,6 +34,7 @@ de:
         travel_costs: "Reisen"
         training: "Fortbildung"
         non_cash_contribution: "Sach-, Leistungs-, Nutzungseinlagen"
+        business_insurances: "Versicherungen"
         insurances: "Private Zusatzversicherungen"
       sublines:
         home_office: "%{deductible_office_space}m² von %{office_space}m² Gesamtfläche"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171101093939) do
+ActiveRecord::Schema.define(version: 20180317191655) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,7 +84,6 @@ ActiveRecord::Schema.define(version: 20171101093939) do
     t.datetime "updated_at", null: false
     t.string "seller"
     t.integer "private_use_percent", default: 0, null: false
-    t.decimal "usable_value", precision: 10, scale: 2, default: "0.0", null: false
     t.string "receipt_id"
     t.string "receipt_filename"
     t.integer "receipt_size"
@@ -153,6 +152,14 @@ ActiveRecord::Schema.define(version: 20171101093939) do
     t.datetime "updated_at"
     t.uuid "project_id"
     t.boolean "billable", default: true, null: false
+  end
+
+  create_table "taxation_types", force: :cascade do |t|
+    t.uuid "account_id"
+    t.decimal "tax"
+    t.date "date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "timers", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|

@@ -6,7 +6,7 @@ class Expense < ApplicationRecord
   VALID_TYPES = %i[
     gwg afa licenses telecommunication training business_expenses
     work_related_deductions home_office current misc
-    travel_costs non_cash_contribution insurances
+    travel_costs non_cash_contribution business_insurances insurances
   ].freeze
   # TODO: needs to be complete AFA Table
   VALID_AFA_TYPES = [{
@@ -30,8 +30,6 @@ class Expense < ApplicationRecord
 
   validates :value, :description, :date, :expense_type, :seller, :private_use_percent, presence: true
   validates :afa_type, presence: true, if: ->(expense) { expense.expense_type == 'afa' }
-
-  before_save :calculate_usable_value
 
   def self.accessible_attributes
     %w[description seller value usable_value private_use_percent created_at updated_at date expense_type afa_type]
@@ -69,8 +67,8 @@ class Expense < ApplicationRecord
     where(expense_type: type)
   end
 
-  def afa_value
-    return if afa_type.blank? || (date.year + afa_type) < Time.zone.now.year
+  def afa_value(year = Time.zone.now.year)
+    return 0.0 if afa_type.blank? || (date.year + afa_type) < year
     value / afa_type
   end
 
@@ -83,14 +81,14 @@ class Expense < ApplicationRecord
     (value * (100 - private_use_percent).to_f) / 100.0
   end
 
-  def calculate_usable_value
-    self.usable_value = if expense_type == 'afa'
-                          afa_value
-                        elsif expense_type == 'home_office'
-                          home_office_value
-                        else
-                          deductible_value
-                        end
+  def usable_value(year = Time.zone.now.year)
+    if expense_type == 'afa'
+      afa_value(year)
+    elsif expense_type == 'home_office'
+      home_office_value
+    else
+      deductible_value
+    end
   end
 
   def needs_receipt?

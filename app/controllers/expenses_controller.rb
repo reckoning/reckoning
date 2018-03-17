@@ -19,7 +19,7 @@ class ExpensesController < ApplicationController
         render ExpensePdf.new(current_account, expenses, filter_params).pdf
       end
       format.html do
-        @expenses_sum = expenses.without_insurances.sum(:usable_value)
+        @expenses_sum = expenses.without_insurances.to_a.sum(&:usable_value)
         if filter_params[:type] == 'insurances'
           @expenses_sum = expenses.sum(:usable_value)
         end

@@ -48,16 +48,26 @@ class Account < ApplicationRecord
     return if provision.blank?
 
     current_invoices = invoices.includes(:customer, :project).order('date DESC').paid_in_year(Time.zone.now.year)
-    current_expenses = expenses.without_insurances.year(Time.zone.now.year)
-    (current_invoices.sum(:value) - current_expenses.sum(:usable_value)) / 100 * provision.to_i
+    current_expenses = expenses.without_insurances.year(Time.zone.now.year).to_a.sum(&:usable_value)
+    open_afa_expenses = expenses.filter_type(:afa).reject do |expense|
+      expense.afa_value(Time.zone.now.year).zero?
+    end.sum do |expense|
+      expense.afa_value(Time.zone.now.year)
+    end
+    (current_invoices.sum(:value) - current_expenses - open_afa_expenses) / 100 * provision.to_i
   end
 
   def last_provision_value
     return if provision.blank?
 
     last_invoices = invoices.includes(:customer, :project).order('date DESC').paid_in_year(Time.zone.now.year - 1)
-    last_expenses = expenses.without_insurances.year(Time.zone.now.year - 1)
-    (last_invoices.sum(:value) - last_expenses.sum(:usable_value)) / 100 * provision.to_i
+    last_expenses = expenses.without_insurances.year(Time.zone.now.year - 1).to_a.sum(&:usable_value)
+    open_afa_expenses = expenses.filter_type(:afa).reject do |expense|
+      expense.afa_value(Time.zone.now.year - 1).zero?
+    end.sum do |expense|
+      expense.afa_value(Time.zone.now.year - 1)
+    end
+    (last_invoices.sum(:value) - last_expenses - open_afa_expenses) / 100 * provision.to_i
   end
 
   def dropbox?

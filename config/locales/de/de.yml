@@ -154,6 +154,7 @@ de:
       business_expenses: "Spesen"
       training: "Fortbildung"
       non_cash_contribution: "Sach-, Leistungs, Nutzungseinlagen"
+      business_insurances: "Versicherungen"
       insurances: "Private Zusatzversicherungen"
     expense_year:
       label: "Gekauft in:"
