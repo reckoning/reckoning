@@ -20,6 +20,8 @@ de:
         seller: "Verkäufer/Händler"
         expense_type: "Typ"
         receipt: "Beleg"
+        vat_percent: "Steuern"
+        vat_value: "Steuern"
       user:
         enabled: "Aktiv?"
         admin: "Admin?"
