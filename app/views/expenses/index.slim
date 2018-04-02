@@ -11,6 +11,7 @@
           '
           small.visible-xs-block.visible-md-inline.visible-sm-inline.visible-lg-inline
             = I18n.t(:"headlines.invoice.sum", sum: number_to_currency(@expenses_sum))
+            = I18n.t(:"headlines.invoice.vat_sum", sum: number_to_currency(@expenses_vat_sum))
 
       .col-xs-12.col-md-7
         .btn-group.btn-group-justified-responsive.pull-right.resource-nav
