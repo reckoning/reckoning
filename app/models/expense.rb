@@ -98,9 +98,9 @@ class Expense < ApplicationRecord
 
   def vat_value
     if expense_type == 'afa'
-      (100 * vat_percent) / value
+      value * vat_percent / 100
     else
-      (100 * vat_percent) / usable_value
+      usable_value * vat_percent / 100
     end
   end
 
