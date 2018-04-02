@@ -36,6 +36,7 @@ de:
       edit: "Rechnung bearbeiten"
       index: "Aktuelle Rechnungen"
       sum: "Gesamt: %{sum}"
+      vat_sum: "Steuern: %{sum}"
 
     customer:
       new: "Neuer Kunde"
