@@ -69,16 +69,16 @@ class Expense < ApplicationRecord
 
   def afa_value(year = Time.zone.now.year)
     return 0.0 if afa_type.blank? || (date.year + afa_type) < year
-    value_without_vat / afa_type
+    value / afa_type
   end
 
   def home_office_value
     return if account.deductible_office_percent.blank?
-    (value_without_vat * account.deductible_office_percent) / 100.0
+    (value * account.deductible_office_percent) / 100.0
   end
 
   def deductible_value
-    (value_without_vat * (100 - private_use_percent).to_f) / 100.0
+    (value * (100 - private_use_percent).to_f) / 100.0
   end
 
   def usable_value(year = Time.zone.now.year)
@@ -92,12 +92,16 @@ class Expense < ApplicationRecord
   end
 
   def value_without_vat
-    return value if vat_percent.zero?
-    (value * 100) / (100 + vat_percent)
+    return usable_value if vat_percent.zero?
+    (usable_value * 100) / (100 + vat_percent)
   end
 
   def vat_value
-    value * vat_percent / (100 + vat_percent)
+    if expense_type == 'afa'
+      100 * vat_percent / value
+    else
+      100 * vat_percent / usable_value
+    end
   end
 
   def needs_receipt?
