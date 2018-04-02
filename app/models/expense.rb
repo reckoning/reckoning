@@ -111,7 +111,8 @@ class Expense < ApplicationRecord
       date: date,
       expense_type: expense_type,
       seller: seller,
-      private_use_percent: private_use_percent
+      private_use_percent: private_use_percent,
+      vat_percent: vat_percent
     }
   end
 end
