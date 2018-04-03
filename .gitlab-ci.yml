@@ -1,0 +1,37 @@
+# This file is a template, and might need editing before it works on your project.
+# Official language image. Look for the different tagged releases at:
+image: "ruby:2.5.1"
+
+services:
+  - redis:latest
+  - postgres:latest
+
+variables:
+  POSTGRES_DB: reckoning_test
+
+cache:
+  paths:
+    - vendor/ruby
+
+before_script:
+  - ruby -v                                   # Print out ruby version for debugging
+  - apt-get update -q && apt-get install nodejs -yqq
+  - gem install bundler  --no-ri --no-rdoc    # Bundler is not installed with the image
+  - bundle install -j $(nproc) --path vendor  # Install dependencies into ./vendor/ruby
+
+rubocop:
+  script:
+  - bundle exec rubocop
+
+audit:
+  script:
+  - bundle exec bundle-audit update 
+  - bundle exec bundle-audit check
+  
+rails:
+  variables:
+    DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/$POSTGRES_DB"
+  script:
+  - rails db:migrate
+  - rails db:seed
+  - rails test
