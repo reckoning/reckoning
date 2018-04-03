@@ -7,22 +7,35 @@ cache:
 
 stages:
   - checks
-  # - tests
+  - tests
   # - deploy
 
-.standard_template: &standard_template
+.default_template: &default_template
   before_script:
     - "bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=$(nproc) --retry=3"
 
 audit:
-  <<: *standard_template
+  <<: *default_template
   script:
     - "bundle exec bundle-audit update"
     - "bundle exec bundle-audit check"
   stage: checks
 
 rubocop:
-  <<: *standard_template
+  <<: *default_template
   script:
     - "bundle exec rubocop --format progress"
   stage: checks
+
+.test_template: &test_template
+  <<: *default_template
+  before_script:
+    - "bundle exec rake db:create"
+    - "bundle exec rake db:schema:load"
+  stage: test
+
+test:
+  <<: *test_template
+  script:
+    - "bundle exec rails test"
+  stage: tests
