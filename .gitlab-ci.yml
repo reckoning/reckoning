@@ -1,4 +1,4 @@
-image: registry.gitlab.com/reckoning/app:2.5.1"
+image: registry.gitlab.com/reckoning/app:2.5.1
 
 cache:
   key: gems
