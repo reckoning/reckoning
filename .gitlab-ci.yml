@@ -7,6 +7,9 @@ cache:
 
 variables:
   RAILS_ENV: test
+  POSTGRES_DB: reckoning_test
+  POSTGRES_USER: reckoning
+  POSTGRES_PASSWORD: ""
 
 stages:
   - checks
@@ -36,8 +39,9 @@ rubocop:
     - "bundle exec thor setup:dev_env"
     - "rc-service postgresql start"
     - "/builds/reckoning/app/scripts/wait-for-it.sh localhost:5432"
-    - "bundle exec rails db:create"
     - "bundle exec rails db:schema:load"
+  services:
+    - postgresql:latest
   stage: test
 
 unit_tests:
