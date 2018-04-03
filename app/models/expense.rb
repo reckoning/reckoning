@@ -45,7 +45,15 @@ class Expense < ApplicationRecord
   end
 
   def self.year(year)
-    where("date <= ? AND date >= ?", "#{year}-12-31", "#{year}-01-01")
+    where('extract(year  from date) = ?', year)
+  end
+
+  def self.month(month)
+    where('extract(month from date) = ?', month)
+  end
+
+  def self.months(months)
+    where('extract(month from date) IN (?)', months)
   end
 
   def self.without_insurances
@@ -54,12 +62,28 @@ class Expense < ApplicationRecord
 
   def self.filter(filter_params)
     filter_year(filter_params.fetch(:year, nil))
+      .filter_month(filter_params.fetch(:month, nil))
+      .filter_quarter(filter_params.fetch(:quarter, nil))
       .filter_type(filter_params.fetch(:type, nil))
   end
 
   def self.filter_year(year)
     return all if year.blank? || year !~ /\d{4}/
     year(year)
+  end
+
+  def self.filter_month(month)
+    return all if month.blank? || !I18n.t("date.month_names").index(month)
+    month(I18n.t("date.month_names").index(month))
+  end
+
+  def self.filter_quarter(quarter)
+    return all unless (1..4).cover?(quarter.to_i)
+    months(quarters[quarter.to_i - 1])
+  end
+
+  def self.quarters
+    [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]]
   end
 
   def self.filter_type(type)

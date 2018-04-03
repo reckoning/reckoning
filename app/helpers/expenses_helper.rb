@@ -19,4 +19,16 @@ module ExpensesHelper
       { name: year, link: year }
     end
   end
+
+  def expenses_months
+    I18n.t("date.month_names").compact.map do |month|
+      { name: month, link: month }
+    end
+  end
+
+  def expenses_quarters
+    (1..4).map do |quarter|
+      { name: quarter, link: quarter }
+    end
+  end
 end

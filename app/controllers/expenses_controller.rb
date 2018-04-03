@@ -78,7 +78,7 @@ class ExpensesController < ApplicationController
   end
 
   private def filter_params
-    params.permit(:year, :type)
+    params.permit(:year, :type, :quarter, :month)
   end
   helper_method :filter_params
 

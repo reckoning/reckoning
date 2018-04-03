@@ -158,6 +158,10 @@ de:
       insurances: "Private Zusatzversicherungen"
     expense_year:
       label: "Gekauft in:"
+    expense_quarter:
+      label: "Quartal:"
+    expense_month:
+      label: "Monat:"
     invoice_year:
       label: "Erstellt in:"
     invoice_paid_in_year:
