@@ -1,37 +1,31 @@
 # This file is a template, and might need editing before it works on your project.
 # Official language image. Look for the different tagged releases at:
-image: "ruby:2.5.1"
-
-services:
-  - redis:latest
-  - postgres:latest
-
-variables:
-  POSTGRES_DB: reckoning_test
+image: "registry.gitlab.com/reckoning/app"
 
 cache:
+  key: gems
   paths:
-    - vendor/ruby
+    - vendor/bundle
 
-before_script:
-  - ruby -v                                   # Print out ruby version for debugging
-  - apt-get update -q && apt-get install nodejs -yqq
-  - gem install bundler  --no-ri --no-rdoc    # Bundler is not installed with the image
-  - bundle install -j $(nproc) --path vendor  # Install dependencies into ./vendor/ruby
+stages:
+  - checks
+  # - tests
+  # - deploy
 
-rubocop:
-  script:
-  - bundle exec rubocop
+.standard_template: &standard_template
+  before_script:
+    - "bundle check --path=vendor/bundle"
+    - "bundle install --path=vendor/bundle --jobs=$(nproc) --retry=3"
 
 audit:
+  <<: *standard_template
   script:
-  - bundle exec bundle-audit update 
-  - bundle exec bundle-audit check
-  
-rails:
-  variables:
-    DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/$POSTGRES_DB"
+    - "bundle exec bundle-audit update"
+    - "bundle exec bundle-audit check"
+  stage: checks
+
+rubocop:
+  <<: *standard_template
   script:
-  - rails db:migrate
-  - rails db:seed
-  - rails test
+    - "bundle exec rubocop --format progress"
+  stage: checks
