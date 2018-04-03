@@ -30,6 +30,7 @@ rubocop:
 .test_template: &test_template
   before_script:
     - "bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=$(nproc) --retry=3"
+    - "bundle exec thor setup:dev_env"
     - "bundle exec rails db:create"
     - "bundle exec rails db:schema:load"
   stage: test
