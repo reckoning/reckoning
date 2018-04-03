@@ -59,6 +59,8 @@ gem 'redcarpet'
 
 gem 'puma'
 
+gem 'tzinfo-data'
+
 gem "i18n-js", ">= 3.0.0.rc11"
 gem 'rails-i18n'
 
