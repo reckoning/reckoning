@@ -28,13 +28,13 @@ rubocop:
   stage: checks
 
 .test_template: &test_template
-  <<: *default_template
   before_script:
-    - "bundle exec rake db:create"
-    - "bundle exec rake db:schema:load"
+    - "bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=$(nproc) --retry=3"
+    - "bundle exec rails db:create"
+    - "bundle exec rails db:schema:load"
   stage: test
 
-test:
+unit_tests:
   <<: *test_template
   script:
     - "bundle exec rails test"
