@@ -8,9 +8,10 @@ cache:
 variables:
   TZ: Europe/Berlin
   RAILS_ENV: test
+  DATABASE_USER: reckoning
   DATABASE_HOST: postgres
   POSTGRES_DB: reckoning_test
-  POSTGRES_USER: reckoning
+  POSTGRES_USER: $DATABASE_USER
   POSTGRES_PASSWORD: ""
   LC_ALL: C.UTF-8
 
