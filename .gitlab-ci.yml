@@ -52,8 +52,17 @@ unit_tests:
     - "bundle exec rails test"
   stage: tests
 
+.deploy_template: &deploy_template
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - 'eval $(ssh-agent -s)'
+    - 'ssh-add <(echo "$SSH_PRIVATE_KEY")'
+    - 'mkdir -p ~/.ssh'
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - "bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=$(nproc) --retry=3"
+
 deploy:
-  <<: *default_template
+  <<: *deploy_template
   script:
     - "bundle exec mina live deploy"
   stage: deploy
