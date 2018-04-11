@@ -18,7 +18,7 @@ variables:
 stages:
   - checks
   - tests
-  # - deploy
+  - deploy
 
 .default_template: &default_template
   before_script:
@@ -51,3 +51,11 @@ unit_tests:
   script:
     - "bundle exec rails test"
   stage: tests
+
+deploy:
+  <<: *default_template
+  script:
+    - "bundle exec mina live deploy"
+  stage: deploy
+  only:
+    - master
