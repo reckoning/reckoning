@@ -57,5 +57,6 @@ deploy:
   script:
     - "bundle exec mina live deploy"
   stage: deploy
+  environment: Live
   only:
     - master
