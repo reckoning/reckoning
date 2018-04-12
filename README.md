@@ -1,8 +1,6 @@
 # Reckoning
 
-[![CircleCI](https://circleci.com/gh/reckoning/app/tree/master.svg?style=svg)](https://circleci.com/gh/reckoning/app/tree/master)
-[![Code Climate](https://codeclimate.com/github/reckoning/app/badges/gpa.svg)](https://codeclimate.com/github/reckoning/app)
-[![Test Coverage](https://codeclimate.com/github/reckoning/app/badges/coverage.svg)](https://codeclimate.com/github/reckoning/app/coverage)
+[![pipeline status](https://gitlab.com/reckoning/app/badges/master/pipeline.svg)](https://gitlab.com/reckoning/app/commits/master)
 
 Reckoning is a simple tool for invoicing
 
