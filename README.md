@@ -1,6 +1,6 @@
 # Reckoning
 
-[![pipeline status](https://gitlab.com/reckoning/app/badges/master/pipeline.svg)](https://gitlab.com/reckoning/app/commits/master)
+[![CircleCI](https://circleci.com/gh/reckoning/app/tree/master.svg?style=svg)](https://circleci.com/gh/reckoning/app/tree/master)
 
 Reckoning is a simple tool for invoicing
 
