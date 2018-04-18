@@ -46,12 +46,4 @@ class Setup < Thor
       end
     end
   end
-
-  desc "dev_env", "Copy files for local Dev-Enviroment"
-  def dev_env
-    app_dir = File.join(File.dirname(__FILE__), '..', '..')
-    run "mkdir #{app_dir}/files"
-    run "cp #{app_dir}/config/database.example.yml #{app_dir}/config/database.yml"
-    run "cp #{app_dir}/.env.example #{app_dir}/.env"
-  end
 end
