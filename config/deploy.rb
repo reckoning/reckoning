@@ -25,7 +25,7 @@ set :user, 'reckoning'
 set :forward_agent, true
 
 set :deploy_to, '/home/reckoning'
-set :repository, 'https://gitlab.com/reckoning/app.git'
+set :repository, 'https://github.com/reckoning/app.git'
 set :rails_env, 'production'
 set :branch, 'master'
 set :version_scheme, :datetime
