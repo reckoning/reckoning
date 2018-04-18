@@ -28,6 +28,7 @@ set :deploy_to, '/home/reckoning'
 set :repository, 'git@gitlab.com:reckoning/app.git'
 set :rails_env, 'production'
 set :branch, 'master'
+set :version_scheme, :datetime
 
 task :remote_environment do
   invoke :'rbenv:load'
