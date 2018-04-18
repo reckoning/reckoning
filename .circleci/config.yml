@@ -32,7 +32,6 @@ jobs:
       - restore_cache:
           keys:
             - v1-bundle-{{ checksum "Gemfile.lock" }}
-            - v1-bundle-
       - run: bundle install --path vendor/bundle
       - save_cache:
           key: v1-bundle-{{ checksum "Gemfile.lock" }}
@@ -56,9 +55,9 @@ jobs:
           name: Check Audit DB
           command: bundle exec bundle-audit check
       - save_cache:
-          key: v1-assets-{{ .Environment.CIRCLE_SHA1 }}
+          key: v1-bundle-{{ checksum "Gemfile.lock" }}
           paths:
-            - ~/app/public/assets
+            - ~/app/vendor/bundle
 
   rubocop:
     <<: *defaults
@@ -74,9 +73,9 @@ jobs:
           name: rubocoptering
           command: bundle exec rubocop --format progress
       - save_cache:
-          key: v1-assets-{{ .Environment.CIRCLE_SHA1 }}
+          key: v1-bundle-{{ checksum "Gemfile.lock" }}
           paths:
-            - ~/app/public/assets
+            - ~/app/vendor/bundle
 
   unit_tests:
     <<: *defaults
@@ -123,6 +122,7 @@ jobs:
       - restore_cache:
           keys:
             - v1-assets-{{ .Environment.CIRCLE_SHA1 }}
+      - run: bundle --path vendor/bundle
       - add_ssh_keys:
           fingerprints:
             - "9b:2a:48:b3:c6:b7:8d:22:d6:1a:82:d1:00:bf:6d:6c"
