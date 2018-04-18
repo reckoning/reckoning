@@ -51,6 +51,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/app
+      - run: bundle --path vendor/bundle
       - run:
           name: Update Audit DB
           command: bundle exec bundle-audit update
@@ -63,6 +64,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/app
+      - run: bundle --path vendor/bundle
       - run:
           name: rubocoptering
           command: bundle exec rubocop --format progress
@@ -72,6 +74,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/app
+      - run: bundle --path vendor/bundle
       - run: bundle exec rake db:create db:schema:load
       - run:
           name: Run Unit Tests
@@ -86,6 +89,7 @@ jobs:
             - v1-assets-
       - attach_workspace:
           at: ~/app
+      - run: bundle --path vendor/bundle
       - run:
           name: Precompile assets
           command: bundle exec rake assets:precompile
@@ -103,6 +107,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/app
+      - run: bundle --path vendor/bundle
       - add_ssh_keys:
           fingerprints:
             - "9b:2a:48:b3:c6:b7:8d:22:d6:1a:82:d1:00:bf:6d:6c"
