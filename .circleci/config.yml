@@ -115,6 +115,9 @@ jobs:
           name: Keyscan Erelas (HACK)
           command: ssh-keyscan -H erelas.mortik.xyz >> ~/.ssh/known_hosts
       - run:
+          name: Keyscan Github (HACK)
+          command: ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+      - run:
           name: Deploy
           command: bundle exec mina live deploy
 
