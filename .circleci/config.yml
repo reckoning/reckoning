@@ -3,7 +3,7 @@ version: 2.0
 defaults: &defaults
   working_directory: ~/app
   docker:
-    - image: circleci/ruby:2.5.1-node-browsers
+    - image: reckoning/app:2.5.1
       environment:
         RAILS_ENV: test
         DATABASE_HOST: 127.0.0.1
