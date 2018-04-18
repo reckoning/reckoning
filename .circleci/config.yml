@@ -18,12 +18,12 @@ jobs:
     <<: *defaults
     steps:
       - checkout
+      - persist_to_workspace:
+          root: ~/app
+          paths:
+            - ./
       - save_cache:
           key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
-          paths:
-            - ~/app
-      - persist_to_workspace:
-          root: workspace
           paths:
             - ~/app
 
@@ -35,11 +35,12 @@ jobs:
       - restore_cache:
           keys:
             - v1-bundle-{{ checksum "Gemfile.lock" }}
+            - v1-bundle-
       - run: bundle install --path vendor/bundle
       - persist_to_workspace:
-          root: workspace
+          root: ~/app
           paths:
-            - ~/app/vendor/bundle
+            - vendor/bundle
       - save_cache:
           key: v1-bundle-{{ checksum "Gemfile.lock" }}
           paths:
@@ -62,7 +63,6 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/app
-      - run: bundle --path vendor/bundle
       - run:
           name: rubocoptering
           command: bundle exec rubocop --format progress
@@ -80,18 +80,19 @@ jobs:
   precompile_assets:
     <<: *defaults
     steps:
-      - attach_workspace:
-          at: ~/app
       - restore_cache:
           keys:
             - v1-assets-{{ .Environment.CIRCLE_SHA1 }}
+            - v1-assets-
+      - attach_workspace:
+          at: ~/app
       - run:
           name: Precompile assets
           command: bundle exec rake assets:precompile
       - persist_to_workspace:
-          root: workspace
+          root: ~/app
           paths:
-            - ~/app/public/assets
+            - public/assets
       - save_cache:
           key: v1-assets-{{ .Environment.CIRCLE_SHA1 }}
           paths:
