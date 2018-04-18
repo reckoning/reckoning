@@ -22,17 +22,24 @@ jobs:
           key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - ~/app
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - ~/app
 
   bundle_dependencies:
     <<: *defaults
     steps:
-      - restore_cache:
-          keys:
-            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+      - attach_workspace:
+          at: ~/app
       - restore_cache:
           keys:
             - v1-bundle-{{ checksum "Gemfile.lock" }}
       - run: bundle install --path vendor/bundle
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - ~/app/vendor/bundle
       - save_cache:
           key: v1-bundle-{{ checksum "Gemfile.lock" }}
           paths:
@@ -41,52 +48,30 @@ jobs:
   audit:
     <<: *defaults
     steps:
-      - restore_cache:
-          keys:
-            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
-      - restore_cache:
-          keys:
-            - v1-bundle-{{ checksum "Gemfile.lock" }}
-      - run: bundle --path vendor/bundle
+      - attach_workspace:
+          at: ~/app
       - run:
           name: Update Audit DB
           command: bundle exec bundle-audit update
       - run:
           name: Check Audit DB
           command: bundle exec bundle-audit check
-      - save_cache:
-          key: v1-bundle-{{ checksum "Gemfile.lock" }}
-          paths:
-            - ~/app/vendor/bundle
 
   rubocop:
     <<: *defaults
     steps:
-      - restore_cache:
-          keys:
-            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
-      - restore_cache:
-          keys:
-            - v1-bundle-{{ checksum "Gemfile.lock" }}
+      - attach_workspace:
+          at: ~/app
       - run: bundle --path vendor/bundle
       - run:
           name: rubocoptering
           command: bundle exec rubocop --format progress
-      - save_cache:
-          key: v1-bundle-{{ checksum "Gemfile.lock" }}
-          paths:
-            - ~/app/vendor/bundle
 
   unit_tests:
     <<: *defaults
     steps:
-      - restore_cache:
-          keys:
-            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
-      - restore_cache:
-          keys:
-            - v1-bundle-{{ checksum "Gemfile.lock" }}
-      - run: bundle --path vendor/bundle
+      - attach_workspace:
+          at: ~/app
       - run: bundle exec rake db:create db:schema:load
       - run:
           name: Run Unit Tests
@@ -95,16 +80,18 @@ jobs:
   precompile_assets:
     <<: *defaults
     steps:
+      - attach_workspace:
+          at: ~/app
       - restore_cache:
           keys:
-            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
-      - restore_cache:
-          keys:
-            - v1-bundle-{{ checksum "Gemfile.lock" }}
-      - run: bundle --path vendor/bundle
+            - v1-assets-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Precompile assets
           command: bundle exec rake assets:precompile
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - ~/app/public/assets
       - save_cache:
           key: v1-assets-{{ .Environment.CIRCLE_SHA1 }}
           paths:
@@ -113,16 +100,8 @@ jobs:
   deploy:
     <<: *defaults
     steps:
-      - restore_cache:
-          keys:
-            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
-      - restore_cache:
-          keys:
-            - v1-bundle-{{ checksum "Gemfile.lock" }}
-      - restore_cache:
-          keys:
-            - v1-assets-{{ .Environment.CIRCLE_SHA1 }}
-      - run: bundle --path vendor/bundle
+      - attach_workspace:
+          at: ~/app
       - add_ssh_keys:
           fingerprints:
             - "9b:2a:48:b3:c6:b7:8d:22:d6:1a:82:d1:00:bf:6d:6c"
