@@ -12,10 +12,15 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(formatters)
 SimpleCov.start('rails')
 
 ENV["RAILS_ENV"] = "test"
-require File.expand_path('../../config/environment', __FILE__)
+require File.expand_path('../config/environment', __dir__)
 
 require "rails/test_help"
 require "minitest/rails"
+
+# https://github.com/rails/rails/issues/31324
+if ActionPack::VERSION::STRING >= "5.2.0"
+  Minitest::Rails::TestUnit = Rails::TestUnit
+end
 
 require "active_record/fixtures"
 require "database_cleaner"

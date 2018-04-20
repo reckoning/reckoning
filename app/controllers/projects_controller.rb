@@ -30,11 +30,11 @@ class ProjectsController < ApplicationController
 
   def new
     authorize! :create, Project
-    @project ||= if customer
-                   customer.projects.new
-                 else
-                   current_account.projects.new
-                 end
+    @project = if customer
+                 customer.projects.new
+               else
+                 current_account.projects.new
+               end
   end
 
   def edit
@@ -53,7 +53,7 @@ class ProjectsController < ApplicationController
 
   def update
     authorize! :update, project
-    if project.update_attributes(project_params)
+    if project.update(project_params)
       redirect_to project_path(project), flash: { success: resource_message(:project, :update, :success) }
     else
       flash.now[:alert] = resource_message(:project, :update, :failure)
