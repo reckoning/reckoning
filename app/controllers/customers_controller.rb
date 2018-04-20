@@ -12,7 +12,7 @@ class CustomersController < ApplicationController
 
   def update
     authorize! :update, customer
-    if customer.update_attributes(customer_params)
+    if customer.update(customer_params)
       redirect_to "#{edit_customer_path(customer)}#{hash}", flash: { success: resource_message(:customer, :update, :success) }
     else
       flash.now[:alert] = resource_message(:customer, :update, :failure)

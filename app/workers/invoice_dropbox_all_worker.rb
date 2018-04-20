@@ -11,13 +11,13 @@ class InvoiceDropboxAllWorker
       invoice.generate
       invoice.generate_timesheet if invoice.timers.present?
 
-      invoice.update_attributes(pdf_generated_at: Time.zone.now)
+      invoice.update(pdf_generated_at: Time.zone.now)
 
       InvoiceDropboxWorker.perform_async invoice.id
     rescue StandardError => e
       Rails.logger.debug e.inspect
     ensure
-      invoice.update_attributes(pdf_generating: false)
+      invoice.update(pdf_generating: false)
     end
   end
 end

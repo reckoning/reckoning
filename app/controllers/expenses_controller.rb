@@ -54,7 +54,7 @@ class ExpensesController < ApplicationController
 
   def update
     authorize! :update, expense
-    if expense.update_attributes(expense_params)
+    if expense.update(expense_params)
       redirect_to "#{expenses_path(stored_params(:index))}#expense-#{expense.id}", flash: { success: resource_message(:expense, :update, :success) }
     else
       flash.now[:alert] = resource_message(:expense, :update, :failure)

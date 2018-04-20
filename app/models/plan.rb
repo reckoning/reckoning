@@ -22,7 +22,7 @@ class Plan < ApplicationRecord
     self.discount = stripe_discount.percent_off if stripe_discount.present?
   rescue Stripe::InvalidRequestError => _e
     errors.add(:stripe_plan_id, "Invalid")
-    return false
+    false
   end
 
   def description

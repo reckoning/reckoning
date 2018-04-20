@@ -15,10 +15,10 @@ class ErrorsController < ActionController::Base
   def server_error
     respond_to do |format|
       format.html do
-        render status: 500, layout: "error"
+        render status: :internal_server_error, layout: "error"
       end
       format.json do
-        render json: { code: "server_error", message: "Server Error" }, status: 500
+        render json: { code: "server_error", message: "Server Error" }, status: :internal_server_error
       end
     end
   end
