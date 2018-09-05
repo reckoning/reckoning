@@ -321,7 +321,7 @@ GEM
     ruby_dep (1.5.0)
     ruby_parser (3.11.0)
       sexp_processor (~> 4.9)
-    rubyzip (1.2.1)
+    rubyzip (1.2.2)
     rufus-scheduler (3.4.2)
       et-orbi (~> 1.0)
     sass (3.5.6)
@@ -514,4 +514,4 @@ RUBY VERSION
    ruby 2.5.1p57
 
 BUNDLED WITH
-   1.16.1
+   1.16.3
