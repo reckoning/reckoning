@@ -1,7 +1,7 @@
 {
   "name": "Reckoning.io",
   "version": "1.0.0",
-  "description": "[![Build Status](https://travis-ci.org/Reckoning/app.png?branch=master)](https://travis-ci.org/Reckoning/app)",
+  "description": "[![Build Status](https://travis-ci.org/Reckoning/reckoning.png?branch=master)](https://travis-ci.org/Reckoning/reckoning)",
   "main": "index.js",
   "directories": {
     "doc": "doc",
@@ -10,18 +10,11 @@
   "dependencies": {
     "bower": "~1.8.8"
   },
-  "devDependencies": {
-    "husky": "^0.11.4"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepush": "bundle exec bundle-audit update && bundle exec bundle-audit check && bundle exec rubocop && bundle exec rake"
-  },
   "repository": {
     "type": "git",
     "url": "git://github.com/Reckoning/app.git"
   },
-  "author": "",
+  "author": "Marten Klitzke",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Reckoning/app/issues"
