@@ -20,7 +20,7 @@ module NumberHelper
                end
       "#{hours}:#{padded}"
     else
-      "0:00"
+      '0:00'
     end
   end
 end

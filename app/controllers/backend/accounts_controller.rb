@@ -42,7 +42,7 @@ module Backend
       if account.update(account_params)
         redirect_to backend_accounts_path, notice: resource_message(:account, :update, :success)
       else
-        render "edit", error: resource_message(:account, :update, :failure)
+        render 'edit', error: resource_message(:account, :update, :failure)
       end
     end
 
@@ -65,7 +65,7 @@ module Backend
     helper_method :account
 
     private def set_active_nav
-      @active_nav = "backend_accounts"
+      @active_nav = 'backend_accounts'
     end
   end
 end

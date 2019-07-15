@@ -22,8 +22,8 @@ module Api
         scope = scope.where.not(id: without_ids) if without_ids
 
         sort = params.fetch(:sort, nil)
-        @projects = if sort.present? && sort == "used"
-                      scope.includes(:timers).order("timers.created_at desc nulls last")
+        @projects = if sort.present? && sort == 'used'
+                      scope.includes(:timers).order('timers.created_at desc nulls last')
                     else
                       scope.order(name: :asc)
                     end
@@ -34,13 +34,13 @@ module Api
         authorize! :destroy, @project
 
         if @project.invoices.present?
-          Rails.logger.info "Project Destroy Failed: Invoices present"
-          render json: ValidationError.new("project.destroy_failure_dependency"), status: :bad_request
+          Rails.logger.info 'Project Destroy Failed: Invoices present'
+          render json: ValidationError.new('project.destroy_failure_dependency'), status: :bad_request
         elsif @project.destroy
           render json: { message: resource_message(:project, :destroy, :success) }, status: :ok
         else
           Rails.logger.info "Project Destroy Failed: #{@project.errors.full_messages.to_yaml}"
-          render json: ValidationError.new("project.destroy", @project.errors), status: :bad_request
+          render json: ValidationError.new('project.destroy', @project.errors), status: :bad_request
         end
       end
 
@@ -52,8 +52,8 @@ module Api
           @project.save
           render json: { message: resource_message(:project, :archive, :success) }, status: :ok
         else
-          Rails.logger.info "Project Archive Failed"
-          render json: ValidationError.new("project.archive"), status: :bad_request
+          Rails.logger.info 'Project Archive Failed'
+          render json: ValidationError.new('project.archive'), status: :bad_request
         end
       end
 

@@ -6,8 +6,8 @@ class InvoiceMailerWorkerTest < ActionMailer::TestCase
   let(:invoice) { invoices :january }
 
   before do
-    invoice.customer.email_template = "Hallo Foo"
-    invoice.customer.invoice_email = "test@customer.io"
+    invoice.customer.email_template = 'Hallo Foo'
+    invoice.customer.invoice_email = 'test@customer.io'
     invoice.customer.save
   end
 
@@ -18,6 +18,6 @@ class InvoiceMailerWorkerTest < ActionMailer::TestCase
     InvoiceMailerWorker.drain
     assert_equal 0, InvoiceMailerWorker.jobs.size
 
-    refute ActionMailer::Base.deliveries.empty?
+    assert_not ActionMailer::Base.deliveries.empty?
   end
 end

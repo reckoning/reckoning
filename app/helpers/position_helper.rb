@@ -14,6 +14,6 @@ module PositionHelper
     fields = form.fields_for(:positions, new_object, child_index: id) do |builder|
       render("#{form.object.class.name.downcase.pluralize}/timer_position_fields", fields: builder)
     end
-    { id: id, fields: fields.tr("\n", "") }
+    { id: id, fields: fields.tr("\n", '') }
   end
 end

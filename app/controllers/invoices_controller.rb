@@ -10,9 +10,9 @@ class InvoicesController < ApplicationController
   def index
     authorize! :read, Invoice
     @invoices = current_account.invoices
-                               .filter(filter_params)
+                               .filter_result(filter_params)
                                .includes(:customer, :project).references(:customers)
-                               .order(sort_column + " " + sort_direction)
+                               .order(sort_column + ' ' + sort_direction)
                                .page(params.fetch(:page, nil))
                                .per(10)
   end
@@ -60,7 +60,7 @@ class InvoicesController < ApplicationController
       redirect_to invoice_path(invoice), flash: { success: I18n.t(:"messages.invoice.send_test_mail.success") }
     else
       flash.now[:alert] = I18n.t(:"messages.invoice.send_test_mail.failure")
-      render "show"
+      render 'show'
     end
   end
 
@@ -117,7 +117,7 @@ class InvoicesController < ApplicationController
       redirect_to invoices_path, flash: { success: resource_message(:invoice, :create, :success) }
     else
       flash.now[:alert] = resource_message(:invoice, :create, :failure)
-      render "new"
+      render 'new'
     end
   end
 
@@ -127,7 +127,7 @@ class InvoicesController < ApplicationController
       redirect_to invoices_path, flash: { success: resource_message(:invoice, :update, :success) }
     else
       flash.now[:alert] = resource_message(:invoice, :update, :failure)
-      render "edit"
+      render 'edit'
     end
   end
 
@@ -176,7 +176,7 @@ class InvoicesController < ApplicationController
       if (Invoice.column_names + %w[customers.name]).include?(params[:sort])
         params[:sort]
       else
-        "ref"
+        'ref'
       end
     end
   end
@@ -187,7 +187,7 @@ class InvoicesController < ApplicationController
   end
 
   private def projects
-    @projects ||= current_account.projects.includes(:customer).active.order("name ASC")
+    @projects ||= current_account.projects.includes(:customer).active.order('name ASC')
   end
   helper_method :projects
 
@@ -218,6 +218,7 @@ class InvoicesController < ApplicationController
 
   private def check_limit
     return unless invoice_limit_reached?
+
     redirect_to invoices_path, alert: I18n.t(:"messages.demo_active")
   end
 
@@ -232,6 +233,7 @@ class InvoicesController < ApplicationController
 
   private def check_dependencies
     return if current_account.address.present?
+
     redirect_to "#{edit_user_registration_path}#address", alert: I18n.t(:"messages.missing_address")
   end
 end

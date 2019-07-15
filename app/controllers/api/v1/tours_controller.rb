@@ -31,7 +31,7 @@ module Api
           render status: :created
         else
           Rails.logger.info "Tour Create Failed: #{@tour.errors.full_messages.to_yaml}"
-          render json: ValidationError.new("tour.create", @tour.errors), status: :bad_request
+          render json: ValidationError.new('tour.create', @tour.errors), status: :bad_request
         end
       end
 
@@ -40,7 +40,7 @@ module Api
         authorize! :update, @tour
         unless @tour.update(tour_params)
           Rails.logger.info "Tour Update Failed: #{@tour.errors.full_messages.to_yaml}"
-          render json: ValidationError.new("tour.update", @tour.errors), status: :bad_request
+          render json: ValidationError.new('tour.update', @tour.errors), status: :bad_request
         end
         send_realtime_update(@tour)
       end
@@ -50,7 +50,7 @@ module Api
         authorize! :destroy, @tour
         unless @tour.destroy
           Rails.logger.info "Tour Destroy Failed: #{@tour.errors.full_messages.to_yaml}"
-          render json: ValidationError.new("tour.destroy", @tour.errors), status: :bad_request
+          render json: ValidationError.new('tour.destroy', @tour.errors), status: :bad_request
         end
         send_realtime_update(@tour)
       end

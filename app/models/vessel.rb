@@ -8,7 +8,7 @@ class Vessel < ApplicationRecord
   validates :manufacturer, :vessel_type, :initial_milage, presence: true
   validates :milage, :account_id, :license_plate, :buying_date, presence: true
 
-  attachment :image, content_type: ["image/jpg", "image/jpeg", "image/png"]
+  attachment :image, content_type: ['image/jpg', 'image/jpeg', 'image/png']
 
   before_validation :set_milage
 
@@ -24,14 +24,14 @@ class Vessel < ApplicationRecord
     [
       manufacturer,
       vessel_type
-    ].join(" ")
+    ].join(' ')
   end
 
   def full_name
     [
       license_plate,
       name
-    ].join(", ")
+    ].join(', ')
   end
 
   def to_builder

@@ -2,10 +2,10 @@
 
 class Project < ApplicationRecord
   DEFAULT_ROUND_UP_OPTIONS = {
-    "Nicht aufrunden" => 0.minutes,
-    "Auf 15 Minuten" => 15.minutes,
-    "Auf 30 Minuten" => 30.minutes,
-    "Auf 1 Stunde" => 60.minutes
+    'Nicht aufrunden' => 0.minutes,
+    'Auf 15 Minuten' => 15.minutes,
+    'Auf 30 Minuten' => 30.minutes,
+    'Auf 1 Stunde' => 60.minutes
   }.freeze
 
   belongs_to :customer
@@ -68,9 +68,7 @@ class Project < ApplicationRecord
   def timer_values_invoiced
     values = 0.0
     timers.each do |timer|
-      if timer.value.present? && timer.position_id.present?
-        values += timer.value.to_d
-      end
+      values += timer.value.to_d if timer.value.present? && timer.position_id.present?
     end
     values
   end
@@ -78,9 +76,7 @@ class Project < ApplicationRecord
   def timer_values_uninvoiced
     values = 0.0
     timers.billable.each do |timer|
-      if timer.value.present? && timer.position_id.blank?
-        values += timer.value.to_d
-      end
+      values += timer.value.to_d if timer.value.present? && timer.position_id.blank?
     end
     values
   end
@@ -103,11 +99,13 @@ class Project < ApplicationRecord
 
   def budget_percent_invoiced
     return if budget_hours.blank?
+
     timer_values_invoiced / budget_hours * 100
   end
 
   def budget_percent_uninvoiced
     return if budget_hours.blank?
+
     timer_values_uninvoiced / budget_hours * 100
   end
 end

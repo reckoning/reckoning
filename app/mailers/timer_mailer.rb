@@ -12,9 +12,7 @@ class TimerMailer < ActionMailer::Base
     send_mail timer.user.email
   end
 
-  private
-
-  def send_mail(to)
+  private def send_mail(to)
     @timer = timer
     mail(
       from: from,
@@ -24,7 +22,7 @@ class TimerMailer < ActionMailer::Base
     )
   end
 
-  def from
+  private def from
     @from ||= Rails.application.secrets[:mailer_default_from].to_s
   end
 end

@@ -13,7 +13,7 @@ module PdfOptions
 
     def inline_pdf_options
       {
-        layout: "layouts/pdf",
+        layout: 'layouts/pdf',
         locals: { resource: self }
       }
     end
@@ -21,10 +21,10 @@ module PdfOptions
     def whicked_pdf_options
       {
         header: {
-          content: ApplicationController.new.render_to_string("shared/pdf_header", inline_pdf_options)
+          content: ApplicationController.new.render_to_string('shared/pdf_header', inline_pdf_options)
         },
         footer: {
-          content: ApplicationController.new.render_to_string("shared/pdf_footer", inline_pdf_options)
+          content: ApplicationController.new.render_to_string('shared/pdf_footer', inline_pdf_options)
         },
         margin: {
           top: 30,

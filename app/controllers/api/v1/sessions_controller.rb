@@ -25,7 +25,7 @@ module Api
       def destroy
         auth_token = AuthToken.find_by(user_id: current_user.id, token: jwt_token[:token])
         auth_token&.destroy
-        render json: { code: "sessions.destroy", message: I18n.t("devise.sessions.signed_out") }
+        render json: { code: 'sessions.destroy', message: I18n.t('devise.sessions.signed_out') }
       end
 
       private def new_auth_token(user_id)
@@ -49,6 +49,7 @@ module Api
       private def validate_otp(resource)
         return true unless resource.otp_required_for_login
         return if login_params[:otp_token].nil?
+
         resource.validate_and_consume_otp!(login_params[:otp_token])
       end
 
@@ -57,7 +58,7 @@ module Api
       end
 
       private def invalid_login_attempt
-        render json: { code: "session.create", message: I18n.t("devise.failure.invalid") }, status: :bad_request
+        render json: { code: 'session.create', message: I18n.t('devise.failure.invalid') }, status: :bad_request
       end
     end
   end

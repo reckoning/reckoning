@@ -31,7 +31,7 @@ module Api
           render status: :created
         else
           Rails.logger.info "Timer Create Failed: #{@timer.errors.full_messages.to_yaml}"
-          render json: ValidationError.new("timer.create", @timer.errors), status: :bad_request
+          render json: ValidationError.new('timer.create', @timer.errors), status: :bad_request
         end
       end
 
@@ -40,7 +40,7 @@ module Api
         authorize! :update, @timer
         unless @timer.update(timer_params)
           Rails.logger.info "Timer Update Failed: #{@timer.errors.full_messages.to_yaml}"
-          render json: ValidationError.new("timer.update", @timer.errors), status: :bad_request
+          render json: ValidationError.new('timer.update', @timer.errors), status: :bad_request
         end
         @timer.start if start_timer?
         send_realtime_update(@timer)
@@ -72,11 +72,11 @@ module Api
         if @timer.position.blank?
           unless @timer.destroy
             Rails.logger.info "Timer Destroy Failed: #{@timer.errors.full_messages.to_yaml}"
-            render json: ValidationError.new("timer.destroy", @timer.errors), status: :bad_request
+            render json: ValidationError.new('timer.destroy', @timer.errors), status: :bad_request
           end
           send_realtime_update(@timer)
         else
-          Rails.logger.info "Timer Destroy Failed: Timer allready on Invoice"
+          Rails.logger.info 'Timer Destroy Failed: Timer allready on Invoice'
           render json: { message: I18n.t(:"messages.timer.destroy.failure") }, status: :bad_request
         end
       end
@@ -87,6 +87,7 @@ module Api
 
       private def date_range
         return if start_date.blank? || end_date.blank?
+
         @date_range ||= (start_date..end_date)
       end
 

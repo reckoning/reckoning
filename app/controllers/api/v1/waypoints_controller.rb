@@ -20,7 +20,7 @@ module Api
           render status: :created
         else
           Rails.logger.info "Waypoint Create Failed: #{@waypoint.errors.full_messages.to_yaml}"
-          render json: ValidationError.new("waypoint.create", @waypoint.errors), status: :bad_request
+          render json: ValidationError.new('waypoint.create', @waypoint.errors), status: :bad_request
         end
       end
 
@@ -31,7 +31,7 @@ module Api
         return if @waypoint.update(waypoint_params)
 
         Rails.logger.info "Waypoint Update Failed: #{@waypoint.errors.full_messages.to_yaml}"
-        render json: ValidationError.new("waypoint.update", @waypoint.errors), status: :bad_request
+        render json: ValidationError.new('waypoint.update', @waypoint.errors), status: :bad_request
       end
 
       def destroy
@@ -41,7 +41,7 @@ module Api
         return if @waypoint.destroy
 
         Rails.logger.info "Waypoint Destroy Failed: #{@waypoint.errors.full_messages.to_yaml}"
-        render json: ValidationError.new("waypoint.destroy", @waypoint.errors), status: :bad_request
+        render json: ValidationError.new('waypoint.destroy', @waypoint.errors), status: :bad_request
       end
 
       private def limit
