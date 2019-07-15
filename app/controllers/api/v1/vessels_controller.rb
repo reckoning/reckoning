@@ -20,7 +20,7 @@ module Api
           render status: :created
         else
           Rails.logger.info "Vessel Create Failed: #{@vessel.errors.full_messages.to_yaml}"
-          render json: ValidationError.new("vessel.create", @vessel.errors), status: :bad_request
+          render json: ValidationError.new('vessel.create', @vessel.errors), status: :bad_request
         end
       end
 
@@ -29,7 +29,7 @@ module Api
         authorize! :update, @vessel
         unless @vessel.update(vessel_params)
           Rails.logger.info "Vessel Update Failed: #{@vessel.errors.full_messages.to_yaml}"
-          render json: ValidationError.new("vessel.update", @vessel.errors), status: :bad_request
+          render json: ValidationError.new('vessel.update', @vessel.errors), status: :bad_request
         end
         send_realtime_update(@vessel)
       end
@@ -39,7 +39,7 @@ module Api
         authorize! :destroy, @vessel
         unless @vessel.destroy
           Rails.logger.info "Vessel Destroy Failed: #{@vessel.errors.full_messages.to_yaml}"
-          render json: ValidationError.new("vessel.destroy", @vessel.errors), status: :bad_request
+          render json: ValidationError.new('vessel.destroy', @vessel.errors), status: :bad_request
         end
         send_realtime_update(@vessel)
       end

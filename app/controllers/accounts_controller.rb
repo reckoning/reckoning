@@ -21,7 +21,7 @@ class AccountsController < ApplicationController
     if account.save
       redirect_to new_user_session_path, flash: { success: resource_message(:account, :create, :success) }
     else
-      render "new", alert: resource_message(:account, :create, :failure), layout: 'landing_page'
+      render 'new', alert: resource_message(:account, :create, :failure), layout: 'landing_page'
     end
   end
 
@@ -35,7 +35,7 @@ class AccountsController < ApplicationController
       redirect_to "#{edit_account_path}#{hash}", flash: { success: resource_message(:account, :update, :success) }
     else
       flash.now[:alert] = resource_message(:account, :update, :failure)
-      render "edit"
+      render 'edit'
     end
   end
 
@@ -79,11 +79,12 @@ class AccountsController < ApplicationController
   helper_method :account
 
   private def hash
-    params.fetch(:hash, "")
+    params.fetch(:hash, '')
   end
 
   private def check_registration_setting
     return if registration_enabled? || params[:stripe_test].present?
+
     redirect_to root_path
   end
 end

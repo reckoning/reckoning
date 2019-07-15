@@ -18,7 +18,7 @@ class TasksController < ApplicationController
                        .where(timers: { position_id: nil })
                        .where.not(timers: { value: [nil, 0] })
                        .all
-        render json: { body: render_to_string(partial: "list", locals: { tasks: tasks }) }
+        render json: { body: render_to_string(partial: 'list', locals: { tasks: tasks }) }
       end
       format.html { redirect_to root_path }
     end

@@ -29,6 +29,7 @@ module Charts
         start_date = Time.zone.parse("#{year}-#{month}-1").beginning_of_month
         end_date = Time.zone.parse("#{year}-#{month}-1").end_of_month
         break if end_date > Time.zone.now
+
         dataset[:data] << scope.where(date: start_date.to_date..end_date).all.sum(:value)
       end
       dataset

@@ -6,7 +6,7 @@ class Plan < ApplicationRecord
   before_validation :prefill_from_base_plan, on: :create
 
   def self.base
-    @base ||= find_by(code: "basic")
+    @base ||= find_by(code: 'basic')
   end
 
   def prefill_from_base_plan
@@ -14,14 +14,14 @@ class Plan < ApplicationRecord
     begin
       stripe_discount = Stripe::Coupon.retrieve(code)
     rescue Stripe::InvalidRequestError => _e
-      Rails.logger.info "Discount Coupon not present"
+      Rails.logger.info 'Discount Coupon not present'
     end
 
     self.base_price = stripe_plan.amount
     self.interval = stripe_plan.interval
     self.discount = stripe_discount.percent_off if stripe_discount.present?
   rescue Stripe::InvalidRequestError => _e
-    errors.add(:stripe_plan_id, "Invalid")
+    errors.add(:stripe_plan_id, 'Invalid')
     false
   end
 

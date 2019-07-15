@@ -5,10 +5,11 @@ module ApplicationHelper
     [
       ("#{current_account.name} -" if defined?(current_account) && current_account.present?),
       I18n.t(:"meta.title.default")
-    ].compact.join(" ")
+    ].compact.join(' ')
   end
 
   def auth_token
+    # rubocop:disable Rails/HelperInstanceVariable
     @auth_token ||= begin
       if user_signed_in?
         JsonWebToken.encode(
@@ -16,33 +17,34 @@ module ApplicationHelper
           user_id: current_user.id
         )
       else
-        ""
+        ''
       end
     end
+    # rubocop:enable Rails/HelperInstanceVariable
   end
 
   def title(label = nil)
     [
       label,
       main_title
-    ].compact.join(" | ")
+    ].compact.join(' | ')
   end
 
   def sortable(column, title = nil)
     title ||= column.titleize
     css_class = column == sort_column ? "current #{sort_direction}" : nil
-    direction = column == sort_column && sort_direction == "asc" ? "desc" : "asc"
+    direction = column == sort_column && sort_direction == 'asc' ? 'desc' : 'asc'
     link_to title, plumb(sort: column, direction: direction, page: nil), class: css_class
   end
 
   def overtime_label(overtime, weekly_hours)
     hours_per_day = weekly_hours / 5
     if overtime < (hours_per_day * 1.25)
-      "success"
+      'success'
     elsif overtime < (hours_per_day * 2.5)
-      "warning"
+      'warning'
     else
-      "danger"
+      'danger'
     end
   end
 end

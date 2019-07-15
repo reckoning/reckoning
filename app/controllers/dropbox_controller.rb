@@ -13,7 +13,7 @@ class DropboxController < ApplicationController
   ].freeze
 
   def show
-    @active_nav = "account"
+    @active_nav = 'account'
     authorize! :connect, :dropbox
   end
 
@@ -55,7 +55,7 @@ class DropboxController < ApplicationController
   end
 
   private def hash
-    params.fetch(:hash, "")
+    params.fetch(:hash, '')
   end
 
   private def flow

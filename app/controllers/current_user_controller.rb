@@ -22,7 +22,7 @@ class CurrentUserController < ApplicationController
       @codes = current_user.generate_otp_backup_codes!
       current_user.save!
       flash.now[:success] = I18n.t(:"messages.backup_codes", scope: 'devise.otp')
-      render "otp"
+      render 'otp'
     else
       redirect_to "#{edit_user_registration_path}#security"
     end
@@ -38,7 +38,7 @@ class CurrentUserController < ApplicationController
     else
       flash.now[:alert] = I18n.t(:"messages.enable.failure", scope: 'devise.otp')
     end
-    render "otp"
+    render 'otp'
   end
 
   def disable_otp
@@ -50,7 +50,7 @@ class CurrentUserController < ApplicationController
       redirect_to "#{edit_user_registration_path}#security", flash: { success: I18n.t(:"messages.disable.success", scope: 'devise.otp') }
     else
       flash.now[:alert] = I18n.t(:"messages.disable.failure", scope: 'devise.otp')
-      render "otp"
+      render 'otp'
     end
   end
 

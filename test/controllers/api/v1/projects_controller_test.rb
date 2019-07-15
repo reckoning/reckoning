@@ -14,16 +14,16 @@ module Api
 
       let(:project) { projects :narendra3 }
 
-      describe "unauthorized" do
-        it "Unauthrized user cant view projects index" do
+      describe 'unauthorized' do
+        it 'Unauthrized user cant view projects index' do
           get :index
 
           assert_response :unauthorized
           json = JSON.parse response.body
-          assert_equal "unauthorized", json["code"]
+          assert_equal 'unauthorized', json['code']
         end
 
-        it "Unauthrized user cant destroy project" do
+        it 'Unauthrized user cant destroy project' do
           delete :destroy, params: { id: project.id }
 
           assert_response :unauthorized
@@ -32,7 +32,7 @@ module Api
         end
       end
 
-      describe "happy path" do
+      describe 'happy path' do
         let(:will) { users :will }
         let(:outpost6) { projects :outpost6 }
 
@@ -40,13 +40,13 @@ module Api
           add_authorization will
         end
 
-        it "renders a projects list" do
+        it 'renders a projects list' do
           get :index
 
           assert_response :ok
         end
 
-        it "destroys a project" do
+        it 'destroys a project' do
           delete :destroy, params: { id: outpost6.id }
 
           assert_response :ok

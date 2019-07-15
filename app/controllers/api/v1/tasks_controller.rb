@@ -23,7 +23,7 @@ module Api
           render status: :created
         else
           Rails.logger.info "Task Create Failed: #{@task.errors.full_messages.to_yaml}"
-          render json: ValidationError.new("task.create", @task.errors), status: :bad_request
+          render json: ValidationError.new('task.create', @task.errors), status: :bad_request
         end
       end
 

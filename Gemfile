@@ -2,9 +2,9 @@
 
 source 'https://rubygems.org'
 
-ruby '2.5.1'
+ruby '2.6.3'
 
-gem 'rails', '5.2.0'
+gem 'rails', '5.2.2.1'
 
 gem 'pg', '~> 1.0'
 
@@ -59,7 +59,7 @@ gem 'puma'
 
 gem 'tzinfo-data'
 
-gem "i18n-js", ">= 3.0.0.rc11"
+gem 'i18n-js', '>= 3.0.0.rc11'
 gem 'rails-i18n'
 
 gem 'highline'
@@ -82,8 +82,8 @@ gem 'typhoeus'
 # pdf rendering
 gem 'wicked_pdf'
 
-gem "refile", require: 'refile/rails', git: 'https://github.com/refile/refile'
-gem "refile-s3"
+gem 'refile', require: 'refile/rails', git: 'https://github.com/refile/refile'
+gem 'refile-s3'
 
 # heroku production
 gem 'non-stupid-digest-assets'
@@ -94,7 +94,11 @@ group :development do
   gem 'listen'
   gem 'mailcatcher'
   gem 'pry-rails'
+
   gem 'rubocop', require: false
+  gem 'rubocop-performance'
+  gem 'rubocop-rails'
+
   gem 'spring'
   gem 'spring-watcher-listen'
   gem 'web-console'

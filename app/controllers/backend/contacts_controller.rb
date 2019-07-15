@@ -13,13 +13,11 @@ module Backend
     end
 
     def sort_column
-      Contact.column_names.include?(params[:sort]) ? params[:sort] : "id"
+      Contact.column_names.include?(params[:sort]) ? params[:sort] : 'id'
     end
     helper_method :sort_column
 
-    private
-
-    def set_active_nav
+    private def set_active_nav
       @active_nav = 'backend_contacts'
     end
   end

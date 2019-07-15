@@ -50,7 +50,7 @@ module Backend
       if user.update(user_params)
         redirect_to backend_users_path, notice: resource_message(:user, :update, :success)
       else
-        render "edit", error: resource_message(:user, :update, :failure)
+        render 'edit', error: resource_message(:user, :update, :failure)
       end
     end
 
@@ -63,23 +63,21 @@ module Backend
     end
 
     def sort_column
-      User.column_names.include?(params[:sort]) ? params[:sort] : "id"
+      User.column_names.include?(params[:sort]) ? params[:sort] : 'id'
     end
     helper_method :sort_column
 
-    private
-
-    def user_params
+    private def user_params
       params.require(:user).permit(:email, :password, :password_confirmation, :admin, :enabled)
     end
 
-    def user
+    private def user
       @user ||= User.where(id: params.fetch(:id, nil)).first
       @user ||= User.new
     end
     helper_method :user
 
-    def set_active_nav
+    private def set_active_nav
       @active_nav = 'backend_users'
     end
   end

@@ -22,6 +22,7 @@ class AuthToken < ApplicationRecord
     loop do
       auth_token = Devise.friendly_token
       next if AuthToken.find_by(user_id: user_id, token: auth_token)
+
       self.token = auth_token
       break
     end

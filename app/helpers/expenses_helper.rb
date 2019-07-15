@@ -4,6 +4,7 @@ module ExpensesHelper
   def first_expenses_year
     first_invoice = current_account.invoices.order('date').first
     return if first_invoice.blank?
+
     first_invoice.date.year
   end
 
@@ -21,7 +22,7 @@ module ExpensesHelper
   end
 
   def expenses_months
-    I18n.t("date.month_names").compact.map do |month|
+    I18n.t('date.month_names').compact.map do |month|
       { name: month, link: month }
     end
   end

@@ -11,7 +11,7 @@ json.vessel_full_name tour.vessel.full_name
 json.vessel_milage tour.vessel.milage
 json.last_driver_id tour.last_driver.id if tour.last_driver.present?
 json.waypoints tour.waypoints.order(time: :asc) do |waypoint|
-  json.partial! "api/v1/tours/waypoints", waypoint: waypoint
+  json.partial! 'api/v1/tours/waypoints', waypoint: waypoint
 end
 json.created_at tour.created_at
 json.updated_at tour.updated_at

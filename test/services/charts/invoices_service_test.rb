@@ -10,11 +10,11 @@ module Charts
       @service = InvoicesService.new(account.invoices)
     end
 
-    it "should generate labels" do
+    it 'should generate labels' do
       assert @service.labels.length.positive?
     end
 
-    it "should generate datasets" do
+    it 'should generate datasets' do
       assert @service.datasets.length.positive?
     end
   end
