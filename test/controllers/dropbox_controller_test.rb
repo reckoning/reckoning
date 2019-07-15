@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require "test_helper"
+require 'test_helper'
 
 class DropboxControllerTest < ActionController::TestCase
   tests ::DropboxController
 
   let(:user) { users :will }
 
-  describe "unauthorized" do
+  describe 'unauthorized' do
     it "Unauthorized User can't start dropbox activation"
 
     it "Unauthorized User can't activate dropbox"
@@ -15,15 +15,15 @@ class DropboxControllerTest < ActionController::TestCase
     it "Unauthorized User can't deactivate dropbox"
   end
 
-  describe "happy path" do
+  describe 'happy path' do
     before do
       sign_in user
     end
 
-    it "#start"
+    it '#start'
 
-    it "#activate"
+    it '#activate'
 
-    it "#deactivate"
+    it '#deactivate'
   end
 end

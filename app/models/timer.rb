@@ -36,7 +36,7 @@ class Timer < ApplicationRecord
   end
 
   def self.not_empty
-    where.not(value: [nil, 0, "0.0", "0"])
+    where.not(value: [nil, 0, '0.0', '0'])
   end
 
   def self.billable

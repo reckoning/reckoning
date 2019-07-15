@@ -24,10 +24,10 @@ class ContactsController < ApplicationController
     response = JSON.parse(Typhoeus.post(
       'https://www.google.com/recaptcha/api/siteverify',
       body: {
-        secret: "6LfePAkTAAAAAK9myYnkYnkk5zY7tXFMSVIWa36N",
-        response: params["g-recaptcha-response"]
+        secret: '6LfePAkTAAAAAK9myYnkYnkk5zY7tXFMSVIWa36N',
+        response: params['g-recaptcha-response']
       }
     ).body)
-    response["success"]
+    response['success']
   end
 end

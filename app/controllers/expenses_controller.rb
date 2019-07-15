@@ -9,7 +9,7 @@ class ExpensesController < ApplicationController
   def index
     authorize! :read, :expenses
     expenses = current_account.expenses
-                              .filter(filter_params)
+                              .filter_result(filter_params)
 
     respond_to do |format|
       format.csv do
@@ -26,7 +26,7 @@ class ExpensesController < ApplicationController
           @expenses_vat_sum = expenses.sum(:vat_value)
         end
 
-        @expenses = expenses.order(sort_column + " " + sort_direction)
+        @expenses = expenses.order(sort_column + ' ' + sort_direction)
                             .page(params.fetch(:page, nil))
                             .per(40)
       end
@@ -44,7 +44,7 @@ class ExpensesController < ApplicationController
       redirect_to "#{expenses_path(stored_params(:index))}#expense-#{expense.id}", flash: { success: resource_message(:expense, :create, :success) }
     else
       flash.now[:alert] = resource_message(:expense, :create, :failure)
-      render "new"
+      render 'new'
     end
   end
 
@@ -58,7 +58,7 @@ class ExpensesController < ApplicationController
       redirect_to "#{expenses_path(stored_params(:index))}#expense-#{expense.id}", flash: { success: resource_message(:expense, :update, :success) }
     else
       flash.now[:alert] = resource_message(:expense, :update, :failure)
-      render "edit"
+      render 'edit'
     end
   end
 
@@ -83,12 +83,12 @@ class ExpensesController < ApplicationController
   helper_method :filter_params
 
   private def sort_column
-    Expense.column_names.include?(params[:sort]) ? params[:sort] : "expenses.date"
+    Expense.column_names.include?(params[:sort]) ? params[:sort] : 'expenses.date'
   end
   helper_method :sort_column
 
   private def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : 'desc'
   end
 
   private def set_active_nav

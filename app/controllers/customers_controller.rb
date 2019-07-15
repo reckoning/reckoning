@@ -37,6 +37,6 @@ class CustomersController < ApplicationController
   end
 
   private def hash
-    params.fetch(:hash, "")
+    params.fetch(:hash, '')
   end
 end

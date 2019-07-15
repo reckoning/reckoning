@@ -34,6 +34,7 @@ class Account < ApplicationRecord
 
   def calculate_office_percent
     return if deductible_office_space.blank? || office_space.blank?
+
     self.deductible_office_percent = (100.0 * deductible_office_space / office_space).ceil
   end
 

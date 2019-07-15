@@ -26,7 +26,7 @@ class Expense < ApplicationRecord
     %i[home_office telecommunication current business_expenses non_cash_contribution insurances].include?(type)
   end.freeze
 
-  attachment :receipt, content_type: ["application/pdf", "image/jpeg", "image/png"]
+  attachment :receipt, content_type: ['application/pdf', 'image/jpeg', 'image/png']
 
   validates :value, :description, :date, :expense_type, :seller, :private_use_percent, presence: true
   validates :afa_type, presence: true, if: ->(expense) { expense.expense_type == 'afa' }
@@ -60,7 +60,7 @@ class Expense < ApplicationRecord
     where.not(expense_type: 'insurances')
   end
 
-  def self.filter(filter_params)
+  def self.filter_result(filter_params)
     filter_year(filter_params.fetch(:year, nil))
       .filter_month(filter_params.fetch(:month, nil))
       .filter_quarter(filter_params.fetch(:quarter, nil))
@@ -69,16 +69,19 @@ class Expense < ApplicationRecord
 
   def self.filter_year(year)
     return all if year.blank? || year !~ /\d{4}/
+
     year(year)
   end
 
   def self.filter_month(month)
-    return all if month.blank? || !I18n.t("date.month_names").index(month)
-    month(I18n.t("date.month_names").index(month))
+    return all if month.blank? || !I18n.t('date.month_names').index(month)
+
+    month(I18n.t('date.month_names').index(month))
   end
 
   def self.filter_quarter(quarter)
     return all unless (1..4).cover?(quarter.to_i)
+
     months(quarters[quarter.to_i - 1])
   end
 
@@ -88,16 +91,19 @@ class Expense < ApplicationRecord
 
   def self.filter_type(type)
     return all if type.blank? || !VALID_TYPES.include?(type.to_sym)
+
     where(expense_type: type)
   end
 
   def afa_value(year = Time.zone.now.year)
     return 0.0 if afa_type.blank? || (date.year + afa_type) < year
+
     value / afa_type
   end
 
   def home_office_value
     return if account.deductible_office_percent.blank?
+
     (value * account.deductible_office_percent) / 100.0
   end
 
@@ -117,6 +123,7 @@ class Expense < ApplicationRecord
 
   def value_without_vat
     return usable_value if vat_percent.zero?
+
     (usable_value * 100) / (100 + vat_percent)
   end
 
