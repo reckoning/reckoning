@@ -60,7 +60,7 @@ class Expense < ApplicationRecord
     where.not(expense_type: 'insurances')
   end
 
-  def self.filter(filter_params)
+  def self.filter_result(filter_params)
     filter_year(filter_params.fetch(:year, nil))
       .filter_month(filter_params.fetch(:month, nil))
       .filter_quarter(filter_params.fetch(:quarter, nil))

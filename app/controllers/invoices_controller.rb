@@ -10,7 +10,7 @@ class InvoicesController < ApplicationController
   def index
     authorize! :read, Invoice
     @invoices = current_account.invoices
-                               .filter(filter_params)
+                               .filter_result(filter_params)
                                .includes(:customer, :project).references(:customers)
                                .order(sort_column + ' ' + sort_direction)
                                .page(params.fetch(:page, nil))

@@ -9,7 +9,7 @@ class ExpensesController < ApplicationController
   def index
     authorize! :read, :expenses
     expenses = current_account.expenses
-                              .filter(filter_params)
+                              .filter_result(filter_params)
 
     respond_to do |format|
       format.csv do

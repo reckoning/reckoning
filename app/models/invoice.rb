@@ -72,7 +72,7 @@ class Invoice < ApplicationRecord
     where('date <= ? AND date >= ?', "#{year}-12-31", "#{year}-01-01")
   end
 
-  def self.filter(filter_params)
+  def self.filter_result(filter_params)
     filter_year(filter_params.fetch(:year, nil))
       .filter_state(filter_params.fetch(:state, nil))
       .filter_paid_in_year(filter_params.fetch(:paid_in_year, nil))
