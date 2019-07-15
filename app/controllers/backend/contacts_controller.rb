@@ -17,9 +17,7 @@ module Backend
     end
     helper_method :sort_column
 
-    private
-
-    def set_active_nav
+    private def set_active_nav
       @active_nav = 'backend_contacts'
     end
   end

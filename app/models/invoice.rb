@@ -35,6 +35,7 @@ class Invoice < ApplicationRecord
 
   def on_charged_entry(_new_state, _event, *_args)
     return unless send_via_mail?
+
     InvoiceMailerWorker.perform_in 1.minute, id
   end
 
@@ -79,16 +80,19 @@ class Invoice < ApplicationRecord
 
   def self.filter_year(year)
     return all if year.blank? || year !~ /\d{4}/
+
     year(year)
   end
 
   def self.filter_state(state)
     return all if state.blank? || !Invoice.workflow_spec.state_names.include?(state.to_sym)
+
     send(state)
   end
 
   def self.filter_paid_in_year(paid_in_year)
     return all if paid_in_year.blank? || paid_in_year !~ /\d{4}/
+
     paid_in_year(paid_in_year)
   end
 
@@ -106,6 +110,7 @@ class Invoice < ApplicationRecord
 
   def set_payment_due_date
     return if payment_due_date.present?
+
     payment_due = customer.payment_due || DEFAULT_PAYMENT_DUE_DAYS
     self.payment_due_date = Time.zone.now + payment_due.days
     save
@@ -119,6 +124,7 @@ class Invoice < ApplicationRecord
     value = 0.0
     positions.each do |position|
       next if position.marked_for_destruction?
+
       if position.value.present?
         value += position.value
       elsif position.hours && position.rate
@@ -166,6 +172,7 @@ class Invoice < ApplicationRecord
     project = Project.find_by(id: project_id)
     customer = Customer.find_by(id: project.customer_id) if project.present?
     return if customer.blank?
+
     self.customer_id = customer.id
   end
 

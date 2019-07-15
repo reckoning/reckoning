@@ -13,6 +13,7 @@ class Position < ApplicationRecord
 
   def set_value
     return if hours.blank? || hours.zero?
+
     self.value = if rate.present?
                    hours * rate
                  elsif invoice.rate.present?

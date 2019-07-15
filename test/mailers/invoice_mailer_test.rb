@@ -15,7 +15,7 @@ class InvoiceMailerTest < ActionMailer::TestCase
     it "sends email to default from if nothing is defined" do
       mail = InvoiceMailer.customer(invoice).deliver_now
 
-      refute ActionMailer::Base.deliveries.empty?
+      assert_not ActionMailer::Base.deliveries.empty?
 
       assert_equal ["test@customer.io"], mail.to
       assert_equal ["noreply@reckoning.io"], mail.from
@@ -27,7 +27,7 @@ class InvoiceMailerTest < ActionMailer::TestCase
 
       mail = InvoiceMailer.customer(invoice).deliver_now
 
-      refute ActionMailer::Base.deliveries.empty?
+      assert_not ActionMailer::Base.deliveries.empty?
 
       assert_equal ["test@customer.io"], mail.to
       assert_equal ["user@reckoning.io"], mail.from
@@ -39,7 +39,7 @@ class InvoiceMailerTest < ActionMailer::TestCase
 
       mail = InvoiceMailer.customer(invoice).deliver_now
 
-      refute ActionMailer::Base.deliveries.empty?
+      assert_not ActionMailer::Base.deliveries.empty?
 
       assert_equal ["test@customer.io"], mail.to
       assert_equal ["special-customer@reckoning.io"], mail.from
@@ -51,7 +51,7 @@ class InvoiceMailerTest < ActionMailer::TestCase
 
       mail = InvoiceMailer.customer(invoice).deliver_now
 
-      refute ActionMailer::Base.deliveries.empty?
+      assert_not ActionMailer::Base.deliveries.empty?
 
       assert_equal ["test@customer.io"], mail.to
       assert_equal ["noreply@reckoning.io"], mail.from

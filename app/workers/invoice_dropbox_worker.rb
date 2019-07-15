@@ -23,6 +23,7 @@ class InvoiceDropboxWorker
     client.put_file(path, invoice.inline_pdf, true)
 
     return if invoice.timers.present?
+
     path = (base_path + [
       "#{invoice.timesheet_file}.pdf"
     ]).join("/")

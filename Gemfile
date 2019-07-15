@@ -94,7 +94,11 @@ group :development do
   gem 'listen'
   gem 'mailcatcher'
   gem 'pry-rails'
+
   gem 'rubocop', require: false
+  gem 'rubocop-performance'
+  gem 'rubocop-rails'
+
   gem 'spring'
   gem 'spring-watcher-listen'
   gem 'web-console'

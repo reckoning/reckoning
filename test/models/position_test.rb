@@ -5,12 +5,12 @@ require 'test_helper'
 class PositionTest < ActiveSupport::TestCase
   it "should not be valid if description is missing" do
     position = Position.new
-    assert !position.valid?, "#{position.inspect} should be invalid"
+    assert_not position.valid?, "#{position.inspect} should be invalid"
   end
 
   it "should not be valid if invoice is missing" do
     position = Position.new(description: "foo")
-    assert !position.valid?, "#{position.inspect} should be invalid"
+    assert_not position.valid?, "#{position.inspect} should be invalid"
   end
 
   it "should set the correct value on save for position and invoice" do

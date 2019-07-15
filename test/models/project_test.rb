@@ -9,12 +9,12 @@ class ProjectTest < ActiveSupport::TestCase
 
   it "should not save project without customer_id" do
     project = Project.new(name: "Project", rate: 99.0)
-    assert !project.valid?
+    assert_not project.valid?
   end
 
   it "should not save project without name" do
     project = Project.new(customer_id: customer.id, rate: 99.0)
-    assert !project.valid?
+    assert_not project.valid?
   end
 
   it "if rate is empty it should fall back to 0.0" do

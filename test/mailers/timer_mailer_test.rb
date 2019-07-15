@@ -8,7 +8,7 @@ class TimerMailerTest < ActionMailer::TestCase
   it "sends email user with long running timer" do
     mail = TimerMailer.notify(timer).deliver_now
 
-    refute ActionMailer::Base.deliveries.empty?
+    assert_not ActionMailer::Base.deliveries.empty?
 
     assert_equal [timer.user.email], mail.to
     assert_equal ["noreply@reckoning.io"], mail.from

@@ -49,6 +49,7 @@ module Api
       private def validate_otp(resource)
         return true unless resource.otp_required_for_login
         return if login_params[:otp_token].nil?
+
         resource.validate_and_consume_otp!(login_params[:otp_token])
       end
 

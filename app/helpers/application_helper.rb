@@ -9,6 +9,7 @@ module ApplicationHelper
   end
 
   def auth_token
+    # rubocop:disable Rails/HelperInstanceVariable
     @auth_token ||= begin
       if user_signed_in?
         JsonWebToken.encode(
@@ -19,6 +20,7 @@ module ApplicationHelper
         ""
       end
     end
+    # rubocop:enable Rails/HelperInstanceVariable
   end
 
   def title(label = nil)

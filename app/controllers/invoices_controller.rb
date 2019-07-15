@@ -218,6 +218,7 @@ class InvoicesController < ApplicationController
 
   private def check_limit
     return unless invoice_limit_reached?
+
     redirect_to invoices_path, alert: I18n.t(:"messages.demo_active")
   end
 
@@ -232,6 +233,7 @@ class InvoicesController < ApplicationController
 
   private def check_dependencies
     return if current_account.address.present?
+
     redirect_to "#{edit_user_registration_path}#address", alert: I18n.t(:"messages.missing_address")
   end
 end

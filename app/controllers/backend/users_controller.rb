@@ -67,19 +67,17 @@ module Backend
     end
     helper_method :sort_column
 
-    private
-
-    def user_params
+    private def user_params
       params.require(:user).permit(:email, :password, :password_confirmation, :admin, :enabled)
     end
 
-    def user
+    private def user
       @user ||= User.where(id: params.fetch(:id, nil)).first
       @user ||= User.new
     end
     helper_method :user
 
-    def set_active_nav
+    private def set_active_nav
       @active_nav = 'backend_users'
     end
   end

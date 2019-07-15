@@ -1,4 +1,8 @@
 # https://github.com/bbatsov/rubocop/blob/master/config/default.yml
+require:
+  - rubocop-performance
+  - rubocop-rails
+
 AllCops:
   Exclude:
     - 'node_modules/**/*'
@@ -66,6 +70,10 @@ Metrics/PerceivedComplexity:
 
 Style/ParallelAssignment:
   Enabled: false
+
+
+Style/AccessModifierDeclarations:
+  EnforcedStyle: inline
 
 # `fail` is seldom/never seen in Ruby code.
 # https://github.com/bbatsov/ruby-style-guide/issues/233

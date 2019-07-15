@@ -87,6 +87,7 @@ module Api
 
       private def date_range
         return if start_date.blank? || end_date.blank?
+
         @date_range ||= (start_date..end_date)
       end
 

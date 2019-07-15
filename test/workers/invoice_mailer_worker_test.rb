@@ -18,6 +18,6 @@ class InvoiceMailerWorkerTest < ActionMailer::TestCase
     InvoiceMailerWorker.drain
     assert_equal 0, InvoiceMailerWorker.jobs.size
 
-    refute ActionMailer::Base.deliveries.empty?
+    assert_not ActionMailer::Base.deliveries.empty?
   end
 end

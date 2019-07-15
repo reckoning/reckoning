@@ -28,9 +28,7 @@ class BaseController < ApplicationController
     @active_nav = 'terms'
   end
 
-  private
-
-  def dashboard
+  private def dashboard
     @charged_invoices = current_account.invoices.includes(:customer, :project).order('date DESC').charged
     @paid_invoices = current_account.invoices.includes(:customer, :project).order('date DESC').paid_in_year(Time.zone.now.year)
     @last_invoices = current_account.invoices.includes(:customer, :project).order('date DESC').paid_in_year(Time.zone.now.year - 1)
@@ -42,18 +40,19 @@ class BaseController < ApplicationController
     render 'dashboard'
   end
 
-  def welcome
+  private def welcome
     @active_nav = 'welcome'
     render 'welcome', layout: 'landing_page'
   end
 
-  def contact
+  private def contact
     Contact.new
   end
   helper_method :contact
 
-  def contact_cookie
+  private def contact_cookie
     return if cookies[:_reckoning_contact].blank?
+
     contact = Contact.where(email: cookies.signed[:_reckoning_contact]).first
     if contact.blank?
       cookies.delete :_reckoning_contact
@@ -64,7 +63,7 @@ class BaseController < ApplicationController
   end
   helper_method :contact_cookie
 
-  def plans
+  private def plans
     plans = []
 
     plan_list = Stripe::Plan.all

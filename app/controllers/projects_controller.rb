@@ -113,6 +113,7 @@ class ProjectsController < ApplicationController
 
   private def check_dependencies
     return if current_account.address.present?
+
     redirect_to "#{edit_account_path}#address", alert: I18n.t(:"messages.missing_address")
   end
 end

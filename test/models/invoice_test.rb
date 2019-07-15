@@ -7,17 +7,17 @@ class InvoiceTest < ActiveSupport::TestCase
 
   it "should not be valid without project" do
     invoice = Invoice.new(customer_id: "foo", project_id: nil)
-    assert !invoice.valid?, "#{invoice.inspect} should be invalid"
+    assert_not invoice.valid?, "#{invoice.inspect} should be invalid"
   end
 
   test "should not be valid without date" do
     invoice = Invoice.new(date: nil)
-    assert !invoice.valid?, "#{invoice.inspect} should be invalid"
+    assert_not invoice.valid?, "#{invoice.inspect} should be invalid"
   end
 
   it "should not be valid without customer" do
     invoice = Invoice.new(customer_id: nil)
-    assert !invoice.valid?, "#{invoice.inspect} should be invalid"
+    assert_not invoice.valid?, "#{invoice.inspect} should be invalid"
   end
 
   it "should create invoice if date and valid project present" do

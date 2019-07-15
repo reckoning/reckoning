@@ -82,7 +82,7 @@ module Api
 
           assert_response :ok
 
-          refute_equal klingon, Customer.find_by(id: klingon.id)
+          assert_not_equal klingon, Customer.find_by(id: klingon.id)
         end
       end
     end
