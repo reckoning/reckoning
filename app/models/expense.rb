@@ -26,7 +26,7 @@ class Expense < ApplicationRecord
     %i[home_office telecommunication current business_expenses non_cash_contribution insurances].include?(type)
   end.freeze
 
-  attachment :receipt, content_type: ["application/pdf", "image/jpeg", "image/png"]
+  attachment :receipt, content_type: ['application/pdf', 'image/jpeg', 'image/png']
 
   validates :value, :description, :date, :expense_type, :seller, :private_use_percent, presence: true
   validates :afa_type, presence: true, if: ->(expense) { expense.expense_type == 'afa' }
@@ -74,9 +74,9 @@ class Expense < ApplicationRecord
   end
 
   def self.filter_month(month)
-    return all if month.blank? || !I18n.t("date.month_names").index(month)
+    return all if month.blank? || !I18n.t('date.month_names').index(month)
 
-    month(I18n.t("date.month_names").index(month))
+    month(I18n.t('date.month_names').index(month))
   end
 
   def self.filter_quarter(quarter)

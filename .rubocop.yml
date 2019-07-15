@@ -20,18 +20,6 @@ Rails:
 Style/Documentation:
   Enabled: false # for now
 
-Style/RaiseArgs:
-  Enabled: false
-
-Naming/FileName:
-  Enabled: false
-
-Style/StringLiterals:
-  Enabled: false
-
-Naming/PredicateName:
-  Enabled: false
-
 # User.all.map do |user|
 #   [user.name, user.children.map(&:names)]
 # end.flatten.map do |name|

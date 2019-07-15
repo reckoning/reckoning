@@ -3,7 +3,7 @@
 module JsonWebToken
   module_function def encode(payload)
     payload = payload.dup
-    payload[:iss] = "Reckoning.io"
+    payload[:iss] = 'Reckoning.io'
 
     JWT.encode(payload, Rails.application.secrets[:devise_jwt], 'HS512')
   end

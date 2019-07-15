@@ -34,12 +34,12 @@ class ApplicationController < ActionController::Base
   end
 
   private def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : 'desc'
   end
   helper_method :sort_direction
 
   private def backend?
-    self.class.to_s.split("::").first == "Backend"
+    self.class.to_s.split('::').first == 'Backend'
   end
   helper_method :backend?
 
@@ -59,12 +59,12 @@ class ApplicationController < ActionController::Base
   helper_method :api_domain
 
   private def store_current_params
-    key = (params[:controller].to_s + "_" + params[:action].to_s).to_sym
+    key = (params[:controller].to_s + '_' + params[:action].to_s).to_sym
     session[key] = params.reject { |k| %w[controller action format].include?(k.to_s) }
   end
 
   private def stored_params(action, controller = params[:controller])
-    key = (controller.to_s + "_" + action.to_s).to_sym
+    key = (controller.to_s + '_' + action.to_s).to_sym
     (session[key] || ActionController::Parameters.new).to_unsafe_h
   end
   helper_method :stored_params

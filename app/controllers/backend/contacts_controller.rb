@@ -13,7 +13,7 @@ module Backend
     end
 
     def sort_column
-      Contact.column_names.include?(params[:sort]) ? params[:sort] : "id"
+      Contact.column_names.include?(params[:sort]) ? params[:sort] : 'id'
     end
     helper_method :sort_column
 

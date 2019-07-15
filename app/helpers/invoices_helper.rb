@@ -3,12 +3,12 @@
 module InvoicesHelper
   def invoice_label(invoice)
     case invoice.current_state.to_s
-    when "created"
-      "default"
-    when "paid"
-      "success"
+    when 'created'
+      'default'
+    when 'paid'
+      'success'
     else
-      "primary"
+      'primary'
     end
   end
 

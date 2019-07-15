@@ -57,7 +57,7 @@ class Invoice < ApplicationRecord
   end
 
   def self.due
-    where("payment_due_date < ?", Time.zone.now.to_date)
+    where('payment_due_date < ?', Time.zone.now.to_date)
   end
 
   def self.created
@@ -65,11 +65,11 @@ class Invoice < ApplicationRecord
   end
 
   def self.paid_in_year(year)
-    paid.where("pay_date <= ? AND pay_date >= ?", "#{year}-12-31", "#{year}-01-01")
+    paid.where('pay_date <= ? AND pay_date >= ?', "#{year}-12-31", "#{year}-01-01")
   end
 
   def self.year(year)
-    where("date <= ? AND date >= ?", "#{year}-12-31", "#{year}-01-01")
+    where('date <= ? AND date >= ?', "#{year}-12-31", "#{year}-01-01")
   end
 
   def self.filter(filter_params)
@@ -97,13 +97,13 @@ class Invoice < ApplicationRecord
   end
 
   def ref_number
-    format "%05d", ref
+    format '%05d', ref
   end
 
   def title
     output = []
     output << content_tag(:strong, customer.name)
-    output << " - "
+    output << ' - '
     output << project.name
     safe_join(output)
   end
@@ -152,7 +152,7 @@ class Invoice < ApplicationRecord
 
   def inline_pdf
     WickedPdf.new.pdf_from_string(
-      ApplicationController.new.render_to_string("invoices/pdf", inline_pdf_options),
+      ApplicationController.new.render_to_string('invoices/pdf', inline_pdf_options),
       whicked_pdf_options
     )
   end
@@ -163,7 +163,7 @@ class Invoice < ApplicationRecord
 
   def inline_timesheet_pdf
     WickedPdf.new.pdf_from_string(
-      ApplicationController.new.render_to_string("invoices/timesheet", inline_pdf_options),
+      ApplicationController.new.render_to_string('invoices/timesheet', inline_pdf_options),
       whicked_pdf_options
     )
   end
@@ -181,7 +181,7 @@ class Invoice < ApplicationRecord
   end
 
   private def set_ref
-    last_invoice = Invoice.where(account_id: account_id).order("ref DESC").first
+    last_invoice = Invoice.where(account_id: account_id).order('ref DESC').first
     self.ref = if last_invoice.present?
                  last_invoice.ref + 1
                else

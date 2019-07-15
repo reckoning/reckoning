@@ -17,7 +17,7 @@ module Api
     end
 
     private def not_found(message = I18n.t('messages.record_not_found.base'))
-      render json: { code: "not_found", message: message }, status: :not_found
+      render json: { code: 'not_found', message: message }, status: :not_found
     end
 
     def resource_message(resource, action, state)

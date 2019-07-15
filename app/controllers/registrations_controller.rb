@@ -29,6 +29,6 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   private def hash
-    params.fetch(:hash, "")
+    params.fetch(:hash, '')
   end
 end

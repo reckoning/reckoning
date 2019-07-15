@@ -20,10 +20,10 @@ class InvoiceMailer < ActionMailer::Base
     date = I18n.l(invoice.date, format: :month_year)
 
     @body = invoice.customer.email_template
-    @body = @body.gsub("{date}", date || '')
-    @body = @body.gsub("{company}", invoice.customer.name || '')
-    @body = @body.gsub("{project}", invoice.project.name || '')
-    @body = @body.gsub("{month}", month || '')
+    @body = @body.gsub('{date}', date || '')
+    @body = @body.gsub('{company}', invoice.customer.name || '')
+    @body = @body.gsub('{project}', invoice.project.name || '')
+    @body = @body.gsub('{month}', month || '')
 
     @signature = invoice.account.signature
 

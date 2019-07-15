@@ -14,7 +14,7 @@ class ExpenseImportsController < ApplicationController
     authorize! :create, ExpenseImport
     @expense_import = ExpenseImport.new(import_params.merge(account_id: current_account.id))
     if @expense_import.save
-      redirect_to expenses_path(stored_params(:index, "expenses_controller")), flash: { success: resource_message(:expense, :import, :success) }
+      redirect_to expenses_path(stored_params(:index, 'expenses_controller')), flash: { success: resource_message(:expense, :import, :success) }
     else
       render :new
     end

@@ -50,7 +50,7 @@ module Backend
       if user.update(user_params)
         redirect_to backend_users_path, notice: resource_message(:user, :update, :success)
       else
-        render "edit", error: resource_message(:user, :update, :failure)
+        render 'edit', error: resource_message(:user, :update, :failure)
       end
     end
 
@@ -63,7 +63,7 @@ module Backend
     end
 
     def sort_column
-      User.column_names.include?(params[:sort]) ? params[:sort] : "id"
+      User.column_names.include?(params[:sort]) ? params[:sort] : 'id'
     end
     helper_method :sort_column
 

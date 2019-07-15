@@ -6,8 +6,8 @@ class InvoiceMailerWorkerTest < ActionMailer::TestCase
   let(:invoice) { invoices :january }
 
   before do
-    invoice.customer.email_template = "Hallo Foo"
-    invoice.customer.invoice_email = "test@customer.io"
+    invoice.customer.email_template = 'Hallo Foo'
+    invoice.customer.invoice_email = 'test@customer.io'
     invoice.customer.save
   end
 

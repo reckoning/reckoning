@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module NavHelper
-  def active_nav?(navs = "home")
+  def active_nav?(navs = 'home')
     navs = [navs] unless navs.is_a?(Array)
     # rubocop:disable Rails/HelperInstanceVariable
     return unless navs.any? { |nav| nav == @active_nav }
@@ -11,9 +11,9 @@ module NavHelper
     'active'
   end
 
-  def hide_nav?(nav = "home")
+  def hide_nav?(nav = 'home')
     # rubocop:disable Rails/HelperInstanceVariable
-    return "hide" if nav == @active_nav
+    return 'hide' if nav == @active_nav
     # rubocop:enable Rails/HelperInstanceVariable
   end
 
