@@ -14,6 +14,7 @@ class Customer < ApplicationRecord
 
   def workdays
     return if employment_date.blank? || !employed?
+
     days = 0
     date = Time.current.to_date
     while date >= employment_date
@@ -29,6 +30,7 @@ class Customer < ApplicationRecord
 
   def overtime(user_id)
     return if workdays.blank? || weekly_hours.blank?
+
     (timers.where(user_id: user_id).sum(:value) - scheduled_hours).to_f
   end
 

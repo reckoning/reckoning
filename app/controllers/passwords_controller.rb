@@ -13,7 +13,7 @@ class PasswordsController < ApplicationController
     if @user.update_with_password(password_params)
       redirect_to "#{edit_user_registration_path}#security", flash: { success: I18n.t(:"messages.password.update.success") }
     else
-      render "edit#security", alert: I18n.t(:"messages.password.update.failure")
+      render 'edit#security', alert: I18n.t(:"messages.password.update.failure")
     end
   end
 

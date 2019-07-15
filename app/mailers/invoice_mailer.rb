@@ -15,17 +15,15 @@ class InvoiceMailer < ActionMailer::Base
     send_mail test_mail
   end
 
-  private
-
-  def send_mail(to)
+  private def send_mail(to)
     month = I18n.l(invoice.date, format: :month)
     date = I18n.l(invoice.date, format: :month_year)
 
     @body = invoice.customer.email_template
-    @body = @body.gsub("{date}", date || '')
-    @body = @body.gsub("{company}", invoice.customer.name || '')
-    @body = @body.gsub("{project}", invoice.project.name || '')
-    @body = @body.gsub("{month}", month || '')
+    @body = @body.gsub('{date}', date || '')
+    @body = @body.gsub('{company}', invoice.customer.name || '')
+    @body = @body.gsub('{project}', invoice.project.name || '')
+    @body = @body.gsub('{month}', month || '')
 
     @signature = invoice.account.signature
 
@@ -40,7 +38,7 @@ class InvoiceMailer < ActionMailer::Base
     )
   end
 
-  def from
+  private def from
     @from ||= invoice.customer.default_from if invoice.customer.default_from.present?
     @from ||= invoice.account.default_from if invoice.account.default_from.present?
     @from ||= Rails.application.secrets[:mailer_default_from].to_s

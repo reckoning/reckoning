@@ -27,7 +27,7 @@ Rails.application.routes.draw do
 
   devise_for :users,
              skip: %i[sessions registrations],
-             controllers: { registrations: "registrations" }
+             controllers: { registrations: 'registrations' }
 
   as :user do
     get 'signup' => 'accounts#new', as: :new_registration
@@ -53,7 +53,7 @@ Rails.application.routes.draw do
 
   resources :invoices do
     collection do
-      put "archive" => "invoices#archive_all"
+      put 'archive' => 'invoices#archive_all'
     end
     member do
       put :generate_positions
@@ -62,7 +62,7 @@ Rails.application.routes.draw do
       put :archive
       put :send_mail
       post :send_test_mail
-      get "/pdf/:pdf" => 'invoices#pdf', as: :pdf, defaults: { format: :pdf }
+      get '/pdf/:pdf' => 'invoices#pdf', as: :pdf, defaults: { format: :pdf }
       get '/timesheet-pdf/:pdf' => 'invoices#timesheet', as: :timesheet_pdf, defaults: { format: :pdf }
     end
   end
@@ -70,20 +70,20 @@ Rails.application.routes.draw do
   resource :timesheet, only: [:show]
 
   resource :template, only: [] do
-    template "blank"
-    template "datepicker"
-    template "month_timers"
-    template "day_timesheets"
-    template "week_timesheets"
-    template "timer_modal_timesheets"
-    template "task_modal_timesheets"
-    template "index_logbooks"
-    template "vessel_logbooks"
-    template "vessel_modal_logbooks"
-    template "tour_logbooks"
-    template "tour_modal_logbooks"
-    template "waypoint_modal_logbooks"
-    template "map_modal_logbooks"
+    template 'blank'
+    template 'datepicker'
+    template 'month_timers'
+    template 'day_timesheets'
+    template 'week_timesheets'
+    template 'timer_modal_timesheets'
+    template 'task_modal_timesheets'
+    template 'index_logbooks'
+    template 'vessel_logbooks'
+    template 'vessel_modal_logbooks'
+    template 'tour_logbooks'
+    template 'tour_modal_logbooks'
+    template 'waypoint_modal_logbooks'
+    template 'map_modal_logbooks'
   end
 
   resources :positions, only: %i[new destroy]
@@ -108,7 +108,7 @@ Rails.application.routes.draw do
 
   resource :logbook, only: [:show]
 
-  resource :dropbox, controller: "dropbox", only: [:show] do
+  resource :dropbox, controller: 'dropbox', only: [:show] do
     collection do
       get :start
       get :activate

@@ -14,7 +14,7 @@ class User < ApplicationRecord
 
   validates :email, email: true
 
-  def has_overtime?
+  def overtime?
     account.customers.any? { |customer| customer.overtime(id) }
   end
 

@@ -11,27 +11,25 @@ formatters = [
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(formatters)
 SimpleCov.start('rails')
 
-ENV["RAILS_ENV"] = "test"
+ENV['RAILS_ENV'] = 'test'
 require File.expand_path('../config/environment', __dir__)
 
-require "rails/test_help"
-require "minitest/rails"
+require 'rails/test_help'
+require 'minitest/rails'
 
 # https://github.com/rails/rails/issues/31324
-if ActionPack::VERSION::STRING >= "5.2.0"
-  Minitest::Rails::TestUnit = Rails::TestUnit
-end
+Minitest::Rails::TestUnit = Rails::TestUnit if ActionPack::VERSION::STRING >= '5.2.0'
 
-require "active_record/fixtures"
-require "database_cleaner"
+require 'active_record/fixtures'
+require 'database_cleaner'
 
-require "faker"
+require 'faker'
 
 require 'sidekiq/testing'
 Sidekiq::Testing.fake!
 
 # helper
-require "support/session_helper"
+require 'support/session_helper'
 
 # database cleaner
 DatabaseCleaner.strategy = :transaction

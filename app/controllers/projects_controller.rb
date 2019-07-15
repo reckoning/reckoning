@@ -17,7 +17,7 @@ class ProjectsController < ApplicationController
               scope.where(workflow_state: :active)
             end
 
-    @projects = scope.order(sort_column + " " + sort_direction)
+    @projects = scope.order(sort_column + ' ' + sort_direction)
                      .page(params.fetch(:page, nil))
                      .per(20)
     @projects_by_customer = @projects.group_by(&:customer)
@@ -47,7 +47,7 @@ class ProjectsController < ApplicationController
       redirect_to project_path(project), flash: { success: resource_message(:project, :create, :success) }
     else
       flash.now[:alert] = resource_message(:project, :create, :failure)
-      render "new"
+      render 'new'
     end
   end
 
@@ -57,7 +57,7 @@ class ProjectsController < ApplicationController
       redirect_to project_path(project), flash: { success: resource_message(:project, :update, :success) }
     else
       flash.now[:alert] = resource_message(:project, :update, :failure)
-      render "edit"
+      render 'edit'
     end
   end
 
@@ -74,13 +74,13 @@ class ProjectsController < ApplicationController
     if (Project.column_names + %w[customers.name]).include?(params[:sort])
       params[:sort]
     else
-      "customers.name"
+      'customers.name'
     end
   end
   helper_method :sort_column
 
   private def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : 'asc'
   end
 
   private def set_active_nav
@@ -113,6 +113,7 @@ class ProjectsController < ApplicationController
 
   private def check_dependencies
     return if current_account.address.present?
+
     redirect_to "#{edit_account_path}#address", alert: I18n.t(:"messages.missing_address")
   end
 end

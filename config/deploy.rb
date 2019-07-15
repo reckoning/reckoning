@@ -34,7 +34,7 @@ task :remote_environment do
   invoke :'rbenv:load'
 end
 
-desc "Deploys the current version to the server."
+desc 'Deploys the current version to the server.'
 task deploy: :remote_environment do
   deploy do
     invoke :'git:clone'
@@ -115,9 +115,9 @@ namespace :db do
 
   task backup: :remote_environment do
     in_path fetch(:current_path).to_s do
-      comment "Creating DB Backup..."
+      comment 'Creating DB Backup...'
       command %(bundle exec thor db:dump)
-      comment "DB Backup finished"
+      comment 'DB Backup finished'
     end
   end
 
@@ -126,17 +126,17 @@ namespace :db do
   end
 
   task download_backup: :backup do
-    comment "Downloading latest backup..."
+    comment 'Downloading latest backup...'
     system %(scp #{fetch(:user)}@#{fetch(:domain)}:#{fetch(:deploy_to)}/shared/dumps/latest.dump dumps/)
-    comment "Download finished"
+    comment 'Download finished'
   end
 
   # to import login with root and use:
   # pg_restore --verbose --clean --no-acl --no-owner -h 127.0.0.1 -U reckoning -d reckoning dumps/latest.dump
   # from shared dir
   task :upload_backup do
-    comment "Uploading latest backup..."
+    comment 'Uploading latest backup...'
     system %(scp dumps/latest.dump #{fetch(:user)}@#{fetch(:domain)}:#{fetch(:deploy_to)}/shared/dumps/)
-    comment "Upload finished"
+    comment 'Upload finished'
   end
 end
