@@ -118,7 +118,7 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     dropbox-sdk (1.6.5)
       json
-    dynamic_fields_for_rails (0.7.0)
+    dynamic_fields_for_rails (1.0.0)
       rails (>= 3.0.0, < 6.0.0)
     encryptor (3.0.0)
     erubi (1.8.0)
