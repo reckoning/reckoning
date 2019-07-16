@@ -99,7 +99,7 @@ GEM
     connection_pool (2.2.2)
     crass (1.0.4)
     daemons (1.2.6)
-    dalli (2.7.8)
+    dalli (2.7.10)
     database_cleaner (1.7.0)
     devise (4.6.2)
       bcrypt (~> 3.0)
