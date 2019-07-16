@@ -438,7 +438,7 @@ GEM
     websocket-extensions (0.1.4)
     wicked_pdf (1.4.0)
       activesupport
-    workflow (1.2.0)
+    workflow (2.0.2)
 
 PLATFORMS
   ruby
