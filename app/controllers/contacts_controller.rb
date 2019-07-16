@@ -24,7 +24,7 @@ class ContactsController < ApplicationController
     response = JSON.parse(Typhoeus.post(
       'https://www.google.com/recaptcha/api/siteverify',
       body: {
-        secret: '6LfePAkTAAAAAK9myYnkYnkk5zY7tXFMSVIWa36N',
+        secret: Rails.application.secrets.recaptcha,
         response: params['g-recaptcha-response']
       }
     ).body)
