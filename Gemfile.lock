@@ -150,7 +150,6 @@ GEM
       html2haml (>= 1.0.1)
       railties (>= 5.1)
     highline (2.0.2)
-    hirb (0.7.3)
     html2haml (2.2.0)
       erubis (~> 2.7.0)
       haml (>= 4.0, < 6)
@@ -362,10 +361,10 @@ GEM
       docile (~> 1.1)
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
-    simplecov-console (0.4.2)
+    simplecov-console (0.5.0)
       ansi
-      hirb
       simplecov
+      terminal-table
     simplecov-html (0.10.2)
     sinatra (2.0.5)
       mustermann (~> 1.0)
@@ -400,6 +399,8 @@ GEM
       faraday (~> 0.13)
       net-http-persistent (~> 3.0)
     temple (0.8.1)
+    terminal-table (1.8.0)
+      unicode-display_width (~> 1.1, >= 1.1.1)
     thin (1.7.2)
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0, >= 1.0.4)
