@@ -22,8 +22,8 @@ class ExpensesController < ApplicationController
         @expenses_sum = expenses.without_insurances.to_a.sum(&:usable_value)
         @expenses_vat_sum = expenses.without_insurances.to_a.sum(&:vat_value)
         if filter_params[:type] == 'insurances'
-          @expenses_sum = expenses.sum(:usable_value)
-          @expenses_vat_sum = expenses.sum(:vat_value)
+          @expenses_sum = expenses.to_a.sum(&:usable_value)
+          @expenses_vat_sum = expenses.to_a.sum(&:vat_value)
         end
 
         @expenses = expenses.order(sort_column + ' ' + sort_direction)
