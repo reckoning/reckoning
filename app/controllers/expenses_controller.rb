@@ -26,7 +26,7 @@ class ExpensesController < ApplicationController
           @expenses_vat_sum = expenses.to_a.sum(&:vat_value)
         end
 
-        @expenses = expenses.order(sort_column + ' ' + sort_direction)
+        @expenses = expenses.order(sort_column.to_sym => sort_direction, created_at: :desc)
                             .page(params.fetch(:page, nil))
                             .per(40)
       end
