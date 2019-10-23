@@ -230,7 +230,7 @@ GEM
       metaclass (~> 0.0.1)
     money (6.13.4)
       i18n (>= 0.6.4, <= 2)
-    multi_json (1.13.1)
+    multi_json (1.14.1)
     multipart-post (2.1.1)
     mustermann (1.0.3)
     net-http-persistent (3.0.1)
@@ -433,7 +433,7 @@ GEM
       activemodel (>= 5.0)
       bindex (>= 0.4.0)
       railties (>= 5.0)
-    web_translate_it (2.4.8)
+    web_translate_it (2.4.11)
       multi_json
       multipart-post (~> 2.0)
       optimist (~> 3.0)
