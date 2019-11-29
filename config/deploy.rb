@@ -8,6 +8,7 @@ set :shared_dirs, [
 ]
 
 set :shared_files, [
+  '.rbenv-vars',
   'config/secrets.yml',
   'config/database.yml'
 ]
@@ -82,17 +83,20 @@ end
 namespace :server do
   task :restart do
     comment 'Restart Application'
-    command %(sudo supervisorctl restart reckoning:*)
+    command %(sudo service reckoning-app restart)
+    command %(sudo service reckoning-worker restart)
   end
 
   task :stop do
     comment 'Stopping Application'
-    command %(sudo supervisorctl stop reckoning:*)
+    command %(sudo service reckoning-app stop)
+    command %(sudo service reckoning-worker stop)
   end
 
   task :start do
     comment 'Starting Application'
-    command %(sudo supervisorctl start reckoning:*)
+    command %(sudo service reckoning-app start)
+    command %(sudo service reckoning-worker start)
   end
 end
 
