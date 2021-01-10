@@ -9,8 +9,6 @@ set :shared_dirs, [
 
 set :shared_files, [
   '.rbenv-vars',
-  'config/secrets.yml',
-  'config/database.yml'
 ]
 
 set :stages, %w[local live]
