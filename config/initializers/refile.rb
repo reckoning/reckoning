@@ -1,15 +1,18 @@
 # frozen_string_literal: true
 
 if Rails.env.production?
-  require 'refile/s3'
+  require 'fog/aws'
+  require "refile/fog"
 
-  aws = {
-    access_key_id: Rails.application.secrets[:aws_key],
-    secret_access_key: Rails.application.secrets[:aws_secret],
-    region: 'eu-central-1',
-    bucket: 'reckoning',
+  credentials = {
+    provider: 'AWS',
+    aws_access_key_id: Rails.application.secrets.s3_key,
+    aws_secret_access_key: Rails.application.secrets.s3_secret,
+    region: Rails.application.secrets.s3_region,
+    endpoint: Rails.application.secrets.s3_endpoint,
+    directory: Rails.application.secrets.s3_space
   }
 
-  Refile.cache = Refile::S3.new(prefix: 'cache', **aws)
-  Refile.store = Refile::S3.new(prefix: 'store', **aws)
+  Refile.cache = Refile::Fog::Backend.new(prefix: 'cache', **credentials)
+  Refile.store = Refile::Fog::Backend.new(prefix: 'store', **credentials)
 end

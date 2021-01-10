@@ -1,5 +1,6 @@
 production:
   url: <%= ENV["DATABASE_URL"] %>
+  pool: <%= ENV["DATABASE_POOL_SIZE"] %>
 
 development:
   database: reckoning_dev

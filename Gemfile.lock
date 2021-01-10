@@ -10,6 +10,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
+    CFPropertyList (2.3.6)
     actioncable (5.2.4.2)
       actionpack (= 5.2.4.2)
       nio4r (~> 2.0)
@@ -51,6 +52,11 @@ GEM
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
+    addressable (2.7.0)
+      public_suffix (>= 2.0.2, < 5.0)
+    aliyun-sdk (0.8.0)
+      nokogiri (~> 1.6)
+      rest-client (~> 2.0)
     ansi (1.5.0)
     arel (9.0.0)
     ast (2.4.0)
@@ -58,14 +64,6 @@ GEM
       encryptor (~> 3.0.0)
     autoprefixer-rails (9.4.10.2)
       execjs
-    aws-sdk (2.11.34)
-      aws-sdk-resources (= 2.11.34)
-    aws-sdk-core (2.11.34)
-      aws-sigv4 (~> 1.0)
-      jmespath (~> 1.0)
-    aws-sdk-resources (2.11.34)
-      aws-sdk-core (= 2.11.34)
-    aws-sigv4 (1.0.2)
     bcrypt (3.1.13)
     bindex (0.7.0)
     bootstrap-sass (3.4.1)
@@ -97,9 +95,10 @@ GEM
     concurrent-ruby (1.1.6)
     connection_pool (2.2.2)
     crass (1.0.6)
-    daemons (1.2.6)
     dalli (2.7.10)
     database_cleaner (1.7.0)
+    declarative (0.0.20)
+    declarative-option (0.1.0)
     devise (4.7.1)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -117,6 +116,7 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     dropbox-sdk (1.6.5)
       json
+    dry-inflector (0.2.0)
     dynamic_fields_for_rails (1.0.0)
       rails (>= 3.0.0, < 6.0.0)
     encryptor (3.0.0)
@@ -126,20 +126,197 @@ GEM
       tzinfo
     ethon (0.12.0)
       ffi (>= 1.3.0)
-    eventmachine (1.2.5)
+    excon (0.78.1)
     execjs (2.7.0)
     faker (1.9.6)
       i18n (>= 0.7)
     faraday (0.15.4)
       multipart-post (>= 1.2, < 3)
     ffi (1.11.1)
+    fission (0.5.0)
+      CFPropertyList (~> 2.2)
+    fog (2.2.0)
+      fog-aliyun (>= 0.1.0)
+      fog-atmos
+      fog-aws (>= 0.6.0)
+      fog-brightbox (~> 0.4)
+      fog-cloudatcost (~> 0.4)
+      fog-cloudstack (~> 0.1.0)
+      fog-core (~> 2.1)
+      fog-digitalocean (>= 0.3.0)
+      fog-dnsimple (~> 2.1)
+      fog-dynect (~> 0.0.2)
+      fog-ecloud (~> 0.1)
+      fog-google (~> 1.0)
+      fog-internet-archive
+      fog-json
+      fog-local
+      fog-openstack
+      fog-ovirt
+      fog-powerdns (>= 0.1.1)
+      fog-profitbricks
+      fog-rackspace
+      fog-radosgw (>= 0.0.2)
+      fog-riakcs
+      fog-sakuracloud (>= 0.0.4)
+      fog-serverlove
+      fog-softlayer
+      fog-storm_on_demand
+      fog-terremark
+      fog-vmfusion
+      fog-voxel
+      fog-vsphere (>= 0.4.0)
+      fog-xenserver
+      fog-xml (~> 0.1.1)
+      ipaddress (~> 0.5)
+      json (~> 2.0)
+    fog-aliyun (0.3.19)
+      aliyun-sdk (~> 0.8.0)
+      fog-core
+      fog-json
+      ipaddress (~> 0.8)
+      xml-simple (~> 1.1)
+    fog-atmos (0.1.0)
+      fog-core
+      fog-xml
+    fog-aws (3.7.0)
+      fog-core (~> 2.1)
+      fog-json (~> 1.1)
+      fog-xml (~> 0.1)
+      ipaddress (~> 0.8)
+    fog-brightbox (0.16.1)
+      dry-inflector
+      fog-core
+      fog-json
+      mime-types
+    fog-cloudatcost (0.4.0)
+      fog-core
+      fog-json
+      ipaddress
+    fog-cloudstack (0.1.0)
+      fog-core (~> 2.1)
+      fog-json (~> 1.1)
+      fog-xml (~> 0.1)
+    fog-core (2.2.3)
+      builder
+      excon (~> 0.71)
+      formatador (~> 0.2)
+      mime-types
+    fog-digitalocean (0.4.0)
+      fog-core
+      fog-json
+      fog-xml
+      ipaddress (>= 0.5)
+    fog-dnsimple (2.1.0)
+      fog-core (>= 1.38, < 3)
+      fog-json
+    fog-dynect (0.0.3)
+      fog-core
+      fog-json
+      fog-xml
+    fog-ecloud (0.3.0)
+      fog-core
+      fog-xml
+    fog-google (1.7.1)
+      fog-core
+      fog-json
+      fog-xml
+      google-api-client (~> 0.23.0)
+    fog-internet-archive (0.0.2)
+      fog-core
+      fog-json
+      fog-xml
+    fog-json (1.2.0)
+      fog-core
+      multi_json (~> 1.10)
+    fog-local (0.6.0)
+      fog-core (>= 1.27, < 3.0)
+    fog-openstack (1.0.11)
+      fog-core (~> 2.1)
+      fog-json (>= 1.0)
+      ipaddress (>= 0.8)
+    fog-ovirt (2.0.0)
+      activesupport
+      fog-core
+      fog-json
+      fog-xml
+      ovirt-engine-sdk (>= 4.3.1)
+      rbovirt (~> 0.1.5)
+    fog-powerdns (0.2.0)
+      fog-core
+      fog-json
+      fog-xml
+    fog-profitbricks (0.0.5)
+      fog-core
+      fog-xml
+      nokogiri
+    fog-rackspace (0.1.6)
+      fog-core (>= 1.35)
+      fog-json (>= 1.0)
+      fog-xml (>= 0.1)
+      ipaddress (>= 0.8)
+    fog-radosgw (0.0.5)
+      fog-core (>= 1.21.0)
+      fog-json
+      fog-xml (>= 0.0.1)
+    fog-riakcs (0.1.0)
+      fog-core
+      fog-json
+      fog-xml
+    fog-sakuracloud (1.7.5)
+      fog-core
+      fog-json
+    fog-serverlove (0.1.2)
+      fog-core
+      fog-json
+    fog-softlayer (1.1.4)
+      fog-core
+      fog-json
+    fog-storm_on_demand (0.1.1)
+      fog-core
+      fog-json
+    fog-terremark (0.1.0)
+      fog-core
+      fog-xml
+    fog-vmfusion (0.1.0)
+      fission
+      fog-core
+    fog-voxel (0.1.0)
+      fog-core
+      fog-xml
+    fog-vsphere (3.5.0)
+      fog-core
+      rbvmomi (>= 1.9, < 3)
+    fog-xenserver (1.0.0)
+      fog-core
+      fog-xml
+      xmlrpc
+    fog-xml (0.1.3)
+      fog-core
+      nokogiri (>= 1.5.11, < 2.0.0)
     font-awesome-sass (5.9.0)
       sassc (>= 1.11)
+    formatador (0.2.5)
     fugit (1.2.2)
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.1)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
+    google-api-client (0.23.9)
+      addressable (~> 2.5, >= 2.5.1)
+      googleauth (>= 0.5, < 0.7.0)
+      httpclient (>= 2.8.1, < 3.0)
+      mime-types (~> 3.0)
+      representable (~> 3.0)
+      retriable (>= 2.0, < 4.0)
+      signet (~> 0.9)
+    googleauth (0.6.7)
+      faraday (~> 0.12)
+      jwt (>= 1.4, < 3.0)
+      memoist (~> 0.16)
+      multi_json (~> 1.11)
+      os (>= 0.9, < 2.0)
+      signet (~> 0.7)
     haml (5.1.1)
       temple (>= 0.8.0)
       tilt
@@ -158,14 +335,15 @@ GEM
       ruby_parser (~> 3.5)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
+    httpclient (2.8.3)
     i18n (1.8.2)
       concurrent-ruby (~> 1.0)
     i18n-js (3.3.0)
       i18n (>= 0.6.6)
+    ipaddress (0.8.3)
     jaro_winkler (1.5.3)
     jbuilder (2.9.1)
       activesupport (>= 4.2.0)
-    jmespath (1.4.0)
     jquery-rails (4.3.5)
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
@@ -196,18 +374,9 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
-    mailcatcher (0.2.4)
-      eventmachine
-      haml
-      i18n
-      json
-      mail
-      sinatra
-      skinny (>= 0.1.2)
-      sqlite3-ruby
-      thin
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
+    memoist (0.16.2)
     metaclass (0.0.4)
     method_source (0.9.2)
     mime-types (3.1)
@@ -244,6 +413,9 @@ GEM
     open4 (1.3.4)
     optimist (3.0.0)
     orm_adapter (0.5.0)
+    os (1.1.1)
+    ovirt-engine-sdk (4.4.0)
+      json (>= 1, < 3)
     parallel (1.17.0)
     parser (2.6.3.0)
       ast (~> 2.4.0)
@@ -253,6 +425,7 @@ GEM
       method_source (~> 0.9.0)
     pry-rails (0.3.9)
       pry (>= 0.10.4)
+    public_suffix (4.0.6)
     puma (4.0.1)
       nio4r (~> 2.0)
     raabro (1.1.6)
@@ -295,11 +468,23 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
+    rbovirt (0.1.7)
+      nokogiri
+      rest-client (> 1.7.0)
+    rbvmomi (2.4.1)
+      builder (~> 3.0)
+      json (>= 1.8)
+      nokogiri (~> 1.5)
+      optimist (~> 3.0)
     redcarpet (3.4.0)
     redis (4.1.2)
-    refile-s3 (0.2.0)
-      aws-sdk (~> 2.0)
-      refile (~> 0.6.0)
+    refile-fog (0.2.0)
+      fog
+      refile
+    representable (3.0.4)
+      declarative (< 0.1.0)
+      declarative-option (< 0.2.0)
+      uber (< 0.2.0)
     responders (3.0.0)
       actionpack (>= 5.0)
       railties (>= 5.0)
@@ -307,6 +492,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
+    retriable (3.1.2)
     roo (2.8.2)
       nokogiri (~> 1)
       rubyzip (>= 1.2.1, < 2.0.0)
@@ -358,6 +544,11 @@ GEM
     sidekiq-cron (1.1.0)
       fugit (~> 1.1)
       sidekiq (>= 4.2.1)
+    signet (0.12.0)
+      addressable (~> 2.3)
+      faraday (~> 0.9)
+      jwt (>= 1.5, < 3.0)
+      multi_json (~> 1.10)
     simplecov (0.17.0)
       docile (~> 1.1)
       json (>= 1.8, < 3)
@@ -372,9 +563,6 @@ GEM
       rack (~> 2.0)
       rack-protection (= 2.0.5)
       tilt (~> 2.0)
-    skinny (0.2.2)
-      eventmachine (~> 1.0)
-      thin
     slim (4.0.1)
       temple (>= 0.7.6, < 0.9)
       tilt (>= 2.0.6, < 2.1)
@@ -393,17 +581,10 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    sqlite3 (1.3.13)
-    sqlite3-ruby (1.3.3)
-      sqlite3 (>= 1.3.3)
     stripe (4.21.3)
       faraday (~> 0.13)
       net-http-persistent (~> 3.0)
     temple (0.8.1)
-    thin (1.7.2)
-      daemons (~> 1.0, >= 1.0.9)
-      eventmachine (~> 1.0, >= 1.0.4)
-      rack (>= 1, < 3)
     thor (0.20.3)
     thread_safe (0.3.6)
     tilt (2.0.9)
@@ -417,6 +598,7 @@ GEM
       thread_safe (~> 0.1)
     tzinfo-data (1.2019.2)
       tzinfo (>= 1.0.0)
+    uber (0.1.0)
     uglifier (4.1.20)
       execjs (>= 0.3.0, < 3)
     unf (0.1.4)
@@ -443,6 +625,8 @@ GEM
     wicked_pdf (1.4.0)
       activesupport
     workflow (1.2.0)
+    xml-simple (1.1.8)
+    xmlrpc (0.3.1)
 
 PLATFORMS
   ruby
@@ -464,6 +648,7 @@ DEPENDENCIES
   dropbox-sdk
   dynamic_fields_for_rails
   faker
+  fog-aws
   font-awesome-sass
   haml
   haml-rails
@@ -475,7 +660,6 @@ DEPENDENCIES
   jwt
   kaminari
   listen
-  mailcatcher
   mina
   mina-multistage
   mini_magick
@@ -493,7 +677,7 @@ DEPENDENCIES
   rails-perftest
   redcarpet
   refile!
-  refile-s3
+  refile-fog
   roo
   rqrcode-rails3
   rubocop
@@ -528,4 +712,4 @@ RUBY VERSION
    ruby 2.6.4p104
 
 BUNDLED WITH
-   1.17.2
+   2.2.4

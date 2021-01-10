@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-ruby '2.6.4'
+ruby File.read('.ruby-version').chomp
 
 gem 'rails', '5.2.4.2'
 
@@ -82,8 +82,9 @@ gem 'typhoeus'
 # pdf rendering
 gem 'wicked_pdf'
 
+gem 'fog-aws'
 gem 'refile', require: 'refile/rails', git: 'https://github.com/refile/refile'
-gem 'refile-s3'
+gem 'refile-fog'
 
 # heroku production
 gem 'non-stupid-digest-assets'
@@ -92,7 +93,6 @@ gem 'nokogiri', '>= 1.7.1'
 
 group :development do
   gem 'listen'
-  gem 'mailcatcher'
   gem 'pry-rails'
 
   gem 'rubocop', require: false

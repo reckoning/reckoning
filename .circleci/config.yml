@@ -116,7 +116,7 @@ jobs:
             - "9b:2a:48:b3:c6:b7:8d:22:d6:1a:82:d1:00:bf:6d:6c"
       - run:
           name: Keyscan Erelas (HACK)
-          command: ssh-keyscan -H erebor.mortik.xyz >> ~/.ssh/known_hosts
+          command: ssh-keyscan -H reckoning.mortik.xyz >> ~/.ssh/known_hosts
       - run:
           name: Keyscan Github (HACK)
           command: ssh-keyscan -H github.com >> ~/.ssh/known_hosts

@@ -100,6 +100,14 @@ namespace :server do
   end
 end
 
+namespace :bundler do
+  task reinstall: :remote_environment do
+    in_path fetch(:current_path).to_s do
+      command %(bundle install --redownload)
+    end
+  end
+end
+
 namespace :db do
   task load_schema: :remote_environment do
     in_path fetch(:current_path).to_s do
