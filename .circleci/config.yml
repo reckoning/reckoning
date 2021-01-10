@@ -3,7 +3,7 @@ version: 2.0
 defaults: &defaults
   working_directory: ~/app
   docker:
-    - image: reckoning/app:2.6.4
+    - image: reckoning/app:2.6.6
       environment:
         RAILS_ENV: test
         DATABASE_HOST: 127.0.0.1
