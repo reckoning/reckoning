@@ -26,7 +26,7 @@ set :forward_agent, true
 set :deploy_to, '/home/reckoning'
 set :repository, 'https://github.com/reckoning/app.git'
 set :rails_env, 'production'
-set :branch, 'master'
+set :branch, 'main'
 set :version_scheme, :datetime
 
 task :remote_environment do
