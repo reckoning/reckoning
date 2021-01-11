@@ -1,6 +1,6 @@
 # Reckoning
 
-[![CircleCI](https://circleci.com/gh/reckoning/app/tree/master.svg?style=svg)](https://circleci.com/gh/reckoning/app/tree/master)
+[![CircleCI](https://circleci.com/gh/reckoning/app/tree/main.svg?style=svg)](https://circleci.com/gh/reckoning/app/tree/main)
 
 Reckoning is a simple tool for invoicing
 
