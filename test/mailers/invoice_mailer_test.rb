@@ -18,7 +18,7 @@ class InvoiceMailerTest < ActionMailer::TestCase
       assert_not ActionMailer::Base.deliveries.empty?
 
       assert_equal ['test@customer.io'], mail.to
-      assert_equal ['noreply@reckoning.io'], mail.from
+      assert_equal ['noreply@mortik.xyz'], mail.from
     end
 
     it 'sends email to global from address' do
@@ -54,7 +54,7 @@ class InvoiceMailerTest < ActionMailer::TestCase
       assert_not ActionMailer::Base.deliveries.empty?
 
       assert_equal ['test@customer.io'], mail.to
-      assert_equal ['noreply@reckoning.io'], mail.from
+      assert_equal ['noreply@mortik.xyz'], mail.from
     end
   end
 end

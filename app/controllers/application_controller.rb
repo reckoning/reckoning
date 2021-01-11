@@ -54,7 +54,7 @@ class ApplicationController < ActionController::Base
   helper_method :invoice_limit_reached?
 
   private def api_domain
-    "//api.#{Rails.application.secrets[:domain]}"
+    "//#{Rails.application.secrets[:domain]}/api"
   end
   helper_method :api_domain
 
