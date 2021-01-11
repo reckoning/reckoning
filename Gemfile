@@ -38,7 +38,7 @@ gem 'jbuilder'
 
 gem 'dynamic_fields_for_rails'
 
-gem 'workflow'
+gem 'workflow', '~> 1.2.0'
 
 gem 'sass-rails'
 
