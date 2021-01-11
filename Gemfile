@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 
 ruby File.read('.ruby-version').chomp
 
-gem 'rails', '5.2.4.3'
+gem 'rails', '5.2.4.4'
 
 gem 'pg', '~> 1.0'
 
@@ -48,7 +48,7 @@ gem 'js-routes'
 gem 'turbolinks'
 
 gem 'bootstrap-sass'
-gem 'bourbon'
+gem 'bourbon', '~> 6.x'
 gem 'font-awesome-sass'
 
 gem 'uglifier', '>= 1.3.0'
@@ -63,7 +63,7 @@ gem 'i18n-js', '>= 3.0.0.rc11'
 gem 'rails-i18n'
 
 gem 'highline'
-gem 'thor'
+gem 'thor', '~> 0.19'
 
 gem 'bower-rails'
 
