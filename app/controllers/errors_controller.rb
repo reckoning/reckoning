@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ErrorsController < ActionController::Base
+class ErrorsController < ApplicationController
   def not_found
     respond_to do |format|
       format.html do

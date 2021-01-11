@@ -82,9 +82,7 @@ gem 'typhoeus'
 # pdf rendering
 gem 'wicked_pdf'
 
-gem 'fog-aws'
 gem 'refile', require: 'refile/rails', git: 'https://github.com/refile/refile'
-gem 'refile-fog'
 
 # heroku production
 gem 'non-stupid-digest-assets'

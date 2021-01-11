@@ -17,16 +17,17 @@ class Account < ApplicationRecord
   store_accessor :contact_information, :address, :country, :public_email, :telefon, :fax, :website
 
   validates :name, :users, :plan, presence: true
+  # rubocop:disable Rails/UniqueValidationWithoutIndex empty subdomain prevents a unique index
   validates :subdomain, uniqueness: true, allow_blank: true
+  # rubocop:enable Rails/UniqueValidationWithoutIndex
   validates :subdomain, exclusion: { in: %w[www app admin api backend reckoning] }
   validates_associated :users
   validates :stripe_token, :stripe_email, presence: true, on: :create, if: :on_paid_plan?
 
   accepts_nested_attributes_for :users
 
-  before_create :set_trail_end_date
-
   before_save :calculate_office_percent
+  before_create :set_trail_end_date
 
   def on_paid_plan?
     !on_plan?(:free)

@@ -10,7 +10,7 @@ module Backend
     def index
       @accounts = Account.all
                          .order(created_at: :desc)
-                         .page(params.fetch(:page) { nil })
+                         .page(params.fetch(:page, nil))
                          .per(20)
     end
 

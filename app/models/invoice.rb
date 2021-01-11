@@ -85,7 +85,7 @@ class Invoice < ApplicationRecord
   end
 
   def self.filter_state(state)
-    return all if state.blank? || !Invoice.workflow_spec.state_names.include?(state.to_sym)
+    return all if state.blank? || Invoice.workflow_spec.state_names.exclude?(state.to_sym)
 
     send(state)
   end
@@ -102,7 +102,7 @@ class Invoice < ApplicationRecord
 
   def title
     output = []
-    output << content_tag(:strong, customer.name)
+    output << tag.strong(customer.name)
     output << ' - '
     output << project.name
     safe_join(output)

@@ -12,7 +12,7 @@ class InvoicesController < ApplicationController
     @invoices = current_account.invoices
                                .filter_result(filter_params)
                                .includes(:customer, :project).references(:customers)
-                               .order(sort_column + ' ' + sort_direction)
+                               .order("#{sort_column} #{sort_direction}")
                                .page(params.fetch(:page, nil))
                                .per(10)
   end

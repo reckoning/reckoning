@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class InvoiceMailer < ActionMailer::Base
+class InvoiceMailer < ApplicationMailer
   default from: Rails.application.secrets[:mailer_default_from].to_s
 
   attr_accessor :invoice

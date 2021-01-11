@@ -19,7 +19,7 @@ class ProjectTest < ActiveSupport::TestCase
 
   it 'if rate is empty it should fall back to 0.0' do
     project = Project.new(customer_id: customer.id, name: 'Project')
-    assert project.rate == 0.0
+    assert project.rate.zero?
   end
 
   it 'should save project with customer_id & name & rate' do

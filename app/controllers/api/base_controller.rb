@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Api
-  class BaseController < ActionController::Base
+  class BaseController < ApplicationController
     include Concerns::Accounts
 
     protect_from_forgery with: :null_session

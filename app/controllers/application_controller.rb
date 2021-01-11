@@ -59,12 +59,13 @@ class ApplicationController < ActionController::Base
   helper_method :api_domain
 
   private def store_current_params
-    key = (params[:controller].to_s + '_' + params[:action].to_s).to_sym
-    session[key] = params.reject { |k| %w[controller action format].include?(k.to_s) }
+    key = "#{params[:controller]}_#{params[:action]}".to_sym
+    base_params = %w[controller action format]
+    session[key] = params.reject { |k| base_params.include?(k.to_s) }
   end
 
   private def stored_params(action, controller = params[:controller])
-    key = (controller.to_s + '_' + action.to_s).to_sym
+    key = "#{controller}_#{action}".to_sym
     (session[key] || ActionController::Parameters.new).to_unsafe_h
   end
   helper_method :stored_params

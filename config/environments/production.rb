@@ -77,7 +77,7 @@ Reckoning::Application.configure do
 
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
   if ENV['RAILS_LOG_TO_STDOUT'].present?
-    logger           = ActiveSupport::Logger.new(STDOUT)
+    logger           = ActiveSupport::Logger.new($stdout)
     logger.formatter = config.log_formatter
     config.logger = ActiveSupport::TaggedLogging.new(logger)
   end
@@ -85,7 +85,7 @@ Reckoning::Application.configure do
   config.action_controller.default_url_options = { host: Rails.application.secrets[:domain] }
 
   config.action_cable.mount_path = '/cable'
-  config.action_cable.allowed_request_origins = [%r{http(s?):\/\/(.*)reckoning\.io}]
+  config.action_cable.allowed_request_origins = [%r{http(s?)://(.*)reckoning\.io}]
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.default_url_options = { host: Rails.application.secrets[:domain] }

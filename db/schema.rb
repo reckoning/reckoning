@@ -10,11 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180402121554) do
+ActiveRecord::Schema.define(version: 2021_01_11_001623) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
   enable_extension "hstore"
+  enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
   create_table "accounts", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 20180402121554) do
     t.datetime "updated_at", null: false
     t.string "user_agent"
     t.integer "expires"
+    t.index ["token", "user_id"], name: "index_auth_tokens_on_token_and_user_id", unique: true
     t.index ["token"], name: "index_auth_tokens_on_token"
   end
 
@@ -55,6 +56,7 @@ ActiveRecord::Schema.define(version: 20180402121554) do
     t.string "email"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["email"], name: "index_contacts_on_email", unique: true
   end
 
   create_table "customers", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -108,6 +110,7 @@ ActiveRecord::Schema.define(version: 20180402121554) do
     t.uuid "customer_id"
     t.uuid "project_id"
     t.uuid "account_id", null: false
+    t.index ["ref", "account_id"], name: "index_invoices_on_ref_and_account_id", unique: true
   end
 
   create_table "plans", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|

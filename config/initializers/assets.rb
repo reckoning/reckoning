@@ -11,4 +11,4 @@ Rails.application.config.assets.version = '1.5'
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 Rails.application.config.assets.precompile += %w[pdf.css pdfjs-dist/build/pdf.worker.js]
-Rails.application.config.assets.precompile += Dir[Rails.root.join('vendor', 'assets', 'bower_components', '**', 'img', '*')]
+Rails.application.config.assets.precompile += Dir[Rails.root.join('vendor/assets/bower_components/**/img/*')]

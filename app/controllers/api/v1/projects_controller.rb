@@ -47,13 +47,13 @@ module Api
       def archive
         @project = current_account.projects.find(params[:id])
         authorize! :archive, @project
-        if !@project.archived?
+        if @project.archived?
+          Rails.logger.info 'Project Archive Failed'
+          render json: ValidationError.new('project.archive'), status: :bad_request
+        else
           @project.archive!
           @project.save
           render json: { message: resource_message(:project, :archive, :success) }, status: :ok
-        else
-          Rails.logger.info 'Project Archive Failed'
-          render json: ValidationError.new('project.archive'), status: :bad_request
         end
       end
 

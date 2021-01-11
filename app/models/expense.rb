@@ -22,8 +22,9 @@ class Expense < ApplicationRecord
     value: 13,
     label: I18n.t(:"expenses.afa_types.office_furniture")
   }].freeze
+  BUSINESS_TYPES = %i[home_office telecommunication current business_expenses non_cash_contribution insurances].freeze
   NEEDS_RECEIPT_TYPES = VALID_TYPES.reject do |type|
-    %i[home_office telecommunication current business_expenses non_cash_contribution insurances].include?(type)
+    BUSINESS_TYPES.include?(type)
   end.freeze
 
   attachment :receipt, content_type: ['application/pdf', 'image/jpeg', 'image/png']
@@ -90,7 +91,7 @@ class Expense < ApplicationRecord
   end
 
   def self.filter_type(type)
-    return all if type.blank? || !VALID_TYPES.include?(type.to_sym)
+    return all if type.blank? || VALID_TYPES.exclude?(type.to_sym)
 
     where(expense_type: type)
   end
@@ -112,9 +113,10 @@ class Expense < ApplicationRecord
   end
 
   def usable_value(year = Time.zone.now.year)
-    if expense_type == 'afa'
+    case expense_type
+    when 'afa'
       afa_value(year)
-    elsif expense_type == 'home_office'
+    when 'home_office'
       home_office_value
     else
       deductible_value

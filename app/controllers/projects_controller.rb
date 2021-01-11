@@ -17,7 +17,7 @@ class ProjectsController < ApplicationController
               scope.where(workflow_state: :active)
             end
 
-    @projects = scope.order(sort_column + ' ' + sort_direction)
+    @projects = scope.order("#{sort_column} #{sort_direction}")
                      .page(params.fetch(:page, nil))
                      .per(20)
     @projects_by_customer = @projects.group_by(&:customer)

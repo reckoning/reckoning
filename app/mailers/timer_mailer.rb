@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TimerMailer < ActionMailer::Base
+class TimerMailer < ApplicationMailer
   include Rails.application.routes.url_helpers
 
   default from: Rails.application.secrets[:mailer_default_from].to_s

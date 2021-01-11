@@ -10,7 +10,7 @@ module Backend
     def index
       @users = User.all
                    .order("#{sort_column} #{sort_direction}")
-                   .page(params.fetch(:page) { nil })
+                   .page(params.fetch(:page, nil))
                    .per(20)
     end
 

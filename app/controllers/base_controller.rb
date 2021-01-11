@@ -71,9 +71,7 @@ class BaseController < ApplicationController
       plans << plan
     end
 
-    plans = plans.sort_by(&:amount)
-
-    plans
+    plans.sort_by(&:amount)
   end
   helper_method :plans
 end

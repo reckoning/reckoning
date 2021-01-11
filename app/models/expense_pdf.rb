@@ -6,10 +6,9 @@ class ExpensePdf
 
   include PdfOptions
 
-  attr_accessor :account, :filter
-  attr_accessor :telecommunication, :home_office, :gwg, :travel_costs, :business_expenses, :training
-  attr_accessor :misc, :current, :licenses, :non_cash_contribution, :insurances
+  attr_accessor :account, :filter, :telecommunication, :home_office, :gwg, :travel_costs, :business_expenses, :training, :misc, :current, :licenses, :non_cash_contribution, :insurances
 
+  # rubocop:disable Metrics/CyclomaticComplexity
   def initialize(account, expenses, filter)
     self.account = account
     self.filter = filter
@@ -26,6 +25,7 @@ class ExpensePdf
     self.non_cash_contribution = expenses.select { |expense| expense.expense_type == 'non_cash_contribution' }.sort_by(&:date)
     self.insurances = expenses.select { |expense| expense.expense_type == 'insurances' }.sort_by(&:date)
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   def persisted?
     false
