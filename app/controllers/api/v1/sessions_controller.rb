@@ -29,14 +29,12 @@ module Api
       end
 
       private def new_auth_token(user_id)
-        @new_auth_token ||= begin
-          AuthToken.create(
-            user_id: user_id,
-            user_agent: request.user_agent,
-            description: login_params[:description],
-            expires: login_params[:expires]
-          )
-        end
+        @new_auth_token ||= AuthToken.create(
+          user_id: user_id,
+          user_agent: request.user_agent,
+          description: login_params[:description],
+          expires: login_params[:expires]
+        )
       end
 
       private def jwt_token

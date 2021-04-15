@@ -9,13 +9,11 @@ module Concerns
     end
 
     def current_account
-      @current_account ||= begin
-        if current_user.present?
-          current_user.account
-        elsif request.subdomain.present? && request.subdomain != 'www' && request.subdomain != 'api'
-          Account.where(subdomain: request.subdomain).first
-        end
-      end
+      @current_account ||= if current_user.present?
+                             current_user.account
+                           elsif request.subdomain.present? && request.subdomain != 'www' && request.subdomain != 'api'
+                             Account.where(subdomain: request.subdomain).first
+                           end
     end
   end
 end

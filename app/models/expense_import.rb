@@ -39,7 +39,7 @@ class ExpenseImport
     spreadsheet = open_spreadsheet
     header = spreadsheet.row(1)
     (2..spreadsheet.last_row).map do |i|
-      row = Hash[[header, spreadsheet.row(i)].transpose]
+      row = [header, spreadsheet.row(i)].transpose.to_h
       expense = Expense.find_by(id: row['id'], account_id: account_id) || Expense.new(account_id: account_id)
       expense.attributes = row.to_hash.slice(*Expense.accessible_attributes)
       expense
