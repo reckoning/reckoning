@@ -1,4 +1,4 @@
-FROM ruby:2.6.6
+FROM ruby:2.7.3
 
 RUN curl https://deb.nodesource.com/setup_10.x | bash - \
     && apt-get install -y --no-install-recommends \

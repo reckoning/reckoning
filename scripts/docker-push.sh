@@ -8,13 +8,13 @@ echo
 echo "Build Container..."
 echo
 
-docker build -t reckoning/app:2.6.6 .
+docker build -t reckoning/app:2.7.3 .
 
 echo
 echo "Push Container..."
 echo
 
-docker push reckoning/app:2.6.6
+docker push reckoning/app:2.7.3
 
 echo
 echo "...Done"
