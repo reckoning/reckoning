@@ -49,7 +49,7 @@ gem 'turbolinks'
 
 gem 'bootstrap-sass'
 gem 'bourbon'
-gem 'font-awesome-sass'
+gem 'font-awesome-sass', '~> 5.0'
 
 gem 'uglifier', '>= 1.3.0'
 
