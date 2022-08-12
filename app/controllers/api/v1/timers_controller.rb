@@ -51,7 +51,7 @@ module Api
         authorize! :stop, @timer
         unless @timer.stop
           Rails.logger.info "Timer Stop Failed: #{@timer.to_yaml}"
-          render json: { message: I18n.t(:"messages.timer.stop.failure") }, status: :bad_request
+          render json: { message: I18n.t(:'messages.timer.stop.failure') }, status: :bad_request
         end
         send_realtime_update(@timer)
       end
@@ -61,7 +61,7 @@ module Api
         authorize! :start, @timer
         unless @timer.start
           Rails.logger.info "Timer Start Failed: #{@timer.to_yaml}"
-          render json: { message: I18n.t(:"messages.timer.start.failure") }, status: :bad_request
+          render json: { message: I18n.t(:'messages.timer.start.failure') }, status: :bad_request
         end
         send_realtime_update(@timer)
       end
@@ -77,7 +77,7 @@ module Api
           send_realtime_update(@timer)
         else
           Rails.logger.info 'Timer Destroy Failed: Timer allready on Invoice'
-          render json: { message: I18n.t(:"messages.timer.destroy.failure") }, status: :bad_request
+          render json: { message: I18n.t(:'messages.timer.destroy.failure') }, status: :bad_request
         end
       end
 

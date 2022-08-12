@@ -33,7 +33,7 @@ class InvoiceMailer < ApplicationMailer
     mail(
       from: from,
       to: to,
-      subject: I18n.t(:"mailer.invoice.customer.subject", name: "#{invoice.account.name}: ", date: date),
+      subject: I18n.t(:'mailer.invoice.customer.subject', name: "#{invoice.account.name}: ", date: date),
       template_name: 'customer'
     )
   end

@@ -10,11 +10,11 @@ module ExpensesHelper
 
   def current_expenses_years
     current_year = Time.zone.now.year
-    current_year = (Time.zone.now + 1.year).year if Time.zone.now.month == 12
+    current_year = 1.year.from_now.year if Time.zone.now.month == 12
     years = if first_expenses_year
               (first_expenses_year..current_year)
             else
-              ((Time.zone.now - 1.year).year..current_year)
+              (1.year.ago.year..current_year)
             end
     years.to_a.reverse.map do |year|
       { name: year, link: year }

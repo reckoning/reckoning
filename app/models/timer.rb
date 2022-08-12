@@ -7,11 +7,11 @@ class Timer < ApplicationRecord
 
   belongs_to :task, touch: true
   belongs_to :user
-  belongs_to :position
+  belongs_to :position, optional: true
 
   before_save :stop_other_timers
 
-  validates :date, :value, :task_id, presence: true
+  validates :date, :value, presence: true
 
   delegate :name, :label, to: :task, prefix: true
   delegate :project, to: :task

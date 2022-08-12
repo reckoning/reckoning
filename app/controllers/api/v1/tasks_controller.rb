@@ -11,7 +11,7 @@ module Api
           date = Date.parse(week_date)
           scope = scope.includes(:timers).references(:timers)
                        .where(timers: { user_id: current_user.id })
-                       .where(timers: { date: [date.beginning_of_week..date.end_of_week] })
+                       .where(timers: { date: [date.all_week] })
         end
         @tasks = scope.order('tasks.id ASC')
       end

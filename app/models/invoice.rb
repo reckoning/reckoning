@@ -13,7 +13,7 @@ class Invoice < ApplicationRecord
   has_many :positions, dependent: :destroy, inverse_of: :invoice
   has_many :timers, through: :positions
 
-  validates :customer_id, :project_id, :date, presence: true
+  validates :date, presence: true
   validates :ref, uniqueness: { scope: :account_id }
 
   accepts_nested_attributes_for :positions, allow_destroy: true

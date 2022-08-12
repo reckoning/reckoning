@@ -25,7 +25,7 @@ class LoginTest < ActionDispatch::IntegrationTest
 
     assert_select '.user-email', user.email.to_s
 
-    assert_equal I18n.t(:"devise.sessions.signed_in"), flash[:notice]
+    assert_equal I18n.t(:'devise.sessions.signed_in'), flash[:notice]
   end
 
   it 'login with invalid credentials redirects and gives correct alert message' do
@@ -43,6 +43,6 @@ class LoginTest < ActionDispatch::IntegrationTest
 
     assert_response :ok
 
-    assert_equal I18n.t(:"devise.failure.invalid"), flash[:alert]
+    assert_equal I18n.t(:'devise.failure.invalid'), flash[:alert]
   end
 end
