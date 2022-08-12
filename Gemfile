@@ -59,7 +59,7 @@ gem 'puma'
 
 gem 'tzinfo-data'
 
-gem 'i18n-js', '>= 3.0.0.rc11'
+gem 'i18n-js'
 gem 'rails-i18n'
 
 gem 'highline'
