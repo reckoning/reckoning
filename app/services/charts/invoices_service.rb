@@ -12,7 +12,7 @@ module Charts
     end
 
     def generate_datasets
-      start_year = (Time.zone.now - 1.year).beginning_of_year
+      start_year = 1.year.ago.beginning_of_year
       end_year = Time.zone.now.end_of_year
 
       return unless scope.exists?(date: start_year..end_year)
@@ -24,7 +24,7 @@ module Charts
     end
 
     private def month_dataset_for_year(year)
-      dataset = new_dataset(I18n.t(:"labels.chart.invoices.month", year: year), color_for_year[year][1])
+      dataset = new_dataset(I18n.t(:'labels.chart.invoices.month', year: year), color_for_year[year][1])
       (1..12).map do |month|
         start_date = Time.zone.parse("#{year}-#{month}-1").beginning_of_month
         end_date = Time.zone.parse("#{year}-#{month}-1").end_of_month
@@ -36,12 +36,12 @@ module Charts
     end
 
     private def cumulative_dataset_for_year(year)
-      dataset = new_dataset(I18n.t(:"labels.chart.invoices.sum", year: year), color_for_year[year][0])
+      dataset = new_dataset(I18n.t(:'labels.chart.invoices.sum', year: year), color_for_year[year][0])
       start_of_year = Time.zone.parse("#{year}-1-1").to_date.beginning_of_month
       (1..12).each do |month|
         end_date = Time.zone.parse("#{year}-#{month}-1").to_date.end_of_month
         dataset[:data] << scope.where(date: start_of_year..end_date).all.sum(:value)
-        dataset[:zone] ||= month - 1 if month >= (Time.zone.now - 1.month).month && Time.zone.now.year == end_date.year
+        dataset[:zone] ||= month - 1 if month >= 1.month.ago.month && Time.zone.now.year == end_date.year
       end
       dataset[:zone] ||= dataset[:data].count - 1
       dataset
@@ -49,7 +49,7 @@ module Charts
 
     private def color_for_year
       @color_for_year ||= {
-        (Time.zone.now - 1.year).year => background_colors,
+        1.year.ago.year => background_colors,
         Time.zone.now.year => colors
       }
     end

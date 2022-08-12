@@ -10,7 +10,7 @@ class TemplatesControllerTest < ActionController::TestCase
       get :show
 
       assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
+      assert_equal I18n.t(:'devise.failure.unauthenticated'), flash[:alert]
     end
   end
 

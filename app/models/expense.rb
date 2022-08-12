@@ -11,16 +11,16 @@ class Expense < ApplicationRecord
   # TODO: needs to be complete AFA Table
   VALID_AFA_TYPES = [{
     value: 3,
-    label: I18n.t(:"expenses.afa_types.computer")
+    label: I18n.t(:'expenses.afa_types.computer')
   }, {
     value: 5,
-    label: I18n.t(:"expenses.afa_types.smartphone")
+    label: I18n.t(:'expenses.afa_types.smartphone')
   }, {
     value: 7,
-    label: I18n.t(:"expenses.afa_types.tv")
+    label: I18n.t(:'expenses.afa_types.tv')
   }, {
     value: 13,
-    label: I18n.t(:"expenses.afa_types.office_furniture")
+    label: I18n.t(:'expenses.afa_types.office_furniture')
   }].freeze
   BUSINESS_TYPES = %i[home_office telecommunication current business_expenses non_cash_contribution insurances].freeze
   NEEDS_RECEIPT_TYPES = VALID_TYPES.reject do |type|

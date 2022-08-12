@@ -6,8 +6,6 @@ class Tour < ApplicationRecord
 
   has_many :waypoints, dependent: :destroy, inverse_of: :tour
 
-  validates :vessel_id, presence: true
-
   accepts_nested_attributes_for :waypoints
 
   def last_driver

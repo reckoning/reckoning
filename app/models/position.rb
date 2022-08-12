@@ -7,7 +7,7 @@ class Position < ApplicationRecord
   before_save :set_value
   after_save :set_invoice_value
 
-  validates :description, :invoice, presence: true
+  validates :description, presence: true
 
   accepts_nested_attributes_for :timers
 

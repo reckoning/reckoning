@@ -32,7 +32,7 @@ module Charts
       return if project.budget.blank? || project.budget.zero?
 
       value = 0.0
-      dataset = new_dataset(I18n.t(:"labels.chart.project.budget"), colors[0])
+      dataset = new_dataset(I18n.t(:'labels.chart.project.budget'), colors[0])
       weeks do |week_start_date, week_end_date, index|
         value += (scope.where(date: week_start_date..week_end_date).all.sum(:value) * project.rate).to_f
 
@@ -48,7 +48,7 @@ module Charts
       @start_date ||= begin
         start_date = project.start_date if project.start_date.present?
         start_date ||= Time.zone.parse(scope.order(:created_at).first.try(:date).to_s) if scope.order(:created_at).first.present?
-        start_date ||= (Time.zone.now - 12.months)
+        start_date ||= 12.months.ago
         start_date = Time.zone.now if start_date > Time.zone.now
         start_date.to_date
       end
@@ -57,7 +57,7 @@ module Charts
     private def end_date
       @end_date ||= begin
         end_date = project.end_date if project.end_date.present?
-        end_date ||= (Time.zone.now + 1.week)
+        end_date ||= 1.week.from_now
         end_date.to_date
       end
     end

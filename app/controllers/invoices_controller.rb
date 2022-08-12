@@ -25,9 +25,9 @@ class InvoicesController < ApplicationController
     authorize! :archive, invoice
     if current_account.dropbox?
       InvoiceDropboxWorker.perform_async invoice.id
-      redirect_to invoice_path(invoice), flash: { success: I18n.t(:"messages.invoice.archive.success") }
+      redirect_to invoice_path(invoice), flash: { success: I18n.t(:'messages.invoice.archive.success') }
     else
-      redirect_to invoice_path(invoice), alert: I18n.t(:"messages.invoice.archive.failure")
+      redirect_to invoice_path(invoice), alert: I18n.t(:'messages.invoice.archive.failure')
     end
   end
 
@@ -35,9 +35,9 @@ class InvoicesController < ApplicationController
     authorize! :archive, invoice
     if current_account.dropbox?
       InvoiceDropboxAllWorker.perform_async current_account.id
-      redirect_to invoices_path, flash: { success: I18n.t(:"messages.invoice.archive_all.success") }
+      redirect_to invoices_path, flash: { success: I18n.t(:'messages.invoice.archive_all.success') }
     else
-      redirect_to invoices_path, alert: I18n.t(:"messages.invoice.archive_all.failure")
+      redirect_to invoices_path, alert: I18n.t(:'messages.invoice.archive_all.failure')
     end
   end
 
@@ -45,9 +45,9 @@ class InvoicesController < ApplicationController
     authorize! :send, invoice
     if invoice.send_via_mail?
       InvoiceMailerWorker.perform_async invoice.id
-      redirect_to invoice_path(invoice), flash: { success: I18n.t(:"messages.invoice.send.success") }
+      redirect_to invoice_path(invoice), flash: { success: I18n.t(:'messages.invoice.send.success') }
     else
-      redirect_to invoice_path(invoice), alert: I18n.t(:"messages.invoice.send.failure")
+      redirect_to invoice_path(invoice), alert: I18n.t(:'messages.invoice.send.failure')
     end
   end
 
@@ -57,9 +57,9 @@ class InvoicesController < ApplicationController
     @test_mail = TestMail.new(test_mail_params)
     if test_mail.valid?
       InvoiceTestMailerWorker.perform_async invoice.id, test_mail.email
-      redirect_to invoice_path(invoice), flash: { success: I18n.t(:"messages.invoice.send_test_mail.success") }
+      redirect_to invoice_path(invoice), flash: { success: I18n.t(:'messages.invoice.send_test_mail.success') }
     else
-      flash.now[:alert] = I18n.t(:"messages.invoice.send_test_mail.failure")
+      flash.now[:alert] = I18n.t(:'messages.invoice.send_test_mail.failure')
       render 'show'
     end
   end
@@ -217,7 +217,7 @@ class InvoicesController < ApplicationController
   private def check_limit
     return unless invoice_limit_reached?
 
-    redirect_to invoices_path, alert: I18n.t(:"messages.demo_active")
+    redirect_to invoices_path, alert: I18n.t(:'messages.demo_active')
   end
 
   private def test_mail
@@ -232,6 +232,6 @@ class InvoicesController < ApplicationController
   private def check_dependencies
     return if current_account.address.present?
 
-    redirect_to "#{edit_user_registration_path}#address", alert: I18n.t(:"messages.missing_address")
+    redirect_to "#{edit_user_registration_path}#address", alert: I18n.t(:'messages.missing_address')
   end
 end

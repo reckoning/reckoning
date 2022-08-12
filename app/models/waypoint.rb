@@ -9,7 +9,7 @@ class Waypoint < ApplicationRecord
 
   attr_accessor :time_date, :time_hours
 
-  validates :time, :account_id, :tour_id, :driver_id, presence: true
+  validates :time, presence: true
   validates :milage, :latitude, :longitude, :location, presence: true
 
   before_validation :set_time

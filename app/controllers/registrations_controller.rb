@@ -12,9 +12,9 @@ class RegistrationsController < Devise::RegistrationsController
     @active_nav = 'user'
     authorize! :update, @user
     if @user.update_without_password(user_params)
-      redirect_to "#{edit_user_registration_path}#{hash}", flash: { success: I18n.t(:"messages.registration.update.success") }
+      redirect_to "#{edit_user_registration_path}#{hash}", flash: { success: I18n.t(:'messages.registration.update.success') }
     else
-      render "edit#{hash}", alert: I18n.t(:"messages.registration.update.failure")
+      render "edit#{hash}", alert: I18n.t(:'messages.registration.update.failure')
     end
   end
 

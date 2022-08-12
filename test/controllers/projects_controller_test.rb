@@ -12,35 +12,35 @@ class ProjectsControllerTest < ActionController::TestCase
       get :index
 
       assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
+      assert_equal I18n.t(:'devise.failure.unauthenticated'), flash[:alert]
     end
 
     it 'Unauthrized user cant view projects new' do
       get :new
 
       assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
+      assert_equal I18n.t(:'devise.failure.unauthenticated'), flash[:alert]
     end
 
     it 'Unauthrized user cant create new project' do
       post :create, params: { project: { project_id: 'foo', date: Time.zone.today } }
 
       assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
+      assert_equal I18n.t(:'devise.failure.unauthenticated'), flash[:alert]
     end
 
     it 'Unauthrized user cant view project edit' do
       get :edit, params: { id: project.id }
 
       assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
+      assert_equal I18n.t(:'devise.failure.unauthenticated'), flash[:alert]
     end
 
     it 'Unauthrized user cant update project' do
       put :update, params: { id: project.id, project: { date: Time.zone.today - 1 } }
 
       assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
+      assert_equal I18n.t(:'devise.failure.unauthenticated'), flash[:alert]
     end
   end
 
@@ -54,7 +54,7 @@ class ProjectsControllerTest < ActionController::TestCase
 
       assert_response :found
 
-      assert_equal I18n.t(:"messages.missing_address"), flash[:alert]
+      assert_equal I18n.t(:'messages.missing_address'), flash[:alert]
     end
   end
 
@@ -88,14 +88,14 @@ class ProjectsControllerTest < ActionController::TestCase
       post :create, params: { project: { customer_id: project.customer.id, name: 'foo' } }
 
       assert_response :found
-      assert_equal I18n.t(:"resources.messages.create.success", resource: I18n.t(:"resources.project")), flash[:success]
+      assert_equal I18n.t(:'resources.messages.create.success', resource: I18n.t(:'resources.project')), flash[:success]
     end
 
     it 'User can update project' do
       put :update, params: { id: project.id, project: { name: 'bar' } }
 
       assert_response :found
-      assert_equal I18n.t(:"resources.messages.update.success", resource: I18n.t(:"resources.project")), flash[:success]
+      assert_equal I18n.t(:'resources.messages.update.success', resource: I18n.t(:'resources.project')), flash[:success]
     end
   end
 end

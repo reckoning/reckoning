@@ -12,35 +12,35 @@ class InvoicesControllerTest < ActionController::TestCase
       get :index
 
       assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
+      assert_equal I18n.t(:'devise.failure.unauthenticated'), flash[:alert]
     end
 
     it 'Unauthrized user cant view invoices new' do
       get :new
 
       assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
+      assert_equal I18n.t(:'devise.failure.unauthenticated'), flash[:alert]
     end
 
     it 'Unauthrized user cant create new invoice' do
       post :create, params: { invoice: { project_id: 'foo', date: Time.zone.today } }
 
       assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
+      assert_equal I18n.t(:'devise.failure.unauthenticated'), flash[:alert]
     end
 
     it 'Unauthrized user cant view invoice edit' do
       get :edit, params: { id: invoice.id }
 
       assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
+      assert_equal I18n.t(:'devise.failure.unauthenticated'), flash[:alert]
     end
 
     it 'Unauthrized user cant destroy invoice' do
       delete :destroy, params: { id: invoice.id }
 
       assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
+      assert_equal I18n.t(:'devise.failure.unauthenticated'), flash[:alert]
 
       assert_equal invoice, Invoice.where(id: invoice.id).first
     end
@@ -49,7 +49,7 @@ class InvoicesControllerTest < ActionController::TestCase
       put :update, params: { id: invoice.id, invoice: { date: Time.zone.today - 1 } }
 
       assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
+      assert_equal I18n.t(:'devise.failure.unauthenticated'), flash[:alert]
     end
   end
 
@@ -62,7 +62,7 @@ class InvoicesControllerTest < ActionController::TestCase
 
       assert_response :found
 
-      assert_equal I18n.t(:"messages.missing_address"), flash[:alert]
+      assert_equal I18n.t(:'messages.missing_address'), flash[:alert]
     end
   end
 
@@ -94,21 +94,21 @@ class InvoicesControllerTest < ActionController::TestCase
       post :create, params: { invoice: { project_id: invoice.project.id, date: Time.zone.today } }
 
       assert_response :found
-      assert_equal I18n.t(:"resources.messages.create.success", resource: I18n.t(:"resources.invoice")), flash[:success]
+      assert_equal I18n.t(:'resources.messages.create.success', resource: I18n.t(:'resources.invoice')), flash[:success]
     end
 
     it 'User can update invoice' do
       put :update, params: { id: invoice.id, invoice: { project_id: invoice.project.id, date: Time.zone.today - 1 } }
 
       assert_response :found
-      assert_equal I18n.t(:"resources.messages.update.success", resource: I18n.t(:"resources.invoice")), flash[:success]
+      assert_equal I18n.t(:'resources.messages.update.success', resource: I18n.t(:'resources.invoice')), flash[:success]
     end
 
     it 'User can destroy invoice' do
       delete :destroy, params: { id: invoice.id }
 
       assert_response :found
-      assert_equal I18n.t(:"resources.messages.destroy.success", resource: I18n.t(:"resources.invoice")), flash[:success]
+      assert_equal I18n.t(:'resources.messages.destroy.success', resource: I18n.t(:'resources.invoice')), flash[:success]
 
       assert_not_equal invoice, Invoice.where(id: invoice.id).first
     end

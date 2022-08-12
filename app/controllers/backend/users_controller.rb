@@ -36,9 +36,9 @@ module Backend
 
     def send_welcome
       if user.send_confirmation_instructions
-        redirect_to backend_users_path, notice: I18n.t(:"messages.user.send_welcome.success")
+        redirect_to backend_users_path, notice: I18n.t(:'messages.user.send_welcome.success')
       else
-        redirect_to backend_users_path, notice: I18n.t(:"messages.user.send_welcome.failure")
+        redirect_to backend_users_path, notice: I18n.t(:'messages.user.send_welcome.failure')
       end
     end
 

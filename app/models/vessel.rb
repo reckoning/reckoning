@@ -6,7 +6,7 @@ class Vessel < ApplicationRecord
   has_many :waypoints, through: :tours
 
   validates :manufacturer, :vessel_type, :initial_milage, presence: true
-  validates :milage, :account_id, :license_plate, :buying_date, presence: true
+  validates :milage, :license_plate, :buying_date, presence: true
 
   attachment :image, content_type: ['image/jpg', 'image/jpeg', 'image/png']
 

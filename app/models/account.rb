@@ -43,7 +43,7 @@ class Account < ApplicationRecord
     return if on_plan?(:free)
 
     self.trail_used = true
-    self.trail_end_at = Time.zone.now + 30.days
+    self.trail_end_at = 30.days.from_now
   end
 
   def provision_value

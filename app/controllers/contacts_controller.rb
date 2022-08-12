@@ -10,9 +10,9 @@ class ContactsController < ApplicationController
     if verify_captcha
       Contact.new(contact_params).save
       cookies.permanent.signed[:_reckoning_contact] = contact_params[:email]
-      redirect_to "#{root_path}#contact", flash: { success: I18n.t(:"messages.contact.create.success") }
+      redirect_to "#{root_path}#contact", flash: { success: I18n.t(:'messages.contact.create.success') }
     else
-      redirect_to "#{root_path}#contact", flash: { alert: I18n.t(:"messages.contact.create.failure") }
+      redirect_to "#{root_path}#contact", flash: { alert: I18n.t(:'messages.contact.create.failure') }
     end
   end
 

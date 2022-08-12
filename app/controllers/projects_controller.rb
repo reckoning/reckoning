@@ -64,9 +64,9 @@ class ProjectsController < ApplicationController
   def unarchive
     authorize! :archive, project
     if project.unarchive!
-      redirect_to projects_path, flash: { success: I18n.t(:"messages.project.unarchive.success") }
+      redirect_to projects_path, flash: { success: I18n.t(:'messages.project.unarchive.success') }
     else
-      redirect_to projects_path, alert: I18n.t(:"messages.project.unarchive.failure")
+      redirect_to projects_path, alert: I18n.t(:'messages.project.unarchive.failure')
     end
   end
 
@@ -114,6 +114,6 @@ class ProjectsController < ApplicationController
   private def check_dependencies
     return if current_account.address.present?
 
-    redirect_to "#{edit_account_path}#address", alert: I18n.t(:"messages.missing_address")
+    redirect_to "#{edit_account_path}#address", alert: I18n.t(:'messages.missing_address')
   end
 end

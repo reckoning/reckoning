@@ -12,7 +12,7 @@ module Api
         scope = Tour.where(account_id: current_account.id)
         if date
           scope = scope.includes(:waypoints)
-                       .where(waypoints: { time: (date.beginning_of_day..date.end_of_day) })
+                       .where(waypoints: { time: date.all_day })
                        .references(:waypoints)
         end
         @tours = scope.order(created_at: :desc)

@@ -13,14 +13,14 @@ class CustomersControllerTest < ActionController::TestCase
       get :edit, params: { id: customer.id }
 
       assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
+      assert_equal I18n.t(:'devise.failure.unauthenticated'), flash[:alert]
     end
 
     it 'Unauthrized user cant update customer' do
       put :update, params: { id: customer.id, customer: { name: 'bar' } }
 
       assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
+      assert_equal I18n.t(:'devise.failure.unauthenticated'), flash[:alert]
     end
   end
 
@@ -39,7 +39,7 @@ class CustomersControllerTest < ActionController::TestCase
       put :update, params: { id: customer.id, customer: { name: 'bar' } }
 
       assert_response :found
-      assert_equal I18n.t(:"resources.messages.update.success", resource: I18n.t(:"resources.customer")), flash[:success]
+      assert_equal I18n.t(:'resources.messages.update.success', resource: I18n.t(:'resources.customer')), flash[:success]
     end
   end
 end

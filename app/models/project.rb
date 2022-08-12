@@ -13,7 +13,7 @@ class Project < ApplicationRecord
   has_many :tasks, dependent: :destroy, inverse_of: :project
   has_many :timers, through: :tasks
 
-  validates :customer_id, :name, :rate, presence: true
+  validates :name, :rate, presence: true
 
   accepts_nested_attributes_for :tasks, allow_destroy: true
 

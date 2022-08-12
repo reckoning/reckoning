@@ -4,7 +4,7 @@ class Task < ApplicationRecord
   belongs_to :project
   has_many :timers, dependent: :destroy
 
-  validates :project, :name, presence: true
+  validates :name, presence: true
 
   delegate :name, :label, :customer_name, to: :project, prefix: true
 
