@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
-  include Concerns::Accounts
+  include ::AccountsConcern
 
   protect_from_forgery prepend: true
   check_authorization unless: :unauthorized_controllers

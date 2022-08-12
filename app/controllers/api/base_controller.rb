@@ -2,7 +2,7 @@
 
 module Api
   class BaseController < ActionController::API
-    include Concerns::Accounts
+    include ::AccountsConcern
 
     before_action :authenticate_user!
 

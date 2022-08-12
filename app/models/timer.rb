@@ -7,7 +7,7 @@ class Timer < ApplicationRecord
 
   belongs_to :task, touch: true
   belongs_to :user
-  belongs_to :position
+  belongs_to :position, optional: true
 
   before_save :stop_other_timers
 
