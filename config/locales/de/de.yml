@@ -3,8 +3,8 @@ de:
   "false": Nein
   version: "%{version} (%{version_number})"
   title:
-    default: "Reckoning.io"
-    backend: "Reckoning.io Backend"
+    default: "Reckoning"
+    backend: "Reckoning Backend"
   default_country: "Deutschland"
   default_country_code: "DE"
   small_business: "umsatzsteuerbefreit nach § 19 UStG"
@@ -83,7 +83,7 @@ de:
     keywords:
       default: "Rechnungen, Fakturierung, Abrechnung, Software-Dienstleistungen, Freelancer, Tools für Softwareentwickler, Rechnungs-Tools"
     title:
-      default: "Reckoning.io"
+      default: "Reckoning"
       dashboard: "Dashboard"
       logbook: "Fahrtenbuch"
       devise:

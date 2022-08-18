@@ -3,8 +3,8 @@ en:
   "false": No
   version: ~
   title:
-    default: "Reckoning.io"
-    backend: "Reckoning.io Backend"
+    default: "Reckoning"
+    backend: "Reckoning Backend"
   small_business: ~
   nav:
     header:

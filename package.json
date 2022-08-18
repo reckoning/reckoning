@@ -1,5 +1,5 @@
 {
-  "name": "Reckoning.io",
+  "name": "reckoning",
   "version": "1.0.0",
   "description": "[![Build Status](https://travis-ci.org/Reckoning/reckoning.png?branch=master)](https://travis-ci.org/Reckoning/reckoning)",
   "main": "index.js",
@@ -19,5 +19,5 @@
   "bugs": {
     "url": "https://github.com/Reckoning/app/issues"
   },
-  "homepage": "https://reckoning.io"
+  "homepage": "https://reckoning.cc"
 }
