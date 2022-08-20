@@ -22,7 +22,7 @@
     .col-xs-12.col-md-9
       .animate ng-cloak=true ng-if="timersLoaded && !timers.length"
         .row
-          = render file: 'templates/blank'
+          = render template: 'templates/blank'
       .timesheet-timer-panel.panel.panel-default.animate ng-repeat="timer in timers" style="overflow: hidden"
         .panel-body
           .pull-left

@@ -16,24 +16,24 @@
             = I18n.t('actions.today')
           a.btn.btn-default href="#/day/{{nextDay()}}"
             i.fa.fa-chevron-right
-  .row      
+  .row
     .col-xs-12.col-md-8 ng-controller="ToursController as toursCtrl"
       .tour-panel.panel.panel-default.animate ng-repeat="tour in tours"
         .panel-heading.panel-heading-map
           ng-map zoom="14" center="{{originFor(tour)}}" style="height: 150px;" scrollwheel="false" draggable="false"
             directions travel-mode="DRIVING" waypoints="{{waypointsFor(tour)}}" origin="{{originFor(tour)}}" destination="{{destinationFor(tour)}}"
         .panel-body
-          a.tour-item href="#/tours/{{tour.id}}" 
+          a.tour-item href="#/tours/{{tour.id}}"
             h3
-              span ng-bind="tour.waypoints[0].time | toShortDate"   
-            br.visible-xs-block 
+              span ng-bind="tour.waypoints[0].time | toShortDate"
+            br.visible-xs-block
             '
             span.label.label-primary ng-bind="tour.vesselLicensePlate"
           a.btn.btn-primary.pull-right.tour-button href="" ng-click="openModal($event, tour)"
-            = I18n.t("actions.add_waypoint")            
+            = I18n.t("actions.add_waypoint")
       .animate ng-cloak=true ng-if="toursLoaded && !tours.length"
         .row
-          = render file: 'templates/blank'
+          = render template: 'templates/blank'
 
     .col-xs-12.col-md-4.text-right
       .btn-group-responsive.resource-nav
@@ -47,7 +47,7 @@
           .panel-title
             strong
               = I18n.t(:"logbook.panels.vessels")
-            
+
             a.pull-right href="" ng-click="openModal($event)" title=I18n.t("actions.add_vessel")
               i.fa.fa-plus
         .list-group
@@ -57,7 +57,7 @@
               i.fa.fa-location-arrow title="{{vessel.lastLocation.location}}"
             hr
             span ng-bind="vessel.name"
-            strong.pull-right 
+            strong.pull-right
               span ng-bind="vessel.milage"
               '
               = I18n.t("labels.defaults.km")
