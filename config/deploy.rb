@@ -3,9 +3,8 @@
 lock '~> 3.11'
 
 set :application, 'reckoning'
-set :deploy_to, '/home/fleetyards'
 set :deploy_to, '/home/reckoning'
-set :repository, 'https://github.com/reckoning/reckoning.git'
+set :repo_url, 'https://github.com/reckoning/reckoning.git'
 
 set :keep_releases, 5
 set :keep_assets, 5
