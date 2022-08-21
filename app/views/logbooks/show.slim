@@ -1,7 +1,0 @@
-- content_for :title do
-  = I18n.t(:"meta.title.logbook")
-- content_for :js_includes do
-  = javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{Rails.application.secrets[:google_api_key]}"
-
-#logbook.logbook ng-strict-di=true data-turbolinks="false"
-  .row ng-view=true

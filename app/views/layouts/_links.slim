@@ -11,6 +11,3 @@ ul.nav.navbar-nav
   - if can? :read, :expenses
     li class=active_nav?('expenses')
       = link_to I18n.t(:"nav.header.expenses"), expenses_path
-  - if can? :read, :logbook
-    li class=active_nav?('logbook')
-      = link_to I18n.t(:"nav.header.logbook"), logbook_path

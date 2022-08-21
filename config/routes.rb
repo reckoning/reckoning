@@ -76,12 +76,6 @@ Rails.application.routes.draw do
     template 'timer_modal_timesheets'
     template 'task_modal_timesheets'
     template 'index_logbooks'
-    template 'vessel_logbooks'
-    template 'vessel_modal_logbooks'
-    template 'tour_logbooks'
-    template 'tour_modal_logbooks'
-    template 'waypoint_modal_logbooks'
-    template 'map_modal_logbooks'
   end
 
   resources :positions, only: %i[new destroy]
@@ -103,8 +97,6 @@ Rails.application.routes.draw do
 
   resources :expenses, except: [:show]
   resources :expense_imports, only: %i[new create]
-
-  resource :logbook, only: [:show]
 
   resource :dropbox, controller: 'dropbox', only: [:show] do
     collection do
