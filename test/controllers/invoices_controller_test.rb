@@ -118,7 +118,7 @@ class InvoicesControllerTest < ActionController::TestCase
       put :charge, params: { id: invoice.id }
 
       assert_redirected_to 'where_i_came_from'
-      assert invoice.reload.charged?, invoice.inspect
+      assert(invoice.reload.charged?)
     end
   end
 end

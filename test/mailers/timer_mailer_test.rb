@@ -11,6 +11,6 @@ class TimerMailerTest < ActionMailer::TestCase
     assert_not ActionMailer::Base.deliveries.empty?
 
     assert_equal [timer.user.email], mail.to
-    assert_equal ['noreply@reckoning.cc'], mail.from
+    assert_equal ['noreply@reckoning.me'], mail.from
   end
 end

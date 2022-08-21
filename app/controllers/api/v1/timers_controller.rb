@@ -7,7 +7,6 @@ module Api
         not_found(I18n.t('messages.record_not_found.timer', id: params[:id]))
       end
 
-      # rubocop:disable Metrics/CyclomaticComplexity
       def index
         authorize! :index, Timer
         scope = current_account.timers
@@ -20,7 +19,6 @@ module Api
         scope = scope.limit(limit) if limit
         @timers = scope.order(updated_at: :desc)
       end
-      # rubocop:enable Metrics/CyclomaticComplexity
 
       def create
         @timer ||= current_user.timers.new timer_params

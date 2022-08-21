@@ -96,8 +96,11 @@ group :development do
   gem 'pry-rails'
 
   gem 'rubocop', require: false
-  gem 'rubocop-performance'
-  gem 'rubocop-rails'
+  gem 'rubocop-ast', require: false
+  gem 'rubocop-minitest', '0.11.1', require: false
+  gem 'rubocop-performance', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rake', require: false
 
   gem 'spring'
   gem 'spring-watcher-listen'
