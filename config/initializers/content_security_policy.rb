@@ -9,9 +9,16 @@
 require 'uri'
 
 Rails.application.config.content_security_policy do |policy|
+  main_url = "http://#{Rails.configuration.app.domain}"
+  cable_url = "ws://#{Rails.configuration.app.domain}"
+  if Rails.configuration.force_ssl
+    main_url = "https://#{Rails.configuration.app.domain}"
+    cable_url = "wss://#{Rails.configuration.app.domain}"
+  end
+
   connect_src = [
-    :self, :data, 'https://sentry.io', 'https://fonts.googleapis.com', 'https://fonts.gstatic.com',
-    'https://pro.fontawesome.com', 'https://kit-pro.fontawesome.com',
+    :self, :data, main_url, cable_url, 'https://sentry.io', 'https://fonts.googleapis.com',
+    'https://fonts.gstatic.com', 'https://pro.fontawesome.com', 'https://kit-pro.fontawesome.com',
     'https://kit-free.fontawesome.com', 'https://ka-p.fontawesome.com', 'https://www.gstatic.com'
   ]
 
