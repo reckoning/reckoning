@@ -1,0 +1,34 @@
+shared:
+  name: Reckoning
+  copyright_owner: <%= ENV["COPYRIGHT_OWNER"] || 'Marten Klitzke' %>
+
+  domain: <%= ENV["DOMAIN"] %>
+  url: <%= ENV["APP_URL"] %>
+
+  s3_space: reckoning
+  s3_region: fra1
+  s3_endpoint: https://fra1.digitaloceanspaces.com
+
+  cable_endpoint: <%= ENV["CABLE_ENDPOINT"] || "ws://localhost:#{ENV["PORT"]}/cable" %>
+  cable_channel_prefix: <%= ENV["CABLE_CHANNEL_PREFIX"] %>
+
+  jwt_expiration: <%= 24.hours.to_i %>
+
+  mailer_default_from: <%= ENV["MAILER_DEFAULT_FROM"] || 'noreply@reckoning.me' %>
+
+  registration: false
+  demo: false
+
+development:
+  url: http://reckoning.test
+  domain: reckoning.test
+
+  registration: true
+  demo: true
+
+test:
+  url: http://reckoning.test
+  domain: reckoning.test
+
+  registration: true
+  demo: false

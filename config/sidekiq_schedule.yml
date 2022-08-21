@@ -1,0 +1,9 @@
+# see https://crontab.guru for help/explanation of cron lines
+
+production: &default
+  running_timer_job:
+    cron: '*/10 * * * *' # Every 10 Minutes
+    class: 'RunningTimerWorker'
+
+development:
+  <<: *default

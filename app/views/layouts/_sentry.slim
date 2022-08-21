@@ -1,5 +1,5 @@
 javascript:
-  Raven.config("#{Rails.application.secrets[:sentry_js]}", {
+  Raven.config("#{Rails.application.credentials.sentry_js}", {
     release: "#{Reckoning::VERSION}",
-    whitelistUrls: ['reckoning.io/assets/']
+    whitelistUrls: ["#{Rails.configuration.app.domain}/assets/"]
   }).install();

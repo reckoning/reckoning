@@ -9,7 +9,7 @@ class ExpensesController < ApplicationController
   def index
     authorize! :read, :expenses
     expenses = current_account.expenses
-                              .filter_result(filter_params)
+      .filter_result(filter_params)
 
     respond_to do |format|
       format.csv do
@@ -27,8 +27,8 @@ class ExpensesController < ApplicationController
         end
 
         @expenses = expenses.order(sort_column.to_sym => sort_direction, created_at: :desc)
-                            .page(params.fetch(:page, nil))
-                            .per(40)
+          .page(params.fetch(:page, nil))
+          .per(40)
       end
     end
   end

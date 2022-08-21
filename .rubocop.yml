@@ -1,10 +1,11 @@
-# https://github.com/bbatsov/rubocop/blob/master/config/default.yml
 require:
+  - rubocop-minitest
   - rubocop-performance
   - rubocop-rails
+  - rubocop-rake
+  - rubocop-ast
 
 AllCops:
-  NewCops: enable
   Exclude:
     - 'node_modules/**/*'
     - 'db/**/*'
@@ -14,12 +15,28 @@ AllCops:
     - 'log/**/*'
     - 'Brewfile'
     - 'Rakefile'
+  NewCops: enable
 
 Rails:
   Enabled: true
 
+Rails/HelperInstanceVariable:
+  Enabled: false
+
 Style/Documentation:
   Enabled: false # for now
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
+# Style/Lambda:
+#   Enabled: false
 
 # User.all.map do |user|
 #   [user.name, user.children.map(&:names)]
@@ -38,6 +55,15 @@ Style/TrailingCommaInArrayLiteral:
 
 Style/TrailingCommaInHashLiteral:
   Enabled: false
+
+Layout/RescueEnsureAlignment:
+  Enabled: false
+
+Style/AccessModifierDeclarations:
+  EnforcedStyle: inline
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
 
 Layout/LineLength:
   Enabled: false
@@ -60,9 +86,8 @@ Metrics/PerceivedComplexity:
 Style/ParallelAssignment:
   Enabled: false
 
-
-Style/AccessModifierDeclarations:
-  EnforcedStyle: inline
+Metrics/CyclomaticComplexity:
+  Max: 10
 
 # `fail` is seldom/never seen in Ruby code.
 # https://github.com/bbatsov/ruby-style-guide/issues/233
@@ -73,6 +98,18 @@ Style/SignalException:
 Style/TrivialAccessors:
   ExactNameMatch: true
 
+Style/RedundantFetchBlock:
+  Enabled: false
+
+Rails/BulkChangeTable:
+  Enabled: false
+
 Rails/Delegate:
   Exclude:
     - lib/**/*
+
+Rails/UnknownEnv:
+  Environments:
+    - production
+    - test
+    - development

@@ -44,17 +44,17 @@ class ApplicationController < ActionController::Base
   helper_method :backend?
 
   private def registration_enabled?
-    Rails.application.secrets[:registration]
+    Rails.configuration.app.registration
   end
   helper_method :registration_enabled?
 
   private def invoice_limit_reached?
-    !current_user.admin? && Rails.application.secrets[:demo] && current_account.invoices.count >= 2
+    !current_user.admin? && Rails.configuration.app.demo && current_account.invoices.count >= 2
   end
   helper_method :invoice_limit_reached?
 
   private def api_domain
-    "//#{Rails.application.secrets[:domain]}"
+    "//#{Rails.configuration.app.domain}"
   end
   helper_method :api_domain
 

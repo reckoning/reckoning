@@ -3,7 +3,7 @@
 class User < ApplicationRecord
   devise :two_factor_authenticatable, :two_factor_backupable, :confirmable, :lockable, :recoverable,
          :registerable, :rememberable, :trackable, :validatable,
-         otp_secret_encryption_key: Rails.application.secrets[:devise_otp],
+         otp_secret_encryption_key: Rails.application.credentials.devise_otp,
          otp_backup_code_length: 32, otp_number_of_backup_codes: 10
 
   belongs_to :account

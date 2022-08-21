@@ -9,5 +9,4 @@ html lang=I18n.locale
         .col-xs-12.col-md-10.col-md-offset-2.col-xl-11.col-xl-offset-1
           == yield
     - if Rails.env.production?
-      = render "layouts/google_analytics"
       = render "layouts/sentry"

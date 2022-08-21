@@ -9,9 +9,9 @@ module Backend
     # get: /backend/accounts
     def index
       @accounts = Account.all
-                         .order(created_at: :desc)
-                         .page(params.fetch(:page, nil))
-                         .per(20)
+        .order(created_at: :desc)
+        .page(params.fetch(:page, nil))
+        .per(20)
     end
 
     # get: /backend/accounts/new

@@ -1,0 +1,3 @@
+shared:
+  url: <%= ENV["REDIS_URL"] || 'redis://localhost:6379' %>
+  db: <%= ENV["REDIS_DB"] || 0 %>

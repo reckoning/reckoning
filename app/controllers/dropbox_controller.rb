@@ -60,8 +60,8 @@ class DropboxController < ApplicationController
 
   private def flow
     @flow ||= DropboxOAuth2Flow.new(
-      Rails.application.secrets[:dropbox_key],
-      Rails.application.secrets[:dropbox_secret],
+      Rails.application.credentials.dropbox_key,
+      Rails.application.credentials.dropbox_secret,
       activate_dropbox_url,
       session,
       :dropbox_auth_csrf_token,

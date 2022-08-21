@@ -44,7 +44,7 @@ gem 'sass-rails'
 
 gem 'coffee-rails'
 gem 'jquery-rails'
-gem 'js-routes'
+gem 'js-routes', '~> 1.0'
 gem 'turbolinks'
 
 gem 'bootstrap-sass'
@@ -77,6 +77,8 @@ gem 'web_translate_it'
 
 gem 'sentry-raven'
 
+gem 'lograge'
+
 gem 'typhoeus'
 
 # pdf rendering
@@ -94,12 +96,17 @@ group :development do
   gem 'pry-rails'
 
   gem 'rubocop', require: false
-  gem 'rubocop-performance'
-  gem 'rubocop-rails'
+  gem 'rubocop-ast', require: false
+  gem 'rubocop-minitest', '0.11.1', require: false
+  gem 'rubocop-performance', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rake', require: false
 
   gem 'spring'
   gem 'spring-watcher-listen'
   gem 'web-console'
+
+  gem 'letter_opener'
 end
 
 group :test do

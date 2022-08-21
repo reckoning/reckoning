@@ -1,3 +1,0 @@
-running_timer_job:
-  cron: '*/10 * * * *'
-  class: 'RunningTimerWorker'

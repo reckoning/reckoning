@@ -6,12 +6,12 @@ module Api
       def index
         authorize! :index, Task
         scope = current_account.tasks
-                               .includes(project: [:customer]).references(:project)
+          .includes(project: [:customer]).references(:project)
         if week_date
           date = Date.parse(week_date)
           scope = scope.includes(:timers).references(:timers)
-                       .where(timers: { user_id: current_user.id })
-                       .where(timers: { date: [date.all_week] })
+            .where(timers: { user_id: current_user.id })
+            .where(timers: { date: [date.all_week] })
         end
         @tasks = scope.order('tasks.id ASC')
       end

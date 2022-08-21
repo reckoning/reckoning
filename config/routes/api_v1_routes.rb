@@ -20,10 +20,6 @@ v1_api_routes = lambda do
     end
   end
 
-  resources :vessels, only: %i[index create update destroy]
-  resources :tours, only: %i[index show create update destroy]
-  resources :waypoints, only: %i[index create update destroy]
-  resources :manufacturers, only: [:index]
   resources :users, only: [:index] do
     collection do
       get :current

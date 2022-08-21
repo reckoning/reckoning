@@ -12,7 +12,7 @@ de:
   devise:
     otp:
       title: 'Zwei-Faktor-Autorisierung'
-      explain: 'Sie können eine Zwei-Faktor-Autorisierung mit z.B. <a href="%{google_auth_link}" target="_blank">Google Authenticator</a>, <a href="%{one_password_link}" target="_blank">1Password</a> oder <a href="%{authy_link}" target="_blank">Authy</a> hinzufügen, um Ihren Zugang zu Reckoning.io sicherer zu machen.'
+      explain: 'Sie können eine Zwei-Faktor-Autorisierung mit z.B. <a href="%{google_auth_link}" target="_blank">Google Authenticator</a>, <a href="%{one_password_link}" target="_blank">1Password</a> oder <a href="%{authy_link}" target="_blank">Authy</a> hinzufügen, um Ihren Zugang zu Reckoning sicherer zu machen.'
       enable_explain: 'Scanen Sie diesen QRCode und geben Sie einen der generierten Tokens ein.'
       disable_explain: 'Wenn Sie die Zwei-Faktor-Autorisierung wieder deaktivieren wollen, geben Sie einen der generierten Tokens ein.'
       backup_explain: 'Speichern Sie diese Backup Codes an einem sicherem Ort.'

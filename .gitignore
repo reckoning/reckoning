@@ -35,3 +35,7 @@ public/javascripts/translations.js
 reckoning-app.sublime-workspace
 reckoning.io.csr
 reckoning.io.key
+
+/config/master.key
+
+/config/credentials/production.key

@@ -1,10 +1,10 @@
-production:
+production: &default
   adapter: redis
-  url: <%=ENV['REDIS_URL']%>
+  url: <%= Rails.configuration.redis.url %>
+  channel_prefix: <%= Rails.configuration.app.cable_channel_prefix %>
 
 development:
-  adapter: redis
-  url: <%=ENV['REDIS_URL']%>
+  <<: *default
 
 test:
-  adapter: async
+  adapter: test

@@ -98,7 +98,7 @@ module Api
           assert_response :ok
 
           json = JSON.parse response.body
-          assert_equal true, json['started']
+          assert json['started']
           assert json['startedAt']
         end
 
@@ -109,7 +109,7 @@ module Api
           assert_response :ok
 
           json = JSON.parse response.body
-          assert_equal false, json['started']
+          assert_not json['started']
         end
 
         it 'destroys a timer' do
