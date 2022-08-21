@@ -77,6 +77,8 @@ gem 'web_translate_it'
 
 gem 'sentry-raven'
 
+gem 'lograge'
+
 gem 'typhoeus'
 
 # pdf rendering

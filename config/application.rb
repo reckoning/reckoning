@@ -29,6 +29,8 @@ module Reckoning
 
     config.i18n.fallbacks = [:de]
 
+    config.lograge.enabled = true
+
     config.action_view.field_error_proc = proc { |html_tag, _instance|
       # rubocop:disable Rails/OutputSafety
       html_tag.to_s.html_safe
