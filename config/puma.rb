@@ -1,17 +1,38 @@
 # frozen_string_literal: true
 
-workers Integer(ENV['WEB_CONCURRENCY'] || 3)
-threads_count = Integer(ENV['MAX_THREADS'] || 16)
-threads 0, threads_count
+rails_environment = ENV.fetch('RAILS_ENV', 'development')
+app_dir = ENV.fetch('APP_DIR', '.')
 
-preload_app!
+max_threads_count = Integer(ENV.fetch('MAX_THREADS', 2))
+min_threads_count = Integer(ENV.fetch('MIN_THREADS') { max_threads_count } || 1)
+threads min_threads_count, max_threads_count
 
-rackup      DefaultRackup
-port        ENV['PORT']     || 3000
-environment ENV['RACK_ENV'] || 'development'
+workers Integer(ENV.fetch('WORKER_COUNT', 2))
+
+port ENV.fetch('PORT', 3000)
+
+environment rails_environment
+
+# Set up socket location
+bind "unix://#{app_dir}/tmp/pids/puma.sock"
+
+# Set PID and state locations
+pidfile "#{app_dir}/tmp/pids/puma.pid"
+state_path "#{app_dir}/tmp/pids/puma.state"
+
+activate_control_app
+
+# Allow puma to be restarted by `rails restart` command.
+plugin :tmp_restart
 
 on_worker_boot do
-  # Worker specific setup for Rails 4.1+
-  # See: https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server#on-worker-boot
-  ActiveRecord::Base.establish_connection
+  require 'active_record'
+
+  # rubocop:disable Style/RescueModifier
+  ActiveRecord::Base.connection.disconnect! rescue ActiveRecord::ConnectionNotEstablished
+  # rubocop:enable Style/RescueModifier
+
+  require 'erb'
+
+  ActiveRecord::Base.establish_connection(YAML.safe_load(ERB.new(File.read("#{app_dir}/config/database.yml")).result)[rails_environment])
 end
