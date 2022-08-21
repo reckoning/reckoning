@@ -15,6 +15,7 @@ defaults: &defaults
       environment:
         POSTGRES_USER: root
         POSTGRES_DB: reckoning_test
+    - image: cimg/redis:6.2.6
 
 jobs:
   checkout_code:
