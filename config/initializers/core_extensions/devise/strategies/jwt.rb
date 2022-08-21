@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'json_web_token'
+
 module Devise
   module Strategies
     class JWT < Base

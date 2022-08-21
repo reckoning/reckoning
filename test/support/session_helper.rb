@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'json_web_token'
+
 # taken from https://github.com/turn-project/turn/issues/33
 module SessionHelper
   def add_authorization(user)
