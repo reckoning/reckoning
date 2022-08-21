@@ -67,21 +67,6 @@
 
     = render partial: "base/plans" if Plan.base.present?
 
-  %hr
-
-  .row
-    %a.anchor#contact
-    .col-xs-12.col-md-12
-      %h2.hide
-        = I18n.t(:"headlines.welcome.contact")
-      .row
-        .col-xs-12.col-md-6.col-md-offset-3
-          .well
-            - if contact_cookie
-              = render "base/contact_received"
-            - else
-              = render "base/contact_form"
-
   #image-modal.modal.fade
     .modal-dialog
       .modal-content

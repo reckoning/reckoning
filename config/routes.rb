@@ -14,8 +14,6 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :contacts, only: [:index]
-
     authenticate :user, (->(u) { u.admin? }) do
       mount Sidekiq::Web => '/workers'
     end
@@ -115,8 +113,6 @@ Rails.application.routes.draw do
       get :deactivate
     end
   end
-
-  resources :contacts, only: [:create]
 
   get 'impressum' => 'base#impressum'
   get 'privacy' => 'base#privacy'
