@@ -3,7 +3,7 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  config.hosts << '.reckoning.test'
+  config.hosts << ".#{Rails.configuration.app.domain}"
 
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development
@@ -16,7 +16,7 @@ Rails.application.configure do
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
-  config.action_controller.default_url_options = { host: Rails.application.secrets[:domain] }
+  config.action_controller.default_url_options = { host: Rails.configuration.app.domain }
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = true
@@ -35,20 +35,15 @@ Rails.application.configure do
   # Suppress logger output for asset requests.
   config.assets.quiet = true
 
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.perform_caching = false
   config.action_mailer.perform_deliveries = true
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.default_url_options = { host: Rails.application.secrets[:domain] }
-  config.action_mailer.smtp_settings = {
-    address: Rails.application.secrets[:mailer_host],
-    port: Rails.application.secrets[:mailer_port],
-    enable_starttls_auto: true,
-    user_name: Rails.application.secrets[:mailer_user],
-    password: Rails.application.secrets[:mailer_password],
-    authentication: 'login',
-    domain: Rails.application.secrets[:domain]
-  }
+  config.action_mailer.delivery_method = :letter_opener
+  config.action_mailer.deliver_later_queue_name = 'mailers'
+  config.action_mailer.default_url_options = { host: Rails.configuration.app.domain, trailing_slash: true }
 
-  config.action_cable.allowed_request_origins = ['http://reckoning.test', 'http://localhost:8240', 'http://0.0.0.0:8240']
+  config.action_cable.mount_path = '/cable'
+  config.action_cable.allowed_request_origins = [%r{http(s?)://(.*)#{Rails.configuration.app.domain}}]
 
   config.after_initialize do
     Bullet.enable = true

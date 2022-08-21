@@ -3,7 +3,7 @@
 Reckoning::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  config.hosts << ".#{ENV.fetch('DOMAIN', nil)}"
+  config.hosts << ".#{Rails.configuration.app.domain}"
 
   # Code is not reloaded between requests.
   config.cache_classes = true
@@ -57,7 +57,7 @@ Reckoning::Application.configure do
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.assets.prefix = "/assets"
-  # config.action_controller.asset_host = Rails.application.secrets[:url]
+  # config.action_controller.asset_host = https://assets.reckoning.me
   config.assets.initialize_on_precompile = true
 
   # Ignore bad email addresses and do not raise email delivery errors.
@@ -84,20 +84,23 @@ Reckoning::Application.configure do
     config.logger = ActiveSupport::TaggedLogging.new(logger)
   end
 
-  config.action_controller.default_url_options = { host: Rails.application.secrets[:domain] }
+  config.action_controller.default_url_options = { host: Rails.configuration.app.domain }
 
   config.action_cable.mount_path = '/cable'
-  config.action_cable.allowed_request_origins = [%r{http(s?)://(.*)reckoning\.cc}]
+  config.action_cable.allowed_request_origins = [%r{http(s?)://(.*)#{Rails.configuration.app.domain}}]
 
+  config.action_mailer.deliver_later_queue_name = 'mailers'
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.default_url_options = { host: Rails.application.secrets[:domain] }
+  config.action_mailer.default_url_options = { host: Rails.configuration.app.domain }
   config.action_mailer.smtp_settings = {
-    address: Rails.application.secrets[:mailer_host],
-    port: Rails.application.secrets[:mailer_port],
+    address: Rails.application.credentials.mailer_host,
+    port: Rails.application.credentials.mailer_port,
     enable_starttls_auto: true,
-    user_name: Rails.application.secrets[:mailer_user],
-    password: Rails.application.secrets[:mailer_password],
+    user_name: Rails.application.credentials.mailer_user,
+    password: Rails.application.credentials.mailer_password,
     authentication: 'login',
-    domain: Rails.application.secrets[:domain]
+    domain: Rails.configuration.app.domain
   }
+
+  config.require_master_key = true
 end

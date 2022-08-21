@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'json_web_token'
+
 module ApplicationHelper
   def main_title
     [
@@ -11,7 +13,7 @@ module ApplicationHelper
   def auth_token
     @auth_token ||= if user_signed_in?
                       JsonWebToken.encode(
-                        exp: Time.zone.now.to_i + Rails.application.secrets[:jwt_expiration],
+                        exp: Time.zone.now.to_i + Rails.configuration.app.jwt_expiration,
                         user_id: current_user.id
                       )
                     else

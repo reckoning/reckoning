@@ -12,6 +12,6 @@
         .input-group
           = form.text_field :subdomain, placeholder: I18n.t(:"helpers.placeholder.subdomain"), class: 'form-subdomain form-control'
           = form.label :subdomain, class: "input-group-addon" do
-            = ".#{Rails.application.secrets[:domain]}"
+            = ".#{Rails.configuration.app.domain}"
         = form_errors form.object, :subdomain
   = render "shared/forms/submit", path: root_path

@@ -38,6 +38,9 @@ module Reckoning
     config.exceptions_app = routes
 
     config.middleware.use I18n::JS::Middleware
+    config.app = config_for('app/main')
+    config.redis = config_for(:redis)
+    config.basic_auth = config_for(:basic_auth)
   end
 end
 

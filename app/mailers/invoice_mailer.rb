@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class InvoiceMailer < ApplicationMailer
-  default from: Rails.application.secrets[:mailer_default_from].to_s
-
   attr_accessor :invoice
 
   def customer(invoice)
@@ -41,6 +39,6 @@ class InvoiceMailer < ApplicationMailer
   private def from
     @from ||= invoice.customer.default_from if invoice.customer.default_from.present?
     @from ||= invoice.account.default_from if invoice.account.default_from.present?
-    @from ||= Rails.application.secrets[:mailer_default_from].to_s
+    @from ||= Rails.configuration.app.mailer_default_from
   end
 end
