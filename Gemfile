@@ -108,6 +108,13 @@ group :development do
   gem 'spring-watcher-listen'
   gem 'web-console'
 
+  gem 'bcrypt_pbkdf', require: false
+  gem 'capistrano', '~> 3.11', require: false
+  gem 'capistrano-rails', '~> 1.4', require: false
+  gem 'capistrano-rails-console', require: false
+  gem 'capistrano-rbenv', '~> 2.1', require: false
+  gem 'ed25519', require: false
+
   gem 'letter_opener'
 end
 
@@ -129,8 +136,4 @@ group :development, :test do
   gem 'bullet'
   gem 'bundler-audit'
   gem 'byebug', platform: :mri
-
-  # deployment
-  gem 'mina', require: false
-  gem 'mina-multistage', require: false
 end
