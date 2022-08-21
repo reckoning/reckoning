@@ -22,7 +22,7 @@ class Ability
 
     setup_expenses_abilities(user.account_id) if user.account.feature_expenses?
 
-    setup_logbook_abilities(user.account_id) if user.account.feature_logbook?
+    # setup_logbook_abilities(user.account_id) if user.account.feature_logbook?
 
     setup_admin_abilities if user.admin?
   end
