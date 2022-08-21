@@ -46,16 +46,12 @@ namespace :deploy do
   task :restart do
     invoke :'server:restart_app'
     invoke :'server:restart_worker'
-    invoke :'server:broadcast_version'
-    invoke :'server:check_sc_data'
   end
 
   desc 'Reload'
   task :reload do
     invoke :'server:reload_app'
     invoke :'server:restart_worker'
-    invoke :'server:broadcast_version'
-    invoke :'server:check_sc_data'
   end
 end
 
@@ -103,30 +99,6 @@ namespace :server do
       execute(:sudo, :service, "#{fetch(:application)}-worker", :restart)
       execute(:sudo, :systemctl, 'is-active', '--quiet', "#{fetch(:application)}-worker.service")
       info 'Worker Restarted'
-    end
-  end
-
-  desc 'Broadcast version'
-  task :broadcast_version do
-    on roles(:app) do
-      within release_path do
-        with rails_env: fetch(:rails_env) do
-          info 'Broadcast Version'
-          execute(:bundle, :exec, :thor, 'broadcast:version')
-        end
-      end
-    end
-  end
-
-  desc 'Check SC Data'
-  task :check_sc_data do
-    on roles(:app) do
-      within release_path do
-        with rails_env: fetch(:rails_env) do
-          info 'Check for SC Data updates'
-          execute(:bundle, :exec, :thor, 'broadcast:check_sc_data')
-        end
-      end
     end
   end
 end
