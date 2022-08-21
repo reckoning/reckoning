@@ -39,7 +39,7 @@ class Plan < ApplicationRecord
 
   def price
     if discount
-      Money.new(amount * (100 - discount))
+      Money.new(amount * (100 - discount) / 100)
     else
       Money.new(amount)
     end
