@@ -87,7 +87,9 @@ Reckoning::Application.configure do
   config.action_controller.default_url_options = { host: Rails.configuration.app.domain }
 
   config.action_cable.mount_path = '/cable'
-  config.action_cable.allowed_request_origins = [%r{http(s?)://(.*)#{Rails.configuration.app.domain}}]
+  config.action_cable.allowed_request_origins = [
+    %r{http(s?)://(.*)#{Regexp.escape(Rails.configuration.app.domain)}}
+  ]
 
   config.action_mailer.deliver_later_queue_name = 'mailers'
   config.action_mailer.delivery_method = :smtp
