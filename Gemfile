@@ -102,6 +102,8 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen'
   gem 'web-console'
+
+  gem 'letter_opener'
 end
 
 group :test do
