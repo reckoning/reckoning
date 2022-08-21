@@ -303,6 +303,15 @@ GEM
       ffi (~> 1.0)
     redcarpet (3.5.1)
     redis (4.7.1)
+    redis-actionpack (5.3.0)
+      actionpack (>= 5, < 8)
+      redis-rack (>= 2.1.0, < 3)
+      redis-store (>= 1.1.0, < 2)
+    redis-rack (2.1.4)
+      rack (>= 2.0.8, < 3)
+      redis-store (>= 1.2, < 2)
+    redis-store (1.9.1)
+      redis (>= 4, < 5)
     regexp_parser (2.5.0)
     request_store (1.5.1)
       rack (>= 1.4)
@@ -493,6 +502,7 @@ DEPENDENCIES
   rails-i18n
   rails-perftest
   redcarpet
+  redis-actionpack
   refile!
   roo
   rqrcode-rails3

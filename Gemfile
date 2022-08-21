@@ -81,6 +81,8 @@ gem 'lograge'
 
 gem 'typhoeus'
 
+gem 'redis-actionpack'
+
 # pdf rendering
 gem 'wicked_pdf'
 
