@@ -151,7 +151,6 @@ GEM
     fugit (1.5.3)
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
-    glob (0.3.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
     haml (5.2.2)
@@ -171,9 +170,8 @@ GEM
       ruby_parser (~> 3.5)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
-    i18n-js (4.0.0)
-      glob
-      i18n
+    i18n-js (3.9.2)
+      i18n (>= 0.6.6)
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
@@ -467,7 +465,7 @@ DEPENDENCIES
   haml
   haml-rails
   highline
-  i18n-js
+  i18n-js (~> 3.0)
   jbuilder
   jquery-rails
   js-routes (~> 1.0)
