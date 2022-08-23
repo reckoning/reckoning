@@ -1,5 +1,0 @@
-javascript:
-  Raven.config("#{Rails.application.credentials.sentry_js}", {
-    release: "#{Reckoning::VERSION}",
-    whitelistUrls: ["#{Rails.configuration.app.domain}/assets/"]
-  }).install();

@@ -15,6 +15,7 @@ defaults: &defaults
       environment:
         POSTGRES_USER: root
         POSTGRES_DB: reckoning_test
+    - image: cimg/redis:6.2.6
 
 jobs:
   checkout_code:
@@ -122,7 +123,7 @@ jobs:
           command: ssh-keyscan -H github.com >> ~/.ssh/known_hosts
       - run:
           name: Deploy
-          command: bundle exec mina live deploy
+          command: bundle exec cap live deploy
 
 workflows:
   version: 2

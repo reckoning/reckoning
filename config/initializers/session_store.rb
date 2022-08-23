@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
-# Be sure to restart your server when you modify this file.
+expire_after = 2.hours
 
-Rails.application.config.session_store :cookie_store, key: '_reckoning_session'
+session_store_options = {
+  servers: "#{Rails.configuration.redis.url}/#{Rails.configuration.redis.db}/reckoning-#{Rails.env}-session",
+  key: Rails.configuration.cookie_prefix,
+  domain: Rails.configuration.app.cookie_domain,
+  secure: Rails.env.production?,
+  expire_after: expire_after,
+  same_site: :lax,
+}
 
-# Use the database for sessions instead of the cookie-based default,
-# which shouldn't be used to store highly confidential information
-# (create the session table with "rails generate session_migration")
-# MortikFactura::Application.config.session_store :active_record_store
+Reckoning::Application.config.session_store :redis_store, **session_store_options
