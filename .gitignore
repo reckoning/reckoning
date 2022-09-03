@@ -40,9 +40,16 @@ reckoning-app.sublime-workspace
 reckoning.io.csr
 reckoning.io.key
 
-/config/master.key
+config/master.key
+config/credentials/production.key
 
-/config/credentials/production.key
+# Vite Ruby
+public/vite*
+node_modules
+*.local
+
+app/assets/builds/*
+!app/assets/builds/.keep
 
 node_modules
 yarn-error.log

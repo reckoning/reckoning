@@ -1,0 +1,53 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, viewport-fit=cover">
+
+<title><%= content_for?(:title) ? title(yield(:title)) : title %></title>
+<meta content="<%= I18n.t(:"meta.description.default") %>" name="description">
+<meta content="<%= I18n.t(:"meta.keywords.default") %>" name="keywords">
+
+<link rel="mask-icon" href="<%= asset_url('favicon.svg') %>" color="#428bca">
+<link rel="shortcut icon" type="image/png" href="<%= asset_path('favicon.png') %>">
+
+<meta name="color-scheme" content="light">
+
+<meta name="theme-color" content="#ffffff"/>
+<meta name="application-name" content="<% I18n.t(:"meta.title.default") %>">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-title" content="<% I18n.t(:"meta.title.default") %>">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="<% I18n.t(:"meta.title.default") %>">
+<meta name="apple-mobile-web-app-status-bar-style" content="white">
+<meta name="application-name" content="<% I18n.t(:"meta.title.default") %>">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-title" content="<% I18n.t(:"meta.title.default") %>">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="<% I18n.t(:"meta.title.default") %>">
+<meta name="apple-mobile-web-app-status-bar-style" content="white">
+
+<%= action_cable_meta_tag %>
+
+<link rel="manifest" href="/manifest.json" />
+
+<%= favicon_link_tag 'icon-iphone.png', rel: "apple-touch-icon", type: 'image/png' %>
+<%= favicon_link_tag 'icon-ipad.png', rel: "apple-touch-icon", sizes: "76x76", type: 'image/png' %>
+<%= favicon_link_tag 'icon-iphone-retina.png', rel: "apple-touch-icon", sizes: "120x120", type: 'image/png' %>
+<%= favicon_link_tag 'icon-ipad-retina.png', rel: "apple-touch-icon", sizes: "152x152", type: 'image/png' %>
+<%= favicon_link_tag 'icon-ipad-retina.png', rel: "apple-touch-startup-image", type: 'image/png' %>
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://storage.googleapis.com">
+<link rel="preconnect" href="https://kit-pro.fontawesome.com">
+
+<script src="https://kit.fontawesome.com/80d0ee6c6c.js" crossorigin="anonymous"></script>
+
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Orbitron:400,500,700,900&display=swap" crossorigin>
+<link rel="stylesheet" media="all" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Orbitron:400,500,700,900|Major+Mono+Display&display=swap" crossorigin>
+
+<%= csrf_meta_tags %>
+
+<%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+<%= vite_stylesheet_tag 'frontend.scss' %>
+
+<%= vite_client_tag %>
+<%= vite_typescript_tag 'frontend' %>
+

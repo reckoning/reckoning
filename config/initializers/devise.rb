@@ -6,8 +6,6 @@ Devise.setup do |config|
   config.warden do |manager|
     manager.default_strategies(scope: :user).unshift :two_factor_authenticatable
     manager.default_strategies(scope: :user).unshift :two_factor_backupable
-    manager.strategies.add(:jwt, Devise::Strategies::JWT)
-    manager.default_strategies(scope: :user).unshift :jwt
     manager.failure_app = JSONFailureApp
   end
 
@@ -126,14 +124,18 @@ Devise.setup do |config|
 
   # ==> Configuration for :rememberable
   # The time the user will be remembered without asking for credentials again.
-  config.remember_for = 3.months
+  config.remember_for = 6.months
 
   # If true, extends the user's remember period when remembered via cookie.
   config.extend_remember_period = true
 
   # Options to be passed to the created cookie. For instance, you can set
   # :secure => true in order to force SSL only cookies.
-  config.rememberable_options = {secure: true}
+  config.rememberable_options = {
+    domain: ".#{Rails.configuration.app.domain}",
+    secure: Rails.env.production?,
+    same_site: :lax
+  }
 
   # ==> Configuration for :validatable
   # Range for password length. Default is 8..128.

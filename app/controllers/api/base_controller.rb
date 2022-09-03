@@ -2,6 +2,9 @@
 
 module Api
   class BaseController < ActionController::API
+    include ActionController::Cookies
+    include ActionController::MimeResponds
+    include ActionController::Caching
     include ::AccountsConcern
 
     before_action :authenticate_user!

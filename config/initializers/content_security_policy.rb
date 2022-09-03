@@ -23,9 +23,8 @@ Rails.application.config.content_security_policy do |policy|
 
   if Rails.env.development?
     connect_src.concat [
-      "ws://localhost:3035", "http://localhost:3035",
-      "ws://reckoning.test:3035", "http://reckoning.test:3035", "ws://reckoning.test:3036"
-      # "ws://#{ViteRuby.config.host_with_port}"
+      'ws://reckoning.test:3036', 'http://reckoning.test:3036',
+      "ws://#{ViteRuby.config.host_with_port}", "http://#{ViteRuby.config.host_with_port}"
     ]
   end
 
@@ -34,7 +33,7 @@ Rails.application.config.content_security_policy do |policy|
     "https://kit-pro.fontawesome.com", "https://kit-free.fontawesome.com",
     "https://www.gstatic.com"
   ]
-  # script_src << "http://#{ViteRuby.config.host_with_port}" if Rails.env.development?
+  script_src << "http://#{ViteRuby.config.host_with_port}" if Rails.env.development?
 
   worker_src = %i[self blob]
 

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-require "sidekiq/web"
+require 'sidekiq/web'
+
+Rails.application.default_url_options = { host: Rails.configuration.app.domain, trailing_slash: true }
 
 Rails.application.routes.draw do
   draw :api_routes
@@ -71,37 +73,37 @@ Rails.application.routes.draw do
     end
   end
 
-  resource :timesheet, only: [:show]
+  # resource :timesheet, only: [:show]
 
-  resource :template, only: [] do
-    template "blank"
-    template "datepicker"
-    template "month_timers"
-    template "day_timesheets"
-    template "week_timesheets"
-    template "timer_modal_timesheets"
-    template "task_modal_timesheets"
-    template "index_logbooks"
-  end
+  # resource :template, only: [] do
+  #   template 'blank'
+  #   template 'datepicker'
+  #   template 'month_timers'
+  #   template 'day_timesheets'
+  #   template 'week_timesheets'
+  #   template 'timer_modal_timesheets'
+  #   template 'task_modal_timesheets'
+  #   template 'index_logbooks'
+  # end
 
-  resources :positions, only: %i[new destroy]
+  # resources :positions, only: %i[new destroy]
 
-  resources :customers, only: %i[edit update]
-  resources :projects, except: [:destroy] do
-    member do
-      put :unarchive
-    end
+  # resources :customers, only: %i[edit update]
+  # resources :projects, except: [:destroy] do
+  #   member do
+  #     put :unarchive
+  #   end
 
-    resources :tasks, only: %i[index create]
-  end
+  #   resources :tasks, only: %i[index create]
+  # end
 
-  resources :timers, only: [] do
-    collection do
-      get :uninvoiced
-    end
-  end
+  # resources :timers, only: [] do
+  #   collection do
+  #     get :uninvoiced
+  #   end
+  # end
 
-  resources :expenses, except: [:show]
+  # resources :expenses, except: [:show]
   resources :expense_imports, only: %i[new create]
 
   resource :dropbox, controller: "dropbox", only: [:show] do
@@ -111,6 +113,10 @@ Rails.application.routes.draw do
       get :deactivate
     end
   end
+
+  draw :frontend_routes
+
+  draw :frontend_routes
 
   get "impressum" => "base#impressum"
   get "privacy" => "base#privacy"

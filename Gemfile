@@ -26,7 +26,6 @@ gem "slim-rails"
 
 gem "devise"
 gem "devise-two-factor"
-gem "jwt"
 
 gem "mini_magick"
 gem "rqrcode"
@@ -44,9 +43,7 @@ gem "dynamic_fields_for_rails"
 
 gem "workflow", "~> 1.2.0"
 
-gem "aasm"
-
-gem "sass-rails"
+gem 'aasm'
 
 gem "coffee-rails"
 gem "jquery-rails"
@@ -85,7 +82,11 @@ gem "sentry-sidekiq"
 
 gem "lograge"
 
-gem "typhoeus"
+gem 'typhoeus'
+
+gem 'vite_rails'
+
+gem 'tailwindcss-rails'
 
 gem "redis-actionpack"
 gem "redis-store"

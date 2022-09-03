@@ -1,0 +1,113 @@
+openapi: 3.1.0
+x-stoplight:
+  id: nytj1xscxausi
+info:
+  title: schema-v1
+  description: Reckoning Api Schema V1
+  version: '1.0'
+  contact:
+    name: Marten Klitzke
+    url: 'https://reckoning.me'
+    email: info@reckoning.me
+  license:
+    name: MIT License
+    url: 'https://github.com/reckoning/reckoning/blob/main/LICENSE'
+tags:
+  - name: sessions
+    description: Sessions
+  - name: users
+    description: Users
+servers:
+  - url: 'http://reckoning.test/api/v1'
+    description: development
+  - url: 'https://reckoning.me/api/v1'
+    description: live
+paths:
+  /me:
+    get:
+      summary: Get current User
+      description: Get current User
+      tags:
+        - users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      operationId: get-me
+      parameters: []
+      security:
+        - sessionCookie: []
+  /sessions:
+    post:
+      summary: Create Session
+      description: Create new Session
+      tags:
+        - sessions
+      operationId: create-session
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+      responses:
+        '201':
+          description: |
+            Successfully authenticated. The session ID is returned in a cookie named `RECKONING`. You need to include this cookie in subsequent requests.
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: RECKONING=abcde12345; Path=/; HttpOnly
+    delete:
+      summary: Destroy Session
+      description: Destroy the current Session
+      tags:
+        - sessions
+      operationId: delete-session
+      responses:
+        '200':
+          description: OK
+      security:
+        - sessionCookie: []
+components:
+  schemas:
+    User:
+      title: User
+      x-stoplight:
+        id: wgmsb4opo1nmq
+      x-tags:
+        - users
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+        name:
+          type: string
+        avatar:
+          type: string
+          format: uri
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+  securitySchemes:
+    sessionCookie:
+      name: RECKONING
+      type: apiKey
+      in: cookie
+      description: Session Cookie for Authentication

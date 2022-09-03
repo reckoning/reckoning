@@ -25,6 +25,8 @@ require "minitest/pride"
 
 require "knapsack"
 
+require 'knapsack'
+
 # https://github.com/rails/rails/issues/31324
 Minitest::Rails::TestUnit = Rails::TestUnit if ActionPack::VERSION::STRING >= "5.2.0"
 

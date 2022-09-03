@@ -10,17 +10,6 @@ module ApplicationHelper
     ].compact.join(" ")
   end
 
-  def auth_token
-    @auth_token ||= if user_signed_in?
-      JsonWebToken.encode(
-        exp: Time.zone.now.to_i + Rails.configuration.app.jwt_expiration,
-        user_id: current_user.id
-      )
-    else
-      ""
-    end
-  end
-
   def title(label = nil)
     [
       label,

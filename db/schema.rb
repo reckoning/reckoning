@@ -77,18 +77,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_24_160026) do
     t.string "key"
   end
 
-  create_table "auth_tokens", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.uuid "user_id", null: false
-    t.string "token"
-    t.text "description"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
-    t.string "user_agent"
-    t.integer "expires"
-    t.index ["token", "user_id"], name: "index_auth_tokens_on_token_and_user_id", unique: true
-    t.index ["token"], name: "index_auth_tokens_on_token"
-  end
-
   create_table "customers", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
