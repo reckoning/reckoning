@@ -75,7 +75,9 @@ gem 'dropbox-sdk'
 
 gem 'web_translate_it'
 
-gem 'sentry-raven'
+gem 'sentry-rails'
+gem 'sentry-ruby'
+gem 'sentry-sidekiq'
 
 gem 'lograge'
 

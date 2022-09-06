@@ -161,10 +161,6 @@ GEM
     execjs (2.8.1)
     faker (2.23.0)
       i18n (>= 1.8.11, < 2)
-    faraday (2.5.2)
-      faraday-net_http (>= 2.0, < 3.1)
-      ruby2_keywords (>= 0.0.4)
-    faraday-net_http (3.0.0)
     ffi (1.15.5)
     font-awesome-sass (5.15.1)
       sassc (>= 1.11)
@@ -385,8 +381,14 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    sentry-raven (3.1.2)
-      faraday (>= 1.0)
+    sentry-rails (5.4.2)
+      railties (>= 5.0)
+      sentry-ruby (~> 5.4.2)
+    sentry-ruby (5.4.2)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+    sentry-sidekiq (5.4.2)
+      sentry-ruby (~> 5.4.2)
+      sidekiq (>= 3.0)
     sexp_processor (4.16.1)
     sidekiq (6.5.6)
       connection_pool (>= 2.2.5)
@@ -540,7 +542,9 @@ DEPENDENCIES
   rubocop-rake
   ruby-prof
   sass-rails
-  sentry-raven
+  sentry-rails
+  sentry-ruby
+  sentry-sidekiq
   sidekiq
   sidekiq-cron
   simplecov
