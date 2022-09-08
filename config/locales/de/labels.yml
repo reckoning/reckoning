@@ -17,7 +17,6 @@ de:
       euro: "€"
       budget: "Budget"
       remaining_budget: "Verbrauch"
-      value: "Betrag"
       description: "Beschreibung"
       contact: "Kontaktinformationen"
       address: "Adresse"
@@ -31,6 +30,7 @@ de:
       timers: Zeiten
       invoices: Rechnungen
       created_at: Erstellt
+      days: Tage
       week_days: Wochentage
       current_position: "Aktuelle Position"
     datepicker:

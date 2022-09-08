@@ -43,6 +43,13 @@
                 - if project.budget_hours.present? && !project.budget_hours.zero?
                   .highlight
                     = number_to_currency((project.budget_hours - project.timer_values_billable), unit: "h", precision: 2)
+                    '
+                    small
+                      = "("
+                      = ((project.budget_hours - project.timer_values_billable) / 8).round
+                      '
+                      = I18n.t('labels.defaults.days')
+                      = ")"
                 - else
                   .highlight.blank
                     = I18n.t(:"labels.defaults.na")
@@ -50,7 +57,14 @@
                   - if project.budget_hours.present? && !project.budget_hours.zero?
                     .row
                       .col-xs-4.text-left Gesamt
-                      .col-xs-8.text-right= number_to_currency(project.budget_hours, unit: "h", precision: 2)
+                      .col-xs-8.text-right
+                        = number_to_currency(project.budget_hours, unit: "h", precision: 2)
+                        '
+                        = "("
+                        = (project.budget_hours / 8).round
+                        '
+                        = I18n.t('labels.defaults.days')
+                        = ")"
               .col-xs-6.col-md-3.panel-box.panel-box-bottom
                 h2 Verbleibendes Budget
                 - if project.budget.present? && !project.budget.zero?
