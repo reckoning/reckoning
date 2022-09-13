@@ -5,12 +5,16 @@ import type { BaseHttpRequest } from './core/BaseHttpRequest'
 import type { OpenAPIConfig } from './core/OpenAPI'
 import { AxiosHttpRequest } from './core/AxiosHttpRequest'
 
+import { CustomersService } from './services/CustomersService'
+import { ProjectsService } from './services/ProjectsService'
 import { SessionsService } from './services/SessionsService'
 import { UsersService } from './services/UsersService'
 
 type HttpRequestConstructor = new (config: OpenAPIConfig) => BaseHttpRequest
 
 export class ReckoningApiV1 {
+  public readonly customers: CustomersService
+  public readonly projects: ProjectsService
   public readonly sessions: SessionsService
   public readonly users: UsersService
 
@@ -32,6 +36,8 @@ export class ReckoningApiV1 {
       ENCODE_PATH: config?.ENCODE_PATH,
     })
 
+    this.customers = new CustomersService(this.request)
+    this.projects = new ProjectsService(this.request)
     this.sessions = new SessionsService(this.request)
     this.users = new UsersService(this.request)
   }

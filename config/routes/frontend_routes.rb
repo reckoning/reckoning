@@ -6,6 +6,7 @@ namespace :frontend, path: "" do
   get "projects" => "base#index"
   get "invoices" => "base#index"
   get "timers" => "base#index"
+  get "timers/:year" => "base#index"
   get "expenses" => "base#index"
 
   get "settings" => "base#index"

@@ -13,6 +13,10 @@ info:
     name: MIT License
     url: 'https://github.com/reckoning/reckoning/blob/main/LICENSE'
 tags:
+  - name: customers
+    description: Customers
+  - name: projects
+    description: Projects
   - name: sessions
     description: Sessions
   - name: users
@@ -25,8 +29,8 @@ servers:
 paths:
   /me:
     get:
-      summary: Get current User
-      description: Get current User
+      summary: Current User Detail
+      description: Current User Detail
       tags:
         - users
       responses:
@@ -79,8 +83,181 @@ paths:
           description: OK
       security:
         - sessionCookie: []
+  /customers:
+    get:
+      summary: Customers Index
+      description: List of Customers
+      tags:
+        - customers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+      operationId: get-customers
+      security:
+        - sessionCookie: []
+  '/customers/:id':
+    get:
+      summary: Customer Detail
+      description: Customer Detail
+      tags:
+        - customers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+      operationId: 'get-customers-:id'
+      security:
+        - sessionCookie: []
+  /projects:
+    get:
+      summary: Projects Index
+      description: List of Projects
+      tags:
+        - projects
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+      operationId: get-projects
+      security:
+        - sessionCookie: []
+  '/projects/:id':
+    get:
+      summary: Project Detail
+      description: Project Detail
+      tags:
+        - projects
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+      operationId: 'get-projects-:id'
+      security:
+        - sessionCookie: []
 components:
   schemas:
+    Customer:
+      type: object
+      x-examples:
+        example-1:
+          id: 4a1be11b-edc4-4747-bc04-13cd8737c979
+          name: Sekeido
+          createdAt: '2014-09-17T09:10:03.304+02:00'
+          updatedAt: '2015-02-06T00:27:44.003+01:00'
+          links:
+            show:
+              href: /api/v1/customers/4a1be11b-edc4-4747-bc04-13cd8737c979
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        links:
+          type: object
+          properties:
+            show:
+              type: object
+              properties:
+                href:
+                  type: string
+                  format: uri
+    Project:
+      type: object
+      x-examples:
+        example-1:
+          id: 406bec9a-dacb-4ddd-95a1-1222f2a8e010
+          name: Core Team 2022
+          customerName: Shipcloud GmbH
+          label: Shipcloud GmbH - Core Team 2022
+          tasks: []
+          createdAt: '2022-09-08T21:49:49.479+02:00'
+          updatedAt: '2022-09-08T21:50:46.004+02:00'
+          links:
+            show:
+              href: /api/v1/projects/406bec9a-dacb-4ddd-95a1-1222f2a8e010
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        customerName:
+          type: string
+        label:
+          type: string
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        links:
+          type: object
+          properties:
+            show:
+              type: object
+              properties:
+                href:
+                  type: string
+                  format: uri
+    Task:
+      type: object
+      x-examples:
+        example-1:
+          id: 01d0847c-9c3e-419a-a92e-571fc94ff38b
+          name: Entwicklung
+          label: Entwicklung (fakturierbar)
+          billable: true
+          projectId: f5a1ef41-eb72-4202-b74e-a5668263c925
+          createdAt: '2015-02-09T00:20:32.125+01:00'
+          updatedAt: '2022-09-09T16:06:17.766+02:00'
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        label:
+          type: string
+        billable:
+          type: boolean
+        projectId:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
     User:
       title: User
       x-stoplight:

@@ -27,15 +27,15 @@
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity $transition-base-speed;
+  transition: opacity $transition-base-speed ease;
 }
 
 .fade-enter-active {
-  transition-delay: $transition-base-speed;
+  transition-delay: 0.2s;
 }
 
-.fade-enter,
-.fade-leave-active {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 

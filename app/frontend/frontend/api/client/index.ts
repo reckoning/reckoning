@@ -9,7 +9,12 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise'
 export { OpenAPI } from './core/OpenAPI'
 export type { OpenAPIConfig } from './core/OpenAPI'
 
+export type { Customer } from './models/Customer'
+export type { Project } from './models/Project'
+export type { Task } from './models/Task'
 export type { User } from './models/User'
 
+export { CustomersService } from './services/CustomersService'
+export { ProjectsService } from './services/ProjectsService'
 export { SessionsService } from './services/SessionsService'
 export { UsersService } from './services/UsersService'

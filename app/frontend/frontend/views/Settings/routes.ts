@@ -4,7 +4,7 @@ export const routes = [
   {
     path: 'profile/',
     name: 'settings-profile',
-    component: () => import('@/frontend/pages/Settings/ProfilePage.vue'),
+    component: () => import('@/frontend/views/Settings/ProfileView.vue'),
     meta: {
       title: 'settings.index',
       needsAuthentication: true,
@@ -13,7 +13,7 @@ export const routes = [
   // {
   //   path: 'account/',
   //   name: 'settings-account',
-  //   component: () => import('@/frontend/pages/Settings/AccountPage.vue'),
+  //   component: () => import('@/frontend/views/Settings/AccountView.vue'),
   //   meta: {
   //     title: 'settings.account',
   //     needsAuthentication: true,
@@ -23,7 +23,7 @@ export const routes = [
   //   path: 'notifications/',
   //   name: 'settings-notifications',
   //   component: () =>
-  //     import('@/frontend/pages/Settings/Notifications/index.vue'),
+  //     import('@/frontend/views/Settings/NotificationsView.vue'),
   //   meta: {
   //     title: 'settings.notifications',
   //     needsAuthentication: true,
@@ -32,7 +32,7 @@ export const routes = [
   // {
   //   path: 'security/',
   //   name: 'settings-security',
-  //   component: () => import('@/frontend/pages/Settings/Security/index.vue'),
+  //   component: () => import('@/frontend/views/Settings/SecurityView.vue'),
   //   meta: {
   //     needsAuthentication: true,
   //   },

@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.app.json",
+  "include": [
+    "app/frontend/**/*.ts",
+    "test/javascript/**/*.ts"
+  ],
+  "exclude": [],
+  "compilerOptions": {
+    "composite": true,
+    "lib": [],
+    "types": ["node", "jsdom"]
+  }
+}

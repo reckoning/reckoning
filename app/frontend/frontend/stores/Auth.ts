@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import { sessions } from '@/frontend/api'
 
 export default defineStore(
-  'auth',
+  'Auth',
   () => {
     const authenticated = ref(false)
 

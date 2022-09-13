@@ -1,10 +1,13 @@
-import { routes as SettingsRoutes } from '@/frontend/pages/Settings/routes'
+import type { RouteLocation } from 'vue-router'
+import { format } from 'date-fns'
+import { routes as SettingsRoutes } from '@/frontend/views/Settings/routes'
+import HomeView from '@/frontend/views/HomeView.vue'
 
 export const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('@/frontend/pages/HomePage.vue'),
+    component: HomeView,
     meta: {
       title: 'home',
     },
@@ -12,7 +15,7 @@ export const routes = [
   {
     path: '/dashboard/',
     name: 'dashboard',
-    component: () => import('@/frontend/pages/DashboardPage.vue'),
+    component: () => import('@/frontend/views/DashboardView.vue'),
     meta: {
       title: 'dashboard',
       needsAuthentication: true,
@@ -21,7 +24,7 @@ export const routes = [
   {
     path: '/invoices/',
     name: 'invoices',
-    component: () => import('@/frontend/pages/InvoicesPage.vue'),
+    component: () => import('@/frontend/views/InvoicesView.vue'),
     meta: {
       title: 'invoices',
       needsAuthentication: true,
@@ -30,7 +33,7 @@ export const routes = [
   {
     path: '/projects/',
     name: 'projects',
-    component: () => import('@/frontend/pages/ProjectsPage.vue'),
+    component: () => import('@/frontend/views/ProjectsView.vue'),
     meta: {
       title: 'projects',
       needsAuthentication: true,
@@ -39,7 +42,22 @@ export const routes = [
   {
     path: '/timers/',
     name: 'timers',
-    component: () => import('@/frontend/pages/TimersPage.vue'),
+    meta: {
+      needsAuthentication: true,
+    },
+    redirect: (_to: RouteLocation) => {
+      return {
+        name: 'timers-year',
+        params: {
+          year: format(new Date(), 'yyyy'),
+        },
+      }
+    },
+  },
+  {
+    path: '/timers/:year',
+    name: 'timers-year',
+    component: () => import('@/frontend/views/TimersView.vue'),
     meta: {
       title: 'timers',
       needsAuthentication: true,
@@ -48,7 +66,7 @@ export const routes = [
   {
     path: '/expenses/',
     name: 'expenses',
-    component: () => import('@/frontend/pages/ExpensesPage.vue'),
+    component: () => import('@/frontend/views/ExpensesPage.vue'),
     meta: {
       title: 'expenses',
       needsAuthentication: true,
@@ -57,7 +75,7 @@ export const routes = [
   {
     path: '/settings/',
     name: 'settings',
-    component: () => import('@/frontend/pages/SettingsPage.vue'),
+    component: () => import('@/frontend/views/SettingsView.vue'),
     meta: {
       needsAuthentication: true,
     },
@@ -69,7 +87,7 @@ export const routes = [
   // {
   //   path: '/sign-up/',
   //   name: 'signup',
-  //   component: () => import('@/frontend/pages/SignupPage.vue'),
+  //   component: () => import('@/frontend/views/SignupView.vue'),
   //   meta: {
   //     title: 'signUp',
   //   },
@@ -77,7 +95,7 @@ export const routes = [
   {
     path: '/login/',
     name: 'login',
-    component: () => import('@/frontend/pages/LoginPage.vue'),
+    component: () => import('@/frontend/views/LoginView.vue'),
     meta: {
       title: 'login',
     },
@@ -85,7 +103,7 @@ export const routes = [
   {
     path: '/impressum/',
     name: 'impressum',
-    component: () => import('@/frontend/pages/ImpressumPage.vue'),
+    component: () => import('@/frontend/views/ImpressumView.vue'),
     meta: {
       title: 'impressum',
     },
@@ -93,7 +111,7 @@ export const routes = [
   {
     path: '/privacy-policy/',
     name: 'privacy-policy',
-    component: () => import('@/frontend/pages/PrivacyPolicyPage.vue'),
+    component: () => import('@/frontend/views/PrivacyPolicyView.vue'),
     meta: {
       title: 'privacy-policy',
     },
@@ -101,7 +119,7 @@ export const routes = [
   // {
   //   path: '/password/request/',
   //   name: 'request-password',
-  //   component: () => import('@/frontend/pages/RequestPasswordPage.vue'),
+  //   component: () => import('@/frontend/views/RequestPasswordView.vue'),
   //   meta: {
   //     title: 'requestPassword',
   //   },
@@ -109,7 +127,7 @@ export const routes = [
   // {
   //   path: '/password/update/:token/',
   //   name: 'change-password',
-  //   component: () => import('@/frontend/pages/ChangePasswordPage.vue'),
+  //   component: () => import('@/frontend/views/ChangePasswordView.vue'),
   //   meta: {
   //     title: 'changePassword',
   //   },
@@ -117,19 +135,19 @@ export const routes = [
   // {
   //   path: '/confirm/:token/',
   //   name: 'confirm',
-  //   component: () => import('@/frontend/pages/ConfirmPage.vue'),
+  //   component: () => import('@/frontend/views/ConfirmView.vue'),
   // },
   {
     path: '/404/',
     name: '404',
-    component: () => import('@/frontend/pages/NotFoundPage.vue'),
+    component: () => import('@/frontend/views/NotFoundView.vue'),
     meta: {
       title: 'notFound',
     },
   },
   {
     path: '/:catchAll(.*)',
-    component: () => import('@/frontend/pages/NotFoundPage.vue'),
+    component: () => import('@/frontend/views/NotFoundView.vue'),
     meta: {
       title: 'notFound',
     },

@@ -1,24 +1,26 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import type {
+  RouteRecordRaw,
+  RouteLocation,
+  RouteLocationRaw,
+} from 'vue-router'
 import initialRoutes from '@/frontend/routes'
 import useAuthStore from '@/frontend/stores/Auth'
+import useAppStore from '@/frontend/stores/App'
 
-const addTrailingSlashToAllRoutes = (routes) =>
-  [].concat(
-    ...routes.map((route) => {
+const addTrailingSlashToAllRoutes = (
+  routes: RouteRecordRaw[]
+): RouteRecordRaw[] =>
+  routes
+    .map((route: RouteRecordRaw): RouteRecordRaw[] => {
       if (['*', '/'].includes(route.path)) {
         return [route]
       }
 
-      const { pathToRegexpOptions = {} } = route
+      const path: string = route.path.replace(/\/$/, '')
 
-      const path = route.path.replace(/\/$/, '')
-
-      const modifiedRoute = {
+      const modifiedRoute: RouteRecordRaw = {
         ...route,
-        pathToRegexpOptions: {
-          ...pathToRegexpOptions,
-          strict: true,
-        },
         path: `${path}/`,
       }
 
@@ -30,7 +32,7 @@ const addTrailingSlashToAllRoutes = (routes) =>
         modifiedRoute,
         {
           path,
-          redirect: (to) => ({
+          redirect: (to: RouteLocation): RouteLocationRaw => ({
             name: route.name,
             params: to.params || null,
             query: to.query || null,
@@ -38,7 +40,7 @@ const addTrailingSlashToAllRoutes = (routes) =>
         },
       ]
     })
-  )
+    .flat()
 
 const router = createRouter({
   strict: true,
@@ -58,6 +60,14 @@ const router = createRouter({
         }
       }, 200)
     }),
+})
+
+router.afterEach(() => {
+  const appStore = useAppStore()
+
+  if (appStore.navigationOpen) {
+    appStore.closeNavigation()
+  }
 })
 
 router.beforeEach((to, _from) => {

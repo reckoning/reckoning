@@ -1,13 +1,4 @@
 <template>
-  <!-- This example requires Tailwind CSS v2.0+ -->
-  <!--
-  This example requires updating your template:
-
-  ```
-  <html class="h-full">
-  <body class="h-full">
-  ```
--->
   <main class="min-h-screen bg-cover bg-top sm:bg-top background-image-404">
     <div
       class="mx-auto max-w-7xl px-4 py-16 text-center sm:px-6 sm:py-24 lg:px-8 lg:py-48"

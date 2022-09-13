@@ -10,8 +10,8 @@ export class UsersService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
 
   /**
-   * Get current User
-   * Get current User
+   * Current User Detail
+   * Current User Detail
    * @returns User OK
    * @throws ApiError
    */

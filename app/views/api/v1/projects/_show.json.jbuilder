@@ -3,6 +3,7 @@
 json.id project.id
 json.name project.name
 json.customer_name project.customer_name
+json.customer_id project.customer_id
 json.label project.label
 json.tasks project.tasks.includes(:timers).order("timers.created_at DESC") do |task|
   json.partial! "api/v1/projects/tasks", task: task

@@ -7,7 +7,7 @@ const router = createRouter({
   routes,
 })
 
-export default (Component, propsData = {}) =>
+export default (Component: any, propsData = {}) =>
   mount(Component, {
     global: {
       plugins: [router],

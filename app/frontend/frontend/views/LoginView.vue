@@ -1,28 +1,4 @@
 <template>
-  <!--
-  This example requires Tailwind CSS v2.0+
-
-  This example requires some changes to your config:
-
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
--->
-  <!--
-  This example requires updating your template:
-
-  ```
-  <html class="h-full bg-gray-50">
-  <body class="h-full">
-  ```
--->
   <div class="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
       <h1 class="mt-6 text-center text-3xl tracking-tight text-gray-900">
@@ -168,10 +144,11 @@
 <script lang="ts" setup>
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import * as yup from 'yup'
-import { useRouter, useRoute, RouteRecordName } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+import type { RouteRecordName } from 'vue-router'
 import useAuthStore from '@/frontend/stores/Auth'
 import { sessions } from '@/frontend/api'
-import { ApiError } from '@/frontend/api/client/core/ApiError'
+import type { ApiError } from '@/frontend/api/client/core/ApiError'
 
 const router = useRouter()
 const route = useRoute()

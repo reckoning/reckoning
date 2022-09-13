@@ -1,3 +1,5 @@
+import { describe, it, expect } from 'vitest'
+
 import mountVM from '~/test/javascript/unit/mount'
 import NavItem from '@/components/navigation/NavItem.vue'
 
