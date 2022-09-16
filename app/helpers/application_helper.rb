@@ -37,9 +37,9 @@ module ApplicationHelper
 
   def overtime_label(overtime, weekly_hours)
     hours_per_day = weekly_hours / 5
-    if overtime < (hours_per_day * 1.25)
+    if overtime < (hours_per_day * 1.25) && overtime > (hours_per_day * -1.25)
       'success'
-    elsif overtime < (hours_per_day * 2.5)
+    elsif overtime < (hours_per_day * 2.5) && overtime > (hours_per_day * -2.5)
       'warning'
     else
       'danger'

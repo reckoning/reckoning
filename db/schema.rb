@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_21_104103) do
+ActiveRecord::Schema.define(version: 2022_09_16_111252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -38,18 +38,7 @@ ActiveRecord::Schema.define(version: 2022_08_21_104103) do
     t.integer "office_space"
     t.integer "deductible_office_space"
     t.integer "deductible_office_percent"
-  end
-
-  create_table "auth_tokens", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.uuid "user_id", null: false
-    t.string "token"
-    t.text "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "user_agent"
-    t.integer "expires"
-    t.index ["token", "user_id"], name: "index_auth_tokens_on_token_and_user_id", unique: true
-    t.index ["token"], name: "index_auth_tokens_on_token"
+    t.text "offer_headline"
   end
 
   create_table "customers", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -66,6 +55,10 @@ ActiveRecord::Schema.define(version: 2022_08_21_104103) do
     t.date "employment_date"
     t.integer "weekly_hours"
     t.date "employment_end_date"
+    t.text "offer_disclaimer"
+  end
+
+  create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
   end
 
   create_table "expenses", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -106,6 +99,22 @@ ActiveRecord::Schema.define(version: 2022_08_21_104103) do
     t.index ["ref", "account_id"], name: "index_invoices_on_ref_and_account_id", unique: true
   end
 
+  create_table "offers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "account_id", null: false
+    t.uuid "customer_id"
+    t.uuid "project_id"
+    t.text "description"
+    t.date "date"
+    t.decimal "value", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "rate", precision: 10, scale: 2, default: "0.0", null: false
+    t.string "aasm_state"
+    t.integer "ref"
+    t.boolean "pdf_generating", default: false, null: false
+    t.datetime "pdf_generated_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "plans", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string "code"
     t.decimal "base_price"
@@ -126,6 +135,9 @@ ActiveRecord::Schema.define(version: 2022_08_21_104103) do
     t.decimal "value", precision: 10, scale: 2
     t.decimal "rate", precision: 10, scale: 2
     t.uuid "invoice_id"
+    t.string "type"
+    t.uuid "invoicable_id"
+    t.string "invoicable_type"
   end
 
   create_table "projects", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -151,12 +163,13 @@ ActiveRecord::Schema.define(version: 2022_08_21_104103) do
     t.boolean "billable", default: true, null: false
   end
 
-  create_table "taxation_types", force: :cascade do |t|
+  create_table "tax_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "account_id"
-    t.decimal "tax"
-    t.date "date"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.decimal "value", precision: 10, scale: 2, default: "0.0", null: false
+    t.datetime "valid_from", null: false
+    t.datetime "valid_until"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "timers", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|

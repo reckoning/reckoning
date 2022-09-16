@@ -21,6 +21,6 @@ class PositionTest < ActiveSupport::TestCase
 
   it 'should respond to invoice' do
     position = Position.new
-    assert_respond_to position, :invoice
+    assert_respond_to position, :invoicable
   end
 end

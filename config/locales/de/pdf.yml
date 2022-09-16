@@ -4,6 +4,7 @@ de:
     page_from: "von"
     not_generated: "PDF noch nicht erstellt oder veraltet."
     please_regenerate: 'Bitte klicke auf "%{generate}” oder auf "%{regenerate}".'
+    salutation: Mit freundlichen Grüßen
     invoice:
       subject:
         project: "Projekt:"
@@ -16,6 +17,20 @@ de:
       net: "Netto"
       gross: "Brutto"
       sum: "Summe"
+    offer:
+      subject:
+        project: "Projekt:"
+        date: "Angebotsdatum:"
+        tax: "Steuernummer:"
+      headline: "Angebot"
+      tax: "USt. (%{value} %)"
+      net: "Netto"
+      gross: "Brutto"
+      sum: "Summe"
+      confirmation_info: "Bestätigung des Angebots %{ref} vom %{date}:"
+      confirmation: "Hiermit bestätigen wir Ihr Angebot."
+      confirmation_signature_date: Ort, Datum
+      confirmation_signature: Unterschrift, Stempel
 
     timesheet:
       headline: "Stunden von<br>%{from} bis %{to}"

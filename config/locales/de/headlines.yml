@@ -38,6 +38,14 @@ de:
       sum: "Gesamt: %{sum}"
       vat_sum: "Steuern: %{sum}"
 
+    offer:
+      new: "Neues Angebot"
+      show: "Vorschau für Angebot %{offer_ref}"
+      edit: "Angebot bearbeiten"
+      index: "Aktuelle Angebote"
+      sum: "Gesamt: %{sum}"
+      vat_sum: "Steuern: %{sum}"
+
     customer:
       new: "Neuer Kunde"
       edit: "Kunde bearbeiten"

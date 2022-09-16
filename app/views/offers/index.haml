@@ -1,0 +1,36 @@
+- content_for :title do
+  = I18n.t(:"meta.title.offer.index")
+.row#offers
+  .col-xs-12.col-md-12
+
+    .row
+      .col-xs-12.col-md-8
+        %h1
+          = I18n.t(:"headlines.offer.index")
+          %small
+            - sum = 0
+            - @offers.each do |offer|
+              - sum = sum + offer.value
+            = I18n.t(:"headlines.offer.sum", sum: number_to_currency(sum))
+
+      .col-xs-12.col-md-4
+        .btn-group-responsive.pull-right.resource-nav
+          %a.btn.btn-primary{href: new_offer_path}
+            %i.fa.fa-plus
+            = I18n.t(:"nav.subnav.new_offer")
+
+    .row
+      .col-xs-12.col-md-6
+        = render "shared/tables/filter", resource: "offer", name: "state", filters: Offer.aasm.states.map(&:name), translateable: true
+        = render "shared/tables/filter", resource: "offer", name: "year", filters: current_offer_years
+      .col-xs-12.col-md-6
+        = paginate @offers
+
+    - if @offers.present?
+      = render partial: "offers/list", :@offers => @offers
+    - else
+      = render partial: "shared/blank"
+
+    .row
+      .col-xs-12.col-md-6
+        = paginate @offers

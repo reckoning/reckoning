@@ -1,0 +1,8 @@
+%ul.nav.nav-tabs#preview-nav{role: "tablist"}
+  %li.active
+    %a{href: "#offer-preview", role: "tab", data: { toggle: "tab" }}
+      = I18n.t(:"labels.defaults.offer")
+#preview-wrapper
+  .tab-content
+    .tab-pane.active#offer-preview
+      .pdf-viewer{ data: { pdf: { path: pdf_offer_path(offer, "#{offer.offer_file}.pdf") } } }

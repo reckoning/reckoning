@@ -10,6 +10,7 @@ class Project < ApplicationRecord
 
   belongs_to :customer
   has_many :invoices, dependent: :destroy
+  has_many :offers, dependent: :destroy
   has_many :tasks, dependent: :destroy, inverse_of: :project
   has_many :timers, through: :tasks
 

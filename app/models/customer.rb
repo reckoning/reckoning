@@ -29,7 +29,7 @@ class Customer < ApplicationRecord
   end
 
   def overtime(user_id)
-    return if workdays.blank? || weekly_hours.blank?
+    return if workdays.blank? || weekly_hours.blank? || !employed?
 
     (timers.where(user_id: user_id).sum(:value) - scheduled_hours).to_f
   end

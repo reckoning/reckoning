@@ -64,6 +64,10 @@ de:
       send_test_mail:
         success: "Test E-Mail wurde erfolgreich versendet."
         failure: "Test E-Mail konnte nicht versandt werden."
+    offer:
+      pdf_generating: "PDF wird generiert"
+      pdf_generated: "PDF wurde erfolgreich erstellt."
+      files_missing: 'Bitte warten Sie bis das Angebot erstellt wurde oder klicken Sie erneut auf "Angebot erstellen".'
     registration:
       update:
         success: "Ihre Daten wurden erfolgreich bearbeitet."

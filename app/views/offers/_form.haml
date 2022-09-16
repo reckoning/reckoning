@@ -1,0 +1,65 @@
+= form_for offer, html: {id: 'offer-form' } do |form|
+  .row
+    .col-xs-12.col-md-6
+      .form-group.selectize{class: form_error?(offer, :project_id)}
+        %select.js-selectize{name: "offer[project_id]", id: "offer_project_id", placeholder: I18n.t(:"helpers.prompt.offer.project_id")}
+          %option
+          - projects.each do |project|
+            %option{value: project.id, selected: (true if project.id == @offer.project_id), data: {data: project.to_json}}
+              = project.name_with_customer
+        = form_errors offer, :project_id
+    .col-xs-12.col-md-6
+      .form-group{class: form_error?(offer, :date)}
+        .input-group.datepicker
+          = form.label :date, class: "input-group-addon"
+          = form.date_field :date, class: 'form-control', "data-value" => form.object.date
+          %span.input-group-btn
+            %button.btn.btn-default{type: "button"}
+              %i.fa.fa-calendar
+        = form_errors offer, :date, 'input-group-btn-feedback'
+  .row
+    .col-xs-12.col-md-4.form-group{class: form_error?(offer, :ref)}
+      .input-group
+        = form.label :ref, class: "input-group-addon"
+        = form.text_field :ref, value: (offer.ref_number unless offer.ref.blank?), class: 'form-control'
+      = form_errors offer, :ref
+  .row
+    .col-xs-12.col-md-6
+      .form-group{class: form_error?(form.object, :description)}
+        = form.label :description
+        = form.text_area :description, placeholder: I18n.t(:"helpers.placeholder.offer.description"), rows: 6, class: 'form-control'
+        = form_errors form.object, :description
+
+  %fieldset
+    %legend
+      Positionen:
+
+    #positions{data: position_fields(form)}
+      = form.fields_for :positions, offer.positions do |builder|
+        = render 'position_fields', fields: builder
+
+    .btn-group-responsive.pull-right
+      = link_to_add_fields form, :positions, name: I18n.t(:"actions.add"), class: "btn btn-default", target: "#positions" do
+        %i.fa.fa-plus
+        = I18n.t(:"actions.add_position")
+
+  = render "shared/forms/submit", path: offers_path
+
+
+.modal.fade#add-positions-modal{tabindex: "-1", role: "dialog", aria: {hidden: "true"}}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{type: "button", data: {dismiss: "modal"}, aria: {hidden: "true"}}
+          &times;
+        %h3.modal-title
+          = I18n.t(:"labels.modals.title.positions")
+      .modal-body
+        %form#add-positions{onsubmit: "App.offer.addPositions($(this)); return false;"}
+      .modal-footer
+        %button.btn.btn-default(type="button" data-select-all)
+          %i.fa.fa-check-square-o
+        %button.btn.btn-default(type="button" data-dismiss="modal")
+          = I18n.t(:"actions.close")
+        %button.btn.btn-primary{form: "add-positions", data: {loading: {text: I18n.t(:"actions.loading")}}}
+          = I18n.t(:"actions.add")

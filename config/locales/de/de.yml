@@ -15,6 +15,7 @@ de:
     header:
       home: "Dashboard"
       invoices: "Rechnungen"
+      offers: "Angebote"
       customers: "Kunden"
       projects: "Projekte"
       timesheet: "Zeiten"
@@ -42,6 +43,7 @@ de:
     subnav:
       back: "Zurück"
       new_invoice: "Neue Rechnung"
+      new_offer: "Neues Angebot"
       archive_invoices: "Alle Rechnungen archivieren"
       new_customer: "Neuer Kunde"
       new_project: "Neues Projekt"
@@ -65,9 +67,11 @@ de:
         taxes: Steuern
         mailing: E-Mail
         dropbox: Dropbox
+        offer: "Angebote"
       customer:
         basic: Allgemein
         email: "E-Mail Setup"
+        offer: Angebote
 
   views:
     pagination:
@@ -104,6 +108,11 @@ de:
         show: "Rechnung %{invoice_ref}"
         new: "Neue Rechnung"
         edit: "Rechnung bearbeiten"
+      offer:
+        index: "Angebote"
+        show: "Angebot %{offer_ref}"
+        new: "Neues Angebot"
+        edit: "Angebot bearbeiten"
       expense:
         index: "Ausgaben"
         new: "Neue Ausgabe"
@@ -174,6 +183,15 @@ de:
       created: "Entwürfe"
       charged: "Offen"
       paid: "Bezahlt"
+    offer_year:
+      label: "Erstellt in:"
+    offer_state:
+      label: "Status:"
+      created: "Entwürfe"
+      bided: "Abgegeben"
+      accepted: "Angenommen"
+      declined: "Abgelehnt"
+      canceled: "Abgebrochen"
 
   user:
     current_sign_in_at:

@@ -11,6 +11,19 @@ de:
           archived: "Archiviert"
       invoice_position:
         description: "Beschreibung"
+      offer:
+        project_id: "Projekt"
+        description: "Beschreibung"
+        states:
+          created: "Entwurf"
+          bided: "Offen"
+          cancelled: "Abgebrochen"
+          accepted: "Angenommen"
+          declined: "Abgelehnt"
+      account:
+        offer_headline: Einleitung
+      customer:
+        offer_disclaimer: Disclaimer
       contact:
         created_at: "vor %{time}"
       expense:

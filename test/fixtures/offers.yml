@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  project: narendra3
+  customer: starfleet
+  account: enterprise
+  date: <%= Date.parse("#{Time.current.year}-01-30") %>
+  aasm_state: :created
+  ref: "00001"
+  description: "Build a Warp Core"
+
+two:
+  project: narendra3
+  customer: starfleet
+  account: defiant
+  date: <%= Date.parse("#{Time.current.year}-02-28") %>
+  aasm_state: :created
+  ref: "00002"
+  description: "Build a Warp Core"

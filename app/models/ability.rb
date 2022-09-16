@@ -12,6 +12,7 @@ class Ability
     can :connect, :dropbox
 
     setup_invoice_abilities(user)
+    setup_offer_abilities(user)
 
     can :two_factor_qrcode, User
     can :manage, Customer, account_id: user.account_id
@@ -40,6 +41,14 @@ class Ability
 
     can :charge, Invoice do |invoice|
       %i[created].include?(invoice.current_state.to_sym) && invoice.account_id == user.account_id
+    end
+  end
+
+  def setup_offer_abilities(user)
+    can %i[read create destroy check], Offer, account_id: user.account_id
+
+    can :update, Offer do |offer|
+      (offer.created? || offer.bided?) && offer.account_id == user.account_id
     end
   end
 

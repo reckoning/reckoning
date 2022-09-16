@@ -6,8 +6,8 @@ window.App.Invoice.oldProjectRate = 0
 window.laddaButton ?= {}
 
 window.App.Invoice.showPreview = ->
-  $('#preview-info').addClass('hide')
-  $(".pdf-viewer").parent().removeClass('hide')
+  $('#invoice #preview-info').addClass('hide')
+  $("#invoice .pdf-viewer").parent().removeClass('hide')
 
 window.App.Invoice.updateValues = (ev, $fields) ->
   $fields.each (i, field) ->

@@ -1,0 +1,10 @@
+= form_for account, url: account_path do |form|
+  input name="hash" value="" type="hidden"
+  .row
+    .col-xs-12.col-md-6
+      .form-group class=form_error?(form.object, :offer_headline)
+        = form.label :offer_headline
+        = form.text_area :offer_headline, placeholder: I18n.t(:"helpers.placeholder.account.offer_headline"), rows: 10, class: 'form-control'
+        small = form_errors form.object, :offer_headline
+
+  = render "shared/forms/submit", path: root_path

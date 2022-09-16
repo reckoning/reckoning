@@ -1,4 +1,4 @@
 warpcore:
   description: "Build a Warp Core"
   hours: 50.0
-  invoice: january
+  invoicable: january

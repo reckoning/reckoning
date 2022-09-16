@@ -9,6 +9,8 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
+    aasm (5.2.0)
+      concurrent-ruby (~> 1.0)
     actioncable (6.1.6.1)
       actionpack (= 6.1.6.1)
       activesupport (= 6.1.6.1)
@@ -127,6 +129,9 @@ GEM
     connection_pool (2.2.5)
     crass (1.0.6)
     dalli (3.2.2)
+    data_migrate (8.1.1)
+      activerecord (>= 5.0)
+      railties (>= 5.0)
     database_cleaner (2.0.1)
       database_cleaner-active_record (~> 2.0.0)
     database_cleaner-active_record (2.0.1)
@@ -162,8 +167,6 @@ GEM
     faker (2.23.0)
       i18n (>= 1.8.11, < 2)
     ffi (1.15.5)
-    font-awesome-sass (5.15.1)
-      sassc (>= 1.11)
     fugit (1.6.0)
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
@@ -481,6 +484,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  aasm
   bcrypt_pbkdf
   bootstrap-sass
   bourbon
@@ -496,6 +500,7 @@ DEPENDENCIES
   codeclimate-test-reporter
   coffee-rails
   dalli
+  data_migrate
   database_cleaner
   devise
   devise-two-factor
@@ -503,7 +508,6 @@ DEPENDENCIES
   dynamic_fields_for_rails
   ed25519
   faker
-  font-awesome-sass (~> 5.0)
   haml
   haml-rails
   highline

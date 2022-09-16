@@ -1,30 +1,27 @@
 # frozen_string_literal: true
 
 class Position < ApplicationRecord
-  belongs_to :invoice, touch: true
-  has_many :timers, dependent: :nullify
+  belongs_to :invoicable, polymorphic: true, touch: true
 
   before_save :set_value
-  after_save :set_invoice_value
+  after_save :set_invoicable_value
 
   validates :description, presence: true
-
-  accepts_nested_attributes_for :timers
 
   def set_value
     return if hours.blank? || hours.zero?
 
     self.value = if rate.present?
                    hours * rate
-                 elsif invoice.rate.present?
-                   hours * invoice.rate
+                 elsif invoicable.rate.present?
+                   hours * invoicable.rate
                  else
-                   hours * invoice.project.rate
+                   hours * invoicable.project.rate
                  end
   end
 
-  def set_invoice_value
-    invoice.set_value
-    invoice.save
+  def set_invoicable_value
+    invoicable.set_value
+    invoicable.save
   end
 end

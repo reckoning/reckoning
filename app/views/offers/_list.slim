@@ -1,0 +1,16 @@
+.panel.panel-list class="panel-default"
+  .panel-heading
+    .panel-title
+      .row.hidden-xs.hidden-sm
+        .col-xs-1.col-md-1.ref
+          = sortable "ref", I18n.t(:"labels.offer.ref")
+        .col-xs-4.col-md-4.name
+          = sortable "customers.name", I18n.t(:"labels.offer.customer")
+        .col-xs-2.col-md-2.month
+          = sortable "date", I18n.t(:"labels.defaults.date")
+        .col-xs-2.col-md-2.value
+          = sortable "value", I18n.t(:"labels.defaults.value")
+        .col-xs-1.col-md-1.state
+          = sortable "state", I18n.t(:"labels.defaults.state")
+  .list-group
+    = render partial: "offers/show", collection: @offers, as: :offer
