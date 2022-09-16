@@ -1,0 +1,58 @@
+.list-group-item
+  .row
+    .col-xs-6.col-md-1.ref
+      = offer.ref_number
+    .col-xs-6.visible-xs.visible-sm
+      .pull-right
+        span class="label label-#{offer_label(offer)}"
+          = I18n.t(:"activerecord.attributes.offer.states.#{offer.aasm_state.to_s}")
+    .col-xs-12.col-md-4.name
+      a.plain href=offer_path(offer)
+        = offer.title
+    .col-xs-6.col-md-2.month
+      = I18n.l offer.date, format: :month_year
+    .col-xs-6.col-md-2.value
+      .pull-right
+        b= number_to_currency offer.value
+    .col-md-1.state.hidden-xs.hidden-sm
+      span class="label label-#{offer_label(offer)}"
+        = I18n.t(:"activerecord.attributes.offer.states.#{offer.aasm_state.to_s}")
+    .col-xs-12.col-md-2
+      .pull-right.hidden-xs.hidden-sm
+        .dropdown
+          button.btn.btn-default.dropdown-toggle type="button" data-toggle="dropdown" data-aria-expanded="false"
+            = I18n.t(:"labels.defaults.actions")
+            '
+            span.caret
+          ul.dropdown-menu.dropdown-menu-right role="menu"
+            - if can? :read, offer
+              li
+                a href=offer_path(offer)
+                  = I18n.t(:"actions.show")
+            - if can? :update, offer
+              li
+                a href=edit_offer_path(offer)
+                  i.fa.fa-edit
+                  '
+                  = I18n.t(:"actions.edit")
+            - if can? :destroy, offer
+              li.divider
+              li
+                a href=offer_path(offer) data-method="DELETE" data-notyConfirm=I18n.t(:"messages.confirm.delete")
+                  i.fa.fa-trash
+                  '
+                  = I18n.t(:"actions.delete")
+
+      .btn-group.btn-group-justified.visible-xs.visible-sm
+        a.btn.btn-default href=offer_path(offer)
+          = I18n.t(:"actions.show")
+        - if can? :update, offer
+          a.btn.btn-default href=edit_offer_path(offer)
+            i.fa.fa-edit
+            '
+            span.hidden-xs.hidden-sm= I18n.t(:"actions.edit")
+        - if can? :destroy, offer
+          a.btn.btn-danger href=offer_path(offer) data-method="DELETE" data-notyConfirm=I18n.t(:"messages.confirm.delete")
+            i.fa.fa-trash
+            '
+            span.hidden-xs.hidden-sm= I18n.t(:"actions.delete")

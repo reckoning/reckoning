@@ -1,0 +1,19 @@
+- context ||= 'info'
+.panel{class: "panel-#{context}"}
+  - if defined?(panel_title)
+    .panel-heading
+      .panel-title
+        %strong
+          = panel_title
+  .list-group.offers-list
+    - offers.each do |offer|
+      %a.list-group-item{href: offer_path(offer)}
+        = offer.ref_number
+        = " | "
+        = offer.title
+        .text-right
+          %em
+            = I18n.l offer.date, format: :month_year
+    - if offers.empty?
+      %span.list-group-item
+        = I18n.t(:"labels.table.blank.offer")

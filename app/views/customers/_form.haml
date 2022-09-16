@@ -86,4 +86,16 @@
                     {company}
                   Name des Kunden
 
+    .tab-pane#offer
+      %fieldset
+        %legend
+          = I18n.t(:"labels.customer.offer")
+
+        .row
+          .col-xs-12.col-md-6
+            .form-group{class: form_error?(form.object, :offer_disclaimer)}
+              = form.label :offer_disclaimer
+              = form.text_area :offer_disclaimer, placeholder: I18n.t(:"helpers.placeholder.customer.offer_disclaimer"), rows: 10, class: 'form-control'
+              = form_errors form.object, :offer_disclaimer
+
   = render "shared/forms/submit", path: projects_path

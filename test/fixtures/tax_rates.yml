@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  value: 9.99
+  valid_from: 2022-09-16 09:49:59
+  valid_until: 2022-09-16 09:49:59
+
+two:
+  value: 9.99
+  valid_from: 2022-09-16 09:49:59
+  valid_until: 2022-09-16 09:49:59

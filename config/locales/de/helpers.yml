@@ -59,6 +59,9 @@ de:
         delivery_date: "Lieferdatum"
         payment_due_date: "Zahlungsziel"
         ref: "Rechnungsnummer"
+      offer:
+        date: "Datum"
+        ref: "Angebotsnummer"
       task:
         billable: "Fakturierbar?"
       customer:
@@ -75,7 +78,8 @@ de:
         default_from: "Absender"
         customer_type: "Typ"
         weekly_hours: "Wochenstunden"
-        employment_date: "Anstellungsdatum"
+        employment_date: "Einstellungsdatum"
+        employment_end_date: "Austrittsdatum"
       expense:
         date: "Eingangsdatum"
         description: "Beschreibung"
@@ -126,6 +130,7 @@ de:
         vat_id: "Steuernummer"
         office_space: "in m²"
         deductible_office_space: "in m²"
+        offer_headline: Einleitungstext. Wird über der Positionstabelle auf dem Angebot angezeigt.
         bank_account:
           bank: "Bank"
           bank_code: "BLZ"
@@ -149,6 +154,7 @@ de:
         invoice_email: "Empfänger"
         default_from: "Absender"
         weekly_hours: "Wochenstunden"
+        offer_disclaimer: Rechtlich relevante Informationen. Wird am ende des Angebots angezeigt.
       vessel:
         manufacturer: "Hersteller"
         type: "z.B. A4 Avant"
@@ -158,6 +164,8 @@ de:
         description: "Beschreibung der Tour"
       waypoint:
         description: "Notiz"
+      offer:
+        description: "Erläuterungen zum Angebot. Wird untet der Positionstabelle angezeigt."
     prompt:
       country: "Bitte wähle ein Land"
       user:
@@ -165,6 +173,8 @@ de:
       project:
         customer_id: "Bitte wähle einen Kunden"
       invoice:
+        project_id: "Bitte wähle ein Projekt"
+      offer:
         project_id: "Bitte wähle ein Projekt"
       timer:
         project: "Bitte wähle ein Projekt"

@@ -10,7 +10,7 @@ class Invoice < ApplicationRecord
   belongs_to :account
   belongs_to :customer
   belongs_to :project
-  has_many :positions, dependent: :destroy, inverse_of: :invoice
+  has_many :positions, class_name: 'InvoicePosition', dependent: :destroy, inverse_of: :invoicable
   has_many :timers, through: :positions
 
   validates :date, presence: true

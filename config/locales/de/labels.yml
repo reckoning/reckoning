@@ -25,10 +25,12 @@ de:
       email: "E-Mail"
       enabled: "Status"
       invoice: Rechnung
+      offer: Angebot
       timesheet: Stundenzettel
       tasks: Aufgaben
       timers: Zeiten
       invoices: Rechnungen
+      offers: Angebote
       created_at: Erstellt
       days: Tage
       week_days: Wochentage
@@ -72,6 +74,9 @@ de:
     invoice:
       customer: "Kunde/Projekt"
       due: "Fällig seit %{date}"
+    offer:
+      ref: "A.-Nr."
+      customer: "Kunde/Projekt"
     contact:
       email: "E-Mail"
       created_at: "Empfangen"
@@ -93,9 +98,11 @@ de:
         taxes: "Steuern"
         mailing: "E-Mail Einstellungen"
         dropbox: "Dropbox Verbindung"
+        offer: "Angebots Einstellungen"
     customer:
       basic: "Allgemeine Informationen"
       email: "E-Mail Setup für Rechnungen"
+      offer: "Angebots Einstellungen"
     budget:
       uninvoiced: "Noch nicht in Rechnung gestellt"
       limit: "Gesamt: %{budget}"

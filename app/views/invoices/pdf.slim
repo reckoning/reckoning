@@ -67,7 +67,7 @@
             td.value
               = number_to_currency position.value
       tfoot
-        - if resource.account.tax.present?
+        - if resource.account.tax_rates.valid_on(datetime: resource.delivery_date || resource.date).present?
           tr.step-sum
             td colspan=3
               = I18n.t(:"pdf.invoice.net")

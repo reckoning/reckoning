@@ -8,6 +8,8 @@ gem 'rails', '6.1.6.1'
 
 gem 'pg', '~> 1.0'
 
+gem 'data_migrate'
+
 gem 'money'
 gem 'stripe'
 
@@ -40,6 +42,8 @@ gem 'dynamic_fields_for_rails'
 
 gem 'workflow', '~> 1.2.0'
 
+gem 'aasm'
+
 gem 'sass-rails'
 
 gem 'coffee-rails'
@@ -49,7 +53,6 @@ gem 'turbolinks'
 
 gem 'bootstrap-sass'
 gem 'bourbon'
-gem 'font-awesome-sass', '~> 5.0'
 
 gem 'uglifier', '>= 1.3.0'
 

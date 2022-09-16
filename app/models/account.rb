@@ -3,7 +3,8 @@
 class Account < ApplicationRecord
   has_many :users, dependent: :destroy
   has_many :invoices, dependent: :destroy
-  has_many :positions, through: :invoices
+  has_many :offers, dependent: :destroy
+  has_many :tax_rates, dependent: :destroy
   has_many :customers, dependent: :destroy
   has_many :projects, through: :customers
   has_many :tasks, through: :projects

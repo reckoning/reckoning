@@ -1,6 +1,7 @@
 de:
   resources:
     invoice: "Rechnung"
+    offer: "Angebot"
     project: "Projekt"
     customer: "Kunde"
     account: "Account"

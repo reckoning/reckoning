@@ -1,0 +1,38 @@
+- content_for :title do
+  = I18n.t(:"meta.title.offer.show", offer_ref: offer.ref_number)
+
+.row#offer{data: {id: offer.id}}
+
+  .col-xs-12.col-md-12
+    .row
+      .col-xs-12.col-md-8
+        %h1
+          = I18n.t(:"headlines.offer.show", offer_ref: offer.ref_number)
+
+      .col-xs-12.col-md-4
+        .btn-group.btn-group-responsive.pull-right.resource-nav
+          = link_to I18n.t(:"nav.subnav.back"), back_path(offers_path), class: "btn btn-default"
+
+    .row
+      .col-xs-12.col-md-8
+        = render "preview"
+
+      .col-xs-12.col-md-4.side-nav
+        .row
+          .col-xs-12.col-md-12
+            .panel.panel-default
+              .panel-heading
+                .panel-title
+                  %strong
+                    = I18n.t(:"labels.panels.title.downloads")
+              .list-group
+                = link_to pdf_offer_path(offer, offer.offer_file), target: "_blank", class: "save-offer list-group-item" do
+                  %i.fa.fa-download
+                  = I18n.t(:"actions.download_offer")
+
+        %br
+
+        .row
+          .col-xs-12.col-md-12
+            = render "show_actions"
+

@@ -65,6 +65,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :offers do
+    member do
+      get '/pdf/:pdf' => 'offers#pdf', as: :pdf, defaults: { format: :pdf }
+    end
+  end
+
   resource :timesheet, only: [:show]
 
   resource :template, only: [] do

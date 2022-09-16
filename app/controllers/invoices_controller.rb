@@ -103,7 +103,7 @@ class InvoicesController < ApplicationController
                  else
                    current_account.invoices.new
                  end
-    invoice.positions << Position.new
+    invoice.positions << InvoicePosition.new
   end
 
   def edit

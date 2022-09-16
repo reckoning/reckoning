@@ -25,9 +25,7 @@ $font-size-h6: floor(($font-size-base * 0.85));
 
 @import "bourbon";
 @import "bootstrap-sprockets";
-@import 'bootstrap-custom';
-@import "font-awesome-sprockets";
-@import "font-awesome";
+@import "bootstrap-custom";
 @import "partials";
 @import "invoice";
 @import "pdf_preview";
@@ -51,7 +49,8 @@ body {
     padding-top: 0 !important;
   }
 
-  > .container-fluid, > .container {
+  > .container-fluid,
+  > .container {
     padding-bottom: 20px;
     padding-top: 20px;
   }
@@ -64,7 +63,12 @@ body {
   }
 }
 
-[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+[ng\:cloak],
+[ng-cloak],
+[data-ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak {
   display: none !important;
 }
 

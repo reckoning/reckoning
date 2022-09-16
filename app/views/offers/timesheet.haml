@@ -1,0 +1,47 @@
+- timers_by_date = resource.timers.billable.order(:date).group_by(&:date)
+#pdf-body.timesheet
+  .row
+    #subject
+      .info-wrapper
+        #infomartion
+          = I18n.t(:"pdf.invoice.subject.project")
+          = resource.project.name
+        #date
+          = I18n.t(:"pdf.invoice.subject.date")
+          = I18n.l resource.date
+      %h1
+        = I18n.t(:"pdf.timesheet.headline", from: I18n.l(timers_by_date.keys.first), to: I18n.l(timers_by_date.keys.last)).html_safe
+
+    %br
+
+    %table.table.table-condensed
+      %thead
+        %th=I18n.t(:"labels.timesheet.date")
+        %th=I18n.t(:"labels.timesheet.task")
+        %th.align-right=I18n.t(:"labels.defaults.hours")
+      %tbody
+        - value = 0
+        - timers_by_date.each do |date, timers|
+          %tr
+            %td.date
+              %strong
+                = I18n.l(date)
+            %td
+            %td.hours
+              %strong
+                = number_to_currency(timers.sum {|t| t.value.to_d }, unit: "")
+          - timers.each do |timer|
+            - value = value + timer.value.to_d
+            %tr
+              %td
+              %td
+                = timer.task.name
+              %td.hours
+                = number_to_currency(timer.value, unit: "")
+        %tr.sum.border
+          %td{colspan: 2}
+            %strong
+              = I18n.t(:"pdf.timesheet.sum")
+          %td.value
+            %strong
+              = number_to_currency(value, unit: "")

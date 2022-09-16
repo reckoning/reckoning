@@ -1,0 +1,127 @@
+#pdf-body.offer
+  address#company
+    = "#{resource.account.name},"
+    '
+    = resource.account.address.gsub("\r\n", ", ").gsub("\n", ", ").gsub("\r", ", ") unless resource.account.address.blank?
+
+  address#customer
+    = resource.customer.name
+    br
+    br
+    = simple_format(resource.customer.address)
+
+  .row
+    #subject
+      .info-wrapper
+        #infomartion
+          = I18n.t(:"pdf.offer.subject.project")
+          '
+          = resource.project.name
+        #date
+          = I18n.t(:"pdf.offer.subject.date")
+          '
+          = I18n.l resource.date
+
+        - if resource.account.vat_id.present?
+          #tax
+            = I18n.t(:"pdf.offer.subject.tax")
+            '
+            = resource.account.vat_id
+        .clear
+      h1
+        = I18n.t(:"pdf.offer.headline")
+        '
+        = resource.ref_number
+
+      .clear
+
+    .headline
+      p
+        = simple_format(resource.account.offer_headline)
+
+    .clear
+
+    table.table.table-condensed
+      thead
+        th=I18n.t(:"labels.defaults.description")
+        th.align-right=I18n.t(:"labels.defaults.hours")
+        th.align-right=I18n.t(:"labels.defaults.rate")
+        th.align-right=I18n.t(:"labels.defaults.value")
+      tbody
+        - resource.positions.each do |position|
+          tr
+            td
+              = position.description
+            td.hours
+              = number_to_currency position.hours, unit: ""
+            td.rate
+              - if position.rate.present?
+                = number_to_currency position.rate
+              - elsif position.hours.present?
+                = number_to_currency resource.rate
+            td.value
+              = number_to_currency position.value
+      tfoot
+        - if resource.account.tax_rates.valid_on(datetime: resource.date).present?
+          tr.step-sum
+            td colspan=3
+              = I18n.t(:"pdf.offer.net")
+            td.value
+              = number_to_currency resource.value
+          tr.tax
+            td colspan=3
+              = I18n.t(:"pdf.offer.tax", value: resource.account.tax)
+            td.value
+              - taxes = (resource.value * resource.account.tax.to_d) / 100
+              = number_to_currency taxes
+          - value = resource.value + taxes
+          - value_label = I18n.t(:"pdf.offer.gross")
+        - else
+          tr.tax
+            td colspan=4
+              = I18n.t(:"small_business")
+          - value = resource.value
+          - value_label = I18n.t(:"pdf.offer.sum")
+        tr.sum
+          td colspan=3
+            b= value_label
+          td.value
+            b= number_to_currency(value)
+
+    .clear
+
+    .subline
+      p
+        = simple_format(resource.description)
+
+      br
+
+      p
+        = simple_format(resource.customer.offer_disclaimer)
+
+
+    .salutation
+      p
+        = I18n.t('pdf.salutation')
+        br
+        = resource.account.name
+
+    br
+
+    .confirmation
+      p
+        = I18n.t('pdf.offer.confirmation_info', ref: resource.ref_number, date: I18n.l(resource.date))
+        br
+        = I18n.t('pdf.offer.confirmation')
+        br
+
+      .confirmation-location
+        hr
+
+        = I18n.t('pdf.offer.confirmation_signature_date')
+
+      .confirmation-signature
+        hr
+
+        = I18n.t('pdf.offer.confirmation_signature')
+

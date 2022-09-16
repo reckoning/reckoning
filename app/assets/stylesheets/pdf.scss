@@ -28,8 +28,9 @@ table {
     padding: 6px 0;
   }
 
-  td, th {
-    font-size: .8em;
+  td,
+  th {
+    font-size: 0.8em;
 
     &.align-right {
       text-align: right;
@@ -48,7 +49,6 @@ table {
   display: block;
   page-break-after: always;
 }
-
 
 address {
   font-style: normal;
@@ -73,7 +73,11 @@ address {
     float: right;
     width: 50%;
 
-    #infomartion, #date, #delivery-date, #tax, #payment-due {
+    #infomartion,
+    #date,
+    #delivery-date,
+    #tax,
+    #payment-due {
       font-size: 15px;
       margin-bottom: 5px;
       text-align: right;
@@ -126,7 +130,9 @@ tr {
   width: 100%;
   padding-top: 5px;
 
-  address, .contact-information, .bank-information {
+  address,
+  .contact-information,
+  .bank-information {
     display: inline-block;
     font-size: 12px;
     line-height: 1.5em;
@@ -141,7 +147,7 @@ tr {
     width: 25%;
   }
 
-  .contact-information{
+  .contact-information {
     width: 38%;
     margin-top: 1.5em;
   }
@@ -151,12 +157,45 @@ tr {
   }
 }
 
+.headline {
+  margin: 40px 0 20px 0;
+  font-size: 16px;
+}
+
+.subline {
+  margin: 40px 0;
+  font-size: 16px;
+}
+
+.salutation {
+  margin: 40px 0;
+  font-size: 16px;
+}
+
+.confirmation {
+  margin: 40px 0;
+  padding-top: 20px;
+  font-size: 16px;
+  break-before: always;
+  page-break-before: always;
+  break-inside: avoid;
+  page-break-inside: avoid;
+
+  .confirmation-location,
+  .confirmation-signature {
+    float: left;
+    width: 35%;
+    padding-top: 80px;
+    margin-right: 5%;
+  }
+}
+
 .alwaysbreak {
   page-break-before: always;
 }
 
 .nobreak:before {
-  clear:both;
+  clear: both;
 }
 
 .nobreak {

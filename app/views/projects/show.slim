@@ -100,6 +100,9 @@
             a href="#timers" role="tab" data-toggle="tab"
               = I18n.t(:"labels.defaults.timers")
           li
+            a href="#offers" role="tab" data-toggle="tab"
+              = I18n.t(:"labels.defaults.offers")
+          li
             a href="#invoices" role="tab" data-toggle="tab"
               = I18n.t(:"labels.defaults.invoices")
           li
@@ -108,6 +111,8 @@
         .tab-content
           .tab-pane.active#timers
             = render "timers_panel", timers: project.timers.includes(:task), context: "default"
+          .tab-pane#offers
+            = render "base/offers_panel", offers: project.offers.includes(:customer), context: "default"
           .tab-pane#invoices
             = render "base/invoices_panel", invoices: project.invoices.includes(:customer), context: "default"
           .tab-pane#tasks

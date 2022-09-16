@@ -18,6 +18,7 @@ de:
     add_task: "Aufgabe hinzufügen"
     add_timer: "Neuer Timer"
     add_invoice: "Neue Rechnung"
+    add_offer: "Neues Angebot"
     add_vessel: "Neues Fahrzeug"
     add_waypoint: "Neuer Wegpunkt"
     show: "Anzeigen"
@@ -40,6 +41,7 @@ de:
     send_invoice: "Rechnung versenden"
     download_invoice: "Rechnung speichern"
     download_timesheet: "Stundenzettel speichern"
+    download_offer: "Angebot speichern"
     dropbox_link: "Dropbox verbinden"
     dropbox_unlink: "Dropbox trennen"
     start: Start
