@@ -10,7 +10,7 @@ module JsonWebToken
 
   module_function def decode(token)
     decoded_token = ::JWT.decode(token, Rails.application.credentials.devise_jwt, true, algorithm: 'HS512')
-    HashWithIndifferentAccess.new(decoded_token.first)
+    ActiveSupport::HashWithIndifferentAccess.new(decoded_token.first)
   rescue StandardError
     nil
   end
