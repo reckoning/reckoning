@@ -35,7 +35,7 @@
       Positionen:
 
     #positions{data: position_fields(form)}
-      = form.fields_for :positions, offer.positions do |builder|
+      = form.fields_for :positions, offer.positions.order(description: :asc) do |builder|
         = render 'position_fields', fields: builder
 
     .btn-group-responsive.pull-right
