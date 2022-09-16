@@ -22,7 +22,7 @@ class Schema < Thor
 
     raw_data = fetch_remote(api_schema_url)
 
-    File.write(Rails.root.join("public/schema-#{api_version}.yaml"), raw_data)
+    Rails.root.join("public/schema-#{api_version}.yaml").write(raw_data)
   end
 
   no_commands do
