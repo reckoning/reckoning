@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_16_111252) do
+ActiveRecord::Schema.define(version: 2022_09_16_142926) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -113,6 +113,7 @@ ActiveRecord::Schema.define(version: 2022_09_16_111252) do
     t.datetime "pdf_generated_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["ref", "account_id"], name: "index_offers_on_ref_and_account_id", unique: true
   end
 
   create_table "plans", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
