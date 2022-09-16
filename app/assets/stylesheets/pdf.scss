@@ -9,7 +9,7 @@ $secondary-link-color: #222;
 }
 
 body {
-  font-size: 1.2em;
+  font-size: 12pt;
   padding: 10px;
   color: #333;
 }
@@ -54,14 +54,16 @@ address {
   font-style: normal;
 
   &#company {
-    font-size: 11px;
+    font-size: 8pt;
     margin-bottom: 10px;
     margin-top: 62px;
     border-bottom: 1px solid #cacaca;
     display: inline-block;
+    white-space: nowrap;
   }
+
   &#customer {
-    font-size: 16px;
+    font-size: 11pt;
   }
 }
 
@@ -78,14 +80,14 @@ address {
     #delivery-date,
     #tax,
     #payment-due {
-      font-size: 15px;
+      font-size: 12pt;
       margin-bottom: 5px;
       text-align: right;
     }
   }
 
   h1 {
-    font-size: 130%;
+    font-size: 18pt;
     width: 50%;
     font-weight: bold;
     margin-top: 0;
@@ -111,8 +113,8 @@ tr {
   width: 100%;
   text-align: right;
   border-bottom: 1px solid #cacaca;
-  font-size: 30px;
-  font-weight: 900;
+  font-size: 20pt;
+  font-weight: normal;
   font-style: italic;
   color: #2ba6cb !important;
   font-family: Orbitron, sans-serif !important;
@@ -134,11 +136,11 @@ tr {
   .contact-information,
   .bank-information {
     display: inline-block;
-    font-size: 12px;
+    font-size: 9pt;
     line-height: 1.5em;
 
     p {
-      font-size: 12px;
+      font-size: 9pt;
       line-height: 1.5em;
     }
   }
@@ -159,23 +161,23 @@ tr {
 
 .headline {
   margin: 40px 0 20px 0;
-  font-size: 16px;
+  font-size: 11pt;
 }
 
 .subline {
   margin: 40px 0;
-  font-size: 16px;
+  font-size: 11pt;
 }
 
 .salutation {
   margin: 40px 0;
-  font-size: 16px;
+  font-size: 11pt;
 }
 
 .confirmation {
   margin: 40px 0;
   padding-top: 20px;
-  font-size: 16px;
+  font-size: 11pt;
   break-before: always;
   page-break-before: always;
   break-inside: avoid;
