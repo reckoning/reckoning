@@ -114,6 +114,7 @@ de:
         uninvoiced_timer: "Keine unabgerechnete Zeiten vorhanden"
         customer: "Keine Kunden vorhanden"
         invoice: "Keine Rechnungen vorhanden"
+        offer: "Keine Angebote vorhanden"
         project: "Keine Projekte vorhanden"
         task: "Keine Aufgaben vorhanden"
         contact: "Keine Anfragen vorhanden"
