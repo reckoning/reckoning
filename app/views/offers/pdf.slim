@@ -48,7 +48,7 @@
         th.align-right=I18n.t(:"labels.defaults.rate")
         th.align-right=I18n.t(:"labels.defaults.value")
       tbody
-        - resource.positions.each do |position|
+        - resource.positions.order(description: :asc).each do |position|
           tr
             td
               = position.description

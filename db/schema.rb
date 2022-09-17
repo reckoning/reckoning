@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_16_142926) do
+ActiveRecord::Schema.define(version: 2022_09_17_125546) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -77,7 +77,7 @@ ActiveRecord::Schema.define(version: 2022_09_16_142926) do
     t.string "expense_type", null: false
     t.decimal "value", precision: 10, scale: 2, default: "0.0", null: false
     t.string "description"
-    t.date "date", null: false
+    t.date "date"
     t.uuid "account_id", null: false
     t.string "receipt"
     t.datetime "created_at", null: false
@@ -90,6 +90,9 @@ ActiveRecord::Schema.define(version: 2022_09_16_142926) do
     t.string "receipt_content_type"
     t.integer "afa_type"
     t.integer "vat_percent", default: 0, null: false
+    t.date "started_at"
+    t.date "ended_at"
+    t.integer "interval", default: 0, null: false
   end
 
   create_table "invoices", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|

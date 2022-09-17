@@ -2,6 +2,7 @@
 
 class ExpensesController < ApplicationController
   include ResourceHelper
+  include ExpensesHelper
 
   before_action :set_active_nav
   before_action :store_current_params, only: [:index]
@@ -19,12 +20,12 @@ class ExpensesController < ApplicationController
         render ExpensePdf.new(current_account, expenses, filter_params).pdf
       end
       format.html do
-        @expenses_sum = expenses.without_insurances.to_a.sum(&:usable_value)
-        @expenses_vat_sum = expenses.without_insurances.to_a.sum(&:vat_value)
-        if filter_params[:type] == 'insurances'
-          @expenses_sum = expenses.to_a.sum(&:usable_value)
-          @expenses_vat_sum = expenses.to_a.sum(&:vat_value)
-        end
+        year_filter = filter_params.fetch(:year, nil)
+        normalized_expenses = Expense.normalized(expenses.without_insurances.to_a, year_filter: year_filter)
+        normalized_expenses = Expense.normalized(expenses.to_a, year_filter: year_filter) if filter_params[:type] == 'insurances'
+
+        @expenses_sum = normalized_expenses.sum(&:usable_value)
+        @expenses_vat_sum = normalized_expenses.sum(&:vat_value)
 
         @expenses = expenses.order(sort_column.to_sym => sort_direction, created_at: :desc)
           .page(params.fetch(:page, nil))
@@ -97,7 +98,8 @@ class ExpensesController < ApplicationController
 
   private def expense_params
     @expense_params ||= params.require(:expense).permit(
-      :expense_type, :afa_type, :description, :seller, :date, :receipt, :remove_receipt, :value, :private_use_percent, :vat_percent
+      :expense_type, :afa_type, :description, :seller, :date, :receipt, :remove_receipt, :value,
+      :private_use_percent, :vat_percent, :interval, :started_at, :ended_at
     )
   end
 

@@ -82,6 +82,8 @@ de:
         employment_end_date: "Austrittsdatum"
       expense:
         date: "Eingangsdatum"
+        started_at: "Start Datum"
+        ended_at: "End Datum"
         description: "Beschreibung"
         value: "Betrag"
         seller: "Verkäufer/Händler"
@@ -184,6 +186,7 @@ de:
       expense:
         expense_type: "Bitte wähle einen Typ"
         afa_type: "Bitte wähle einen AFA-Typ"
+        interval: "Bitte wähle einen Intervall"
       vessel:
         manufacturer: "Bitte wähle einen Hersteller"
       tour:
