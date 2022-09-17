@@ -84,6 +84,15 @@ export const routes = [
     },
     children: SettingsRoutes,
   },
+  {
+    path: '/calculator/',
+    name: 'calculator',
+    component: () => import('@/frontend/views/CalculatorView.vue'),
+    meta: {
+      title: 'calculator',
+      needsAuthentication: true,
+    },
+  },
   // {
   //   path: '/sign-up/',
   //   name: 'signup',

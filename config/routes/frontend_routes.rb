@@ -8,6 +8,7 @@ namespace :frontend, path: "" do
   get "timers" => "base#index"
   get "timers/:year" => "base#index"
   get "expenses" => "base#index"
+  get "calculator" => "base#index"
 
   get "settings" => "base#index"
   get "settings/profile" => "base#index"
