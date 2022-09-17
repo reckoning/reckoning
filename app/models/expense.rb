@@ -102,6 +102,22 @@ class Expense < ApplicationRecord
     where(expense_type: type)
   end
 
+  def self.normalized(expenses, year_filter: nil)
+    expenses.map do |expense|
+      if expense.once?
+        expense
+      else
+        expense.dates_for_interval.filter_map do |date|
+          next if year_filter.present? && date.year != year_filter.to_i
+
+          new_expense = expense.dup
+          new_expense.date = date
+          new_expense
+        end
+      end
+    end.flatten
+  end
+
   def ended_at_is_after_started_at
     errors.add(:ended_at, 'cannot be before the start date') if ended_at.present? && ended_at < started_at
   end

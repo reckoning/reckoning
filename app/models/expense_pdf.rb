@@ -13,7 +13,7 @@ class ExpensePdf
     self.account = account
     self.filter = filter
 
-    normalized_expenses = normalize_expenses(expenses)
+    normalized_expenses = Expense.normalized(expenses, year_filter: year_filter)
 
     self.telecommunication = normalized_expenses.select { |expense| expense.expense_type == 'telecommunication' }.sort_by(&:date)
     self.home_office = normalized_expenses.select { |expense| expense.expense_type == 'home_office' }.sort_by(&:date)
@@ -29,22 +29,6 @@ class ExpensePdf
   end
   # rubocop:enable Metrics/CyclomaticComplexity
 
-  def normalize_expenses(expenses)
-    expenses.map do |expense|
-      if expense.once?
-        expense
-      else
-        expense.dates_for_interval.filter_map do |date|
-          next if year_filter.present? && date.year != year_filter
-
-          new_expense = expense.dup
-          new_expense.date = date
-          new_expense
-        end
-      end
-    end.flatten
-  end
-
   def persisted?
     false
   end
@@ -54,7 +38,7 @@ class ExpensePdf
   end
 
   def year_filter
-    filter.fetch(:year, nil).to_i
+    filter.fetch(:year, nil)
   end
 
   def pdf_file
