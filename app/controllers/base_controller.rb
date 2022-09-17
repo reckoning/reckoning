@@ -35,8 +35,8 @@ class BaseController < ApplicationController
     @budgets = current_account.projects.active.with_budget.includes(:customer, :tasks, :timers).order('tasks.updated_at DESC')
     scope = current_account.invoices.paid_or_charged.where(date: 1.year.ago.beginning_of_year..Time.zone.now.end_of_year)
     @invoices_chart_data = Charts::InvoicesService.new(scope).data
-    @expenses = current_account.expenses.without_insurances.year(Time.zone.now.year)
-    @last_expenses = current_account.expenses.without_insurances.year(Time.zone.now.year - 1)
+    @expenses = Expense.normalized(current_account.expenses.without_insurances.year(Time.zone.now.year).to_a, year: Time.zone.now.year)
+    @last_expenses = Expense.normalized(current_account.expenses.without_insurances.year(Time.zone.now.year - 1).to_a, year: Time.zone.now.year - 1)
     render 'dashboard'
   end
 

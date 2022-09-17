@@ -20,9 +20,9 @@ class ExpensesController < ApplicationController
         render ExpensePdf.new(current_account, expenses, filter_params).pdf
       end
       format.html do
-        year_filter = filter_params.fetch(:year, nil)
-        normalized_expenses = Expense.normalized(expenses.without_insurances.to_a, year_filter: year_filter)
-        normalized_expenses = Expense.normalized(expenses.to_a, year_filter: year_filter) if filter_params[:type] == 'insurances'
+        year = filter_params.fetch(:year, nil)
+        normalized_expenses = Expense.normalized(expenses.without_insurances.to_a, year: year)
+        normalized_expenses = Expense.normalized(expenses.to_a, year: year) if filter_params[:type] == 'insurances'
 
         @expenses_sum = normalized_expenses.sum(&:usable_value)
         @expenses_vat_sum = normalized_expenses.sum(&:vat_value)

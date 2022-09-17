@@ -6,8 +6,8 @@
     - if @expenses.present?
       .list-group-item
         = I18n.t(:"dashboard.panels.expenses.current")
-        strong.pull-right= number_to_currency(@expenses.to_a.sum(&:usable_value))
+        strong.pull-right= number_to_currency(@expenses.sum(&:usable_value))
     - if @last_expenses.present?
       .list-group-item
         = I18n.t(:"dashboard.panels.expenses.last")
-        strong.pull-right= number_to_currency(@last_expenses.to_a.sum(&:usable_value))
+        strong.pull-right= number_to_currency(@last_expenses.sum(&:usable_value))
