@@ -13,7 +13,7 @@ class ExpensePdf
     self.account = account
     self.filter = filter
 
-    normalized_expenses = Expense.normalized(expenses, year_filter: year_filter)
+    normalized_expenses = Expense.normalized(expenses, year: year_filter)
 
     self.telecommunication = normalized_expenses.select { |expense| expense.expense_type == 'telecommunication' }.sort_by(&:date)
     self.home_office = normalized_expenses.select { |expense| expense.expense_type == 'home_office' }.sort_by(&:date)

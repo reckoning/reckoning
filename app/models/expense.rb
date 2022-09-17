@@ -102,13 +102,13 @@ class Expense < ApplicationRecord
     where(expense_type: type)
   end
 
-  def self.normalized(expenses, year_filter: nil)
+  def self.normalized(expenses, year: nil)
     expenses.map do |expense|
       if expense.once?
         expense
       else
         expense.dates_for_interval.filter_map do |date|
-          next if year_filter.present? && date.year != year_filter.to_i
+          next if year.present? && date.year != year.to_i
 
           new_expense = expense.dup
           new_expense.date = date
