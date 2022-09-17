@@ -23,6 +23,7 @@ label {
   right: 10px;
   width: 14px;
   height: 14px;
+  line-height: normal;
   pointer-events: all;
 }
 
@@ -77,14 +78,17 @@ form {
     }
   }
 
-  .form-control[type=checkbox] {
+  .form-control[type="checkbox"] {
     margin: 0;
     box-shadow: none;
     background-color: transparent;
   }
 
   .has-error {
-    input, textarea, .selectize-control .selectize-input, .selectize-control .selectize-input.input-active {
+    input,
+    textarea,
+    .selectize-control .selectize-input,
+    .selectize-control .selectize-input.input-active {
       border-color: #c60f13;
       background-color: rgba(red, 0.1);
     }

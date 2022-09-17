@@ -1,7 +1,10 @@
 .list-group-item id="expense-#{expense.id}"
   .row
     .col-xs-6.col-md-2
-      = I18n.l expense.date
+      - if expense.once?
+        = I18n.l expense.date
+      - else
+        = "#{Expense.human_enum_name(:interval, expense.interval)}: #{I18n.l(expense.started_at)} - #{(I18n.l(expense.ended_at) if expense.ended_at)}"
     .col-xs-6.col-md-3.expense-description
       a href=edit_expense_path(expense) title=I18n.t(:"actions.edit")
         b= expense.description

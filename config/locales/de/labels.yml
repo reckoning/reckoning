@@ -82,6 +82,8 @@ de:
       created_at: "Empfangen"
     expenses:
       date: "Datum"
+      started_at: "Start Datum"
+      ended_at: "End Datum"
     user:
       current_sign_in_at: "Letzte Aktivität vor"
       admin: "Admin?"

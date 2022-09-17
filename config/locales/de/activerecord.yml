@@ -28,6 +28,8 @@ de:
         created_at: "vor %{time}"
       expense:
         date: "Datum"
+        started_at: "Start Datum"
+        ended_at: "End Datum"
         description: "Beschreibung"
         value: "Betrag"
         seller: "Verkäufer/Händler"
@@ -35,6 +37,13 @@ de:
         receipt: "Beleg"
         vat_percent: "Steuern"
         vat_value: "Steuern"
+        intervals:
+          once: "Einmalig"
+          daily: "Täglich"
+          weekly: "Wöchentlich"
+          monthly: "Monatlich"
+          quarterly: "Quartalsweise"
+          yearly: "Jährlich"
       user:
         enabled: "Aktiv?"
         admin: "Admin?"

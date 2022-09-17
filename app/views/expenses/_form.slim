@@ -17,8 +17,12 @@
             option value=type[:value] selected=(true if type[:value] == expense.afa_type)
               = type[:label]
         = form_errors expense, :afa_type
-
-    .col-xs-12.col-md-6
+  .row
+    .col-xs-12.col-md-4
+      .form-group.selectize class=form_error?(expense, :interval)
+        = form.select :interval, Expense.intervals.keys.map { |w| [Expense.human_enum_name(:interval, w), w] }, { include_blank: I18n.t(:"helpers.prompt.expense.interval") }, { class: 'js-selectize' }
+        = form_errors expense, :interval
+    .col-xs-12.col-md-4.js-toggle-interval-once class=(expense.once? ? "" : "hide")
       .form-group class=form_error?(expense, :date)
         .input-group.datepicker
           = form.label :date, class: "input-group-addon"
@@ -27,6 +31,24 @@
             button.btn.btn-default type="button"
               i.fa.fa-calendar
         = form_errors expense, :date, 'input-group-btn-feedback'
+    .col-xs-12.col-md-4.js-toggle-interval-other class=(expense.once? ? "hide" : "")
+      .form-group class=form_error?(expense, :started_at)
+        .input-group.datepicker
+          = form.label :started_at, class: "input-group-addon"
+          = form.date_field :started_at, value: I18n.l(Time.zone.now, format: :datepicker), class: 'form-control', "data-value" => form.object.started_at
+          span.input-group-btn
+            button.btn.btn-default type="button"
+              i.fa.fa-calendar
+        = form_errors expense, :started_at, 'input-group-btn-feedback'
+    .col-xs-12.col-md-4.js-toggle-interval-other class=(expense.once? ? "hide" : "")
+      .form-group class=form_error?(expense, :ended_at)
+        .input-group.datepicker
+          = form.label :ended_at, class: "input-group-addon"
+          = form.date_field :ended_at, value: I18n.l(Time.zone.now, format: :datepicker), class: 'form-control', "data-value" => form.object.ended_at
+          span.input-group-btn
+            button.btn.btn-default type="button"
+              i.fa.fa-calendar
+        = form_errors expense, :ended_at, 'input-group-btn-feedback'
   .row
     .col-xs-12.col-md-6
       .form-group class=form_error?(expense, :description)

@@ -37,10 +37,6 @@
       .col-xs-12.col-md-6.filters
         = render "shared/tables/filter", resource: "expense", name: "year", filters: current_expenses_years
         '
-        = render "shared/tables/filter", resource: "expense", name: "quarter", filters: expenses_quarters
-        '
-        = render "shared/tables/filter", resource: "expense", name: "month", filters: expenses_months
-        '
         = render "shared/tables/filter", resource: "expense", name: "type", filters: Expense::VALID_TYPES, translateable: true
       .col-xs-12.col-md-6
         = paginate @expenses

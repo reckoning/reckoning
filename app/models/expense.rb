@@ -27,10 +27,16 @@ class Expense < ApplicationRecord
     BUSINESS_TYPES.include?(type)
   end.freeze
 
+  enum interval: { once: 0, weekly: 1, monthly: 2, quarterly: 3, yearly: 4 }
+
   attachment :receipt, content_type: ['application/pdf', 'image/jpeg', 'image/png']
 
-  validates :value, :description, :date, :expense_type, :seller, :private_use_percent, presence: true
+  validates :value, :description, :expense_type, :seller, :private_use_percent, :interval, presence: true
   validates :afa_type, presence: true, if: ->(expense) { expense.expense_type == 'afa' }
+
+  validates :date, presence: true, if: ->(expense) { expense.once? }
+  validates :started_at, presence: true, unless: ->(expense) { expense.once? }
+  validate :ended_at_is_after_started_at
 
   def self.accessible_attributes
     %w[description seller value usable_value private_use_percent created_at updated_at date expense_type afa_type]
@@ -46,15 +52,23 @@ class Expense < ApplicationRecord
   end
 
   def self.year(year)
-    where('extract(year  from date) = ?', year)
+    where(interval: :once).where('extract(year from date) = ?', year)
+      .or(
+        Expense.where.not(interval: :once)
+          .where('extract(year from started_at) <= :year AND (ended_at IS NULL OR extract(year from ended_at) >= :year)', year: year)
+      )
   end
 
-  def self.month(month)
-    where('extract(month from date) = ?', month)
-  end
-
-  def self.months(months)
-    where('extract(month from date) IN (?)', months)
+  def self.date_range(start_date:, end_date: nil)
+    where(interval: :once, date: start_date..end_date)
+      .or(
+        Expense.where.not(interval: :once)
+          .where(
+            'started_at <= :end_date AND (ended_at IS NULL OR ended_at >= :start_date)',
+            start_date: start_date,
+            end_date: end_date
+          )
+      )
   end
 
   def self.without_insurances
@@ -63,8 +77,10 @@ class Expense < ApplicationRecord
 
   def self.filter_result(filter_params)
     filter_year(filter_params.fetch(:year, nil))
-      .filter_month(filter_params.fetch(:month, nil))
-      .filter_quarter(filter_params.fetch(:quarter, nil))
+      .filter_date_range(
+        start_date: filter_params.fetch(:start_date, nil),
+        end_date: filter_params.fetch(:end_date, nil)
+      )
       .filter_type(filter_params.fetch(:type, nil))
   end
 
@@ -74,26 +90,49 @@ class Expense < ApplicationRecord
     year(year)
   end
 
-  def self.filter_month(month)
-    return all if month.blank? || !I18n.t('date.month_names').index(month)
+  def self.filter_date_range(start_date: nil, end_date: nil)
+    return all if start_date.blank?
 
-    month(I18n.t('date.month_names').index(month))
-  end
-
-  def self.filter_quarter(quarter)
-    return all unless (1..4).cover?(quarter.to_i)
-
-    months(quarters[quarter.to_i - 1])
-  end
-
-  def self.quarters
-    [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]]
+    date_range(start_date: start_date, end_date: end_date)
   end
 
   def self.filter_type(type)
     return all if type.blank? || VALID_TYPES.exclude?(type.to_sym)
 
     where(expense_type: type)
+  end
+
+  def ended_at_is_after_started_at
+    errors.add(:ended_at, 'cannot be before the start date') if ended_at.present? && ended_at < started_at
+  end
+
+  def dates_for_interval
+    return [] if once?
+
+    dates = []
+    end_date = ended_at || Time.current
+    current_date = started_at
+    index = 1
+    while current_date <= end_date
+      dates << current_date
+      current_date = started_at.advance(timerange_for_interval(index))
+      index += 1
+    end
+
+    dates
+  end
+
+  def timerange_for_interval(index = 1)
+    case interval
+    when 'weekly'
+      { weeks: index }
+    when 'monthly'
+      { months: index }
+    when 'quarterly'
+      { months: index * 3 }
+    when 'yearly'
+      { years: index }
+    end
   end
 
   def afa_value(year = Time.zone.now.year)
