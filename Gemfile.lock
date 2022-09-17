@@ -9,7 +9,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    aasm (5.2.0)
+    aasm (5.3.0)
       concurrent-ruby (~> 1.0)
     actioncable (6.1.6.1)
       actionpack (= 6.1.6.1)
@@ -126,7 +126,7 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.1.10)
-    connection_pool (2.2.5)
+    connection_pool (2.3.0)
     crass (1.0.6)
     dalli (3.2.2)
     data_migrate (8.1.1)
@@ -167,7 +167,7 @@ GEM
     faker (2.23.0)
       i18n (>= 1.8.11, < 2)
     ffi (1.15.5)
-    fugit (1.6.0)
+    fugit (1.7.0)
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
     globalid (1.0.0)
@@ -226,7 +226,7 @@ GEM
       activesupport (>= 4)
       railties (>= 4)
       request_store (~> 1.0)
-    loofah (2.18.0)
+    loofah (2.19.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -359,7 +359,7 @@ GEM
       parser (>= 3.1.1.0)
     rubocop-minitest (0.11.1)
       rubocop (>= 0.90, < 2.0)
-    rubocop-performance (1.14.3)
+    rubocop-performance (1.15.0)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
     rubocop-rails (2.16.0)
@@ -456,7 +456,7 @@ GEM
       tzinfo (>= 1.0.0)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
-    unicode-display_width (2.2.0)
+    unicode-display_width (2.3.0)
     uniform_notifier (1.16.0)
     url_plumber (0.1.2)
       activesupport (>= 3.0.0)
