@@ -28,7 +28,10 @@ class Expense < ApplicationRecord
   delegate :value, to: :afa_type, prefix: true, allow_nil: true
 
   def self.accessible_attributes
-    %w[description seller value usable_value private_use_percent created_at updated_at date expense_type afa_type_value]
+    %w[
+      description seller value usable_value private_use_percent created_at updated_at date
+      expense_type afa_type_value vat_percent interval started_at ended_at
+    ]
   end
 
   def self.to_csv(options = {})
@@ -193,7 +196,11 @@ class Expense < ApplicationRecord
       expense_type: expense_type,
       seller: seller,
       private_use_percent: private_use_percent,
-      vat_percent: vat_percent
+      vat_percent: vat_percent,
+      afa_type_id: afa_type_id,
+      interval: interval,
+      started_at: started_at,
+      ended_at: ended_at,
     }
   end
 end
