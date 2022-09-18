@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  value: 1
+  valid_from: 2022-09-18
+  valid_until: 2022-09-18
+
+two:
+  value: 1
+  valid_from: 2022-09-18
+  valid_until: 2022-09-18

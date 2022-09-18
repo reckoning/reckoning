@@ -10,13 +10,9 @@
         = form_errors expense, :expense_type
 
     .col-xs-12.col-md-3
-      .form-group.selectize class=form_error?(expense, :afa_type)
-        select.js-selectize name="expense[afa_type]" id="expense_afa_type" placeholder=I18n.t(:"helpers.prompt.expense.afa_type")
-          option
-          - Expense::VALID_AFA_TYPES.each do |type|
-            option value=type[:value] selected=(true if type[:value] == expense.afa_type)
-              = type[:label]
-        = form_errors expense, :afa_type
+      .form-group.selectize class=form_error?(expense, :afa_type_id)
+        = form.collection_select :afa_type_id, AfaType.all, :id, :name, {include_blank: ""}, {placeholder: I18n.t(:"helpers.prompt.expense.afa_type"), class: "js-customer-selectize"}
+        = form_errors expense, :afa_type_id
   .row
     .col-xs-12.col-md-4
       .form-group.selectize class=form_error?(expense, :interval)

@@ -13,6 +13,8 @@ gem 'data_migrate'
 gem 'money'
 gem 'stripe'
 
+gem 'mobility', '~> 1.2.9'
+
 gem 'sidekiq'
 gem 'sidekiq-cron'
 # for sidekiq web

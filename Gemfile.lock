@@ -242,6 +242,9 @@ GEM
     minitest-rails (6.1.0)
       minitest (~> 5.10)
       railties (~> 6.1.0)
+    mobility (1.2.9)
+      i18n (>= 0.6.10, < 2)
+      request_store (~> 1.0)
     mocha (1.14.0)
     money (6.16.0)
       i18n (>= 0.6.4, <= 2)
@@ -522,6 +525,7 @@ DEPENDENCIES
   lograge
   mini_magick
   minitest-rails
+  mobility (~> 1.2.9)
   mocha
   money
   nokogiri (>= 1.7.1)

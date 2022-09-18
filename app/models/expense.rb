@@ -2,29 +2,13 @@
 
 class Expense < ApplicationRecord
   belongs_to :account
+  belongs_to :afa_type, optional: true
 
   VALID_TYPES = %i[
     gwg afa licenses telecommunication training business_expenses
     work_related_deductions home_office current misc
     travel_costs non_cash_contribution business_insurances insurances
   ].freeze
-  # TODO: needs to be complete AFA Table
-  VALID_AFA_TYPES = [{
-    value: 3,
-    label: I18n.t('expenses.afa_types.computer')
-  }, {
-    value: 5,
-    label: I18n.t('expenses.afa_types.smartphone')
-  }, {
-    value: 7,
-    label: I18n.t('expenses.afa_types.tv')
-  }, {
-    value: 7,
-    label: I18n.t('expenses.afa_types.bicycle')
-  }, {
-    value: 13,
-    label: I18n.t('expenses.afa_types.office_furniture')
-  }].freeze
   BUSINESS_TYPES = %i[home_office telecommunication current business_expenses non_cash_contribution insurances].freeze
   NEEDS_RECEIPT_TYPES = VALID_TYPES.reject do |type|
     BUSINESS_TYPES.include?(type)
@@ -41,8 +25,10 @@ class Expense < ApplicationRecord
   validates :started_at, presence: true, unless: ->(expense) { expense.once? }
   validate :ended_at_is_after_started_at
 
+  delegate :value, to: :afa_type, prefix: true, allow_nil: true
+
   def self.accessible_attributes
-    %w[description seller value usable_value private_use_percent created_at updated_at date expense_type afa_type]
+    %w[description seller value usable_value private_use_percent created_at updated_at date expense_type afa_type_value]
   end
 
   def self.to_csv(options = {})
@@ -155,9 +141,9 @@ class Expense < ApplicationRecord
   end
 
   def afa_value(year = Time.zone.now.year)
-    return 0.0 if afa_type.blank? || (date.year + afa_type) < year
+    return 0.0 if afa_type_value.blank? || (date.year + afa_type_value) < year
 
-    value / afa_type
+    value / afa_type_value
   end
 
   def home_office_value

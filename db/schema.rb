@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_17_125546) do
+ActiveRecord::Schema.define(version: 2022_09_18_152638) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -39,6 +39,14 @@ ActiveRecord::Schema.define(version: 2022_09_17_125546) do
     t.integer "deductible_office_space"
     t.integer "deductible_office_percent"
     t.text "offer_headline"
+  end
+
+  create_table "afa_types", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "value", null: false
+    t.date "valid_from", null: false
+    t.date "valid_until"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "auth_tokens", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -88,11 +96,12 @@ ActiveRecord::Schema.define(version: 2022_09_17_125546) do
     t.string "receipt_filename"
     t.integer "receipt_size"
     t.string "receipt_content_type"
-    t.integer "afa_type"
+    t.integer "afa_type_old"
     t.integer "vat_percent", default: 0, null: false
     t.date "started_at"
     t.date "ended_at"
     t.integer "interval", default: 0, null: false
+    t.uuid "afa_type_id"
   end
 
   create_table "invoices", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -112,6 +121,31 @@ ActiveRecord::Schema.define(version: 2022_09_17_125546) do
     t.uuid "project_id"
     t.uuid "account_id", null: false
     t.index ["ref", "account_id"], name: "index_invoices_on_ref_and_account_id", unique: true
+  end
+
+  create_table "mobility_string_translations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "locale", null: false
+    t.string "key", null: false
+    t.string "value"
+    t.string "translatable_type"
+    t.uuid "translatable_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["translatable_id", "translatable_type", "key"], name: "index_mobility_string_translations_on_translatable_attribute"
+    t.index ["translatable_id", "translatable_type", "locale", "key"], name: "index_mobility_string_translations_on_keys", unique: true
+    t.index ["translatable_type", "key", "value", "locale"], name: "index_mobility_string_translations_on_query_keys"
+  end
+
+  create_table "mobility_text_translations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "locale", null: false
+    t.string "key", null: false
+    t.text "value"
+    t.string "translatable_type"
+    t.uuid "translatable_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["translatable_id", "translatable_type", "key"], name: "index_mobility_text_translations_on_translatable_attribute"
+    t.index ["translatable_id", "translatable_type", "locale", "key"], name: "index_mobility_text_translations_on_keys", unique: true
   end
 
   create_table "offers", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
