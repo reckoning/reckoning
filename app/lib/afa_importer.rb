@@ -35,8 +35,6 @@ class AfaImporter
 
       imported_ids << afa_type.id
     end
-
-    # AfaType.where.not(id: imported_ids).destroy_all
   end
 
   private def download_csv
