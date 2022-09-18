@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_18_152638) do
+ActiveRecord::Schema.define(version: 2022_09_18_184307) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -148,7 +148,7 @@ ActiveRecord::Schema.define(version: 2022_09_18_152638) do
     t.index ["translatable_id", "translatable_type", "locale", "key"], name: "index_mobility_text_translations_on_keys", unique: true
   end
 
-  create_table "offers", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "offers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "account_id", null: false
     t.uuid "customer_id"
     t.uuid "project_id"
@@ -213,7 +213,7 @@ ActiveRecord::Schema.define(version: 2022_09_18_152638) do
     t.boolean "billable", default: true, null: false
   end
 
-  create_table "tax_rates", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "tax_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "account_id"
     t.decimal "value", precision: 10, scale: 2, default: "0.0", null: false
     t.datetime "valid_from", null: false

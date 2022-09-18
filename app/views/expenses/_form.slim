@@ -11,7 +11,7 @@
 
     .col-xs-12.col-md-3
       .form-group.selectize class=form_error?(expense, :afa_type_id)
-        = form.collection_select :afa_type_id, AfaType.all, :id, :name, {include_blank: ""}, {placeholder: I18n.t(:"helpers.prompt.expense.afa_type"), class: "js-customer-selectize"}
+        = form.collection_select :afa_type_id, AfaType.i18n.order(name: :asc).all, :id, :name, {include_blank: ""}, {placeholder: I18n.t(:"helpers.prompt.expense.afa_type"), class: "js-selectize"}
         = form_errors expense, :afa_type_id
   .row
     .col-xs-12.col-md-4
