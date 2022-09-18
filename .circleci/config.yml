@@ -11,11 +11,11 @@ defaults: &defaults
         LC_ALL: C.UTF-8
         LANG: en_US.UTF-8
         LANGUAGE: en_US.UTF-8
-    - image: circleci/postgres:13.1.1-alpine
+    - image: cimg/postgres:13.8
       environment:
         POSTGRES_USER: root
         POSTGRES_DB: reckoning_test
-    - image: cimg/redis:6.2.6
+    - image: cimg/redis:6.2.7
 
 jobs:
   checkout_code:
