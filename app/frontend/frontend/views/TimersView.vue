@@ -155,7 +155,7 @@
                     </MenuItem>
                   </div>
                   <div class="py-1">
-                    <MenuItem v-slot="{ active }">
+                    <MenuItem>
                       <router-link
                         :to="{ name: 'timers', params: { year: 2022 } }"
                         href="#"
@@ -175,8 +175,9 @@
                             : 'text-gray-700',
                           'block px-4 py-2 text-sm',
                         ]"
-                        >Day view</a
                       >
+                        Day view
+                      </a>
                     </MenuItem>
                     <MenuItem v-slot="{ active }">
                       <a
@@ -187,8 +188,9 @@
                             : 'text-gray-700',
                           'block px-4 py-2 text-sm',
                         ]"
-                        >Week view</a
                       >
+                        Week view
+                      </a>
                     </MenuItem>
                     <MenuItem v-slot="{ active }">
                       <a
@@ -199,8 +201,9 @@
                             : 'text-gray-700',
                           'block px-4 py-2 text-sm',
                         ]"
-                        >Month view</a
                       >
+                        Month view
+                      </a>
                     </MenuItem>
                     <MenuItem v-slot="{ active }">
                       <a
@@ -211,8 +214,9 @@
                             : 'text-gray-700',
                           'block px-4 py-2 text-sm',
                         ]"
-                        >Year view</a
                       >
+                        Year view
+                      </a>
                     </MenuItem>
                   </div>
                 </MenuItems>
@@ -267,7 +271,7 @@
                         'bg-brand-primary font-semibold text-white',
                       'mx-auto flex h-7 w-7 items-center justify-center rounded-full',
                     ]"
-                    >{{ day.date.split('-').pop().replace(/^0/, '') }}</time
+                    >{{ format(new Date(day.date), "d") }}</time
                   >
                 </button>
               </div>
@@ -280,15 +284,15 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed } from "vue";
+import { useRoute } from "vue-router";
 import {
   ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   EllipsisHorizontalIcon,
-} from '@heroicons/vue/20/solid'
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+} from "@heroicons/vue/20/solid";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import {
   eachWeekOfInterval,
   eachDayOfInterval,
@@ -298,26 +302,26 @@ import {
   startOfWeek,
   isToday,
   format,
-} from 'date-fns'
+} from "date-fns";
 
-const route = useRoute()
+const route = useRoute();
 
 const year = computed((): number => {
   if (route.params.year) {
-    return parseInt(route.params.year as string)
+    return parseInt(route.params.year as string, 10);
   }
 
-  return parseInt(format(new Date(), 'yyyy'))
-})
-const nextYear = computed(() => year.value + 1)
-const previousYear = computed(() => year.value - 1)
+  return parseInt(format(new Date(), "yyyy"), 10);
+});
+const nextYear = computed(() => year.value + 1);
+const previousYear = computed(() => year.value - 1);
 
-const weekStartsOn = 1 // Monday
-const monthIndexes = Array.from({ length: 12 }).map((_, index) => index)
+const weekStartsOn = 1; // Monday
+const monthIndexes = Array.from({ length: 12 }).map((_, index) => index);
 const months = computed(() =>
   monthIndexes.map((index) => {
-    const startOfMonth = new Date(year.value, index, 1)
-    const startDay = startOfWeek(startOfMonth, { weekStartsOn })
+    const startOfMonth = new Date(year.value, index, 1);
+    const startDay = startOfWeek(startOfMonth, { weekStartsOn });
 
     const weeksOfMonth = eachWeekOfInterval(
       {
@@ -325,27 +329,27 @@ const months = computed(() =>
         end: endOfWeek(addWeeks(startDay, 5), { weekStartsOn }),
       },
       { weekStartsOn }
-    )
+    );
 
     const daysOfMonth = weeksOfMonth
-      .map((startDay) =>
+      .map((day) =>
         eachDayOfInterval({
-          start: startDay,
-          end: lastDayOfWeek(startDay, { weekStartsOn }),
+          start: day,
+          end: lastDayOfWeek(day, { weekStartsOn }),
         })
       )
-      .flat()
+      .flat();
 
     const days = daysOfMonth.map((date) => ({
-      date: format(date, 'yyyy-MM-dd'),
+      date: format(date, "yyyy-MM-dd"),
       isCurrentMonth: date.getMonth() === index,
       isToday: isToday(date) && date.getMonth() === index,
-    }))
+    }));
 
     return {
-      name: format(startOfMonth, 'MMMM'),
+      name: format(startOfMonth, "MMMM"),
       days,
-    }
+    };
   })
-)
+);
 </script>

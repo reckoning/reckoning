@@ -37,19 +37,7 @@ jobs:
           path: "**/node_modules"
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - run: yarn install
-      - run: yarn run lint:js
-
-  prettier:
-    needs: js-setup
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-      - run: yarn install
-      - run: yarn run lint:prettier
+      - run: yarn run lint
 
   js-tests:
     needs: js-setup
@@ -193,7 +181,7 @@ jobs:
 
   deploy:
     if: github.ref == 'refs/heads/main'
-    needs: [rubocop, ruby-tests, js-tests, js-lint, prettier, seeds, assets]
+    needs: [rubocop, ruby-tests, js-tests, js-lint, seeds, assets]
     runs-on: ubuntu-latest
 
     environment:

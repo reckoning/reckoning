@@ -1,29 +1,29 @@
-import { ref } from 'vue'
-import { defineStore } from 'pinia'
-import { sessions } from '@/frontend/api'
+import { ref } from "vue";
+import { defineStore } from "pinia";
+import { sessions } from "@/frontend/api";
 
 export default defineStore(
-  'Auth',
+  "Auth",
   () => {
-    const authenticated = ref(false)
+    const authenticated = ref(false);
 
     function login() {
-      authenticated.value = true
+      authenticated.value = true;
     }
 
     async function logout() {
-      authenticated.value = false
+      authenticated.value = false;
 
       try {
-        await sessions.deleteSession()
+        await sessions.deleteSession();
       } catch (_error) {
         // console.error(error)
       }
     }
 
-    return { authenticated, login, logout }
+    return { authenticated, login, logout };
   },
   {
     persist: true,
   }
-)
+);

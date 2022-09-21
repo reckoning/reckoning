@@ -42,16 +42,16 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
-import useAuthStore from '@/frontend/stores/Auth'
+import { computed } from "vue";
+import useAuthStore from "@/frontend/stores/Auth";
 
-const authStore = useAuthStore()
+const authStore = useAuthStore();
 
 const mainClasses = computed(() => {
   if (authStore.authenticated) {
-    return 'md:pl-64'
+    return "md:pl-64";
   }
 
-  return null
-})
+  return null;
+});
 </script>

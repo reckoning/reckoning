@@ -13,21 +13,21 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed } from "vue";
+import { useRoute } from "vue-router";
 
 export interface Props {
-  routeName: string
+  routeName: string;
 }
 
-const route = useRoute()
-const props = withDefaults(defineProps<Props>(), {})
+const route = useRoute();
+const props = withDefaults(defineProps<Props>(), {});
 
 const active = computed(() => {
   if (route.name === props.routeName) {
-    return true
+    return true;
   }
 
-  return false
-})
+  return false;
+});
 </script>

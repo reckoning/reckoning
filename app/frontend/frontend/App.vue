@@ -17,25 +17,25 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
-import Navigation from '@/frontend/components/AppNavigation.vue'
-import SearchBar from '@/frontend/components/SearchBar.vue'
-import AppFooter from '@/components/AppFooter.vue'
-import useAuthStore from '@/frontend/stores/Auth'
+import { computed } from "vue";
+import { storeToRefs } from "pinia";
+import { useRoute } from "vue-router";
+import Navigation from "@/frontend/components/AppNavigation.vue";
+import SearchBar from "@/frontend/components/SearchBar.vue";
+import AppFooter from "@/components/AppFooter.vue";
+import useAuthStore from "@/frontend/stores/Auth";
 
-const route = useRoute()
+const route = useRoute();
 
 // Authentication State
-const authStore = useAuthStore()
-const { authenticated } = storeToRefs(authStore)
+const authStore = useAuthStore();
+const { authenticated } = storeToRefs(authStore);
 
 const mainClasses = computed(() => {
   if (authStore.authenticated) {
-    return 'md:pl-64'
+    return "md:pl-64";
   }
 
-  return null
-})
+  return null;
+});
 </script>

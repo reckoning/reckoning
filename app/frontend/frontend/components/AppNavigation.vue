@@ -65,13 +65,13 @@
 </template>
 
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
+import { storeToRefs } from "pinia";
 import {
   Dialog,
   DialogPanel,
   TransitionChild,
   TransitionRoot,
-} from '@headlessui/vue'
+} from "@headlessui/vue";
 import {
   ClockIcon,
   RectangleStackIcon,
@@ -80,47 +80,47 @@ import {
   WalletIcon,
   XMarkIcon,
   CalculatorIcon,
-} from '@heroicons/vue/24/outline'
-import MainNavigation from '@/components/navigation/MainItems.vue'
-import type { NavigationItem } from '@/components/navigation/MainItems.vue'
-import useAppStore from '@/frontend/stores/App'
+} from "@heroicons/vue/24/outline";
+import MainNavigation from "@/components/navigation/MainItems.vue";
+import type { NavigationItem } from "@/components/navigation/MainItems.vue";
+import useAppStore from "@/frontend/stores/App";
 
 // Navigation Items
 const navigationItems: NavigationItem[] = [
   {
-    name: 'Dashboard',
-    to: { name: 'dashboard' },
+    name: "Dashboard",
+    to: { name: "dashboard" },
     icon: HomeIcon,
   },
   {
-    name: 'Invoices',
-    to: { name: 'invoices' },
+    name: "Invoices",
+    to: { name: "invoices" },
     icon: DocumentTextIcon,
   },
   {
-    name: 'Projects',
-    to: { name: 'projects' },
+    name: "Projects",
+    to: { name: "projects" },
     icon: RectangleStackIcon,
   },
-  { name: 'Timers', to: { name: 'timers' }, icon: ClockIcon },
+  { name: "Timers", to: { name: "timers" }, icon: ClockIcon },
   {
-    name: 'Expenses',
-    to: { name: 'expenses' },
+    name: "Expenses",
+    to: { name: "expenses" },
     icon: WalletIcon,
   },
   {
-    name: 'Calculator',
-    to: { name: 'calculator' },
+    name: "Calculator",
+    to: { name: "calculator" },
     icon: CalculatorIcon,
-    activeRoutes: ['calculator', 'calculator-item'],
+    activeRoutes: ["calculator", "calculator-item"],
   },
-]
+];
 
-const appStore = useAppStore()
+const appStore = useAppStore();
 
-const { navigationOpen } = storeToRefs(appStore)
+const { navigationOpen } = storeToRefs(appStore);
 
 const closeNavigation = () => {
-  appStore.closeNavigation()
-}
+  appStore.closeNavigation();
+};
 </script>

@@ -26,50 +26,50 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import { storeToRefs } from 'pinia'
-import { XMarkIcon } from '@heroicons/vue/24/outline'
-import FormInput from '@/frontend/components/form/FormInput.vue'
-import useCalculatorStore from '@/frontend/stores/Calculator'
+import { computed } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { storeToRefs } from "pinia";
+import { XMarkIcon } from "@heroicons/vue/24/outline";
+import FormInput from "@/frontend/components/form/FormInput.vue";
+import useCalculatorStore from "@/frontend/stores/Calculator";
 
-const route = useRoute()
-const store = useCalculatorStore()
+const route = useRoute();
+const store = useCalculatorStore();
 
 const calculatorData = computed(
   () =>
     store.find(String(route.params.uuid)) ||
     store.newDefaultItem(String(route.params.uuid))
-)
+);
 
 function saveCalculator() {
-  store.save(calculatorData.value)
+  store.save(calculatorData.value);
 }
 
-const { data: calculators } = storeToRefs(store)
+const { data: calculators } = storeToRefs(store);
 
 function isNewCalculator() {
-  return !store.find(calculatorData.value.uuid)
+  return !store.find(calculatorData.value.uuid);
 }
 
-const router = useRouter()
+const router = useRouter();
 
 const remove = () => {
-  if (confirm('Are you sure?')) {
-    store.remove(calculatorData.value.uuid)
+  if (confirm("Are you sure?")) {
+    store.remove(calculatorData.value.uuid);
 
-    const firstCalculator = calculators.value[0]
+    const firstCalculator = calculators.value[0];
 
     if (firstCalculator) {
       router.push({
-        name: 'calculator-item',
+        name: "calculator-item",
         params: { uuid: firstCalculator.uuid },
-      })
+      });
     } else {
       router.push({
-        name: 'calculator',
-      })
+        name: "calculator",
+      });
     }
   }
-}
+};
 </script>

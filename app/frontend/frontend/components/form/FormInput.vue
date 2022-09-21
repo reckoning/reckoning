@@ -20,23 +20,23 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed } from "vue";
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(["update:modelValue"]);
 
 const props = defineProps<{
-  modelValue: string | number | null
-  type: 'number' | 'text'
-  label?: string
-  id: string
-}>()
+  modelValue: string | number | null;
+  type: "number" | "text";
+  label?: string;
+  id: string;
+}>();
 
 const value = computed({
   get() {
-    return props.modelValue
+    return props.modelValue;
   },
-  set(value) {
-    emit('update:modelValue', value)
+  set(modelValue) {
+    emit("update:modelValue", modelValue);
   },
-})
+});
 </script>

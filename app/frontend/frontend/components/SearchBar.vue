@@ -95,53 +95,53 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import {
   Bars3BottomLeftIcon,
   MagnifyingGlassIcon,
   BellIcon,
-} from '@heroicons/vue/24/outline'
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import useAuthStore from '@/frontend/stores/Auth'
-import useAppStore from '@/frontend/stores/App'
-import type { User } from '@/frontend/api/client/models/User'
-import apiClient from '@/frontend/api'
+} from "@heroicons/vue/24/outline";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
+import useAuthStore from "@/frontend/stores/Auth";
+import useAppStore from "@/frontend/stores/App";
+import type { User } from "@/frontend/api/client/models/User";
+import apiClient from "@/frontend/api";
 
 const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
-]
+  { name: "Your Profile", href: "#" },
+  { name: "Settings", href: "#" },
+];
 
 // Navigation
-const appStore = useAppStore()
+const appStore = useAppStore();
 
 function openNavigation() {
   if (appStore.navigationOpen) {
-    appStore.closeNavigation()
+    appStore.closeNavigation();
   } else {
-    appStore.openNavigation()
+    appStore.openNavigation();
   }
 }
 
 // Fetch Current User
-const user = ref<User | null>(null)
+const user = ref<User | null>(null);
 
 onMounted(async () => {
   try {
-    user.value = await apiClient.users.getMe()
+    user.value = await apiClient.users.getMe();
   } catch (error) {
     // console.error(error)
   }
-})
+});
 
 // Authentication
-const authStore = useAuthStore()
-const router = useRouter()
+const authStore = useAuthStore();
+const router = useRouter();
 
 const logout = () => {
-  authStore.logout()
+  authStore.logout();
 
-  router.push({ name: 'home' })
-}
+  router.push({ name: "home" });
+};
 </script>

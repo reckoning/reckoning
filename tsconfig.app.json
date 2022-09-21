@@ -8,19 +8,20 @@
       "dom",
       "dom.iterable"
     ],
+    "noImplicitAny": false,
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["app/frontend/*"],
+      "@/*": ["./app/frontend/*"],
       "~/*": ["*"]
     }
   },
   "include": [
     "@types/*",
-    "app/frontend/**/*.ts",
-    "app/frontend/**/*.vue"
+    "./app/frontend/**/*.ts",
+    "./app/frontend/**/*.vue"
   ],
   "exclude": [
-    "app/frontend/**/__tests__/*"
+    "./app/frontend/**/__tests__/*"
   ]
 }

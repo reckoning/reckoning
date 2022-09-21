@@ -2,11 +2,11 @@
 
 export const routes = [
   {
-    path: 'profile/',
-    name: 'settings-profile',
-    component: () => import('@/frontend/views/Settings/ProfileView.vue'),
+    path: "profile/",
+    name: "settings-profile",
+    component: () => import("@/frontend/views/Settings/ProfileView.vue"),
     meta: {
-      title: 'settings.index',
+      title: "settings.index",
       needsAuthentication: true,
     },
   },
@@ -41,6 +41,6 @@ export const routes = [
   //   },
   //   children: SecurityRoutes,
   // },
-]
+];
 
-export default routes
+export default routes;

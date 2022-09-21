@@ -20,21 +20,21 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
-import FormInput from '@/frontend/components/form/FormInput.vue'
-import useCalculatorStore from '@/frontend/stores/Calculator'
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+import FormInput from "@/frontend/components/form/FormInput.vue";
+import useCalculatorStore from "@/frontend/stores/Calculator";
 
-const route = useRoute()
-const store = useCalculatorStore()
+const route = useRoute();
+const store = useCalculatorStore();
 
 const calculatorData = computed(
   () =>
     store.find(String(route.params.uuid)) ||
     store.newDefaultItem(String(route.params.uuid))
-)
+);
 
 function saveCalculator() {
-  store.save(calculatorData.value)
+  store.save(calculatorData.value);
 }
 </script>

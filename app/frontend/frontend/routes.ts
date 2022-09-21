@@ -1,93 +1,93 @@
-import type { RouteLocation } from 'vue-router'
-import { format } from 'date-fns'
-import HomeView from '@/frontend/views/HomeView.vue'
-import { v4 as uuidv4 } from 'uuid'
-import { routes as SettingsRoutes } from '@/frontend/views/Settings/routes'
+import type { RouteLocation } from "vue-router";
+import { format } from "date-fns";
+import HomeView from "@/frontend/views/HomeView.vue";
+import { v4 as uuidv4 } from "uuid";
+import { routes as SettingsRoutes } from "@/frontend/views/Settings/routes";
 
 export const routes = [
   {
-    path: '/',
-    name: 'home',
+    path: "/",
+    name: "home",
     component: HomeView,
     meta: {
-      title: 'home',
+      title: "home",
     },
   },
   {
-    path: '/dashboard/',
-    name: 'dashboard',
-    component: () => import('@/frontend/views/DashboardView.vue'),
+    path: "/dashboard/",
+    name: "dashboard",
+    component: () => import("@/frontend/views/DashboardView.vue"),
     meta: {
-      title: 'dashboard',
+      title: "dashboard",
       needsAuthentication: true,
     },
   },
   {
-    path: '/invoices/',
-    name: 'invoices',
-    component: () => import('@/frontend/views/InvoicesView.vue'),
+    path: "/invoices/",
+    name: "invoices",
+    component: () => import("@/frontend/views/InvoicesView.vue"),
     meta: {
-      title: 'invoices',
+      title: "invoices",
       needsAuthentication: true,
     },
   },
   {
-    path: '/projects/',
-    name: 'projects',
-    component: () => import('@/frontend/views/ProjectsView.vue'),
+    path: "/projects/",
+    name: "projects",
+    component: () => import("@/frontend/views/ProjectsView.vue"),
     meta: {
-      title: 'projects',
+      title: "projects",
       needsAuthentication: true,
     },
   },
   {
-    path: '/timers/',
-    name: 'timers',
+    path: "/timers/",
+    name: "timers",
     meta: {
       needsAuthentication: true,
     },
     redirect: (_to: RouteLocation) => ({
-      name: 'timers-year',
+      name: "timers-year",
       params: {
-        year: format(new Date(), 'yyyy'),
+        year: format(new Date(), "yyyy"),
       },
     }),
   },
   {
-    path: '/timers/:year',
-    name: 'timers-year',
-    component: () => import('@/frontend/views/TimersView.vue'),
+    path: "/timers/:year",
+    name: "timers-year",
+    component: () => import("@/frontend/views/TimersView.vue"),
     meta: {
-      title: 'timers',
+      title: "timers",
       needsAuthentication: true,
     },
   },
   {
-    path: '/expenses/',
-    name: 'expenses',
-    component: () => import('@/frontend/views/ExpensesView.vue'),
+    path: "/expenses/",
+    name: "expenses",
+    component: () => import("@/frontend/views/ExpensesView.vue"),
     meta: {
-      title: 'expenses',
+      title: "expenses",
       needsAuthentication: true,
     },
   },
   {
-    path: '/settings/',
-    name: 'settings',
-    component: () => import('@/frontend/views/SettingsView.vue'),
+    path: "/settings/",
+    name: "settings",
+    component: () => import("@/frontend/views/SettingsView.vue"),
     meta: {
       needsAuthentication: true,
     },
     redirect: {
-      name: 'settings-profile',
+      name: "settings-profile",
     },
     children: SettingsRoutes,
   },
   {
-    path: '/calculator/',
-    name: 'calculator',
+    path: "/calculator/",
+    name: "calculator",
     redirect: (_to: RouteLocation) => ({
-      name: 'calculator-item',
+      name: "calculator-item",
       params: {
         uuid: uuidv4(),
       },
@@ -97,11 +97,11 @@ export const routes = [
     },
   },
   {
-    path: '/calculator/:uuid',
-    name: 'calculator-item',
-    component: () => import('@/frontend/views/CalculatorView.vue'),
+    path: "/calculator/:uuid",
+    name: "calculator-item",
+    component: () => import("@/frontend/views/CalculatorView.vue"),
     meta: {
-      title: 'calculator',
+      title: "calculator",
       needsAuthentication: true,
     },
   },
@@ -114,27 +114,27 @@ export const routes = [
   //   },
   // },
   {
-    path: '/login/',
-    name: 'login',
-    component: () => import('@/frontend/views/LoginView.vue'),
+    path: "/login/",
+    name: "login",
+    component: () => import("@/frontend/views/LoginView.vue"),
     meta: {
-      title: 'login',
+      title: "login",
     },
   },
   {
-    path: '/impressum/',
-    name: 'impressum',
-    component: () => import('@/frontend/views/ImpressumView.vue'),
+    path: "/impressum/",
+    name: "impressum",
+    component: () => import("@/frontend/views/ImpressumView.vue"),
     meta: {
-      title: 'impressum',
+      title: "impressum",
     },
   },
   {
-    path: '/privacy-policy/',
-    name: 'privacy-policy',
-    component: () => import('@/frontend/views/PrivacyPolicyView.vue'),
+    path: "/privacy-policy/",
+    name: "privacy-policy",
+    component: () => import("@/frontend/views/PrivacyPolicyView.vue"),
     meta: {
-      title: 'privacy-policy',
+      title: "privacy-policy",
     },
   },
   // {
@@ -159,20 +159,20 @@ export const routes = [
   //   component: () => import('@/frontend/views/ConfirmView.vue'),
   // },
   {
-    path: '/404/',
-    name: '404',
-    component: () => import('@/frontend/views/NotFoundView.vue'),
+    path: "/404/",
+    name: "404",
+    component: () => import("@/frontend/views/NotFoundView.vue"),
     meta: {
-      title: 'notFound',
+      title: "notFound",
     },
   },
   {
-    path: '/:catchAll(.*)',
-    component: () => import('@/frontend/views/NotFoundView.vue'),
+    path: "/:catchAll(.*)",
+    component: () => import("@/frontend/views/NotFoundView.vue"),
     meta: {
-      title: 'notFound',
+      title: "notFound",
     },
   },
-]
+];
 
-export default routes
+export default routes;

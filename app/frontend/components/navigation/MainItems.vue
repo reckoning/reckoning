@@ -5,7 +5,7 @@
     </div>
     <nav class="mt-5 space-y-1 px-2">
       <router-link
-        v-for="item in items"
+        v-for="item in props.items"
         :key="item.name"
         :to="(item.to as RouteLocation)"
         :class="[
@@ -33,32 +33,32 @@
 
 <script lang="ts" setup>
 // import { Component } from 'vue'
-import { useRoute } from 'vue-router'
-import type { RouteLocation } from 'vue-router'
+import { useRoute } from "vue-router";
+import type { RouteLocation } from "vue-router";
 
 export type NavigationItem = {
-  name: string
-  to: Partial<RouteLocation>
-  icon: any
-  activeRoutes?: string[]
-}
+  name: string;
+  to: Partial<RouteLocation>;
+  icon: any;
+  activeRoutes?: string[];
+};
 
 export interface Props {
-  items: NavigationItem[]
+  items: NavigationItem[];
 }
 
-const { items } = withDefaults(defineProps<Props>(), {})
+const props = withDefaults(defineProps<Props>(), {});
 
 // Active Navigation
-const route = useRoute()
+const route = useRoute();
 const isActive = (item: NavigationItem): boolean => {
   if (item.activeRoutes) {
-    return item.activeRoutes.includes(String(route.name))
+    return item.activeRoutes.includes(String(route.name));
   }
   if (route.name === item.to.name) {
-    return true
+    return true;
   }
 
-  return false
-}
+  return false;
+};
 </script>

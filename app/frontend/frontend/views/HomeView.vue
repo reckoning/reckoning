@@ -252,16 +252,16 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount } from 'vue'
-import { useRouter } from 'vue-router'
-import useAuthStore from '@/frontend/stores/Auth'
+import { onBeforeMount } from "vue";
+import { useRouter } from "vue-router";
+import useAuthStore from "@/frontend/stores/Auth";
 
-const authStore = useAuthStore()
-const router = useRouter()
+const authStore = useAuthStore();
+const router = useRouter();
 
 onBeforeMount(() => {
   if (authStore.authenticated) {
-    router.push({ name: 'dashboard' })
+    router.push({ name: "dashboard" });
   }
-})
+});
 </script>

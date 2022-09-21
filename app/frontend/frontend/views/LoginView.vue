@@ -142,44 +142,44 @@
 </template>
 
 <script lang="ts" setup>
-import { Form, Field, ErrorMessage } from 'vee-validate'
-import * as yup from 'yup'
-import { useRouter, useRoute } from 'vue-router'
-import type { RouteRecordName } from 'vue-router'
-import useAuthStore from '@/frontend/stores/Auth'
-import { sessions } from '@/frontend/api'
-import type { ApiError } from '@/frontend/api/client/core/ApiError'
+import { Form, Field, ErrorMessage } from "vee-validate";
+import * as yup from "yup";
+import { useRouter, useRoute } from "vue-router";
+import type { RouteRecordName } from "vue-router";
+import useAuthStore from "@/frontend/stores/Auth";
+import { sessions } from "@/frontend/api";
+import type { ApiError } from "@/frontend/api/client/core/ApiError";
 
-const router = useRouter()
-const route = useRoute()
+const router = useRouter();
+const route = useRoute();
 
 const loginSchema = yup.object({
   email: yup.string().required().email(),
   password: yup.string().required().min(8),
   rememberMe: yup.boolean(),
-})
+});
 
 const formValues = {
   rememberMe: false,
-}
+};
 
-const authStore = useAuthStore()
+const authStore = useAuthStore();
 
 const onSubmit = async (values, { resetForm, setFieldError }) => {
   try {
-    await sessions.createSession(values)
+    await sessions.createSession(values);
 
-    resetForm()
+    resetForm();
 
-    authStore.login()
+    authStore.login();
 
     if (route.redirectedFrom) {
-      router.push({ name: route.redirectedFrom.name as RouteRecordName })
+      router.push({ name: route.redirectedFrom.name as RouteRecordName });
     } else {
-      router.push({ name: 'home' })
+      router.push({ name: "home" });
     }
   } catch (error) {
-    setFieldError('email', (error as ApiError).body.message)
+    setFieldError("email", (error as ApiError).body.message);
   }
-}
+};
 </script>

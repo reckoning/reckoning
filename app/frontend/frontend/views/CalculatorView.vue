@@ -64,7 +64,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from "vue";
 import {
   format,
   isWeekend,
@@ -72,75 +72,77 @@ import {
   endOfYear,
   eachDayOfInterval,
   differenceInMonths,
-} from 'date-fns'
-import { useRoute } from 'vue-router'
-import { storeToRefs } from 'pinia'
-import { PlusIcon } from '@heroicons/vue/24/outline'
-import CalculatorFixedIncomeForm from '@/frontend/components/calculator/FixedIncomeForm.vue'
-import CalculatorHourlyIncomeForm from '@/frontend/components/calculator/HourlyIncomeForm.vue'
-import CalculatorBaseForm from '@/frontend/components/calculator/BaseForm.vue'
-import useCalculatorStore from '@/frontend/stores/Calculator'
-import apiClient from '@/frontend/api'
-import type { GermanHoliday } from '@/frontend/api/client/models/GermanHoliday'
+} from "date-fns";
+import { useRoute } from "vue-router";
+import { storeToRefs } from "pinia";
+import { PlusIcon } from "@heroicons/vue/24/outline";
+import CalculatorFixedIncomeForm from "@/frontend/components/calculator/FixedIncomeForm.vue";
+import CalculatorHourlyIncomeForm from "@/frontend/components/calculator/HourlyIncomeForm.vue";
+import CalculatorBaseForm from "@/frontend/components/calculator/BaseForm.vue";
+import useCalculatorStore from "@/frontend/stores/Calculator";
+import apiClient from "@/frontend/api";
+import type { GermanHoliday } from "@/frontend/api/client/models/GermanHoliday";
 
 const holidayDates = computed(() =>
   holidays.value.map((holiday: any) => holiday.date)
-)
+);
 
-const route = useRoute()
-const store = useCalculatorStore()
-const { data: calculators } = storeToRefs(store)
+const route = useRoute();
+const store = useCalculatorStore();
+const { data: calculators } = storeToRefs(store);
 
-const currentYear = new Date(2022, 0, 1)
+const currentYear = new Date(2022, 0, 1);
 
 const calculatorData = computed(
   () =>
     store.find(String(route.params.uuid)) ||
     store.newDefaultItem(String(route.params.uuid))
-)
+);
 
 function isNewCalculator() {
-  return !store.find(calculatorData.value.uuid)
+  return !store.find(calculatorData.value.uuid);
 }
 
-const daysOfWeek = computed(() => calculatorData.value.daysOfWeek || 0)
-const baseIncome = computed(() => calculatorData.value.baseIncome || 0)
-const hourRate = computed(() => calculatorData.value.hourRate || 0)
-const hoursPerDay = computed(() => calculatorData.value.hoursPerDay || 0)
-const vacation = computed(() => calculatorData.value.vacation || 0)
-const absence = computed(() => calculatorData.value.absence || 0)
+const daysOfWeek = computed(() => calculatorData.value.daysOfWeek || 0);
+const baseIncome = computed(() => calculatorData.value.baseIncome || 0);
+const hourRate = computed(() => calculatorData.value.hourRate || 0);
+const hoursPerDay = computed(() => calculatorData.value.hoursPerDay || 0);
+const vacation = computed(() => calculatorData.value.vacation || 0);
+const absence = computed(() => calculatorData.value.absence || 0);
 
 const remainingMonths: number = differenceInMonths(
   endOfYear(new Date()),
   new Date()
-)
+);
 
-const holidays = ref<GermanHoliday[]>([])
+const holidays = ref<GermanHoliday[]>([]);
 
 onMounted(async () => {
   holidays.value = await apiClient.holidays.getGermanHolidays({
     year: currentYear.getFullYear(),
-    state: ['HH', 'NATIONAL'],
-  })
-})
+    state: ["HH", "NATIONAL"],
+  });
+});
 
 const normalizedVacation = computed(
   () => (vacation.value * daysOfWeek.value) / 5
-)
+);
 
-const normalizedAbsence = computed(() => (absence.value * daysOfWeek.value) / 5)
+const normalizedAbsence = computed(
+  () => (absence.value * daysOfWeek.value) / 5
+);
 
-const vacationPerMonth = computed(() => normalizedVacation.value / 12)
+const vacationPerMonth = computed(() => normalizedVacation.value / 12);
 
-const absencePerMonth = computed(() => normalizedAbsence.value / 12)
+const absencePerMonth = computed(() => normalizedAbsence.value / 12);
 
 const remainingVacationValue = computed(
   () => vacationPerMonth.value * remainingMonths
-)
+);
 
 const remainingAbsenceValue = computed(
   () => absencePerMonth.value * remainingMonths
-)
+);
 
 const remainingWorkDays = computed(() =>
   Math.round(
@@ -150,20 +152,20 @@ const remainingWorkDays = computed(() =>
       daysOfWeek.value) /
       5
   )
-)
+);
 
 const remainingWeekDaysForYear = computed(() => {
-  const currentDay = new Date()
+  const currentDay = new Date();
   const daysForYear = eachDayOfInterval({
     start: currentDay,
     end: endOfYear(currentDay),
-  })
+  });
 
   return daysForYear.filter(
     (day) =>
-      !isWeekend(day) && !holidayDates.value.includes(format(day, 'yyyy-MM-dd'))
-  )
-})
+      !isWeekend(day) && !holidayDates.value.includes(format(day, "yyyy-MM-dd"))
+  );
+});
 
 const workDays = computed(() =>
   Math.round(
@@ -173,72 +175,72 @@ const workDays = computed(() =>
       daysOfWeek.value) /
       5
   )
-)
+);
 
 const weekDaysForYear = computed(() => {
   const daysForYear: Date[] = eachDayOfInterval({
     start: startOfYear(currentYear),
     end: endOfYear(currentYear),
-  })
+  });
 
   return daysForYear.filter(
     (day) =>
-      !isWeekend(day) && !holidayDates.value.includes(format(day, 'yyyy-MM-dd'))
-  )
-})
+      !isWeekend(day) && !holidayDates.value.includes(format(day, "yyyy-MM-dd"))
+  );
+});
 
 const roundToTwo = (num: number) =>
-  +`${Math.round(Number(`${String(num)}e+2`))}e-2`
+  +`${Math.round(Number(`${String(num)}e+2`))}e-2`;
 
 const stats = computed(() => {
-  const baseIncomePerMonth = baseIncome.value / 12.0
-  const baseIncomeRemaining = baseIncomePerMonth * remainingMonths
-  const ratePerDay = hourRate.value * hoursPerDay.value
+  const baseIncomePerMonth = baseIncome.value / 12.0;
+  const baseIncomeRemaining = baseIncomePerMonth * remainingMonths;
+  const ratePerDay = hourRate.value * hoursPerDay.value;
 
   return [
-    { name: 'Workdays per Year', stat: workDays },
+    { name: "Workdays per Year", stat: workDays },
     {
-      name: 'Remaining Workdays',
+      name: "Remaining Workdays",
       stat: roundToTwo(remainingWorkDays.value),
     },
     {
-      name: 'Remaining Months',
+      name: "Remaining Months",
       stat: roundToTwo(remainingMonths),
     },
-    { name: 'Vacation per Month', stat: roundToTwo(vacationPerMonth.value) },
-    { name: 'Absence per Month', stat: roundToTwo(absencePerMonth.value) },
+    { name: "Vacation per Month", stat: roundToTwo(vacationPerMonth.value) },
+    { name: "Absence per Month", stat: roundToTwo(absencePerMonth.value) },
     {
-      name: 'Remaining Vacation',
+      name: "Remaining Vacation",
       stat: roundToTwo(remainingVacationValue.value),
     },
     {
-      name: 'Remaining Absence',
+      name: "Remaining Absence",
       stat: roundToTwo(remainingAbsenceValue.value),
     },
-    { name: 'Rate per Day', stat: roundToTwo(ratePerDay) },
+    { name: "Rate per Day", stat: roundToTwo(ratePerDay) },
     {
-      name: 'Possible Income for rest of the Year',
+      name: "Possible Income for rest of the Year",
       stat: roundToTwo(
         baseIncomeRemaining + ratePerDay * remainingWorkDays.value
       ),
     },
     {
-      name: 'Possible Monthly Income for rest of the Year',
+      name: "Possible Monthly Income for rest of the Year",
       stat: roundToTwo(
         baseIncomePerMonth +
           (ratePerDay * remainingWorkDays.value) / remainingMonths
       ),
     },
     {
-      name: 'Possible Income for a whole Year',
+      name: "Possible Income for a whole Year",
       stat: roundToTwo(baseIncome.value + ratePerDay * workDays.value),
     },
     {
-      name: 'Possible Monthly Income for a whole Year',
+      name: "Possible Monthly Income for a whole Year",
       stat: roundToTwo(
         baseIncomePerMonth + (ratePerDay * workDays.value) / 12.0
       ),
     },
-  ]
-})
+  ];
+});
 </script>
