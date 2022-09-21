@@ -1,8 +1,8 @@
 import type { RouteLocation } from 'vue-router'
 import { format } from 'date-fns'
-import { routes as SettingsRoutes } from '@/frontend/views/Settings/routes'
 import HomeView from '@/frontend/views/HomeView.vue'
 import { v4 as uuidv4 } from 'uuid'
+import { routes as SettingsRoutes } from '@/frontend/views/Settings/routes'
 
 export const routes = [
   {
@@ -46,14 +46,12 @@ export const routes = [
     meta: {
       needsAuthentication: true,
     },
-    redirect: (_to: RouteLocation) => {
-      return {
-        name: 'timers-year',
-        params: {
-          year: format(new Date(), 'yyyy'),
-        },
-      }
-    },
+    redirect: (_to: RouteLocation) => ({
+      name: 'timers-year',
+      params: {
+        year: format(new Date(), 'yyyy'),
+      },
+    }),
   },
   {
     path: '/timers/:year',
@@ -88,14 +86,12 @@ export const routes = [
   {
     path: '/calculator/',
     name: 'calculator',
-    redirect: (_to: RouteLocation) => {
-      return {
-        name: 'calculator-item',
-        params: {
-          uuid: uuidv4(),
-        },
-      }
-    },
+    redirect: (_to: RouteLocation) => ({
+      name: 'calculator-item',
+      params: {
+        uuid: uuidv4(),
+      },
+    }),
     meta: {
       needsAuthentication: true,
     },

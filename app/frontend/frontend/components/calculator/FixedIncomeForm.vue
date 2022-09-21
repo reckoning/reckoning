@@ -7,9 +7,9 @@
       <div class="basis-1/3 space-y-3">
         <FormInput
           id="baseIncome"
+          v-model="calculatorData.baseIncome"
           type="number"
           label="Base Income"
-          v-model="calculatorData.baseIncome"
           @input="saveCalculator"
         />
       </div>
@@ -22,19 +22,17 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import useCalculatorStore from '@/frontend/stores/Calculator'
-
 import FormInput from '@/frontend/components/form/FormInput.vue'
+import useCalculatorStore from '@/frontend/stores/Calculator'
 
 const route = useRoute()
 const store = useCalculatorStore()
 
-const calculatorData = computed(() => {
-  return (
+const calculatorData = computed(
+  () =>
     store.find(String(route.params.uuid)) ||
     store.newDefaultItem(String(route.params.uuid))
-  )
-})
+)
 
 function saveCalculator() {
   store.save(calculatorData.value)

@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
+import App from '@/frontend/App.vue'
 import router from '@/frontend/lib/Router'
 import pinia from '@/frontend/lib/Pinia'
-import App from '@/frontend/App.vue'
 
 declare global {
   interface Window {

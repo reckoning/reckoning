@@ -45,10 +45,10 @@
             >
               <span class="sr-only">Open user menu</span>
               <img
+                v-if="user"
                 class="h-8 w-8 rounded-full"
                 :src="user.avatar"
                 alt=""
-                v-if="user"
               />
             </MenuButton>
           </div>
@@ -97,14 +97,14 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import useAuthStore from '@/frontend/stores/Auth'
-import useAppStore from '@/frontend/stores/App'
 import {
   Bars3BottomLeftIcon,
   MagnifyingGlassIcon,
   BellIcon,
 } from '@heroicons/vue/24/outline'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+import useAuthStore from '@/frontend/stores/Auth'
+import useAppStore from '@/frontend/stores/App'
 import type { User } from '@/frontend/api/client/models/User'
 import apiClient from '@/frontend/api'
 

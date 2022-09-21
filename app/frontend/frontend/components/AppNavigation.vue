@@ -81,9 +81,9 @@ import {
   XMarkIcon,
   CalculatorIcon,
 } from '@heroicons/vue/24/outline'
-import useAppStore from '@/frontend/stores/App'
 import MainNavigation from '@/components/navigation/MainItems.vue'
 import type { NavigationItem } from '@/components/navigation/MainItems.vue'
+import useAppStore from '@/frontend/stores/App'
 
 // Navigation Items
 const navigationItems: NavigationItem[] = [

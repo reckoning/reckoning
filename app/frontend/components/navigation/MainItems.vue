@@ -54,7 +54,8 @@ const route = useRoute()
 const isActive = (item: NavigationItem): boolean => {
   if (item.activeRoutes) {
     return item.activeRoutes.includes(String(route.name))
-  } else if (route.name === item.to.name) {
+  }
+  if (route.name === item.to.name) {
     return true
   }
 

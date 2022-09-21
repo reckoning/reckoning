@@ -20,10 +20,10 @@
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
-import useAuthStore from '@/frontend/stores/Auth'
 import Navigation from '@/frontend/components/AppNavigation.vue'
 import SearchBar from '@/frontend/components/SearchBar.vue'
 import AppFooter from '@/components/AppFooter.vue'
+import useAuthStore from '@/frontend/stores/Auth'
 
 const route = useRoute()
 

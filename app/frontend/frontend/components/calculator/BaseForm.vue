@@ -4,8 +4,8 @@
       <div class="basis-1/3 space-y-3">
         <FormInput
           id="name"
-          type="text"
           v-model="calculatorData.name"
+          type="text"
           @input="saveCalculator"
         />
       </div>
@@ -13,9 +13,9 @@
       <div class="basis-1/3 space-y-3 text-right">
         <button
           v-if="!isNewCalculator()"
-          @click="remove"
           type="button"
           class="inline-flex items-center rounded-md mt-1 border border-transparent bg-red-600 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+          @click="remove"
         >
           <XMarkIcon class="-ml-1 mr-3 h-5 w-5" aria-hidden="true" />
           Remove
@@ -30,18 +30,17 @@ import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { XMarkIcon } from '@heroicons/vue/24/outline'
-import useCalculatorStore from '@/frontend/stores/Calculator'
 import FormInput from '@/frontend/components/form/FormInput.vue'
+import useCalculatorStore from '@/frontend/stores/Calculator'
 
 const route = useRoute()
 const store = useCalculatorStore()
 
-const calculatorData = computed(() => {
-  return (
+const calculatorData = computed(
+  () =>
     store.find(String(route.params.uuid)) ||
     store.newDefaultItem(String(route.params.uuid))
-  )
-})
+)
 
 function saveCalculator() {
   store.save(calculatorData.value)

@@ -73,19 +73,19 @@ import {
   eachDayOfInterval,
   differenceInMonths,
 } from 'date-fns'
-import type { GermanHoliday } from '@/frontend/api/client/models/GermanHoliday'
-import apiClient from '@/frontend/api'
-import useCalculatorStore from '@/frontend/stores/Calculator'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { PlusIcon } from '@heroicons/vue/24/outline'
 import CalculatorFixedIncomeForm from '@/frontend/components/calculator/FixedIncomeForm.vue'
 import CalculatorHourlyIncomeForm from '@/frontend/components/calculator/HourlyIncomeForm.vue'
 import CalculatorBaseForm from '@/frontend/components/calculator/BaseForm.vue'
+import useCalculatorStore from '@/frontend/stores/Calculator'
+import apiClient from '@/frontend/api'
+import type { GermanHoliday } from '@/frontend/api/client/models/GermanHoliday'
 
-const holidayDates = computed(() => {
-  return holidays.value.map((holiday: any) => holiday.date)
-})
+const holidayDates = computed(() =>
+  holidays.value.map((holiday: any) => holiday.date)
+)
 
 const route = useRoute()
 const store = useCalculatorStore()
@@ -93,12 +93,11 @@ const { data: calculators } = storeToRefs(store)
 
 const currentYear = new Date(2022, 0, 1)
 
-const calculatorData = computed(() => {
-  return (
+const calculatorData = computed(
+  () =>
     store.find(String(route.params.uuid)) ||
     store.newDefaultItem(String(route.params.uuid))
-  )
-})
+)
 
 function isNewCalculator() {
   return !store.find(calculatorData.value.uuid)
@@ -125,39 +124,33 @@ onMounted(async () => {
   })
 })
 
-const normalizedVacation = computed(() => {
-  return (vacation.value * daysOfWeek.value) / 5
-})
+const normalizedVacation = computed(
+  () => (vacation.value * daysOfWeek.value) / 5
+)
 
-const normalizedAbsence = computed(() => {
-  return (absence.value * daysOfWeek.value) / 5
-})
+const normalizedAbsence = computed(() => (absence.value * daysOfWeek.value) / 5)
 
-const vacationPerMonth = computed(() => {
-  return normalizedVacation.value / 12
-})
+const vacationPerMonth = computed(() => normalizedVacation.value / 12)
 
-const absencePerMonth = computed(() => {
-  return normalizedAbsence.value / 12
-})
+const absencePerMonth = computed(() => normalizedAbsence.value / 12)
 
-const remainingVacationValue = computed(() => {
-  return vacationPerMonth.value * remainingMonths
-})
+const remainingVacationValue = computed(
+  () => vacationPerMonth.value * remainingMonths
+)
 
-const remainingAbsenceValue = computed(() => {
-  return absencePerMonth.value * remainingMonths
-})
+const remainingAbsenceValue = computed(
+  () => absencePerMonth.value * remainingMonths
+)
 
-const remainingWorkDays = computed(() => {
-  return Math.round(
+const remainingWorkDays = computed(() =>
+  Math.round(
     ((remainingWeekDaysForYear.value.length -
       remainingVacationValue.value -
       remainingAbsenceValue.value) *
       daysOfWeek.value) /
       5
   )
-})
+)
 
 const remainingWeekDaysForYear = computed(() => {
   const currentDay = new Date()
@@ -166,22 +159,21 @@ const remainingWeekDaysForYear = computed(() => {
     end: endOfYear(currentDay),
   })
 
-  return daysForYear.filter((day) => {
-    return (
+  return daysForYear.filter(
+    (day) =>
       !isWeekend(day) && !holidayDates.value.includes(format(day, 'yyyy-MM-dd'))
-    )
-  })
+  )
 })
 
-const workDays = computed(() => {
-  return Math.round(
+const workDays = computed(() =>
+  Math.round(
     ((weekDaysForYear.value.length -
       normalizedVacation.value -
       normalizedAbsence.value) *
       daysOfWeek.value) /
       5
   )
-})
+)
 
 const weekDaysForYear = computed(() => {
   const daysForYear: Date[] = eachDayOfInterval({
@@ -189,16 +181,14 @@ const weekDaysForYear = computed(() => {
     end: endOfYear(currentYear),
   })
 
-  return daysForYear.filter((day) => {
-    return (
+  return daysForYear.filter(
+    (day) =>
       !isWeekend(day) && !holidayDates.value.includes(format(day, 'yyyy-MM-dd'))
-    )
-  })
+  )
 })
 
-const roundToTwo = (num: number) => {
-  return +(Math.round(Number(String(num) + 'e+2')) + 'e-2')
-}
+const roundToTwo = (num: number) =>
+  +`${Math.round(Number(`${String(num)}e+2`))}e-2`
 
 const stats = computed(() => {
   const baseIncomePerMonth = baseIncome.value / 12.0

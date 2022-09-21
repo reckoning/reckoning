@@ -28,8 +28,8 @@ import apiClient from '@/frontend/api'
 // Fetch Projects
 const projects = ref<Project[] | []>([])
 
-const groupedProjects = computed(() => {
-  return projects.value.reduce((acc, project) => {
+const groupedProjects = computed(() =>
+  projects.value.reduce((acc, project) => {
     const key = project.customerName
     if (!acc[key]) {
       acc[key] = []
@@ -37,23 +37,16 @@ const groupedProjects = computed(() => {
     acc[key].push(project)
     return acc
   }, {} as Record<string, Project[]>)
-})
+)
 
-const onlyUnique = (value, index, self) => {
-  return self.indexOf(value) === index
-}
+const onlyUnique = (value, index, self) => self.indexOf(value) === index
 
-const projectsForCustomer = (customerName: string): Project[] => {
-  return projects.value.filter(
-    (project) => project.customerName == customerName
-  )
-}
+const projectsForCustomer = (customerName: string): Project[] =>
+  projects.value.filter((project) => project.customerName == customerName)
 
-const customers = computed(() => {
-  return projects.value
-    .map((project) => project.customerName)
-    .filter(onlyUnique)
-})
+const customers = computed(() =>
+  projects.value.map((project) => project.customerName).filter(onlyUnique)
+)
 
 console.log(groupedProjects)
 

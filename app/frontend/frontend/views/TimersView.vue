@@ -222,8 +222,8 @@
         </header>
         <div class="bg-white">
           <div
-            class="mx-auto grid max-w-3xl grid-cols-1 gap-x-8 gap-y-16 px-4 py-16 sm:grid-cols-2 sm:px-6 xl:max-w-none xl:grid-cols-3 xl:px-8 2xl:grid-cols-4"
             :key="year"
+            class="mx-auto grid max-w-3xl grid-cols-1 gap-x-8 gap-y-16 px-4 py-16 sm:grid-cols-2 sm:px-6 xl:max-w-none xl:grid-cols-3 xl:px-8 2xl:grid-cols-4"
           >
             <section
               v-for="month in months"
@@ -328,25 +328,23 @@ const months = computed(() =>
     )
 
     const daysOfMonth = weeksOfMonth
-      .map((startDay) => {
-        return eachDayOfInterval({
+      .map((startDay) =>
+        eachDayOfInterval({
           start: startDay,
-          end: lastDayOfWeek(startDay, { weekStartsOn: weekStartsOn }),
+          end: lastDayOfWeek(startDay, { weekStartsOn }),
         })
-      })
+      )
       .flat()
 
-    const days = daysOfMonth.map((date) => {
-      return {
-        date: format(date, 'yyyy-MM-dd'),
-        isCurrentMonth: date.getMonth() === index,
-        isToday: isToday(date) && date.getMonth() === index,
-      }
-    })
+    const days = daysOfMonth.map((date) => ({
+      date: format(date, 'yyyy-MM-dd'),
+      isCurrentMonth: date.getMonth() === index,
+      isToday: isToday(date) && date.getMonth() === index,
+    }))
 
     return {
       name: format(startOfMonth, 'MMMM'),
-      days: days,
+      days,
     }
   })
 )

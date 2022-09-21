@@ -19,7 +19,7 @@ export default defineStore(
 
     function newDefaultItem(uuid: string): CalculatorData {
       return {
-        uuid: uuid,
+        uuid,
         name: 'New',
         baseIncome: 0,
         hourRate: 0,
@@ -47,10 +47,9 @@ export default defineStore(
 
       if (index === -1) {
         return false
-      } else {
-        data.value.splice(index, 1)
-        return true
       }
+      data.value.splice(index, 1)
+      return true
     }
 
     function find(uuid: string): CalculatorData | null {
