@@ -10,14 +10,17 @@ export class SessionsService {
   /**
    * Create Session
    * Create new Session
-   * @param requestBody
    * @returns string Successfully authenticated. The session ID is returned in a cookie named `RECKONING`. You need to include this cookie in subsequent requests.
    *
    * @throws ApiError
    */
-  public createSession(requestBody?: {
-    email?: string
-    password?: string
+  public createSession({
+    requestBody,
+  }: {
+    requestBody?: {
+      email?: string
+      password?: string
+    }
   }): CancelablePromise<string> {
     return this.httpRequest.request({
       method: 'POST',

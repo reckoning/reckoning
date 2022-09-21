@@ -15,6 +15,8 @@ info:
 tags:
   - name: customers
     description: Customers
+  - name: holidays
+    description: Holidays
   - name: projects
     description: Projects
   - name: sessions
@@ -151,6 +153,34 @@ paths:
       operationId: 'get-projects-:id'
       security:
         - sessionCookie: []
+  /german-holidays:
+    get:
+      summary: German Holidays Index
+      tags:
+        - holidays
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GermanHoliday'
+      operationId: get-german-holidays
+      parameters:
+        - schema:
+            type: number
+          in: query
+          name: year
+          description: Year
+        - schema:
+            type: array
+          in: query
+          name: state
+          description: Federal State Shorthand
+          explode: true
+      description: List of German Holidays
 components:
   schemas:
     Customer:
@@ -185,6 +215,25 @@ components:
                 href:
                   type: string
                   format: uri
+    GermanHoliday:
+      title: GermanHoliday
+      x-stoplight:
+        id: kl6ovent9noxy
+      type: object
+      properties:
+        name:
+          type: string
+        date:
+          type: string
+          format: date
+        federalState:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
     Project:
       type: object
       x-examples:

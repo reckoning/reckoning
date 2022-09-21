@@ -9,6 +9,10 @@ class AppEndpointResolver
     "#{scheme}://#{domain}"
   end
 
+  def frontend_base_url
+    "v2"
+  end
+
   def api_endpoint
     "#{scheme}://#{domain}/api/#{Rails.configuration.app.api_version}"
   end

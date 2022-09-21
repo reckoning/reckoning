@@ -2,6 +2,7 @@ import type { RouteLocation } from 'vue-router'
 import { format } from 'date-fns'
 import { routes as SettingsRoutes } from '@/frontend/views/Settings/routes'
 import HomeView from '@/frontend/views/HomeView.vue'
+import { v4 as uuidv4 } from 'uuid'
 
 export const routes = [
   {
@@ -66,7 +67,7 @@ export const routes = [
   {
     path: '/expenses/',
     name: 'expenses',
-    component: () => import('@/frontend/views/ExpensesPage.vue'),
+    component: () => import('@/frontend/views/ExpensesView.vue'),
     meta: {
       title: 'expenses',
       needsAuthentication: true,
@@ -87,6 +88,21 @@ export const routes = [
   {
     path: '/calculator/',
     name: 'calculator',
+    redirect: (_to: RouteLocation) => {
+      return {
+        name: 'calculator-item',
+        params: {
+          uuid: uuidv4(),
+        },
+      }
+    },
+    meta: {
+      needsAuthentication: true,
+    },
+  },
+  {
+    path: '/calculator/:uuid',
+    name: 'calculator-item',
     component: () => import('@/frontend/views/CalculatorView.vue'),
     meta: {
       title: 'calculator',

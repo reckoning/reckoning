@@ -44,7 +44,7 @@ const addTrailingSlashToAllRoutes = (
 
 const router = createRouter({
   strict: true,
-  history: createWebHistory(),
+  history: createWebHistory(window.FRONTEND_BASE_URL),
   linkActiveClass: 'active',
   linkExactActiveClass: 'active-exact',
   routes: addTrailingSlashToAllRoutes(initialRoutes),

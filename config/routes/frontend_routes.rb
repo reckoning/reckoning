@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-namespace :frontend, path: "" do
+endpoints = AppEndpointResolver.new
+
+namespace :frontend, path: endpoints.frontend_base_url do
   get "dashboard" => "base#index"
   get "customers" => "base#index"
   get "projects" => "base#index"
@@ -9,6 +11,7 @@ namespace :frontend, path: "" do
   get "timers/:year" => "base#index"
   get "expenses" => "base#index"
   get "calculator" => "base#index"
+  get "calculator/:uuid" => "base#index"
 
   get "settings" => "base#index"
   get "settings/profile" => "base#index"

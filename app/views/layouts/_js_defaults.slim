@@ -7,5 +7,5 @@ javascript:
   ApiBasePath = "#{(api_domain if defined?(api_domain))}"
   ApiHeaders = new Headers({
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer #{auth_token}'
   });
+  window.AUTHENTICATED = "#{signed_in?}"

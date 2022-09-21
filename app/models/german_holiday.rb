@@ -1,0 +1,2 @@
+class GermanHoliday < ApplicationRecord
+end

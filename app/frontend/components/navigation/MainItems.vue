@@ -9,7 +9,7 @@
         :key="item.name"
         :to="(item.to as RouteLocation)"
         :class="[
-          isActive(String(item.to.name))
+          isActive(item)
             ? 'bg-gray-900 text-white'
             : 'text-gray-300 hover:bg-gray-700 hover:text-white',
           'group flex items-center px-2 py-2 text-base font-medium rounded-md',
@@ -18,7 +18,7 @@
         <component
           :is="item.icon"
           :class="[
-            isActive(String(item.to.name))
+            isActive(item)
               ? 'text-gray-300'
               : 'text-gray-400 group-hover:text-gray-300',
             'mr-4 flex-shrink-0 h-6 w-6',
@@ -40,7 +40,7 @@ export type NavigationItem = {
   name: string
   to: Partial<RouteLocation>
   icon: any
-  current: boolean
+  activeRoutes?: string[]
 }
 
 export interface Props {
@@ -51,8 +51,10 @@ const { items } = withDefaults(defineProps<Props>(), {})
 
 // Active Navigation
 const route = useRoute()
-const isActive = (routeName: string): boolean => {
-  if (route.name === routeName) {
+const isActive = (item: NavigationItem): boolean => {
+  if (item.activeRoutes) {
+    return item.activeRoutes.includes(String(route.name))
+  } else if (route.name === item.to.name) {
     return true
   }
 

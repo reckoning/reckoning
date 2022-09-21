@@ -27,6 +27,8 @@ v1_api_routes = lambda do
       get :current
     end
   end
+
+  resources :german_holidays, path: "german-holidays", only: [:index]
 end
 
 scope :v1, defaults: {format: :json}, as: :v1 do

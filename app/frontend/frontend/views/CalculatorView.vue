@@ -3,88 +3,45 @@
     <div class="mx-auto px-4 sm:px-6 md:px-8">
       <h1 class="text-2xl text-gray-900">Calculator</h1>
 
-      <div class="w-full max-w-xs">
-        <div>
-          <label for="hourRate" class="block text-sm font-medium text-gray-700">
-            Hour Rate
-          </label>
-          <div class="mt-1">
-            <input
-              type="number"
-              name="hourRate"
-              id="hourRate"
-              v-model="hourRate"
-              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              placeholder="you@example.com"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label
-            for="hoursPerDay"
-            class="block text-sm font-medium text-gray-700"
+      <div class="border-b border-gray-200">
+        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+          <router-link
+            v-for="item in calculators"
+            :key="item.uuid"
+            :to="{ name: 'calculator-item', params: { uuid: item.uuid } }"
+            :class="[
+              item.uuid === route.params.uuid
+                ? 'border-brand-primary text-brand-primary'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+              'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm',
+            ]"
+            :aria-current="item.uuid === route.params.uuid ? 'page' : undefined"
           >
-            Hours per Day
-          </label>
-          <div class="mt-1">
-            <input
-              type="number"
-              name="hoursPerDay"
-              id="hoursPerDay"
-              v-model="hoursPerDay"
-              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            />
-          </div>
-        </div>
-        <div>
-          <label
-            for="daysOfWeek"
-            class="block text-sm font-medium text-gray-700"
+            {{ item.name || item.uuid }}
+          </router-link>
+          <router-link
+            key="new-calculator"
+            :to="{ name: 'calculator' }"
+            :class="[
+              isNewCalculator()
+                ? 'border-brand-primary text-brand-primary'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+              'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm',
+            ]"
+            :aria-current="isNewCalculator() ? 'page' : undefined"
           >
-            Workdays per Week
-          </label>
-          <div class="mt-1">
-            <input
-              type="number"
-              name="daysOfWeek"
-              id="daysOfWeek"
-              v-model="daysOfWeek"
-              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            />
-          </div>
-        </div>
-        <div>
-          <label for="vacation" class="block text-sm font-medium text-gray-700">
-            Vacation per Year
-          </label>
-          <div class="mt-1">
-            <input
-              type="number"
-              name="vacation"
-              id="vacation"
-              v-model="vacation"
-              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            />
-          </div>
-        </div>
-        <div>
-          <label for="absence" class="block text-sm font-medium text-gray-700">
-            Absence per Year
-          </label>
-          <div class="mt-1">
-            <input
-              type="number"
-              name="absence"
-              id="absence"
-              v-model="absence"
-              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            />
-          </div>
-        </div>
+            <PlusIcon class="w-5 h-5" />
+          </router-link>
+        </nav>
       </div>
 
-      <div>
+      <CalculatorBaseForm />
+
+      <CalculatorFixedIncomeForm />
+
+      <CalculatorHourlyIncomeForm />
+
+      <div class="mt-5 border-t border-gray-200">
         <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
           <div
             v-for="item in stats"
@@ -115,68 +72,57 @@ import {
   endOfYear,
   eachDayOfInterval,
   differenceInMonths,
-  addDays,
 } from 'date-fns'
-
-export type HolidayResponse = {
-  [state: string]: {
-    [holidayName: string]: {
-      datum: string
-      info: string
-    }
-  }
-}
-export type Holiday = {
-  state: string
-  name: string
-  date: string
-}
-
-const fetchHolidays = async (): Promise<HolidayResponse> => {
-  const response = await fetch('https://feiertage-api.de/api/')
-  return response.json()
-}
-
-const normalizedHolidays = computed(() => {
-  return Object.keys(holidays.value)
-    .map((key: string) => {
-      return Object.keys(holidays.value[key]).map((holidayName: string) => {
-        return {
-          state: key,
-          name: holidayName,
-          date: holidays.value[key][holidayName].datum,
-        }
-      })
-    })
-    .flat()
-})
+import type { GermanHoliday } from '@/frontend/api/client/models/GermanHoliday'
+import apiClient from '@/frontend/api'
+import useCalculatorStore from '@/frontend/stores/Calculator'
+import { useRoute } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { PlusIcon } from '@heroicons/vue/24/outline'
+import CalculatorFixedIncomeForm from '@/frontend/components/calculator/FixedIncomeForm.vue'
+import CalculatorHourlyIncomeForm from '@/frontend/components/calculator/HourlyIncomeForm.vue'
+import CalculatorBaseForm from '@/frontend/components/calculator/BaseForm.vue'
 
 const holidayDates = computed(() => {
-  return normalizedHolidays.value
-    .filter(
-      (holiday: any) => holiday.state === 'HH' || holiday.state === 'NATIONAL'
-    )
-    .map((holiday: any) => holiday.date)
+  return holidays.value.map((holiday: any) => holiday.date)
 })
 
-const hourRate = ref<number>(0)
-const hoursPerDay = ref<number>(8)
-const daysOfWeek = ref<number>(5)
-const vacation = ref<number>(30)
-const absence = ref<number>(10)
+const route = useRoute()
+const store = useCalculatorStore()
+const { data: calculators } = storeToRefs(store)
+
+const currentYear = new Date(2022, 0, 1)
+
+const calculatorData = computed(() => {
+  return (
+    store.find(String(route.params.uuid)) ||
+    store.newDefaultItem(String(route.params.uuid))
+  )
+})
+
+function isNewCalculator() {
+  return !store.find(calculatorData.value.uuid)
+}
+
+const daysOfWeek = computed(() => calculatorData.value.daysOfWeek || 0)
+const baseIncome = computed(() => calculatorData.value.baseIncome || 0)
+const hourRate = computed(() => calculatorData.value.hourRate || 0)
+const hoursPerDay = computed(() => calculatorData.value.hoursPerDay || 0)
+const vacation = computed(() => calculatorData.value.vacation || 0)
+const absence = computed(() => calculatorData.value.absence || 0)
+
 const remainingMonths: number = differenceInMonths(
   endOfYear(new Date()),
   new Date()
 )
 
-const ratePerDay = computed(() => {
-  return hourRate.value * hoursPerDay.value
-})
-
-const holidays = ref<HolidayResponse>({})
+const holidays = ref<GermanHoliday[]>([])
 
 onMounted(async () => {
-  holidays.value = await fetchHolidays()
+  holidays.value = await apiClient.holidays.getGermanHolidays({
+    year: currentYear.getFullYear(),
+    state: ['HH', 'NATIONAL'],
+  })
 })
 
 const normalizedVacation = computed(() => {
@@ -214,9 +160,10 @@ const remainingWorkDays = computed(() => {
 })
 
 const remainingWeekDaysForYear = computed(() => {
+  const currentDay = new Date()
   const daysForYear = eachDayOfInterval({
-    start: new Date(),
-    end: endOfYear(new Date()),
+    start: currentDay,
+    end: endOfYear(currentDay),
   })
 
   return daysForYear.filter((day) => {
@@ -238,8 +185,8 @@ const workDays = computed(() => {
 
 const weekDaysForYear = computed(() => {
   const daysForYear: Date[] = eachDayOfInterval({
-    start: startOfYear(new Date()),
-    end: endOfYear(new Date()),
+    start: startOfYear(currentYear),
+    end: endOfYear(currentYear),
   })
 
   return daysForYear.filter((day) => {
@@ -253,41 +200,55 @@ const roundToTwo = (num: number) => {
   return +(Math.round(Number(String(num) + 'e+2')) + 'e-2')
 }
 
-const stats = computed(() => [
-  { name: 'Workdays for Current Year', stat: workDays },
-  {
-    name: 'Remaining Workdays for Current Year',
-    stat: roundToTwo(remainingWorkDays.value),
-  },
-  {
-    name: 'Remaining Months for Current Year',
-    stat: roundToTwo(remainingMonths),
-  },
-  { name: 'Vacation per Month', stat: roundToTwo(vacationPerMonth.value) },
-  { name: 'Absence per Month', stat: roundToTwo(absencePerMonth.value) },
-  {
-    name: 'Remaining Vacation',
-    stat: roundToTwo(remainingVacationValue.value),
-  },
-  { name: 'Remaining Absence', stat: roundToTwo(remainingAbsenceValue.value) },
-  { name: 'Rate per Day', stat: roundToTwo(ratePerDay.value) },
-  {
-    name: 'Possible Income for rest of the Year',
-    stat: roundToTwo(ratePerDay.value * remainingWorkDays.value),
-  },
-  {
-    name: 'Possible Monthly Income for rest of the Year',
-    stat: roundToTwo(
-      (ratePerDay.value * remainingWorkDays.value) / remainingMonths
-    ),
-  },
-  {
-    name: 'Possible Income for a whole Year',
-    stat: roundToTwo(ratePerDay.value * workDays.value),
-  },
-  {
-    name: 'Possible Monthly Income for a whole Year',
-    stat: roundToTwo((ratePerDay.value * workDays.value) / 12.0),
-  },
-])
+const stats = computed(() => {
+  const baseIncomePerMonth = baseIncome.value / 12.0
+  const baseIncomeRemaining = baseIncomePerMonth * remainingMonths
+  const ratePerDay = hourRate.value * hoursPerDay.value
+
+  return [
+    { name: 'Workdays per Year', stat: workDays },
+    {
+      name: 'Remaining Workdays',
+      stat: roundToTwo(remainingWorkDays.value),
+    },
+    {
+      name: 'Remaining Months',
+      stat: roundToTwo(remainingMonths),
+    },
+    { name: 'Vacation per Month', stat: roundToTwo(vacationPerMonth.value) },
+    { name: 'Absence per Month', stat: roundToTwo(absencePerMonth.value) },
+    {
+      name: 'Remaining Vacation',
+      stat: roundToTwo(remainingVacationValue.value),
+    },
+    {
+      name: 'Remaining Absence',
+      stat: roundToTwo(remainingAbsenceValue.value),
+    },
+    { name: 'Rate per Day', stat: roundToTwo(ratePerDay) },
+    {
+      name: 'Possible Income for rest of the Year',
+      stat: roundToTwo(
+        baseIncomeRemaining + ratePerDay * remainingWorkDays.value
+      ),
+    },
+    {
+      name: 'Possible Monthly Income for rest of the Year',
+      stat: roundToTwo(
+        baseIncomePerMonth +
+          (ratePerDay * remainingWorkDays.value) / remainingMonths
+      ),
+    },
+    {
+      name: 'Possible Income for a whole Year',
+      stat: roundToTwo(baseIncome.value + ratePerDay * workDays.value),
+    },
+    {
+      name: 'Possible Monthly Income for a whole Year',
+      stat: roundToTwo(
+        baseIncomePerMonth + (ratePerDay * workDays.value) / 12.0
+      ),
+    },
+  ]
+})
 </script>

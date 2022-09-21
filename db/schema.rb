@@ -117,6 +117,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_24_160026) do
     t.uuid "afa_type_id"
   end
 
+  create_table "german_holidays", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.date "date"
+    t.string "federal_state"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "invoices", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.date "date"
     t.datetime "created_at", precision: nil

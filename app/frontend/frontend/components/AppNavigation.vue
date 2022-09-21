@@ -79,6 +79,7 @@ import {
   DocumentTextIcon,
   WalletIcon,
   XMarkIcon,
+  CalculatorIcon,
 } from '@heroicons/vue/24/outline'
 import useAppStore from '@/frontend/stores/App'
 import MainNavigation from '@/components/navigation/MainItems.vue'
@@ -90,26 +91,28 @@ const navigationItems: NavigationItem[] = [
     name: 'Dashboard',
     to: { name: 'dashboard' },
     icon: HomeIcon,
-    current: true,
   },
   {
     name: 'Invoices',
     to: { name: 'invoices' },
     icon: DocumentTextIcon,
-    current: false,
   },
   {
     name: 'Projects',
     to: { name: 'projects' },
     icon: RectangleStackIcon,
-    current: false,
   },
-  { name: 'Timers', to: { name: 'timers' }, icon: ClockIcon, current: false },
+  { name: 'Timers', to: { name: 'timers' }, icon: ClockIcon },
   {
     name: 'Expenses',
     to: { name: 'expenses' },
     icon: WalletIcon,
-    current: false,
+  },
+  {
+    name: 'Calculator',
+    to: { name: 'calculator' },
+    icon: CalculatorIcon,
+    activeRoutes: ['calculator', 'calculator-item'],
   },
 ]
 

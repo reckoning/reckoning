@@ -6,6 +6,7 @@ import App from '@/frontend/App.vue'
 declare global {
   interface Window {
     API_ENDPOINT: string
+    FRONTEND_BASE_URL: string
   }
 }
 
