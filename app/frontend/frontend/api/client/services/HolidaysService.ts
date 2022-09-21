@@ -1,10 +1,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { GermanHoliday } from '../models/GermanHoliday'
+import type { GermanHoliday } from "../models/GermanHoliday";
 
-import type { CancelablePromise } from '../core/CancelablePromise'
-import type { BaseHttpRequest } from '../core/BaseHttpRequest'
+import type { CancelablePromise } from "../core/CancelablePromise";
+import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 
 export class HolidaysService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
@@ -22,19 +22,19 @@ export class HolidaysService {
     /**
      * Year
      */
-    year?: number
+    year?: number;
     /**
      * Federal State Shorthand
      */
-    state?: any[]
+    state?: any[];
   }): CancelablePromise<Array<GermanHoliday>> {
     return this.httpRequest.request({
-      method: 'GET',
-      url: '/german-holidays',
+      method: "GET",
+      url: "/german-holidays",
       query: {
         year: year,
         state: state,
       },
-    })
+    });
   }
 }

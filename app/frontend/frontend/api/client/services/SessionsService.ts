@@ -1,8 +1,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { CancelablePromise } from '../core/CancelablePromise'
-import type { BaseHttpRequest } from '../core/BaseHttpRequest'
+import type { CancelablePromise } from "../core/CancelablePromise";
+import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 
 export class SessionsService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
@@ -18,17 +18,17 @@ export class SessionsService {
     requestBody,
   }: {
     requestBody?: {
-      email?: string
-      password?: string
-    }
+      email?: string;
+      password?: string;
+    };
   }): CancelablePromise<string> {
     return this.httpRequest.request({
-      method: 'POST',
-      url: '/sessions',
+      method: "POST",
+      url: "/sessions",
       body: requestBody,
-      mediaType: 'application/json',
-      responseHeader: 'Set-Cookie',
-    })
+      mediaType: "application/json",
+      responseHeader: "Set-Cookie",
+    });
   }
 
   /**
@@ -39,8 +39,8 @@ export class SessionsService {
    */
   public deleteSession(): CancelablePromise<any> {
     return this.httpRequest.request({
-      method: 'DELETE',
-      url: '/sessions',
-    })
+      method: "DELETE",
+      url: "/sessions",
+    });
   }
 }

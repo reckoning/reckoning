@@ -1,10 +1,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Customer } from '../models/Customer'
+import type { Customer } from "../models/Customer";
 
-import type { CancelablePromise } from '../core/CancelablePromise'
-import type { BaseHttpRequest } from '../core/BaseHttpRequest'
+import type { CancelablePromise } from "../core/CancelablePromise";
+import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 
 export class CustomersService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
@@ -17,9 +17,9 @@ export class CustomersService {
    */
   public getCustomers(): CancelablePromise<Array<Customer>> {
     return this.httpRequest.request({
-      method: 'GET',
-      url: '/customers',
-    })
+      method: "GET",
+      url: "/customers",
+    });
   }
 
   /**
@@ -28,10 +28,20 @@ export class CustomersService {
    * @returns Customer OK
    * @throws ApiError
    */
-  public getCustomersId(): CancelablePromise<Customer> {
+  public getCustomersId({
+    id,
+  }: {
+    /**
+     * Customer ID
+     */
+    id: string;
+  }): CancelablePromise<Customer> {
     return this.httpRequest.request({
-      method: 'GET',
-      url: '/customers/:id',
-    })
+      method: "GET",
+      url: "/customers/{id}",
+      path: {
+        id: id,
+      },
+    });
   }
 }

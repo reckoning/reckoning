@@ -1,10 +1,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Project } from '../models/Project'
+import type { Project } from "../models/Project";
 
-import type { CancelablePromise } from '../core/CancelablePromise'
-import type { BaseHttpRequest } from '../core/BaseHttpRequest'
+import type { CancelablePromise } from "../core/CancelablePromise";
+import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 
 export class ProjectsService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
@@ -17,9 +17,9 @@ export class ProjectsService {
    */
   public getProjects(): CancelablePromise<Array<Project>> {
     return this.httpRequest.request({
-      method: 'GET',
-      url: '/projects',
-    })
+      method: "GET",
+      url: "/projects",
+    });
   }
 
   /**
@@ -28,10 +28,20 @@ export class ProjectsService {
    * @returns Project OK
    * @throws ApiError
    */
-  public getProjectsId(): CancelablePromise<Project> {
+  public getProject({
+    id,
+  }: {
+    /**
+     * Id of Project
+     */
+    id: string;
+  }): CancelablePromise<Project> {
     return this.httpRequest.request({
-      method: 'GET',
-      url: '/projects/:id',
-    })
+      method: "GET",
+      url: "/projects/{id}",
+      path: {
+        id: id,
+      },
+    });
   }
 }

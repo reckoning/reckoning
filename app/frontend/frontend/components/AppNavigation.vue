@@ -101,6 +101,12 @@ const navigationItems: NavigationItem[] = [
     name: "Projects",
     to: { name: "projects" },
     icon: RectangleStackIcon,
+    activeRoutes: [
+      "projects",
+      "projects-list",
+      "project-detail",
+      "project-calculator",
+    ],
   },
   { name: "Timers", to: { name: "timers" }, icon: ClockIcon },
   {

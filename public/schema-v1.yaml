@@ -103,7 +103,7 @@ paths:
       operationId: get-customers
       security:
         - sessionCookie: []
-  '/customers/:id':
+  '/customers/{id}':
     get:
       summary: Customer Detail
       description: Customer Detail
@@ -116,9 +116,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Customer'
+        '':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
       operationId: 'get-customers-:id'
       security:
         - sessionCookie: []
+    parameters:
+      - schema:
+          type: string
+          format: uuid
+        name: id
+        in: path
+        required: true
+        description: Customer ID
   /projects:
     get:
       summary: Projects Index
@@ -137,7 +150,7 @@ paths:
       operationId: get-projects
       security:
         - sessionCookie: []
-  '/projects/:id':
+  '/projects/{id}':
     get:
       summary: Project Detail
       description: Project Detail
@@ -150,9 +163,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Project'
-      operationId: 'get-projects-:id'
+        '':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+      operationId: get-project
       security:
         - sessionCookie: []
+    parameters:
+      - schema:
+          type: string
+          format: uuid
+        name: id
+        in: path
+        required: true
+        description: Id of Project
   /german-holidays:
     get:
       summary: German Holidays Index

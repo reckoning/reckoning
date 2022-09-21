@@ -29,6 +29,11 @@ module Api
         end
       end
 
+      def show
+        @project = current_account.projects.find(params[:id])
+        authorize! :show, @project
+      end
+
       def destroy
         @project = current_account.projects.find(params[:id])
         authorize! :destroy, @project

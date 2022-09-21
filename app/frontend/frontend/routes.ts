@@ -2,6 +2,7 @@ import type { RouteLocation } from "vue-router";
 import { format } from "date-fns";
 import HomeView from "@/frontend/views/HomeView.vue";
 import { v4 as uuidv4 } from "uuid";
+import { routes as ProjectsRoutes } from "@/frontend/views/Projects/routes";
 import { routes as SettingsRoutes } from "@/frontend/views/Settings/routes";
 
 export const routes = [
@@ -39,6 +40,10 @@ export const routes = [
       title: "projects",
       needsAuthentication: true,
     },
+    redirect: {
+      name: "projects-list",
+    },
+    children: ProjectsRoutes,
   },
   {
     path: "/timers/",

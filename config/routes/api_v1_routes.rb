@@ -7,7 +7,7 @@ v1_api_routes = lambda do
 
   resources :customers, only: %i[index show create destroy]
 
-  resources :projects, only: %i[index destroy] do
+  resources :projects, only: %i[index show destroy] do
     member do
       put :archive
     end

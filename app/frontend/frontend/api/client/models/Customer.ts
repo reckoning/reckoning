@@ -3,13 +3,13 @@
 /* eslint-disable */
 
 export type Customer = {
-  id?: string
-  name?: string
-  createdAt?: string
-  updatedAt?: string
+  id?: string;
+  name?: string;
+  createdAt?: string;
+  updatedAt?: string;
   links?: {
     show?: {
-      href?: string
-    }
-  }
-}
+      href?: string;
+    };
+  };
+};
