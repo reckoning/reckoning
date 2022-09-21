@@ -4,13 +4,13 @@ class ApplicationController < ActionController::Base
   include ::AccountsConcern
 
   protect_from_forgery prepend: true
-  # check_authorization unless: :unauthorized_controllers
+  check_authorization unless: :unauthorized_controllers
 
   rescue_from CanCan::AccessDenied do |exception|
     redirect_to root_url, alert: exception.message
   end
 
-  # before_action :authenticate_user!
+  before_action :authenticate_user!
   before_action :set_default_nav
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :set_user_cookie, if: :user_signed_in?

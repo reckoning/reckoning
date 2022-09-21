@@ -106,7 +106,7 @@ module Api
       end
 
       private def task
-        @task ||= current_account.tasks.find(params.delete(:task_id))
+        @task ||= current_account.tasks.find(params.delete(:taskId))
       end
 
       private def start_timer?

@@ -4,6 +4,9 @@ module Frontend
   class BaseController < ApplicationController
     layout "frontend"
 
+    skip_authorization_check
+    before_action :authenticate_user!, only: []
+
     def index
       route = request.fullpath.split("?").first.sub(%r{^/}, "").tr("/", "_")
       route = "home" if route.blank?
