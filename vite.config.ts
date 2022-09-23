@@ -1,22 +1,22 @@
-import { defineConfig, splitVendorChunkPlugin } from 'vite'
-import RubyPlugin from 'vite-plugin-ruby'
-import VuePlugin from '@vitejs/plugin-vue'
-import { VitePWA } from 'vite-plugin-pwa'
+import { defineConfig, splitVendorChunkPlugin } from "vite";
+import RubyPlugin from "vite-plugin-ruby";
+import VuePlugin from "@vitejs/plugin-vue";
+import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
   plugins: [
     RubyPlugin(),
     VuePlugin(),
     VitePWA({
-      registerType: 'autoUpdate',
-      filename: 'sw.js',
+      registerType: "autoUpdate",
+      filename: "sw.js",
       useCredentials: true,
-      scope: '/',
+      scope: "/",
       workbox: {
         modifyURLPrefix: {
-          '': '/vite/',
+          "": "/vite/",
         },
-        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
         clientsClaim: true,
         skipWaiting: true,
         navigateFallback: null,
@@ -33,6 +33,6 @@ export default defineConfig({
     },
   },
   define: {
-    'process.env': {},
+    "process.env": {},
   },
-})
+});

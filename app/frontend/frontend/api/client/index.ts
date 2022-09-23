@@ -12,6 +12,7 @@ export type { OpenAPIConfig } from "./core/OpenAPI";
 export type { Customer } from "./models/Customer";
 export type { GermanHoliday } from "./models/GermanHoliday";
 export type { Project } from "./models/Project";
+export type { SessionForm } from "./models/SessionForm";
 export type { Task } from "./models/Task";
 export type { User } from "./models/User";
 

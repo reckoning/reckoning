@@ -30,8 +30,8 @@ const store = useCalculatorStore();
 
 const calculatorData = computed(
   () =>
-    store.find(String(route.params.uuid)) ||
-    store.newDefaultItem(String(route.params.uuid))
+    store.find(String(route.params.id)) ||
+    store.newDefaultItem(String(route.params.id))
 );
 
 function saveCalculator() {

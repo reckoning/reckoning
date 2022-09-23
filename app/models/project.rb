@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'business_time'
+
 class Project < ApplicationRecord
   DEFAULT_ROUND_UP_OPTIONS = {
     "Nicht aufrunden" => 0.minutes,
@@ -20,6 +22,8 @@ class Project < ApplicationRecord
 
   delegate :name, to: :customer, prefix: true
 
+  before_save :set_working_days
+
   include Workflow
   workflow do
     state :active do
@@ -28,6 +32,18 @@ class Project < ApplicationRecord
     state :archived do
       event :unarchive, transitions_to: :active
     end
+  end
+
+  def set_working_days
+    return if start_date.blank? || end_date.blank?
+
+    if federal_state.present?
+      GermanHoliday.where(federal_state: ['NATIONAL', federal_state]).find_each do |holiday|
+        BusinessTime::Config.holidays << holiday.date
+      end
+    end
+
+    self.business_days = start_date.business_days_until(end_date)
   end
 
   def label

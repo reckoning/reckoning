@@ -9,7 +9,13 @@
           @input="saveCalculator"
         />
       </div>
-      <div class="basis-1/3 space-y-3"></div>
+      <div class="basis-1/3">
+        <DateRangePicker
+          :start="calculatorData.startDate"
+          :end="calculatorData.endDate"
+          @input="saveDateRange"
+        />
+      </div>
       <div class="basis-1/3 space-y-3 text-right">
         <button
           v-if="!isNewCalculator()"
@@ -31,6 +37,7 @@ import { useRouter, useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { XMarkIcon } from "@heroicons/vue/24/outline";
 import FormInput from "@/frontend/components/form/FormInput.vue";
+import DateRangePicker from "@/frontend/components/form/DateRangePicker.vue";
 import useCalculatorStore from "@/frontend/stores/Calculator";
 
 const route = useRoute();
@@ -38,32 +45,39 @@ const store = useCalculatorStore();
 
 const calculatorData = computed(
   () =>
-    store.find(String(route.params.uuid)) ||
-    store.newDefaultItem(String(route.params.uuid))
+    store.find(String(route.params.id)) ||
+    store.newDefaultItem(String(route.params.id))
 );
 
-function saveCalculator() {
+function saveCalculator(): void {
   store.save(calculatorData.value);
+}
+
+function saveDateRange(startDate: string | null, endDate: string | null): void {
+  calculatorData.value.startDate = startDate || undefined;
+  calculatorData.value.endDate = endDate || undefined;
+
+  saveCalculator();
 }
 
 const { data: calculators } = storeToRefs(store);
 
-function isNewCalculator() {
-  return !store.find(calculatorData.value.uuid);
+function isNewCalculator(): boolean {
+  return !store.find(calculatorData.value.id);
 }
 
 const router = useRouter();
 
 const remove = () => {
   if (confirm("Are you sure?")) {
-    store.remove(calculatorData.value.uuid);
+    store.remove(calculatorData.value.id);
 
     const firstCalculator = calculators.value[0];
 
     if (firstCalculator) {
       router.push({
         name: "calculator-item",
-        params: { uuid: firstCalculator.uuid },
+        params: { id: firstCalculator.id },
       });
     } else {
       router.push({

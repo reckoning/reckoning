@@ -1,8 +1,9 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
+import { format, endOfYear } from "date-fns";
 
 export type CalculatorData = {
-  uuid: string;
+  id: string;
   name: string | null;
   baseIncome: number | null;
   hourRate: number | null;
@@ -10,6 +11,8 @@ export type CalculatorData = {
   daysOfWeek: number | null;
   vacation: number | null;
   absence: number | null;
+  startDate?: string;
+  endDate?: string;
 };
 
 export default defineStore(
@@ -17,9 +20,9 @@ export default defineStore(
   () => {
     const data = ref<CalculatorData[]>([]);
 
-    function newDefaultItem(uuid: string): CalculatorData {
+    function newDefaultItem(id: string): CalculatorData {
       return {
-        uuid,
+        id,
         name: "New",
         baseIncome: 0,
         hourRate: 0,
@@ -27,11 +30,13 @@ export default defineStore(
         daysOfWeek: 5,
         vacation: 30,
         absence: 10,
+        startDate: format(new Date(), "yyyy-MM-dd"),
+        endDate: format(endOfYear(new Date()), "yyyy-MM-dd"),
       };
     }
 
     function save(dataItem: CalculatorData): CalculatorData {
-      const index = data.value.findIndex((item) => item.uuid === dataItem.uuid);
+      const index = data.value.findIndex((item) => item.id === dataItem.id);
 
       if (index === -1) {
         data.value.push(dataItem);
@@ -42,8 +47,8 @@ export default defineStore(
       return dataItem;
     }
 
-    function remove(uuid: string): boolean {
-      const index = data.value.findIndex((item) => item.uuid === uuid);
+    function remove(id: string): boolean {
+      const index = data.value.findIndex((item) => item.id === id);
 
       if (index === -1) {
         return false;
@@ -52,8 +57,8 @@ export default defineStore(
       return true;
     }
 
-    function find(uuid: string): CalculatorData | null {
-      const existingData = data.value.find((item) => item.uuid === uuid);
+    function find(id: string): CalculatorData | null {
+      const existingData = data.value.find((item) => item.id === id);
 
       if (existingData) {
         return existingData;
@@ -62,14 +67,14 @@ export default defineStore(
       return null;
     }
 
-    function findOrCreate(uuid: string) {
-      const existingData = data.value.find((item) => item.uuid === uuid);
+    function findOrCreate(id: string) {
+      const existingData = data.value.find((item) => item.id === id);
 
       if (existingData) {
         return existingData;
       }
 
-      return save(newDefaultItem(uuid));
+      return save(newDefaultItem(id));
     }
 
     return { data, newDefaultItem, save, remove, find, findOrCreate };

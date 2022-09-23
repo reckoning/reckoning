@@ -149,6 +149,7 @@ import type { RouteRecordName } from "vue-router";
 import useAuthStore from "@/frontend/stores/Auth";
 import { sessions } from "@/frontend/api";
 import type { ApiError } from "@/frontend/api/client/core/ApiError";
+import type { SessionForm } from "@/frontend/api/client/models/SessionForm";
 
 const router = useRouter();
 const route = useRoute();
@@ -165,9 +166,9 @@ const formValues = {
 
 const authStore = useAuthStore();
 
-const onSubmit = async (values, { resetForm, setFieldError }) => {
+const onSubmit = async (values: SessionForm, { resetForm, setFieldError }) => {
   try {
-    await sessions.createSession(values);
+    await sessions.createSession({ requestBody: values });
 
     resetForm();
 

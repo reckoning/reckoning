@@ -7,12 +7,18 @@
     >
       {{ label }}
     </label>
-    <div class="mt-1">
+    <div
+      :class="{
+        'mt-1': label,
+      }"
+    >
       <input
         :id="id"
         v-model="value"
         :type="type"
         :name="id"
+        :max="max"
+        :min="min"
         class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
       />
     </div>
@@ -26,7 +32,9 @@ const emit = defineEmits(["update:modelValue"]);
 
 const props = defineProps<{
   modelValue: string | number | null;
-  type: "number" | "text";
+  type: "number" | "text" | "date" | "email" | "password";
+  max?: string | number;
+  min?: string | number;
   label?: string;
   id: string;
 }>();

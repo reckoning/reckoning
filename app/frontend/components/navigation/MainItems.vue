@@ -32,14 +32,14 @@
 </template>
 
 <script lang="ts" setup>
-// import { Component } from 'vue'
+import type { Component } from "vue";
 import { useRoute } from "vue-router";
 import type { RouteLocation } from "vue-router";
 
 export type NavigationItem = {
   name: string;
   to: Partial<RouteLocation>;
-  icon: any;
+  icon: Component;
   activeRoutes?: string[];
 };
 

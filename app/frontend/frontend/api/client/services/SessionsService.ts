@@ -1,6 +1,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { SessionForm } from "../models/SessionForm";
+
 import type { CancelablePromise } from "../core/CancelablePromise";
 import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 
@@ -17,10 +19,7 @@ export class SessionsService {
   public createSession({
     requestBody,
   }: {
-    requestBody?: {
-      email?: string;
-      password?: string;
-    };
+    requestBody?: SessionForm;
   }): CancelablePromise<string> {
     return this.httpRequest.request({
       method: "POST",

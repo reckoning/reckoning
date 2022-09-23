@@ -57,14 +57,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  format: email
-                password:
-                  type: string
-                  format: password
+              $ref: '#/components/schemas/SessionForm'
       responses:
         '201':
           description: |
@@ -116,12 +109,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Customer'
-        '':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Customer'
-      operationId: 'get-customers-:id'
+      operationId: get-customer
       security:
         - sessionCookie: []
     parameters:
@@ -159,11 +147,6 @@ paths:
       responses:
         '200':
           description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Project'
-        '':
           content:
             application/json:
               schema:
@@ -303,6 +286,20 @@ components:
                 href:
                   type: string
                   format: uri
+    SessionForm:
+      title: SessionForm
+      x-stoplight:
+        id: pk5l8s2cfrsz2
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+        rememberMe:
+          type: boolean
     Task:
       type: object
       x-examples:

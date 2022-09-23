@@ -28,7 +28,7 @@ export class CustomersService {
    * @returns Customer OK
    * @throws ApiError
    */
-  public getCustomersId({
+  public getCustomer({
     id,
   }: {
     /**

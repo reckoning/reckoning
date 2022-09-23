@@ -7,11 +7,14 @@ module.exports = {
     node: true,
   },
   extends: [
-    "plugin:vue/vue3-essential",
+    "plugin:vue/vue3-recommended",
     "eslint:recommended",
-    "@vue/eslint-config-typescript",
+    "@vue/eslint-config-typescript/recommended",
     "@vue/eslint-config-prettier",
   ],
+  parserOptions: {
+    ecmaVersion: "latest",
+  },
   plugins: ["vitest"],
   overrides: [
     {
@@ -19,10 +22,7 @@ module.exports = {
       extends: ["plugin:cypress/recommended"],
     },
   ],
-  parserOptions: {
-    ecmaVersion: "latest",
-  },
   rules: {
-    "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/no-explicit-any": "error",
   },
 };

@@ -94,7 +94,7 @@ export const routes = [
     redirect: (_to: RouteLocation) => ({
       name: "calculator-item",
       params: {
-        uuid: uuidv4(),
+        id: uuidv4(),
       },
     }),
     meta: {
@@ -102,7 +102,7 @@ export const routes = [
     },
   },
   {
-    path: "/calculator/:uuid",
+    path: "/calculator/:id",
     name: "calculator-item",
     component: () => import("@/frontend/views/CalculatorView.vue"),
     meta: {
