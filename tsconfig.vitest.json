@@ -1,13 +1,15 @@
 {
   "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "lib": [],
+    "types": ["node", "jsdom"],
+    "noImplicitAny": false,
+  },
   "include": [
+    "@types/*",
     "app/frontend/**/*.ts",
+    "app/frontend/**/*.vue",
     "test/javascript/**/*.ts"
   ],
-  "exclude": [],
-  "compilerOptions": {
-    "composite": true,
-    "lib": [],
-    "types": ["node", "jsdom"]
-  }
+  "exclude": []
 }

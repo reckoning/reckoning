@@ -22,6 +22,7 @@
     "app/frontend/**/*.vue"
   ],
   "exclude": [
-    "app/frontend/**/__tests__/*"
+    "app/frontend/**/__tests__/*",
+    "test/javascript/**/*.ts"
   ]
 }

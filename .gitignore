@@ -48,6 +48,7 @@ yarn-error.log
 yarn-debug.log*
 .yarn-integrity
 build
+*.tsbuildinfo
 
 app/assets/builds/*
 !app/assets/builds/.keep

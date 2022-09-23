@@ -12,8 +12,17 @@ module.exports = {
     "@vue/eslint-config-typescript/recommended",
     "@vue/eslint-config-prettier",
   ],
+  parser: "vue-eslint-parser",
   parserOptions: {
     ecmaVersion: "latest",
+    project: [
+      "./tsconfig.json",
+      "./tsconfig.app.json",
+      "./tsconfig.config.json",
+      "./tsconfig.vitest.json",
+    ],
+    parser: "@typescript-eslint/parser",
+    tsconfigRootDir: ".",
   },
   plugins: ["vitest"],
   overrides: [
@@ -24,5 +33,11 @@ module.exports = {
   ],
   rules: {
     "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/no-unnecessary-type-assertion": "error",
+    "@typescript-eslint/no-unsafe-argument": "error",
+    "@typescript-eslint/no-unsafe-assignment": "error",
+    "@typescript-eslint/no-unsafe-call": "error",
+    "@typescript-eslint/no-unsafe-member-access": "error",
+    "@typescript-eslint/no-unsafe-return": "error",
   },
 };

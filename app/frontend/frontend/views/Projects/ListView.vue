@@ -8,7 +8,7 @@
           {{ customer }}
           <ul>
             <li
-              v-for="project in projectsForCustomer(customer)"
+              v-for="project in projectsForCustomer(customer as string)"
               :key="project.id"
             >
               -
@@ -32,14 +32,16 @@ import apiClient from "@/frontend/api";
 // Fetch Projects
 const projects = ref<Project[] | []>([]);
 
-const onlyUnique = (value, index, self) => self.indexOf(value) === index;
-
 const projectsForCustomer = (customerName: string): Project[] =>
   projects.value.filter((project) => project.customerName === customerName);
 
-const customers = computed(() =>
-  projects.value.map((project) => project.customerName).filter(onlyUnique)
-);
+const customers = computed(() => {
+  const customerNames = projects.value.map((project) => project.customerName);
+
+  return customerNames.filter((name, index) => {
+    return customerNames.indexOf(name) === index;
+  });
+});
 
 onMounted(async () => {
   try {

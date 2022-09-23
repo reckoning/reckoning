@@ -5,7 +5,7 @@
     </div>
     <nav class="mt-5 space-y-1 px-2">
       <router-link
-        v-for="item in props.items"
+        v-for="item in items"
         :key="item.name"
         :to="(item.to as RouteLocation)"
         :class="[
@@ -17,6 +17,7 @@
       >
         <component
           :is="item.icon"
+          v-if="item.icon"
           :class="[
             isActive(item)
               ? 'text-gray-300'
@@ -39,7 +40,7 @@ import type { RouteLocation } from "vue-router";
 export type NavigationItem = {
   name: string;
   to: Partial<RouteLocation>;
-  icon: Component;
+  icon?: Component;
   activeRoutes?: string[];
 };
 
@@ -47,7 +48,7 @@ export interface Props {
   items: NavigationItem[];
 }
 
-const props = withDefaults(defineProps<Props>(), {});
+defineProps<Props>();
 
 // Active Navigation
 const route = useRoute();

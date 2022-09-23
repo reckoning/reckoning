@@ -70,7 +70,7 @@ router.afterEach(() => {
   }
 });
 
-router.beforeEach((to, _from) => {
+router.beforeEach((to) => {
   const authStore = useAuthStore();
 
   if (to.meta.needsAuthentication && !authStore.authenticated) {

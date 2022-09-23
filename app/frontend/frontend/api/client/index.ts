@@ -15,6 +15,7 @@ export type { Project } from "./models/Project";
 export type { SessionForm } from "./models/SessionForm";
 export type { Task } from "./models/Task";
 export type { User } from "./models/User";
+export type { ValidationError } from "./models/ValidationError";
 
 export { CustomersService } from "./services/CustomersService";
 export { HolidaysService } from "./services/HolidaysService";

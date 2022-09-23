@@ -1,4 +1,5 @@
 import axios from "axios";
+import type { AxiosError } from "axios";
 import { ReckoningApiV1 } from "@/frontend/api/client/ReckoningApiV1";
 import useAuthStore from "@/frontend/stores/Auth";
 
@@ -9,10 +10,14 @@ const apiClient = new ReckoningApiV1({
 
 axios.interceptors.response.use(
   (response) => response,
-  (error) => {
+  (error: AxiosError) => {
     const authStore = useAuthStore();
 
-    if (error.response.status === 401 && authStore.authenticated) {
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      authStore.authenticated
+    ) {
       authStore.logout();
     }
 

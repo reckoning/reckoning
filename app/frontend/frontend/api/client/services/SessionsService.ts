@@ -27,6 +27,9 @@ export class SessionsService {
       body: requestBody,
       mediaType: "application/json",
       responseHeader: "Set-Cookie",
+      errors: {
+        400: `Bad Request`,
+      },
     });
   }
 

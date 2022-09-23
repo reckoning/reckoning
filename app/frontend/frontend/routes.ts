@@ -1,4 +1,4 @@
-import type { RouteLocation } from "vue-router";
+import type { Component } from "vue";
 import { format } from "date-fns";
 import HomeView from "@/frontend/views/HomeView.vue";
 import { v4 as uuidv4 } from "uuid";
@@ -9,7 +9,7 @@ export const routes = [
   {
     path: "/",
     name: "home",
-    component: HomeView,
+    component: HomeView as Component,
     meta: {
       title: "home",
     },
@@ -51,7 +51,7 @@ export const routes = [
     meta: {
       needsAuthentication: true,
     },
-    redirect: (_to: RouteLocation) => ({
+    redirect: () => ({
       name: "timers-year",
       params: {
         year: format(new Date(), "yyyy"),
@@ -91,7 +91,7 @@ export const routes = [
   {
     path: "/calculator/",
     name: "calculator",
-    redirect: (_to: RouteLocation) => ({
+    redirect: () => ({
       name: "calculator-item",
       params: {
         id: uuidv4(),

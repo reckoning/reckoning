@@ -1,4 +1,5 @@
 import { createApp } from "vue";
+import type { Component } from "vue";
 import App from "@/frontend/App.vue";
 import router from "@/frontend/lib/Router";
 import pinia from "@/frontend/lib/Pinia";
@@ -10,7 +11,7 @@ declare global {
   }
 }
 
-const app = createApp(App);
+const app = createApp(App as Component);
 
 app.use(router);
 app.use(pinia);

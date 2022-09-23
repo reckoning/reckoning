@@ -184,7 +184,7 @@ jobs:
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
-      - name: Run Seeds
+      - name: Precompile Assets
         run: bundle exec rails assets:precompile
 
 

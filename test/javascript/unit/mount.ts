@@ -1,17 +1,17 @@
 import { mount } from "@vue/test-utils";
-import { createRouter, createWebHistory } from "vue-router";
-import { routes } from "@/frontend/routes";
-// import type { ComponentOptionsWithObjectProps } from "vue";
+import { createTestingPinia } from "@pinia/testing";
+import { vi } from "vitest";
+import Router from "@/frontend/lib/Router";
 
-const router = createRouter({
-  history: createWebHistory(),
-  routes,
-});
-
-export default (Component, propsData = {}) =>
+export default (Component, options = {}) =>
   mount(Component, {
     global: {
-      plugins: [router],
+      plugins: [
+        Router,
+        createTestingPinia({
+          createSpy: vi.fn,
+        }),
+      ],
     },
-    propsData,
+    ...options,
   });

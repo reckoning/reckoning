@@ -143,13 +143,15 @@
 
 <script lang="ts" setup>
 import { Form, Field, ErrorMessage } from "vee-validate";
+import type { SubmissionContext } from "vee-validate";
 import * as yup from "yup";
 import { useRouter, useRoute } from "vue-router";
 import type { RouteRecordName } from "vue-router";
 import useAuthStore from "@/frontend/stores/Auth";
 import { sessions } from "@/frontend/api";
-import type { ApiError } from "@/frontend/api/client/core/ApiError";
+import { ApiError } from "@/frontend/api/client/core/ApiError";
 import type { SessionForm } from "@/frontend/api/client/models/SessionForm";
+import type { ValidationError } from "@/frontend/api/client/models/ValidationError";
 
 const router = useRouter();
 const route = useRoute();
@@ -166,11 +168,11 @@ const formValues = {
 
 const authStore = useAuthStore();
 
-const onSubmit = async (values: SessionForm, { resetForm, setFieldError }) => {
+const onSubmit = async (values: SessionForm, context: SubmissionContext) => {
   try {
     await sessions.createSession({ requestBody: values });
 
-    resetForm();
+    context.resetForm();
 
     authStore.login();
 
@@ -179,8 +181,10 @@ const onSubmit = async (values: SessionForm, { resetForm, setFieldError }) => {
     } else {
       router.push({ name: "home" });
     }
-  } catch (error) {
-    setFieldError("email", (error as ApiError).body.message);
+  } catch (error: unknown) {
+    if (error instanceof ApiError) {
+      context.setFieldError("email", (error.body as ValidationError).message);
+    }
   }
 };
 </script>
