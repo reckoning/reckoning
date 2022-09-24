@@ -10,5 +10,6 @@ digitalocean:
   service: S3
   bucket: reckoning
   endpoint: https://fra1.digitaloceanspaces.com
+  region: fra1
   access_key_id: <%= Rails.application.credentials.dig(:s3_key) %>
   secret_access_key: <%= Rails.application.credentials.dig(:s3_secret) %>
