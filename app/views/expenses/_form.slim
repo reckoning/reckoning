@@ -83,19 +83,19 @@
     .col-xs-12.col-md-3
       .form-group class=form_error?(expense, :receipt)
         = form.label :receipt
-        = form.attachment_field :receipt, class: 'form-control', direct: true, presigned: true
+        = form.file_field :receipt, class: 'form-control', direct_upload: true
         = form_errors expense, :receipt
-      - if expense.receipt.present?
-        .form-group
-          .checkbox.checkbox-right
-            = form.check_box :remove_receipt
-            label for="expense_remove_receipt"
-              = I18n.t(:"helpers.label.expense.remove_receipt")
+      / - if expense.receipt.present?
+      /   .form-group
+      /     .checkbox.checkbox-right
+      /       = form.check_box :remove_receipt
+      /       label for="expense_remove_receipt"
+      /         = I18n.t(:"helpers.label.expense.remove_receipt")
     .col-xs-12.col-md-3
-      - if expense.receipt.present?
-        a href=attachment_url(expense, :receipt) target="_blank"
-          - if expense.receipt_content_type == "application/pdf"
-            .pdf-viewer data-pdf-path=attachment_url(expense, :receipt)
+      - if expense.receipt_blob.present?
+        a href=rails_blob_path(expense.receipt, disposition: "attachment") target="_blank"
+          - if expense.receipt_blob.content_type == "application/pdf"
+            .pdf-viewer data-pdf-path=url_for(expense.receipt)
       - else
         p.placeholder
           = I18n.t("helpers.label.expense.receipt_missing")

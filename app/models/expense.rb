@@ -16,7 +16,9 @@ class Expense < ApplicationRecord
 
   enum interval: { once: 0, weekly: 1, monthly: 2, quarterly: 3, yearly: 4 }
 
-  attachment :receipt, content_type: ['application/pdf', 'image/jpeg', 'image/png']
+  has_one_attached :receipt
+
+  validates :receipt, content_type: ['application/pdf', 'image/jpeg', 'image/png']
 
   validates :value, :description, :expense_type, :seller, :private_use_percent, :interval, presence: true
   validates :afa_type, presence: true, if: ->(expense) { expense.expense_type == 'afa' }

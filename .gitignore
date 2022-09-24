@@ -25,6 +25,10 @@ test/reports/*
 
 # app files
 files/*
+storage/*
+public/assets
+public/compare/*
+public/vite*
 
 # js dependencies
 vendor/assets/.bowerrc

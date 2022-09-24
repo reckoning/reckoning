@@ -23,7 +23,6 @@
 #= require nvd3
 #= require vendor/highcharts/highcharts
 #= require vendor/highcharts/no-data-to-display
-#= require refile
 #= require app
 #= require_tree ./app
 #= require helper

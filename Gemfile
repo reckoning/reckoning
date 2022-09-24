@@ -93,7 +93,9 @@ gem 'redis-actionpack'
 # pdf rendering
 gem 'wicked_pdf'
 
-gem 'refile', require: 'refile/rails', git: 'https://github.com/refile/refile'
+gem 'active_storage_validations'
+gem 'aws-sdk-s3', require: false
+gem 'image_processing', '~> 1.2'
 
 # heroku production
 gem 'non-stupid-digest-assets'

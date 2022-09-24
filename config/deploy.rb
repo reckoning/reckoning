@@ -22,7 +22,6 @@ set :initial_deploy, false
 set :linked_dirs, [
   'public/assets',
   'public/vite',
-  'public/uploads',
   '.bundle',
   'log',
   'tmp/cache',
