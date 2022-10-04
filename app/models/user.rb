@@ -18,6 +18,10 @@ class User < ApplicationRecord
     account.customers.any? { |customer| customer.overtime(id) }
   end
 
+  def weekly_hours
+    timers.where('date >= ?', 1.week.ago).sum(:value)
+  end
+
   def update_gravatar_hash
     hash = if gravatar.blank?
              Digest::MD5.hexdigest(id.to_s)

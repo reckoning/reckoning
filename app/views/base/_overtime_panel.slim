@@ -2,14 +2,23 @@
   .panel-heading
     .panel-title
       strong
-        = I18n.t(:"dashboard.panels.overtime")
+        = I18n.t("dashboard.panels.overtime")
   .list-group
-    - current_account.customers.each do |customer|
-      ruby:
-        overtime = customer.overtime(current_user.id)
+    - if current_user.overtime?
+      - current_account.customers.each do |customer|
+        ruby:
+          overtime = customer.overtime(current_user.id)
 
-      - if overtime && customer.weekly_hours
-        .list-group-item(class="list-group-item-#{overtime_label(overtime, customer.weekly_hours)}")
-          = customer.name
-          strong.pull-right
-            = number_to_currency(overtime, unit: "h", precision: 2)
+        - if overtime && customer.weekly_hours
+          .list-group-item(class="list-group-item-#{overtime_label(overtime, customer.weekly_hours)}")
+            = customer.name
+            strong.pull-right
+              = number_to_currency(overtime, unit: "h", precision: 2)
+    ruby:
+      weekly_hours = current_user.weekly_hours
+
+    - if weekly_hours
+      .list-group-item(class="list-group-item-#{weekly_hours_label(weekly_hours)}")
+        = I18n.t('dashboard.panels.weekly_hours')
+        strong.pull-right
+          = number_to_currency(weekly_hours, unit: "h", precision: 2)
