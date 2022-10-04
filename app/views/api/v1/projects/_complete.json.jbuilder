@@ -9,16 +9,16 @@ json.timer_values project.timer_values
 json.timer_values_billable project.timer_values_billable
 json.timer_values_invoiced project.timer_values_invoiced
 json.timer_values_uninvoiced project.timer_values_uninvoiced
-json.invoice_values project.invoice_values
-json.rate project.rate
-json.budget project.budget
+json.invoice_values project.invoice_values.to_f
+json.rate project.rate.to_f
+json.budget project.budget.to_f
 json.budget_on_dashboard project.budget_on_dashboard
-json.budget_hours project.budget_hours
-json.budget_percent project.budget_percent
-json.budget_percent_invoiced project.budget_percent_invoiced
-json.budget_percent_uninvoiced project.budget_percent_uninvoiced
-json.round_up project.round_up
-json.state = project.workflow_state
+json.budget_hours project.budget_hours.to_f
+json.budget_percent project.budget_percent.to_f
+json.budget_percent_invoiced project.budget_percent_invoiced.to_f
+json.budget_percent_uninvoiced project.budget_percent_uninvoiced.to_f
+json.round_up project.round_up.to_f
+json.state project.workflow_state
 json.federal_state project.federal_state
 json.business_days project.business_days
 json.start_date project.start_date

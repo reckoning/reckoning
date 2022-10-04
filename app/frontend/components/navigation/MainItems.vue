@@ -7,7 +7,7 @@
       <router-link
         v-for="item in items"
         :key="item.name"
-        :to="(item.to as RouteLocation)"
+        :to="(item.to as RouteLocationRaw)"
         :class="[
           isActive(item)
             ? 'bg-gray-900 text-white'
@@ -35,7 +35,7 @@
 <script lang="ts" setup>
 import type { Component } from "vue";
 import { useRoute } from "vue-router";
-import type { RouteLocation } from "vue-router";
+import type { RouteLocation, RouteLocationRaw } from "vue-router";
 
 export type NavigationItem = {
   name: string;

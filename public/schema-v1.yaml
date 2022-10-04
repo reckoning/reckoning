@@ -253,25 +253,105 @@ components:
       type: object
       x-examples:
         example-1:
-          id: 406bec9a-dacb-4ddd-95a1-1222f2a8e010
-          name: Core Team 2022
+          id: dcf90db8-5fdd-4d4c-b517-966e95e6eb4a
+          name: Shipcloud App
+          label: Shipcloud GmbH - Shipcloud App
           customerName: Shipcloud GmbH
-          label: Shipcloud GmbH - Core Team 2022
-          tasks: []
-          createdAt: '2022-09-08T21:49:49.479+02:00'
-          updatedAt: '2022-09-08T21:50:46.004+02:00'
+          customerId: 00e691db-739e-472d-bbd5-3a107697a0f2
+          timerValues: 0
+          timerValuesBillable: 0
+          timerValuesInvoiced: 0
+          timerValuesUninvoiced: 0
+          invoiceValues: 0
+          rate: 105
+          budget: 25200
+          budgetOnDashboard: true
+          budgetHours: 240
+          budgetPercent: 0
+          budgetPercentInvoiced: 0
+          budgetPercentUninvoiced: 0
+          roundUp: 900
+          state: active
+          federalState: HH
+          businessDays: 41
+          startDate: '2022-09-30'
+          endDate: '2022-11-30'
+          tasks:
+            - id: 491f96cd-58e1-4eaa-a254-81c97f32b092
+              name: Quicksight Dashboards
+              label: Quicksight Dashboards (fakturierbar)
+              billable: true
+              projectId: dcf90db8-5fdd-4d4c-b517-966e95e6eb4a
+              createdAt: '2022-09-16T13:20:41.982+02:00'
+              updatedAt: '2022-09-16T13:20:41.982+02:00'
+            - id: 3e4b9216-c1ed-4b01-9939-80dcd48cc341
+              name: Tracking Status via Datenbank Mapping
+              label: Tracking Status via Datenbank Mapping (fakturierbar)
+              billable: true
+              projectId: dcf90db8-5fdd-4d4c-b517-966e95e6eb4a
+              createdAt: '2022-09-16T13:20:41.988+02:00'
+              updatedAt: '2022-09-16T13:20:41.988+02:00'
+            - id: e1c656db-3094-4fc5-916f-000ad0456ec7
+              name: 'Anpassung der Abostruktur: Staffelpreise'
+              label: 'Anpassung der Abostruktur: Staffelpreise (fakturierbar)'
+              billable: true
+              projectId: dcf90db8-5fdd-4d4c-b517-966e95e6eb4a
+              createdAt: '2022-09-16T13:20:41.985+02:00'
+              updatedAt: '2022-09-16T13:20:41.985+02:00'
+          createdAt: '2022-09-16T13:20:41.979+02:00'
+          updatedAt: '2022-09-22T08:35:46.920+02:00'
           links:
             show:
-              href: /api/v1/projects/406bec9a-dacb-4ddd-95a1-1222f2a8e010
+              href: /api/v1/projects/dcf90db8-5fdd-4d4c-b517-966e95e6eb4a/
+      description: ''
       properties:
         id:
           type: string
           format: uuid
         name:
           type: string
+        label:
+          type: string
         customerName:
           type: string
-        label:
+        customerId:
+          type: string
+          format: uuid
+        timerValues:
+          type: integer
+        timerValuesBillable:
+          type: integer
+        timerValuesInvoiced:
+          type: integer
+        timerValuesUninvoiced:
+          type: integer
+        invoiceValues:
+          type: integer
+        rate:
+          type: integer
+        budget:
+          type: integer
+        budgetOnDashboard:
+          type: boolean
+        budgetHours:
+          type: integer
+        budgetPercent:
+          type: integer
+        budgetPercentInvoiced:
+          type: integer
+        budgetPercentUninvoiced:
+          type: integer
+        roundUp:
+          type: integer
+        state:
+          type: string
+        federalState:
+          type: string
+        businessDays:
+          type: integer
+        startDate:
+          type: string
+        endDate:
           type: string
         tasks:
           type: array
@@ -279,10 +359,8 @@ components:
             $ref: '#/components/schemas/Task'
         createdAt:
           type: string
-          format: date-time
         updatedAt:
           type: string
-          format: date-time
         links:
           type: object
           properties:
@@ -291,7 +369,6 @@ components:
               properties:
                 href:
                   type: string
-                  format: uri
     SessionForm:
       title: SessionForm
       x-stoplight:

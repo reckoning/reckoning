@@ -2,6 +2,7 @@ import type { Component } from "vue";
 import { format } from "date-fns";
 import HomeView from "@/frontend/views/HomeView.vue";
 import { v4 as uuidv4 } from "uuid";
+import { routes as CustomersRoutes } from "@/frontend/views/Customers/routes";
 import { routes as ProjectsRoutes } from "@/frontend/views/Projects/routes";
 import { routes as SettingsRoutes } from "@/frontend/views/Settings/routes";
 
@@ -31,6 +32,19 @@ export const routes = [
       title: "invoices",
       needsAuthentication: true,
     },
+  },
+  {
+    path: "/customers/",
+    name: "customers",
+    component: () => import("@/frontend/views/CustomersView.vue"),
+    meta: {
+      title: "customers",
+      needsAuthentication: true,
+    },
+    redirect: {
+      name: "customers-list",
+    },
+    children: CustomersRoutes,
   },
   {
     path: "/projects/",
