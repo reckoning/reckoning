@@ -49,7 +49,7 @@ module ApplicationHelper
   def weekly_hours_label(weekly_hours)
     # TODO: move to db field
     default_work_hours = 40
-    hours_per_day = weekly_hours / 5
+
     if weekly_hours < (default_work_hours * 1.25) && weekly_hours > (default_work_hours * -1.25)
       'success'
     elsif weekly_hours < (default_work_hours * 2.5) && weekly_hours > (default_work_hours * -2.5)
