@@ -19,7 +19,7 @@ class User < ApplicationRecord
   end
 
   def weekly_hours
-    timers.where('date >= ?', 1.week.ago).sum(:value)
+    timers.where('date >= ?', Time.current.beginning_of_week).sum(:value)
   end
 
   def update_gravatar_hash
