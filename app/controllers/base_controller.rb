@@ -29,6 +29,7 @@ class BaseController < ApplicationController
   end
 
   private def dashboard
+    @uninvoiced_amount = current_account.uninvoiced_amount
     @charged_invoices = current_account.invoices.includes(:customer, :project).order('date DESC').charged
     @paid_invoices = current_account.invoices.includes(:customer, :project).order('date DESC').paid_in_year(Time.zone.now.year)
     @last_invoices = current_account.invoices.includes(:customer, :project).order('date DESC').paid_in_year(Time.zone.now.year - 1)
