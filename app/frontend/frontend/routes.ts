@@ -63,19 +63,15 @@ export const routes = [
     path: "/timers/",
     name: "timers",
     meta: {
+      title: "timers",
       needsAuthentication: true,
     },
-    redirect: () => ({
-      name: "timers-year",
-      params: {
-        year: format(new Date(), "yyyy"),
-      },
-    }),
+    component: () => import("@/frontend/views/TimersView.vue"),
   },
   {
-    path: "/timers/:year",
-    name: "timers-year",
-    component: () => import("@/frontend/views/TimersView.vue"),
+    path: "/timers-test/:year",
+    name: "timers-test-year",
+    component: () => import("@/frontend/views/TimersTestView.vue"),
     meta: {
       title: "timers",
       needsAuthentication: true,

@@ -7,8 +7,8 @@ namespace :frontend, path: endpoints.frontend_base_url do
   get "customers" => "base#index"
 
   get "projects" => "base#index"
-  get 'projects/:id' => 'base#index'
-  get 'projects/:id/calculator' => 'base#index'
+  get "projects/:id" => "base#index"
+  get "projects/:id/calculator" => "base#index"
 
   get "invoices" => "base#index"
   get "timers" => "base#index"

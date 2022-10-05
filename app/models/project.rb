@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'business_time'
+require "business_time"
 
 class Project < ApplicationRecord
   DEFAULT_ROUND_UP_OPTIONS = {
@@ -38,7 +38,7 @@ class Project < ApplicationRecord
     return if start_date.blank? || end_date.blank?
 
     if federal_state.present?
-      GermanHoliday.where(federal_state: ['NATIONAL', federal_state]).find_each do |holiday|
+      GermanHoliday.where(federal_state: ["NATIONAL", federal_state]).find_each do |holiday|
         BusinessTime::Config.holidays << holiday.date
       end
     end

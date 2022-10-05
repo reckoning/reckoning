@@ -23,8 +23,8 @@ json.federal_state project.federal_state
 json.business_days project.business_days
 json.start_date project.start_date
 json.end_date project.end_date
-json.tasks project.tasks.includes(:timers).order('timers.created_at DESC') do |task|
-  json.partial! 'api/v1/projects/tasks', task: task
+json.tasks project.tasks.includes(:timers).order("timers.created_at DESC") do |task|
+  json.partial! "api/v1/projects/tasks", task: task
 end
 json.created_at project.created_at
 json.updated_at project.updated_at
