@@ -9,6 +9,7 @@ de:
       budgets: "Budget"
       overtime: "Überstunden"
       weekly_hours: "Wochenstunden"
+      daily_hours: "Erfasste Stunden heute"
       expenses:
         title: "Ausgaben"
         current: "Aktuell"

@@ -16,9 +16,16 @@
               = number_to_currency(overtime, unit: "h", precision: 2)
     ruby:
       weekly_hours = current_user.weekly_hours
+      daily_hours = current_user.daily_hours
 
     - if weekly_hours
       .list-group-item(class="list-group-item-#{weekly_hours_label(weekly_hours)}")
         = I18n.t('dashboard.panels.weekly_hours')
         strong.pull-right
           = number_to_currency(weekly_hours, unit: "h", precision: 2)
+
+    - if daily_hours
+      .list-group-item(class="list-group-item-#{daily_hours_label(daily_hours)}")
+        = I18n.t('dashboard.panels.daily_hours')
+        strong.pull-right
+          = number_to_currency(daily_hours, unit: "h", precision: 2)

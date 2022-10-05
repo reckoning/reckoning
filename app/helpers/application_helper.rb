@@ -58,4 +58,17 @@ module ApplicationHelper
       'danger'
     end
   end
+
+  def daily_hours_label(daily_hours)
+    # TODO: move to db field
+    default_work_hours = 8
+
+    if daily_hours < (default_work_hours * 1.25) && daily_hours > (default_work_hours * -1.25)
+      'success'
+    elsif daily_hours < (default_work_hours * 2.5) && daily_hours > (default_work_hours * -2.5)
+      'warning'
+    else
+      'danger'
+    end
+  end
 end

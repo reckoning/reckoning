@@ -22,6 +22,10 @@ class User < ApplicationRecord
     timers.where('date >= ?', Time.current.beginning_of_week).sum(:value)
   end
 
+  def daily_hours
+    timers.where(date: Time.current).sum(:value)
+  end
+
   def update_gravatar_hash
     hash = if gravatar.blank?
              Digest::MD5.hexdigest(id.to_s)
