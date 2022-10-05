@@ -14,6 +14,10 @@
                 = I18n.t(:"dashboard.panels.summary")
           .list-group
             .list-group-item
+              = I18n.t(:"dashboard.panels.uninvoiced")
+              %strong.pull-right
+                = number_to_currency(@uninvoiced_amount)
+            .list-group-item
               = I18n.t(:"dashboard.panels.all_invoices")
               %strong.pull-right
                 = number_to_currency((@charged_invoices + @paid_invoices).sum(&:value))

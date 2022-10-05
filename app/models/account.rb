@@ -30,6 +30,12 @@ class Account < ApplicationRecord
   before_save :calculate_office_percent
   before_create :set_trail_end_date
 
+  def uninvoiced_amount
+    projects.sum do |project|
+      project.timer_values_uninvoiced * project.rate
+    end
+  end
+
   def on_paid_plan?
     !on_plan?(:free)
   end

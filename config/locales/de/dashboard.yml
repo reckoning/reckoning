@@ -6,6 +6,7 @@ de:
       charged_invoices: "Offene Rechnungen"
       paid_invoices: "Bezahlte Rechnungen"
       last_invoices: "Letztes Jahr"
+      uninvoiced: "Offener Betrag"
       budgets: "Budget"
       overtime: "Überstunden"
       weekly_hours: "Wochenstunden"
