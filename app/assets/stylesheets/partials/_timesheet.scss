@@ -14,7 +14,8 @@
     }
   }
 
-  .timesheet-header, .timesheet-footer {
+  .timesheet-header,
+  .timesheet-footer {
     padding: 5px 15px;
 
     .timesheet-day {
@@ -66,7 +67,8 @@
 
   .timesheet-week-page {
     .timesheet-timer {
-      &.invoiced, &.started {
+      &.invoiced,
+      &.started {
         padding-right: 12px;
       }
     }
@@ -117,8 +119,15 @@
     }
   }
 
+  .timesheet-timer-note {
+    margin-left: 10px;
+    padding-left: 10px;
+    border-left: 1px solid #333333;
+  }
+
   @media (max-width: $screen-sm-min) {
-    .timesheet-header, .timesheet-footer {
+    .timesheet-header,
+    .timesheet-footer {
       .timesheet-day {
         padding-right: 0;
         text-align: center;
@@ -151,7 +160,8 @@
       }
 
       .timesheet-timer {
-        &.invoiced, &.started {
+        &.invoiced,
+        &.started {
           padding-right: 2px;
         }
       }
@@ -165,22 +175,24 @@
   }
 }
 
-.timesheet, .logbook, .timers-calendar {
+.timesheet,
+.logbook,
+.timers-calendar {
   .animate.ng-move,
   .animate.ng-enter {
-    -webkit-transition:all linear 0.5s;
-    transition:all linear 0.5s;
+    -webkit-transition: all linear 0.5s;
+    transition: all linear 0.5s;
   }
 
   .animate.ng-leave.ng-leave-active,
   .animate.ng-move,
   .animate.ng-enter {
-    opacity:0;
+    opacity: 0;
   }
 
   .animate.ng-leave,
   .animate.ng-move.ng-move-active,
   .animate.ng-enter.ng-enter-active {
-    opacity:1;
+    opacity: 1;
   }
 }

@@ -33,6 +33,7 @@
                 = " | "
                 span ng-bind="timer.projectCustomerName"
             span ng-bind="timer.taskLabel"
+            span.timesheet-timer-note ng-bind="timer.note"
           .pull-right
             span.timesheet-timer.invoiced ng-if="timer.invoiced" title=I18n.t(:"labels.timesheet.on_invoice") data-toggle="tooltip"
               span ng-bind="timer.value | toHours"
