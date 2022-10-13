@@ -19,7 +19,7 @@ import { ref, computed, onBeforeMount } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import apiClient from "@/frontend/api";
 import type { Project } from "@/frontend/api/client/models/Project";
-import Btn from "@/frontend/components/DefaultButton.vue";
+import Btn from "@/frontend/components/BtnComponent.vue";
 import PageHeader from "@/frontend/components/PageHeader.vue";
 
 const route = useRoute();

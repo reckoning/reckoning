@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { AxiosError } from "axios";
+import nprogress from "nprogress";
 import { ReckoningApiV1 } from "@/frontend/api/client/ReckoningApiV1";
 import useAuthStore from "@/frontend/stores/Auth";
 
@@ -8,9 +9,26 @@ const apiClient = new ReckoningApiV1({
   WITH_CREDENTIALS: true,
 });
 
+axios.interceptors.request.use(
+  (config) => {
+    nprogress.start();
+    return config;
+  },
+  (error) => {
+    nprogress.done();
+    return Promise.reject(error);
+  }
+);
+
 axios.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    nprogress.done();
+
+    return response;
+  },
   (error: AxiosError) => {
+    nprogress.done();
+
     const authStore = useAuthStore();
 
     if (

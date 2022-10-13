@@ -4,6 +4,7 @@ x-stoplight:
 info:
   title: schema-v1
   description: Reckoning Api Schema V1
+  summary: V1 Schema
   version: '1.0'
   contact:
     name: Marten Klitzke
@@ -23,6 +24,8 @@ tags:
     description: Sessions
   - name: users
     description: Users
+  - name: timers
+    description: Timers
 servers:
   - url: 'http://reckoning.test/api/v1'
     description: development
@@ -171,6 +174,7 @@ paths:
   /german-holidays:
     get:
       summary: German Holidays Index
+      description: List of German Holidays
       tags:
         - holidays
       responses:
@@ -195,7 +199,57 @@ paths:
           name: state
           description: Federal State Shorthand
           explode: true
-      description: List of German Holidays
+  /timers:
+    get:
+      summary: Timers Index
+      description: List of Timers
+      tags:
+        - timers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Timer'
+      operationId: get-timers
+      security:
+        - sessionCookie: []
+      parameters:
+        - schema:
+            format: date
+            type: string
+          in: query
+          name: date
+          description: Filter by Date
+        - schema:
+            type: string
+            format: date
+          in: query
+          name: weekDate
+          description: Filter by Week
+    post:
+      summary: Create Timer
+      tags:
+        - timers
+      operationId: create-timer
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Timer'
+      security:
+        - sessionCookie: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimerInput'
+      description: Create a new Timer
 components:
   schemas:
     Customer:
@@ -413,6 +467,149 @@ components:
         updatedAt:
           type: string
           format: date-time
+    Timer:
+      type: object
+      x-examples:
+        example-1:
+          id: e8725547-0fe1-4e19-b826-ed87deb9fe2a
+          date: '2022-10-05'
+          value: '5.25'
+          sumForTask: '5.25'
+          note: Cleanup
+          started: false
+          startedAt: null
+          startTime: null
+          startTimeForTask: null
+          positionId: null
+          invoiced: false
+          taskId: c86cf3ba-dbe7-46ce-a99b-5268ac21e363
+          taskName: Entwicklung
+          taskLabel: Entwicklung (fakturierbar)
+          taskBillable: true
+          projectId: aea91955-77b9-4e41-a09c-86911e82d6ed
+          projectName: Fanblast Homepage
+          projectCustomerName: Digital Blast GmbH
+          createdAt: '2022-10-05T09:49:24.726+02:00'
+          updatedAt: '2022-10-05T20:32:20.156+02:00'
+          deleted: false
+          links:
+            project:
+              href: /api/v1/projects/aea91955-77b9-4e41-a09c-86911e82d6ed
+      properties:
+        id:
+          type: string
+          format: uuid
+        date:
+          type: string
+          format: date
+        value:
+          type: string
+        sumForTask:
+          type: string
+        note:
+          type: string
+        started:
+          type: boolean
+        startedAt:
+          type: string
+          format: date-time
+        startTime:
+          type: string
+        startTimeForTask:
+          type: 'null'
+        positionId:
+          type: string
+        invoiced:
+          type: boolean
+        taskId:
+          type: string
+          format: uuid
+        taskName:
+          type: string
+        taskLabel:
+          type: string
+        taskBillable:
+          type: boolean
+        projectId:
+          type: string
+          format: uuid
+        projectName:
+          type: string
+        projectCustomerName:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        deleted:
+          type: boolean
+        links:
+          type: object
+          properties:
+            project:
+              type: object
+              properties:
+                href:
+                  type: string
+      required:
+        - id
+        - date
+        - taskId
+        - projectId
+        - createdAt
+        - updatedAt
+    TimerInput:
+      type: object
+      x-stoplight:
+        id: jv92lxboerty2
+      x-examples:
+        example-1:
+          id: e8725547-0fe1-4e19-b826-ed87deb9fe2a
+          date: '2022-10-05'
+          value: '5.25'
+          sumForTask: '5.25'
+          note: Cleanup
+          started: false
+          startedAt: null
+          startTime: null
+          startTimeForTask: null
+          positionId: null
+          invoiced: false
+          taskId: c86cf3ba-dbe7-46ce-a99b-5268ac21e363
+          taskName: Entwicklung
+          taskLabel: Entwicklung (fakturierbar)
+          taskBillable: true
+          projectId: aea91955-77b9-4e41-a09c-86911e82d6ed
+          projectName: Fanblast Homepage
+          projectCustomerName: Digital Blast GmbH
+          createdAt: '2022-10-05T09:49:24.726+02:00'
+          updatedAt: '2022-10-05T20:32:20.156+02:00'
+          deleted: false
+          links:
+            project:
+              href: /api/v1/projects/aea91955-77b9-4e41-a09c-86911e82d6ed
+      properties:
+        date:
+          type: string
+          format: date
+        value:
+          type: string
+        note:
+          type: string
+        started:
+          type: boolean
+        taskId:
+          type: string
+          format: uuid
+        projectId:
+          type: string
+          format: uuid
+      required:
+        - date
+        - taskId
+        - projectId
     User:
       title: User
       x-stoplight:

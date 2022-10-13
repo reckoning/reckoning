@@ -16,6 +16,7 @@ module.exports = {
       colors: {
         brand: {
           primary: "#428bca",
+          primaryDark: "#3071a9",
           grayBackground: "#272B30",
           grayBorder: "#c8c8c8",
         },

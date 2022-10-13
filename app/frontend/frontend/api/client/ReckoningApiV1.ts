@@ -9,6 +9,7 @@ import { CustomersService } from "./services/CustomersService";
 import { HolidaysService } from "./services/HolidaysService";
 import { ProjectsService } from "./services/ProjectsService";
 import { SessionsService } from "./services/SessionsService";
+import { TimersService } from "./services/TimersService";
 import { UsersService } from "./services/UsersService";
 
 type HttpRequestConstructor = new (config: OpenAPIConfig) => BaseHttpRequest;
@@ -18,6 +19,7 @@ export class ReckoningApiV1 {
   public readonly holidays: HolidaysService;
   public readonly projects: ProjectsService;
   public readonly sessions: SessionsService;
+  public readonly timers: TimersService;
   public readonly users: UsersService;
 
   public readonly request: BaseHttpRequest;
@@ -42,6 +44,7 @@ export class ReckoningApiV1 {
     this.holidays = new HolidaysService(this.request);
     this.projects = new ProjectsService(this.request);
     this.sessions = new SessionsService(this.request);
+    this.timers = new TimersService(this.request);
     this.users = new UsersService(this.request);
   }
 }
