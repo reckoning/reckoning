@@ -17,7 +17,7 @@ module Api
         scope = scope.billable if params[:billable].present?
         scope = scope.running if params[:running].present?
         scope = scope.limit(limit) if limit
-        @timers = scope.order(updated_at: :desc)
+        @timers = scope.order(created_at: :desc)
       end
 
       def create
