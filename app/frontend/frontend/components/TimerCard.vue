@@ -94,7 +94,6 @@ const toggle = async () => {
       await apiClient.timers.startTimer({ id: props.timer.id });
     }
   } catch (error) {
-    $emit("refetchTimers");
     console.error(error);
   }
 };
