@@ -6,9 +6,6 @@
     "noImplicitAny": false,
   },
   "include": [
-    "@types/*",
-    "app/frontend/**/*.ts",
-    "app/frontend/**/*.vue",
     "test/javascript/**/*.ts"
   ],
   "exclude": []

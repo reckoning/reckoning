@@ -4,12 +4,16 @@ require "roo"
 
 class Timer < ApplicationRecord
   include Rails.application.routes.url_helpers
+  include RoutingConcern
 
   belongs_to :task, touch: true
   belongs_to :user
   belongs_to :position, class_name: "InvoicePosition", optional: true
 
   before_save :stop_other_timers
+  after_create :broadcast_create
+  after_destroy :broadcast_destroy
+  after_commit :broadcast_update
 
   validates :date, :value, presence: true
 
@@ -122,34 +126,23 @@ class Timer < ApplicationRecord
     value + running_hours
   end
 
-  def to_builder
-    Jbuilder.new do |timer|
-      timer.id id
-      timer.date date
-      timer.value value
-      timer.sum_for_task sum_for_task
-      timer.note note
-      timer.started started?
-      timer.started_at started_at
-      timer.start_time start_time
-      timer.start_time_for_task start_time_for_task
-      timer.position_id position_id
-      timer.invoiced invoiced
-      timer.task_id task_id
-      timer.task_name task_name
-      timer.task_label task_label
-      timer.task_billable task.billable
-      timer.project_id task.project_id
-      timer.project_name project_name
-      timer.project_customer_name project_customer_name
-      timer.created_at created_at
-      timer.updated_at updated_at
-      timer.deleted destroyed?
-      timer.links do
-        timer.project do
-          timer.href v1_project_path(task.project_id)
-        end
-      end
-    end
+  def url
+    api_v1_timer_url(self)
+  end
+
+  def to_json(*_args)
+    to_jbuilder_json
+  end
+
+  def broadcast_update
+    TimersChannel.broadcast_to(user, to_json)
+  end
+
+  def broadcast_create
+    TimersCreateChannel.broadcast_to(user, to_json)
+  end
+
+  def broadcast_destroy
+    TimersDestroyChannel.broadcast_to(user, to_json)
   end
 end

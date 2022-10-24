@@ -1,61 +1,101 @@
 <template>
   <div
     :class="[
-      'bg-purple-600',
-      'flex-shrink-0 flex items-center text-uppercase justify-center w-24 text-white text-lg font-medium rounded-l-md',
+      'bg-brand-primary',
+      'flex-shrink-0 flex items-center uppercase justify-center w-24 text-white text-lg font-medium rounded-l-md',
     ]"
   >
-    {{ timer.projectName?.slice(0, 2) }}
+    {{ timer.project.name?.slice(0, 2) }}
   </div>
   <div
-    class="flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b border-gray-200 bg-white"
+    class="flex flex-1 items-center justify-between rounded-r-md border-t border-r border-b border-gray-200 bg-white"
   >
     <div class="flex-1 truncate px-6 py-4 text-sm">
-      <a
-        :href="timer.projectId"
+      <router-link
+        :to="{ name: 'project-detail', params: { id: timer.project.id } }"
         class="font-medium text-lg font-hero text-gray-900 hover:text-gray-600"
-        >{{ timer.projectName }}</a
       >
-      <p class="text-gray-500">{{ timer.date }}</p>
-      <p class="text-gray-500">{{ timer.createdAt }}</p>
+        {{ timer.project.name }}
+        <small>| {{ timer.project.customerName }}</small>
+      </router-link>
+      <p class="text-gray-500">
+        {{ timer.task.label }}
+        <template v-if="timer.note"> | {{ timer.note }}</template>
+      </p>
     </div>
-    <div class="flex-shrink-0 pr-2">
-      <Btn size="md">Start</Btn>
-      <Btn size="sm" color="secondary">Start</Btn>
-      foo
-      <button
-        type="button"
-        class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white bg-transparent text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
+    <div
+      class="flex-shrink-0 flex items-center text-2xl pr-5"
+      :class="{ 'text-brand-primary': timer.startedAt }"
+    >
+      {{ timeValue }}
+    </div>
+    <div class="flex-shrink-0 flex items-center pr-2">
+      <Btn
+        :color="timer.startedAt ? 'success' : 'secondary'"
+        class="mr-2"
+        @click="toggle"
       >
-        <span class="sr-only">Open options</span>
-        <EllipsisVerticalIcon class="h-5 w-5" aria-hidden="true" />
-      </button>
+        <i
+          class="fa fa-circle-o-notch mr-2"
+          :class="{ 'fa-spin': timer.startedAt }"
+        ></i>
+        <template v-if="timer.startedAt">Stop</template>
+        <template v-else>Start</template>
+      </Btn>
+
+      <DropdownMenu />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
-import { format } from "date-fns";
+import { ref, computed, onMounted } from "vue";
+import { format, differenceInSeconds } from "date-fns";
 import type { Timer } from "@/frontend/api/client/models/Timer";
-import { EllipsisVerticalIcon } from "@heroicons/vue/24/outline";
 import Btn from "@/frontend/components/BtnComponent.vue";
+import apiClient from "@/frontend/api";
+import DropdownMenu from "@/frontend/components/DropdownMenu.vue";
 
 export interface Props {
   timer: Timer;
 }
 
 const props = defineProps<Props>();
-const difference = ref<number>(0);
+const currentTime = ref<Date>(new Date());
+
+const timeValue = computed(() => {
+  let seconds = props.timer.value * 60 * 60;
+
+  if (props.timer.startedAt) {
+    seconds += differenceInSeconds(
+      currentTime.value,
+      new Date(props.timer.startedAt)
+    );
+  }
+
+  const time = new Date(0, 0, 0, 0, 0, Math.max(seconds, 0));
+
+  return format(time, "H:mm");
+});
 
 onMounted(async () => {
   setInterval(() => {
     if (props.timer.startedAt) {
-      difference.value = Math.round(
-        (new Date().getTime() - new Date(props.timer.startedAt).getTime()) /
-          1000
-      );
+      currentTime.value = new Date();
     }
   }, 1000);
 });
+
+const toggle = async () => {
+  try {
+    if (props.timer.startedAt) {
+      await apiClient.timers.stopTimer({ id: props.timer.id });
+    } else {
+      await apiClient.timers.startTimer({ id: props.timer.id });
+    }
+  } catch (error) {
+    $emit("refetchTimers");
+    console.error(error);
+  }
+};
 </script>

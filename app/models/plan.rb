@@ -45,16 +45,7 @@ class Plan < ApplicationRecord
     end
   end
 
-  def to_builder
-    Jbuilder.new do |plan|
-      plan.id id
-      plan.code code
-      plan.name name
-      plan.description description
-      plan.price price.cents
-      plan.quantity quantity
-      plan.interval interval
-      plan.featured featured
-    end
+  def to_json(*_args)
+    to_jbuilder_json
   end
 end

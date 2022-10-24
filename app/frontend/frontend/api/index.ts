@@ -45,5 +45,6 @@ axios.interceptors.response.use(
 
 export const { sessions } = apiClient;
 export const { users } = apiClient;
+export const { timers } = apiClient;
 
 export default apiClient;

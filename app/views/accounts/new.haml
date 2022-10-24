@@ -21,7 +21,7 @@
     .form-group.selectize{class: form_error?(@account, :plan)}
       %select.js-selectize{name: "account[plan]", id: "account_plan"}
         - Plan.all.each do |plan|
-          %option{value: plan.code, selected: (true if plan.code == @account.plan || plan.code == params[:plan]), data: {data: plan.to_builder.target!}}
+          %option{value: plan.code, selected: (true if plan.code == @account.plan || plan.code == params[:plan]), data: {data: plan.to_json}}
             = plan.name
       = form_errors @account, :plan
 

@@ -17,7 +17,5 @@ json.end_date project.end_date
 json.created_at project.created_at
 json.updated_at project.updated_at
 json.links do
-  json.show do
-    json.href v1_project_path(project.id)
-  end
+  json.self project.url
 end

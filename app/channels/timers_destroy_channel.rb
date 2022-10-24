@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TimersChannel < ApplicationCable::Channel
+class TimersDestroyChannel < ApplicationCable::Channel
   def subscribed
     stream_for current_user
   end

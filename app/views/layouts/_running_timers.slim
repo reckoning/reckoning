@@ -1,6 +1,6 @@
 - timer = timers.first
 .current-timers.navbar-bottom(style=("display: none;" if timer.blank?))
-  .panel.panel-default.timer(data-timer=(timer.to_builder.target! if timer.present?))
+  .panel.panel-default.timer(data-timer=(timer.to_json if timer.present?))
     .panel-body
       h3.timer-project
       a.pull-right href=(timesheet_path(anchor: "/day/#{timer.date}") if timer.present?)

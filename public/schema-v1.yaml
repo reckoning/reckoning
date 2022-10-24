@@ -250,6 +250,66 @@ paths:
             schema:
               $ref: '#/components/schemas/TimerInput'
       description: Create a new Timer
+  '/timers/{id}/start':
+    parameters:
+      - schema:
+          type: string
+          format: uuid
+        name: id
+        in: path
+        required: true
+        description: Timer ID
+    put:
+      summary: Start Timer
+      tags:
+        - timers
+      description: Start a Timer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Timer'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+      operationId: start-timer
+      security:
+        - sessionCookie: []
+  '/timers/{id}/stop':
+    parameters:
+      - schema:
+          type: string
+          format: uuid
+        name: id
+        in: path
+        required: true
+        description: Timer ID
+    put:
+      summary: Stop Timer
+      tags:
+        - timers
+      description: Stop a Timer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Timer'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+      operationId: stop-timer
+      security:
+        - sessionCookie: []
 components:
   schemas:
     Customer:
@@ -372,29 +432,29 @@ components:
           type: string
           format: uuid
         timerValues:
-          type: integer
+          type: number
         timerValuesBillable:
-          type: integer
+          type: number
         timerValuesInvoiced:
-          type: integer
+          type: number
         timerValuesUninvoiced:
-          type: integer
+          type: number
         invoiceValues:
-          type: integer
+          type: number
         rate:
-          type: integer
+          type: number
         budget:
-          type: integer
+          type: number
         budgetOnDashboard:
           type: boolean
         budgetHours:
-          type: integer
+          type: number
         budgetPercent:
-          type: integer
+          type: number
         budgetPercentInvoiced:
-          type: integer
+          type: number
         budgetPercentUninvoiced:
-          type: integer
+          type: number
         roundUp:
           type: integer
         state:
@@ -423,6 +483,41 @@ components:
               properties:
                 href:
                   type: string
+    ProjectMinimal:
+      title: ProjectMinimal
+      x-stoplight:
+        id: l8xgzstmwt1sy
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        label:
+          type: string
+        state:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+        budget:
+          type: number
+        budgetHours:
+          type: number
+        rate:
+          type: number
+        timerValues:
+          type: number
+        customerName:
+          type: string
+        customerId:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
     SessionForm:
       title: SessionForm
       x-stoplight:
@@ -503,9 +598,8 @@ components:
           type: string
           format: date
         value:
-          type: string
-        sumForTask:
-          type: string
+          type: number
+          format: double
         note:
           type: string
         started:
@@ -521,22 +615,10 @@ components:
           type: string
         invoiced:
           type: boolean
-        taskId:
-          type: string
-          format: uuid
-        taskName:
-          type: string
-        taskLabel:
-          type: string
-        taskBillable:
-          type: boolean
-        projectId:
-          type: string
-          format: uuid
-        projectName:
-          type: string
-        projectCustomerName:
-          type: string
+        project:
+          $ref: '#/components/schemas/ProjectMinimal'
+        task:
+          $ref: '#/components/schemas/Task'
         createdAt:
           type: string
           format: date-time
@@ -556,8 +638,9 @@ components:
       required:
         - id
         - date
-        - taskId
-        - projectId
+        - value
+        - project
+        - task
         - createdAt
         - updatedAt
     TimerInput:
@@ -608,6 +691,7 @@ components:
           format: uuid
       required:
         - date
+        - value
         - taskId
         - projectId
     User:

@@ -22,8 +22,13 @@ json.project_customer_name timer.project_customer_name
 json.created_at timer.created_at
 json.updated_at timer.updated_at
 json.deleted timer.destroyed?
+json.project do
+  json.partial! 'api/v1/projects/minimal', project: timer.project
+end
+json.task do
+  json.partial! 'api/v1/tasks/minimal', task: timer.task
+end
 json.links do
-  json.project do
-    json.href v1_project_path(timer.task.project_id)
-  end
+  json.self timer.url
+  json.project timer.task.project.url
 end

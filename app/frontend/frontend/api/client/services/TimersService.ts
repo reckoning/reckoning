@@ -57,4 +57,56 @@ export class TimersService {
       mediaType: "application/json",
     });
   }
+
+  /**
+   * Start Timer
+   * Start a Timer
+   * @returns Timer OK
+   * @throws ApiError
+   */
+  public startTimer({
+    id,
+  }: {
+    /**
+     * Timer ID
+     */
+    id: string;
+  }): CancelablePromise<Timer> {
+    return this.httpRequest.request({
+      method: "PUT",
+      url: "/timers/{id}/start",
+      path: {
+        id: id,
+      },
+      errors: {
+        400: `Bad Request`,
+      },
+    });
+  }
+
+  /**
+   * Stop Timer
+   * Stop a Timer
+   * @returns Timer OK
+   * @throws ApiError
+   */
+  public stopTimer({
+    id,
+  }: {
+    /**
+     * Timer ID
+     */
+    id: string;
+  }): CancelablePromise<Timer> {
+    return this.httpRequest.request({
+      method: "PUT",
+      url: "/timers/{id}/stop",
+      path: {
+        id: id,
+      },
+      errors: {
+        400: `Bad Request`,
+      },
+    });
+  }
 }

@@ -7,12 +7,8 @@ module Notification
   included do
     attr_accessor :text, :notification_type, :timeout
 
-    def to_builder
-      Jbuilder.new do |notification|
-        notification.text text
-        notification.type notification_type
-        notification.timeout timeout
-      end
+    def to_json(*_args)
+      to_jbuilder_json
     end
   end
 end

@@ -37,7 +37,7 @@
                   = I18n.t(:"actions.edit")
               li.divider
               li
-                a href=archive_v1_project_url(project) data-redirect=projects_path data-method="PUT" data-notyConfirm=I18n.t(:"messages.confirm.project.archive")
+                a href=archive_api_v1_project_url(project) data-redirect=projects_path data-method="PUT" data-notyConfirm=I18n.t(:"messages.confirm.project.archive")
                   i.fa.fa-archive
                   '
                   = I18n.t(:"actions.archive")
@@ -50,7 +50,7 @@
           a.btn.btn-default href=edit_project_path(project) title=I18n.t(:"actions.edit")
             i.fa.fa-edit
             span.hidden-xs.hidden-sm= I18n.t(:"actions.edit")
-          a.btn.btn-default href=archive_v1_project_url(project) data-redirect=projects_path data-method="PUT" data-notyConfirm=I18n.t(:"messages.confirm.project.archive") title=I18n.t(:"actions.archive")
+          a.btn.btn-default href=archive_api_v1_project_url(project) data-redirect=projects_path data-method="PUT" data-notyConfirm=I18n.t(:"messages.confirm.project.archive") title=I18n.t(:"actions.archive")
             i.fa.fa-archive
             span.hidden-xs.hidden-sm= I18n.t(:"actions.archive")
       - else

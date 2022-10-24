@@ -3,6 +3,8 @@
 require "business_time"
 
 class Project < ApplicationRecord
+  include RoutingConcern
+
   DEFAULT_ROUND_UP_OPTIONS = {
     "Nicht aufrunden" => 0.minutes,
     "Auf 15 Minuten" => 15.minutes,
@@ -60,6 +62,10 @@ class Project < ApplicationRecord
 
   def self.with_budget
     where.not(budget: 0).where(budget_on_dashboard: true)
+  end
+
+  def url
+    api_v1_project_url(self)
   end
 
   def name_with_customer

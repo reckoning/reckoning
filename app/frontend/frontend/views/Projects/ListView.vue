@@ -49,7 +49,7 @@
                     ]"
                   >
                     <td
-                      class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+                      class="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                     >
                       <router-link
                         :to="{
@@ -60,17 +60,17 @@
                       >
                     </td>
                     <td
-                      class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                      class="whitespace-nowrap px-3 py-2 text-sm text-gray-500"
                     >
                       {{ project.budget }}
                     </td>
                     <td
-                      class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                      class="whitespace-nowrap px-3 py-2 text-sm text-gray-500"
                     >
                       {{ project.timerValues }}
                     </td>
                     <td
-                      class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
+                      class="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
                     >
                       <DropdownMenu />
                     </td>

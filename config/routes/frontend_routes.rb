@@ -13,6 +13,7 @@ namespace :frontend, path: endpoints.frontend_base_url do
   get "invoices" => "base#index"
   get "timers" => "base#index"
   get "timers/:year" => "base#index"
+  get 'timers-test/:year' => 'base#index'
   get "expenses" => "base#index"
   get "calculator" => "base#index"
   get "calculator/:uuid" => "base#index"

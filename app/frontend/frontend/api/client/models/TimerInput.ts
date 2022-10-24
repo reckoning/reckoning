@@ -4,7 +4,7 @@
 
 export type TimerInput = {
   date: string;
-  value?: string;
+  value: string;
   note?: string;
   started?: boolean;
   taskId: string;

@@ -1,5 +1,4 @@
 import type { Component } from "vue";
-import { format } from "date-fns";
 import HomeView from "@/frontend/views/HomeView.vue";
 import { v4 as uuidv4 } from "uuid";
 import { routes as CustomersRoutes } from "@/frontend/views/Customers/routes";

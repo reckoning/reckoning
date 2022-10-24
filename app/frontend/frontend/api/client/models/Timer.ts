@@ -2,11 +2,13 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { ProjectMinimal } from "./ProjectMinimal";
+import type { Task } from "./Task";
+
 export type Timer = {
   id: string;
   date: string;
-  value?: string;
-  sumForTask?: string;
+  value: number;
   note?: string;
   started?: boolean;
   startedAt?: string;
@@ -14,13 +16,8 @@ export type Timer = {
   startTimeForTask?: null;
   positionId?: string;
   invoiced?: boolean;
-  taskId: string;
-  taskName?: string;
-  taskLabel?: string;
-  taskBillable?: boolean;
-  projectId: string;
-  projectName?: string;
-  projectCustomerName?: string;
+  project: ProjectMinimal;
+  task: Task;
   createdAt: string;
   updatedAt: string;
   deleted?: boolean;

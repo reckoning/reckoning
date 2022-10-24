@@ -116,7 +116,7 @@ const userNavigation = [
 // Navigation
 const appStore = useAppStore();
 
-function openNavigation() {
+function openNavigation(): void {
   if (appStore.navigationOpen) {
     appStore.closeNavigation();
   } else {
