@@ -45,19 +45,21 @@ module Api
       def stop
         @timer = current_user.timers.find(params[:id])
         authorize! :stop, @timer
-        unless @timer.stop
-          Rails.logger.info "Timer Stop Failed: #{@timer.to_yaml}"
-          render json: {message: I18n.t(:"messages.timer.stop.failure")}, status: :bad_request
-        end
+
+        return if @timer.stop
+
+        Rails.logger.info "Timer Stop Failed: #{@timer.to_yaml}"
+        render json: { message: I18n.t(:'messages.timer.stop.failure') }, status: :bad_request
       end
 
       def start
         @timer = current_user.timers.find(params[:id])
         authorize! :start, @timer
-        unless @timer.start
-          Rails.logger.info "Timer Start Failed: #{@timer.to_yaml}"
-          render json: {message: I18n.t(:"messages.timer.start.failure")}, status: :bad_request
-        end
+
+        return if @timer.start
+
+        Rails.logger.info "Timer Start Failed: #{@timer.to_yaml}"
+        render json: { message: I18n.t(:'messages.timer.start.failure') }, status: :bad_request
       end
 
       def destroy
