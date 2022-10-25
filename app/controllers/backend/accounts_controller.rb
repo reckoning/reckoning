@@ -21,6 +21,9 @@ module Backend
     end
 
     # post: /backend/accounts
+    def edit; end
+
+    # get: /backend/accounts/:id/edit
     def create
       generated_password = Devise.friendly_token.first(16)
       user = account.users.first
@@ -33,9 +36,6 @@ module Backend
         render 'new', error: resource_message(:account, :create, :failure)
       end
     end
-
-    # get: /backend/accounts/:id/edit
-    def edit; end
 
     # patch: /backend/accounts/:id
     def update

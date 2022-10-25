@@ -4,19 +4,12 @@ require 'test_helper'
 
 module Api
   module V1
-    class ProjectsControllerTest < ActionController::TestCase
-      setup do
-        @request.headers['Accept'] = Mime[:json]
-        @request.headers['Content-Type'] = Mime[:json].to_s
-      end
-
-      tests ::Api::V1::ProjectsController
-
+    class ProjectsControllerTest < ActionDispatch::IntegrationTest
       let(:project) { projects :narendra3 }
 
       describe 'unauthorized' do
         it 'Unauthrized user cant view projects index' do
-          get :index
+          get '/api/v1/projects'
 
           assert_response :unauthorized
           json = JSON.parse response.body
@@ -24,7 +17,7 @@ module Api
         end
 
         it 'Unauthrized user cant destroy project' do
-          delete :destroy, params: { id: project.id }
+          delete "/api/v1/projects/#{project.id}"
 
           assert_response :unauthorized
 
@@ -37,17 +30,17 @@ module Api
         let(:outpost6) { projects :outpost6 }
 
         before do
-          add_authorization will
+          sign_in will
         end
 
         it 'renders a projects list' do
-          get :index
+          get '/api/v1/projects'
 
           assert_response :ok
         end
 
         it 'destroys a project' do
-          delete :destroy, params: { id: outpost6.id }
+          delete "/api/v1/projects/#{outpost6.id}"
 
           assert_response :ok
 

@@ -4,19 +4,12 @@ require 'test_helper'
 
 module Api
   module V1
-    class TimersControllerTest < ActionController::TestCase
-      setup do
-        @request.headers['Accept'] = Mime[:json]
-        @request.headers['Content-Type'] = Mime[:json].to_s
-      end
-
-      tests ::Api::V1::TimersController
-
+    class TimersControllerTest < ActionDispatch::IntegrationTest
       let(:timer) { timers :threehours }
 
       describe 'unauthorized' do
         it 'Unauthrized user cant view timers index' do
-          get :index
+          get '/api/v1/timers'
 
           assert_response :unauthorized
           json = JSON.parse response.body
@@ -24,31 +17,31 @@ module Api
         end
 
         it 'Unauthrized user cant create new timer' do
-          post :create, params: { timer: { date: Time.current, value: 1.0, taskUuid: timer.task_id } }
+          post '/api/v1/timers', params: { timer: { date: Time.current, value: 1.0, taskUuid: timer.task_id } }
 
           assert_response :unauthorized
         end
 
         it 'Unauthrized user cant update a timer' do
-          put :update, params: { id: timer.id }
+          put "/api/v1/timers/#{timer.id}"
 
           assert_response :unauthorized
         end
 
         it 'Unauthrized user cant start a timer' do
-          put :start, params: { id: timer.id }
+          put "/api/v1/timers/#{timer.id}/start"
 
           assert_response :unauthorized
         end
 
         it 'Unauthrized user cant stop a timer' do
-          put :stop, params: { id: timer.id }
+          put "/api/v1/timers/#{timer.id}/stop"
 
           assert_response :unauthorized
         end
 
         it 'Unauthrized user cant destroy timer' do
-          delete :destroy, params: { id: timer.id }
+          delete "/api/v1/timers/#{timer.id}"
 
           assert_response :unauthorized
 
@@ -61,18 +54,18 @@ module Api
         let(:outpost6) { projects :outpost6 }
 
         before do
-          add_authorization will
+          sign_in will
         end
 
         it 'renders a timers list' do
-          get :index
+          get '/api/v1/timers'
 
           assert_response :ok
         end
 
         it 'creates a new timer' do
           date = Time.current.to_date
-          post :create, params: { date: date, value: 1.0, taskId: timer.task_id }
+          post '/api/v1/timers', params: { date: date, value: 1.0, task_id: timer.task_id }
 
           assert_response :created
 
@@ -83,7 +76,7 @@ module Api
         end
 
         it 'updates a timer' do
-          patch :update, params: { id: timer.id, value: 2.0, taskId: timer.task_id }
+          patch "/api/v1/timers/#{timer.id}", params: { value: 2.0, task_id: timer.task_id }
 
           assert_response :ok
 
@@ -93,7 +86,7 @@ module Api
         end
 
         it 'starts a timer' do
-          put :start, params: { id: timer.id }
+          put "/api/v1/timers/#{timer.id}/start"
 
           assert_response :ok
 
@@ -104,7 +97,7 @@ module Api
 
         it 'stops a timer' do
           timer.update(started_at: Time.current.to_date)
-          put :stop, params: { id: timer.id }
+          put "/api/v1/timers/#{timer.id}/stop"
 
           assert_response :ok
 
@@ -113,7 +106,7 @@ module Api
         end
 
         it 'destroys a timer' do
-          delete :destroy, params: { id: timer.id }
+          delete "/api/v1/timers/#{timer.id}"
 
           assert_response :ok
 

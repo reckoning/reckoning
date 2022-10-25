@@ -135,9 +135,9 @@ class InvoicesController < ApplicationController
     authorize! :charge, invoice
 
     if invoice.charge!
-      flash[:success] = I18n.t(:'messages.invoice.charge.success')
+      flash.now[:success] = I18n.t(:'messages.invoice.charge.success')
     else
-      flash[:alert] = I18n.t(:'messages.invoice.charge.failure')
+      flash.now[:alert] = I18n.t(:'messages.invoice.charge.failure')
     end
 
     respond_to do |format|
@@ -149,9 +149,9 @@ class InvoicesController < ApplicationController
   def pay
     authorize! :pay, invoice
     if invoice.pay!
-      flash[:success] = I18n.t(:'messages.invoice.pay.success')
+      flash.now[:success] = I18n.t(:'messages.invoice.pay.success')
     else
-      flash[:alert] = I18n.t(:'messages.invoice.pay.failure')
+      flash.now[:alert] = I18n.t(:'messages.invoice.pay.failure')
     end
     redirect_back(fallback_location: root_path)
   end
@@ -160,9 +160,9 @@ class InvoicesController < ApplicationController
     authorize! :destroy, invoice
 
     if invoice.destroy
-      flash[:success] = resource_message(:invoice, :destroy, :success)
+      flash.now[:success] = resource_message(:invoice, :destroy, :success)
     else
-      flash[:alert] = resource_message(:invoice, :destroy, :failure)
+      flash.now[:alert] = resource_message(:invoice, :destroy, :failure)
     end
 
     respond_to do |format|
