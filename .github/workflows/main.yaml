@@ -56,8 +56,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          lfs: 'true'
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
@@ -68,8 +66,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          lfs: 'true'
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
@@ -119,8 +115,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        with:
-          lfs: 'true'
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
@@ -166,8 +160,6 @@ jobs:
           --health-retries 5
     steps:
       - uses: actions/checkout@v2
-        with:
-          lfs: 'true'
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
@@ -188,8 +180,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        with:
-          lfs: 'true'
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
@@ -209,8 +199,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        with:
-          lfs: 'true'
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
