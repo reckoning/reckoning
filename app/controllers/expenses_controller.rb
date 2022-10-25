@@ -39,6 +39,10 @@ class ExpensesController < ApplicationController
     @expense = current_account.expenses.new(prefill_params)
   end
 
+  def edit
+    authorize! :create, expense
+  end
+
   def create
     authorize! :create, Expense
     if expense.save
@@ -47,10 +51,6 @@ class ExpensesController < ApplicationController
       flash.now[:alert] = resource_message(:expense, :create, :failure)
       render 'new'
     end
-  end
-
-  def edit
-    authorize! :create, expense
   end
 
   def update
@@ -67,9 +67,9 @@ class ExpensesController < ApplicationController
     authorize! :destroy, expense
 
     if expense.destroy
-      flash[:success] = resource_message(:expense, :destroy, :success)
+      flash.now[:success] = resource_message(:expense, :destroy, :success)
     else
-      flash[:alert] = resource_message(:expense, :destroy, :failure)
+      flash.now[:alert] = resource_message(:expense, :destroy, :failure)
     end
 
     respond_to do |format|

@@ -73,9 +73,9 @@ class OffersController < ApplicationController
     authorize! :destroy, offer
 
     if offer.destroy
-      flash[:success] = resource_message(:offer, :destroy, :success)
+      flash.now[:success] = resource_message(:offer, :destroy, :success)
     else
-      flash[:alert] = resource_message(:offer, :destroy, :failure)
+      flash.now[:alert] = resource_message(:offer, :destroy, :failure)
     end
 
     respond_to do |format|

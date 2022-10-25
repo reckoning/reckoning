@@ -31,17 +31,13 @@ require 'faker'
 require 'sidekiq/testing'
 Sidekiq::Testing.fake!
 
-# helper
-require 'support/session_helper'
-
 # database cleaner
 DatabaseCleaner.strategy = :transaction
 
 # rubocop:disable Style/ClassAndModuleChildren
-class ActionController::TestCase
+class ActionDispatch::IntegrationTest
   fixtures :all
-  include Devise::Test::ControllerHelpers
-  include SessionHelper
+  include Devise::Test::IntegrationHelpers
   ActiveRecord::Migration.check_pending!
 
   before do

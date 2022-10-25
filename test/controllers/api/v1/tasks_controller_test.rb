@@ -4,19 +4,13 @@ require 'test_helper'
 
 module Api
   module V1
-    class TasksControllerTest < ActionController::TestCase
-      setup do
-        @request.headers['Accept'] = Mime[:json]
-        @request.headers['Content-Type'] = Mime[:json].to_s
-      end
-
-      tests ::Api::V1::TasksController
-
+    class TasksControllerTest < ActionDispatch::IntegrationTest
+      let(:project) { projects :narendra3 }
       let(:task) { tasks :away_mission }
 
       describe 'unauthorized' do
         it 'Unauthrized user cant view tasks index' do
-          get :index
+          get '/api/v1/tasks'
 
           assert_response :unauthorized
           json = JSON.parse response.body
@@ -24,7 +18,7 @@ module Api
         end
 
         it 'Unauthrized user cant create new task' do
-          post :create, params: { task: { name: 'foo' } }
+          post '/api/v1/tasks', params: { task: { name: 'foo' } }
 
           assert_response :unauthorized
         end
@@ -34,17 +28,17 @@ module Api
         let(:will) { users :will }
 
         before do
-          add_authorization will
+          sign_in will
         end
 
         it 'renders a tasks list' do
-          get :index
+          get '/api/v1/tasks'
 
           assert_response :ok
         end
 
         it 'creates a new task' do
-          post :create, params: { name: 'foo', projectId: task.project_id }
+          post '/api/v1/tasks', params: { name: 'foo', project_id: project.id }
 
           assert_response :created
 

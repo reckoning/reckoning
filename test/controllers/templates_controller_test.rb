@@ -2,12 +2,10 @@
 
 require 'test_helper'
 
-class TemplatesControllerTest < ActionController::TestCase
-  tests TemplatesController
-
+class TemplatesControllerTest < ActionDispatch::IntegrationTest
   describe 'unauthorized' do
     it 'redirects with unauthorized error when trying to get templates' do
-      get :show
+      get '/template/blank'
 
       assert_response :found
       assert_equal I18n.t(:'devise.failure.unauthenticated'), flash[:alert]
@@ -22,7 +20,7 @@ class TemplatesControllerTest < ActionController::TestCase
     end
 
     it 'shows the requested template' do
-      get :show
+      get '/template/blank'
 
       assert_response :ok
     end

@@ -16,6 +16,10 @@ class AccountsController < ApplicationController
     render layout: 'landing_page'
   end
 
+  def edit
+    authorize! :update, account
+  end
+
   def create
     @active_nav = 'registration'
     if account.save
@@ -23,10 +27,6 @@ class AccountsController < ApplicationController
     else
       render 'new', alert: resource_message(:account, :create, :failure), layout: 'landing_page'
     end
-  end
-
-  def edit
-    authorize! :update, account
   end
 
   def update

@@ -18,6 +18,17 @@ module Backend
     def new; end
 
     # post: /backend/users
+    def edit; end
+
+    def send_welcome
+      if user.send_confirmation_instructions
+        redirect_to backend_users_path, notice: I18n.t(:'messages.user.send_welcome.success')
+      else
+        redirect_to backend_users_path, notice: I18n.t(:'messages.user.send_welcome.failure')
+      end
+    end
+
+    # get: /backend/users/:id/edit
     def create
       password = Devise.friendly_token.first(30)
       @user = User.new(
@@ -33,17 +44,6 @@ module Backend
         render 'new', error: resource_message(:user, :create, :failure)
       end
     end
-
-    def send_welcome
-      if user.send_confirmation_instructions
-        redirect_to backend_users_path, notice: I18n.t(:'messages.user.send_welcome.success')
-      else
-        redirect_to backend_users_path, notice: I18n.t(:'messages.user.send_welcome.failure')
-      end
-    end
-
-    # get: /backend/users/:id/edit
-    def edit; end
 
     # patch: /backend/users/:id
     def update
