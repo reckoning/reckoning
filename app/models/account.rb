@@ -33,7 +33,7 @@ class Account < ApplicationRecord
   def uninvoiced_amount
     projects.sum do |project|
       project.timer_values_uninvoiced * project.rate
-    end
+    end + invoices.includes(:customer, :project).order('date DESC').created.sum(:value)
   end
 
   def on_paid_plan?
