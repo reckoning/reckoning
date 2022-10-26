@@ -18,7 +18,7 @@
                   <tr>
                     <th
                       scope="col"
-                      class="py-3.5 w-1/3 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                      class="py-3.5 w-1/3 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 md:rounded-tl-lg"
                     >
                       {{ customer }}
                     </th>
@@ -34,7 +34,10 @@
                     >
                       Hours
                     </th>
-                    <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                    <th
+                      scope="col"
+                      class="relative py-3.5 pl-3 pr-4 sm:pr-6 md:rounded-tr-lg"
+                    >
                       <span class="sr-only">Edit</span>
                     </th>
                   </tr>
@@ -50,6 +53,10 @@
                   >
                     <td
                       class="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+                      :class="{
+                        'md:rounded-bl-lg':
+                          index === projectsForCustomer(customer).length - 1,
+                      }"
                     >
                       <router-link
                         :to="{
@@ -71,6 +78,10 @@
                     </td>
                     <td
                       class="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
+                      :class="{
+                        'md:rounded-br-lg':
+                          index === projectsForCustomer(customer).length - 1,
+                      }"
                     >
                       <DropdownMenu />
                     </td>

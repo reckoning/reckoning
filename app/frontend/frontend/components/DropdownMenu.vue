@@ -1,8 +1,10 @@
 <template>
   <Menu as="div" class="relative inline-block text-left">
     <div>
-      <MenuButton :as="Btn" size="md" color="clear" rounded="full">
-        <i class="fa fa-ellipsis-vertical" />
+      <MenuButton as="template">
+        <Btn size="md" color="clear" rounded="full">
+          <i class="fa fa-ellipsis-vertical" />
+        </Btn>
       </MenuButton>
     </div>
 

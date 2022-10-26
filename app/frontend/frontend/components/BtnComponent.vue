@@ -34,8 +34,8 @@ export interface Props {
     | "info"
     | "clear";
   buttonType?: "button" | "submit" | "reset";
-  grouped: "default" | "left" | "right" | "both";
-  rounded: "default" | "full";
+  grouped?: "default" | "left" | "right" | "both";
+  rounded?: "default" | "full";
 }
 
 const props = withDefaults(defineProps<Props>(), {
