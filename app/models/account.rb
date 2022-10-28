@@ -31,7 +31,7 @@ class Account < ApplicationRecord
   before_create :set_trail_end_date
 
   def uninvoiced_amount
-    projects.active.where("rate IS NOT NULL AND rate > 0").sum do |project|
+    projects.active.where('rate IS NOT NULL AND rate > 0').sum do |project|
       project.timer_values_uninvoiced * project.rate
     end + invoices.includes(:customer, :project).order('date DESC').created.sum(:value)
   end
