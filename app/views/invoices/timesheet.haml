@@ -36,6 +36,7 @@
               %td
               %td
                 = timer.task.name
+                = " | #{timer.note}" if timer.note.present?
               %td.hours
                 = number_to_currency(timer.value, unit: "")
         %tr.sum.border
