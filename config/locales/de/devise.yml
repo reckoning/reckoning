@@ -73,7 +73,7 @@ de:
       confirmation_instructions:
         subject: 'Anleitung zur Bestätigung Ihres Accounts'
         content:
-          welcome: "Willkommen %{email}""
+          welcome: "Willkommen %{email}"
           confirm_text: 'Sie können Ihren Account freischalten, indem Sie auf den folgenden Link klicken:'
           confirm_link: 'Meinen Account freischalten'
           created_via_admin_text: 'Ihr Passwort wurde aus Sicherheitsgründen automatisch erstellt. Damit Sie sich anmelden können, nutzen Sie bitte die "Passwort vergessen" Funktion.'
