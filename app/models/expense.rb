@@ -69,6 +69,10 @@ class Expense < ApplicationRecord
     where.not(expense_type: 'insurances')
   end
 
+  def self.without_afa
+    where.not(expense_type: 'afa')
+  end
+
   def self.filter_result(filter_params)
     filter_year(filter_params.fetch(:year, nil))
       .filter_date_range(
