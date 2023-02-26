@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 
 ruby File.read('.ruby-version').chomp
 
-gem 'rails', '6.1.6.1'
+gem 'rails', '6.1.7.1'
 
 gem 'pg', '~> 1.0'
 
@@ -101,8 +101,6 @@ gem 'image_processing', '~> 1.2'
 gem 'non-stupid-digest-assets'
 
 gem 'nokogiri', '>= 1.7.1'
-
-gem 'thor'
 
 group :development do
   gem 'listen'
