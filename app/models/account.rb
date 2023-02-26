@@ -57,12 +57,18 @@ class Account < ApplicationRecord
     return if provision.blank?
 
     current_invoices = invoices.includes(:customer, :project).order('date DESC').paid_in_year(Time.zone.now.year)
-    current_expenses = expenses.without_insurances.year(Time.zone.now.year).to_a.sum(&:usable_value)
-    open_afa_expenses = expenses.filter_type(:afa).reject do |expense|
-      expense.afa_value(Time.zone.now.year).zero?
-    end.sum do |expense|
+
+    current_expenses = Expense.normalized(
+      expenses.without_insurances.without_afa.year(Time.zone.now.year).to_a,
+      year: Time.zone.now.year
+    ).sum do |expense|
+      expense.usable_value(Time.zone.now.year)
+    end
+
+    open_afa_expenses = expenses.filter_type(:afa).sum do |expense|
       expense.afa_value(Time.zone.now.year)
     end
+
     (current_invoices.sum(:value) - current_expenses - open_afa_expenses) / 100 * provision.to_i
   end
 
@@ -70,7 +76,9 @@ class Account < ApplicationRecord
     return if provision.blank?
 
     last_invoices = invoices.includes(:customer, :project).order('date DESC').paid_in_year(Time.zone.now.year - 1)
-    last_expenses = expenses.without_insurances.year(Time.zone.now.year - 1).to_a.sum(&:usable_value)
+    last_expenses = expenses.without_insurances.year(Time.zone.now.year - 1).to_a.sum do |expense|
+      expense.usable_value(Time.zone.now.year - 1)
+    end
     open_afa_expenses = expenses.filter_type(:afa).reject do |expense|
       expense.afa_value(Time.zone.now.year - 1).zero?
     end.sum do |expense|
