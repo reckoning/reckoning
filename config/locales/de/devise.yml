@@ -73,14 +73,14 @@ de:
       confirmation_instructions:
         subject: 'Anleitung zur Bestätigung Ihres Accounts'
         content:
-          welcome: 'Willkomen'
+          welcome: "Willkommen %{email}"
           confirm_text: 'Sie können Ihren Account freischalten, indem Sie auf den folgenden Link klicken:'
           confirm_link: 'Meinen Account freischalten'
           created_via_admin_text: 'Ihr Passwort wurde aus Sicherheitsgründen automatisch erstellt. Damit Sie sich anmelden können, nutzen Sie bitte die "Passwort vergessen" Funktion.'
       reset_password_instructions:
         subject: 'Anleitung um Ihr Passwort zurückzusetzen'
         content:
-          hello: 'Hallo'
+          hello: "Hallo %{email}"
           change_link: 'Mein Passwort ändern'
           first_text: 'Es wurde ein Link zum Ändern Ihres Passwortes angefordert. Dies können Sie tun, indem Sie auf den folgenden Link klicken.' #Someone has requested a link to change your password, and you can do this through the link below.
           second_text: 'Wenn Sie diesen Link nicht angefordert haben, ignorieren Sie bitte diese E-Mail.' #If you didn't request this, please ignore this email.
