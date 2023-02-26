@@ -102,6 +102,8 @@ gem "image_processing", "~> 1.2"
 
 gem "nokogiri", ">= 1.7.1"
 
+gem 'thor'
+
 gem "pry-rails"
 
 group :development do
