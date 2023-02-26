@@ -102,8 +102,6 @@ gem 'non-stupid-digest-assets'
 
 gem 'nokogiri', '>= 1.7.1'
 
-gem 'thor'
-
 group :development do
   gem 'listen'
   gem 'pry-rails'
