@@ -525,8 +525,8 @@ GEM
     zeitwerk (2.6.12)
 
 PLATFORMS
-  ruby
   arm64-darwin-22
+  ruby
   x86_64-darwin-20
   x86_64-darwin-21
   x86_64-linux
