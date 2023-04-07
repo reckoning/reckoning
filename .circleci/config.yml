@@ -172,7 +172,7 @@ workflows:
       - deploy:
           requires:
             - audit
-            - rubocop
+            - linting
             - unit_tests
             - precompile_assets
           filters:
