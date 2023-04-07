@@ -114,6 +114,21 @@ code[data-target] {
 }
 
 .filters {
+  display: flex;
+  justify-content: flex-start;
+  gap: 5px;
+
+  .filters-form {
+    display: flex;
+    gap: 5px;
+    margin-left: 20px;
+
+    input[type="submit"],
+    button[type="submit"] {
+      margin-bottom: 20px;
+    }
+  }
+
   .dropdown {
     &:last-child {
       .dropdown-menu {

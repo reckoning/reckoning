@@ -111,6 +111,7 @@ de:
           user: "SMTP Benutzer"
           password: "SMTP Passwort oder Token"
     placeholder:
+      search: "Suche"
       subdomain: subdomain
       name: "Name"
       address: "Adresse"

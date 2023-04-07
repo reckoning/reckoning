@@ -168,6 +168,10 @@ class Invoice < ApplicationRecord
     )
   end
 
+  def vat
+    (value * account.tax.to_d) / 100
+  end
+
   private def set_customer
     project = Project.find_by(id: project_id)
     customer = Customer.find_by(id: project.customer_id) if project.present?

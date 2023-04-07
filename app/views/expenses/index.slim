@@ -38,6 +38,17 @@
         = render "shared/tables/filter", resource: "expense", name: "year", filters: current_expenses_years
         '
         = render "shared/tables/filter", resource: "expense", name: "type", filters: Expense::VALID_TYPES, translateable: true
+        = form_with method: :get, class: 'filters-form' do |form|
+          .form-group
+            .input-group
+              = form.text_field :query, type: :search, class: "form-control", placeholder: I18n.t(:"helpers.placeholder.search"), value: params[:query]
+              .input-group-btn
+                - if params[:query].present?
+                  a.btn.btn-danger href=expenses_path
+                    i.fa.fa-times
+                - else
+                  = form.button type: :submit, class: "btn btn-primary" do
+                    i.fa.fa-search
       .col-xs-12.col-md-6
         = paginate @expenses
 

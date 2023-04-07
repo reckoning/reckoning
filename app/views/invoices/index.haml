@@ -7,11 +7,17 @@
       .col-xs-12.col-md-8
         %h1
           = I18n.t(:"headlines.invoice.index")
+          %br
           %small
             - sum = 0
+            - sum_vat = 0
             - @invoices.each do |invoice|
               - sum = sum + invoice.value
+              - sum_vat = sum_vat + invoice.vat
+
             = I18n.t(:"headlines.invoice.sum", sum: number_to_currency(sum))
+            %br
+            = I18n.t(:"headlines.invoice.vat_sum", sum: number_to_currency(sum_vat))
 
       .col-xs-12.col-md-4
         .btn-group-responsive.pull-right.resource-nav
