@@ -1,0 +1,50 @@
+name: Main
+
+on:
+  push:
+    branches: ["main"]
+    tags-ignore:
+      - "*.*"
+    paths-ignore:
+      - "CHANGELOG.md"
+      - "config/version.rb"
+      - "package.json"
+  pull_request:
+  merge_group:
+  workflow_dispatch:
+
+jobs:
+  ruby-setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+  ruby-lint:
+    needs: ruby-setup
+    uses: ./.github/workflows/ruby-lint.job.yml
+
+  ruby-tests:
+    needs: ruby-setup
+    uses: ./.github/workflows/ruby-tests.job.yml
+
+  seeds:
+    needs: ruby-setup
+    uses: ./.github/workflows/seeds.job.yml
+
+  e2e-tests:
+    needs: [ruby-setup]
+    uses: ./.github/workflows/e2e-tests.job.yml
+    secrets: inherit
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: [ruby-lint, ruby-tests, seeds, e2e-tests]
+    uses: ./.github/workflows/deploy.job.yml
+    with:
+      capEnv: live
+      name: Live
+      url: https://{{ vars.LIVE_DOMAIN }}
+    secrets: inherit

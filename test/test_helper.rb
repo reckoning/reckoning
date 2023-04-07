@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require "dotenv"
+Dotenv.load(".env")
+
 if ENV["RAILS_TEST_COVERAGE"]
   require "simplecov"
   require "simplecov-console"
@@ -19,6 +22,8 @@ require File.expand_path("../config/environment", __dir__)
 require "rails/test_help"
 require "minitest/rails"
 require "minitest/pride"
+
+require "knapsack"
 
 # https://github.com/rails/rails/issues/31324
 Minitest::Rails::TestUnit = Rails::TestUnit if ActionPack::VERSION::STRING >= "5.2.0"
@@ -91,3 +96,6 @@ class ActionMailer::TestCase
   end
 end
 # rubocop:enable Style/ClassAndModuleChildren
+
+knapsack_adapter = Knapsack::Adapters::MinitestAdapter.bind
+knapsack_adapter.set_test_helper_path(__FILE__)

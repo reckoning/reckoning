@@ -1,0 +1,12 @@
+{
+  "test": {
+    "username": "TestUser",
+    "email": "test@reckoning.me",
+    "password": "TestPassword"
+  },
+  "new": {
+    "username": "NewTestUser",
+    "email": "new-test@reckoning.me",
+    "password": "NewTestPassword"
+  }
+}

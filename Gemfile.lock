@@ -230,6 +230,8 @@ GEM
       activerecord
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
+    knapsack (4.0.0)
+      rake
     language_server-protocol (3.17.0.3)
     launchy (2.5.0)
       addressable (~> 2.7)
@@ -555,6 +557,7 @@ DEPENDENCIES
   js-routes (~> 1.0)
   jwt
   kaminari
+  knapsack
   letter_opener
   listen
   lograge
