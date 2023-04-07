@@ -45,30 +45,9 @@ class AccountsController < ApplicationController
 
   private def account_params
     @account_params ||= params.require(:account).permit(
-      :plan,
-      :tax,
-      :vat_id,
-      :provision,
-      :bank,
-      :account_number,
-      :bank_code,
-      :bic,
-      :iban,
-      :default_from,
-      :signature,
-      :name,
-      :address,
-      :country,
-      :public_email,
-      :subdomain,
-      :telefon,
-      :fax,
-      :website,
-      :stripe_email,
-      :stripe_token,
-      :office_space,
-      :deductible_office_space,
-      :offer_headline,
+      :plan, :tax, :vat_id, :provision, :bank, :account_number, :bank_code, :bic, :iban,
+      :signature, :name, :address, :country, :public_email, :subdomain, :telefon, :fax, :website,
+      :stripe_email, :stripe_token, :office_space, :deductible_office_space, :offer_headline,
       users_attributes: %i[email password password_confirmation]
     )
   end

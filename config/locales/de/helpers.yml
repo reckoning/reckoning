@@ -75,6 +75,7 @@ de:
         payment_due: "Zahlungsziel (Tage)"
         email_template: "Inhalt"
         invoice_email: "Empfänger"
+        invoice_email_cc: "CC"
         default_from: "Absender"
         customer_type: "Typ"
         weekly_hours: "Wochenstunden"
@@ -155,6 +156,7 @@ de:
         payment_due: "Zahlungsziel (Tage)"
         email_template: "Inhalt"
         invoice_email: "Empfänger"
+        invoice_email_cc: "Weitere Empfänger"
         default_from: "Absender"
         weekly_hours: "Wochenstunden"
         offer_disclaimer: Rechtlich relevante Informationen. Wird am ende des Angebots angezeigt.

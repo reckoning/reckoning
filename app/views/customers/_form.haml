@@ -49,6 +49,12 @@
               = form_errors customer, :invoice_email
         .row
           .col-xs-12.col-md-6
+            .form-group{class: form_error?(customer, :invoice_email_cc)}
+              = form.label :invoice_email_cc
+              = form.text_field :invoice_email_cc, placeholder: I18n.t(:"helpers.placeholder.customer.invoice_email_cc"), class: 'form-control'
+              = form_errors customer, :invoice_email_cc
+        .row
+          .col-xs-12.col-md-6
             .form-group{class: form_error?(customer, :email_template)}
               = form.label :email_template
               = form.text_area :email_template, placeholder: I18n.t(:"helpers.placeholder.customer.email_template"), rows: 9, class: 'form-control'

@@ -5,7 +5,7 @@ class InvoiceMailer < ApplicationMailer
 
   def customer(invoice)
     self.invoice = invoice
-    send_mail invoice.customer.invoice_email
+    send_mail invoice.customer.invoice_email.split(","), invoice.customer.invoice_email_cc.split(",")
   end
 
   def test(invoice, test_mail)
@@ -13,7 +13,7 @@ class InvoiceMailer < ApplicationMailer
     send_mail test_mail
   end
 
-  private def send_mail(to)
+  private def send_mail(to, cc = [])
     month = I18n.l(invoice.date, format: :month)
     date = I18n.l(invoice.date, format: :month_year)
 
@@ -28,7 +28,7 @@ class InvoiceMailer < ApplicationMailer
     attachments["#{invoice.invoice_file}.pdf"] = invoice.inline_pdf
     attachments["#{invoice.timesheet_file}.pdf"] = invoice.inline_timesheet_pdf if invoice.timers.present?
 
-    cc = invoice.account.contact_information["public_email"]
+    cc = cc + [invoice.account.contact_information["public_email"]]
     bcc = invoice.account.users.pluck(:email) if cc.blank?
 
     mail(
