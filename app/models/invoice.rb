@@ -91,7 +91,7 @@ class Invoice < ApplicationRecord
   end
 
   def self.filter_quarter(quarter, year = Time.current.year)
-    return all if quarter.blank? || !(1..4).include?(quarter.to_i)
+    return all if quarter.blank? || !(1..4).cover?(quarter.to_i)
 
     date_range(
       start_date: Date.new(year.to_i, quarter.to_i * 3 - 2, 1),
@@ -100,7 +100,7 @@ class Invoice < ApplicationRecord
   end
 
   def self.filter_month(month, year = Time.current.year)
-    return all if month.blank? || !(1..12).include?(month.to_i)
+    return all if month.blank? || !(1..12).cover?(month.to_i)
 
     date_range(
       start_date: Date.new(year.to_i, month.to_i, 1),
