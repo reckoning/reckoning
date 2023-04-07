@@ -28,8 +28,8 @@ class InvoiceMailer < ApplicationMailer
     attachments["#{invoice.invoice_file}.pdf"] = invoice.inline_pdf
     attachments["#{invoice.timesheet_file}.pdf"] = invoice.inline_timesheet_pdf if invoice.timers.present?
 
-    cc = invoice.account.contact_information['public_email']
-    bcc = invoice.account.user.email if cc.blank?
+    cc = invoice.account.contact_information["public_email"]
+    bcc = invoice.account.users.pluck(:email) if cc.blank?
 
     mail(
       to: to,
