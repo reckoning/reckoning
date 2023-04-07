@@ -96,7 +96,7 @@ class Expense < ApplicationRecord
 
     date_range(
       start_date: Date.new(year.to_i, quarter.to_i * 3 - 2, 1),
-      end_date: Date.new(year.to_i, quarter.to_i * 3 + 1, -1)
+      end_date: Date.new(year.to_i, quarter.to_i * 3, -1)
     )
   end
 
