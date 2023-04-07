@@ -143,4 +143,6 @@ group :development, :test do
   gem "bullet"
   gem "bundler-audit"
   gem "byebug", platform: :mri
+
+  gem "knapsack"
 end

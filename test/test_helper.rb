@@ -91,3 +91,6 @@ class ActionMailer::TestCase
   end
 end
 # rubocop:enable Style/ClassAndModuleChildren
+
+knapsack_adapter = Knapsack::Adapters::MinitestAdapter.bind
+knapsack_adapter.set_test_helper_path(__FILE__)
