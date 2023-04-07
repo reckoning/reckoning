@@ -26,11 +26,13 @@
             = I18n.t(:"nav.subnav.new_invoice")
 
     .row
-      .col-xs-12.col-md-6
+      .col-xs-12.col-md-8.filters
         = render "shared/tables/filter", resource: "invoice", name: "state", filters: Invoice.workflow_spec.state_names, translateable: true
         = render "shared/tables/filter", resource: "invoice", name: "year", filters: current_invoice_years
+        = render "shared/tables/filter", resource: "invoice", name: "quarter", filters: expenses_quarters, translateable: true
+        = render "shared/tables/filter", resource: "invoice", name: "month", filters: expenses_months, translateable: true
         = render "shared/tables/filter", resource: "invoice", name: "paid_in_year", filters: current_invoice_years
-      .col-xs-12.col-md-6
+      .col-xs-12.col-md-4
         = paginate @invoices
 
     - if @invoices.present?

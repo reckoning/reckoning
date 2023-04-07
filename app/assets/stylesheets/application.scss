@@ -113,6 +113,10 @@ code[data-target] {
   }
 }
 
+.flex {
+  display: flex;
+}
+
 .filters {
   display: flex;
   justify-content: flex-start;
@@ -121,11 +125,6 @@ code[data-target] {
   .filters-form {
     display: flex;
     gap: 5px;
-
-    input[type="submit"],
-    button[type="submit"] {
-      margin-bottom: 20px;
-    }
   }
 
   .dropdown {

@@ -1,7 +1,7 @@
 ruby:
   translateable ||= false
   current_filter = filter_params.fetch(name, nil)
-.dropdown.filter-menu.btn-group
+.dropdown.filter-menu.btn-group.flex
   - if current_filter
     ruby:
       reset_params = filter_params.dup
@@ -31,7 +31,7 @@ ruby:
         end
         value ||= filter.to_s
       li class=("active" if current_filter == value)
-        ruby: 
+        ruby:
           link = filter.link if defined?(filter.link)
           link ||= I18n.t(:"filter.#{resource}_#{name}.#{value}")
         = link_to link, plumb(name.to_s => value)

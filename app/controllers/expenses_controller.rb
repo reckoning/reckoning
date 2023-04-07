@@ -12,8 +12,6 @@ class ExpensesController < ApplicationController
     expenses = current_account.expenses
       .filter_result(filter_params)
 
-    expenses = expenses.where("description ILIKE ?", "%#{params[:query]}%") if params[:query].present?
-
     respond_to do |format|
       format.csv do
         send_data expenses.to_csv
@@ -88,7 +86,7 @@ class ExpensesController < ApplicationController
   end
 
   private def filter_params
-    params.permit(:year, :type, :quarter, :month)
+    params.permit(:year, :type, :quarter, :month, :query)
   end
   helper_method :filter_params
 

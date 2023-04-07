@@ -72,8 +72,14 @@ class Invoice < ApplicationRecord
     where("date <= ? AND date >= ?", "#{year}-12-31", "#{year}-01-01")
   end
 
+  def self.date_range(start_date:, end_date: nil)
+    where(date: start_date..end_date)
+  end
+
   def self.filter_result(filter_params)
     filter_year(filter_params.fetch(:year, nil))
+      .filter_quarter(filter_params.fetch(:quarter, nil), filter_params.fetch(:year, Time.current.year))
+      .filter_month(filter_params.fetch(:month, nil), filter_params.fetch(:year, Time.current.year))
       .filter_state(filter_params.fetch(:state, nil))
       .filter_paid_in_year(filter_params.fetch(:paid_in_year, nil))
   end
@@ -82,6 +88,24 @@ class Invoice < ApplicationRecord
     return all if year.blank? || year !~ /\d{4}/
 
     year(year)
+  end
+
+  def self.filter_quarter(quarter, year = Time.current.year)
+    return all if quarter.blank? || !(1..4).include?(quarter.to_i)
+
+    date_range(
+      start_date: Date.new(year.to_i, quarter.to_i * 3 - 2, 1),
+      end_date: Date.new(year.to_i, quarter.to_i * 3 + 1, -1)
+    )
+  end
+
+  def self.filter_month(month, year = Time.current.year)
+    return all if month.blank? || !(1..12).include?(month.to_i)
+
+    date_range(
+      start_date: Date.new(year.to_i, month.to_i, 1),
+      end_date: Date.new(year.to_i, month.to_i, -1)
+    )
   end
 
   def self.filter_state(state)

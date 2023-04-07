@@ -9,6 +9,7 @@ class InvoicesController < ApplicationController
 
   def index
     authorize! :read, Invoice
+
     @invoices = current_account.invoices
       .filter_result(filter_params)
       .includes(:customer, :project).references(:customers)
@@ -200,7 +201,7 @@ class InvoicesController < ApplicationController
   end
 
   private def filter_params
-    params.permit(:state, :year, :paid_in_year)
+    params.permit(:state, :year, :quarter, :month, :paid_in_year)
   end
   helper_method :filter_params
 
