@@ -142,7 +142,7 @@ workflows:
       - audit:
           requires:
             - bundle_dependencies
-      - rubocop:
+      - linting:
           requires:
             - bundle_dependencies
       - unit_tests:
@@ -160,7 +160,7 @@ workflows:
       - audit:
           requires:
             - bundle_dependencies
-      - rubocop:
+      - linting:
           requires:
             - bundle_dependencies
       - unit_tests:
