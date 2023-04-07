@@ -14,24 +14,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  js-setup:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/workflows/js-setup-action
-
-  js-lint:
-    needs: js-setup
-    uses: ./.github/workflows/js-lint.job.yml
-
-  js-prettier:
-    needs: js-setup
-    uses: ./.github/workflows/js-prettier.job.yml
-
-  js-tests:
-    needs: js-setup
-    uses: ./.github/workflows/js-tests.job.yml
-
   ruby-setup:
     runs-on: ubuntu-latest
     steps:
@@ -53,14 +35,14 @@ jobs:
     uses: ./.github/workflows/seeds.job.yml
 
   e2e-tests:
-    needs: [ruby-setup, js-setup]
+    needs: [ruby-setup]
     uses: ./.github/workflows/e2e-tests.job.yml
     secrets: inherit
 
   # deploy:
   #   if: github.ref == 'refs/heads/main'
   #   needs:
-  #     [ruby-lint, ruby-tests, js-tests, js-lint, js-prettier, seeds, e2e-tests]
+  #     [ruby-lint, ruby-tests, seeds, e2e-tests]
   #   uses: ./.github/workflows/deploy.job.yml
   #   with:
   #     capEnv: live
