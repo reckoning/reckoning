@@ -61,8 +61,6 @@ jobs:
       - run: mkdir -p log && mkdir -p tmp/pids && rm -f tmp/pids/*
       - name: Setup DB
         run: bundle exec rails db:create db:schema:load
-      - name: Create ES Index
-        run: bundle exec thor search:index
       - name: Assets Compile
         run: bundle exec rails assets:precompile
       - name: Prefill DB
