@@ -1,23 +1,12 @@
 {
   "name": "reckoning",
   "version": "1.0.0",
-  "description": "[![Build Status](https://travis-ci.org/Reckoning/reckoning.png?branch=master)](https://travis-ci.org/Reckoning/reckoning)",
-  "main": "index.js",
-  "directories": {
-    "doc": "doc",
-    "test": "test"
+  "private": true,
+  "scripts": {
+    "test:e2e": "cypress run --browser chrome --headless",
+    "test:e2e:report": "generate-mochawesome-report --jsonDir test/reports/e2e --output test/reports/e2e/html --charts"
   },
-  "dependencies": {
-    "bower": "~1.8.14"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/Reckoning/app.git"
-  },
-  "author": "Marten Klitzke",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Reckoning/app/issues"
-  },
-  "homepage": "https://reckoning.cc"
+  "devDependencies": {
+    "cypress": "^12.9.0"
+  }
 }
