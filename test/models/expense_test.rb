@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class ExpenseTest < ActiveSupport::TestCase
-  test 'should calulate list of dates based on interval setting' do
+  test "should calulate list of dates based on interval setting" do
     expense = expenses(:one)
     expense.interval = :monthly
     expense.started_at = Date.new(2022, 1, 31)

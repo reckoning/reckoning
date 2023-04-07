@@ -25,16 +25,16 @@ class ExpensesController < ApplicationController
         open_afa_expenses = current_account.expenses.filter_type(:afa).sum do |expense|
           expense.afa_value(year&.to_i || Time.current.year)
         end
-        normalized_expenses = Expense.normalized(expenses.to_a, year: year) if filter_params[:type] == 'insurances'
+        normalized_expenses = Expense.normalized(expenses.to_a, year: year) if filter_params[:type] == "insurances"
 
         @expenses_sum = normalized_expenses.sum do |expense|
-          next 0 if expense.expense_type == 'afa'
+          next 0 if expense.expense_type == "afa"
 
           expense.usable_value(year&.to_i || Time.current.year)
         end + open_afa_expenses
         @expenses_vat_sum = normalized_expenses.sum(&:vat_value)
 
-        @expenses = expenses.order(sort_column.to_sym => sort_direction, created_at: :desc)
+        @expenses = expenses.order(sort_column.to_sym => sort_direction, :created_at => :desc)
           .page(params.fetch(:page, nil))
           .per(40)
       end
@@ -53,20 +53,20 @@ class ExpensesController < ApplicationController
   def create
     authorize! :create, Expense
     if expense.save
-      redirect_to "#{expenses_path(stored_params(:index))}#expense-#{expense.id}", flash: { success: resource_message(:expense, :create, :success) }
+      redirect_to "#{expenses_path(stored_params(:index))}#expense-#{expense.id}", flash: {success: resource_message(:expense, :create, :success)}
     else
       flash.now[:alert] = resource_message(:expense, :create, :failure)
-      render 'new'
+      render "new"
     end
   end
 
   def update
     authorize! :update, expense
     if expense.update(expense_params)
-      redirect_to "#{expenses_path(stored_params(:index))}#expense-#{expense.id}", flash: { success: resource_message(:expense, :update, :success) }
+      redirect_to "#{expenses_path(stored_params(:index))}#expense-#{expense.id}", flash: {success: resource_message(:expense, :update, :success)}
     else
       flash.now[:alert] = resource_message(:expense, :update, :failure)
-      render 'edit'
+      render "edit"
     end
   end
 
@@ -91,16 +91,16 @@ class ExpensesController < ApplicationController
   helper_method :filter_params
 
   private def sort_column
-    Expense.column_names.include?(params[:sort]) ? params[:sort] : 'expenses.date'
+    Expense.column_names.include?(params[:sort]) ? params[:sort] : "expenses.date"
   end
   helper_method :sort_column
 
   private def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : 'desc'
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
   end
 
   private def set_active_nav
-    @active_nav = 'expenses'
+    @active_nav = "expenses"
   end
 
   private def expense_params

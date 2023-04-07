@@ -4,8 +4,8 @@ json.id project.id
 json.name project.name
 json.customer_name project.customer_name
 json.label project.label
-json.tasks project.tasks.includes(:timers).order('timers.created_at DESC') do |task|
-  json.partial! 'api/v1/projects/tasks', task: task
+json.tasks project.tasks.includes(:timers).order("timers.created_at DESC") do |task|
+  json.partial! "api/v1/projects/tasks", task: task
 end
 json.created_at project.created_at
 json.updated_at project.updated_at

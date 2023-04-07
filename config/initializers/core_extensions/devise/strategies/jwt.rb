@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'json_web_token'
+require "json_web_token"
 
 module Devise
   module Strategies
@@ -26,7 +26,7 @@ module Devise
 
       protected def claims
         ::JsonWebToken.decode(auth_params)
-      rescue StandardError
+      rescue
         nil
       end
     end

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class UserTest < ActiveSupport::TestCase
-  it 'should validate email adresses' do
-    user = User.new(password: 'foofoo', password_confirmation: 'foofoo', email: 'foo @ bar .cccom')
+  it "should validate email adresses" do
+    user = User.new(password: "foofoo", password_confirmation: "foofoo", email: "foo @ bar .cccom")
     assert_not user.valid?
   end
 end

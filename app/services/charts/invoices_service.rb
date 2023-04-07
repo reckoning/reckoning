@@ -24,7 +24,7 @@ module Charts
     end
 
     private def month_dataset_for_year(year)
-      dataset = new_dataset(I18n.t(:'labels.chart.invoices.month', year: year), color_for_year[year][1])
+      dataset = new_dataset(I18n.t(:"labels.chart.invoices.month", year: year), color_for_year[year][1])
       (1..12).map do |month|
         start_date = Time.zone.parse("#{year}-#{month}-1").beginning_of_month
         end_date = Time.zone.parse("#{year}-#{month}-1").end_of_month
@@ -36,7 +36,7 @@ module Charts
     end
 
     private def cumulative_dataset_for_year(year)
-      dataset = new_dataset(I18n.t(:'labels.chart.invoices.sum', year: year), color_for_year[year][0])
+      dataset = new_dataset(I18n.t(:"labels.chart.invoices.sum", year: year), color_for_year[year][0])
       start_of_year = Time.zone.parse("#{year}-1-1").to_date.beginning_of_month
       (1..12).each do |month|
         end_date = Time.zone.parse("#{year}-#{month}-1").to_date.end_of_month

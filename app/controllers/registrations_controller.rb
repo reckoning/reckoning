@@ -4,17 +4,17 @@ class RegistrationsController < Devise::RegistrationsController
   before_action :set_user, only: %i[edit update]
 
   def edit
-    @active_nav = 'user'
+    @active_nav = "user"
     authorize! :update, @user
   end
 
   def update
-    @active_nav = 'user'
+    @active_nav = "user"
     authorize! :update, @user
     if @user.update_without_password(user_params)
-      redirect_to "#{edit_user_registration_path}#{hash}", flash: { success: I18n.t(:'messages.registration.update.success') }
+      redirect_to "#{edit_user_registration_path}#{hash}", flash: {success: I18n.t(:"messages.registration.update.success")}
     else
-      render "edit#{hash}", alert: I18n.t(:'messages.registration.update.failure')
+      render "edit#{hash}", alert: I18n.t(:"messages.registration.update.failure")
     end
   end
 
@@ -29,6 +29,6 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   private def hash
-    params.fetch(:hash, '')
+    params.fetch(:hash, "")
   end
 end

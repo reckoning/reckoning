@@ -14,13 +14,13 @@ module NumberHelper
     minutes = ((number % 1) * 60).to_i
     if hours != 0 || minutes != 0
       padded = if minutes < 10
-                 "0#{minutes}"
-               else
-                 minutes.to_s
-               end
+        "0#{minutes}"
+      else
+        minutes.to_s
+      end
       "#{hours}:#{padded}"
     else
-      '0:00'
+      "0:00"
     end
   end
 end

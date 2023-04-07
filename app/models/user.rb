@@ -2,9 +2,9 @@
 
 class User < ApplicationRecord
   devise :two_factor_authenticatable, :two_factor_backupable, :confirmable, :lockable, :recoverable,
-         :registerable, :rememberable, :trackable, :validatable,
-         otp_secret_encryption_key: Rails.application.credentials.devise_otp,
-         otp_backup_code_length: 32, otp_number_of_backup_codes: 10
+    :registerable, :rememberable, :trackable, :validatable,
+    otp_secret_encryption_key: Rails.application.credentials.devise_otp,
+    otp_backup_code_length: 32, otp_number_of_backup_codes: 10
 
   belongs_to :account
   has_many :timers, dependent: :destroy
@@ -19,7 +19,7 @@ class User < ApplicationRecord
   end
 
   def weekly_hours
-    timers.where('date >= ?', Time.current.beginning_of_week).sum(:value)
+    timers.where("date >= ?", Time.current.beginning_of_week).sum(:value)
   end
 
   def daily_hours
@@ -28,10 +28,10 @@ class User < ApplicationRecord
 
   def update_gravatar_hash
     hash = if gravatar.blank?
-             Digest::MD5.hexdigest(id.to_s)
-           else
-             Digest::MD5.hexdigest(gravatar.downcase.strip)
-           end
+      Digest::MD5.hexdigest(id.to_s)
+    else
+      Digest::MD5.hexdigest(gravatar.downcase.strip)
+    end
     self.gravatar_hash = hash
   end
 
@@ -89,7 +89,7 @@ class User < ApplicationRecord
     # The last 16 bytes of the ciphertext are the authentication tag - we use
     # Galois Counter Mode which is an authenticated encryption mode
     cipher_text = raw_cipher_text[0..-17]
-    auth_tag =  raw_cipher_text[-16..]
+    auth_tag = raw_cipher_text[-16..]
 
     # this alrorithm lifted from
     # https://github.com/attr-encrypted/encryptor/blob/master/lib/encryptor.rb#L54
@@ -97,7 +97,7 @@ class User < ApplicationRecord
     # create an OpenSSL object which will decrypt the AES cipher with 256 bit
     # keys in Galois Counter Mode (GCM). See
     # https://ruby.github.io/openssl/OpenSSL/Cipher.html
-    cipher = OpenSSL::Cipher.new('aes-256-gcm')
+    cipher = OpenSSL::Cipher.new("aes-256-gcm")
 
     # tell the cipher we want to decrypt. Symmetric algorithms use a very
     # similar process for encryption and decryption, hence the same object can
@@ -122,7 +122,7 @@ class User < ApplicationRecord
     # http://ruby-doc.org/stdlib-2.0.0/libdoc/openssl/rdoc/OpenSSL/Cipher.html#method-i-auth_data-3D
     # we are not adding any authenticated data but OpenSSL docs say this should
     # still be called.
-    cipher.auth_data = ''
+    cipher.auth_data = ""
 
     # #update is (somewhat confusingly named) the method which actually
     # performs the decryption on the given chunk of data. Our OTP secret is

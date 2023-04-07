@@ -4,7 +4,7 @@ class RunningTimerNotification
   include Notification
 
   def initialize
-    self.text = I18n.t('notifications.timer.running')
-    self.notification_type = 'warning'
+    self.text = I18n.t("notifications.timer.running")
+    self.notification_type = "warning"
   end
 end

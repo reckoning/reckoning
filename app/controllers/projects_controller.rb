@@ -12,10 +12,10 @@ class ProjectsController < ApplicationController
     state = params.fetch(:state, nil)
     scope = current_account.projects.includes(:customer, :timers)
     scope = if state.present? && Project.workflow_spec.state_names.include?(state.to_sym)
-              scope.where(workflow_state: state)
-            else
-              scope.where(workflow_state: :active)
-            end
+      scope.where(workflow_state: state)
+    else
+      scope.where(workflow_state: :active)
+    end
 
     @projects = scope.order("#{sort_column} #{sort_direction}")
       .page(params.fetch(:page, nil))
@@ -31,10 +31,10 @@ class ProjectsController < ApplicationController
   def new
     authorize! :create, Project
     @project = if customer
-                 customer.projects.new
-               else
-                 current_account.projects.new
-               end
+      customer.projects.new
+    else
+      current_account.projects.new
+    end
   end
 
   def edit
@@ -44,29 +44,29 @@ class ProjectsController < ApplicationController
   def create
     authorize! :create, Project
     if project.save
-      redirect_to project_path(project), flash: { success: resource_message(:project, :create, :success) }
+      redirect_to project_path(project), flash: {success: resource_message(:project, :create, :success)}
     else
       flash.now[:alert] = resource_message(:project, :create, :failure)
-      render 'new'
+      render "new"
     end
   end
 
   def update
     authorize! :update, project
     if project.update(project_params)
-      redirect_to project_path(project), flash: { success: resource_message(:project, :update, :success) }
+      redirect_to project_path(project), flash: {success: resource_message(:project, :update, :success)}
     else
       flash.now[:alert] = resource_message(:project, :update, :failure)
-      render 'edit'
+      render "edit"
     end
   end
 
   def unarchive
     authorize! :archive, project
     if project.unarchive!
-      redirect_to projects_path, flash: { success: I18n.t(:'messages.project.unarchive.success') }
+      redirect_to projects_path, flash: {success: I18n.t(:"messages.project.unarchive.success")}
     else
-      redirect_to projects_path, alert: I18n.t(:'messages.project.unarchive.failure')
+      redirect_to projects_path, alert: I18n.t(:"messages.project.unarchive.failure")
     end
   end
 
@@ -74,17 +74,17 @@ class ProjectsController < ApplicationController
     if (Project.column_names + %w[customers.name]).include?(params[:sort])
       params[:sort]
     else
-      'customers.name'
+      "customers.name"
     end
   end
   helper_method :sort_column
 
   private def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : 'asc'
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
 
   private def set_active_nav
-    @active_nav = 'projects'
+    @active_nav = "projects"
   end
 
   private def customers
@@ -114,6 +114,6 @@ class ProjectsController < ApplicationController
   private def check_dependencies
     return if current_account.address.present?
 
-    redirect_to "#{edit_account_path}#address", alert: I18n.t(:'messages.missing_address')
+    redirect_to "#{edit_account_path}#address", alert: I18n.t(:"messages.missing_address")
   end
 end

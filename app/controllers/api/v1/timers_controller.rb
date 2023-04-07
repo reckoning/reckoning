@@ -4,7 +4,7 @@ module Api
   module V1
     class TimersController < Api::BaseController
       rescue_from ActiveRecord::RecordNotFound do |_exception|
-        not_found(I18n.t('messages.record_not_found.timer', id: params[:id]))
+        not_found(I18n.t("messages.record_not_found.timer", id: params[:id]))
       end
 
       def index
@@ -29,7 +29,7 @@ module Api
           render status: :created
         else
           Rails.logger.info "Timer Create Failed: #{@timer.errors.full_messages.to_yaml}"
-          render json: ValidationError.new('timer.create', @timer.errors), status: :bad_request
+          render json: ValidationError.new("timer.create", @timer.errors), status: :bad_request
         end
       end
 
@@ -38,7 +38,7 @@ module Api
         authorize! :update, @timer
         unless @timer.update(timer_params)
           Rails.logger.info "Timer Update Failed: #{@timer.errors.full_messages.to_yaml}"
-          render json: ValidationError.new('timer.update', @timer.errors), status: :bad_request
+          render json: ValidationError.new("timer.update", @timer.errors), status: :bad_request
         end
         @timer.start if start_timer?
         send_realtime_update(@timer)
@@ -49,7 +49,7 @@ module Api
         authorize! :stop, @timer
         unless @timer.stop
           Rails.logger.info "Timer Stop Failed: #{@timer.to_yaml}"
-          render json: { message: I18n.t(:'messages.timer.stop.failure') }, status: :bad_request
+          render json: {message: I18n.t(:"messages.timer.stop.failure")}, status: :bad_request
         end
         send_realtime_update(@timer)
       end
@@ -59,7 +59,7 @@ module Api
         authorize! :start, @timer
         unless @timer.start
           Rails.logger.info "Timer Start Failed: #{@timer.to_yaml}"
-          render json: { message: I18n.t(:'messages.timer.start.failure') }, status: :bad_request
+          render json: {message: I18n.t(:"messages.timer.start.failure")}, status: :bad_request
         end
         send_realtime_update(@timer)
       end
@@ -70,12 +70,12 @@ module Api
         if @timer.position.blank?
           unless @timer.destroy
             Rails.logger.info "Timer Destroy Failed: #{@timer.errors.full_messages.to_yaml}"
-            render json: ValidationError.new('timer.destroy', @timer.errors), status: :bad_request
+            render json: ValidationError.new("timer.destroy", @timer.errors), status: :bad_request
           end
           send_realtime_update(@timer)
         else
-          Rails.logger.info 'Timer Destroy Failed: Timer allready on Invoice'
-          render json: { message: I18n.t(:'messages.timer.destroy.failure') }, status: :bad_request
+          Rails.logger.info "Timer Destroy Failed: Timer allready on Invoice"
+          render json: {message: I18n.t(:"messages.timer.destroy.failure")}, status: :bad_request
         end
       end
 

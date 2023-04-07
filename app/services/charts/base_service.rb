@@ -39,15 +39,15 @@ module Charts
 
     private def colors
       @colors ||= [
-        '#428bca',
-        '#3071a9'
+        "#428bca",
+        "#3071a9"
       ]
     end
 
     private def background_colors
       @background_colors ||= [
-        '#dcdcdc',
-        '#c3c3c3'
+        "#dcdcdc",
+        "#c3c3c3"
       ]
     end
 

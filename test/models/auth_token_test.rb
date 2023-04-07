@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class AuthTokenTest < ActiveSupport::TestCase
-  it 'should generate a valid token' do
+  it "should generate a valid token" do
     user = users :data
     token = AuthToken.new(user: user)
 

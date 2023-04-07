@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'sidekiq/web'
+require "sidekiq/web"
 
 Rails.application.routes.draw do
   draw :api_routes
@@ -10,31 +10,31 @@ Rails.application.routes.draw do
 
     resources :users, except: [:show] do
       member do
-        put 'send_welcome'
+        put "send_welcome"
       end
     end
 
     authenticate :user, (->(u) { u.admin? }) do
-      mount Sidekiq::Web => '/workers'
+      mount Sidekiq::Web => "/workers"
     end
 
-    root to: 'base#dashboard'
+    root to: "base#dashboard"
   end
 
-  mount ActionCable.server => '/cable'
+  mount ActionCable.server => "/cable"
 
   devise_for :users,
-             skip: %i[sessions registrations],
-             controllers: { registrations: 'registrations' }
+    skip: %i[sessions registrations],
+    controllers: {registrations: "registrations"}
 
   as :user do
-    get 'signup' => 'accounts#new', as: :new_registration
-    post 'signup' => 'accounts#create', as: :registration
-    get 'settings' => 'registrations#edit', as: :edit_user_registration
-    patch 'settings' => 'registrations#update', as: :update_user_registration
-    get 'signin' => 'sessions#new', as: :new_user_session
-    post 'signin' => 'sessions#create', as: :user_session
-    delete 'signout' => 'sessions#destroy', as: :destroy_user_session
+    get "signup" => "accounts#new", :as => :new_registration
+    post "signup" => "accounts#create", :as => :registration
+    get "settings" => "registrations#edit", :as => :edit_user_registration
+    patch "settings" => "registrations#update", :as => :update_user_registration
+    get "signin" => "sessions#new", :as => :new_user_session
+    post "signin" => "sessions#create", :as => :user_session
+    delete "signout" => "sessions#destroy", :as => :destroy_user_session
   end
 
   resource :me, controller: :current_user, only: [] do
@@ -51,7 +51,7 @@ Rails.application.routes.draw do
 
   resources :invoices do
     collection do
-      put 'archive' => 'invoices#archive_all'
+      put "archive" => "invoices#archive_all"
     end
     member do
       put :generate_positions
@@ -60,28 +60,28 @@ Rails.application.routes.draw do
       put :archive
       put :send_mail
       post :send_test_mail
-      get '/pdf/:pdf' => 'invoices#pdf', as: :pdf, defaults: { format: :pdf }
-      get '/timesheet-pdf/:pdf' => 'invoices#timesheet', as: :timesheet_pdf, defaults: { format: :pdf }
+      get "/pdf/:pdf" => "invoices#pdf", :as => :pdf, :defaults => {format: :pdf}
+      get "/timesheet-pdf/:pdf" => "invoices#timesheet", :as => :timesheet_pdf, :defaults => {format: :pdf}
     end
   end
 
   resources :offers do
     member do
-      get '/pdf/:pdf' => 'offers#pdf', as: :pdf, defaults: { format: :pdf }
+      get "/pdf/:pdf" => "offers#pdf", :as => :pdf, :defaults => {format: :pdf}
     end
   end
 
   resource :timesheet, only: [:show]
 
   resource :template, only: [] do
-    template 'blank'
-    template 'datepicker'
-    template 'month_timers'
-    template 'day_timesheets'
-    template 'week_timesheets'
-    template 'timer_modal_timesheets'
-    template 'task_modal_timesheets'
-    template 'index_logbooks'
+    template "blank"
+    template "datepicker"
+    template "month_timers"
+    template "day_timesheets"
+    template "week_timesheets"
+    template "timer_modal_timesheets"
+    template "task_modal_timesheets"
+    template "index_logbooks"
   end
 
   resources :positions, only: %i[new destroy]
@@ -104,7 +104,7 @@ Rails.application.routes.draw do
   resources :expenses, except: [:show]
   resources :expense_imports, only: %i[new create]
 
-  resource :dropbox, controller: 'dropbox', only: [:show] do
+  resource :dropbox, controller: "dropbox", only: [:show] do
     collection do
       get :start
       get :activate
@@ -112,13 +112,13 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'impressum' => 'base#impressum'
-  get 'privacy' => 'base#privacy'
-  get 'terms' => 'base#terms'
+  get "impressum" => "base#impressum"
+  get "privacy" => "base#privacy"
+  get "terms" => "base#terms"
 
-  match '404' => 'errors#not_found', via: :all
-  match '422' => 'errors#server_error', via: :all
-  match '500' => 'errors#server_error', via: :all
+  match "404" => "errors#not_found", :via => :all
+  match "422" => "errors#server_error", :via => :all
+  match "500" => "errors#server_error", :via => :all
 
-  root to: 'base#index'
+  root to: "base#index"
 end
