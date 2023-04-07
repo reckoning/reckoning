@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'json_web_token'
+require "json_web_token"
 
 class AuthToken < ApplicationRecord
   belongs_to :user
 
-  validates :token, presence: true, uniqueness: { scope: :user_id }
+  validates :token, presence: true, uniqueness: {scope: :user_id}
 
   before_validation :generate_authentication_token, on: :create
 

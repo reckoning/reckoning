@@ -9,7 +9,7 @@ class TimersController < ApplicationController
         scope = scope.for_project(project_id) if project_id
         scope = scope.without_ids(timer_ids) if timer_ids
         timers = scope.order(date: :asc)
-        render json: { body: render_to_string(partial: 'list', locals: { timers: timers }) }
+        render json: {body: render_to_string(partial: "list", locals: {timers: timers})}
       end
       format.html { redirect_to root_path }
     end

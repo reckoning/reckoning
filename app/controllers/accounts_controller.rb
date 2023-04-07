@@ -9,11 +9,11 @@ class AccountsController < ApplicationController
   skip_authorization_check only: %i[new create]
 
   def new
-    @active_nav = 'registration'
+    @active_nav = "registration"
     redirect_to new_user_session_path if current_account.present?
     @account = Account.new plan: params[:plan]
     @account.users.build
-    render layout: 'landing_page'
+    render layout: "landing_page"
   end
 
   def edit
@@ -21,26 +21,26 @@ class AccountsController < ApplicationController
   end
 
   def create
-    @active_nav = 'registration'
+    @active_nav = "registration"
     if account.save
-      redirect_to new_user_session_path, flash: { success: resource_message(:account, :create, :success) }
+      redirect_to new_user_session_path, flash: {success: resource_message(:account, :create, :success)}
     else
-      render 'new', alert: resource_message(:account, :create, :failure), layout: 'landing_page'
+      render "new", alert: resource_message(:account, :create, :failure), layout: "landing_page"
     end
   end
 
   def update
     authorize! :update, account
     if account.update(account_params)
-      redirect_to "#{edit_account_path}#{hash}", flash: { success: resource_message(:account, :update, :success) }
+      redirect_to "#{edit_account_path}#{hash}", flash: {success: resource_message(:account, :update, :success)}
     else
       flash.now[:alert] = resource_message(:account, :update, :failure)
-      render 'edit'
+      render "edit"
     end
   end
 
   private def set_active_nav
-    @active_nav = 'account'
+    @active_nav = "account"
   end
 
   private def account_params
@@ -80,7 +80,7 @@ class AccountsController < ApplicationController
   helper_method :account
 
   private def hash
-    params.fetch(:hash, '')
+    params.fetch(:hash, "")
   end
 
   private def check_registration_setting

@@ -1,17 +1,22 @@
-production:
-  url: <%= ENV["DATABASE_URL"] %>
-  pool: <%= ENV["DATABASE_POOL_SIZE"] %>
+production: &default
+  database: <%= ENV["DB_NAME"] || 'reckoning' %>
+  adapter: postgresql
+  host: <%= ENV["DB_HOST"] || 'localhost' %>
+  port: <%= ENV["DB_PORT"] || 5432 %>
+  user: <%= ENV["DB_USER"] || 'root' %>
+  password: <%= ENV["DB_PASSWORD"] %>
+  pool: <%= ENV["DB_POOL_SIZE"] %>
+
+staging:
+  <<: *default
+
+ci:
+  <<: *default
 
 development:
+  <<: *default
   database: reckoning_dev
-  adapter: postgresql
-  host: <%= ENV["DATABASE_HOST"] || 'localhost' %>
-  user: <%= ENV["DATABASE_USER"] %>
-  password: <%= ENV["DATABASE_PASSWORD"] %>
 
 test:
+  <<: *default
   database: reckoning_test
-  adapter: postgresql
-  host: <%= ENV["DATABASE_HOST"] || 'localhost' %>
-  user: <%= ENV["DATABASE_USER"] %>
-  password: <%= ENV["DATABASE_PASSWORD"] %>

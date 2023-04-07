@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'roo'
+require "roo"
 
 class Timer < ApplicationRecord
   include Rails.application.routes.url_helpers
 
   belongs_to :task, touch: true
   belongs_to :user
-  belongs_to :position, class_name: 'InvoicePosition', optional: true
+  belongs_to :position, class_name: "InvoicePosition", optional: true
 
   before_save :stop_other_timers
 
@@ -36,19 +36,19 @@ class Timer < ApplicationRecord
   end
 
   def self.not_empty
-    where.not(value: [nil, 0, '0.0', '0'])
+    where.not(value: [nil, 0, "0.0", "0"])
   end
 
   def self.billable
-    not_empty.includes(:task).where(tasks: { billable: true }).references(:task)
+    not_empty.includes(:task).where(tasks: {billable: true}).references(:task)
   end
 
   def self.for_project(project)
-    includes(:task).where(tasks: { project_id: project }).references(:task)
+    includes(:task).where(tasks: {project_id: project}).references(:task)
   end
 
   def self.non_billable
-    where.not(tasks: { billable: true }).references(:task)
+    where.not(tasks: {billable: true}).references(:task)
   end
 
   def self.running

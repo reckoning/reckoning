@@ -10,10 +10,10 @@ module Api
         if week_date
           date = Date.parse(week_date)
           scope = scope.includes(:timers).references(:timers)
-            .where(timers: { user_id: current_user.id })
-            .where(timers: { date: [date.all_week] })
+            .where(timers: {user_id: current_user.id})
+            .where(timers: {date: [date.all_week]})
         end
-        @tasks = scope.order('tasks.id ASC')
+        @tasks = scope.order("tasks.id ASC")
       end
 
       def create
@@ -23,7 +23,7 @@ module Api
           render status: :created
         else
           Rails.logger.info "Task Create Failed: #{@task.errors.full_messages.to_yaml}"
-          render json: ValidationError.new('task.create', @task.errors), status: :bad_request
+          render json: ValidationError.new("task.create", @task.errors), status: :bad_request
         end
       end
 

@@ -32,7 +32,7 @@ module Charts
       return if project.budget.blank? || project.budget.zero?
 
       value = 0.0
-      dataset = new_dataset(I18n.t(:'labels.chart.project.budget'), colors[0])
+      dataset = new_dataset(I18n.t(:"labels.chart.project.budget"), colors[0])
       weeks do |week_start_date, week_end_date, index|
         value += (scope.where(date: week_start_date..week_end_date).all.sum(:value) * project.rate).to_f
 

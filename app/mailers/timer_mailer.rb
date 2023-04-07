@@ -15,8 +15,8 @@ class TimerMailer < ApplicationMailer
 
     mail(
       to: to,
-      subject: I18n.t(:'mailer.timer.notify.subject'),
-      template_name: 'notify'
+      subject: I18n.t(:"mailer.timer.notify.subject"),
+      template_name: "notify"
     )
   end
 end

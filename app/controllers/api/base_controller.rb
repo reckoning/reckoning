@@ -11,11 +11,11 @@ module Api
     check_authorization
 
     rescue_from CanCan::AccessDenied do |exception|
-      render json: { message: exception.message }, status: :forbidden
+      render json: {message: exception.message}, status: :forbidden
     end
 
-    private def not_found(message = I18n.t('messages.record_not_found.base'))
-      render json: { code: 'not_found', message: message }, status: :not_found
+    private def not_found(message = I18n.t("messages.record_not_found.base"))
+      render json: {code: "not_found", message: message}, status: :not_found
     end
 
     def resource_message(resource, action, state)

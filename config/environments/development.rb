@@ -14,9 +14,9 @@ Rails.application.configure do
   config.eager_load = false
 
   # Show full error reports and disable caching.
-  config.consider_all_requests_local       = true
+  config.consider_all_requests_local = true
   config.action_controller.perform_caching = false
-  config.action_controller.default_url_options = { host: Rails.configuration.app.domain }
+  config.action_controller.default_url_options = {host: Rails.configuration.app.domain}
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = true
@@ -41,10 +41,10 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
   config.action_mailer.perform_deliveries = true
   config.action_mailer.delivery_method = :letter_opener
-  config.action_mailer.deliver_later_queue_name = 'mailers'
-  config.action_mailer.default_url_options = { host: Rails.configuration.app.domain, trailing_slash: true }
+  config.action_mailer.deliver_later_queue_name = "mailers"
+  config.action_mailer.default_url_options = {host: Rails.configuration.app.domain, trailing_slash: true}
 
-  config.action_cable.mount_path = '/cable'
+  config.action_cable.mount_path = "/cable"
   config.action_cable.allowed_request_origins = [%r{http(s?)://(.*)#{Rails.configuration.app.domain}}]
 
   config.after_initialize do

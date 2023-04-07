@@ -14,14 +14,14 @@ class Expense < ApplicationRecord
     BUSINESS_TYPES.include?(type)
   end.freeze
 
-  enum interval: { once: 0, weekly: 1, monthly: 2, quarterly: 3, yearly: 4 }
+  enum interval: {once: 0, weekly: 1, monthly: 2, quarterly: 3, yearly: 4}
 
   has_one_attached :receipt
 
-  validates :receipt, content_type: ['application/pdf', 'image/jpeg', 'image/png']
+  validates :receipt, content_type: ["application/pdf", "image/jpeg", "image/png"]
 
   validates :value, :description, :expense_type, :seller, :private_use_percent, :interval, presence: true
-  validates :afa_type, presence: true, if: ->(expense) { expense.expense_type == 'afa' }
+  validates :afa_type, presence: true, if: ->(expense) { expense.expense_type == "afa" }
 
   validates :date, presence: true, if: ->(expense) { expense.once? }
   validates :started_at, presence: true, unless: ->(expense) { expense.once? }
@@ -46,10 +46,10 @@ class Expense < ApplicationRecord
   end
 
   def self.year(year)
-    where(interval: :once).where('extract(year from date) = ?', year)
+    where(interval: :once).where("extract(year from date) = ?", year)
       .or(
         Expense.where.not(interval: :once)
-          .where('extract(year from started_at) <= :year AND (ended_at IS NULL OR extract(year from ended_at) >= :year)', year: year)
+          .where("extract(year from started_at) <= :year AND (ended_at IS NULL OR extract(year from ended_at) >= :year)", year: year)
       )
   end
 
@@ -58,7 +58,7 @@ class Expense < ApplicationRecord
       .or(
         Expense.where.not(interval: :once)
           .where(
-            'started_at <= :end_date AND (ended_at IS NULL OR ended_at >= :start_date)',
+            "started_at <= :end_date AND (ended_at IS NULL OR ended_at >= :start_date)",
             start_date: start_date,
             end_date: end_date
           )
@@ -66,11 +66,11 @@ class Expense < ApplicationRecord
   end
 
   def self.without_insurances
-    where.not(expense_type: 'insurances')
+    where.not(expense_type: "insurances")
   end
 
   def self.without_afa
-    where.not(expense_type: 'afa')
+    where.not(expense_type: "afa")
   end
 
   def self.filter_result(filter_params)
@@ -117,7 +117,7 @@ class Expense < ApplicationRecord
   end
 
   def ended_at_is_after_started_at
-    errors.add(:ended_at, 'cannot be before the start date') if ended_at.present? && ended_at < started_at
+    errors.add(:ended_at, "cannot be before the start date") if ended_at.present? && ended_at < started_at
   end
 
   def dates_for_interval
@@ -138,14 +138,14 @@ class Expense < ApplicationRecord
 
   def timerange_for_interval(index = 1)
     case interval
-    when 'weekly'
-      { weeks: index }
-    when 'monthly'
-      { months: index }
-    when 'quarterly'
-      { months: index * 3 }
-    when 'yearly'
-      { years: index }
+    when "weekly"
+      {weeks: index}
+    when "monthly"
+      {months: index}
+    when "quarterly"
+      {months: index * 3}
+    when "yearly"
+      {years: index}
     end
   end
 
@@ -167,9 +167,9 @@ class Expense < ApplicationRecord
 
   def usable_value(year = Time.zone.now.year)
     case expense_type
-    when 'afa'
+    when "afa"
       afa_value(year)
-    when 'home_office'
+    when "home_office"
       home_office_value
     else
       deductible_value
@@ -183,7 +183,7 @@ class Expense < ApplicationRecord
   end
 
   def vat_value
-    if expense_type == 'afa'
+    if expense_type == "afa"
       value * vat_percent / 100
     else
       usable_value * vat_percent / 100
@@ -206,7 +206,7 @@ class Expense < ApplicationRecord
       afa_type_id: afa_type_id,
       interval: interval,
       started_at: started_at,
-      ended_at: ended_at,
+      ended_at: ended_at
     }
   end
 end

@@ -1,0 +1,3 @@
+web: ./bin/rails s
+worker: ./bin/sidekiq -C config/sidekiq.yml -v
+docker-compose: docker-compose -f docker-compose.minimal.yml up

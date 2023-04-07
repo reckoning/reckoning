@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 # rubocop:disable Style/ClassAndModuleChildren
 class ActionController::TestRequest
@@ -25,37 +25,37 @@ class NavHelperTest < ActionView::TestCase
     @logged_in = false
   end
 
-  describe 'active_nav?' do
-    test 'should return active class for active nav element' do
-      @active_nav = 'foo'
-      assert_equal 'active', active_nav?('foo')
+  describe "active_nav?" do
+    test "should return active class for active nav element" do
+      @active_nav = "foo"
+      assert_equal "active", active_nav?("foo")
 
-      @active_nav = 'foo'
-      assert_nil active_nav?('bar')
+      @active_nav = "foo"
+      assert_nil active_nav?("bar")
 
-      @active_nav = 'foo'
-      assert_equal 'active', active_nav?(%w[bar foo])
+      @active_nav = "foo"
+      assert_equal "active", active_nav?(%w[bar foo])
     end
   end
 
-  describe 'hide_nav?' do
-    test 'should return hide class for active nav element' do
-      @active_nav = 'foo'
-      assert_equal 'hide', hide_nav?('foo')
+  describe "hide_nav?" do
+    test "should return hide class for active nav element" do
+      @active_nav = "foo"
+      assert_equal "hide", hide_nav?("foo")
 
-      @active_nav = 'foo'
-      assert_nil hide_nav?('bar')
+      @active_nav = "foo"
+      assert_nil hide_nav?("bar")
     end
   end
 
-  describe 'back_path' do
-    test 'should return fallback if current request.referer is blank' do
-      assert_equal 'foo', back_path('foo')
+  describe "back_path" do
+    test "should return fallback if current request.referer is blank" do
+      assert_equal "foo", back_path("foo")
     end
 
-    test 'returns :back if current request.referer is present' do
+    test "returns :back if current request.referer is present" do
       @request.referer = true
-      assert_equal :back, back_path('foo')
+      assert_equal :back, back_path("foo")
     end
   end
 
