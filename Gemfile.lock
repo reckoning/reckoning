@@ -507,6 +507,7 @@ GEM
     websocket-extensions (0.1.5)
     wicked_pdf (2.6.3)
       activesupport
+    wkhtmltopdf-binary (0.12.6.6)
     workflow (1.2.0)
     zeitwerk (2.6.7)
 
@@ -602,6 +603,7 @@ DEPENDENCIES
   web-console
   web_translate_it
   wicked_pdf
+  wkhtmltopdf-binary
   workflow (~> 1.2.0)
 
 RUBY VERSION
