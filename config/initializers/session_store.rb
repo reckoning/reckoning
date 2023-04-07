@@ -8,7 +8,7 @@ session_store_options = {
   domain: Rails.configuration.app.cookie_domain,
   secure: Rails.env.production?,
   expire_after: expire_after,
-  same_site: :lax,
+  same_site: :lax
 }
 
 Reckoning::Application.config.session_store :redis_store, **session_store_options

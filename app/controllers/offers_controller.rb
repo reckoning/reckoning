@@ -28,7 +28,7 @@ class OffersController < ApplicationController
       end
       unless Rails.env.production?
         format.html do
-          render 'pdf', layout: 'pdf', locals: { resource: offer }
+          render "pdf", layout: "pdf", locals: {resource: offer}
         end
       end
     end
@@ -37,10 +37,10 @@ class OffersController < ApplicationController
   def new
     authorize! :create, Offer
     @offer ||= if project
-                 project.offers.new
-               else
-                 current_account.offers.new
-               end
+      project.offers.new
+    else
+      current_account.offers.new
+    end
     offer.positions << OfferPosition.new
   end
 
@@ -52,20 +52,20 @@ class OffersController < ApplicationController
     @offer = current_account.offers.new(offer_params)
     authorize! :create, offer
     if offer.save
-      redirect_to offers_path, flash: { success: resource_message(:offer, :create, :success) }
+      redirect_to offers_path, flash: {success: resource_message(:offer, :create, :success)}
     else
       flash.now[:alert] = resource_message(:offer, :create, :failure)
-      render 'new'
+      render "new"
     end
   end
 
   def update
     authorize! :update, offer
     if offer.update(offer_params)
-      redirect_to offers_path, flash: { success: resource_message(:offer, :update, :success) }
+      redirect_to offers_path, flash: {success: resource_message(:offer, :update, :success)}
     else
       flash.now[:alert] = resource_message(:offer, :update, :failure)
-      render 'edit'
+      render "edit"
     end
   end
 
@@ -86,19 +86,19 @@ class OffersController < ApplicationController
 
   private def sort_column
     @sort_column ||= if (Offer.column_names + %w[customers.name]).include?(params[:sort])
-                       params[:sort]
-                     else
-                       'ref'
-                     end
+      params[:sort]
+    else
+      "ref"
+    end
   end
   helper_method :sort_column
 
   private def set_active_nav
-    @active_nav = 'offers'
+    @active_nav = "offers"
   end
 
   private def projects
-    @projects ||= current_account.projects.includes(:customer).active.order('name ASC')
+    @projects ||= current_account.projects.includes(:customer).active.order("name ASC")
   end
   helper_method :projects
 
@@ -130,6 +130,6 @@ class OffersController < ApplicationController
   private def check_dependencies
     return if current_account.address.present?
 
-    redirect_to "#{edit_user_registration_path}#address", alert: I18n.t(:'messages.missing_address')
+    redirect_to "#{edit_user_registration_path}#address", alert: I18n.t(:"messages.missing_address")
   end
 end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AfaImporter
-  AFA_CSV_URL = 'https://www.bundesfinanzministerium.de/Datenportal/Daten/offene-daten/steuern-zoelle/afa-tabellen/datensaetze/AfA-Tabelle_allgemein-verwendbare-Anlagengueter_alphabetisch_csv.csv?__blob=publicationFile&v=3'
+  AFA_CSV_URL = "https://www.bundesfinanzministerium.de/Datenportal/Daten/offene-daten/steuern-zoelle/afa-tabellen/datensaetze/AfA-Tabelle_allgemein-verwendbare-Anlagengueter_alphabetisch_csv.csv?__blob=publicationFile&v=3"
 
   def run
     download_csv unless File.exist?(csv_file)
@@ -11,7 +11,7 @@ class AfaImporter
       return
     end
 
-    data = CSV.read(csv_file, col_sep: ';')
+    data = CSV.read(csv_file, col_sep: ";")
       .drop(3)
       .map do |row|
         {
@@ -42,12 +42,12 @@ class AfaImporter
 
     return unless response.success?
 
-    body = response.body.force_encoding('ISO-8859-1')
+    body = response.body.force_encoding("ISO-8859-1")
 
     File.write(csv_file, body)
   end
 
   private def csv_file
-    Rails.root.join('tmp/afa.csv')
+    Rails.root.join("tmp/afa.csv")
   end
 end

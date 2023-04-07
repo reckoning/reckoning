@@ -16,7 +16,7 @@ module Api
 
         if resource.valid_password?(login_params[:password]) && validate_otp(resource)
           sign_in(:user, resource, store: false)
-          render json: { auth_token: JsonWebToken.encode(new_auth_token(resource.id).to_jwt_payload) }
+          render json: {auth_token: JsonWebToken.encode(new_auth_token(resource.id).to_jwt_payload)}
           return
         end
         invalid_login_attempt
@@ -25,7 +25,7 @@ module Api
       def destroy
         auth_token = AuthToken.find_by(user_id: current_user.id, token: jwt_token[:token])
         auth_token&.destroy
-        render json: { code: 'sessions.destroy', message: I18n.t('devise.sessions.signed_out') }
+        render json: {code: "sessions.destroy", message: I18n.t("devise.sessions.signed_out")}
       end
 
       private def new_auth_token(user_id)
@@ -56,7 +56,7 @@ module Api
       end
 
       private def invalid_login_attempt
-        render json: { code: 'session.create', message: I18n.t('devise.failure.invalid') }, status: :bad_request
+        render json: {code: "session.create", message: I18n.t("devise.failure.invalid")}, status: :bad_request
       end
     end
   end

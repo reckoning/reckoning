@@ -32,7 +32,7 @@ de:
         budget_on_dashboard: "Auf Dashboard anzeigen?"
         start_date: "Start"
         end_date: "Ende"
-        round_up: "Zeiten aufrunden?"
+        invoice_addition: "Rechnungszusatz"
       user:
         name: "Name"
         email: "E-Mail-Adresse"

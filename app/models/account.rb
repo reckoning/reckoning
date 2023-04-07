@@ -21,7 +21,7 @@ class Account < ApplicationRecord
   # rubocop:disable Rails/UniqueValidationWithoutIndex empty subdomain prevents a unique index
   validates :subdomain, uniqueness: true, allow_blank: true
   # rubocop:enable Rails/UniqueValidationWithoutIndex
-  validates :subdomain, exclusion: { in: %w[www app admin api backend reckoning] }
+  validates :subdomain, exclusion: {in: %w[www app admin api backend reckoning]}
   validates_associated :users
   validates :stripe_token, :stripe_email, presence: true, on: :create, if: :on_paid_plan?
 
@@ -31,9 +31,9 @@ class Account < ApplicationRecord
   before_create :set_trail_end_date
 
   def uninvoiced_amount
-    projects.active.where('rate IS NOT NULL AND rate > 0').sum do |project|
+    projects.active.where("rate IS NOT NULL AND rate > 0").sum do |project|
       project.timer_values_uninvoiced * project.rate
-    end + invoices.includes(:customer, :project).order('date DESC').created.sum(:value)
+    end + invoices.includes(:customer, :project).order("date DESC").created.sum(:value)
   end
 
   def on_paid_plan?
@@ -56,7 +56,7 @@ class Account < ApplicationRecord
   def provision_value
     return if provision.blank?
 
-    current_invoices = invoices.includes(:customer, :project).order('date DESC').paid_in_year(Time.zone.now.year)
+    current_invoices = invoices.includes(:customer, :project).order("date DESC").paid_in_year(Time.zone.now.year)
 
     current_expenses = Expense.normalized(
       expenses.without_insurances.without_afa.year(Time.zone.now.year).to_a,
@@ -75,7 +75,7 @@ class Account < ApplicationRecord
   def last_provision_value
     return if provision.blank?
 
-    last_invoices = invoices.includes(:customer, :project).order('date DESC').paid_in_year(Time.zone.now.year - 1)
+    last_invoices = invoices.includes(:customer, :project).order("date DESC").paid_in_year(Time.zone.now.year - 1)
     last_expenses = expenses.without_insurances.year(Time.zone.now.year - 1).to_a.sum do |expense|
       expense.usable_value(Time.zone.now.year - 1)
     end

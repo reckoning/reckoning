@@ -9,10 +9,10 @@ class Offer < ApplicationRecord
   belongs_to :account
   belongs_to :customer
   belongs_to :project
-  has_many :positions, class_name: 'OfferPosition', foreign_key: :invoicable_id, dependent: :destroy, inverse_of: :invoicable
+  has_many :positions, class_name: "OfferPosition", foreign_key: :invoicable_id, dependent: :destroy, inverse_of: :invoicable
 
   validates :date, presence: true
-  validates :ref, uniqueness: { scope: :account_id }
+  validates :ref, uniqueness: {scope: :account_id}
 
   accepts_nested_attributes_for :positions, allow_destroy: true
 
@@ -47,7 +47,7 @@ class Offer < ApplicationRecord
   end
 
   def self.year(year)
-    where('date <= ? AND date >= ?', "#{year}-12-31", "#{year}-01-01")
+    where("date <= ? AND date >= ?", "#{year}-12-31", "#{year}-01-01")
   end
 
   def self.filter_result(filter_params)
@@ -68,13 +68,13 @@ class Offer < ApplicationRecord
   end
 
   def ref_number
-    format '%05d', ref
+    format "%05d", ref
   end
 
   def title
     output = []
     output << tag.strong(customer.name)
-    output << ' - '
+    output << " - "
     output << project.name
     safe_join(output)
   end
@@ -111,7 +111,7 @@ class Offer < ApplicationRecord
 
   def inline_pdf
     WickedPdf.new.pdf_from_string(
-      ApplicationController.new.render_to_string('offers/pdf', inline_pdf_options),
+      ApplicationController.new.render_to_string("offers/pdf", inline_pdf_options),
       whicked_pdf_options
     )
   end
@@ -129,11 +129,11 @@ class Offer < ApplicationRecord
   end
 
   private def set_ref
-    last_offer = Offer.where(account_id: account_id).order('ref DESC').first
+    last_offer = Offer.where(account_id: account_id).order("ref DESC").first
     self.ref = if last_offer.present?
-                 last_offer.ref + 1
-               else
-                 1
-               end
+      last_offer.ref + 1
+    else
+      1
+    end
   end
 end

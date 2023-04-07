@@ -12,12 +12,12 @@ class Position < ApplicationRecord
     return if hours.blank? || hours.zero?
 
     self.value = if rate.present?
-                   hours * rate
-                 elsif invoicable.rate.present?
-                   hours * invoicable.rate
-                 else
-                   hours * invoicable.project.rate
-                 end
+      hours * rate
+    elsif invoicable.rate.present?
+      hours * invoicable.rate
+    else
+      hours * invoicable.project.rate
+    end
   end
 
   def set_invoicable_value

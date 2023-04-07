@@ -15,7 +15,7 @@ Reckoning::Application.configure do
   config.eager_load = true
 
   # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
+  config.consider_all_requests_local = false
   config.action_controller.perform_caching = true
 
   # Enable Rack::Cache to put a simple HTTP cache in front of your application
@@ -78,30 +78,30 @@ Reckoning::Application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
-  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
-  if ENV['RAILS_LOG_TO_STDOUT'].present?
-    logger           = ActiveSupport::Logger.new($stdout)
+  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
+  if ENV["RAILS_LOG_TO_STDOUT"].present?
+    logger = ActiveSupport::Logger.new($stdout)
     logger.formatter = config.log_formatter
     config.logger = ActiveSupport::TaggedLogging.new(logger)
   end
 
-  config.action_controller.default_url_options = { host: Rails.configuration.app.domain }
+  config.action_controller.default_url_options = {host: Rails.configuration.app.domain}
 
-  config.action_cable.mount_path = '/cable'
+  config.action_cable.mount_path = "/cable"
   config.action_cable.allowed_request_origins = [
     %r{http(s?)://(.*)#{Regexp.escape(Rails.configuration.app.domain)}}
   ]
 
-  config.action_mailer.deliver_later_queue_name = 'mailers'
+  config.action_mailer.deliver_later_queue_name = "mailers"
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.default_url_options = { host: Rails.configuration.app.domain }
+  config.action_mailer.default_url_options = {host: Rails.configuration.app.domain}
   config.action_mailer.smtp_settings = {
     address: Rails.application.credentials.mailer_host,
     port: Rails.application.credentials.mailer_port,
     enable_starttls_auto: true,
     user_name: Rails.application.credentials.mailer_user,
     password: Rails.application.credentials.mailer_password,
-    authentication: 'login',
+    authentication: "login",
     domain: Rails.configuration.app.domain
   }
 

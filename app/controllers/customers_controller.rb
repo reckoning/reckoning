@@ -13,7 +13,7 @@ class CustomersController < ApplicationController
   def update
     authorize! :update, customer
     if customer.update(customer_params)
-      redirect_to "#{edit_customer_path(customer)}#{hash}", flash: { success: resource_message(:customer, :update, :success) }
+      redirect_to "#{edit_customer_path(customer)}#{hash}", flash: {success: resource_message(:customer, :update, :success)}
     else
       flash.now[:alert] = resource_message(:customer, :update, :failure)
       render "edit#{hash}"
@@ -21,7 +21,7 @@ class CustomersController < ApplicationController
   end
 
   private def set_active_nav
-    @active_nav = 'projects'
+    @active_nav = "projects"
   end
 
   private def customer_params
@@ -37,6 +37,6 @@ class CustomersController < ApplicationController
   end
 
   private def hash
-    params.fetch(:hash, '')
+    params.fetch(:hash, "")
   end
 end

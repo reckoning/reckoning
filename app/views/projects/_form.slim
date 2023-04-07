@@ -63,6 +63,11 @@
             option value=value selected=(project.round_up.to_f == value)
               = key
         = form_errors project, :round_up
+  .row
+    .col-xs-6.form-group class=form_error?(project, :invoice_addition)
+      = form.label :invoice_addition
+      = form.text_area :invoice_addition, class: 'form-control'
+      = form_errors project, :invoice_addition
 
   fieldset
     legend Aufgaben:

@@ -6,7 +6,7 @@
 # For further information see the following documentation
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
 
-require 'uri'
+require "uri"
 
 Rails.application.config.content_security_policy do |policy|
   main_url = "http://#{Rails.configuration.app.domain}"
@@ -17,43 +17,43 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   connect_src = [
-    :self, :data, main_url, cable_url, 'https://sentry.io', 'https://fonts.googleapis.com',
-    'https://fonts.gstatic.com', 'https://pro.fontawesome.com', 'https://kit-pro.fontawesome.com',
-    'https://kit-free.fontawesome.com', 'https://ka-p.fontawesome.com', 'https://www.gstatic.com'
+    :self, :data, main_url, cable_url, "https://sentry.io", "https://fonts.googleapis.com",
+    "https://fonts.gstatic.com", "https://pro.fontawesome.com", "https://kit-pro.fontawesome.com",
+    "https://kit-free.fontawesome.com", "https://ka-p.fontawesome.com", "https://www.gstatic.com"
   ]
 
   if Rails.env.development?
     connect_src.concat [
-      'ws://localhost:3035', 'http://localhost:3035',
-      'ws://reckoning.test:3035', 'http://reckoning.test:3035', 'ws://reckoning.test:3036'
+      "ws://localhost:3035", "http://localhost:3035",
+      "ws://reckoning.test:3035", "http://reckoning.test:3035", "ws://reckoning.test:3036"
       # "ws://#{ViteRuby.config.host_with_port}"
     ]
   end
 
   script_src = [
-    :self, :unsafe_inline, :unsafe_eval, :blob, 'https://kit.fontawesome.com',
-    'https://kit-pro.fontawesome.com', 'https://kit-free.fontawesome.com',
-    'https://www.gstatic.com'
+    :self, :unsafe_inline, :unsafe_eval, :blob, "https://kit.fontawesome.com",
+    "https://kit-pro.fontawesome.com", "https://kit-free.fontawesome.com",
+    "https://www.gstatic.com"
   ]
   # script_src << "http://#{ViteRuby.config.host_with_port}" if Rails.env.development?
 
   worker_src = %i[self blob]
 
   style_src = [
-    :self, :unsafe_inline, 'https://fonts.googleapis.com', 'https://pro.fontawesome.com',
-    'https://kit-pro.fontawesome.com', 'https://kit-free.fontawesome.com',
-    'https://ka-p.fontawesome.com'
+    :self, :unsafe_inline, "https://fonts.googleapis.com", "https://pro.fontawesome.com",
+    "https://kit-pro.fontawesome.com", "https://kit-free.fontawesome.com",
+    "https://ka-p.fontawesome.com"
   ]
 
   img_src = [
     :self, :data, :blob, Rails.application.credentials.carrierwave_cloud_cdn_endpoint,
-    'https://img.buymeacoffee.com', 'https://www.gravatar.com'
+    "https://img.buymeacoffee.com", "https://www.gravatar.com"
   ].compact
 
   font_src = [
-    :self, 'https://fonts.gstatic.com', 'https://pro.fontawesome.com',
-    'https://kit-pro.fontawesome.com', 'https://kit-free.fontawesome.com',
-    'https://ka-p.fontawesome.com'
+    :self, "https://fonts.gstatic.com", "https://pro.fontawesome.com",
+    "https://kit-pro.fontawesome.com", "https://kit-free.fontawesome.com",
+    "https://ka-p.fontawesome.com"
   ]
 
   frame_src = %i[self blob]

@@ -40,7 +40,7 @@ class ExpenseImport
     header = spreadsheet.row(1)
     (2..spreadsheet.last_row).map do |i|
       row = [header, spreadsheet.row(i)].transpose.to_h
-      expense = Expense.find_by(id: row['id'], account_id: account_id) || Expense.new(account_id: account_id)
+      expense = Expense.find_by(id: row["id"], account_id: account_id) || Expense.new(account_id: account_id)
       expense.attributes = row.to_hash.slice(*Expense.accessible_attributes)
       expense
     end
@@ -48,7 +48,7 @@ class ExpenseImport
 
   def open_spreadsheet
     case File.extname(file.original_filename)
-    when '.csv' then Roo::CSV.new(file.path)
+    when ".csv" then Roo::CSV.new(file.path)
     else raise "Unknown file type: #{file.original_filename}"
     end
   end

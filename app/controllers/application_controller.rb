@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
   end
 
   private def set_default_nav
-    @active_nav = 'home'
+    @active_nav = "home"
   end
 
   private def after_sign_out_path_for(_resource_or_scope)
@@ -34,12 +34,12 @@ class ApplicationController < ActionController::Base
   end
 
   private def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : 'desc'
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
   end
   helper_method :sort_direction
 
   private def backend?
-    self.class.to_s.split('::').first == 'Backend'
+    self.class.to_s.split("::").first == "Backend"
   end
   helper_method :backend?
 
