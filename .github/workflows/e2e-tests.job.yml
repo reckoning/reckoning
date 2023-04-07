@@ -14,6 +14,7 @@ jobs:
       DATABASE_USER: root
       TEST_SEEDS: 1
       RAILS_ENV: ci
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
       VITE_RUBY_MODE: production
       ON_SUBDOMAIN: false
       RAILS_SERVE_STATIC_FILES: 1
