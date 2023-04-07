@@ -92,7 +92,6 @@ gem "redis-actionpack"
 
 # pdf rendering
 gem "wicked_pdf"
-gem 'wkhtmltopdf-binary'
 
 gem "active_storage_validations"
 gem "aws-sdk-s3", require: false
