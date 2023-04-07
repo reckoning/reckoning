@@ -1,0 +1,29 @@
+name: Check
+
+on:
+  schedule:
+    - cron: "0 20 * * *"
+  workflow_dispatch:
+
+jobs:
+  js-setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/workflows/js-setup-action
+
+  js-audit:
+    needs: js-setup
+    uses: ./.github/workflows/js-audit.job.yml
+
+  ruby-setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+  ruby-audit:
+    needs: ruby-setup
+    uses: ./.github/workflows/ruby-audit.job.yml
