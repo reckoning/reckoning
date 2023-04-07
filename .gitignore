@@ -4,6 +4,8 @@
 # logfiles and tempfiles.
 log/*
 tmp/*
+dumps
+data/*
 
 pids/*
 
@@ -11,8 +13,6 @@ pids/*
 .env
 .powenv
 .byebug_history
-
-latest.dump
 
 public/uploads
 
@@ -43,3 +43,5 @@ reckoning.io.key
 /config/master.key
 
 /config/credentials/production.key
+
+

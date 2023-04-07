@@ -113,6 +113,9 @@ group :development do
   gem 'rubocop-rails', require: false
   gem 'rubocop-rake', require: false
 
+  gem "dotenv"
+  gem "dotenv-rails", require: "dotenv/rails-now"
+
   gem 'spring'
   gem 'spring-watcher-listen'
   gem 'web-console'

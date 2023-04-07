@@ -98,7 +98,7 @@ class ProjectsController < ApplicationController
 
   private def project_params
     @project_params ||= params.require(:project).permit(
-      :customer_id, :name, :rate, :budget, :budget_hours, :round_up,
+      :customer_id, :name, :rate, :budget, :budget_hours, :round_up, :invoice_addition,
       :budget_on_dashboard, :start_date, :end_date, tasks_attributes: %i[
         id name project_id billable _destroy
       ]

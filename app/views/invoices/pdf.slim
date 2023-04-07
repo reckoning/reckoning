@@ -43,6 +43,8 @@
         = I18n.t(:"pdf.invoice.headline")
         '
         = resource.ref_number
+      - if resource.project.invoice_addition.present?
+        p.invoice-addition= resource.project.invoice_addition
 
       .clear
 

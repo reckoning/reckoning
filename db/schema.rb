@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_24_111313) do
+ActiveRecord::Schema.define(version: 2023_04_07_072353) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -226,6 +226,7 @@ ActiveRecord::Schema.define(version: 2022_09_24_111313) do
     t.decimal "round_up", default: "10.0", null: false
     t.datetime "start_date"
     t.datetime "end_date"
+    t.text "invoice_addition"
   end
 
   create_table "tasks", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
