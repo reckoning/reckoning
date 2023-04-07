@@ -13,7 +13,7 @@ class InvoiceMailerTest < ActionMailer::TestCase
 
   describe "#customer" do
     it "sends email to default from" do
-      invoice.account.contact_information['public_email'] = "user@reckoning.me"
+      invoice.account.contact_information["public_email"] = "user@reckoning.me"
       invoice.account.save
 
       mail = InvoiceMailer.customer(invoice).deliver_now
@@ -27,7 +27,7 @@ class InvoiceMailerTest < ActionMailer::TestCase
     end
 
     it "sends email to users email if public_email is empty" do
-      invoice.account.contact_information['public_email'] = nil
+      invoice.account.contact_information["public_email"] = nil
       invoice.account.save
 
       mail = InvoiceMailer.customer(invoice).deliver_now
