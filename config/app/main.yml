@@ -2,7 +2,7 @@ shared:
   name: Reckoning
   copyright_owner: <%= ENV["COPYRIGHT_OWNER"] || 'Marten Klitzke' %>
 
-  domain: <%= ENV["DOMAIN"] %>
+  domain: <%= ENV["DOMAIN"] || "localhost:#{ENV["PORT"] || 8240}" %>
   url: <%= ENV["APP_URL"] %>
 
   s3_space: reckoning
