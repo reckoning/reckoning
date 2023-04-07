@@ -28,17 +28,15 @@ class InvoiceMailer < ApplicationMailer
     attachments["#{invoice.invoice_file}.pdf"] = invoice.inline_pdf
     attachments["#{invoice.timesheet_file}.pdf"] = invoice.inline_timesheet_pdf if invoice.timers.present?
 
+    cc = invoice.account.contact_information['public_email']
+    bcc = invoice.account.user.email if cc.blank?
+
     mail(
-      from: from,
       to: to,
+      cc: cc,
+      bcc: bcc,
       subject: I18n.t(:"mailer.invoice.customer.subject", name: "#{invoice.account.name}: ", date: date),
       template_name: "customer"
     )
-  end
-
-  private def from
-    @from ||= invoice.customer.default_from if invoice.customer.default_from.present?
-    @from ||= invoice.account.default_from if invoice.account.default_from.present?
-    @from ||= Rails.configuration.app.mailer_default_from
   end
 end
