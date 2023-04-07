@@ -63,7 +63,7 @@ jobs:
           name: Check Audit DB
           command: bundle exec bundle-audit check
 
-  rubocop:
+  linting:
     <<: *defaults
     steps:
       - attach_workspace:
@@ -71,7 +71,7 @@ jobs:
       - run: bundle --path vendor/bundle
       - run:
           name: rubocoptering
-          command: bundle exec rubocop --format progress
+          command: bundle exec standardrb --format progress
 
   unit_tests:
     <<: *defaults

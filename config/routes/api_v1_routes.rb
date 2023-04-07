@@ -27,6 +27,6 @@ v1_api_routes = lambda do
   end
 end
 
-scope :v1, defaults: { format: :json }, as: :v1 do
+scope :v1, defaults: {format: :json}, as: :v1 do
   scope module: :v1, &v1_api_routes
 end

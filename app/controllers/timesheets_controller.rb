@@ -8,6 +8,6 @@ class TimesheetsController < ApplicationController
   end
 
   private def set_active_nav
-    @active_nav = 'timesheet'
+    @active_nav = "timesheet"
   end
 end

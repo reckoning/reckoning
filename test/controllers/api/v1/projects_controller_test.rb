@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
     class ProjectsControllerTest < ActionDispatch::IntegrationTest
       let(:project) { projects :narendra3 }
 
-      describe 'unauthorized' do
-        it 'Unauthrized user cant view projects index' do
-          get '/api/v1/projects'
+      describe "unauthorized" do
+        it "Unauthrized user cant view projects index" do
+          get "/api/v1/projects"
 
           assert_response :unauthorized
           json = JSON.parse response.body
-          assert_equal 'unauthorized', json['code']
+          assert_equal "unauthorized", json["code"]
         end
 
-        it 'Unauthrized user cant destroy project' do
+        it "Unauthrized user cant destroy project" do
           delete "/api/v1/projects/#{project.id}"
 
           assert_response :unauthorized
@@ -25,7 +25,7 @@ module Api
         end
       end
 
-      describe 'happy path' do
+      describe "happy path" do
         let(:will) { users :will }
         let(:outpost6) { projects :outpost6 }
 
@@ -33,13 +33,13 @@ module Api
           sign_in will
         end
 
-        it 'renders a projects list' do
-          get '/api/v1/projects'
+        it "renders a projects list" do
+          get "/api/v1/projects"
 
           assert_response :ok
         end
 
-        it 'destroys a project' do
+        it "destroys a project" do
           delete "/api/v1/projects/#{outpost6.id}"
 
           assert_response :ok

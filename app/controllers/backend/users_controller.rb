@@ -15,16 +15,18 @@ module Backend
     end
 
     # get: /backend/users/new
-    def new; end
+    def new
+    end
 
     # post: /backend/users
-    def edit; end
+    def edit
+    end
 
     def send_welcome
       if user.send_confirmation_instructions
-        redirect_to backend_users_path, notice: I18n.t(:'messages.user.send_welcome.success')
+        redirect_to backend_users_path, notice: I18n.t(:"messages.user.send_welcome.success")
       else
-        redirect_to backend_users_path, notice: I18n.t(:'messages.user.send_welcome.failure')
+        redirect_to backend_users_path, notice: I18n.t(:"messages.user.send_welcome.failure")
       end
     end
 
@@ -41,7 +43,7 @@ module Backend
       if user.save
         redirect_to backend_users_path, notice: resource_message(:user, :create, :success)
       else
-        render 'new', error: resource_message(:user, :create, :failure)
+        render "new", error: resource_message(:user, :create, :failure)
       end
     end
 
@@ -50,7 +52,7 @@ module Backend
       if user.update(user_params)
         redirect_to backend_users_path, notice: resource_message(:user, :update, :success)
       else
-        render 'edit', error: resource_message(:user, :update, :failure)
+        render "edit", error: resource_message(:user, :update, :failure)
       end
     end
 
@@ -63,7 +65,7 @@ module Backend
     end
 
     def sort_column
-      User.column_names.include?(params[:sort]) ? params[:sort] : 'id'
+      User.column_names.include?(params[:sort]) ? params[:sort] : "id"
     end
     helper_method :sort_column
 
@@ -78,7 +80,7 @@ module Backend
     helper_method :user
 
     private def set_active_nav
-      @active_nav = 'backend_users'
+      @active_nav = "backend_users"
     end
   end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'dropbox_sdk'
+require "dropbox_sdk"
 
 class DropboxController < ApplicationController
   DROPBOX_EXCEPTIONS = [
@@ -13,7 +13,7 @@ class DropboxController < ApplicationController
   ].freeze
 
   def show
-    @active_nav = 'account'
+    @active_nav = "account"
     authorize! :connect, :dropbox
   end
 
@@ -32,9 +32,9 @@ class DropboxController < ApplicationController
       current_account.dropbox_user = user_id
       current_account.save
 
-      redirect_to "#{edit_account_path}#{hash}", flash: { success: I18n.t(:'messages.dropbox.activate.success') }
+      redirect_to "#{edit_account_path}#{hash}", flash: {success: I18n.t(:"messages.dropbox.activate.success")}
     rescue *DROPBOX_EXCEPTIONS
-      redirect_to "#{edit_account_path}#{hash}", alert: I18n.t(:'messages.dropbox.activate.failure')
+      redirect_to "#{edit_account_path}#{hash}", alert: I18n.t(:"messages.dropbox.activate.failure")
     end
   end
 
@@ -48,14 +48,14 @@ class DropboxController < ApplicationController
       current_account.dropbox_user = nil
       current_account.save
 
-      redirect_to "#{edit_account_path}#{hash}", flash: { success: I18n.t(:'messages.dropbox.deactivate.success') }
-    rescue StandardError
-      redirect_to "#{edit_account_path}#{hash}", alert: I18n.t(:'messages.dropbox.deactivate.failure')
+      redirect_to "#{edit_account_path}#{hash}", flash: {success: I18n.t(:"messages.dropbox.deactivate.success")}
+    rescue
+      redirect_to "#{edit_account_path}#{hash}", alert: I18n.t(:"messages.dropbox.deactivate.failure")
     end
   end
 
   private def hash
-    params.fetch(:hash, '')
+    params.fetch(:hash, "")
   end
 
   private def flow

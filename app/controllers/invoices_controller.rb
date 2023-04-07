@@ -25,9 +25,9 @@ class InvoicesController < ApplicationController
     authorize! :archive, invoice
     if current_account.dropbox?
       InvoiceDropboxWorker.perform_async invoice.id
-      redirect_to invoice_path(invoice), flash: { success: I18n.t(:'messages.invoice.archive.success') }
+      redirect_to invoice_path(invoice), flash: {success: I18n.t(:"messages.invoice.archive.success")}
     else
-      redirect_to invoice_path(invoice), alert: I18n.t(:'messages.invoice.archive.failure')
+      redirect_to invoice_path(invoice), alert: I18n.t(:"messages.invoice.archive.failure")
     end
   end
 
@@ -35,9 +35,9 @@ class InvoicesController < ApplicationController
     authorize! :archive, invoice
     if current_account.dropbox?
       InvoiceDropboxAllWorker.perform_async current_account.id
-      redirect_to invoices_path, flash: { success: I18n.t(:'messages.invoice.archive_all.success') }
+      redirect_to invoices_path, flash: {success: I18n.t(:"messages.invoice.archive_all.success")}
     else
-      redirect_to invoices_path, alert: I18n.t(:'messages.invoice.archive_all.failure')
+      redirect_to invoices_path, alert: I18n.t(:"messages.invoice.archive_all.failure")
     end
   end
 
@@ -45,9 +45,9 @@ class InvoicesController < ApplicationController
     authorize! :send, invoice
     if invoice.send_via_mail?
       InvoiceMailerWorker.perform_async invoice.id
-      redirect_to invoice_path(invoice), flash: { success: I18n.t(:'messages.invoice.send.success') }
+      redirect_to invoice_path(invoice), flash: {success: I18n.t(:"messages.invoice.send.success")}
     else
-      redirect_to invoice_path(invoice), alert: I18n.t(:'messages.invoice.send.failure')
+      redirect_to invoice_path(invoice), alert: I18n.t(:"messages.invoice.send.failure")
     end
   end
 
@@ -57,10 +57,10 @@ class InvoicesController < ApplicationController
     @test_mail = TestMail.new(test_mail_params)
     if test_mail.valid?
       InvoiceTestMailerWorker.perform_async invoice.id, test_mail.email
-      redirect_to invoice_path(invoice), flash: { success: I18n.t(:'messages.invoice.send_test_mail.success') }
+      redirect_to invoice_path(invoice), flash: {success: I18n.t(:"messages.invoice.send_test_mail.success")}
     else
-      flash.now[:alert] = I18n.t(:'messages.invoice.send_test_mail.failure')
-      render 'show'
+      flash.now[:alert] = I18n.t(:"messages.invoice.send_test_mail.failure")
+      render "show"
     end
   end
 
@@ -74,7 +74,7 @@ class InvoicesController < ApplicationController
         format.html do
           @resource = invoice
           @preview = true
-          render 'pdf', layout: 'pdf'
+          render "pdf", layout: "pdf"
         end
       end
     end
@@ -90,7 +90,7 @@ class InvoicesController < ApplicationController
         format.html do
           @resource = invoice
           @preview = true
-          render 'timesheet_pdf', layout: 'pdf'
+          render "timesheet_pdf", layout: "pdf"
         end
       end
     end
@@ -99,10 +99,10 @@ class InvoicesController < ApplicationController
   def new
     authorize! :create, Invoice
     @invoice ||= if project
-                   project.invoices.new
-                 else
-                   current_account.invoices.new
-                 end
+      project.invoices.new
+    else
+      current_account.invoices.new
+    end
     invoice.positions << InvoicePosition.new
   end
 
@@ -114,20 +114,20 @@ class InvoicesController < ApplicationController
     @invoice = current_account.invoices.new(invoice_params)
     authorize! :create, invoice
     if invoice.save
-      redirect_to invoices_path, flash: { success: resource_message(:invoice, :create, :success) }
+      redirect_to invoices_path, flash: {success: resource_message(:invoice, :create, :success)}
     else
       flash.now[:alert] = resource_message(:invoice, :create, :failure)
-      render 'new'
+      render "new"
     end
   end
 
   def update
     authorize! :update, invoice
     if invoice.update(invoice_params)
-      redirect_to invoices_path, flash: { success: resource_message(:invoice, :update, :success) }
+      redirect_to invoices_path, flash: {success: resource_message(:invoice, :update, :success)}
     else
       flash.now[:alert] = resource_message(:invoice, :update, :failure)
-      render 'edit'
+      render "edit"
     end
   end
 
@@ -135,9 +135,9 @@ class InvoicesController < ApplicationController
     authorize! :charge, invoice
 
     if invoice.charge!
-      flash.now[:success] = I18n.t(:'messages.invoice.charge.success')
+      flash.now[:success] = I18n.t(:"messages.invoice.charge.success")
     else
-      flash.now[:alert] = I18n.t(:'messages.invoice.charge.failure')
+      flash.now[:alert] = I18n.t(:"messages.invoice.charge.failure")
     end
 
     respond_to do |format|
@@ -149,9 +149,9 @@ class InvoicesController < ApplicationController
   def pay
     authorize! :pay, invoice
     if invoice.pay!
-      flash.now[:success] = I18n.t(:'messages.invoice.pay.success')
+      flash.now[:success] = I18n.t(:"messages.invoice.pay.success")
     else
-      flash.now[:alert] = I18n.t(:'messages.invoice.pay.failure')
+      flash.now[:alert] = I18n.t(:"messages.invoice.pay.failure")
     end
     redirect_back(fallback_location: root_path)
   end
@@ -173,19 +173,19 @@ class InvoicesController < ApplicationController
 
   private def sort_column
     @sort_column ||= if (Invoice.column_names + %w[customers.name]).include?(params[:sort])
-                       params[:sort]
-                     else
-                       'ref'
-                     end
+      params[:sort]
+    else
+      "ref"
+    end
   end
   helper_method :sort_column
 
   private def set_active_nav
-    @active_nav = 'invoices'
+    @active_nav = "invoices"
   end
 
   private def projects
-    @projects ||= current_account.projects.includes(:customer).active.order('name ASC')
+    @projects ||= current_account.projects.includes(:customer).active.order("name ASC")
   end
   helper_method :projects
 
@@ -194,7 +194,7 @@ class InvoicesController < ApplicationController
       :customer_id, :date, :delivery_date, :payment_due_date, :ref,
       :project_id, positions_attributes: [
         :id, :description, :hours, :rate, :value,
-        :invoice_id, { timer_ids: [] }, :_destroy
+        :invoice_id, {timer_ids: []}, :_destroy
       ]
     )
   end
@@ -217,7 +217,7 @@ class InvoicesController < ApplicationController
   private def check_limit
     return unless invoice_limit_reached?
 
-    redirect_to invoices_path, alert: I18n.t(:'messages.demo_active')
+    redirect_to invoices_path, alert: I18n.t(:"messages.demo_active")
   end
 
   private def test_mail
@@ -232,6 +232,6 @@ class InvoicesController < ApplicationController
   private def check_dependencies
     return if current_account.address.present?
 
-    redirect_to "#{edit_user_registration_path}#address", alert: I18n.t(:'messages.missing_address')
+    redirect_to "#{edit_user_registration_path}#address", alert: I18n.t(:"messages.missing_address")
   end
 end

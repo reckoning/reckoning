@@ -21,7 +21,8 @@ module Backend
     end
 
     # post: /backend/accounts
-    def edit; end
+    def edit
+    end
 
     # get: /backend/accounts/:id/edit
     def create
@@ -33,7 +34,7 @@ module Backend
       if account.save
         redirect_to backend_accounts_path, notice: resource_message(:account, :create, :success)
       else
-        render 'new', error: resource_message(:account, :create, :failure)
+        render "new", error: resource_message(:account, :create, :failure)
       end
     end
 
@@ -42,7 +43,7 @@ module Backend
       if account.update(account_params)
         redirect_to backend_accounts_path, notice: resource_message(:account, :update, :success)
       else
-        render 'edit', error: resource_message(:account, :update, :failure)
+        render "edit", error: resource_message(:account, :update, :failure)
       end
     end
 
@@ -65,7 +66,7 @@ module Backend
     helper_method :account
 
     private def set_active_nav
-      @active_nav = 'backend_accounts'
+      @active_nav = "backend_accounts"
     end
   end
 end

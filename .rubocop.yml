@@ -1,115 +1,30 @@
+# We want Exclude directives from different
+# config files to get merged, not overwritten
+inherit_mode:
+  merge:
+    - Exclude
+
 require:
-  - rubocop-minitest
-  - rubocop-performance
-  - rubocop-rails
-  - rubocop-rake
-  - rubocop-ast
+  # Standard's config uses custom cops,
+  # so it must be loaded
+  - standard
 
+inherit_gem:
+  standard: config/base.yml
+  # You can also choose a Ruby-version-specific config
+  # standard: config/ruby-3.0.yml
+
+inherit_from:
+  - .rubocop_todo.yml
+  - .rubocop_strict.yml
+# Sometimes we enable metrics cops
+# (which are disabled in Standard by default)
+#
+# Metrics:
+#   Enabled: true
+
+# Global options, like Ruby version
 AllCops:
-  Exclude:
-    - 'node_modules/**/*'
-    - 'db/**/*'
-    - 'tmp/**/*'
-    - 'vendor/**/*'
-    - 'bin/**/*'
-    - 'log/**/*'
-    - 'Brewfile'
-    - 'Rakefile'
-  NewCops: enable
+  SuggestExtensions: false
+  TargetRubyVersion: 3.2
 
-Rails:
-  Enabled: true
-
-Rails/HelperInstanceVariable:
-  Enabled: false
-
-Style/Documentation:
-  Enabled: false # for now
-
-Style/HashEachMethods:
-  Enabled: true
-
-Style/HashTransformKeys:
-  Enabled: true
-
-Style/HashTransformValues:
-  Enabled: true
-
-# Style/Lambda:
-#   Enabled: false
-
-# User.all.map do |user|
-#   [user.name, user.children.map(&:names)]
-# end.flatten.map do |name|
-#   name.capitalize
-# end.join(", ")
-Style/MultilineBlockChain:
-  Enabled: false
-
-# [
-#   "foo",
-#   "bar",
-# ]
-Style/TrailingCommaInArrayLiteral:
-  Enabled: false
-
-Style/TrailingCommaInHashLiteral:
-  Enabled: false
-
-Layout/RescueEnsureAlignment:
-  Enabled: false
-
-Style/AccessModifierDeclarations:
-  EnforcedStyle: inline
-
-Layout/MultilineMethodCallIndentation:
-  EnforcedStyle: indented
-
-Layout/LineLength:
-  Enabled: false
-
-Metrics/ClassLength:
-  Enabled: false
-
-Metrics/MethodLength:
-  Max: 40
-
-Metrics/BlockLength:
-  Enabled: false
-
-Metrics/AbcSize:
-  Enabled: false
-
-Metrics/PerceivedComplexity:
-  Enabled: false
-
-Style/ParallelAssignment:
-  Enabled: false
-
-Metrics/CyclomaticComplexity:
-  Max: 10
-
-# `fail` is seldom/never seen in Ruby code.
-# https://github.com/bbatsov/ruby-style-guide/issues/233
-Style/SignalException:
-  EnforcedStyle: only_raise
-
-# Would complain about `new_record?` otherwise
-Style/TrivialAccessors:
-  ExactNameMatch: true
-
-Style/RedundantFetchBlock:
-  Enabled: false
-
-Rails/BulkChangeTable:
-  Enabled: false
-
-Rails/Delegate:
-  Exclude:
-    - lib/**/*
-
-Rails/UnknownEnv:
-  Environments:
-    - production
-    - test
-    - development

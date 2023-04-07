@@ -3,14 +3,14 @@
 module Backend
   class BaseController < ApplicationController
     before_action :verify_admin
-    layout 'backend'
+    layout "backend"
 
     skip_authorization_check
 
     def dashboard
-      @active_nav = 'backend_dashboard'
+      @active_nav = "backend_dashboard"
       @settings = Rails.application.credentials
-      @latest_users = User.limit(10).order('created_at DESC')
+      @latest_users = User.limit(10).order("created_at DESC")
       @users_count = User.count
     end
 
