@@ -1,7 +1,7 @@
 ruby:
   translateable ||= false
   current_filter = filter_params.fetch(name, nil)
-.dropdown.filter-menu.btn-group.flex
+.dropdown.btn-group.flex
   - if current_filter
     ruby:
       reset_params = filter_params.dup

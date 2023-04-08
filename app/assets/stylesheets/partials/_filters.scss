@@ -1,0 +1,43 @@
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 5px;
+  margin-bottom: 15px;
+
+  .form-group {
+    margin-bottom: 0;
+  }
+
+  .filters-form {
+    display: flex;
+    gap: 5px;
+  }
+
+  .dropdown {
+    &:last-child {
+      .dropdown-menu {
+        right: 0;
+        left: auto;
+      }
+    }
+  }
+}
+
+@media (max-width: $screen-sm-max) {
+  .filters {
+    .dropdown {
+      &:last-child .dropdown-menu,
+      .dropdown-menu {
+        position: fixed;
+        top: auto;
+        left: 0.5vw;
+        right: 0.5vw;
+        bottom: 0;
+        width: 99vw;
+        border-radius: 4px 4px 0 0;
+        border-bottom: none;
+      }
+    }
+  }
+}

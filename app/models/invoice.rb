@@ -72,6 +72,13 @@ class Invoice < ApplicationRecord
     where(date: start_date..end_date)
   end
 
+  def self.paid_in_year(year)
+    paid.pay_date_range(
+      start_date: Date.new(year.to_i, 1, 1),
+      end_date: Date.new(year.to_i, -1, -1)
+    )
+  end
+
   def self.filter_result(filter_params)
     filter_year(filter_params.fetch(:year, nil))
       .filter_quarter(
@@ -130,10 +137,7 @@ class Invoice < ApplicationRecord
   def self.filter_paid_in_year(year)
     return all if year.blank? || year !~ /\d{4}/
 
-    paid.pay_date_range(
-      start_date: Date.new(year.to_i, 1, 1),
-      end_date: Date.new(year.to_i, -1, -1)
-    )
+    paid_in_year(year)
   end
 
   def self.filter_paid_in_quarter(quarter, year = Time.current.year)

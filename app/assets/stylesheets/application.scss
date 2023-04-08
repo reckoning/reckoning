@@ -80,11 +80,6 @@ a:hover {
   text-decoration: none;
 }
 
-.filter-menu {
-  margin: 0 0 20px;
-  display: inline-block;
-}
-
 #signup-form {
   margin-bottom: 20px;
 }
@@ -115,44 +110,4 @@ code[data-target] {
 
 .flex {
   display: flex;
-}
-
-.filters {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 5px;
-  margin-bottom: 20px;
-
-  .filter-menu {
-    margin-bottom: 5px;
-  }
-
-  .filters-form {
-    display: flex;
-    gap: 5px;
-  }
-
-  .dropdown {
-    &:last-child {
-      .dropdown-menu {
-        right: 0;
-        left: auto;
-      }
-    }
-
-    @media (max-width: $screen-sm-max) {
-      &:last-child .dropdown-menu,
-      .dropdown-menu {
-        position: fixed;
-        top: auto;
-        left: 0.5vw;
-        right: 0.5vw;
-        bottom: 0;
-        width: 99vw;
-        border-radius: 4px 4px 0 0;
-        border-bottom: none;
-      }
-    }
-  }
 }

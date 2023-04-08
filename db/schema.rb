@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_07_220317) do
+ActiveRecord::Schema.define(version: 2023_04_08_134412) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -106,6 +106,7 @@ ActiveRecord::Schema.define(version: 2023_04_07_220317) do
     t.date "employment_end_date"
     t.text "offer_disclaimer"
     t.string "invoice_email_cc"
+    t.string "invoice_email_bcc"
   end
 
   create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
