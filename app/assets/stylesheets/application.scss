@@ -119,8 +119,14 @@ code[data-target] {
 
 .filters {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-start;
   gap: 5px;
+  margin-bottom: 20px;
+
+  .filter-menu {
+    margin-bottom: 5px;
+  }
 
   .filters-form {
     display: flex;
