@@ -9,11 +9,15 @@ ruby:
     a.btn.btn-danger href=url_for(reset_params) title=I18n.t(:"filter.delete")
       i.fa.fa-times
   a.btn.btn-default.dropdown-toggle href='#' data-toggle='dropdown'
-    = I18n.t(:"filter.#{resource}_#{name}.label")
+    = I18n.t("filter.#{resource}_#{name}.label")
     - if current_filter
       ruby:
         if translateable
-          current_value = I18n.t(:"filter.#{resource}_#{name}.#{current_filter}")
+          if translateable.is_a?(String)
+            current_value = I18n.t(translateable)[current_filter.to_i]
+          else
+            current_value = I18n.t("filter.#{resource}_#{name}.#{current_filter}")
+          end
         else
           current_value = current_filter
         end

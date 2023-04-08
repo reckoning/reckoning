@@ -72,15 +72,15 @@ module ApplicationHelper
     end
   end
 
-  def expenses_months
+  def months
     I18n.t("date.month_names").compact.each_with_index.map do |month, index|
       {name: index + 1, link: month}
     end
   end
 
-  def expenses_quarters
-    (1..4).map do |quarter|
-      {name: quarter, link: I18n.t("date.quarters.#{quarter}")}
+  def quarters
+    I18n.t("date.quarters").compact.each_with_index.map do |quarter, index|
+      {name: index + 1, link: quarter}
     end
   end
 end

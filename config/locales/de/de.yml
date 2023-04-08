@@ -169,48 +169,20 @@ de:
       label: "Gekauft in:"
     expense_quarter:
       label: "Quartal:"
-      1: "1. Quartal"
-      2: "2. Quartal"
-      3: "3. Quartal"
-      4: "4. Quartal"
     expense_month:
       label: "Monat:"
-      1: "Januar"
-      2: "Februar"
-      3: "März"
-      4: "April"
-      5: "Mai"
-      6: "Juni"
-      7: "Juli"
-      8: "August"
-      9: "September"
-      10: "Oktober"
-      11: "November"
-      12: "Dezember"
     invoice_year:
       label: "Erstellt in:"
     invoice_quarter:
       label: "Quartal:"
-      1: "1. Quartal"
-      2: "2. Quartal"
-      3: "3. Quartal"
-      4: "4. Quartal"
     invoice_month:
       label: "Monat:"
-      1: "Januar"
-      2: "Februar"
-      3: "März"
-      4: "April"
-      5: "Mai"
-      6: "Juni"
-      7: "Juli"
-      8: "August"
-      9: "September"
-      10: "Oktober"
-      11: "November"
-      12: "Dezember"
     invoice_paid_in_year:
       label: "Gezahlt in:"
+    invoice_paid_in_quarter:
+      label: "Gezahlt in Quartal:"
+    invoice_paid_in_month:
+      label: "Gezahlt in Monat:"
     project_state:
       all: "Alle Projekte"
       archived: "Archivierte Projekte"

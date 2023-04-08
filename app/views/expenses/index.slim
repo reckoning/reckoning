@@ -36,8 +36,8 @@
     .row
       .col-xs-12.col-md-8.filters
         = render "shared/tables/filter", resource: "expense", name: "year", filters: current_expenses_years
-        = render "shared/tables/filter", resource: "expense", name: "quarter", filters: expenses_quarters, translateable: true
-        = render "shared/tables/filter", resource: "expense", name: "month", filters: expenses_months, translateable: true
+        = render "shared/tables/filter", resource: "expense", name: "quarter", filters: quarters, translateable: "date.quarters"
+        = render "shared/tables/filter", resource: "expense", name: "month", filters: months, translateable: "date.month_names"
         '
         = render "shared/tables/filter", resource: "expense", name: "type", filters: Expense::VALID_TYPES, translateable: true
         = form_with method: :get, class: 'filters-form' do |form|

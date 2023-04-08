@@ -201,7 +201,7 @@ class InvoicesController < ApplicationController
   end
 
   private def filter_params
-    params.permit(:state, :year, :quarter, :month, :paid_in_year)
+    params.permit(:state, :year, :quarter, :month, :paid_in_year, :paid_in_quarter, :paid_in_month)
   end
   helper_method :filter_params
 
