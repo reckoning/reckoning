@@ -1,0 +1,19 @@
+<% unless content_for?(:hide_navigation) %>
+  <nav id="main-nav" class="navbar navbar-default" role="navigation">
+    <div class="container">
+      <%= render "layouts/brand" %>
+      <div class="main-navbar collapse navbar-collapse !visible">
+        <ul class="nav navbar-nav navbar-right">
+          <% if registration_enabled? %>
+            <li class="<%= hide_nav?('registration') %>">
+              <%= link_to I18n.t(:"nav.header.sign_up"), new_registration_path %>
+            </li>
+          <% end %>
+          <li class="<%= hide_nav?('sessions') || hide_nav?('users') %>">
+            <%= link_to I18n.t(:"actions.sign_in"), new_user_session_path %>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+<% end %>
