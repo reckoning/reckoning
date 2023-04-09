@@ -473,7 +473,10 @@ GEM
       lint_roller (~> 1.1)
       rubocop-performance (~> 1.19.0)
     stripe (9.3.0)
+    swagger-blocks (3.0.0)
     tailwindcss-rails (2.0.27-arm64-darwin)
+      railties (>= 6.0.0)
+    tailwindcss-rails (2.0.27-x86_64-darwin)
       railties (>= 6.0.0)
     tailwindcss-rails (2.0.27-x86_64-linux)
       railties (>= 6.0.0)
@@ -526,7 +529,6 @@ GEM
 
 PLATFORMS
   arm64-darwin-22
-  ruby
   x86_64-darwin-20
   x86_64-darwin-21
   x86_64-linux
@@ -606,6 +608,7 @@ DEPENDENCIES
   spring-watcher-listen
   standard
   stripe
+  swagger-blocks
   tailwindcss-rails
   thor
   timecop

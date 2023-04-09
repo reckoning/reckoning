@@ -82,6 +82,8 @@ gem "sentry-rails"
 gem "sentry-ruby"
 gem "sentry-sidekiq"
 
+gem 'swagger-blocks'
+
 gem "lograge"
 
 gem "typhoeus"

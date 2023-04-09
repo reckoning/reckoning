@@ -1,0 +1,54 @@
+type: object
+properties:
+  id:
+    type: string
+    format: uuid
+  date:
+    type: string
+    format: date
+  value:
+    type: number
+    format: double
+  note:
+    type: string
+  started:
+    type: boolean
+  startedAt:
+    type: string
+    format: date-time
+  startTime:
+    type: string
+  startTimeForTask:
+    type: 'null'
+  positionId:
+    type: string
+  invoiced:
+    type: boolean
+  project:
+    $ref: '#/components/schemas/ProjectMinimal'
+  task:
+    $ref: '#/components/schemas/Task'
+  createdAt:
+    type: string
+    format: date-time
+  updatedAt:
+    type: string
+    format: date-time
+  deleted:
+    type: boolean
+  links:
+    type: object
+    properties:
+      project:
+        type: object
+        properties:
+          href:
+            type: string
+required:
+  - id
+  - date
+  - value
+  - project
+  - task
+  - createdAt
+  - updatedAt
