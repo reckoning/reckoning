@@ -28,8 +28,6 @@ To run Reckoning on your local machine you need to install:
 
 ## Future features
 
-[![Stories in Ready](https://badge.waffle.io/mortik/reckoning.png?label=ready&title=Ready)](http://waffle.io/mortik/reckoning)
-
 - Project Landingpages
 - Integrations: Google Drive, Harvest Import etc.
 - Custom Logos and Colors for Invoices
