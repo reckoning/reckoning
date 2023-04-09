@@ -37,8 +37,8 @@ module Api
           assert_response :ok
         end
 
-        it 'creates a new task' do
-          post '/api/v1/tasks', params: { name: 'foo', projectId: project.id }
+        it "creates a new task" do
+          post "/api/v1/tasks", params: {name: "foo", projectId: project.id}
 
           assert_response :created
 

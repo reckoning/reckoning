@@ -49,7 +49,7 @@ module Api
         return if @timer.stop
 
         Rails.logger.info "Timer Stop Failed: #{@timer.to_yaml}"
-        render json: { message: I18n.t(:'messages.timer.stop.failure') }, status: :bad_request
+        render json: {message: I18n.t(:"messages.timer.stop.failure")}, status: :bad_request
       end
 
       def start
@@ -59,7 +59,7 @@ module Api
         return if @timer.start
 
         Rails.logger.info "Timer Start Failed: #{@timer.to_yaml}"
-        render json: { message: I18n.t(:'messages.timer.start.failure') }, status: :bad_request
+        render json: {message: I18n.t(:"messages.timer.start.failure")}, status: :bad_request
       end
 
       def destroy

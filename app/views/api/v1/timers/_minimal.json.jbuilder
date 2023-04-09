@@ -23,10 +23,10 @@ json.created_at timer.created_at
 json.updated_at timer.updated_at
 json.deleted timer.destroyed?
 json.project do
-  json.partial! 'api/v1/projects/minimal', project: timer.project
+  json.partial! "api/v1/projects/minimal", project: timer.project
 end
 json.task do
-  json.partial! 'api/v1/tasks/minimal', task: timer.task
+  json.partial! "api/v1/tasks/minimal", task: timer.task
 end
 json.links do
   json.self timer.url

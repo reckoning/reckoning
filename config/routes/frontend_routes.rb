@@ -5,6 +5,8 @@ endpoints = AppEndpointResolver.new
 namespace :frontend, path: endpoints.frontend_base_url do
   get "dashboard" => "base#index"
   get "customers" => "base#index"
+  get "dashboard" => "base#index"
+  get "customers" => "base#index"
 
   get "projects" => "base#index"
   get "projects/:id" => "base#index"
@@ -13,7 +15,7 @@ namespace :frontend, path: endpoints.frontend_base_url do
   get "invoices" => "base#index"
   get "timers" => "base#index"
   get "timers/:year" => "base#index"
-  get 'timers-test/:year' => 'base#index'
+  get "timers-test/:year" => "base#index"
   get "expenses" => "base#index"
   get "calculator" => "base#index"
   get "calculator/:uuid" => "base#index"
