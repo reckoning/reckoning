@@ -116,8 +116,6 @@ Rails.application.routes.draw do
 
   draw :frontend_routes
 
-  draw :frontend_routes
-
   get "impressum" => "base#impressum"
   get "privacy" => "base#privacy"
   get "terms" => "base#terms"
