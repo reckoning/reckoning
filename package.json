@@ -7,7 +7,7 @@
     "test:e2e:report": "generate-mochawesome-report --jsonDir test/reports/e2e --output test/reports/e2e/html --charts"
   },
   "devDependencies": {
-    "cypress": "^12.9.0",
+    "cypress": "^12.17.0",
     "typescript": "^5.0.4"
   }
 }
