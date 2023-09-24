@@ -26,13 +26,12 @@ class ExpensesController < ApplicationController
         normalized_expenses = Expense.normalized(expenses.to_a, year: year) if filter_params[:type] == "insurances"
 
         open_afa_expenses = if filter_params[:type] == "afa" || filter_params[:type].blank?
-                              current_account.expenses.filter_type(:afa).sum do |expense|
-                                expense.afa_value(year&.to_i || Time.current.year)
-                              end
-                            else
-                              0
-                            end
-
+          current_account.expenses.filter_type(:afa).sum do |expense|
+            expense.afa_value(year&.to_i || Time.current.year)
+          end
+        else
+          0
+        end
 
         @expenses_sum = normalized_expenses.sum do |expense|
           next 0 if expense.expense_type == "afa"
