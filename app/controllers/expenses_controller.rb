@@ -21,17 +21,20 @@ class ExpensesController < ApplicationController
       end
       format.html do
         year = filter_params.fetch(:year, nil)
+
         normalized_expenses = Expense.normalized(expenses.without_insurances.to_a, year: year)
-        open_afa_expenses = current_account.expenses.filter_type(:afa).sum do |expense|
+        normalized_expenses = Expense.normalized(expenses.to_a, year: year) if filter_params[:type] == "insurances"
+
+        open_afa_expenses = current_account.expenses.filter_result(filter_params).filter_type(:afa).sum do |expense|
           expense.afa_value(year&.to_i || Time.current.year)
         end
-        normalized_expenses = Expense.normalized(expenses.to_a, year: year) if filter_params[:type] == "insurances"
 
         @expenses_sum = normalized_expenses.sum do |expense|
           next 0 if expense.expense_type == "afa"
 
           expense.usable_value(year&.to_i || Time.current.year)
         end + open_afa_expenses
+
         @expenses_vat_sum = normalized_expenses.sum(&:vat_value)
 
         @expenses = expenses.order(sort_column.to_sym => sort_direction, :created_at => :desc)

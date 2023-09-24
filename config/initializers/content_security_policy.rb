@@ -18,8 +18,9 @@ Rails.application.config.content_security_policy do |policy|
 
   connect_src = [
     :self, :data, main_url, cable_url, "https://sentry.io", "https://fonts.googleapis.com",
-    "https://fonts.gstatic.com", "https://pro.fontawesome.com", "https://kit-pro.fontawesome.com",
-    "https://kit-free.fontawesome.com", "https://ka-p.fontawesome.com", "https://www.gstatic.com"
+    "https://fonts.gstatic.com", "https://kit.fontawesome.com", "https://pro.fontawesome.com",
+    "https://kit-pro.fontawesome.com", "https://kit-free.fontawesome.com",
+    "https://ka-p.fontawesome.com", "https://www.gstatic.com"
   ]
 
   if Rails.env.development?
