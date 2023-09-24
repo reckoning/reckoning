@@ -2,7 +2,7 @@ angular.module 'Blank'
 .config ['$routeProvider', ($routeProvider) ->
   $routeProvider
     .when '/',
-      templateUrl: Routes.blank_template_path()
+      templateUrl: "/template/blank"
       controller: 'BlankController'
     .otherwise
       redirectTo: '/'

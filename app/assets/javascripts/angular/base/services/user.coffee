@@ -16,7 +16,7 @@ angular.module 'Reckoning'
     factory = @
     @currentPromise.resolve()
     @currentPromise = $q.defer()
-    $http.get(ApiBasePath + Routes.current_v1_users_path(),
+    $http.get(ApiBasePath + "/api/v1/users/current",
       timeout: @currentPromise
     ).then (response) ->
       factory.new(response.data)
@@ -25,7 +25,7 @@ angular.module 'Reckoning'
     factory = @
     @allPromise.resolve()
     @allPromise = $q.defer()
-    $http.get(ApiBasePath + Routes.v1_users_path(),
+    $http.get(ApiBasePath + "/api/v1/users",
       timeout: @allPromise
     ).then (response) ->
       response.data.map((user) ->

@@ -2,22 +2,22 @@ angular.module 'Timesheet'
 .config ['$routeProvider', ($routeProvider) ->
   $routeProvider
     .when '/week',
-      templateUrl: Routes.week_timesheets_template_path()
+      templateUrl: "/template/week_timesheets"
       controller: 'WeekController'
     .when '/week/:date',
-      templateUrl: Routes.week_timesheets_template_path()
+      templateUrl: "/template/week_timesheets"
       controller: 'WeekController'
     .when '/day',
-      templateUrl: Routes.day_timesheets_template_path()
+      templateUrl: "/template/day_timesheets"
       controller: 'DayController'
     .when '/day/:date',
-      templateUrl: Routes.day_timesheets_template_path()
+      templateUrl: "/template/day_timesheets"
       controller: 'DayController'
     .when '/day/:date/:action',
-      templateUrl: Routes.day_timesheets_template_path()
+      templateUrl: "/template/day_timesheets"
       controller: 'DayController'
     .when '/day/:date/:action/:id',
-      templateUrl: Routes.day_timesheets_template_path()
+      templateUrl: "/template/day_timesheets"
       controller: 'DayController'
     .otherwise
       redirectTo: '/day'

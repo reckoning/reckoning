@@ -6,7 +6,7 @@ angular.module 'Reckoning'
     factory = @
     @allPromise.resolve()
     @allPromise = $q.defer()
-    $http.get(ApiBasePath + Routes.v1_tasks_path(),
+    $http.get(ApiBasePath + "/api/v1/tasks",
       timeout: @allPromise
       params:
         weekDate: dates[0].date
@@ -19,7 +19,7 @@ angular.module 'Reckoning'
       currentTasks
 
   create: (params) ->
-    $http.post(ApiBasePath + Routes.v1_tasks_path(), params)
+    $http.post(ApiBasePath + "/api/v1/tasks", params)
 
   new: (dates, task) ->
     task.timers = @fillTimers(dates, task.id, [])

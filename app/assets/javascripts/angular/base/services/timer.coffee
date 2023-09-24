@@ -5,7 +5,7 @@ angular.module 'Reckoning'
   all: (date) ->
     @allPromise.resolve()
     @allPromise = $q.defer()
-    $http.get(ApiBasePath + Routes.v1_timers_path(),
+    $http.get(ApiBasePath + "/api/v1/timers",
       timeout: @allPromise
       params:
         date: date
@@ -14,7 +14,7 @@ angular.module 'Reckoning'
   allInRangeForProject: (projectId, startDate, endDate) ->
     @allPromise.resolve()
     @allPromise = $q.defer()
-    $http.get(ApiBasePath + Routes.v1_timers_path(),
+    $http.get(ApiBasePath + "/api/v1/timers",
       timeout: @allPromise
       params:
         startDate: startDate
@@ -23,19 +23,19 @@ angular.module 'Reckoning'
     )
 
   create: (timer) ->
-    $http.post(ApiBasePath + Routes.v1_timers_path(), timer)
+    $http.post(ApiBasePath + "/api/v1/timers", timer)
 
   update: (timer) ->
-    $http.put(ApiBasePath + Routes.v1_timer_path(timer.id), timer)
+    $http.put(ApiBasePath + "/api/v1/timers/#{timerId}", timer)
 
   start: (timerId) ->
-    $http.put(ApiBasePath + Routes.start_v1_timer_path(timerId))
+    $http.put(ApiBasePath + "/api/v1/timers/#{timerId}/start")
 
   stop: (timerId) ->
-    $http.put(ApiBasePath + Routes.stop_v1_timer_path(timerId))
+    $http.put(ApiBasePath + "/api/v1/timers/#{timerId}/stop")
 
   delete: (timerId) ->
-    $http.delete(ApiBasePath + Routes.v1_timer_path(timerId))
+    $http.delete(ApiBasePath + "/api/v1/timers/#{timerId}")
 
   isStartable: (date) ->
     moment(date).format('YYYYMMDD') >= moment().format('YYYYMMDD')

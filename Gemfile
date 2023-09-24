@@ -50,7 +50,6 @@ gem "sass-rails"
 
 gem "coffee-rails"
 gem "jquery-rails"
-gem "js-routes", "~> 1.0"
 gem "turbolinks"
 
 gem "bootstrap-sass"

@@ -52,7 +52,7 @@ window.App.Invoice.loadPositions = ($element) ->
 
   xhr.abort() if xhr
   xhr = $.ajax
-    url: Routes.uninvoiced_timers_path(projectId: projectId, timerIds: timerIds)
+    url: "/timers/uninvoiced?projectId=#{projectId}&timerIds=#{timerIds}"
     dataType: 'json'
     context: $('#add-positions-modal')
     success: (result) ->

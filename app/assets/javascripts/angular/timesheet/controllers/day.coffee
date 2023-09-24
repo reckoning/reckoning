@@ -16,7 +16,7 @@ angular.module 'Timesheet'
         $location.path('/day/' + $scope.datepickerSelect)
 
     $scope.projectPath = (projectId) ->
-      Routes.project_path(projectId)
+      "projects/#{projectId}"
 
     $scope.navigateToToday = () ->
       $location.path('/day/')

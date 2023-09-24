@@ -5,7 +5,7 @@ angular.module 'Reckoning'
   all: (params) ->
     @allPromise.resolve()
     @allPromise = $q.defer()
-    $http.get(ApiBasePath + Routes.v1_projects_path(),
+    $http.get(ApiBasePath + "/api/v1/projects",
       timeout: @allPromise
       params: params
     )

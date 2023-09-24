@@ -23,7 +23,7 @@ angular.module 'Timesheet'
         @date
 
     $scope.projectPath = (projectId) ->
-      Routes.project_path(projectId)
+      "projects/#{projectId}"
 
     $scope.$watch 'datepickerSelect', ->
       if $scope.datepickerSelect

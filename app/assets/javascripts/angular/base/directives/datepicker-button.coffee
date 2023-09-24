@@ -1,7 +1,7 @@
 angular.module 'Reckoning'
 .directive 'datepickerButton', ['$timeout', ($timeout) ->
   restrict: 'E'
-  templateUrl: Routes.datepicker_template_path()
+  templateUrl: "/template/datepicker"
   require: '?ngModel'
   replace: true
   scope:

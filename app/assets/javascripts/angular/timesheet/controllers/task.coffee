@@ -14,7 +14,7 @@ angular.module 'Timesheet'
 
     $scope.openModal = ->
       $uibModal.open
-        templateUrl: Routes.task_modal_timesheets_template_path()
+        templateUrl: "/template/task_modal_timesheets"
         controller: 'TimerModalController'
         resolve:
           timer: -> {date: $scope.date}

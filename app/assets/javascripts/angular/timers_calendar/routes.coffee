@@ -2,10 +2,10 @@ angular.module 'TimersCalendar'
 .config ['$routeProvider', ($routeProvider) ->
   $routeProvider
     .when '/month',
-      templateUrl: Routes.month_timers_template_path()
+      templateUrl: "/template/month_timers"
       controller: 'MonthController'
     .when '/month/:date',
-      templateUrl: Routes.month_timers_template_path()
+      templateUrl: "/template/month_timers"
       controller: 'MonthController'
     .otherwise
       redirectTo: '/month'

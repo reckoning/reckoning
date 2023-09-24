@@ -59,7 +59,7 @@ class App.Timer
       @remove()
 
   fetch: ->
-    fetch ApiBasePath + Routes.v1_timers_path(running: true),
+    fetch ApiBasePath + "/api/v1/timers?running=true",
       headers: ApiHeaders
     .then (response) ->
       response.json()
