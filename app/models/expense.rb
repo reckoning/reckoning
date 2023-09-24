@@ -20,7 +20,7 @@ class Expense < ApplicationRecord
 
   validates :receipt, content_type: ["application/pdf", "image/jpeg", "image/png"]
 
-  validates :value, :description, :expense_type, :seller, :private_use_percent, :interval, presence: true
+  validates :value, :description, :expense_type, :seller, :private_use_percent, :vat_percent, :interval, presence: true
   validates :afa_type, presence: true, if: ->(expense) { expense.expense_type == "afa" }
 
   validates :date, presence: true, if: ->(expense) { expense.once? }
