@@ -9,7 +9,7 @@ module NavHelper
   end
 
   def hide_nav?(nav = "home")
-    return "hide" if nav == @active_nav
+    "hide" if nav == @active_nav
   end
 
   def back_path(fallback)
