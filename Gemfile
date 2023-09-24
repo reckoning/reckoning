@@ -103,6 +103,8 @@ gem "non-stupid-digest-assets"
 
 gem "nokogiri", ">= 1.7.1"
 
+gem "pry-rails"
+
 group :development do
   gem "listen"
   gem "pry-rails"

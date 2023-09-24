@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_24_131008) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_24_160026) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -298,6 +298,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_24_131008) do
     t.boolean "created_via_admin", default: false
     t.integer "consumed_timestep"
     t.string "layout", default: "top"
+    t.string "otp_secret"
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
