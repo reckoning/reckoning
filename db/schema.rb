@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_08_134412) do
-
+ActiveRecord::Schema[7.0].define(version: 2023_09_24_131008) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -26,9 +25,9 @@ ActiveRecord::Schema.define(version: 2023_04_08_134412) do
     t.hstore "services"
     t.hstore "mailing"
     t.hstore "contact_information"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "trail_end_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "trail_end_at", precision: nil
     t.boolean "trail_used"
     t.string "stripe_email"
     t.string "stripe_token"
@@ -46,7 +45,7 @@ ActiveRecord::Schema.define(version: 2023_04_08_134412) do
     t.string "record_type", null: false
     t.uuid "record_id", null: false
     t.uuid "blob_id", null: false
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
@@ -58,8 +57,8 @@ ActiveRecord::Schema.define(version: 2023_04_08_134412) do
     t.text "metadata"
     t.string "service_name", null: false
     t.bigint "byte_size", null: false
-    t.string "checksum", null: false
-    t.datetime "created_at", null: false
+    t.string "checksum"
+    t.datetime "created_at", precision: nil, null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
@@ -73,8 +72,8 @@ ActiveRecord::Schema.define(version: 2023_04_08_134412) do
     t.integer "value", null: false
     t.date "valid_from", null: false
     t.date "valid_until"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "key"
   end
 
@@ -82,8 +81,8 @@ ActiveRecord::Schema.define(version: 2023_04_08_134412) do
     t.uuid "user_id", null: false
     t.string "token"
     t.text "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "user_agent"
     t.integer "expires"
     t.index ["token", "user_id"], name: "index_auth_tokens_on_token_and_user_id", unique: true
@@ -91,8 +90,8 @@ ActiveRecord::Schema.define(version: 2023_04_08_134412) do
   end
 
   create_table "customers", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.integer "address_id"
     t.integer "payment_due"
     t.text "email_template"
@@ -118,8 +117,8 @@ ActiveRecord::Schema.define(version: 2023_04_08_134412) do
     t.string "description"
     t.date "date"
     t.uuid "account_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "seller"
     t.integer "private_use_percent", default: 0, null: false
     t.integer "afa_type_old"
@@ -132,17 +131,17 @@ ActiveRecord::Schema.define(version: 2023_04_08_134412) do
 
   create_table "invoices", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.date "date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.decimal "value", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "rate", precision: 10, scale: 2, default: "0.0", null: false
     t.string "workflow_state", limit: 255
-    t.datetime "pay_date"
+    t.datetime "pay_date", precision: nil
     t.integer "ref"
     t.boolean "pdf_generating", default: false, null: false
     t.date "delivery_date"
     t.date "payment_due_date"
-    t.datetime "pdf_generated_at"
+    t.datetime "pdf_generated_at", precision: nil
     t.uuid "customer_id"
     t.uuid "project_id"
     t.uuid "account_id", null: false
@@ -155,8 +154,8 @@ ActiveRecord::Schema.define(version: 2023_04_08_134412) do
     t.string "value"
     t.string "translatable_type"
     t.uuid "translatable_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["translatable_id", "translatable_type", "key"], name: "index_mobility_string_translations_on_translatable_attribute"
     t.index ["translatable_id", "translatable_type", "locale", "key"], name: "index_mobility_string_translations_on_keys", unique: true
     t.index ["translatable_type", "key", "value", "locale"], name: "index_mobility_string_translations_on_query_keys"
@@ -168,8 +167,8 @@ ActiveRecord::Schema.define(version: 2023_04_08_134412) do
     t.text "value"
     t.string "translatable_type"
     t.uuid "translatable_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["translatable_id", "translatable_type", "key"], name: "index_mobility_text_translations_on_translatable_attribute"
     t.index ["translatable_id", "translatable_type", "locale", "key"], name: "index_mobility_text_translations_on_keys", unique: true
   end
@@ -185,9 +184,9 @@ ActiveRecord::Schema.define(version: 2023_04_08_134412) do
     t.string "aasm_state"
     t.integer "ref"
     t.boolean "pdf_generating", default: false, null: false
-    t.datetime "pdf_generated_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "pdf_generated_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["ref", "account_id"], name: "index_offers_on_ref_and_account_id", unique: true
   end
 
@@ -199,15 +198,15 @@ ActiveRecord::Schema.define(version: 2023_04_08_134412) do
     t.integer "discount"
     t.boolean "featured"
     t.string "stripe_plan_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "positions", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.decimal "hours", precision: 10, scale: 2
     t.text "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.decimal "value", precision: 10, scale: 2
     t.decimal "rate", precision: 10, scale: 2
     t.uuid "invoice_id"
@@ -218,8 +217,8 @@ ActiveRecord::Schema.define(version: 2023_04_08_134412) do
 
   create_table "projects", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string "name", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.decimal "rate", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "budget", precision: 10, scale: 2, default: "0.0", null: false
     t.uuid "customer_id"
@@ -227,15 +226,15 @@ ActiveRecord::Schema.define(version: 2023_04_08_134412) do
     t.string "workflow_state", default: "active", null: false
     t.decimal "budget_hours", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "round_up", default: "10.0", null: false
-    t.datetime "start_date"
-    t.datetime "end_date"
+    t.datetime "start_date", precision: nil
+    t.datetime "end_date", precision: nil
     t.text "invoice_addition"
   end
 
   create_table "tasks", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string "name", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.uuid "project_id"
     t.boolean "billable", default: true, null: false
   end
@@ -243,19 +242,19 @@ ActiveRecord::Schema.define(version: 2023_04_08_134412) do
   create_table "tax_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "account_id"
     t.decimal "value", precision: 10, scale: 2, default: "0.0", null: false
-    t.datetime "valid_from", null: false
-    t.datetime "valid_until"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "valid_from", precision: nil, null: false
+    t.datetime "valid_until", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "timers", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.date "date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.uuid "position_id"
     t.uuid "task_id"
-    t.datetime "started_at"
+    t.datetime "started_at", precision: nil
     t.uuid "user_id", null: false
     t.text "note"
     t.decimal "value", precision: 30, scale: 18
@@ -266,25 +265,25 @@ ActiveRecord::Schema.define(version: 2023_04_08_134412) do
     t.string "email", limit: 255, default: "", null: false
     t.string "encrypted_password", limit: 255, default: "", null: false
     t.string "reset_password_token", limit: 255
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
+    t.datetime "reset_password_sent_at", precision: nil
+    t.datetime "remember_created_at", precision: nil
     t.integer "sign_in_count", default: 0
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
+    t.datetime "current_sign_in_at", precision: nil
+    t.datetime "last_sign_in_at", precision: nil
     t.string "current_sign_in_ip", limit: 255
     t.string "last_sign_in_ip", limit: 255
     t.integer "failed_attempts", default: 0
     t.string "unlock_token", limit: 255
-    t.datetime "locked_at"
+    t.datetime "locked_at", precision: nil
     t.string "authentication_token", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.integer "address_id"
     t.boolean "enabled", default: false
     t.boolean "admin", default: false
     t.string "confirmation_token", limit: 255
-    t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
+    t.datetime "confirmed_at", precision: nil
+    t.datetime "confirmation_sent_at", precision: nil
     t.string "unconfirmed_email", limit: 255
     t.string "gravatar", limit: 255
     t.string "gravatar_hash", limit: 255

@@ -4,7 +4,7 @@ source "https://rubygems.org"
 
 ruby File.read(".ruby-version").chomp
 
-gem "rails", "6.1.7.6"
+gem "rails", "7.0.8"
 
 gem "pg", "~> 1.0"
 
@@ -89,6 +89,7 @@ gem "lograge"
 gem "typhoeus"
 
 gem "redis-actionpack"
+gem "redis-store"
 
 # pdf rendering
 gem "wicked_pdf"
