@@ -227,6 +227,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_24_160026) do
     t.text "invoice_addition"
     t.integer "business_days"
     t.string "federal_state"
+    t.text "invoice_addition"
   end
 
   create_table "tasks", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
