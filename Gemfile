@@ -97,9 +97,6 @@ gem "active_storage_validations"
 gem "aws-sdk-s3", require: false
 gem "image_processing", "~> 1.2"
 
-# heroku production
-gem "non-stupid-digest-assets"
-
 gem "nokogiri", ">= 1.7.1"
 
 gem "pry-rails"
