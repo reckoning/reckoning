@@ -173,8 +173,16 @@ de:
       label: "Monat:"
     invoice_year:
       label: "Erstellt in:"
+    invoice_quarter:
+      label: "Quartal:"
+    invoice_month:
+      label: "Monat:"
     invoice_paid_in_year:
       label: "Gezahlt in:"
+    invoice_paid_in_quarter:
+      label: "Gezahlt in Quartal:"
+    invoice_paid_in_month:
+      label: "Gezahlt in Monat:"
     project_state:
       all: "Alle Projekte"
       archived: "Archivierte Projekte"

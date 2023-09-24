@@ -4,6 +4,6 @@ describe("Home", () => {
   });
 
   it("Loads", () => {
-    cy.contains("Welcome");
+    cy.contains("Reckoning");
   });
 });

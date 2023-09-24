@@ -18,6 +18,12 @@ de:
       select_month: 'Monat auswählen'
       select_year: 'Jahr auswählen'
   date:
+    quarters:
+      - ~
+      - "1. Quartal"
+      - "2. Quartal"
+      - "3. Quartal"
+      - "4. Quartal"
     first_day_of_week: 1
     formats:
       db: "%Y-%m-%d"

@@ -7,5 +7,5 @@ defiant:
   name: Defiant
   contact_information:
     telefon: "222"
-    email: "info@defiant.sf"
+    public_email: "info@defiant.sf"
     fax: "111"

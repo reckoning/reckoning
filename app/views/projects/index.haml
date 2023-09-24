@@ -19,8 +19,8 @@
             = I18n.t(:"nav.subnav.new_project")
 
     .row
-      .col-xs-12.col-md-6
-        .filter-menu.btn-group
+      .col-xs-12.col-md-6.filters
+        .btn-group
           - if params.fetch(:state, nil)
             %a.btn.btn-default{href: url_for(state: nil)}
               = I18n.t(:"filter.project_state.all")

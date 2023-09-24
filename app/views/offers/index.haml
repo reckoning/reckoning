@@ -20,7 +20,7 @@
             = I18n.t(:"nav.subnav.new_offer")
 
     .row
-      .col-xs-12.col-md-6
+      .col-xs-12.col-md-6.filters
         = render "shared/tables/filter", resource: "offer", name: "state", filters: Offer.aasm.states.map(&:name), translateable: true
         = render "shared/tables/filter", resource: "offer", name: "year", filters: current_offer_years
       .col-xs-12.col-md-6

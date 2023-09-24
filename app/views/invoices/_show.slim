@@ -12,8 +12,10 @@
     .col-xs-6.col-md-2.month
       = I18n.l invoice.date, format: :month_year
     .col-xs-6.col-md-2.value
-      .pull-right
+      .pull-right.text-right
         b= number_to_currency invoice.value
+        br
+        = number_to_currency invoice.vat
     .col-md-1.state.hidden-xs.hidden-sm
       span class="label label-#{invoice_label(invoice)}"
         = I18n.t(:"activerecord.attributes.invoice.states.#{invoice.current_state.to_s}")

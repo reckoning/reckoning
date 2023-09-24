@@ -1,6 +1,6 @@
 = form_for invoice, html: {id: 'invoice-form' } do |form|
   .row
-    .col-xs-12.col-md-6
+    .col-xs-12.col-md-4
       .form-group.selectize{class: form_error?(invoice, :project_id)}
         %select.js-selectize{name: "invoice[project_id]", id: "invoice_project_id", placeholder: I18n.t(:"helpers.prompt.invoice.project_id")}
           %option
@@ -8,7 +8,7 @@
             %option{value: project.id, selected: (true if project.id == @invoice.project_id), data: {data: project.to_json}}
               = project.name_with_customer
         = form_errors invoice, :project_id
-    .col-xs-12.col-md-6
+    .col-xs-12.col-md-4
       .form-group{class: form_error?(invoice, :date)}
         .input-group.datepicker
           = form.label :date, class: "input-group-addon"
@@ -17,6 +17,15 @@
             %button.btn.btn-default{type: "button"}
               %i.fa.fa-calendar
         = form_errors invoice, :date, 'input-group-btn-feedback'
+    .col-xs-12.col-md-4
+      .form-group{class: form_error?(invoice, :pay_date)}
+        .input-group.datepicker
+          = form.label :pay_date, class: "input-group-addon"
+          = form.date_field :pay_date, disabled: !form.object.paid?, class: 'form-control', "data-value" => form.object.pay_date
+          %span.input-group-btn
+            %button.btn.btn-default{type: "button", disabled: !form.object.paid?}
+              %i.fa.fa-calendar
+        = form_errors invoice, :pay_date, 'input-group-btn-feedback'
   .row
     .col-xs-12.col-md-4.form-group{class: form_error?(invoice, :ref)}
       .input-group

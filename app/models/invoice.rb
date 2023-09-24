@@ -64,24 +64,68 @@ class Invoice < ApplicationRecord
     with_created_state
   end
 
-  def self.paid_in_year(year)
-    paid.where("pay_date <= ? AND pay_date >= ?", "#{year}-12-31", "#{year}-01-01")
+  def self.pay_date_range(start_date:, end_date: nil)
+    where(pay_date: start_date..end_date)
   end
 
-  def self.year(year)
-    where("date <= ? AND date >= ?", "#{year}-12-31", "#{year}-01-01")
+  def self.date_range(start_date:, end_date: nil)
+    where(date: start_date..end_date)
+  end
+
+  def self.paid_in_year(year)
+    paid.pay_date_range(
+      start_date: Date.new(year.to_i, 1, 1),
+      end_date: Date.new(year.to_i, -1, -1)
+    )
   end
 
   def self.filter_result(filter_params)
     filter_year(filter_params.fetch(:year, nil))
+      .filter_quarter(
+        filter_params.fetch(:quarter, nil),
+        filter_params.fetch(:year, Time.current.year)
+      )
+      .filter_month(
+        filter_params.fetch(:month, nil),
+        filter_params.fetch(:year, Time.current.year)
+      )
       .filter_state(filter_params.fetch(:state, nil))
       .filter_paid_in_year(filter_params.fetch(:paid_in_year, nil))
+      .filter_paid_in_quarter(
+        filter_params.fetch(:paid_in_quarter, nil),
+        filter_params.fetch(:paid_in_year, Time.current.year)
+      )
+      .filter_paid_in_month(
+        filter_params.fetch(:paid_in_month, nil),
+        filter_params.fetch(:paid_in_year, Time.current.year)
+      )
   end
 
   def self.filter_year(year)
     return all if year.blank? || year !~ /\d{4}/
 
-    year(year)
+    date_range(
+      start_date: Date.new(year.to_i, 1, 1),
+      end_date: Date.new(year.to_i, -1, -1)
+    )
+  end
+
+  def self.filter_quarter(quarter, year = Time.current.year)
+    return all if quarter.blank? || !(1..4).cover?(quarter.to_i)
+
+    date_range(
+      start_date: Date.new(year.to_i, quarter.to_i * 3 - 2, 1),
+      end_date: Date.new(year.to_i, quarter.to_i * 3, -1)
+    )
+  end
+
+  def self.filter_month(month, year = Time.current.year)
+    return all if month.blank? || !(1..12).cover?(month.to_i)
+
+    date_range(
+      start_date: Date.new(year.to_i, month.to_i, 1),
+      end_date: Date.new(year.to_i, month.to_i, -1)
+    )
   end
 
   def self.filter_state(state)
@@ -90,10 +134,28 @@ class Invoice < ApplicationRecord
     send(state)
   end
 
-  def self.filter_paid_in_year(paid_in_year)
-    return all if paid_in_year.blank? || paid_in_year !~ /\d{4}/
+  def self.filter_paid_in_year(year)
+    return all if year.blank? || year !~ /\d{4}/
 
-    paid_in_year(paid_in_year)
+    paid_in_year(year)
+  end
+
+  def self.filter_paid_in_quarter(quarter, year = Time.current.year)
+    return all if quarter.blank? || !(1..4).cover?(quarter.to_i)
+
+    paid.pay_date_range(
+      start_date: Date.new(year.to_i, quarter.to_i * 3 - 2, 1),
+      end_date: Date.new(year.to_i, quarter.to_i * 3, -1)
+    )
+  end
+
+  def self.filter_paid_in_month(month, year = Time.current.year)
+    return all if month.blank? || !(1..12).cover?(month.to_i)
+
+    paid.pay_date_range(
+      start_date: Date.new(year.to_i, month.to_i, 1),
+      end_date: Date.new(year.to_i, month.to_i, -1)
+    )
   end
 
   def ref_number
@@ -166,6 +228,10 @@ class Invoice < ApplicationRecord
       ApplicationController.new.render_to_string("invoices/timesheet", inline_pdf_options),
       whicked_pdf_options
     )
+  end
+
+  def vat
+    (value * account.tax.to_d) / 100
   end
 
   private def set_customer

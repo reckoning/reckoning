@@ -75,6 +75,8 @@ de:
         payment_due: "Zahlungsziel (Tage)"
         email_template: "Inhalt"
         invoice_email: "Empfänger"
+        invoice_email_cc: "CC"
+        invoice_email_bcc: "BCC"
         default_from: "Absender"
         customer_type: "Typ"
         weekly_hours: "Wochenstunden"
@@ -111,6 +113,7 @@ de:
           user: "SMTP Benutzer"
           password: "SMTP Passwort oder Token"
     placeholder:
+      search: "Suche"
       subdomain: subdomain
       name: "Name"
       address: "Adresse"
@@ -154,6 +157,8 @@ de:
         payment_due: "Zahlungsziel (Tage)"
         email_template: "Inhalt"
         invoice_email: "Empfänger"
+        invoice_email_cc: "Weitere Empfänger"
+        invoice_email_bcc: "Weitere versteckte Empfänger"
         default_from: "Absender"
         weekly_hours: "Wochenstunden"
         offer_disclaimer: Rechtlich relevante Informationen. Wird am ende des Angebots angezeigt.

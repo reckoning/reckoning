@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_07_072353) do
+ActiveRecord::Schema.define(version: 2023_04_08_134412) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -75,6 +75,7 @@ ActiveRecord::Schema.define(version: 2023_04_07_072353) do
     t.date "valid_until"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "key"
   end
 
   create_table "auth_tokens", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -104,6 +105,8 @@ ActiveRecord::Schema.define(version: 2023_04_07_072353) do
     t.integer "weekly_hours"
     t.date "employment_end_date"
     t.text "offer_disclaimer"
+    t.string "invoice_email_cc"
+    t.string "invoice_email_bcc"
   end
 
   create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|

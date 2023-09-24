@@ -39,13 +39,12 @@ jobs:
     uses: ./.github/workflows/e2e-tests.job.yml
     secrets: inherit
 
-  # deploy:
-  #   if: github.ref == 'refs/heads/main'
-  #   needs:
-  #     [ruby-lint, ruby-tests, seeds, e2e-tests]
-  #   uses: ./.github/workflows/deploy.job.yml
-  #   with:
-  #     capEnv: live
-  #     name: Live
-  #     url: https://{{ vars.LIVE_DOMAIN }}
-  #   secrets: inherit
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: [ruby-lint, ruby-tests, seeds, e2e-tests]
+    uses: ./.github/workflows/deploy.job.yml
+    with:
+      capEnv: live
+      name: Live
+      url: https://{{ vars.LIVE_DOMAIN }}
+    secrets: inherit
