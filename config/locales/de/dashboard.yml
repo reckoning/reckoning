@@ -5,7 +5,7 @@ de:
       all_invoices: "Alle Rechnungen"
       charged_invoices: "Offene Rechnungen"
       paid_invoices: "Bezahlte Rechnungen"
-      last_invoices: "Letztes Jahr"
+      last_invoices: "Alle Rechnungen %{year}"
       uninvoiced: "Offener Betrag"
       budgets: "Budget"
       overtime: "Überstunden"

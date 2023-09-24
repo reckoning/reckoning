@@ -1,0 +1,10 @@
+<nav class="navbar navbar-default navbar-fixed-top navbar-aside" id="main-nav" role="navigation">
+  <div class="container-fluid">
+    <%= render "layouts/brand" %>
+    <div class="collapse navbar-collapse !visible" id="main-navbar">
+      <%= render "layouts/user_nav" %>
+      <%= render "layouts/links" %>
+    </div>
+    <%= render "layouts/running_timers", timers: current_account.timers.running %>
+  </div>
+</nav>

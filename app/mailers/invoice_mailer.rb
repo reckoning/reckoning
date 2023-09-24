@@ -5,15 +5,19 @@ class InvoiceMailer < ApplicationMailer
 
   def customer(invoice)
     self.invoice = invoice
-    send_mail invoice.customer.invoice_email
+    send_mail(
+      invoice.customer.invoice_email&.split(","),
+      invoice.customer.invoice_email_cc&.split(","),
+      invoice.customer.invoice_email_bcc&.split(",")
+    )
   end
 
   def test(invoice, test_mail)
     self.invoice = invoice
-    send_mail test_mail
+    send_mail(test_mail)
   end
 
-  private def send_mail(to)
+  private def send_mail(to, cc = [], bcc = [])
     month = I18n.l(invoice.date, format: :month)
     date = I18n.l(invoice.date, format: :month_year)
 
@@ -28,17 +32,15 @@ class InvoiceMailer < ApplicationMailer
     attachments["#{invoice.invoice_file}.pdf"] = invoice.inline_pdf
     attachments["#{invoice.timesheet_file}.pdf"] = invoice.inline_timesheet_pdf if invoice.timers.present?
 
+    cc = (cc || []) + [invoice.account.contact_information["public_email"]]
+    bcc = (bcc || []) + invoice.account.users.pluck(:email) if invoice.account.contact_information["public_email"].blank?
+
     mail(
-      from: from,
       to: to,
+      cc: cc&.compact,
+      bcc: bcc&.compact,
       subject: I18n.t(:"mailer.invoice.customer.subject", name: "#{invoice.account.name}: ", date: date),
       template_name: "customer"
     )
-  end
-
-  private def from
-    @from ||= invoice.customer.default_from if invoice.customer.default_from.present?
-    @from ||= invoice.account.default_from if invoice.account.default_from.present?
-    @from ||= Rails.configuration.app.mailer_default_from
   end
 end

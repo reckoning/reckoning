@@ -71,4 +71,16 @@ module ApplicationHelper
       "danger"
     end
   end
+
+  def months
+    I18n.t("date.month_names").compact.each_with_index.map do |month, index|
+      {name: index + 1, link: month}
+    end
+  end
+
+  def quarters
+    I18n.t("date.quarters").compact.each_with_index.map do |quarter, index|
+      {name: index + 1, link: quarter}
+    end
+  end
 end

@@ -20,7 +20,7 @@ class Expense < ApplicationRecord
 
   validates :receipt, content_type: ["application/pdf", "image/jpeg", "image/png"]
 
-  validates :value, :description, :expense_type, :seller, :private_use_percent, :interval, presence: true
+  validates :value, :description, :expense_type, :seller, :private_use_percent, :vat_percent, :interval, presence: true
   validates :afa_type, presence: true, if: ->(expense) { expense.expense_type == "afa" }
 
   validates :date, presence: true, if: ->(expense) { expense.once? }
@@ -75,17 +75,38 @@ class Expense < ApplicationRecord
 
   def self.filter_result(filter_params)
     filter_year(filter_params.fetch(:year, nil))
+      .filter_quarter(filter_params.fetch(:quarter, nil), filter_params.fetch(:year, Time.current.year))
+      .filter_month(filter_params.fetch(:month, nil), filter_params.fetch(:year, Time.current.year))
       .filter_date_range(
         start_date: filter_params.fetch(:start_date, nil),
         end_date: filter_params.fetch(:end_date, nil)
       )
       .filter_type(filter_params.fetch(:type, nil))
+      .filter_search(filter_params.fetch(:query, nil))
   end
 
   def self.filter_year(year)
     return all if year.blank? || year !~ /\d{4}/
 
     year(year)
+  end
+
+  def self.filter_quarter(quarter, year = Time.current.year)
+    return all if quarter.blank? || !(1..4).cover?(quarter.to_i)
+
+    date_range(
+      start_date: Date.new(year.to_i, quarter.to_i * 3 - 2, 1),
+      end_date: Date.new(year.to_i, quarter.to_i * 3, -1)
+    )
+  end
+
+  def self.filter_month(month, year = Time.current.year)
+    return all if month.blank? || !(1..12).cover?(month.to_i)
+
+    date_range(
+      start_date: Date.new(year.to_i, month.to_i, 1),
+      end_date: Date.new(year.to_i, month.to_i, -1)
+    )
   end
 
   def self.filter_date_range(start_date: nil, end_date: nil)
@@ -98,6 +119,12 @@ class Expense < ApplicationRecord
     return all if type.blank? || VALID_TYPES.exclude?(type.to_sym)
 
     where(expense_type: type)
+  end
+
+  def self.filter_search(query)
+    return all if query.blank?
+
+    where("description ILIKE ?", "%#{query}%")
   end
 
   def self.normalized(expenses, year: nil)

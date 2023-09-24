@@ -181,6 +181,16 @@ p.placeholder {
   margin-top: 22px;
 }
 
+.form-group {
+  position: relative;
+}
+
+.form-control-clear {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
 .checkbox.checkbox-right {
   text-align: right;
 

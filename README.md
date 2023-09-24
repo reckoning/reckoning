@@ -1,6 +1,6 @@
 # Reckoning
 
-[![CircleCI](https://circleci.com/gh/reckoning/app/tree/main.svg?style=svg)](https://circleci.com/gh/reckoning/app/tree/main)
+[![Main](https://github.com/reckoning/reckoning/actions/workflows/main.yml/badge.svg)](https://github.com/reckoning/reckoning/actions/workflows/main.yml)
 
 Reckoning is a simple tool for invoicing
 
@@ -27,8 +27,6 @@ To run Reckoning on your local machine you need to install:
 - Tests
 
 ## Future features
-
-[![Stories in Ready](https://badge.waffle.io/mortik/reckoning.png?label=ready&title=Ready)](http://waffle.io/mortik/reckoning)
 
 - Project Landingpages
 - Integrations: Google Drive, Harvest Import etc.

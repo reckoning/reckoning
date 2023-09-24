@@ -18,10 +18,6 @@
               %strong.pull-right
                 = number_to_currency(@uninvoiced_amount)
             .list-group-item
-              = I18n.t(:"dashboard.panels.all_invoices")
-              %strong.pull-right
-                = number_to_currency((@charged_invoices + @paid_invoices).sum(&:value))
-            .list-group-item
               = I18n.t(:"dashboard.panels.charged_invoices")
               %strong.pull-right
                 = number_to_currency(@charged_invoices.sum(:value))
@@ -29,19 +25,23 @@
               = I18n.t(:"dashboard.panels.paid_invoices")
               %strong.pull-right
                 = number_to_currency(@paid_invoices.sum(:value))
+            .list-group-item
+              = I18n.t(:"dashboard.panels.all_invoices")
+              %strong.pull-right
+                = number_to_currency((@charged_invoices + @paid_invoices).sum(&:value))
+            .list-group-item.disabled
+              = I18n.t(:"dashboard.panels.last_invoices", year: (Time.now - 1.year).year)
+              %strong.pull-right
+                = number_to_currency(@last_invoices.sum(:value))
             - if current_account.provision.present?
               .list-group-item
                 = I18n.t(:"dashboard.panels.provision")
                 %strong.pull-right
                   = number_to_currency(current_account.provision_value)
-              .list-group-item
+              .list-group-item.disabled
                 = I18n.t(:"dashboard.panels.last_provision", year: (Time.now - 1.year).year)
                 %strong.pull-right
                   = number_to_currency(current_account.last_provision_value)
-            .list-group-item.disabled
-              = I18n.t(:"dashboard.panels.last_invoices")
-              %strong.pull-right
-                = number_to_currency(@last_invoices.sum(:value))
 
         = render "expenses_panel" if @expenses.present? || @last_expenses.present?
 
@@ -64,7 +64,7 @@
           = render "invoices_panel", panel_title: I18n.t(:"dashboard.panels.paid_invoices"), invoices: @paid_invoices, context: 'success'
 
         - if @last_invoices.present?
-          = render "invoices_panel", panel_title: I18n.t(:"dashboard.panels.last_invoices"), invoices: @last_invoices
+          = render "invoices_panel", panel_title: I18n.t(:"dashboard.panels.last_invoices", year: (Time.now - 1.year).year), invoices: @last_invoices
 
         - if @charged_invoices.blank? && @last_invoices.blank? && @paid_invoices.blank?
           = render "shared/blank"

@@ -79,9 +79,8 @@
             td colspan=3
               = I18n.t(:"pdf.invoice.tax", value: resource.account.tax)
             td.value
-              - taxes = (resource.value * resource.account.tax.to_d) / 100
-              = number_to_currency taxes
-          - value = resource.value + taxes
+              = number_to_currency resource.vat
+          - value = resource.value + resource.vat
           - value_label = I18n.t(:"pdf.invoice.gross")
         - else
           tr.tax
