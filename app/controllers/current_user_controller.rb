@@ -12,8 +12,9 @@ class CurrentUserController < ApplicationController
   def otp_qrcode
     authorize! :update, current_user
     uri = current_user.otp_provisioning_uri(current_user.email, issuer: Rails.configuration.app.name)
-    qr = RQRCode.render_qrcode(uri, :png, level: :l, unit: 6)
-    send_data qr, type: "image/png", disposition: "inline"
+    qr = RQRCode::QRCode.new(uri, level: :l)
+
+    send_data qr.as_svg(color: "428bca"), type: "image/svg+xml", disposition: "inline"
   end
 
   def otp_backup_codes

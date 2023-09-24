@@ -29,7 +29,7 @@ gem "devise-two-factor"
 gem "jwt"
 
 gem "mini_magick"
-gem "rqrcode-rails3"
+gem "rqrcode"
 
 gem "cancancan"
 
