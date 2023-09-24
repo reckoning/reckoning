@@ -1,4 +1,4 @@
-FROM ruby:2.7.3
+FROM ruby:3.2.2
 
 RUN curl https://deb.nodesource.com/setup_10.x | bash - \
     && apt-get install -y --no-install-recommends \
@@ -17,8 +17,8 @@ RUN apt-get install -y --no-install-recommends \
     && rm -rf /tmp/* /var/lib/apt/lists/*
 
 RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
-        && tar -xf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
-        && mv wkhtmltox/bin/wkhtmltopdf /usr/bin/wkhtmltopdf
+    && tar -xf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
+    && mv wkhtmltox/bin/wkhtmltopdf /usr/bin/wkhtmltopdf
 
 RUN gem install bundler
 

@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-ruby File.read(".ruby-version").chomp
+ruby File.read(".tool-versions").match(/ruby (.*)\n/)[1].chomp
 
 gem "rails", "7.0.8"
 
@@ -107,7 +107,6 @@ gem "pry-rails"
 
 group :development do
   gem "listen"
-  gem "pry-rails"
 
   gem "standard"
 

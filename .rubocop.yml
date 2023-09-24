@@ -10,4 +10,4 @@ inherit_gem:
 
 AllCops:
   SuggestExtensions: false
-  TargetRubyVersion: 2.7
+  TargetRubyVersion: 3.2
