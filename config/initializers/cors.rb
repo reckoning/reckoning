@@ -15,18 +15,18 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors, debug: Rails.env.development?, logger: -> { Rails.logger } do
   allow do
     origins [%r{http(s?)://(.*)#{Regexp.escape(Rails.configuration.app.domain)}}]
-    resource '*', headers: :any,
-                  methods: %i[get post delete put patch options head],
-                  expose: %w[Link X-RateLimit-Limit X-RateLimit-Remaining X-RateLimit-Reset],
-                  credentials: true,
-                  max_age: 0
+    resource "*", headers: :any,
+      methods: %i[get post delete put patch options head],
+      expose: %w[Link X-RateLimit-Limit X-RateLimit-Remaining X-RateLimit-Reset],
+      credentials: true,
+      max_age: 0
   end
 
   allow do
-    origins '*'
-    resource '*', headers: :any,
-                  methods: %i[get options head],
-                  expose: %w[Link X-RateLimit-Limit X-RateLimit-Remaining X-RateLimit-Reset],
-                  max_age: 0
+    origins "*"
+    resource "*", headers: :any,
+      methods: %i[get options head],
+      expose: %w[Link X-RateLimit-Limit X-RateLimit-Remaining X-RateLimit-Reset],
+      max_age: 0
   end
 end

@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  app:
+    image: reckoning/app:latest
+    build: .
+    ports:
+      - 8240:3000
+    environment:
+      DATABASE_URL: postgresql://root:root@postgres:5432/reckoning
+      REDIS_URL: redis://redis:6379
+      # INITIAL_DB_SETUP: 1
+      UNSAFE: 1
+      RAILS_SERVE_STATIC_FILES: 1
+      DOMAIN: reckoning.test
+      ON_SUBDOMAIN: false
+    depends_on:
+      - postgres
+      - redis
+  postgres:
+    image: postgres:14.5
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/postgres-local:/var/lib/postgresql/data
+      - ./dumps:/backups
+  redis:
+    image: redis:6.0.9
+    ports:
+      - 6379:6379

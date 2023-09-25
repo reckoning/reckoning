@@ -43,7 +43,7 @@ gem "dynamic_fields_for_rails"
 
 gem "workflow", "~> 1.2.0"
 
-gem 'aasm'
+gem "aasm"
 
 gem "coffee-rails"
 gem "jquery-rails"
@@ -82,11 +82,11 @@ gem "sentry-sidekiq"
 
 gem "lograge"
 
-gem 'typhoeus'
+gem "typhoeus"
 
-gem 'vite_rails'
+gem "vite_rails"
 
-gem 'tailwindcss-rails'
+gem "tailwindcss-rails"
 
 gem "redis-actionpack"
 gem "redis-store"

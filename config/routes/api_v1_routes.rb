@@ -3,7 +3,7 @@
 v1_api_routes = lambda do
   resource :sessions, only: %i[create destroy]
 
-  get 'me' => 'users#current'
+  get "me" => "users#current"
 
   resources :customers, only: %i[index show create destroy]
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'typhoeus'
+require "typhoeus"
 
 class Schema < Thor
   include Thor::Actions
@@ -9,16 +9,16 @@ class Schema < Thor
     true
   end
 
-  desc 'update', 'Fetch Schema and regenerate ts client'
+  desc "update", "Fetch Schema and regenerate ts client"
   def update
     invoke :fetch
 
-    run('yarn run generate-api-client')
+    run("yarn run generate-api-client")
   end
 
-  desc 'fetch', 'Fetch Schema Stoplight'
+  desc "fetch", "Fetch Schema Stoplight"
   def fetch
-    require './config/environment'
+    require "./config/environment"
 
     raw_data = fetch_remote(api_schema_url)
 
@@ -38,8 +38,8 @@ class Schema < Thor
     end
 
     private def api_schema_url
-      ENV['API_SCHEMA_BASE_URL'] ||
-      "https://stoplight.io/api/v1/projects/reckoning/reckoning/nodes/reference/schema-#{api_version}.yaml?deref=optimizedBundle"
+      ENV["API_SCHEMA_BASE_URL"] ||
+        "https://stoplight.io/api/v1/projects/reckoning/reckoning/nodes/reference/schema-#{api_version}.yaml?deref=optimizedBundle"
     end
 
     private def api_version

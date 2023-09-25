@@ -7,24 +7,23 @@
 require "uri"
 
 Rails.application.config.content_security_policy do |policy|
-  main_url = "http://#{Rails.configuration.app.domain}"
-  cable_url = "ws://#{Rails.configuration.app.domain}"
-  if Rails.configuration.force_ssl
-    main_url = "https://#{Rails.configuration.app.domain}"
-    cable_url = "wss://#{Rails.configuration.app.domain}"
-  end
+  main_uri = URI.parse(FRONTEND_ENDPOINT)
+  main_endpoint = "#{main_uri.scheme}://#{main_uri.host}"
+  cable_uri = URI.parse(CABLE_ENDPOINT)
+  cable_endpoint = "#{cable_uri.scheme}://#{cable_uri.host}"
 
   connect_src = [
-    :self, :data, main_url, cable_url, "https://sentry.io", "https://fonts.googleapis.com",
-    "https://fonts.gstatic.com", "https://kit.fontawesome.com", "https://pro.fontawesome.com",
-    "https://kit-pro.fontawesome.com", "https://kit-free.fontawesome.com",
-    "https://ka-p.fontawesome.com", "https://www.gstatic.com"
+    :self, :data, main_endpoint, cable_endpoint, "https://sentry.io", "https://fonts.googleapis.com",
+    "https://fonts.gstatic.com", "https://pro.fontawesome.com", "https://kit-pro.fontawesome.com",
+    "https://kit-free.fontawesome.com", "https://ka-p.fontawesome.com", "https://www.gstatic.com"
   ]
 
   if Rails.env.development?
     connect_src.concat [
-      'ws://reckoning.test:3036', 'http://reckoning.test:3036',
-      "ws://#{ViteRuby.config.host_with_port}", "http://#{ViteRuby.config.host_with_port}"
+      "ws://reckoning.test:3036", "wss://reckoning.test:3036",
+      "http://reckoning.test:3036", "https://reckoning.test:3036",
+      "ws://#{ViteRuby.config.host_with_port}", "http://#{ViteRuby.config.host_with_port}",
+      "wss://#{ViteRuby.config.host_with_port}", "https://#{ViteRuby.config.host_with_port}"
     ]
   end
 

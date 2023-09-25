@@ -6,10 +6,11 @@ log/*
 tmp/*
 dumps
 data/*
-
 pids/*
 
 # config files
+config/credentials/*.key
+config/*.key
 .env
 .powenv
 .byebug_history
@@ -22,6 +23,9 @@ gems/*
 # test files
 coverage/*
 test/reports/*
+test/javascript/e2e/screenshots/*
+test/javascript/e2e/videos/*
+test/javascript/unit/coverage/*
 
 # app files
 files/*
@@ -33,20 +37,17 @@ public/vite*
 # js dependencies
 vendor/assets/.bowerrc
 vendor/assets/bower.json
+vendor/assets/bower_components/jquery
+vendor/assets/bower_components/bootstrap
+vendor/assets/bower_components/sweetalert
 
-# js translations
-public/javascripts/translations.js
-reckoning-app.sublime-workspace
-reckoning.io.csr
-reckoning.io.key
+.byebug_history
 
-config/master.key
-config/credentials/production.key
-
-# Vite Ruby
-public/vite*
 node_modules
-*.local
+yarn-error.log
+yarn-debug.log*
+.yarn-integrity
+build
 
 app/assets/builds/*
 !app/assets/builds/.keep
@@ -57,3 +58,7 @@ yarn-debug.log*
 .yarn-integrity
 build
 
+
+.eslintcache
+
+REVISION
