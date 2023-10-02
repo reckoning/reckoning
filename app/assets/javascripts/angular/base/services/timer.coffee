@@ -26,7 +26,7 @@ angular.module 'Reckoning'
     $http.post(ApiBasePath + "/api/v1/timers", timer)
 
   update: (timer) ->
-    $http.put(ApiBasePath + "/api/v1/timers/#{timerId}", timer)
+    $http.put(ApiBasePath + "/api/v1/timers/#{timer.id}", timer)
 
   start: (timerId) ->
     $http.put(ApiBasePath + "/api/v1/timers/#{timerId}/start")

@@ -6,8 +6,8 @@ class TimersController < ApplicationController
     respond_to do |format|
       format.js do
         scope = current_account.timers.uninvoiced.billable
-        scope = scope.for_project(project_id) if project_id
-        scope = scope.without_ids(timer_ids) if timer_ids
+        scope = scope.for_project(project_id) if project_id.present?
+        scope = scope.without_ids(timer_ids) if timer_ids.present?
         timers = scope.order(date: :asc)
         render json: {body: render_to_string(partial: "list", locals: {timers: timers})}
       end
