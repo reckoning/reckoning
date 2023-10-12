@@ -7,6 +7,54 @@ module Api
         not_found(I18n.t("messages.record_not_found.timer", id: params[:id]))
       end
 
+      include Swagger::Blocks
+
+      swagger_path '/timers' do
+        operation :get do
+          key :summary, 'All Timers'
+          key :description, 'Returns all timers'
+          key :operationId, 'findTimers'
+          key :produces, [
+            'application/json',
+            'text/html',
+          ]
+          key :tags, [
+            'timers'
+          ]
+          parameter do
+            key :name, :per_page
+            key :in, :query
+            key :description, 'number of items to return per page'
+            key :required, false
+            key :type, :integer
+            key :format, :int32
+          end
+          parameter do
+            key :name, :page
+            key :in, :query
+            key :description, 'page to return'
+            key :required, false
+            key :type, :integer
+            key :format, :int32
+          end
+          response 200 do
+            key :description, 'timer response'
+            schema do
+              key :type, :array
+              items do
+                key :'$ref', :Timer
+              end
+            end
+          end
+          response :default do
+            key :description, 'unexpected error'
+            schema do
+              key :'$ref', :ApiError
+            end
+          end
+        end
+      end
+
       def index
         authorize! :index, Timer
         scope = current_account.timers
@@ -20,16 +68,80 @@ module Api
         @timers = scope.order(created_at: :desc)
       end
 
+      swagger_path '/timers' do
+        operation :post do
+          key :description, 'Creates a new Timer'
+          key :operationId, 'createTimer'
+          key :produces, [
+            'application/json'
+          ]
+          key :tags, [
+            'timers'
+          ]
+          parameter do
+            key :name, :timer
+            key :in, :body
+            key :description, 'Timer to add'
+            key :required, true
+            schema do
+              key :'$ref', :TimerInput
+            end
+          end
+          response 200 do
+            key :description, 'timer response'
+            schema do
+              key :'$ref', :Timer
+            end
+          end
+          response :default do
+            key :description, 'unexpected error'
+            schema do
+              key :'$ref', :ApiError
+            end
+          end
+        end
+      end
+
       def create
         @timer ||= current_user.timers.new timer_params
         authorize! :create, @timer
         if @timer.save
           @timer.start if start_timer?
-          send_realtime_update(@timer)
           render status: :created
         else
           Rails.logger.info "Timer Create Failed: #{@timer.errors.full_messages.to_yaml}"
           render json: ValidationError.new("timer.create", @timer.errors), status: :bad_request
+        end
+      end
+
+      swagger_path '/timers/{id}' do
+        operation :get do
+          key :summary, 'Find Timer by ID'
+          key :description, 'Returns a single timer if the user has access'
+          key :operationId, 'findTimerById'
+          key :tags, [
+            'timers'
+          ]
+          parameter do
+            key :name, :id
+            key :in, :path
+            key :description, 'ID of timer to fetch'
+            key :required, true
+            key :type, :string
+            key :format, :uuid
+          end
+          response 200 do
+            key :description, 'timer response'
+            schema do
+              key :'$ref', :Timer
+            end
+          end
+          response :default do
+            key :description, 'unexpected error'
+            schema do
+              key :'$ref', :ApiError
+            end
+          end
         end
       end
 
@@ -41,27 +153,26 @@ module Api
           render json: ValidationError.new("timer.update", @timer.errors), status: :bad_request
         end
         @timer.start if start_timer?
-        send_realtime_update(@timer)
       end
 
       def stop
         @timer = current_user.timers.find(params[:id])
         authorize! :stop, @timer
-        unless @timer.stop
-          Rails.logger.info "Timer Stop Failed: #{@timer.to_yaml}"
-          render json: {message: I18n.t(:"messages.timer.stop.failure")}, status: :bad_request
-        end
-        send_realtime_update(@timer)
+
+        return if @timer.stop
+
+        Rails.logger.info "Timer Stop Failed: #{@timer.to_yaml}"
+        render json: {message: I18n.t(:"messages.timer.stop.failure")}, status: :bad_request
       end
 
       def start
         @timer = current_user.timers.find(params[:id])
         authorize! :start, @timer
-        unless @timer.start
-          Rails.logger.info "Timer Start Failed: #{@timer.to_yaml}"
-          render json: {message: I18n.t(:"messages.timer.start.failure")}, status: :bad_request
-        end
-        send_realtime_update(@timer)
+
+        return if @timer.start
+
+        Rails.logger.info "Timer Start Failed: #{@timer.to_yaml}"
+        render json: {message: I18n.t(:"messages.timer.start.failure")}, status: :bad_request
       end
 
       def destroy
@@ -72,7 +183,6 @@ module Api
             Rails.logger.info "Timer Destroy Failed: #{@timer.errors.full_messages.to_yaml}"
             render json: ValidationError.new("timer.destroy", @timer.errors), status: :bad_request
           end
-          send_realtime_update(@timer)
         else
           Rails.logger.info "Timer Destroy Failed: Timer allready on Invoice"
           render json: {message: I18n.t(:"messages.timer.destroy.failure")}, status: :bad_request
@@ -106,16 +216,11 @@ module Api
       end
 
       private def task
-        @task ||= current_account.tasks.find(params.delete(:task_id))
+        @task ||= current_account.tasks.find(params.delete(:taskId))
       end
 
       private def start_timer?
         params.delete(:started)
-      end
-
-      private def send_realtime_update(timer)
-        ActionCable.server.broadcast "timers_#{current_user.id}_#{timer.date}", timer.to_builder.target!
-        ActionCable.server.broadcast "timers_#{current_user.id}_all", timer.to_builder.target!
       end
 
       private def timer_params

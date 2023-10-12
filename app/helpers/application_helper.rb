@@ -1,24 +1,11 @@
 # frozen_string_literal: true
 
-require "json_web_token"
-
 module ApplicationHelper
   def main_title
     [
       ("#{current_account.name} -" if defined?(current_account) && current_account.present?),
       I18n.t(:"meta.title.default")
     ].compact.join(" ")
-  end
-
-  def auth_token
-    @auth_token ||= if user_signed_in?
-      JsonWebToken.encode(
-        exp: Time.zone.now.to_i + Rails.configuration.app.jwt_expiration,
-        user_id: current_user.id
-      )
-    else
-      ""
-    end
   end
 
   def title(label = nil)

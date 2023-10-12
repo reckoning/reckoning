@@ -65,7 +65,7 @@ module Api
 
         it "creates a new timer" do
           date = Time.current.to_date
-          post "/api/v1/timers", params: {date: date, value: 1.0, task_id: timer.task_id}
+          post "/api/v1/timers", params: {date: date, value: 1.0, taskId: timer.task_id}
 
           assert_response :created
 
@@ -76,7 +76,7 @@ module Api
         end
 
         it "updates a timer" do
-          patch "/api/v1/timers/#{timer.id}", params: {value: 2.0, task_id: timer.task_id}
+          patch "/api/v1/timers/#{timer.id}", params: {value: 2.0, taskId: timer.task_id}
 
           assert_response :ok
 

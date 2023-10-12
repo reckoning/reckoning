@@ -20,6 +20,7 @@ class Ability
     can :manage, Task, project: {customer: {account_id: user.account_id}}
     can :manage, Timer, user_id: user.id
     can :manage, :timesheet
+    can :read, GermanHoliday
 
     setup_expenses_abilities(user.account_id) if user.account.feature_expenses?
 

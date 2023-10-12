@@ -2,6 +2,10 @@
 
 class TimersChannel < ApplicationCable::Channel
   def subscribed
-    stream_from "timers_#{current_user.id}_#{params[:room]}"
+    stream_for current_user
+  end
+
+  def unsubscribed
+    stop_all_streams
   end
 end

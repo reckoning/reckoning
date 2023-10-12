@@ -1,0 +1,86 @@
+.col-animated {
+  transition: width 0.4s ease, max-width 0.4s ease;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  overflow: hidden;
+  transition: width $transition-base-speed ease,
+    max-width $transition-base-speed ease, padding $transition-base-speed ease;
+
+  label,
+  .filter-group-title {
+    white-space: nowrap;
+  }
+
+  .radio-list {
+    min-width: 300px;
+  }
+}
+
+.slide-enter,
+.slide-leave-active {
+  width: 0;
+  max-width: 0;
+  padding: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity $transition-base-speed ease;
+}
+
+.fade-enter-active {
+  transition-delay: 0.2s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-slow-enter-active,
+.fade-slow-leave-active {
+  transition: opacity 1.5s;
+}
+
+.fade-slow-enter-active {
+  transition-delay: 1.5s;
+}
+
+.fade-slow-enter,
+.fade-slow-leave-active {
+  opacity: 0;
+}
+
+.fade-list-item {
+  opacity: 1;
+  transition: all $transition-base-speed;
+}
+
+.fade-list-enter,
+.fade-list-leave-to {
+  transform: translateY(30px);
+  opacity: 0;
+}
+
+.fade-list-leave-active {
+  opacity: 0;
+}
+
+.fade-list-enter-active {
+  transition-delay: $transition-base-speed;
+}
+
+.fade-nav-enter-active {
+  transition: opacity 0.3s;
+}
+
+.fade-nav-leave-active {
+  transition: opacity 0.3s;
+}
+
+.fade-nav-enter,
+.fade-nav-leave-active {
+  opacity: 0;
+}

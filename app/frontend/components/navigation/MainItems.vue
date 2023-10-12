@@ -1,0 +1,65 @@
+<template>
+  <div class="h-0 flex-1 overflow-y-auto pt-5 pb-4">
+    <div class="flex flex-shrink-0 items-center px-4">
+      <p class="text-gray-200 text-2xl brand">Reckoning</p>
+    </div>
+    <nav class="mt-5 space-y-1 px-2">
+      <router-link
+        v-for="item in items"
+        :key="item.name"
+        :to="(item.to as RouteLocationRaw)"
+        :class="[
+          isActive(item)
+            ? 'bg-gray-900 text-white'
+            : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+          'group flex items-center px-2 py-2 text-base font-medium rounded-md',
+        ]"
+      >
+        <component
+          :is="item.icon"
+          v-if="item.icon"
+          :class="[
+            isActive(item)
+              ? 'text-gray-300'
+              : 'text-gray-400 group-hover:text-gray-300',
+            'mr-4 flex-shrink-0 h-6 w-6',
+          ]"
+          aria-hidden="true"
+        />
+        {{ item.name }}
+      </router-link>
+    </nav>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import type { Component } from "vue";
+import { useRoute } from "vue-router";
+import type { RouteLocation, RouteLocationRaw } from "vue-router";
+
+export type NavigationItem = {
+  name: string;
+  to: Partial<RouteLocation>;
+  icon?: Component;
+  activeRoutes?: string[];
+};
+
+export interface Props {
+  items: NavigationItem[];
+}
+
+defineProps<Props>();
+
+// Active Navigation
+const route = useRoute();
+const isActive = (item: NavigationItem): boolean => {
+  if (item.activeRoutes) {
+    return item.activeRoutes.includes(String(route.name));
+  }
+  if (route.name === item.to.name) {
+    return true;
+  }
+
+  return false;
+};
+</script>

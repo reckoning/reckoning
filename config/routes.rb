@@ -2,6 +2,8 @@
 
 require "sidekiq/web"
 
+Rails.application.default_url_options = {host: Rails.configuration.app.domain, trailing_slash: true}
+
 Rails.application.routes.draw do
   draw :api_routes
 
@@ -111,6 +113,8 @@ Rails.application.routes.draw do
       get :deactivate
     end
   end
+
+  draw :frontend_routes
 
   get "impressum" => "base#impressum"
   get "privacy" => "base#privacy"

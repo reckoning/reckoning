@@ -1,0 +1,734 @@
+openapi: 3.1.0
+info:
+  title: schema-v1
+  description: Reckoning Api Schema V1
+  summary: V1 Schema
+  version: '1.0'
+  contact:
+    name: Marten Klitzke
+    url: 'https://reckoning.me'
+    email: info@reckoning.me
+  license:
+    name: MIT License
+    url: 'https://github.com/reckoning/reckoning/blob/main/LICENSE'
+tags:
+  - name: customers
+    description: Customers
+  - name: holidays
+    description: Holidays
+  - name: projects
+    description: Projects
+  - name: sessions
+    description: Sessions
+  - name: users
+    description: Users
+  - name: timers
+    description: Timers
+servers:
+  - url: 'http://reckoning.test/api/v1'
+    description: development
+  - url: 'https://reckoning.me/api/v1'
+    description: live
+paths:
+  /me:
+    get:
+      summary: Current User Detail
+      description: Current User Detail
+      tags:
+        - users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      operationId: get-me
+      parameters: []
+      security:
+        - sessionCookie: []
+  /sessions:
+    post:
+      summary: Create Session
+      description: Create new Session
+      tags:
+        - sessions
+      operationId: create-session
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionForm'
+      responses:
+        '201':
+          description: |
+            Successfully authenticated. The session ID is returned in a cookie named `RECKONING`. You need to include this cookie in subsequent requests.
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: RECKONING=abcde12345; Path=/; HttpOnly
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+    delete:
+      summary: Destroy Session
+      description: Destroy the current Session
+      tags:
+        - sessions
+      operationId: delete-session
+      responses:
+        '200':
+          description: OK
+      security:
+        - sessionCookie: []
+  /customers:
+    get:
+      summary: Customers Index
+      description: List of Customers
+      tags:
+        - customers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+      operationId: get-customers
+      security:
+        - sessionCookie: []
+  '/customers/{id}':
+    get:
+      summary: Customer Detail
+      description: Customer Detail
+      tags:
+        - customers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+      operationId: get-customer
+      security:
+        - sessionCookie: []
+    parameters:
+      - schema:
+          type: string
+          format: uuid
+        name: id
+        in: path
+        required: true
+        description: Customer ID
+  /projects:
+    get:
+      summary: Projects Index
+      description: List of Projects
+      tags:
+        - projects
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+      operationId: get-projects
+      security:
+        - sessionCookie: []
+  '/projects/{id}':
+    get:
+      summary: Project Detail
+      description: Project Detail
+      tags:
+        - projects
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+      operationId: get-project
+      security:
+        - sessionCookie: []
+    parameters:
+      - schema:
+          type: string
+          format: uuid
+        name: id
+        in: path
+        required: true
+        description: Id of Project
+  /german-holidays:
+    get:
+      summary: German Holidays Index
+      description: List of German Holidays
+      tags:
+        - holidays
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GermanHoliday'
+      operationId: get-german-holidays
+      parameters:
+        - schema:
+            type: number
+          in: query
+          name: year
+          description: Year
+        - schema:
+            type: array
+          in: query
+          name: state
+          description: Federal State Shorthand
+          explode: true
+  /timers:
+    get:
+      summary: Timers Index
+      description: List of Timers
+      tags:
+        - timers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Timer'
+      operationId: get-timers
+      security:
+        - sessionCookie: []
+      parameters:
+        - schema:
+            format: date
+            type: string
+          in: query
+          name: date
+          description: Filter by Date
+        - schema:
+            type: string
+            format: date
+          in: query
+          name: weekDate
+          description: Filter by Week
+    post:
+      summary: Create Timer
+      tags:
+        - timers
+      operationId: create-timer
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Timer'
+      security:
+        - sessionCookie: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimerInput'
+      description: Create a new Timer
+  '/timers/{id}/start':
+    parameters:
+      - schema:
+          type: string
+          format: uuid
+        name: id
+        in: path
+        required: true
+        description: Timer ID
+    put:
+      summary: Start Timer
+      tags:
+        - timers
+      description: Start a Timer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Timer'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+      operationId: start-timer
+      security:
+        - sessionCookie: []
+  '/timers/{id}/stop':
+    parameters:
+      - schema:
+          type: string
+          format: uuid
+        name: id
+        in: path
+        required: true
+        description: Timer ID
+    put:
+      summary: Stop Timer
+      tags:
+        - timers
+      description: Stop a Timer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Timer'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+      operationId: stop-timer
+      security:
+        - sessionCookie: []
+components:
+  schemas:
+    Customer:
+      type: object
+      x-examples:
+        example-1:
+          id: 4a1be11b-edc4-4747-bc04-13cd8737c979
+          name: Sekeido
+          createdAt: '2014-09-17T09:10:03.304+02:00'
+          updatedAt: '2015-02-06T00:27:44.003+01:00'
+          links:
+            show:
+              href: /api/v1/customers/4a1be11b-edc4-4747-bc04-13cd8737c979
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        links:
+          type: object
+          properties:
+            show:
+              type: object
+              properties:
+                href:
+                  type: string
+                  format: uri
+    GermanHoliday:
+      title: GermanHoliday
+      x-stoplight:
+        id: kl6ovent9noxy
+      type: object
+      properties:
+        name:
+          type: string
+        date:
+          type: string
+          format: date
+        federalState:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Project:
+      type: object
+      x-examples:
+        example-1:
+          id: dcf90db8-5fdd-4d4c-b517-966e95e6eb4a
+          name: Shipcloud App
+          label: Shipcloud GmbH - Shipcloud App
+          customerName: Shipcloud GmbH
+          customerId: 00e691db-739e-472d-bbd5-3a107697a0f2
+          timerValues: 0
+          timerValuesBillable: 0
+          timerValuesInvoiced: 0
+          timerValuesUninvoiced: 0
+          invoiceValues: 0
+          rate: 105
+          budget: 25200
+          budgetOnDashboard: true
+          budgetHours: 240
+          budgetPercent: 0
+          budgetPercentInvoiced: 0
+          budgetPercentUninvoiced: 0
+          roundUp: 900
+          state: active
+          federalState: HH
+          businessDays: 41
+          startDate: '2022-09-30'
+          endDate: '2022-11-30'
+          tasks:
+            - id: 491f96cd-58e1-4eaa-a254-81c97f32b092
+              name: Quicksight Dashboards
+              label: Quicksight Dashboards (fakturierbar)
+              billable: true
+              projectId: dcf90db8-5fdd-4d4c-b517-966e95e6eb4a
+              createdAt: '2022-09-16T13:20:41.982+02:00'
+              updatedAt: '2022-09-16T13:20:41.982+02:00'
+            - id: 3e4b9216-c1ed-4b01-9939-80dcd48cc341
+              name: Tracking Status via Datenbank Mapping
+              label: Tracking Status via Datenbank Mapping (fakturierbar)
+              billable: true
+              projectId: dcf90db8-5fdd-4d4c-b517-966e95e6eb4a
+              createdAt: '2022-09-16T13:20:41.988+02:00'
+              updatedAt: '2022-09-16T13:20:41.988+02:00'
+            - id: e1c656db-3094-4fc5-916f-000ad0456ec7
+              name: 'Anpassung der Abostruktur: Staffelpreise'
+              label: 'Anpassung der Abostruktur: Staffelpreise (fakturierbar)'
+              billable: true
+              projectId: dcf90db8-5fdd-4d4c-b517-966e95e6eb4a
+              createdAt: '2022-09-16T13:20:41.985+02:00'
+              updatedAt: '2022-09-16T13:20:41.985+02:00'
+          createdAt: '2022-09-16T13:20:41.979+02:00'
+          updatedAt: '2022-09-22T08:35:46.920+02:00'
+          links:
+            show:
+              href: /api/v1/projects/dcf90db8-5fdd-4d4c-b517-966e95e6eb4a/
+      description: ''
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        label:
+          type: string
+        customerName:
+          type: string
+        customerId:
+          type: string
+          format: uuid
+        timerValues:
+          type: number
+        timerValuesBillable:
+          type: number
+        timerValuesInvoiced:
+          type: number
+        timerValuesUninvoiced:
+          type: number
+        invoiceValues:
+          type: number
+        rate:
+          type: number
+        budget:
+          type: number
+        budgetOnDashboard:
+          type: boolean
+        budgetHours:
+          type: number
+        budgetPercent:
+          type: number
+        budgetPercentInvoiced:
+          type: number
+        budgetPercentUninvoiced:
+          type: number
+        roundUp:
+          type: integer
+        state:
+          type: string
+        federalState:
+          type: string
+        businessDays:
+          type: integer
+        startDate:
+          type: string
+        endDate:
+          type: string
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        links:
+          type: object
+          properties:
+            show:
+              type: object
+              properties:
+                href:
+                  type: string
+    ProjectMinimal:
+      title: ProjectMinimal
+      x-stoplight:
+        id: l8xgzstmwt1sy
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        label:
+          type: string
+        state:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+        budget:
+          type: number
+        budgetHours:
+          type: number
+        rate:
+          type: number
+        timerValues:
+          type: number
+        customerName:
+          type: string
+        customerId:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+    SessionForm:
+      title: SessionForm
+      x-stoplight:
+        id: pk5l8s2cfrsz2
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+        rememberMe:
+          type: boolean
+    Task:
+      type: object
+      x-examples:
+        example-1:
+          id: 01d0847c-9c3e-419a-a92e-571fc94ff38b
+          name: Entwicklung
+          label: Entwicklung (fakturierbar)
+          billable: true
+          projectId: f5a1ef41-eb72-4202-b74e-a5668263c925
+          createdAt: '2015-02-09T00:20:32.125+01:00'
+          updatedAt: '2022-09-09T16:06:17.766+02:00'
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        label:
+          type: string
+        billable:
+          type: boolean
+        projectId:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Timer:
+      type: object
+      x-examples:
+        example-1:
+          id: e8725547-0fe1-4e19-b826-ed87deb9fe2a
+          date: '2022-10-05'
+          value: '5.25'
+          sumForTask: '5.25'
+          note: Cleanup
+          started: false
+          startedAt: null
+          startTime: null
+          startTimeForTask: null
+          positionId: null
+          invoiced: false
+          taskId: c86cf3ba-dbe7-46ce-a99b-5268ac21e363
+          taskName: Entwicklung
+          taskLabel: Entwicklung (fakturierbar)
+          taskBillable: true
+          projectId: aea91955-77b9-4e41-a09c-86911e82d6ed
+          projectName: Fanblast Homepage
+          projectCustomerName: Digital Blast GmbH
+          createdAt: '2022-10-05T09:49:24.726+02:00'
+          updatedAt: '2022-10-05T20:32:20.156+02:00'
+          deleted: false
+          links:
+            project:
+              href: /api/v1/projects/aea91955-77b9-4e41-a09c-86911e82d6ed
+      properties:
+        id:
+          type: string
+          format: uuid
+        date:
+          type: string
+          format: date
+        value:
+          type: number
+          format: double
+        note:
+          type: string
+        started:
+          type: boolean
+        startedAt:
+          type: string
+          format: date-time
+        startTime:
+          type: string
+        startTimeForTask:
+          type: 'null'
+        positionId:
+          type: string
+        invoiced:
+          type: boolean
+        project:
+          $ref: '#/components/schemas/ProjectMinimal'
+        task:
+          $ref: '#/components/schemas/Task'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        deleted:
+          type: boolean
+        links:
+          type: object
+          properties:
+            project:
+              type: object
+              properties:
+                href:
+                  type: string
+      required:
+        - id
+        - date
+        - value
+        - project
+        - task
+        - createdAt
+        - updatedAt
+    TimerInput:
+      type: object
+      x-stoplight:
+        id: jv92lxboerty2
+      x-examples:
+        example-1:
+          id: e8725547-0fe1-4e19-b826-ed87deb9fe2a
+          date: '2022-10-05'
+          value: '5.25'
+          sumForTask: '5.25'
+          note: Cleanup
+          started: false
+          startedAt: null
+          startTime: null
+          startTimeForTask: null
+          positionId: null
+          invoiced: false
+          taskId: c86cf3ba-dbe7-46ce-a99b-5268ac21e363
+          taskName: Entwicklung
+          taskLabel: Entwicklung (fakturierbar)
+          taskBillable: true
+          projectId: aea91955-77b9-4e41-a09c-86911e82d6ed
+          projectName: Fanblast Homepage
+          projectCustomerName: Digital Blast GmbH
+          createdAt: '2022-10-05T09:49:24.726+02:00'
+          updatedAt: '2022-10-05T20:32:20.156+02:00'
+          deleted: false
+          links:
+            project:
+              href: /api/v1/projects/aea91955-77b9-4e41-a09c-86911e82d6ed
+      properties:
+        date:
+          type: string
+          format: date
+        value:
+          type: string
+        note:
+          type: string
+        started:
+          type: boolean
+        taskId:
+          type: string
+          format: uuid
+        projectId:
+          type: string
+          format: uuid
+      required:
+        - date
+        - value
+        - taskId
+        - projectId
+    User:
+      title: User
+      x-stoplight:
+        id: wgmsb4opo1nmq
+      x-tags:
+        - users
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+        name:
+          type: string
+        avatar:
+          type: string
+          format: uri
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    ValidationError:
+      title: ValidationError
+      x-stoplight:
+        id: zx9iq7g2fzopy
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+  securitySchemes:
+    sessionCookie:
+      name: RECKONING
+      type: apiKey
+      in: cookie
+      description: Session Cookie for Authentication

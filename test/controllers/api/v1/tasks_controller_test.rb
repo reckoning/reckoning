@@ -38,7 +38,7 @@ module Api
         end
 
         it "creates a new task" do
-          post "/api/v1/tasks", params: {name: "foo", project_id: project.id}
+          post "/api/v1/tasks", params: {name: "foo", projectId: project.id}
 
           assert_response :created
 

@@ -1,0 +1,20 @@
+<script type="application/javascript">
+  window.API_ENDPOINT = "<%= API_ENDPOINT %>";
+  window.FRONTEND_BASE_URL = "<%= FRONTEND_BASE_URL %>";
+  window.CABLE_ENDPOINT = "<%= CABLE_ENDPOINT %>";
+</script>
+<div id="app" class="h-full">
+  <div class="app-intro">
+    <h1 class="text-4xl">
+      <%= I18n.t('title.default') %>
+    </h1>
+    <div>
+      <div class="loader">
+        <div class="cube1 cube"></div>
+        <div class="cube2 cube"></div>
+        <div class="cube4 cube"></div>
+        <div class="cube3 cube"></div>
+      </div>
+    </div>
+  </div>
+</div>

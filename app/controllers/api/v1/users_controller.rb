@@ -10,6 +10,7 @@ module Api
 
       def current
         authorize! :read, User
+
         @user = current_user
       end
     end

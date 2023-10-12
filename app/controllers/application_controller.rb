@@ -10,7 +10,8 @@ class ApplicationController < ActionController::Base
     redirect_to root_url, alert: exception.message
   end
 
-  before_action :authenticate_user!, :set_default_nav
+  before_action :authenticate_user!
+  before_action :set_default_nav
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :set_user_cookie, if: :user_signed_in?
 

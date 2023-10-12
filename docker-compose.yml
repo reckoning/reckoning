@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  app:
+    build: docker/dev/Dockerfile
+    ports:
+      - 8240:3000
+    environment:
+      DATABASE_URL: postgresql://root:root@postgres:5432/reckoning
+      REDIS_URL: redis://redis:6379
+      INITIAL_DB_SETUP: 1
+      UNSAFE: 1
+      RAILS_SERVE_STATIC_FILES: 1
+      DOMAIN: reckoning.test
+      ON_SUBDOMAIN: false
+    depends_on:
+      - postgres
+      - redis
+      - vite
+  vite:
+    build: docker/dev/Dockerfile.vite
+    ports:
+      - 3036:3036
+  postgres:
+    image: postgres:14.5
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/postgres-local:/var/lib/postgresql/data
+      - ./dumps:/backups
+  redis:
+    image: redis:6.0.9
+    ports:
+      - 6379:6379

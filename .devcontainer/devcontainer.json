@@ -1,0 +1,7 @@
+{
+  "name": "Reckoning",
+  "dockerComposeFile": "./docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/app",
+  "shutdownAction": "stopCompose"
+}

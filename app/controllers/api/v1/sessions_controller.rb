@@ -3,60 +3,75 @@
 module Api
   module V1
     class SessionsController < Api::BaseController
-      include ActionController::HttpAuthentication::Token
-
-      skip_authorization_check
+      skip_authorization_check except: [:confirm_access]
       before_action :authenticate_user!, except: [:create]
-
-      respond_to :json
 
       def create
         resource = User.find_for_database_authentication(email: login_params[:email])
-        return invalid_login_attempt unless resource
 
-        if resource.valid_password?(login_params[:password]) && validate_otp(resource)
-          sign_in(:user, resource, store: false)
-          render json: {auth_token: JsonWebToken.encode(new_auth_token(resource.id).to_jwt_payload)}
+        if resource.blank?
+          render json: {code: "session.create.not_found_in_database", message: I18n.t("devise.failure.not_found_in_database")}, status: :bad_request
           return
+        else
+          unless resource.active_for_authentication?
+            resource.resend_confirmation
+
+            render json: {code: "session.create.unconfirmed", message: I18n.t("devise.failure.unconfirmed")}, status: :bad_request
+            return
+          end
+
+          if resource.otp_required_for_login && login_params[:twoFactorCode].blank?
+            render json: {code: "session.create.two_factor_required", message: I18n.t("devise.failure.two_factor_required")}, status: :bad_request
+            return
+          end
+
+          unless resource.valid_password?(login_params[:password])
+            render json: {code: "session.create.invalid", message: I18n.t("devise.failure.not_found_in_database")}, status: :bad_request
+            return
+          end
+
+          if resource.otp_required_for_login && !resource.validate_and_consume_otp!(login_params[:twoFactorCode])
+            render json: {code: "session.create.invalid", message: I18n.t("devise.failure.not_found_in_database")}, status: :bad_request
+            return
+          end
         end
-        invalid_login_attempt
+
+        resource.remember_me = login_params[:rememberMe]
+
+        Rails.logger.debug resource.remember_me.to_yaml
+        sign_in(:user, resource)
+
+        render json: {code: :success, message: I18n.t("labels.success")}
       end
 
       def destroy
-        auth_token = AuthToken.find_by(user_id: current_user.id, token: jwt_token[:token])
-        auth_token&.destroy
+        sign_out(:user)
+
         render json: {code: "sessions.destroy", message: I18n.t("devise.sessions.signed_out")}
       end
 
-      private def new_auth_token(user_id)
-        @new_auth_token ||= AuthToken.create(
-          user_id: user_id,
-          user_agent: request.user_agent,
-          description: login_params[:description],
-          expires: login_params[:expires]
-        )
-      end
+      def confirm_access
+        authorize! :confirm_access, current_user
 
-      private def jwt_token
-        @jwt_token ||= begin
-          auth_params, _options = token_and_options(request)
-          JsonWebToken.decode(auth_params)
+        unless current_user.valid_password?(login_params[:password])
+          render json: {code: "session.confirmAccess.failure", message: I18n.t("messages.confirmAccess.failure")}, status: :bad_request
+          return
         end
-      end
 
-      private def validate_otp(resource)
-        return true unless resource.otp_required_for_login
-        return if login_params[:otp_token].nil?
+        cookies.encrypted["#{Rails.configuration.cookie_prefix}_ACCESS_CONFIRMED"] = {
+          value: current_user.confirm_access_token,
+          domain: Rails.configuration.app.cookie_domain,
+          secure: Rails.env.production?,
+          expires: 15.minutes,
+          httponly: true,
+          same_site: :lax
+        }
 
-        resource.validate_and_consume_otp!(login_params[:otp_token])
+        render json: {code: :success, message: I18n.t("labels.success")}
       end
 
       private def login_params
-        @login_params ||= params.permit(:email, :password, :otp_token, :description, :expires)
-      end
-
-      private def invalid_login_attempt
-        render json: {code: "session.create", message: I18n.t("devise.failure.invalid")}, status: :bad_request
+        @login_params ||= params.permit(:email, :password, :rememberMe, :twoFactorCode)
       end
     end
   end

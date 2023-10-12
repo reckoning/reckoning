@@ -15,6 +15,8 @@ gem "stripe"
 
 gem "mobility", "~> 1.2.9"
 
+gem "business_time"
+
 gem "sidekiq"
 gem "sidekiq-cron"
 # for sidekiq web
@@ -26,7 +28,6 @@ gem "slim-rails"
 
 gem "devise"
 gem "devise-two-factor"
-gem "jwt"
 
 gem "mini_magick"
 gem "rqrcode"
@@ -45,8 +46,6 @@ gem "dynamic_fields_for_rails"
 gem "workflow", "~> 1.2.0"
 
 gem "aasm"
-
-gem "sass-rails"
 
 gem "coffee-rails"
 gem "jquery-rails"
@@ -83,9 +82,15 @@ gem "sentry-rails"
 gem "sentry-ruby"
 gem "sentry-sidekiq"
 
+gem 'swagger-blocks'
+
 gem "lograge"
 
 gem "typhoeus"
+
+gem "vite_rails"
+
+gem "tailwindcss-rails"
 
 gem "redis-actionpack"
 gem "redis-store"
@@ -98,6 +103,8 @@ gem "aws-sdk-s3", require: false
 gem "image_processing", "~> 1.2"
 
 gem "nokogiri", ">= 1.7.1"
+
+gem 'thor'
 
 gem "pry-rails"
 

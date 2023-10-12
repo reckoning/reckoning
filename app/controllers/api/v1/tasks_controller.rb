@@ -32,7 +32,7 @@ module Api
       end
 
       private def project
-        @project ||= current_account.projects.find(params.delete(:project_id))
+        @project ||= current_account.projects.find(params.delete(:projectId))
       end
 
       private def task_params

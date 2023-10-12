@@ -33,7 +33,7 @@ App.initInternal = ->
 
 document.addEventListener 'turbolinks:load', ->
   App.init()
-  App.initInternal() if AuthToken
+  App.initInternal() if window.AUTHENTICATED == 'true'
 
 $(document).on 'click', '[data-geolocation]', (ev) ->
   ev.preventDefault()

@@ -1,0 +1,28 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.web.json",
+  "compilerOptions": {
+    "target": "esnext",
+    "composite": true,
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable"
+    ],
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./app/frontend/*"],
+      "~/*": ["*"]
+    }
+  },
+  "include": [
+    "@types/*",
+    "app/frontend/**/*.ts",
+    "app/frontend/**/*.vue"
+  ],
+  "exclude": [
+    "app/frontend/**/__tests__/*",
+    "test/javascript/**/*.ts"
+  ]
+}

@@ -1,0 +1,50 @@
+get:
+  summary: Timers Index
+  description: List of Timers
+  tags:
+    - timers
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Timer'
+  operationId: get-timers
+  security:
+    - sessionCookie: []
+  parameters:
+    - schema:
+        format: date
+        type: string
+      in: query
+      name: date
+      description: Filter by Date
+    - schema:
+        type: string
+        format: date
+      in: query
+      name: weekDate
+      description: Filter by Week
+post:
+  summary: Create Timer
+  tags:
+    - timers
+  operationId: create-timer
+  responses:
+    '201':
+      description: Created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Timer'
+  security:
+    - sessionCookie: []
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/TimerInput'
+  description: Create a new Timer

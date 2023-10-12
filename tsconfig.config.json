@@ -1,0 +1,14 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.node.json",
+  "compilerOptions": {
+    "composite": true,
+    "types": ["node"]
+  },
+  "include": [
+    ".eslintrc.*",
+    "vite.config.*",
+    "vitest.config.*",
+    "cypress.config.*",
+    "config/tailwind.config.*"
+  ]
+}

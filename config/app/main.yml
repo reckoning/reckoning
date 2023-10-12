@@ -5,6 +5,8 @@ shared:
   domain: <%= ENV["DOMAIN"] || "localhost:#{ENV["PORT"] || 8240}" %>
   url: <%= ENV["APP_URL"] %>
 
+  api_version: v1
+
   s3_space: reckoning
   s3_region: fra1
   s3_endpoint: https://fra1.digitaloceanspaces.com
