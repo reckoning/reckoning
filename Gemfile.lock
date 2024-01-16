@@ -82,8 +82,8 @@ GEM
     autoprefixer-rails (10.4.15.0)
       execjs (~> 2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.827.0)
-    aws-sdk-core (3.183.0)
+    aws-partitions (1.828.0)
+    aws-sdk-core (3.183.1)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
@@ -91,7 +91,7 @@ GEM
     aws-sdk-kms (1.71.0)
       aws-sdk-core (~> 3, >= 3.177.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.135.0)
+    aws-sdk-s3 (1.136.0)
       aws-sdk-core (~> 3, >= 3.181.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.6)
@@ -146,7 +146,7 @@ GEM
     concurrent-ruby (1.2.2)
     connection_pool (2.4.1)
     crass (1.0.6)
-    dalli (3.2.5)
+    dalli (3.2.6)
     data_migrate (9.1.1)
       activerecord (>= 6.0)
       railties (>= 6.0)
@@ -186,13 +186,13 @@ GEM
     execjs (2.9.1)
     faker (3.2.1)
       i18n (>= 1.8.11, < 2)
-    ffi (1.16.1)
+    ffi (1.16.2)
     fugit (1.8.1)
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    haml (6.1.2)
+    haml (6.2.0)
       temple (>= 0.8.2)
       thor
       tilt
@@ -523,7 +523,7 @@ GEM
     wicked_pdf (2.7.0)
       activesupport
     workflow (1.2.0)
-    zeitwerk (2.6.11)
+    zeitwerk (2.6.12)
 
 PLATFORMS
   ruby
