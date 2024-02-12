@@ -514,7 +514,7 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
-    web_translate_it (3.0.0)
+    web_translate_it (3.0.2)
       multi_json
       optimist (~> 3.0)
     websocket-driver (0.7.6)
