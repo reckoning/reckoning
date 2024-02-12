@@ -146,7 +146,8 @@ GEM
     concurrent-ruby (1.2.2)
     connection_pool (2.4.1)
     crass (1.0.6)
-    dalli (3.2.5)
+    dalli (3.2.7)
+      base64
     data_migrate (9.1.1)
       activerecord (>= 6.0)
       railties (>= 6.0)
