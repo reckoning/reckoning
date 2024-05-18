@@ -4,7 +4,7 @@ source "https://rubygems.org"
 
 ruby File.read(".tool-versions").match(/ruby (.*)\n/)[1].chomp
 
-gem "rails", "7.0.8"
+gem "rails", "7.0.8.3"
 
 gem "pg", "~> 1.0"
 
