@@ -135,8 +135,6 @@ GEM
       capistrano (~> 3.1)
       sshkit (~> 1.3)
     chunky_png (1.4.0)
-    codeclimate-test-reporter (1.0.7)
-      simplecov
     coderay (1.1.3)
     coffee-rails (5.0.0)
       coffee-script (>= 2.2.0)
@@ -275,7 +273,6 @@ GEM
       ruby2_keywords (>= 0.0.5)
     money (6.16.0)
       i18n (>= 0.6.4, <= 2)
-    multi_json (1.15.0)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
     net-imap (0.3.7)
@@ -300,7 +297,6 @@ GEM
       racc (~> 1.4)
     nokogiri (1.15.4-x86_64-linux)
       racc (~> 1.4)
-    optimist (3.1.0)
     orm_adapter (0.5.0)
     parallel (1.23.0)
     parser (3.2.2.3)
@@ -520,9 +516,6 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
-    web_translate_it (3.0.0)
-      multi_json
-      optimist (~> 3.0)
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -552,7 +545,6 @@ DEPENDENCIES
   capistrano-rails (~> 1.4)
   capistrano-rails-console
   capistrano-rbenv (~> 2.1)
-  codeclimate-test-reporter
   coffee-rails
   dalli
   data_migrate
@@ -621,7 +613,6 @@ DEPENDENCIES
   tzinfo-data
   url_plumber
   web-console
-  web_translate_it
   workflow (~> 1.2.0)
 
 RUBY VERSION
