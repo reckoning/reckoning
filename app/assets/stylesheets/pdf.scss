@@ -165,21 +165,19 @@ tr {
 }
 
 .subline {
-  margin: 40px 0;
+  margin: 20px 0;
   font-size: 11pt;
 }
 
 .salutation {
-  margin: 40px 0;
+  margin: 10px 0 0;
   font-size: 11pt;
 }
 
 .confirmation {
-  margin: 40px 0;
+  margin: 40px 0 0;
   padding-top: 20px;
   font-size: 11pt;
-  break-before: always;
-  page-break-before: always;
   break-inside: avoid;
   page-break-inside: avoid;
 
