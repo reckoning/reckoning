@@ -17,7 +17,7 @@ jobs:
   ruby-setup:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
@@ -25,6 +25,10 @@ jobs:
   ruby-lint:
     needs: ruby-setup
     uses: ./.github/workflows/ruby-lint.job.yml
+
+  brakeman:
+    needs: ruby-setup
+    uses: ./.github/workflows/brakeman.job.yml
 
   ruby-tests:
     needs: ruby-setup
@@ -41,7 +45,7 @@ jobs:
 
   deploy:
     if: github.ref == 'refs/heads/main'
-    needs: [ruby-lint, ruby-tests, seeds, e2e-tests]
+    needs: [ruby-lint, brakeman, ruby-tests, seeds, e2e-tests]
     uses: ./.github/workflows/deploy.job.yml
     with:
       capEnv: live

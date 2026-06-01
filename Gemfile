@@ -138,6 +138,7 @@ group :test do
 end
 
 group :development, :test do
+  gem "brakeman", require: false
   gem "bullet"
   gem "bundler-audit"
   gem "byebug", platform: :mri
