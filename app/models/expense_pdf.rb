@@ -33,8 +33,9 @@ class ExpensePdf
     false
   end
 
-  def pdf
-    pdf_options(pdf_file)
+  def inline_pdf
+    html = ApplicationController.new.render_to_string("expenses/index", inline_pdf_options.merge(formats: [:pdf]))
+    Grover.new(html, **grover_options).to_pdf
   end
 
   def year_filter

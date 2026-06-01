@@ -3,9 +3,18 @@ description: JS Setup Tasks
 runs:
   using: "composite"
   steps:
-    - uses: actions/cache@v3
+    - name: Setup Node.js
+      uses: actions/setup-node@v6
       with:
-        path: "**/node_modules"
-        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-    - run: yarn install
+        node-version: "lts/*"
+    - name: Install pnpm
+      run: npm install -g pnpm@10.13.1
+      shell: bash
+    - uses: actions/cache@v5
+      with:
+        path: |
+          "**/node_modules"
+          "~/.pnpm-store"
+        key: ${{ runner.os }}-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+    - run: pnpm install
       shell: bash

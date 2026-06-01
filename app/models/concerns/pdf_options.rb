@@ -4,13 +4,8 @@ require "active_support/concern"
 
 module PdfOptions
   extend ActiveSupport::Concern
-  included do
-    def pdf_options(file)
-      {
-        pdf: file
-      }.merge(inline_pdf_options).merge(whicked_pdf_options)
-    end
 
+  included do
     def inline_pdf_options
       {
         layout: "layouts/pdf",
@@ -18,21 +13,24 @@ module PdfOptions
       }
     end
 
-    def whicked_pdf_options
+    def grover_options
       {
-        header: {
-          content: ApplicationController.new.render_to_string("shared/pdf_header", inline_pdf_options)
-        },
-        footer: {
-          content: ApplicationController.new.render_to_string("shared/pdf_footer", inline_pdf_options)
-        },
+        format: "A4",
         margin: {
-          top: 30,
-          bottom: 38,
-          left: 18,
-          right: 18
-        }
+          top: "30mm",
+          bottom: "38mm",
+          left: "18mm",
+          right: "18mm"
+        },
+        display_header_footer: true,
+        header_template: render_pdf_partial("shared/pdf_header"),
+        footer_template: render_pdf_partial("shared/pdf_footer"),
+        print_background: true
       }
+    end
+
+    private def render_pdf_partial(template)
+      ApplicationController.new.render_to_string(template, layout: false, locals: {resource: self})
     end
   end
 end

@@ -3,11 +3,22 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "test:e2e": "cypress run --browser chrome --headless",
     "test:e2e:report": "generate-mochawesome-report --jsonDir test/reports/e2e --output test/reports/e2e/html --charts"
+  },
+  "dependencies": {
+    "pdfjs-dist": "3.11.174",
+    "puppeteer": "^23.0.0"
   },
   "devDependencies": {
     "cypress": "^12.17.4",
     "typescript": "^5.2.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "cypress",
+      "puppeteer"
+    ]
   }
 }

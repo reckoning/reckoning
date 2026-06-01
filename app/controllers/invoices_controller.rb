@@ -75,7 +75,7 @@ class InvoicesController < ApplicationController
     authorize! :read, invoice
     respond_to do |format|
       format.pdf do
-        render invoice.pdf
+        send_data invoice.inline_pdf, filename: "#{invoice.invoice_file}.pdf", type: "application/pdf", disposition: "inline"
       end
       unless Rails.env.production?
         format.html do
@@ -91,7 +91,7 @@ class InvoicesController < ApplicationController
     authorize! :read, invoice
     respond_to do |format|
       format.pdf do
-        render invoice.timesheet_pdf
+        send_data invoice.inline_timesheet_pdf, filename: "#{invoice.timesheet_file}.pdf", type: "application/pdf", disposition: "inline"
       end
       unless Rails.env.production?
         format.html do

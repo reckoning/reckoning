@@ -105,15 +105,9 @@ class Offer < ApplicationRecord
     "offer-#{ref}-#{I18n.l(date.to_date, format: :file).downcase}"
   end
 
-  def pdf
-    pdf_options(offer_file)
-  end
-
   def inline_pdf
-    WickedPdf.new.pdf_from_string(
-      ApplicationController.new.render_to_string("offers/pdf", inline_pdf_options),
-      whicked_pdf_options
-    )
+    html = ApplicationController.new.render_to_string("offers/pdf", inline_pdf_options)
+    Grover.new(html, **grover_options).to_pdf
   end
 
   private def set_customer

@@ -24,7 +24,7 @@ class OffersController < ApplicationController
     authorize! :read, offer
     respond_to do |format|
       format.pdf do
-        render offer.pdf
+        send_data offer.inline_pdf, filename: "#{offer.offer_file}.pdf", type: "application/pdf", disposition: "inline"
       end
       unless Rails.env.production?
         format.html do

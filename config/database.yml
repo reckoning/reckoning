@@ -15,8 +15,8 @@ ci:
 
 development:
   <<: *default
-  database: reckoning_dev
+  database: <%= ENV["DB_NAME"] || "reckoning_dev#{ENV['WORKTREE_SUFFIX']}" %>
 
 test:
   <<: *default
-  database: reckoning_test
+  database: <%= ENV["DB_NAME"] || "reckoning_test#{ENV['WORKTREE_SUFFIX']}#{ENV['TEST_ENV_NUMBER']}" %>

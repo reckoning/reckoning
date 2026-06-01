@@ -18,10 +18,9 @@ App.initInternal = ->
 
   pdfViewers = $('.pdf-viewer')
   if pdfViewers.length > 0
-    PDFJS.workerSrc = PDFJSWorkerPath
-    for viewer in pdfViewers
-      PDFViewer = new App.PDFViewer($(viewer))
-      PDFViewer.init()
+    pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJSWorkerPath
+    pdfViewers.each (_, viewer) ->
+      new App.PDFViewer($(viewer)).init()
 
   Cable = new App.Cable()
   App.cable = Cable.consumer

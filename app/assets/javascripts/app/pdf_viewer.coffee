@@ -8,7 +8,7 @@ class App.PDFViewer
 
     pdfPath = @viewer.data('pdfPath')
     if pdfPath isnt undefined
-      PDFJS.getDocument(pdfPath).then (pdf) =>
+      pdfjsLib.getDocument(pdfPath).promise.then (pdf) =>
         @renderPages(pdf)
 
   renderPage: ($promise, callback) ->
@@ -20,7 +20,7 @@ class App.PDFViewer
       canvas = $canvas[0]
       context = canvas.getContext('2d')
 
-      viewport = page.getViewport(2.0)
+      viewport = page.getViewport({ scale: 2.0 })
       canvas.height = viewport.height
       canvas.width = viewport.width
 
@@ -28,14 +28,14 @@ class App.PDFViewer
         canvasContext: context
         viewport: viewport
 
-      page.render(renderContext).then ->
+      page.render(renderContext).promise.then ->
         $canvas.fadeIn('slow')
         callback()
 
   renderPages: (pdf, index = 1) ->
     @renderPage pdf.getPage(index), =>
       index++
-      if index <= pdf.pdfInfo.numPages
+      if index <= pdf.numPages
         @renderPages(pdf, index)
       else
         @finish()

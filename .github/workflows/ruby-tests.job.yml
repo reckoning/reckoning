@@ -47,13 +47,16 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+      - uses: ./.github/workflows/js-setup-action
       - run: mkdir -p log
       - run: bundle exec rails db:create db:schema:load
-      - name: Install wkthtmltopdf
+      - name: Install Chromium system libs for Puppeteer
         run: |
-          sudo apt-get install -y xfonts-base xfonts-75dpi
-          wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.bionic_amd64.deb
-          sudo dpkg -i wkhtmltox_0.12.6-1.bionic_amd64.deb
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libnss3 libatk-bridge2.0-0 libdrm2 libxkbcommon0 libgbm1 libasound2 \
+            libxshmfence1 libxcomposite1 libxdamage1 libxrandr2 libpango-1.0-0 \
+            libcairo2 libxss1 fonts-liberation
       - name: Run tests
         env:
           CI_NODE_TOTAL: ${{ matrix.ci_node_total }}

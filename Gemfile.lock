@@ -192,6 +192,8 @@ GEM
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    grover (1.2.10)
+      nokogiri (~> 1)
     haml (6.1.2)
       temple (>= 0.8.2)
       thor
@@ -522,8 +524,6 @@ GEM
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    wicked_pdf (2.7.0)
-      activesupport
     workflow (1.2.0)
     zeitwerk (2.6.11)
 
@@ -562,6 +562,7 @@ DEPENDENCIES
   dynamic_fields_for_rails
   ed25519
   faker
+  grover
   haml
   haml-rails
   highline
@@ -618,7 +619,6 @@ DEPENDENCIES
   url_plumber
   web-console
   web_translate_it
-  wicked_pdf
   workflow (~> 1.2.0)
 
 RUBY VERSION

@@ -11,6 +11,7 @@ pids/*
 
 # config files
 .env
+.env.local
 .powenv
 .byebug_history
 
@@ -45,8 +46,5 @@ reckoning.io.key
 /config/credentials/production.key
 
 node_modules
-yarn-error.log
-yarn-debug.log*
-.yarn-integrity
 build
 

@@ -208,26 +208,14 @@ class Invoice < ApplicationRecord
     "stunden-rechnung-#{ref}-#{I18n.l(date.to_date, format: :file).downcase}"
   end
 
-  def pdf
-    pdf_options(invoice_file)
-  end
-
   def inline_pdf
-    WickedPdf.new.pdf_from_string(
-      ApplicationController.new.render_to_string("invoices/pdf", inline_pdf_options),
-      whicked_pdf_options
-    )
-  end
-
-  def timesheet_pdf
-    pdf_options(timesheet_file)
+    html = ApplicationController.new.render_to_string("invoices/pdf", inline_pdf_options)
+    Grover.new(html, **grover_options).to_pdf
   end
 
   def inline_timesheet_pdf
-    WickedPdf.new.pdf_from_string(
-      ApplicationController.new.render_to_string("invoices/timesheet", inline_pdf_options),
-      whicked_pdf_options
-    )
+    html = ApplicationController.new.render_to_string("invoices/timesheet", inline_pdf_options)
+    Grover.new(html, **grover_options).to_pdf
   end
 
   def vat

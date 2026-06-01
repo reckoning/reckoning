@@ -17,7 +17,8 @@ class ExpensesController < ApplicationController
         send_data expenses.to_csv
       end
       format.pdf do
-        render ExpensePdf.new(current_account, expenses, filter_params).pdf
+        expense_pdf = ExpensePdf.new(current_account, expenses, filter_params)
+        send_data expense_pdf.inline_pdf, filename: "#{expense_pdf.pdf_file}.pdf", type: "application/pdf", disposition: "inline"
       end
       format.html do
         year = filter_params.fetch(:year, nil)

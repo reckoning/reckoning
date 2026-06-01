@@ -91,7 +91,7 @@ gem "redis-actionpack"
 gem "redis-store"
 
 # pdf rendering
-gem "wicked_pdf"
+gem "grover"
 
 gem "active_storage_validations"
 gem "aws-sdk-s3", require: false
