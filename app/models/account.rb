@@ -17,7 +17,7 @@ class Account < ApplicationRecord
   store_accessor :contact_information, :address, :country, :public_email, :telefon, :fax, :website
 
   validates :name, :users, :plan, presence: true
-  # rubocop:disable Rails/UniqueValidationWithoutIndex empty subdomain prevents a unique index
+  # rubocop:disable Rails/UniqueValidationWithoutIndex -- empty subdomain prevents a unique index
   validates :subdomain, uniqueness: true, allow_blank: true
   # rubocop:enable Rails/UniqueValidationWithoutIndex
   validates :subdomain, exclusion: {in: %w[www app admin api backend reckoning]}

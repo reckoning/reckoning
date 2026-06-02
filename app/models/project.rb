@@ -21,6 +21,7 @@ class Project < ApplicationRecord
   delegate :name, to: :customer, prefix: true
 
   include Workflow
+
   workflow do
     state :active do
       event :archive, transitions_to: :archived

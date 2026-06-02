@@ -43,6 +43,7 @@ DatabaseCleaner.strategy = :transaction
 class ActionDispatch::IntegrationTest
   fixtures :all
   include Devise::Test::IntegrationHelpers
+
   ActiveRecord::Migration.check_all_pending!
 
   before do

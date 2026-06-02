@@ -154,8 +154,8 @@ FileUtils.chdir APP_ROOT do
   run_step_wait(ruby_deps, node_deps, docker)
 
   # Group B: Prepare databases (need Ruby deps + Docker)
-  dev_db = run_step "Preparing database (dev)", "DB_PORT=#{db_port} WORKTREE_SUFFIX=#{wt_name ? worktree_db_suffix(NAME_OVERRIDE || wt_name) : ''} bin/rails db:prepare", async: true
-  test_db = run_step "Preparing database (test)", "DB_PORT=#{db_port} WORKTREE_SUFFIX=#{wt_name ? worktree_db_suffix(NAME_OVERRIDE || wt_name) : ''} RAILS_ENV=test bin/rails db:prepare", async: true
+  dev_db = run_step "Preparing database (dev)", "DB_PORT=#{db_port} WORKTREE_SUFFIX=#{worktree_db_suffix(NAME_OVERRIDE || wt_name) if wt_name} bin/rails db:prepare", async: true
+  test_db = run_step "Preparing database (test)", "DB_PORT=#{db_port} WORKTREE_SUFFIX=#{worktree_db_suffix(NAME_OVERRIDE || wt_name) if wt_name} RAILS_ENV=test bin/rails db:prepare", async: true
   run_step_wait(dev_db, test_db)
 
   # Group C: Clean logs/tmp
