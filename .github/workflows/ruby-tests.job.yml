@@ -58,9 +58,7 @@ jobs:
             libxshmfence1 libxcomposite1 libxdamage1 libxrandr2 libpango-1.0-0 \
             libcairo2 libxss1 fonts-liberation
       - name: Install Puppeteer-managed Chrome
-        run: |
-          rm -rf ~/.cache/puppeteer
-          pnpm exec puppeteer browsers install chrome
+        run: pnpm exec puppeteer browsers install chrome
       - name: Run tests
         env:
           CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
