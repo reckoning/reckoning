@@ -38,10 +38,4 @@
 
     .row
       .col-xs-12.col-md-6
-        - if current_account.dropbox?
-          .btn-group-responsive
-            = link_to archive_invoices_path, method: :put, class: "btn btn-default" do
-              = I18n.t(:"nav.subnav.archive_invoices")
-          %br
-      .col-xs-12.col-md-6
         = paginate @invoices

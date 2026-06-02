@@ -50,14 +50,10 @@ Rails.application.routes.draw do
   resource :password, only: %i[edit update]
 
   resources :invoices do
-    collection do
-      put "archive" => "invoices#archive_all"
-    end
     member do
       put :generate_positions
       put :charge
       put :pay
-      put :archive
       put :send_mail
       post :send_test_mail
       get "/pdf/:pdf" => "invoices#pdf", :as => :pdf, :defaults => {format: :pdf}
@@ -103,14 +99,6 @@ Rails.application.routes.draw do
 
   resources :expenses, except: [:show]
   resources :expense_imports, only: %i[new create]
-
-  resource :dropbox, controller: "dropbox", only: [:show] do
-    collection do
-      get :start
-      get :activate
-      get :deactivate
-    end
-  end
 
   get "impressum" => "base#impressum"
   get "privacy" => "base#privacy"

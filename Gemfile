@@ -75,8 +75,6 @@ gem "roo"
 
 gem "rack-cors", require: "rack/cors"
 
-gem "dropbox-sdk"
-
 gem "sentry-rails"
 gem "sentry-ruby"
 gem "sentry-sidekiq"

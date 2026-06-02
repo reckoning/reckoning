@@ -99,7 +99,6 @@ de:
         banking: "Bank Informationen"
         taxes: "Steuern"
         mailing: "E-Mail Einstellungen"
-        dropbox: "Dropbox Verbindung"
         offer: "Angebots Einstellungen"
     customer:
       basic: "Allgemeine Informationen"

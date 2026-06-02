@@ -13,7 +13,6 @@ class Account < ApplicationRecord
 
   store_accessor :settings, :tax, :provision
   store_accessor :bank_account, :bank, :account_number, :bank_code, :iban, :bic
-  store_accessor :services, :dropbox_user, :dropbox_token
   store_accessor :mailing, :default_from, :signature
   store_accessor :contact_information, :address, :country, :public_email, :telefon, :fax, :website
 
@@ -85,10 +84,6 @@ class Account < ApplicationRecord
       expense.afa_value(Time.zone.now.year - 1)
     end
     (last_invoices.sum(:value) - last_expenses - open_afa_expenses) / 100 * provision.to_i
-  end
-
-  def dropbox?
-    dropbox_token.present?
   end
 
   def on_plan?(on_plan)

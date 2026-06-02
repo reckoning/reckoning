@@ -21,10 +21,6 @@
     %a{href: "#{path}#mailing", data: {toggle: ("tab" if path.blank?)}}
       %i.fa.fa-send.fa-fw
       = I18n.t("nav.subnav.account.mailing")
-  %li{class: (active == "dropbox" ? "active" : "")}
-    %a{href: "#{path}#dropbox", data: {toggle: ("tab" if path.blank?)}}
-      %i.fa.fa-dropbox.fa-fw
-      = I18n.t("nav.subnav.account.dropbox")
   %li{class: (active == "offer" ? "active" : "")}
     %a{href: "#{path}#offer", data: {toggle: ("tab" if path.blank?)}}
       %i.fa.fa-hand-holding-box.fa-fw

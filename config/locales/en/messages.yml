@@ -82,9 +82,6 @@ en:
       files_missing: ~
       load_positions:
         missing: ~
-      archive:
-        success: ~
-        failure: ~
       send:
         success: ~
         failure: ~
@@ -101,13 +98,6 @@ en:
         failure: ~
     timer:
       import:
-        success: ~
-        failure: ~
-    dropbox:
-      activate:
-        success: ~
-        failure: ~
-      deactivate:
         success: ~
         failure: ~
     demo_active: ~

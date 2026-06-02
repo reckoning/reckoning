@@ -52,12 +52,6 @@ de:
       files_missing: 'Bitte warten Sie bis die Rechnung erstellt wurde oder klicken Sie erneut auf "Rechnung erstellen".'
       load_positions:
         missing: "Bitte wählen Sie zunächst ein Projekt und geben Sie ein Datum an."
-      archive:
-        success: "Rechnung wurde erfolgreich in Dropbox archiviert."
-        failure: "Rechnung konnte nicht archiviert werden. Bitte überprüfen Sie Ihre Einstellungen für Ihren Dropbox-Account."
-      archive_all:
-        success: "Rechnungen werden nun in Dropbox archiviert."
-        failure: "Rechnungen konnten nicht archiviert werden. Bitte überprüfen Sie Ihre Einstellungen für Ihren Dropbox-Account."
       send:
         success: "Rechnung wurde erfolgreich versendet."
         failure: "Rechnung konnte nicht versandt werden. Bitte überprüfen Sie Ihre E-Mail-Einstellungen und die des betreffenden Kunden."
@@ -86,13 +80,6 @@ de:
       import:
         success: "%{resource} erfolgreich importiert."
         failure: "%{resource} konnten nicht importiert werden."
-    dropbox:
-      activate:
-        success: "Dropbox-Account erfolgreich verbunden."
-        failure: "Ihr Dropbox-Account konnte nicht verbunden werden."
-      deactivate:
-        success: "Dropbox-Account erfolgreich getrennt"
-        failure: "Beim Trennen Ihres Dropbox-Accounts ist ein Fehler aufgetreten."
     contact:
       create:
         success: "Anmeldung erfolgreich."

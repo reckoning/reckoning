@@ -28,26 +28,6 @@ class InvoicesController < ApplicationController
     authorize! :read, invoice
   end
 
-  def archive
-    authorize! :archive, invoice
-    if current_account.dropbox?
-      InvoiceDropboxWorker.perform_async invoice.id
-      redirect_to invoice_path(invoice), flash: {success: I18n.t(:"messages.invoice.archive.success")}
-    else
-      redirect_to invoice_path(invoice), alert: I18n.t(:"messages.invoice.archive.failure")
-    end
-  end
-
-  def archive_all
-    authorize! :archive, invoice
-    if current_account.dropbox?
-      InvoiceDropboxAllWorker.perform_async current_account.id
-      redirect_to invoices_path, flash: {success: I18n.t(:"messages.invoice.archive_all.success")}
-    else
-      redirect_to invoices_path, alert: I18n.t(:"messages.invoice.archive_all.failure")
-    end
-  end
-
   def send_mail
     authorize! :send, invoice
     if invoice.send_via_mail?

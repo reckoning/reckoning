@@ -9,8 +9,6 @@ class Ability
     can :update, User, id: user.id
     can :update, Account, id: user.account_id
 
-    can :connect, :dropbox
-
     setup_invoice_abilities(user)
     setup_offer_abilities(user)
 
@@ -29,7 +27,7 @@ class Ability
   end
 
   def setup_invoice_abilities(user)
-    can %i[read create update destroy check archive send], Invoice, account_id: user.account_id
+    can %i[read create update destroy check send], Invoice, account_id: user.account_id
 
     can :pay, Invoice do |invoice|
       %i[charged].include?(invoice.current_state.to_sym) && invoice.account_id == user.account_id
