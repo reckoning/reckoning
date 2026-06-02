@@ -60,7 +60,7 @@ jobs:
       - name: Install Puppeteer-managed Chrome
         run: |
           rm -rf ~/.cache/puppeteer
-          npx --yes @puppeteer/browsers install chrome@131.0.6778.204
+          pnpm exec puppeteer browsers install chrome
       - name: Run tests
         env:
           CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
