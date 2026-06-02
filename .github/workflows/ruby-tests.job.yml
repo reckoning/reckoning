@@ -43,7 +43,7 @@ jobs:
         ci_node_index: [0, 1, 2, 3]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
@@ -54,9 +54,21 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
-            libnss3 libatk-bridge2.0-0 libdrm2 libxkbcommon0 libgbm1 libasound2 \
+            libnss3 libatk-bridge2.0-0 libdrm2 libxkbcommon0 libgbm1 libasound2t64 \
             libxshmfence1 libxcomposite1 libxdamage1 libxrandr2 libpango-1.0-0 \
             libcairo2 libxss1 fonts-liberation
+      - name: Install Puppeteer-managed Chrome
+        env:
+          CHROME_VERSION: "131.0.6778.204"
+        run: |
+          DEST="$HOME/.cache/puppeteer/chrome/linux-${CHROME_VERSION}"
+          rm -rf "$DEST"
+          mkdir -p "$DEST"
+          curl -sSL -o /tmp/chrome.zip \
+            "https://storage.googleapis.com/chrome-for-testing-public/${CHROME_VERSION}/linux64/chrome-linux64.zip"
+          unzip -q /tmp/chrome.zip -d "$DEST"
+          rm /tmp/chrome.zip
+          test -x "$DEST/chrome-linux64/chrome"
       - name: Run tests
         env:
           CI_NODE_TOTAL: ${{ matrix.ci_node_total }}

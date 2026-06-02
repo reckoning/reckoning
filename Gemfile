@@ -55,7 +55,7 @@ gem "turbolinks"
 gem "bootstrap-sass"
 gem "bourbon"
 
-gem "uglifier", ">= 1.3.0"
+gem "terser"
 
 gem "redcarpet"
 
@@ -138,6 +138,7 @@ group :test do
 end
 
 group :development, :test do
+  gem "brakeman", require: false
   gem "bullet"
   gem "bundler-audit"
   gem "byebug", platform: :mri

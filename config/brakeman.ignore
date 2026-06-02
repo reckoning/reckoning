@@ -1,0 +1,24 @@
+{
+  "ignored_warnings": [
+    {
+      "fingerprint": "93d48990a02924d3227846777a522cff3a805221020c8a7e80cbfcfd4c6e95fd",
+      "note": "baseline: CrossSiteScripting — Cross-Site Scripting"
+    },
+    {
+      "fingerprint": "aa5d309c019158d6a15d8569eb87298c4cd9a4ec4d4f8e49f3963cc1507614f3",
+      "note": "baseline: PermitAttributes — Mass Assignment"
+    },
+    {
+      "fingerprint": "d84924377155b41e094acae7404ec2e521629d86f97b0ff628e3d1b263f8101c",
+      "note": "baseline: EOLRails — Unmaintained Dependency"
+    },
+    {
+      "fingerprint": "d882f63ce96c28fb6c6e0982f2a171460e4b933bfd9b9a5421dca21eef3f76da",
+      "note": "baseline: CookieSerialization — Remote Code Execution"
+    },
+    {
+      "fingerprint": "edf687f759ec9765bd5db185dbc615c80af77d6e7e19386fc42934e7a80307af",
+      "note": "baseline: EOLRuby — Unmaintained Dependency"
+    }
+  ]
+}
