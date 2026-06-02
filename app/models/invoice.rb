@@ -23,6 +23,7 @@ class Invoice < ApplicationRecord
   before_create :set_ref
 
   include Workflow
+
   workflow do
     state :created do
       event :charge, transitions_to: :charged

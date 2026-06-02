@@ -8,7 +8,7 @@ module Charts
       @project = project
       @ticks = []
 
-      super scope
+      super(scope)
     end
 
     def generate_labels

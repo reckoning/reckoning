@@ -2,6 +2,7 @@
 
 class BaseController < ApplicationController
   include NumberHelper
+
   skip_authorization_check
   before_action :authenticate_user!, only: []
 

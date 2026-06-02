@@ -2,5 +2,6 @@
 
 class AfaType < ApplicationRecord
   extend Mobility
+
   translates :name, type: :string
 end

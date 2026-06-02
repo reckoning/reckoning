@@ -4,6 +4,7 @@ require "active_support/concern"
 
 module Notification
   extend ActiveSupport::Concern
+
   included do
     attr_accessor :text, :notification_type, :timeout
 

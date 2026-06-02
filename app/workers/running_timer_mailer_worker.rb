@@ -2,6 +2,7 @@
 
 class RunningTimerMailerWorker
   include Sidekiq::Worker
+
   sidekiq_options queue: (ENV["MAILER_QUEUE"] || "reckoning-mailer").to_sym
 
   def perform(timer_id)
