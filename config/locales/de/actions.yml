@@ -42,8 +42,6 @@ de:
     download_invoice: "Rechnung speichern"
     download_timesheet: "Stundenzettel speichern"
     download_offer: "Angebot speichern"
-    dropbox_link: "Dropbox verbinden"
-    dropbox_unlink: "Dropbox trennen"
     start: Start
     begin: Starten
     stop: Stop
