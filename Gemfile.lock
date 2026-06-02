@@ -494,6 +494,8 @@ GEM
     temple (0.10.2)
     terminal-table (3.0.2)
       unicode-display_width (>= 1.1.1, < 3)
+    terser (1.2.7)
+      execjs (>= 0.3.0, < 3)
     thor (1.5.0)
     tilt (2.3.0)
     timecop (0.9.8)
@@ -507,8 +509,6 @@ GEM
       concurrent-ruby (~> 1.0)
     tzinfo-data (1.2023.3)
       tzinfo (>= 1.0.0)
-    uglifier (4.2.0)
-      execjs (>= 0.3.0, < 3)
     unicode-display_width (2.4.2)
     uniform_notifier (1.16.0)
     url_plumber (0.1.2)
@@ -613,12 +613,12 @@ DEPENDENCIES
   spring-watcher-listen
   standard
   stripe
+  terser
   thor
   timecop
   turbolinks
   typhoeus
   tzinfo-data
-  uglifier (>= 1.3.0)
   url_plumber
   web-console
   web_translate_it
