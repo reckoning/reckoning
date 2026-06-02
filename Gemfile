@@ -77,8 +77,6 @@ gem "rack-cors", require: "rack/cors"
 
 gem "dropbox-sdk"
 
-gem "web_translate_it"
-
 gem "sentry-rails"
 gem "sentry-ruby"
 gem "sentry-sidekiq"
@@ -124,7 +122,6 @@ group :development do
 end
 
 group :test do
-  gem "codeclimate-test-reporter"
   gem "database_cleaner"
   gem "faker"
   gem "minitest-rails"
