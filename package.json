@@ -8,7 +8,7 @@
     "test:e2e:report": "generate-mochawesome-report --jsonDir test/reports/e2e --output test/reports/e2e/html --charts"
   },
   "dependencies": {
-    "pdfjs-dist": "3.11.174",
+    "pdfjs-dist": "6.0.227",
     "puppeteer": "^23.0.0"
   },
   "devDependencies": {
