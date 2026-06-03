@@ -3,6 +3,11 @@
 require "sidekiq/web"
 
 Rails.application.routes.draw do
+  # Kamal/proxy healthcheck. Rails 7.1+ auto-mounts this via
+  # `config.load_defaults 7.1+`; we're still on 7.0 defaults so wire it
+  # manually for now.
+  get "up" => "rails/health#show", as: :rails_health_check
+
   draw :api_routes
 
   namespace :backend do

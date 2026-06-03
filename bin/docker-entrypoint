@@ -1,0 +1,19 @@
+#!/bin/bash -e
+
+# jemalloc was wired in at image build but re-export in case the env got
+# stripped (kamal occasionally clears LD_PRELOAD for accessory containers).
+if [ -z "${LD_PRELOAD+x}" ]; then
+  LD_PRELOAD=$(find /usr -name libjemalloc.so.2 -print -quit 2>/dev/null)
+  export LD_PRELOAD
+fi
+
+# Clear any stale puma pidfile from a crashed previous container
+rm -f /rails/tmp/pids/server.pid
+
+# Run migrations on the web role only (kamal sets KAMAL_ROLE=web for web
+# containers and KAMAL_ROLE=worker for sidekiq containers).
+if [ "${KAMAL_ROLE:-web}" = "web" ] && [ "${SKIP_DB_PREPARE:-0}" != "1" ]; then
+  bundle exec rails db:prepare
+fi
+
+exec "${@}"

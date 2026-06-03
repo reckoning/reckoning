@@ -1,0 +1,18 @@
+# Kamal destination: live
+# kamal deploy -d live
+
+servers:
+  web:
+    hosts:
+      - reckoning.mortik.xyz
+  worker:
+    hosts:
+      - reckoning.mortik.xyz
+
+proxy:
+  host: reckoning.mortik.xyz
+
+env:
+  clear:
+    RAILS_ENV: production
+    DOMAIN: reckoning.mortik.xyz

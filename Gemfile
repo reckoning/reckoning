@@ -109,6 +109,10 @@ gem "nokogiri", ">= 1.7.1"
 
 gem "pry-rails"
 
+# Speeds up rails boot via cached require paths + iseq compilation.
+# Precompiled at image build time (see Dockerfile).
+gem "bootsnap", require: false
+
 group :development do
   gem "listen"
 
@@ -121,6 +125,11 @@ group :development do
   gem "spring-watcher-listen"
   gem "web-console"
 
+  # Deployment via Docker + Kamal (https://kamal-deploy.org).
+  gem "kamal", "~> 2.11", require: false
+
+  # Legacy Capistrano deploy — kept alongside Kamal while we cut over.
+  # Drop these once `kamal deploy -d live` is the source of truth.
   gem "bcrypt_pbkdf", require: false
   gem "capistrano", "~> 3.11", require: false
   gem "capistrano-rails", "~> 1.4", require: false
