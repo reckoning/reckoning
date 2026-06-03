@@ -67,8 +67,14 @@ Rails.application.configure do
   # Use a different logger for distributed setups.
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
 
-  # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
+  # Use Rails' built-in Redis cache store (also backs the session store).
+  config.cache_store = :redis_cache_store, {
+    url: Rails.configuration.redis.url,
+    namespace: "reckoning-#{Rails.env}",
+    error_handler: ->(method:, returning:, exception:) {
+      Sentry.capture_exception(exception, level: "warning", tags: {method: method, returning: returning})
+    }
+  }
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.assets.prefix = "/assets"
