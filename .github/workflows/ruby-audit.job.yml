@@ -14,4 +14,13 @@ jobs:
       - name: Update Audit DB
         run: bundle exec bundle-audit update
       - name: Check Audit DB
-        run: bundle exec bundle-audit check
+        # Baseline ignores — kept narrow on purpose so any new advisory
+        # against sinatra (or any other gem) fails the build.
+        # - GHSA-hxx2-7vcw-mqr3 / CVE-2024-21510 (sinatra ReDoS, fixed in 4.1.0)
+        # - GHSA-mr3q-g2mv-mr4q / CVE-2025-61921 (sinatra ReDoS, fixed in 4.2.0)
+        # Both require sinatra >= 4, which needs rack 3, which needs
+        # dropping redis-actionpack/redis-rack — tracked as a separate
+        # P2 refactor.
+        run: |
+          bundle exec bundle-audit check \
+            --ignore GHSA-hxx2-7vcw-mqr3 GHSA-mr3q-g2mv-mr4q
