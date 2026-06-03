@@ -71,7 +71,7 @@ gem "puma"
 
 gem "tzinfo-data"
 
-gem "i18n-js", "~> 3.0"
+gem "i18n-js", "~> 4.2"
 gem "rails-i18n"
 
 gem "highline"
