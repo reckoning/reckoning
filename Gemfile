@@ -21,7 +21,7 @@ gem "data_migrate"
 gem "money"
 gem "stripe"
 
-gem "mobility", "~> 1.2.9"
+gem "mobility", "~> 1.3.2"
 
 gem "sidekiq"
 gem "sidekiq-cron"
