@@ -47,8 +47,11 @@ jobs:
     uses: ./.github/workflows/e2e-tests.job.yml
     secrets: inherit
 
+  # Deploy is temporarily disabled while the P0 modernization series settles.
+  # Re-enable by removing `false &&` once the live environment has been
+  # smoke-tested against the new Ruby 3.4 / Rails 7.2 / PG 17 / Redis 7 stack.
   deploy:
-    if: github.ref == 'refs/heads/main'
+    if: false && github.ref == 'refs/heads/main'
     needs: [ruby-lint, brakeman, ruby-audit, ruby-tests, seeds, e2e-tests]
     uses: ./.github/workflows/deploy.job.yml
     with:
