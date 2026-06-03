@@ -1,0 +1,20 @@
+name: Release Please
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          # GITHUB_TOKEN is fine for opening the release PR. If you want the
+          # release PR itself to retrigger CI on push, switch to a PAT here.
+          token: ${{ secrets.GITHUB_TOKEN }}
