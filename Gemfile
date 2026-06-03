@@ -26,7 +26,7 @@ gem "mobility", "~> 1.2.9"
 gem "sidekiq"
 gem "sidekiq-cron"
 # for sidekiq web
-gem "sinatra", require: nil
+gem "sinatra", ">= 4.2", require: nil
 
 gem "haml"
 gem "haml-rails"
@@ -40,8 +40,6 @@ gem "mini_magick"
 gem "rqrcode"
 
 gem "cancancan"
-
-gem "dalli"
 
 gem "kaminari"
 gem "url_plumber"
@@ -91,8 +89,14 @@ gem "lograge"
 
 gem "typhoeus"
 
-gem "redis-actionpack"
-gem "redis-store"
+# Rails has built-in `:redis_cache_store` and `ActionDispatch::Session::CacheStore`
+# since 7.1; explicit `gem "redis"` is what feeds it.
+gem "redis"
+
+# connection_pool 3.0 changed its constructor; Rails 7.2's RedisCacheStore
+# still calls the 2.x API. Drop the pin after Rails 7.2 ships connection_pool 3
+# support (or after the Rails 8.x bump).
+gem "connection_pool", "< 3"
 
 # pdf rendering
 gem "grover"
