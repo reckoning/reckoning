@@ -164,7 +164,8 @@ GEM
       tzinfo
       unicode (>= 0.4.4.5)
     csv (3.3.5)
-    dalli (3.2.5)
+    dalli (5.0.5)
+      logger
     data_migrate (9.1.1)
       activerecord (>= 6.0)
       railties (>= 6.0)
