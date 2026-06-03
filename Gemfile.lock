@@ -297,8 +297,9 @@ GEM
       request_store (~> 1.0)
     mocha (2.1.0)
       ruby2_keywords (>= 0.0.5)
-    money (6.16.0)
-      i18n (>= 0.6.4, <= 2)
+    money (7.0.2)
+      bigdecimal
+      i18n (~> 1.9)
     mustermann (3.1.1)
     mutex_m (0.3.0)
     net-imap (0.6.4)
