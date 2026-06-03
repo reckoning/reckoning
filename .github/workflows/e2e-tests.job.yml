@@ -17,6 +17,13 @@ jobs:
       TEST_SEEDS: 1
       RAILS_ENV: ci
       RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+      # Test-only fallback values so Dependabot/fork PRs (which don't
+      # inherit repo secrets) still boot Rails. Production / staging
+      # inject real secrets via the deploy environment.
+      SECRET_KEY_BASE: ci-secret-key-base-not-used-outside-tests
+      DEVISE_SECRET: ci-devise-secret-not-used-outside-tests
+      DEVISE_JWT_SECRET: ci-devise-jwt-secret-not-used-outside-tests
+      DEVISE_OTP_SECRET: ci-devise-otp-secret-not-used-outside-tests
       VITE_RUBY_MODE: production
       ON_SUBDOMAIN: false
       RAILS_SERVE_STATIC_FILES: 1
@@ -67,8 +74,10 @@ jobs:
           wait-on: "http://localhost:8270"
           wait-on-timeout: 120
           browser: chrome
-          record: true
-          parallel: true
+          # Recording + parallel need CYPRESS_RECORD_KEY, which Dependabot
+          # / fork PRs don't have. Fall back to a single-runner local run.
+          record: ${{ secrets.CYPRESS_RECORD_KEY != '' }}
+          parallel: ${{ secrets.CYPRESS_RECORD_KEY != '' }}
         env:
           PORT: 8270
           CYPRESS_BASE_URL: http://localhost:8270
