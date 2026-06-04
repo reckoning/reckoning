@@ -26,7 +26,7 @@
                 .row
                   .col-xs-12.col-md-4
                     pre
-                      == @codes.join("<br>")
+                      = @codes.join("\n")
               - else
                 p
                   = link_to I18n.t(:backup_codes, scope: 'devise.otp'), otp_backup_codes_me_path, method: :post, class: "btn btn-warning"

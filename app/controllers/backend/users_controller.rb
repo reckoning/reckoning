@@ -70,7 +70,14 @@ module Backend
     helper_method :sort_column
 
     private def user_params
-      params.require(:user).permit(:email, :password, :password_confirmation, :admin, :enabled)
+      # Only admins can promote/demote other admins. Brakeman flags any
+      # unconditional `permit(:admin)`; gating the key on the current
+      # user's role both satisfies the check and tightens the actual
+      # authorization story (the /backend namespace is also gated at
+      # the route level by Warden, but defense in depth).
+      permitted = [:email, :password, :password_confirmation, :enabled]
+      permitted << :admin if current_user&.admin?
+      params.require(:user).permit(*permitted)
     end
 
     private def user
