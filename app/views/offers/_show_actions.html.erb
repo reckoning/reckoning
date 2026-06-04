@@ -1,0 +1,21 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="panel-title">
+      <strong>
+        <%= I18n.t(:"labels.panels.title.default") %>
+      </strong>
+    </div>
+  </div>
+  <div class="list-group">
+    <% if can? :update, offer %>
+      <a class="list-group-item" href="<%= edit_offer_path(offer) %>">
+        <i class="fa fa-edit"></i>
+        <%= I18n.t(:"actions.edit") %>
+      </a>
+    <% end %>
+    <a class="list-group-item" href="<%= offer_path(offer) %>" data-method="DELETE" data-notyConfirm="<%= I18n.t(:"messages.confirm.delete") %>">
+      <i class="fa fa-trash"></i>
+      <%= I18n.t(:"actions.delete") %>
+    </a>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<% content_for :title do %>
+  <%= I18n.t(:"meta.title.offer.index") %>
+<% end %>
+<div class="row" id="offers">
+  <div class="col-xs-12 col-md-12">
+
+    <div class="row">
+      <div class="col-xs-12 col-md-8">
+        <h1>
+          <%= I18n.t(:"headlines.offer.index") %>
+          <small>
+            <% sum = @offers.sum(&:value) %>
+            <%= I18n.t(:"headlines.offer.sum", sum: number_to_currency(sum)) %>
+          </small>
+        </h1>
+      </div>
+
+      <div class="col-xs-12 col-md-4">
+        <div class="btn-group-responsive pull-right resource-nav">
+          <a class="btn btn-primary" href="<%= new_offer_path %>">
+            <i class="fa fa-plus"></i>
+            <%= I18n.t(:"nav.subnav.new_offer") %>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 col-md-6 filters">
+        <%= render "shared/tables/filter", resource: "offer", name: "state", filters: Offer.aasm.states.map(&:name), translateable: true %>
+        <%= render "shared/tables/filter", resource: "offer", name: "year", filters: current_offer_years %>
+      </div>
+      <div class="col-xs-12 col-md-6">
+        <%= paginate @offers %>
+      </div>
+    </div>
+
+    <% if @offers.present? %>
+      <%= render partial: "offers/list", :@offers => @offers %>
+    <% else %>
+      <%= render partial: "shared/blank" %>
+    <% end %>
+
+    <div class="row">
+      <div class="col-xs-12 col-md-6">
+        <%= paginate @offers %>
+      </div>
+    </div>
+  </div>
+</div>
