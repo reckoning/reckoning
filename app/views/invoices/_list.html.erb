@@ -1,0 +1,26 @@
+<div class="panel panel-list panel-default">
+  <div class="panel-heading">
+    <div class="panel-title">
+      <div class="row hidden-xs hidden-sm">
+        <div class="col-xs-1 col-md-1 ref">
+          <%= sortable "ref", I18n.t(:"labels.defaults.ref") %>
+        </div>
+        <div class="col-xs-4 col-md-4 name">
+          <%= sortable "customers.name", I18n.t(:"labels.invoice.customer") %>
+        </div>
+        <div class="col-xs-2 col-md-2 month">
+          <%= sortable "date", I18n.t(:"labels.defaults.date") %>
+        </div>
+        <div class="col-xs-2 col-md-2 value">
+          <%= sortable "value", I18n.t(:"labels.defaults.value") %>
+        </div>
+        <div class="col-xs-1 col-md-1 state">
+          <%= sortable "state", I18n.t(:"labels.defaults.state") %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="list-group">
+    <%= render partial: "invoices/show", collection: @invoices, as: :invoice %>
+  </div>
+</div>

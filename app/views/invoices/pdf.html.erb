@@ -1,0 +1,129 @@
+<div id="pdf-body" class="invoice">
+  <address id="company">
+    <%= "#{resource.account.name}," %>
+    <% unless resource.account.address.blank? %>
+      <%= resource.account.address.gsub("\r\n", ", ").gsub("\n", ", ").gsub("\r", ", ") %>
+    <% end %>
+  </address>
+
+  <address id="customer">
+    <%= resource.customer.name %>
+    <br>
+    <br>
+    <%= simple_format(resource.customer.address) %>
+  </address>
+
+  <div class="row">
+    <div id="subject">
+      <div class="info-wrapper">
+        <div id="infomartion">
+          <%= I18n.t(:"pdf.invoice.subject.project") %>
+          <%= resource.project.name %>
+        </div>
+        <div id="date">
+          <%= I18n.t(:"pdf.invoice.subject.date") %>
+          <%= I18n.l resource.date %>
+        </div>
+        <% if resource.delivery_date.present? %>
+          <div id="delivery-date">
+            <%= I18n.t(:"pdf.invoice.subject.delivery_date") %>
+            <%= I18n.l resource.delivery_date %>
+          </div>
+        <% end %>
+
+        <% if resource.payment_due_date.present? %>
+          <div id="payment-due">
+            <%= I18n.t(:"pdf.invoice.subject.payment_due") %>
+            <%= I18n.l resource.payment_due_date %>
+          </div>
+        <% end %>
+
+        <% if resource.account.vat_id.present? %>
+          <div id="tax">
+            <%= I18n.t(:"pdf.invoice.subject.tax") %>
+            <%= resource.account.vat_id %>
+          </div>
+        <% end %>
+        <div class="clear"></div>
+      </div>
+      <h1>
+        <%= I18n.t(:"pdf.invoice.headline") %>
+        <%= resource.ref_number %>
+      </h1>
+      <% if resource.project.invoice_addition.present? %>
+        <p class="invoice-addition"><%= resource.project.invoice_addition %></p>
+      <% end %>
+
+      <div class="clear"></div>
+    </div>
+
+    <table class="table table-condensed">
+      <thead>
+        <th><%= I18n.t(:"labels.defaults.description") %></th>
+        <th class="align-right"><%= I18n.t(:"labels.defaults.hours") %></th>
+        <th class="align-right"><%= I18n.t(:"labels.defaults.rate") %></th>
+        <th class="align-right"><%= I18n.t(:"labels.defaults.value") %></th>
+      </thead>
+      <tbody>
+        <% resource.positions.order(description: :asc).each do |position| %>
+          <tr>
+            <td>
+              <%= position.description %>
+            </td>
+            <td class="hours">
+              <%= number_to_currency position.hours, unit: "" %>
+            </td>
+            <td class="rate">
+              <% if position.rate.present? %>
+                <%= number_to_currency position.rate %>
+              <% elsif position.hours.present? %>
+                <%= number_to_currency resource.rate %>
+              <% end %>
+            </td>
+            <td class="value">
+              <%= number_to_currency position.value %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <% if resource.account.tax_rates.valid_on(datetime: resource.delivery_date || resource.date).present? %>
+          <tr class="step-sum">
+            <td colspan="3">
+              <%= I18n.t(:"pdf.invoice.net") %>
+            </td>
+            <td class="value">
+              <%= number_to_currency resource.value %>
+            </td>
+          </tr>
+          <tr class="tax">
+            <td colspan="3">
+              <%= I18n.t(:"pdf.invoice.tax", value: resource.account.tax) %>
+            </td>
+            <td class="value">
+              <%= number_to_currency resource.vat %>
+            </td>
+          </tr>
+          <% value = resource.value + resource.vat %>
+          <% value_label = I18n.t(:"pdf.invoice.gross") %>
+        <% else %>
+          <tr class="tax">
+            <td colspan="4">
+              <%= I18n.t(:"small_business") %>
+            </td>
+          </tr>
+          <% value = resource.value %>
+          <% value_label = I18n.t(:"pdf.invoice.sum") %>
+        <% end %>
+        <tr class="sum">
+          <td colspan="3">
+            <b><%= value_label %></b>
+          </td>
+          <td class="value">
+            <b><%= number_to_currency(value) %></b>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

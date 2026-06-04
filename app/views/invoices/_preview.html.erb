@@ -1,0 +1,26 @@
+<ul class="nav nav-tabs" id="preview-nav" role="tablist">
+  <li class="active">
+    <a href="#invoice-preview" role="tab" data-toggle="tab">
+      <%= I18n.t(:"labels.defaults.invoice") %>
+    </a>
+  </li>
+  <% if invoice.timers.present? %>
+    <li>
+      <a href="#timesheet-preview" role="tab" data-toggle="tab">
+        <%= I18n.t(:"labels.defaults.timesheet") %>
+      </a>
+    </li>
+  <% end %>
+</ul>
+<div id="preview-wrapper">
+  <div class="tab-content">
+    <div class="tab-pane active" id="invoice-preview">
+      <div class="pdf-viewer" data-pdf-path="<%= pdf_invoice_path(invoice, "#{invoice.invoice_file}.pdf") %>"></div>
+    </div>
+    <% if invoice.timers.present? %>
+      <div class="tab-pane" id="timesheet-preview">
+        <div class="pdf-viewer" data-pdf-path="<%= timesheet_pdf_invoice_path(invoice, "#{invoice.invoice_file}.pdf") %>"></div>
+      </div>
+    <% end %>
+  </div>
+</div>
