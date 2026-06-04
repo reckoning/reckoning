@@ -17,6 +17,6 @@
 
 /* Tailwind 4 auto-scans .html/.js/.ts/.vue etc. but not Rails template
  * extensions. Point it at the server-rendered views and helpers. */
-@source "../../views/**/*.{haml,slim,erb}";
+@source "../../views/**/*.erb";
 @source "../../helpers/**/*.rb";
 @source "../../components/**/*.{html,erb,rb}";
