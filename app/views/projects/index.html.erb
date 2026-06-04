@@ -1,0 +1,60 @@
+<% content_for :title do %>
+  <%= I18n.t(:"meta.title.project.index") %>
+<% end %>
+
+<div class="row" id="projects">
+  <div class="col-xs-12 col-md-12">
+
+    <div class="row">
+      <div class="col-xs-12 col-md-8">
+        <h1>
+          <% if params.fetch(:state, nil) %>
+            <%= I18n.t(:"headlines.project.index_archived") %>
+          <% else %>
+            <%= I18n.t(:"headlines.project.index") %>
+          <% end %>
+        </h1>
+      </div>
+
+      <div class="col-xs-12 col-md-4">
+        <div class="btn-group btn-group-justified-responsive pull-right resource-nav">
+          <a class="btn btn-primary" href="<%= new_project_path %>">
+            <i class="fa fa-plus"></i>
+            <%= I18n.t(:"nav.subnav.new_project") %>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 col-md-6 filters">
+        <div class="btn-group">
+          <% if params.fetch(:state, nil) %>
+            <a class="btn btn-default" href="<%= url_for(state: nil) %>">
+              <%= I18n.t(:"filter.project_state.all") %>
+            </a>
+          <% else %>
+            <a class="btn btn-default" href="<%= url_for(state: :archived) %>">
+              <%= I18n.t(:"filter.project_state.archived") %>
+            </a>
+          <% end %>
+        </div>
+      </div>
+      <div class="col-xs-12 col-md-6">
+        <%= paginate @projects %>
+      </div>
+    </div>
+
+    <%= render partial: "list" %>
+
+    <% if @projects.blank? %>
+      <%= render partial: "shared/blank" %>
+    <% end %>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <%= paginate @projects %>
+      </div>
+    </div>
+  </div>
+</div>

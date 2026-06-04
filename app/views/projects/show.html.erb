@@ -1,0 +1,170 @@
+<% content_for :title do %>
+  <%= project.name %>
+<% end %>
+<div class="row" id="show-project">
+  <div class="col-xs-12 col-md-12">
+    <div class="row">
+      <div class="col-xs-12 col-md-7">
+        <h1>
+          <%= project.name %>
+        </h1>
+      </div>
+      <div class="col-xs-12 col-md-5">
+        <div class="btn-group btn-group-justified-responsive pull-right resource-nav">
+          <%= link_to I18n.t(:"nav.subnav.back"), projects_path, class: "btn btn-default" %>
+          <a class="btn btn-primary" href="<%= edit_project_path(project) %>">
+            <i class="fa fa-edit"></i>
+            <span class="hidden-xs hidden-sm hidden-md"><%= I18n.t(:"actions.edit") %></span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-md-12">
+        <script>
+          window.projectBudgetChartData = <%= raw @project_budget_chart_data.to_json %>;
+        </script>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="panel-title">
+              <strong><%= I18n.t(:"labels.panels.charts.project_budget") %></strong>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="chart chart-big">
+              <div class="chart-inner" id="project-budget-chart"></div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12 panel-progress">
+                <div class="progress progress-slim text-center">
+                  <div class="progress-bar <%= budget_progress(project) %>" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: <%= project.budget_percent %>%"></div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-6 col-md-3 panel-box panel-box-bottom">
+                <h2>Erfasste Stunden</h2>
+                <div class="highlight">
+                  <%= number_to_currency(project.timer_values, unit: "h", precision: 2) %>
+                </div>
+                <div class="subline">
+                  <a href="<%= timesheet_path(project_id: project) %>#/day/<%= I18n.l(Time.zone.now.to_date, format: :db) %>/new">
+                    <i class="fa fa-clock-o"></i>
+                    <%= I18n.t(:"actions.add_timer") %>
+                  </a>
+                </div>
+              </div>
+              <div class="col-xs-6 col-md-3 panel-box panel-box-bottom">
+                <h2>Verbleibende Stunden</h2>
+                <% if project.budget_hours.present? && !project.budget_hours.zero? %>
+                  <div class="highlight">
+                    <%= number_to_currency((project.budget_hours - project.timer_values_billable), unit: "h", precision: 2) %>
+                    <small>
+                      (<%= ((project.budget_hours - project.timer_values_billable) / 8).round %> <%= I18n.t("labels.defaults.days") %>)
+                    </small>
+                  </div>
+                <% else %>
+                  <div class="highlight blank">
+                    <%= I18n.t(:"labels.defaults.na") %>
+                  </div>
+                <% end %>
+                <div class="subline">
+                  <% if project.budget_hours.present? && !project.budget_hours.zero? %>
+                    <div class="row">
+                      <div class="col-xs-4 text-left">Gesamt</div>
+                      <div class="col-xs-8 text-right">
+                        <%= number_to_currency(project.budget_hours, unit: "h", precision: 2) %>
+                        (<%= (project.budget_hours / 8).round %> <%= I18n.t("labels.defaults.days") %>)
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+              <div class="col-xs-6 col-md-3 panel-box panel-box-bottom">
+                <h2>Verbleibendes Budget</h2>
+                <% if project.budget.present? && !project.budget.zero? %>
+                  <div class="highlight">
+                    <%= number_to_currency(project.budget - project.invoice_values) %>
+                  </div>
+                <% else %>
+                  <div class="highlight blank">
+                    <%= I18n.t(:"labels.defaults.na") %>
+                  </div>
+                <% end %>
+                <div class="subline">
+                  <% if project.budget.present? && !project.budget.zero? %>
+                    <div class="row">
+                      <div class="col-xs-4 text-left">Gesamt</div>
+                      <div class="col-xs-8 text-right"><%= number_to_currency(project.budget) %></div>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+              <div class="col-xs-6 col-md-3 panel-box panel-box-bottom">
+                <h2>Offener Betrag</h2>
+                <% if project.rate.present? %>
+                  <div class="highlight">
+                    <%= number_to_currency project.timer_values_uninvoiced * project.rate %>
+                  </div>
+                <% else %>
+                  <div class="highlight blank">
+                    <%= I18n.t(:"labels.defaults.na") %>
+                  </div>
+                <% end %>
+                <div class="subline">
+                  <a href="<%= new_invoice_path(project_id: project) %>">
+                    <i class="fa fa-plus"></i>
+                    <%= I18n.t(:"actions.add_invoice") %>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-md-12"></div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-md-12 nav-tabs-list nav-tabs-full-width">
+        <ul class="nav nav-tabs" role="tablist">
+          <li class="active">
+            <a href="#timers" role="tab" data-toggle="tab">
+              <%= I18n.t(:"labels.defaults.timers") %>
+            </a>
+          </li>
+          <li>
+            <a href="#offers" role="tab" data-toggle="tab">
+              <%= I18n.t(:"labels.defaults.offers") %>
+            </a>
+          </li>
+          <li>
+            <a href="#invoices" role="tab" data-toggle="tab">
+              <%= I18n.t(:"labels.defaults.invoices") %>
+            </a>
+          </li>
+          <li>
+            <a href="#tasks" role="tab" data-toggle="tab">
+              <%= I18n.t(:"labels.defaults.tasks") %>
+            </a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="timers">
+            <%= render "timers_panel", timers: project.timers.includes(:task), context: "default" %>
+          </div>
+          <div class="tab-pane" id="offers">
+            <%= render "base/offers_panel", offers: project.offers.includes(:customer), context: "default" %>
+          </div>
+          <div class="tab-pane" id="invoices">
+            <%= render "base/invoices_panel", invoices: project.invoices.includes(:customer), context: "default" %>
+          </div>
+          <div class="tab-pane" id="tasks">
+            <%= render "tasks_panel", tasks: project.tasks, context: "default" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

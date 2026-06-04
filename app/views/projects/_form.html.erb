@@ -1,0 +1,135 @@
+<%= form_for project do |form| %>
+  <div class="row">
+    <div class="col-xs-12 col-md-6">
+      <div class="form-group selectize <%= form_error?(project, :customer_id) %>">
+        <%= form.collection_select :customer_id, customers, :id, :name, { include_blank: "" }, { placeholder: I18n.t(:"helpers.prompt.project.customer_id"), class: "js-customer-selectize" } %>
+        <%= form_errors project, :customer_id %>
+      </div>
+    </div>
+    <div class="col-xs-12 col-md-6">
+      <div class="form-group <%= form_error?(project, :name) %>">
+        <%= form.text_field :name, placeholder: I18n.t(:"helpers.placeholder.name"), class: "form-control" %>
+        <%= form_errors project, :name %>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-md-6 form-group <%= form_error?(project, :start_date) %>">
+      <div class="input-group datepicker">
+        <%= form.label :start_date, class: "input-group-addon" %>
+        <%= form.date_field :start_date, class: "form-control", "data-value" => form.object.start_date %>
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button">
+            <i class="fa fa-calendar"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+
+    <div class="col-xs-12 col-md-6 form-group <%= form_error?(project, :end_date) %>">
+      <div class="input-group datepicker">
+        <%= form.label :end_date, class: "input-group-addon" %>
+        <%= form.date_field :end_date, class: "form-control", "data-value" => form.object.end_date %>
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button">
+            <i class="fa fa-calendar"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-6 col-md-3 form-group <%= form_error?(project, :rate) %>">
+      <%= form.label :rate %>
+      <div class="input-group">
+        <%= form.number_field :rate, class: "form-control text-right" %>
+        <span class="input-group-addon">€/Std.</span>
+      </div>
+      <%= form_errors project, :rate %>
+    </div>
+
+    <div class="col-xs-6 col-md-3 form-group <%= form_error?(project, :budget) %>">
+      <%= form.label :budget %>
+      <div class="input-group">
+        <%= form.number_field :budget, class: "form-control text-right", step: "any" %>
+        <span class="input-group-addon">€</span>
+      </div>
+      <%= form_errors project, :budget %>
+    </div>
+
+    <div class="col-xs-6 col-md-3 form-group <%= form_error?(project, :budget_hours) %>">
+      <%= form.label :budget_hours %>
+      <div class="input-group">
+        <%= form.number_field :budget_hours, class: "form-control text-right", step: "any" %>
+        <span class="input-group-addon">h</span>
+      </div>
+      <%= form_errors project, :budget_hours %>
+    </div>
+
+    <div class="col-xs-12 col-md-3 form-group <%= form_error?(project, :budget_on_dashboard) %>">
+      <div class="checkbox">
+        <%= form.check_box :budget_on_dashboard %>
+        <%= form.label :budget_on_dashboard %>
+        <%= form_errors project, :budget_on_dashboard %>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-6 col-md-3">
+      <p class="form-control-static text-right">
+        <%= I18n.t(:"helpers.label.project.round_up") %>
+      </p>
+    </div>
+    <div class="col-xs-6 col-md-3">
+      <div class="form-group selectize <%= form_error?(project, :round_up) %>">
+        <select class="js-customer-selectize" id="project_round_up" name="project[round_up]">
+          <% Project::DEFAULT_ROUND_UP_OPTIONS.each do |key, value| %>
+            <option value="<%= value %>"<%= ' selected'.html_safe if project.round_up.to_f == value %>>
+              <%= key %>
+            </option>
+          <% end %>
+        </select>
+        <%= form_errors project, :round_up %>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-6 form-group <%= form_error?(project, :invoice_addition) %>">
+      <%= form.label :invoice_addition %>
+      <%= form.text_area :invoice_addition, class: "form-control" %>
+      <%= form_errors project, :invoice_addition %>
+    </div>
+  </div>
+
+  <fieldset>
+    <legend>Aufgaben:</legend>
+    <div class="row" id="tasks">
+      <%= form.fields_for :tasks, project.tasks do |builder| %>
+        <%= render "task_fields", fields: builder %>
+      <% end %>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="btn-group-responsive pull-right">
+          <%= link_to_add_fields form, :tasks, name: I18n.t(:"actions.add"), class: "btn btn-default", target: "#tasks" do %>
+            <i class="fa fa-plus"></i>
+            <%= I18n.t(:"actions.add_task") %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+
+  <br>
+  <hr>
+
+  <div class="btn-group-responsive">
+    <button class="btn btn-primary btn-lg" type="submit">
+      <%= I18n.t(:"actions.save") %>
+    </button>
+    <a class="btn btn-default" href="<%= projects_path %>" data-notyConfirm="<%= I18n.t(:"messages.confirm.form.cancel") %>">
+      <%= I18n.t(:"actions.cancel") %>
+    </a>
+  </div>
+<% end %>

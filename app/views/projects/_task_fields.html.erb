@@ -1,0 +1,21 @@
+<div class="col-xs-12 col-md-6 fields">
+  <div class="form-group <%= form_error?(fields.object, :name) %>">
+    <div class="input-group">
+      <%= fields.text_field :name, placeholder: I18n.t(:"helpers.placeholder.name"), class: "form-control" %>
+      <span class="input-group-addon">
+        <div class="checkbox">
+          <%= fields.check_box :billable %>
+          <%= fields.label :billable %>
+        </div>
+      </span>
+      <span class="input-group-btn">
+        <%= link_to_delete_fields fields, name: I18n.t(:"actions.delete"), class: "btn btn-danger" do %>
+          <i class="fa fa-trash"></i>
+        <% end %>
+      </span>
+    </div>
+    <%= form_errors fields.object, :name %>
+  </div>
+
+  <div class="clearfix"></div>
+</div>

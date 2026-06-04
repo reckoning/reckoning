@@ -1,0 +1,18 @@
+<% context ||= "info" %>
+<div class="panel panel-<%= context %>">
+  <div class="list-group tasks-list">
+    <% tasks.each do |task| %>
+      <a class="list-group-item" href="">
+        <%= task.name %>
+        <span class="pull-right badge">
+          <%= I18n.t("labels.task.billable.#{task.billable}") %>
+        </span>
+      </a>
+    <% end %>
+    <% if tasks.empty? %>
+      <span class="list-group-item">
+        <%= I18n.t(:"labels.table.blank.task") %>
+      </span>
+    <% end %>
+  </div>
+</div>

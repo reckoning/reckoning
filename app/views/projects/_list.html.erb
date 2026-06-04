@@ -1,0 +1,37 @@
+<% @projects_by_customer.each do |customer, projects| %>
+  <div class="panel panel-list panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">
+        <div class="row">
+          <div class="col-xs-8 col-md-4 name">
+            <a href="<%= edit_customer_path(customer) %>">
+              <strong>
+                <%= customer.name %>
+              </strong>
+            </a>
+          </div>
+          <div class="col-md-2 hidden-xs hidden-sm">
+            <span>
+              <%= I18n.t(:"labels.defaults.budget") %>
+            </span>
+          </div>
+          <div class="col-md-4 hidden-xs hidden-sm">
+            <span>
+              <%= I18n.t(:"labels.defaults.hours") %>
+            </span>
+          </div>
+          <div class="col-xs-4 col-md-2">
+            <div class="panel-list-action pull-right">
+              <a class="btn btn-default" href="<%= new_project_path(customer_id: customer) %>" title="<%= I18n.t(:"nav.subnav.new_project_for_customer", customer: customer.name) %>" data-toggle="tooltip">
+                <i class="fa fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="list-group">
+      <%= render partial: "projects/show", collection: projects.sort_by(&:name), as: :project %>
+    </div>
+  </div>
+<% end %>
