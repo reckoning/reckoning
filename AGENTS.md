@@ -23,42 +23,78 @@ rendered as PDFs and emailed.
   `:redis_cache_store`
 - **Auth** Devise + devise-two-factor (v6 schema); JWT for API
 - **Authz** CanCanCan
-- **Templating** Haml + Slim
+- **Templating** ERB (every view; haml + slim removed in Phase 3)
 - **PDF** Grover (puppeteer + Google Chrome)
 - **Storage** ActiveStorage on DigitalOcean Spaces (S3-compatible) in
   production
-- **Asset pipeline** Sprockets + Terser (legacy — see "Frontend
-  modernization in flight" below)
+- **Frontend toolchain** Vite (`vite_rails`) with TS entrypoints under
+  `app/frontend/`, alongside the legacy Sprockets + Terser bundle
+  which still ships jQuery / CoffeeScript / AngularJS until Phase 9.
+- **CSS** Tailwind 4 via `@tailwindcss/vite` (preflight off so it
+  coexists with Bootstrap 3 until Phase 9)
+- **JS framework** Hotwire — Turbo Drive owns navigation, Stimulus
+  controllers auto-register from `app/frontend/controllers/*_controller.ts`
 
 ### Migrating toward
 
 - Container deploy via **Kamal 2** + multi-stage Dockerfile + GHCR
-  (PR landing as #853; runs **alongside Capistrano** until verified).
-- Release automation via **release-please** + Conventional Commits
-  (PR landing as #852). After this, version bumps and CHANGELOG
-  entries happen automatically.
+  (runs **alongside Capistrano** until verified; auto-deploy on push
+  is currently gated off — see #837).
+- Release automation via **release-please** + Conventional Commits.
 
 ### Frontend modernization in flight
 
 The frontend is legacy and being replaced. **Don't add new code to the
 legacy stack** — if you must touch a screen, prefer the smallest
-in-place change. New features should go through Vite once it lands.
+in-place change. New features go through Vite (TS + Tailwind +
+Hotwire). See `docs/frontend-migration-plan.md` for the phased plan.
 
-Legacy (to be removed):
+Done (Phases 1–4 + Phase 5 in progress):
 
-- Bootstrap 3 (EOL 2019) + bootstrap-sass + bourbon
-- AngularJS (EOL 2021) under `app/assets/javascripts/angular/`
-- jQuery + jquery_ujs + Turbolinks
-- CoffeeScript (`*.coffee` files, `coffee-rails` gem)
-- Sprockets `//= require` manifests
-- bower-rails
+- Phase 1 — Vite installed alongside Sprockets (#859)
+- Phase 2 — Tailwind 4 alongside Bootstrap 3, preflight off (#860)
+- Phase 3 — every haml/slim template converted to ERB; haml + slim
+  gems dropped (#861–#870)
+- Phase 4 — Turbo Drive + Stimulus baseline; Turbolinks gone
+  (#871, #872)
+- Phase 5 — Turbo Frames on CRUD index pages
+  (projects #873, offers #874, invoices #875)
 
-Targets (see `docs/frontend-migration-plan.md` for the phased plan):
+Still legacy (to be removed in later phases):
 
-- **Vite** (`vite_rails`) with `app/frontend/entrypoints/`
-- **Tailwind 4** via `@tailwindcss/vite`
-- **TypeScript** + Vue 3 (or Stimulus if simpler — TBD)
-- **Playwright** for e2e (replacing Cypress 12)
+- Bootstrap 3 (EOL 2019) + bootstrap-sass + bourbon — Phase 9
+- AngularJS (EOL 2021) under `app/assets/javascripts/angular/` —
+  Phase 7, after Vue islands (Phase 6) replace timesheet + project
+  timers calendar
+- jQuery + jquery_ujs — Phase 9 (after the remaining `[data-method]`
+  / `[data-notyConfirm]` flows move to Turbo + Stimulus)
+- CoffeeScript (`*.coffee` files, `coffee-rails` gem) — Phase 9
+- Sprockets `//= require` manifests — Phase 9
+- bower-rails — Phase 7
+- Cypress 12 — Phase 8, replaced by Playwright
+- i18n-js v3 — Phase 10
+
+### Hotwire conventions
+
+- **Turbo Drive** is enabled globally. Opt out with `data-turbo="false"`
+  on a link or its container.
+- **Turbo Frames** wrap list/filter/pagination regions on index pages
+  (see `app/views/{projects,offers,invoices}/index.html.erb`). Frame
+  id matches the wrapper on both the initial render and the
+  subsequent partial response; the controller doesn't need a special
+  branch.
+- **`data-turbo-method`** is the Turbo replacement for the classic
+  Rails `link_to ..., method: :put|:delete`. Use `data: { turbo_method:
+  :put }` in `link_to` calls.
+- **`turbo:load → turbolinks:load` shim** in `application.ts` re-fires
+  the legacy event so existing CoffeeScript that listens for
+  `turbolinks:load` keeps working under Turbo navigation. Delegate
+  event handlers to `document` if they need to survive Turbo Frame
+  swaps (see `app/assets/javascripts/helpers/noty.coffee` for the
+  pattern).
+- **Stimulus controllers** live in `app/frontend/controllers/`. File
+  `tabs_controller.ts` exporting a default `Controller` subclass
+  auto-registers as `data-controller="tabs"`.
 
 ## Project structure
 
@@ -79,7 +115,7 @@ reckoning/
 │   ├── routes/            # api_routes, etc.
 │   ├── initializers/
 │   ├── environments/
-│   ├── deploy.yml         # Kamal (after #853 lands)
+│   ├── deploy.yml         # Kamal 2
 │   └── deploy.rb          # Capistrano (legacy)
 ├── db/
 │   ├── migrate/
@@ -89,7 +125,7 @@ reckoning/
 ├── cypress/               # e2e (Cypress 12 — being replaced)
 ├── lib/
 ├── docker/
-├── Dockerfile             # multi-stage prod image (after #853 lands)
+├── Dockerfile             # multi-stage prod image
 └── .github/workflows/     # CI: ruby-lint, ruby-tests, ruby-audit,
                            #     brakeman, seeds, e2e-tests
 ```
@@ -138,7 +174,7 @@ All three are wired as required PR gates in CI. They WILL fail your PR.
 # Legacy path (currently the source of truth)
 bundle exec cap live deploy
 
-# New path (lands with #853, disabled by default until verified)
+# New path (disabled by default until verified)
 bundle exec kamal deploy -d live
 ```
 
