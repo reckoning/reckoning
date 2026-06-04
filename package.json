@@ -8,6 +8,8 @@
     "test:e2e:report": "generate-mochawesome-report --jsonDir test/reports/e2e --output test/reports/e2e/html --charts"
   },
   "dependencies": {
+    "@hotwired/stimulus": "^3.2.2",
+    "@hotwired/turbo": "^8.0.23",
     "pdfjs-dist": "3.11.174",
     "puppeteer": "^23.0.0"
   },
