@@ -46,6 +46,10 @@ gem "url_plumber"
 
 gem "jbuilder"
 
+# Modern asset pipeline. Lives alongside Sprockets during the
+# frontend migration (see docs/frontend-migration-plan.md).
+gem "vite_rails"
+
 gem "dynamic_fields_for_rails"
 
 gem "workflow", "~> 1.2.0"
