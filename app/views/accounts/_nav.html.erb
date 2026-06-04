@@ -1,0 +1,19 @@
+<% path ||= "" %>
+<% active ||= "basic" %>
+<ul class="nav nav-tabs-vertical">
+  <% [
+       ["basic",   "fa-book",            "nav.subnav.account.basic"],
+       ["address", "fa-globe",           "nav.subnav.account.address"],
+       ["banking", "fa-bank",            "nav.subnav.account.banking"],
+       ["taxes",   "fa-building",        "nav.subnav.account.taxes"],
+       ["mailing", "fa-send",            "nav.subnav.account.mailing"],
+       ["offer",   "fa-hand-holding-box","nav.subnav.account.offer"]
+     ].each do |key, icon, label_key| %>
+    <li class="<%= "active" if active == key %>">
+      <a href="<%= path %>#<%= key %>"<%= ' data-toggle="tab"'.html_safe if path.blank? %>>
+        <i class="fa <%= icon %> fa-fw"></i>
+        <%= I18n.t(label_key) %>
+      </a>
+    </li>
+  <% end %>
+</ul>

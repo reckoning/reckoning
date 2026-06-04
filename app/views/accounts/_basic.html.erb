@@ -1,0 +1,26 @@
+<%= form_for account, url: account_path do |form| %>
+  <input name="hash" value="" type="hidden">
+  <div class="row">
+    <div class="col-xs-12 col-md-6">
+      <div class="form-group <%= form_error?(form.object, :name) %>">
+        <%= form.label :name %>
+        <%= form.text_field :name, placeholder: I18n.t(:"helpers.placeholder.name"), class: "form-control" %>
+        <%= form_errors form.object, :name %>
+      </div>
+    </div>
+    <div class="col-xs-12 col-md-4">
+      <div class="form-group <%= form_error?(form.object, :subdomain) %>">
+        <%= form.label :subdomain %>
+        <div class="input-group">
+          <%= form.text_field :subdomain, placeholder: I18n.t(:"helpers.placeholder.subdomain"), class: "form-subdomain form-control" %>
+          <%= form.label :subdomain, class: "input-group-addon" do %>
+            <%= ".#{Rails.configuration.app.domain}" %>
+          <% end %>
+        </div>
+        <%= form_errors form.object, :subdomain %>
+      </div>
+    </div>
+  </div>
+
+  <%= render "shared/forms/submit", path: root_path %>
+<% end %>

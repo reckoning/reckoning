@@ -1,0 +1,86 @@
+<% content_for :title do %>
+  <%= I18n.t(:"meta.title.sign_up") %>
+<% end %>
+<% content_for :js_includes do %>
+  <%= javascript_include_tag "https://checkout.stripe.com/checkout.js" %>
+<% end %>
+<% content_for :hide_navigation, true %>
+<%= form_for @account, url: registration_path, html: { class: "form-registration" } do |form| %>
+  <h1 class="form-registration-heading">
+    <a href="<%= root_path %>"><%= I18n.t(:"title.default") %></a>
+    <small><%= I18n.t(:"headlines.sign_up") %></small>
+  </h1>
+
+  <%= form.hidden_field :stripe_email %>
+  <%= form.hidden_field :stripe_token %>
+
+  <div class="form-group <%= form_error?(@account, :name) %>">
+    <%= form.text_field :name, autocomplete: "off", placeholder: I18n.t(:"helpers.placeholder.account.name"), class: "form-control" %>
+    <%= form_errors @account, :name %>
+  </div>
+
+  <% if @account.on_plan?(:free) %>
+    <%= form.hidden_field :plan, value: params[:plan] || @account.plan %>
+  <% else %>
+    <div class="form-group selectize <%= form_error?(@account, :plan) %>">
+      <select class="js-selectize" name="account[plan]" id="account_plan">
+        <% Plan.all.each do |plan| %>
+          <option value="<%= plan.code %>"<%= ' selected'.html_safe if plan.code == @account.plan || plan.code == params[:plan] %> data-data="<%= plan.to_builder.target! %>">
+            <%= plan.name %>
+          </option>
+        <% end %>
+      </select>
+      <%= form_errors @account, :plan %>
+    </div>
+  <% end %>
+
+  <hr>
+
+  <%= form.fields_for :users, @account.users do |fields| %>
+    <div class="form-group <%= form_error?(fields.object, :email) %>">
+      <%= fields.email_field :email, autocomplete: "off", placeholder: I18n.t(:"helpers.placeholder.user.email"), class: "form-control" %>
+      <%= form_errors fields.object, :email %>
+    </div>
+
+    <div class="form-group <%= form_error?(fields.object, :password) %>">
+      <%= fields.password_field :password, autocomplete: "off", placeholder: I18n.t(:"helpers.placeholder.user.password"), class: "form-control" %>
+      <%= form_errors fields.object, :password %>
+    </div>
+
+    <div class="form-group <%= form_error?(fields.object, :password_confirmation) %>">
+      <%= fields.password_field :password_confirmation, autocomplete: "off", placeholder: I18n.t(:"helpers.placeholder.user.password_confirmation"), class: "form-control" %>
+      <%= form_errors fields.object, :password_confirmation %>
+    </div>
+  <% end %>
+
+  <hr>
+
+  <div class="form-group <%= form_error?(@account, :vat_id) %>">
+    <%= form.text_field :vat_id, placeholder: I18n.t(:"helpers.placeholder.account.vat_id"), class: "form-control" %>
+    <%= form_errors @account, :vat_id %>
+  </div>
+
+  <div class="form-group <%= form_error?(@account, :subdomain) %>">
+    <div class="input-group">
+      <%= form.text_field :subdomain, placeholder: I18n.t(:"helpers.placeholder.subdomain"), class: "form-subdomain form-control" %>
+      <%= form.label :subdomain, class: "input-group-addon" do %>
+        <%= ".#{Rails.configuration.app.domain}" %>
+      <% end %>
+    </div>
+    <%= form_errors @account, :subdomain %>
+  </div>
+
+  <br>
+
+  <button class="btn-block btn btn-primary btn-lg btn-loading" data-loading-text="<%= I18n.t(:"actions.loading") %>">
+    <%= I18n.t(:"actions.sign_up") %>
+  </button>
+  <div class="clearfix"></div>
+
+  <hr>
+
+  <p class="text-center"><%= I18n.t(:"info.sign_in") %></p>
+  <a class="btn btn-default btn-block" href="<%= new_user_session_path %>">
+    <%= I18n.t(:"actions.sign_in") %>
+  </a>
+<% end %>
