@@ -1,0 +1,14 @@
+<ul class="nav nav-tabs" id="preview-nav" role="tablist">
+  <li class="active">
+    <a href="#offer-preview" role="tab" data-toggle="tab">
+      <%= I18n.t(:"labels.defaults.offer") %>
+    </a>
+  </li>
+</ul>
+<div id="preview-wrapper">
+  <div class="tab-content">
+    <div class="tab-pane active" id="offer-preview">
+      <div class="pdf-viewer" data-pdf-path="<%= pdf_offer_path(offer, "#{offer.offer_file}.pdf") %>"></div>
+    </div>
+  </div>
+</div>

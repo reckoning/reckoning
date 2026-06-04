@@ -1,0 +1,166 @@
+<div id="pdf-body" class="offer">
+  <address id="company">
+    <%= "#{resource.account.name}," %>
+    <% unless resource.account.address.blank? %>
+      <%= resource.account.address.gsub("\r\n", ", ").gsub("\n", ", ").gsub("\r", ", ") %>
+    <% end %>
+  </address>
+
+  <address id="customer">
+    <%= resource.customer.name %>
+    <br>
+    <br>
+    <%= simple_format(resource.customer.address) %>
+  </address>
+
+  <div class="row">
+    <div id="subject">
+      <div class="info-wrapper">
+        <div id="infomartion">
+          <%= I18n.t(:"pdf.offer.subject.project") %>
+          <%= resource.project.name %>
+        </div>
+        <div id="date">
+          <%= I18n.t(:"pdf.offer.subject.date") %>
+          <%= I18n.l resource.date %>
+        </div>
+
+        <% if resource.account.vat_id.present? %>
+          <div id="tax">
+            <%= I18n.t(:"pdf.offer.subject.tax") %>
+            <%= resource.account.vat_id %>
+          </div>
+        <% end %>
+        <div class="clear"></div>
+      </div>
+      <h1>
+        <%= I18n.t(:"pdf.offer.headline") %>
+        <%= resource.ref_number %>
+      </h1>
+
+      <div class="clear"></div>
+    </div>
+
+    <div class="headline">
+      <p>
+        <%= simple_format(resource.account.offer_headline) %>
+      </p>
+    </div>
+
+    <div class="clear"></div>
+
+    <table class="table table-condensed">
+      <thead>
+        <th><%= I18n.t(:"labels.defaults.description") %></th>
+        <th class="align-right"><%= I18n.t(:"labels.defaults.hours") %></th>
+        <th class="align-right"><%= I18n.t(:"labels.defaults.rate") %></th>
+        <th class="align-right"><%= I18n.t(:"labels.defaults.value") %></th>
+      </thead>
+      <tbody>
+        <% resource.positions.order(description: :asc).each do |position| %>
+          <tr>
+            <td>
+              <%= position.description %>
+            </td>
+            <td class="hours">
+              <%= number_to_currency position.hours, unit: "" %>
+            </td>
+            <td class="rate">
+              <% if position.rate.present? %>
+                <%= number_to_currency position.rate %>
+              <% elsif position.hours.present? %>
+                <%= number_to_currency resource.rate %>
+              <% end %>
+            </td>
+            <td class="value">
+              <%= number_to_currency position.value %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <% if resource.account.tax_rates.valid_on(datetime: resource.date).present? %>
+          <tr class="step-sum">
+            <td colspan="3">
+              <%= I18n.t(:"pdf.offer.net") %>
+            </td>
+            <td class="value">
+              <%= number_to_currency resource.value %>
+            </td>
+          </tr>
+          <tr class="tax">
+            <td colspan="3">
+              <%= I18n.t(:"pdf.offer.tax", value: resource.account.tax) %>
+            </td>
+            <td class="value">
+              <% taxes = (resource.value * resource.account.tax.to_d) / 100 %>
+              <%= number_to_currency taxes %>
+            </td>
+          </tr>
+          <% value = resource.value + taxes %>
+          <% value_label = I18n.t(:"pdf.offer.gross") %>
+        <% else %>
+          <tr class="tax">
+            <td colspan="4">
+              <%= I18n.t(:"small_business") %>
+            </td>
+          </tr>
+          <% value = resource.value %>
+          <% value_label = I18n.t(:"pdf.offer.sum") %>
+        <% end %>
+        <tr class="sum">
+          <td colspan="3">
+            <b><%= value_label %></b>
+          </td>
+          <td class="value">
+            <b><%= number_to_currency(value) %></b>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div class="clear"></div>
+
+    <div class="subline">
+      <p>
+        <%= simple_format(resource.description) %>
+      </p>
+
+      <br>
+
+      <p>
+        <%= simple_format(resource.customer.offer_disclaimer) %>
+      </p>
+    </div>
+
+
+    <div class="salutation">
+      <p>
+        <%= I18n.t("pdf.salutation") %>
+        <br>
+        <%= resource.account.name %>
+      </p>
+    </div>
+
+    <div class="confirmation">
+      <p>
+        <%= I18n.t("pdf.offer.confirmation_info", ref: resource.ref_number, date: I18n.l(resource.date)) %>
+        <br>
+        <%= I18n.t("pdf.offer.confirmation") %>
+        <br>
+      </p>
+
+      <div class="confirmation-location">
+        <hr>
+
+        <%= I18n.t("pdf.offer.confirmation_signature_date") %>
+      </div>
+
+      <div class="confirmation-signature">
+        <hr>
+
+        <%= I18n.t("pdf.offer.confirmation_signature") %>
+      </div>
+    </div>
+  </div>
+</div>
