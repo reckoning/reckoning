@@ -26,35 +26,44 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-xs-12 col-md-6 filters">
-        <div class="btn-group">
-          <% if params.fetch(:state, nil) %>
-            <a class="btn btn-default" href="<%= url_for(state: nil) %>">
-              <%= I18n.t(:"filter.project_state.all") %>
-            </a>
-          <% else %>
-            <a class="btn btn-default" href="<%= url_for(state: :archived) %>">
-              <%= I18n.t(:"filter.project_state.archived") %>
-            </a>
-          <% end %>
+    <%# Turbo Frame around filter + pagination + list. Filter and
+        pagination links inside the frame issue Turbo requests; the
+        controller re-renders the same template and Turbo extracts the
+        matching frame and swaps just this region. `data-turbo-action=
+        "advance"` updates the URL so the filter/page is shareable.
+        First Phase 5 (Turbo Frames on CRUD) PR — see
+        docs/frontend-migration-plan.md. %>
+    <turbo-frame id="projects-list" data-turbo-action="advance">
+      <div class="row">
+        <div class="col-xs-12 col-md-6 filters">
+          <div class="btn-group">
+            <% if params.fetch(:state, nil) %>
+              <a class="btn btn-default" href="<%= url_for(state: nil) %>">
+                <%= I18n.t(:"filter.project_state.all") %>
+              </a>
+            <% else %>
+              <a class="btn btn-default" href="<%= url_for(state: :archived) %>">
+                <%= I18n.t(:"filter.project_state.archived") %>
+              </a>
+            <% end %>
+          </div>
+        </div>
+        <div class="col-xs-12 col-md-6">
+          <%= paginate @projects %>
         </div>
       </div>
-      <div class="col-xs-12 col-md-6">
-        <%= paginate @projects %>
+
+      <%= render partial: "list" %>
+
+      <% if @projects.blank? %>
+        <%= render partial: "shared/blank" %>
+      <% end %>
+
+      <div class="row">
+        <div class="col-xs-12">
+          <%= paginate @projects %>
+        </div>
       </div>
-    </div>
-
-    <%= render partial: "list" %>
-
-    <% if @projects.blank? %>
-      <%= render partial: "shared/blank" %>
-    <% end %>
-
-    <div class="row">
-      <div class="col-xs-12">
-        <%= paginate @projects %>
-      </div>
-    </div>
+    </turbo-frame>
   </div>
 </div>

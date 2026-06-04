@@ -95,11 +95,15 @@ window.displayError = (text, timeout) ->
   timeout = false if timeout is undefined
   displayNoty(text, 'error', timeout)
 
-document.addEventListener "turbolinks:load", () ->
-  $("[data-notyConfirm]").click (ev) ->
-    displayConfirm(ev, $(@))
-    return false
+# Delegated so the handler keeps working when Turbo Frame swaps in
+# new [data-notyConfirm] elements (e.g. project archive button after
+# a pagination/filter navigation). Bound once at script load — the
+# document survives both Turbo Drive and Turbo Frame navigations.
+$(document).on "click", "[data-notyConfirm]", (ev) ->
+  displayConfirm(ev, $(@))
+  return false
 
+document.addEventListener "turbolinks:load", () ->
   success = $('body').data('success');
   displaySuccess(success) if success
 
