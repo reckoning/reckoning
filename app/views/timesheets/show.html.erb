@@ -1,0 +1,6 @@
+<% content_for :title do %>
+  <%= I18n.t(:"meta.title.timesheet.index") %>
+<% end %>
+<div id="timesheet" class="timesheet" ng-strict-di="true" data-turbolinks="false">
+  <div class="row" ng-view="true"></div>
+</div>

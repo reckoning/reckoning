@@ -1,0 +1,64 @@
+<br>
+
+<div class="col-xs-12">
+  <div class="row">
+    <div class="col-xs-12 col-md-6">
+      <h2>
+        <span ng-bind="currentMonth()"></span>
+        <small>
+          (<span ng-bind="businessDays"></span>
+          <%= I18n.t("labels.defaults.week_days") %>)
+        </small>
+      </h2>
+    </div>
+    <div class="col-xs-12 col-md-6">
+      <div class="pull-right resource-nav">
+        <div class="btn-group btn-group-justified-responsive resource-nav">
+          <a class="btn btn-default" href="#/month/{{prevMonth()}}">
+            <i class="fa fa-chevron-left"></i>
+          </a>
+          <datepicker ng-model="datepickerSelect"></datepicker>
+          <a class="btn btn-default" href="#/month" ng-disabled="isCurrentMonth()">
+            <%= I18n.t("actions.today") %>
+          </a>
+          <a class="btn btn-default" href="#/month/{{nextMonth()}}">
+            <i class="fa fa-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xs-12">
+      <div class="calendar">
+        <div class="header">
+          <div class="day" ng-repeat="day in weeks[0].days">
+            <span ng-bind="day.dayShort"></span>
+          </div>
+        </div>
+        <div class="week" ng-repeat="week in weeks">
+          <div class="day" ng-class="{'current-month':day.isCurrentMonth,'current-day':day.isCurrentDay}" ng-repeat="day in week.days">
+            <a class="day-number" href="/timesheet/#/day/{{day.date}}" ng-bind="day.day"></a>
+            <div class="timers">
+              <a class="timer" ng-click="openModal(day.date, timer)" ng-repeat="timer in timersForDate(day.date)" ng-class="cssClassForTimer(timer)">
+                <span ng-if="timer.started">
+                  <i class="fa fa-circle-o-notch fa-spin"></i>
+                  <timer start-time="timer.startTime" max-time-unit="'hour'">{{hours}}:{{mminutes}}</timer>
+                </span>
+                <span ng-if="!timer.started">
+                  <span class="timer-value">
+                    <span ng-bind="timer.value | toHours"></span>
+                  </span>
+                </span>
+                |
+                <span class="timer-task" ng-bind="timer.taskName" title="{{timer.taskName}}"></span>
+              </a>
+              <a class="add-timer" ng-click="openModal(day.date)" title="<%= I18n.t("actions.add_timer") %>">
+                <i class="fa fa-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

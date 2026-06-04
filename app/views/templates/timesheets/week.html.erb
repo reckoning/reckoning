@@ -1,0 +1,119 @@
+<div class="col-xs-12 timesheet-week-page">
+  <div class="row">
+    <div class="col-xs-12 col-md-6">
+      <h1>
+        <span ng-bind="startOfWeek()"></span>
+        . -
+        <span ng-bind="endOfWeek()"></span>
+      </h1>
+    </div>
+    <div class="col-xs-12 col-md-6">
+      <div class="pull-right resource-nav">
+        <div class="btn-group btn-group-justified-responsive resource-nav">
+          <a class="btn btn-default" href="#/week/{{prevWeek()}}">
+            <i class="fa fa-chevron-left"></i>
+          </a>
+          <datepicker-button ng-model="datepickerSelect"></datepicker-button>
+          <a class="btn btn-default" ng-click="navigateToToday()">
+            <%= I18n.t("actions.today") %>
+          </a>
+          <a class="btn btn-default" href="#/week/{{nextWeek()}}">
+            <i class="fa fa-chevron-right"></i>
+          </a>
+        </div>
+        <div class="btn-group btn-group-justified-responsive resource-nav">
+          <a class="btn btn-default" href="#/day/{{dayDate()}}">
+            <%= I18n.t(:"labels.timesheet.day") %>
+          </a>
+          <a class="btn btn-default active" href="#/week/{{date}}">
+            <%= I18n.t(:"labels.timesheet.week") %>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div ng-controller="TaskController as taskCtrl">
+    <div class="timesheet-header row">
+      <div class="col-xs-12 col-md-4 timesheet-actions">
+        <div class="btn-group btn-group-justified-responsive resource-nav">
+          <a class="btn btn-primary" ng-click="openModal()">
+            <i class="fa fa-plus"></i>
+            <%= I18n.t(:"actions.add_task") %>
+          </a>
+        </div>
+      </div>
+      <div class="col-xs-12 col-md-6 timesheet-days">
+        <div class="timesheet-day" ng-class="{'timesheet-today':date.isCurrentDate}" ng-repeat="date in dates">
+          <a href="#/day/{{date.date}}">
+            <span class="hidden-xs" ng-bind="date.day"></span>
+            <br>
+            <span ng-bind="date.short"></span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="animate" ng-cloak="true" ng-if="currentTasksLoaded && !currentTasks.length">
+      <div class="row">
+        <%= render template: "templates/blank" %>
+      </div>
+    </div>
+
+    <div class="panel panel-default animate" ng-repeat="task in currentTasks">
+      <div class="panel-body row">
+        <div class="col-xs-12 col-md-4 timesheet-task">
+          <a ng-href="{{projectPath(task.projectId)}}">
+            <span ng-bind="task.projectName"></span>
+          </a>
+          <small>
+            | <span ng-bind="task.projectCustomerName"></span>
+          </small>
+          <br>
+          <span ng-bind="task.label"></span>
+        </div>
+        <div class="col-xs-12 col-md-6 timesheet-days">
+          <div class="text-right timesheet-day" ng-repeat="date in dates">
+            <div ng-repeat="timer in task.timers | forDate:date.date">
+              <div ng-if="$last">
+                <div class="timesheet-timer invoiced" ng-if="timer.invoiced">
+                  <span title="<%= I18n.t(:"labels.timesheet.on_invoice") %>" data-toggle="tooltip" ng-bind="timer.sumForTask | toHours"></span>
+                </div>
+                <div class="timesheet-timer started" ng-if="timer.startTimeForTask">
+                  <timer start-time="timer.startTimeForTask" max-time-unit="'hour'">{{hours}}:{{mminutes}}</timer>
+                </div>
+                <div class="timesheet-timer" ng-if="!timer.startTimeForTask && !timer.invoiced">
+                  <input class="form-control" type="text" ng-model="timer.sumForTask" timefield="true" ng-disabled="timer.invoiced" ng-blur="save(timer)">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3 col-xs-offset-7 col-md-offset-0 col-md-1">
+          <div class="text-right timesheet-row-sum">
+            <span ng-bind="sumForTask(task) | toHours"></span>
+          </div>
+        </div>
+        <div class="col-xs-2 col-md-1">
+          <div class="text-right timesheet-task-actions">
+            <button class="btn btn-link btn-lg default" ng-click="removeTask(task)">
+              <i class="fa fa-close"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="timesheet-footer row animate" ng-cloak="true" ng-if="currentTasksLoaded && currentTasks.length">
+      <div class="col-xs-12 col-md-offset-4 col-md-6 timesheet-days">
+        <div class="timesheet-day timesheet-col-sum" ng-repeat="date in dates">
+          <span ng-bind="sumForDate(date) | toHours"></span>
+        </div>
+      </div>
+      <div class="col-xs-12 col-md-1 timesheet-sum">
+        <div class="text-right">
+          <span class="visible-xs-inline-block"><%= I18n.t(:"labels.timesheet.sum") %></span>
+          <span ng-bind="sumForWeek() | toHours"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

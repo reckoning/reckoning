@@ -1,0 +1,87 @@
+<div class="col-xs-12 timesheet-day-page">
+  <div class="row">
+    <div class="col-xs-12 col-md-7">
+      <h1 ng-bind="day()"></h1>
+    </div>
+    <div class="col-xs-12 col-md-5">
+      <div class="pull-right resource-nav">
+        <div class="btn-group btn-group-justified-responsive resource-nav">
+          <a class="btn btn-default" href="#/day/{{prevDay()}}">
+            <i class="fa fa-chevron-left"></i>
+          </a>
+          <datepicker-button ng-model="datepickerSelect"></datepicker-button>
+          <a class="btn btn-default" ng-click="navigateToToday()">
+            <%= I18n.t("actions.today") %>
+          </a>
+          <a class="btn btn-default" href="#/day/{{nextDay()}}">
+            <i class="fa fa-chevron-right"></i>
+          </a>
+        </div>
+        <div class="btn-group resource-nav hidden-xs">
+          <a class="btn btn-default active" href="#/day/{{dayDate()}}">
+            <%= I18n.t(:"labels.timesheet.day") %>
+          </a>
+          <a class="btn btn-default" href="#/week/{{weekDate()}}">
+            <%= I18n.t(:"labels.timesheet.week") %>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" ng-controller="TimerController as timerCtrl">
+    <div class="col-xs-12 col-md-9">
+      <div class="animate" ng-cloak="true" ng-if="timersLoaded && !timers.length">
+        <div class="row">
+          <%= render template: "templates/blank" %>
+        </div>
+      </div>
+      <div class="timesheet-timer-panel panel panel-default animate" ng-repeat="timer in timers" style="overflow: hidden">
+        <div class="panel-body">
+          <div class="pull-left">
+            <h3>
+              <a ng-href="{{projectPath(timer.projectId)}}">
+                <span ng-bind="timer.projectName"></span>
+              </a>
+              <small>
+                | <span ng-bind="timer.projectCustomerName"></span>
+              </small>
+            </h3>
+            <span ng-bind="timer.taskLabel"></span>
+            <span class="timesheet-timer-note" ng-bind="timer.note"></span>
+          </div>
+          <div class="pull-right">
+            <span class="timesheet-timer invoiced" ng-if="timer.invoiced" title="<%= I18n.t(:"labels.timesheet.on_invoice") %>" data-toggle="tooltip">
+              <span ng-bind="timer.value | toHours"></span>
+            </span>
+            <span class="timesheet-timer started" ng-if="timer.started">
+              <timer start-time="timer.startTime" max-time-unit="'hour'">{{hours}}:{{mminutes}}</timer>
+              <button class="btn btn-success btn-lg" ng-click="stopTimer(timer, $event)">
+                <i class="fa fa-circle-o-notch fa-spin"></i>
+                <%= I18n.t(:"actions.stop") %>
+              </button>
+            </span>
+            <span class="timesheet-timer" ng-if="!timer.started && !timer.invoiced">
+              <span ng-bind="timer.value | toHours"></span>
+              <button class="btn btn-default btn-lg" ng-click="startTimer(timer, $event)" ng-if="isStartable(timer.date)">
+                <i class="fa fa-circle-o-notch"></i>
+                <%= I18n.t(:"actions.start") %>
+              </button>
+            </span>
+            <button class="btn btn-link btn-lg default" ng-if="!timer.invoiced" ng-click="openModal(timer)">
+              <i class="fa fa-edit"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xs-12 col-md-3 text-right">
+      <div class="btn-group-responsive resource-nav">
+        <button class="btn btn-primary btn-lg" ng-click="openModal()">
+          <i class="fa fa-plus"></i>
+          <%= I18n.t(:"actions.add_timer") %>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
