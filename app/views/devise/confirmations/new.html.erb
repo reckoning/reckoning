@@ -1,0 +1,23 @@
+<% content_for :title do %>
+  <%= I18n.t(:"meta.title.confirm") %>
+<% end %>
+<div class="row">
+  <div class="col-xs-12 col-md-5 col-md-offset-2">
+    <h1><%= I18n.t(:"headlines.confirm") %></h1>
+    <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |form| %>
+      <div class="form-group <%= form_error?(resource, :email) %>">
+        <%= form.text_field :email, required: true, placeholder: I18n.t(:"helpers.placeholder.user.email"), class: "form-control" %>
+        <small><%= form_errors resource, :email %></small>
+      </div>
+      <br>
+      <div class="form-group">
+        <button class="btn btn-lg btn-primary">
+          <%= I18n.t(:"actions.confirm") %>
+        </button>
+      </div>
+    <% end %>
+  </div>
+  <div class="col-xs-12 col-md-3">
+    <%= render "devise/shared/links" %>
+  </div>
+</div>
