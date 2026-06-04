@@ -13,11 +13,14 @@
   },
   "devDependencies": {
     "cypress": "^12.17.4",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "vite": "^7.3.5",
+    "vite-plugin-ruby": "^5.2.2"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
       "cypress",
+      "esbuild",
       "puppeteer"
     ]
   }

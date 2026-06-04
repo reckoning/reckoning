@@ -82,6 +82,10 @@ RUN bundle install --jobs 4 && \
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile --ignore-scripts
 
+# esbuild needs its native binary (vite uses it for transforms).
+# --ignore-scripts above skipped its postinstall, so rebuild explicitly.
+RUN pnpm rebuild esbuild
+
 # Application code
 COPY . .
 
@@ -92,8 +96,9 @@ RUN if [ -n "$GIT_REVISION" ]; then echo "$GIT_REVISION" > REVISION; fi
 # bootsnap iseq+yjit warmup — boot time drops noticeably
 RUN bundle exec bootsnap precompile --gemfile app/ lib/ config/
 
-# Compile Sprockets assets. SECRET_KEY_BASE_DUMMY=1 lets Rails initialize
-# without a real key at build time; runtime injects the real one.
+# Compile assets. SECRET_KEY_BASE_DUMMY=1 lets Rails initialize without
+# a real key at build time; runtime injects the real one. `assets:precompile`
+# runs both Sprockets AND Vite (vite_rails auto-hooks into the task).
 RUN --mount=type=secret,id=RAILS_MASTER_KEY \
     RAILS_MASTER_KEY="$(cat /run/secrets/RAILS_MASTER_KEY 2>/dev/null || true)" \
     SECRET_KEY_BASE_DUMMY=1 \
