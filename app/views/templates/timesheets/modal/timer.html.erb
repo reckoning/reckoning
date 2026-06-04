@@ -1,0 +1,57 @@
+<div class="modal-header">
+  <button class="close" type="button" ng-click="cancel()" aria-hidden="true">&times;</button>
+  <h2 class="modal-title">
+    <span ng-if="timer.id">
+      <%= I18n.t(:"labels.modals.title.timesheet.edit_timer") %>
+    </span>
+    <span ng-if="!timer.id">
+      <%= I18n.t(:"labels.modals.title.timesheet.add_timer") %>
+    </span>
+  </h2>
+</div>
+<div class="modal-body">
+  <form ng-submit="saveTimer(timer, false)">
+    <div class="row">
+      <div class="col-xs-12">
+        <select selectize="true" ng-disabled="timer.invoiced" selectize-default="true" label-field="label" options="projects" ng-model="timer.projectId" placeholder="<%= I18n.t(:"helpers.prompt.timer.project") %>" ng-if="!withoutProjectSelect"></select>
+
+        <hr ng-if="!withoutProjectSelect">
+
+        <select selectize="true" ng-disabled="timer.invoiced" selectize-default="true" create="createTask" options="tasks" ng-model="timer.taskId" placeholder="<%= I18n.t(:"helpers.prompt.timer.task") %>"></select>
+
+        <hr>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-md-8">
+        <textarea class="form-control" ng-disabled="timer.invoiced" ng-model="timer.note" placeholder="<%= I18n.t(:"helpers.placeholder.timer.note") %>"></textarea>
+      </div>
+      <div class="col-xs-12 col-md-4">
+        <br class="visible-sm visible-xs">
+        <div class="modal-timer" ng-if="timer.id && timer.started">
+          <timer start-time="timer.startTime" max-time-unit="'hour'">{{hours}}:{{mminutes}}</timer>
+        </div>
+        <input class="input-lg form-control text-right" ng-disabled="timer.invoiced" ng-if="!(timer.id && timer.started)" ng-model="timer.value" placeholder="0:00" timefield="true">
+      </div>
+      <button class="hide"></button>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <div class="pull-right">
+    <button class="btn btn-primary btn-lg" ng-class="{'disabled':timer.invoiced}" ng-disabled="timer.invoiced || !timer.taskId" ng-click="saveTimer(timer, false)" data-loading-text="<%= I18n.t(:"actions.loading") %>">
+      <%= I18n.t(:"actions.save") %>
+    </button>
+    <button class="btn btn-default btn-lg" type="button" title="<%= I18n.t(:"actions.begin") %>" ng-if="((!timer.started) || (timer.started && !timer.id)) && isStartable(timer.date)" ng-class="{'disabled':timer.invoiced}" ng-disabled="timer.invoiced || !timer.taskId" ng-click="saveTimer(timer, true)" data-loading-text="<%= I18n.t(:"actions.loading") %>">
+      <i class="fa fa-play"></i>
+    </button>
+    <button class="btn btn-default btn-lg" type="button" title="<%= I18n.t(:"actions.stop") %>" ng-click="stopTimer(timer, $event)" ng-if="timer.id && timer.started && !timer.invoiced">
+      <i class="fa fa-stop"></i>
+    </button>
+  </div>
+  <div class="pull-left" ng-if="timer.id && !timer.invoiced">
+    <button class="btn btn-danger" type="button" ng-click="delete(timer)">
+      <%= I18n.t(:"actions.delete") %>
+    </button>
+  </div>
+</div>

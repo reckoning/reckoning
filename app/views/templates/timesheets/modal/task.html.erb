@@ -1,0 +1,21 @@
+<div class="modal-header">
+  <button class="close" ng-click="cancel()" aria-hidden="true">&times;</button>
+  <h2 class="modal-title"><%= I18n.t(:"labels.modals.title.timesheet.add_task") %></h2>
+</div>
+<div class="modal-body">
+  <select selectize="true" selectize-default="true" label-field="label" options="projects" ng-model="timer.projectId" placeholder="<%= I18n.t(:"helpers.prompt.timer.project") %>"></select>
+
+  <hr>
+
+  <select selectize="true" selectize-default="true" create="createTask" ng-disabled="!timer.projectId" options="tasks" ng-model="timer.taskId" placeholder="<%= I18n.t(:"helpers.prompt.timer.task") %>"></select>
+</div>
+<div class="modal-footer">
+  <div class="pull-left">
+    <button class="btn btn-primary" ng-disabled="!timer.taskId" ng-click="addTask()" data-loading-text="<%= I18n.t(:"actions.loading") %>">
+      <%= I18n.t(:"actions.add") %>
+    </button>
+    <button class="btn btn-default" ng-click="cancel()">
+      <%= I18n.t(:"actions.close") %>
+    </button>
+  </div>
+</div>
