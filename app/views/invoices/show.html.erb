@@ -1,0 +1,96 @@
+<% content_for :title do %>
+  <%= I18n.t(:"meta.title.invoice.show", invoice_ref: invoice.ref_number) %>
+<% end %>
+
+<div class="row" id="invoice" data-id="<%= invoice.id %>">
+
+  <div class="col-xs-12 col-md-12">
+    <div class="row">
+      <div class="col-xs-12 col-md-8">
+        <h1>
+          <%= I18n.t(:"headlines.invoice.show", invoice_ref: invoice.ref_number) %>
+          <% if invoice.charged? && invoice.payment_due_date < Time.zone.now %>
+            <small>
+              <span class="label label-danger due-label">
+                <%= I18n.t(:"labels.invoice.due", date: time_ago_in_words(invoice.payment_due_date)) %>
+              </span>
+            </small>
+          <% end %>
+        </h1>
+      </div>
+
+      <div class="col-xs-12 col-md-4">
+        <div class="btn-group btn-group-responsive pull-right resource-nav">
+          <% if can? :charge, invoice %>
+            <% charge_confirm = I18n.t(:"messages.confirm.charge") %>
+            <% if invoice.send_via_mail? %>
+              <% charge_confirm = I18n.t(:"messages.confirm.charge_mail") %>
+            <% end %>
+            <a class="btn btn-primary" href="<%= charge_invoice_path(invoice) %>" data-method="PUT" data-notyConfirm="<%= charge_confirm %>">
+              <i class="fa fa-envelope"></i>
+              <%= I18n.t(:"actions.charge") %>
+            </a>
+          <% end %>
+
+          <% if can? :pay, invoice %>
+            <%= link_to pay_invoice_path(invoice), method: :put, class: "btn btn-primary" do %>
+              <i class="fa fa-check-square-o"></i>
+              <%= I18n.t(:"actions.pay") %>
+            <% end %>
+          <% end %>
+          <%= link_to I18n.t(:"nav.subnav.back"), back_path(invoices_path), class: "btn btn-default" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 col-md-8">
+        <%= render "preview" %>
+      </div>
+
+      <div class="col-xs-12 col-md-4 side-nav">
+        <div class="row">
+          <div class="col-xs-12 col-md-12">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <div class="panel-title">
+                  <strong>
+                    <%= I18n.t(:"labels.panels.title.downloads") %>
+                  </strong>
+                </div>
+              </div>
+              <div class="list-group">
+                <%= link_to pdf_invoice_path(invoice, invoice.invoice_file), target: "_blank", class: "save-invoice list-group-item" do %>
+                  <i class="fa fa-download"></i>
+                  <%= I18n.t(:"actions.download_invoice") %>
+                <% end %>
+                <%= link_to timesheet_pdf_invoice_path(invoice, invoice.timesheet_file), target: "_blank", class: "save-timesheet list-group-item#{" hide" if invoice.timers.blank?}" do %>
+                  <i class="fa fa-download"></i>
+                  <%= I18n.t(:"actions.download_timesheet") %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+          <div class="col-xs-12 col-md-12">
+            <%= render "show_actions" %>
+          </div>
+        </div>
+
+        <% if invoice.send_via_mail? %>
+          <br>
+
+          <div class="row">
+            <div class="col-xs-12 col-md-12">
+              <%= render "test_mail_form" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

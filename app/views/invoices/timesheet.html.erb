@@ -1,0 +1,75 @@
+<% timers_by_date = resource.timers.billable.order(:date).group_by(&:date) %>
+<div id="pdf-body" class="timesheet">
+  <div class="row">
+    <div id="subject">
+      <div class="info-wrapper">
+        <div id="infomartion">
+          <%= I18n.t(:"pdf.invoice.subject.project") %>
+          <%= resource.project.name %>
+        </div>
+        <div id="date">
+          <%= I18n.t(:"pdf.invoice.subject.date") %>
+          <%= I18n.l resource.date %>
+        </div>
+      </div>
+      <h1>
+        <%= I18n.t(:"pdf.timesheet.headline", from: I18n.l(timers_by_date.keys.first), to: I18n.l(timers_by_date.keys.last)).html_safe %>
+      </h1>
+    </div>
+
+    <br>
+
+    <table class="table table-condensed">
+      <thead>
+        <th><%= I18n.t(:"labels.timesheet.date") %></th>
+        <th><%= I18n.t(:"labels.timesheet.task") %></th>
+        <th class="align-right"><%= I18n.t(:"labels.defaults.hours") %></th>
+      </thead>
+      <tbody>
+        <% value = 0 %>
+        <% timers_by_date.each do |date, timers| %>
+          <tr>
+            <td class="date">
+              <strong>
+                <%= I18n.l(date) %>
+              </strong>
+            </td>
+            <td></td>
+            <td class="hours">
+              <strong>
+                <%= number_to_currency(timers.sum { |t| t.value.to_d }, unit: "") %>
+              </strong>
+            </td>
+          </tr>
+          <% timers.each do |timer| %>
+            <% value += timer.value.to_d %>
+            <tr>
+              <td></td>
+              <td>
+                <%= timer.task.name %>
+                <% if timer.note.present? %>
+                  | <%= timer.note %>
+                <% end %>
+              </td>
+              <td class="hours">
+                <%= number_to_currency(timer.value, unit: "") %>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+        <tr class="sum border">
+          <td colspan="2">
+            <strong>
+              <%= I18n.t(:"pdf.timesheet.sum") %>
+            </strong>
+          </td>
+          <td class="value">
+            <strong>
+              <%= number_to_currency(value, unit: "") %>
+            </strong>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,57 @@
+<% content_for :title do %>
+  <%= I18n.t(:"meta.title.invoice.index") %>
+<% end %>
+<div class="row" id="invoices">
+  <div class="col-xs-12 col-md-12">
+
+    <div class="row">
+      <div class="col-xs-12 col-md-8">
+        <h1>
+          <%= I18n.t(:"headlines.invoice.index") %>
+          <br>
+          <small>
+            <%= I18n.t(:"headlines.invoice.sum", sum: number_to_currency(@invoices_sum)) %>
+            <br>
+            <%= I18n.t(:"headlines.invoice.vat_sum", sum: number_to_currency(@invoices_vat_sum)) %>
+          </small>
+        </h1>
+      </div>
+
+      <div class="col-xs-12 col-md-4">
+        <div class="btn-group-responsive pull-right resource-nav">
+          <a class="btn btn-primary <%= "disabled" if invoice_limit_reached? %>" href="<%= new_invoice_path %>">
+            <i class="fa fa-plus"></i>
+            <%= I18n.t(:"nav.subnav.new_invoice") %>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 col-md-8 filters">
+        <%= render "shared/tables/filter", resource: "invoice", name: "state", filters: Invoice.workflow_spec.state_names, translateable: true %>
+        <%= render "shared/tables/filter", resource: "invoice", name: "year", filters: current_invoice_years %>
+        <%= render "shared/tables/filter", resource: "invoice", name: "quarter", filters: quarters, translateable: "date.quarters" %>
+        <%= render "shared/tables/filter", resource: "invoice", name: "month", filters: months, translateable: "date.month_names" %>
+        <%= render "shared/tables/filter", resource: "invoice", name: "paid_in_year", filters: current_invoice_years %>
+        <%= render "shared/tables/filter", resource: "invoice", name: "paid_in_quarter", filters: quarters, translateable: "date.quarters" %>
+        <%= render "shared/tables/filter", resource: "invoice", name: "paid_in_month", filters: months, translateable: "date.month_names" %>
+      </div>
+      <div class="col-xs-12 col-md-4">
+        <%= paginate @invoices %>
+      </div>
+    </div>
+
+    <% if @invoices.present? %>
+      <%= render partial: "invoices/list", :@invoices => @invoices %>
+    <% else %>
+      <%= render partial: "shared/blank" %>
+    <% end %>
+
+    <div class="row">
+      <div class="col-xs-12 col-md-6">
+        <%= paginate @invoices %>
+      </div>
+    </div>
+  </div>
+</div>
