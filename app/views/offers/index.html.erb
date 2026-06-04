@@ -25,26 +25,32 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-xs-12 col-md-6 filters">
-        <%= render "shared/tables/filter", resource: "offer", name: "state", filters: Offer.aasm.states.map(&:name), translateable: true %>
-        <%= render "shared/tables/filter", resource: "offer", name: "year", filters: current_offer_years %>
+    <%# Turbo Frame around filters, sortable list, pagination — same
+        pattern as projects/index (Phase 5 batch 1). Filter/sort/page
+        clicks update just this region. `advance` keeps the URL in
+        sync so a filtered view is shareable + browser-back-friendly. %>
+    <turbo-frame id="offers-list" data-turbo-action="advance">
+      <div class="row">
+        <div class="col-xs-12 col-md-6 filters">
+          <%= render "shared/tables/filter", resource: "offer", name: "state", filters: Offer.aasm.states.map(&:name), translateable: true %>
+          <%= render "shared/tables/filter", resource: "offer", name: "year", filters: current_offer_years %>
+        </div>
+        <div class="col-xs-12 col-md-6">
+          <%= paginate @offers %>
+        </div>
       </div>
-      <div class="col-xs-12 col-md-6">
-        <%= paginate @offers %>
-      </div>
-    </div>
 
-    <% if @offers.present? %>
-      <%= render partial: "offers/list", :@offers => @offers %>
-    <% else %>
-      <%= render partial: "shared/blank" %>
-    <% end %>
+      <% if @offers.present? %>
+        <%= render partial: "offers/list", "@offers": @offers %>
+      <% else %>
+        <%= render partial: "shared/blank" %>
+      <% end %>
 
-    <div class="row">
-      <div class="col-xs-12 col-md-6">
-        <%= paginate @offers %>
+      <div class="row">
+        <div class="col-xs-12 col-md-6">
+          <%= paginate @offers %>
+        </div>
       </div>
-    </div>
+    </turbo-frame>
   </div>
 </div>
