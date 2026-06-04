@@ -1,9 +1,0 @@
-doctype html
-html lang=I18n.locale
-  head = render "layouts/head"
-  body.landing-page data-success=flash[:success] data-info=notice data-error=alert
-    = render "layouts/landing_page/navigation"
-    .container
-      == yield
-
-    = render "layouts/footer"

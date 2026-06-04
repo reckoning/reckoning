@@ -1,0 +1,41 @@
+<% content_for :title do %>
+  <%= I18n.t(:"meta.title.user.edit") %>
+<% end %>
+<div class="row">
+  <div class="col-xs-12 col-md-12">
+
+    <%= render "users/header" %>
+
+    <div class="row">
+      <div class="col-xs-12 col-lg-10 col-md-9 col-sm-9">
+        <%= form_for @user, url: update_user_registration_path do |form| %>
+          <input name="hash" value="" type="hidden">
+          <div class="tab-content">
+            <div class="tab-pane active" id="basic">
+              <fieldset>
+                <legend>
+                  <%= I18n.t(:"labels.user.settings.basic") %>
+                </legend>
+                <%= render "users/basic", form: form, resource: @user %>
+              </fieldset>
+            </div>
+            <div class="tab-pane" id="security">
+              <fieldset>
+                <legend>
+                  <%= I18n.t(:"labels.user.settings.security") %>
+                </legend>
+                <%= render "users/security", form: form, resource: @user %>
+              </fieldset>
+            </div>
+          </div>
+
+          <%= render "shared/forms/submit", path: root_path %>
+        <% end %>
+      </div>
+
+      <div class="col-xs-12 col-lg-2 col-md-3 col-sm-3">
+        <%= render "users/nav" %>
+      </div>
+    </div>
+  </div>
+</div>

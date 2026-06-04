@@ -1,0 +1,23 @@
+<% content_for :title do %>
+  <%= I18n.t(:"meta.title.expense.new") %>
+<% end %>
+
+<div class="row" id="new-expense">
+
+  <div class="col-xs-12 col-md-12">
+
+    <div class="row">
+      <div class="col-xs-12 col-md-8">
+        <h1><%= I18n.t(:"headlines.expense.new") %></h1>
+      </div>
+
+      <div class="col-xs-12 col-md-4">
+        <div class="btn-group-responsive pull-right resource-nav">
+          <%= link_to I18n.t(:"nav.subnav.back"), expenses_path(stored_params(:index)), class: "btn btn-default" %>
+        </div>
+      </div>
+    </div>
+
+    <%= render "form" %>
+  </div>
+</div>

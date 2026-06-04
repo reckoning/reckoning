@@ -1,0 +1,13 @@
+<% content_for(:title) do %>
+  <%= I18n.t(:"meta.title.server_error") %>
+<% end %>
+<div class="cbox cbox-error cbox-large">
+  <h1 class="form-signin-heading">
+    <a href="<%= root_path %>"><%= I18n.t(:"title.default") %></a>
+  </h1>
+  <div class="well">
+    <h2><%= I18n.t(:"headlines.server_error") %></h2>
+
+    <p><%= I18n.t(:"error_pages.server_error") %></p>
+  </div>
+</div>

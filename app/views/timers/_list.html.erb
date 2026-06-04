@@ -1,0 +1,33 @@
+<div class="list-group">
+  <% timers.each do |timer| %>
+    <a class="list-group-item" href="#" onclick="toggleCheckbox($(this)); return false;" data-activeclass="list-group-item-info">
+      <div class="row">
+        <div class="col-xs-6 col-md-2">
+          <%= I18n.l timer.date %>
+        </div>
+        <div class="col-xs-6 col-md-7">
+          <strong>
+            <%= timer.task.name %>
+          </strong>
+        </div>
+        <div class="col-xs-6 col-md-2 text-right">
+          <span class="label label-primary">
+            <%= number_to_currency timer.value, unit: "h" %>
+          </span>
+        </div>
+        <div class="col-xs-6 col-md-1">
+          <div class="checkbox pull-right">
+            <%= check_box_tag "timer_ids[]", { name: timer.task.name, task_id: timer.task_id, id: timer.id, value: timer.value.to_f }.to_json, false, id: dom_id(timer) %>
+            <label for="<%= dom_id(timer) %>"></label>
+          </div>
+        </div>
+      </div>
+    </a>
+  <% end %>
+
+  <% if timers.blank? %>
+    <div class="list-group-item">
+      Keine Einträge vorhanden
+    </div>
+  <% end %>
+</div>

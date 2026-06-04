@@ -1,0 +1,39 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <%= I18n.t(:"labels.panels.title.latest_users", count: @users_count) %>
+    </h3>
+  </div>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th><%= I18n.t(:"labels.user.email") %></th>
+        <th><%= I18n.t(:"labels.defaults.created_at") %></th>
+        <th><%= I18n.t(:"labels.user.last_sign_in") %></th>
+        <th class="actions one"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @latest_users.each do |user| %>
+        <tr>
+          <td>
+            <%= user.email %>
+          </td>
+          <td>
+            <%= I18n.t(:"activerecord.attributes.user.created_at", time: time_ago_in_words(user.created_at)) %>
+          </td>
+          <td>
+            <%= last_user_logged_in(user) %>
+          </td>
+          <td>
+            <div class="btn-group">
+              <%= link_to edit_backend_user_path(user), title: I18n.t(:"actions.edit"), class: "btn btn-default btn-sm" do %>
+                <i class="fa fa-edit"></i>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

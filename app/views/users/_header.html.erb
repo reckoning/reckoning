@@ -1,0 +1,17 @@
+<% path = root_path unless defined?(path) %>
+<% hide_back = false unless defined?(hide_back) %>
+<div class="row">
+  <div class="col-xs-12 col-md-8">
+    <h1>
+      <%= I18n.t(:"headlines.user") %>
+    </h1>
+  </div>
+
+  <% unless hide_back %>
+    <div class="col-xs-12 col-md-4">
+      <div class="btn-group-responsive pull-right resource-nav">
+        <%= link_to I18n.t(:"nav.subnav.back"), path, class: "btn btn-default" %>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,39 @@
+<ul class="nav navbar-nav navbar-right">
+  <li class="dropdown user-menu <%= active_nav?("user") || active_nav?("account") %>">
+    <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+      <div class="gravatar">
+        <img src="<%= current_user.avatar %>" alt="avatar">
+      </div>
+      <span class="user-email">
+        <%= current_user.email %>
+      </span>
+      <b class="caret"></b>
+    </a>
+    <ul class="dropdown-menu">
+      <li class="<%= active_nav?("account") %>">
+        <%= link_to I18n.t(:"nav.header.account"), edit_account_path %>
+      </li>
+      <li class="<%= active_nav?("user") %>">
+        <%= link_to I18n.t(:"nav.header.user"), edit_user_registration_path %>
+      </li>
+      <% if current_user.admin? %>
+        <li class="divider"></li>
+        <% if backend? %>
+          <li>
+            <%= link_to I18n.t(:"nav.header.frontend"), root_path %>
+          </li>
+        <% else %>
+          <li>
+            <a href="<%= backend_root_path %>" data-turbolinks="false">
+              <%= I18n.t(:"nav.header.backend") %>
+            </a>
+          </li>
+        <% end %>
+      <% end %>
+      <li class="divider"></li>
+      <li>
+        <%= link_to I18n.t(:"actions.sign_out"), destroy_user_session_path, method: :delete %>
+      </li>
+    </ul>
+  </li>
+</ul>

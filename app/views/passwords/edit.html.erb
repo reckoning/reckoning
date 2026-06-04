@@ -1,0 +1,56 @@
+<% content_for :title do %>
+  <%= I18n.t(:"meta.title.password.edit") %>
+<% end %>
+<div class="row">
+  <div class="col-xs-12 col-md-12">
+
+    <%= render "users/header", path: "#{edit_user_registration_path}#security" %>
+
+    <div class="row">
+      <div class="col-xs-12 col-lg-10 col-md-9 col-sm-9">
+        <%= form_for @user, url: password_path do |form| %>
+          <div class="tab-content">
+            <div class="tab-pane active" id="security">
+              <fieldset>
+                <legend>
+                  <%= I18n.t(:"headlines.change_password") %>
+                </legend>
+                <div class="row">
+                  <div class="col-xs-12 col-md-6 form-group <%= form_error?(@user, :current_password) %>">
+                    <%= form.password_field :current_password, autocomplete: "off", placeholder: I18n.t(:"helpers.placeholder.user.current_password"), class: "form-control" %>
+                    <small>
+                      <%= form_errors @user, :current_password %>
+                    </small>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12 col-md-6 form-group <%= form_error?(@user, :password) %>">
+                    <%= form.password_field :password, autocomplete: "off", placeholder: I18n.t(:"helpers.placeholder.user.password"), class: "form-control" %>
+                    <small>
+                      <%= form_errors @user, :password %>
+                    </small>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xs-12 col-md-6 form-group <%= form_error?(@user, :password_confirmation) %>">
+                    <%= form.password_field :password_confirmation, autocomplete: "off", placeholder: I18n.t(:"helpers.placeholder.user.password_confirmation"), class: "form-control" %>
+                    <small>
+                      <%= form_errors @user, :password_confirmation %>
+                    </small>
+                  </div>
+                </div>
+
+                <%= render "shared/forms/submit", path: "#{edit_user_registration_path}#security" %>
+              </fieldset>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="col-xs-12 col-lg-2 col-md-3 col-sm-3">
+        <%= render "users/nav", path: "#{edit_user_registration_path}#security", active: "security" %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+<a class="list-group-item" href="<%= project_path(project) %>">
+  <div class="budget-label">
+    <%= project.name_with_customer %>
+  </div>
+  <div class="progress progress-slim text-center">
+    <div class="progress-bar <%= budget_progress(project) %>" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: <%= project.budget_percent %>%"></div>
+  </div>
+</a>

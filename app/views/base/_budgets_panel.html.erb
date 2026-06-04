@@ -1,0 +1,16 @@
+<% unless budgets.blank? %>
+  <div class="panel panel-default" id="budgets-panel">
+    <div class="panel-heading">
+      <div class="panel-title">
+        <strong>
+          <%= I18n.t(:"dashboard.panels.budgets") %>
+        </strong>
+      </div>
+    </div>
+    <div class="list-group">
+      <% budgets.each do |project| %>
+        <%= render "budget_item", project: project %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,39 @@
+<% content_for :title do %>
+  <%= I18n.t(:"meta.title.backend.account.index") %>
+<% end %>
+<div class="row" id="accounts">
+  <div class="col-xs-12 col-md-12">
+
+    <div class="row">
+      <div class="col-xs-12 col-md-8">
+        <h1>
+          <%= I18n.t(:"headlines.backend.account.index") %>
+        </h1>
+      </div>
+
+      <div class="col-xs-12 col-md-4">
+        <div class="btn-group pull-right resource-nav">
+          <%= link_to I18n.t(:"nav.subnav.new_account"), new_backend_account_path, class: "btn btn-primary" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 col-md-6">
+        <div class="pull-right">
+          <%= paginate @accounts %>
+        </div>
+      </div>
+    </div>
+
+    <%= render "backend/accounts/list", accounts: @accounts %>
+
+    <div class="row">
+      <div class="col-xs-12 col-md-6">
+        <div class="pull-right">
+          <%= paginate @accounts %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

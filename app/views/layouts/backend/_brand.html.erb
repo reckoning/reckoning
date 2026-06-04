@@ -1,0 +1,13 @@
+<div class="navbar-header">
+  <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".main-navbar">
+    <span class="sr-only">
+      <%= I18n.t(:"nav.header.toggle") %>
+    </span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+  </button>
+  <a class="navbar-brand <%= active_nav? %>" href="<%= backend_root_path %>">
+    <%= I18n.t(:"title.backend") %>
+  </a>
+</div>

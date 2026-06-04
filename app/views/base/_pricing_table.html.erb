@@ -1,0 +1,21 @@
+<div class="col-xs-12 <%= plan.featured ? "col-md-4" : "col-md-3" %>">
+  <div class="panel panel-default pricing-table <%= "featured" if plan.featured %>">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        <%= plan.name %>
+      </h3>
+    </div>
+    <ul class="list-group">
+      <% I18n.t(:"plans.desc.#{plan.code}").each do |key, text| %>
+        <li class="list-group-item">
+          <%= text.html_safe %>
+        </li>
+      <% end %>
+    </ul>
+    <div class="panel-footer">
+      <h2>
+        <%= raw I18n.t(:"plans.price.#{plan.interval}", price: plan.price) %>
+      </h2>
+    </div>
+  </div>
+</div>

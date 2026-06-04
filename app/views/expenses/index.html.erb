@@ -1,0 +1,111 @@
+<% content_for :title do %>
+  <%= I18n.t(:"meta.title.expense.index") %>
+<% end %>
+
+<div class="row" id="expenses">
+  <div class="col-xs-12 col-md-12">
+
+    <div class="row">
+      <div class="col-xs-12 col-md-5">
+        <h1>
+          <%= I18n.t(:"headlines.expense.index") %>
+          <br>
+          <small class="visible-xs-block visible-md-inline visible-sm-inline visible-lg-inline">
+            <%= I18n.t(:"headlines.invoice.sum", sum: number_to_currency(@expenses_sum)) %>
+            <br>
+            <%= I18n.t(:"headlines.invoice.vat_sum", sum: number_to_currency(@expenses_vat_sum)) %>
+          </small>
+        </h1>
+      </div>
+
+      <div class="col-xs-12 col-md-7">
+        <div class="btn-group btn-group-justified-responsive pull-right resource-nav">
+          <a class="btn btn-primary" href="<%= new_expense_path %>">
+            <i class="fa fa-plus"></i>
+            <%= I18n.t(:"nav.subnav.new_expense") %>
+          </a>
+          <a class="btn btn-default" href="<%= url_for(stored_params(:index).merge(format: :pdf)) %>" target="_blank">
+            <i class="fa fa-down"></i>
+            <%= I18n.t(:"nav.subnav.export_expenses_pdf") %>
+          </a>
+          <a class="btn btn-default hidden-xs" href="<%= url_for(stored_params(:index).merge(format: :csv)) %>" target="_blank">
+            <i class="fa fa-down"></i>
+            <%= I18n.t(:"nav.subnav.export") %>
+          </a>
+          <a class="btn btn-default hidden-xs" href="<%= new_expense_import_path %>">
+            <i class="fa fa-down"></i>
+            <%= I18n.t(:"nav.subnav.import") %>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 col-md-8 filters">
+        <%= render "shared/tables/filter", resource: "expense", name: "year", filters: current_expenses_years %>
+        <%= render "shared/tables/filter", resource: "expense", name: "quarter", filters: quarters, translateable: "date.quarters" %>
+        <%= render "shared/tables/filter", resource: "expense", name: "month", filters: months, translateable: "date.month_names" %>
+        <%= render "shared/tables/filter", resource: "expense", name: "type", filters: Expense::VALID_TYPES, translateable: true %>
+        <%= form_with method: :get, class: "filters-form" do |form| %>
+          <%= form.hidden_field :year, value: params[:year] if params[:year].present? %>
+          <%= form.hidden_field :quarter, value: params[:quarter] if params[:quarter].present? %>
+          <%= form.hidden_field :month, value: params[:month] if params[:month].present? %>
+          <%= form.hidden_field :type, value: params[:type] if params[:type].present? %>
+          <div class="form-group">
+            <div class="input-group">
+              <%= form.text_field :query, type: :search, class: "form-control", placeholder: I18n.t(:"helpers.placeholder.search"), value: params[:query] %>
+              <div class="input-group-btn">
+                <% if params[:query].present? %>
+                  <a class="btn btn-danger" href="<%= url_for(stored_params(:index).except(:query)) %>">
+                    <i class="fa fa-times"></i>
+                  </a>
+                <% else %>
+                  <%= form.button type: :submit, class: "btn btn-primary" do %>
+                    <i class="fa fa-search"></i>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class="col-xs-12 col-md-4">
+        <%= paginate @expenses %>
+      </div>
+    </div>
+
+    <% if @expenses.present? %>
+      <div class="panel panel-list panel-default expense">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-md-2 hidden-xs">
+              <%= I18n.t("activerecord.attributes.expense.date") %>
+            </div>
+            <div class="col-md-3 hidden-xs">
+              <%= I18n.t("activerecord.attributes.expense.description") %>
+            </div>
+            <div class="col-md-2 hidden-xs"><%= I18n.t("activerecord.attributes.expense.expense_type") %></div>
+            <div class="col-md-2 hidden-xs"><%= I18n.t("activerecord.attributes.expense.vat_value") %></div>
+            <div class="col-md-3 hidden-xs">
+              <%= I18n.t("activerecord.attributes.expense.receipt") %>
+              <div class="pull-right"><%= I18n.t("activerecord.attributes.expense.value") %></div>
+            </div>
+          </div>
+        </div>
+        <div class="list-group">
+          <%= render partial: "expenses/list_item", collection: @expenses, as: :expense %>
+        </div>
+      </div>
+    <% end %>
+
+    <% if @expenses.blank? %>
+      <%= render partial: "shared/blank" %>
+    <% end %>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <%= paginate @expenses %>
+      </div>
+    </div>
+  </div>
+</div>
