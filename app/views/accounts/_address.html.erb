@@ -1,0 +1,68 @@
+<%= form_for account, url: account_path do |form| %>
+  <input name="hash" value="" type="hidden">
+  <div class="row">
+    <div class="col-xs-12 col-md-6">
+      <div class="form-group <%= form_error?(form.object, :address) %>">
+        <%= form.label :address %>
+        <%= form.text_area :address, placeholder: I18n.t(:"helpers.placeholder.address"), rows: 2, class: "form-control" %>
+        <small><%= form_errors form.object, :address %></small>
+      </div>
+    </div>
+    <div class="col-xs-12 col-md-6">
+      <div class="form-group <%= form_error?(form.object, :country) %>">
+        <%= form.label :country %>
+        <%= form.text_field :country, placeholder: I18n.t(:"helpers.prompt.country"), class: "form-control" %>
+        <small><%= form_errors form.object, :country %></small>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-md-6">
+      <div class="form-group <%= form_error?(form.object, :telefon) %>">
+        <%= form.label :telefon %>
+        <%= form.text_field :telefon, placeholder: I18n.t(:"helpers.placeholder.telefon"), class: "form-control" %>
+        <small><%= form_errors form.object, :telefon %></small>
+      </div>
+    </div>
+    <div class="col-xs-12 col-md-6">
+      <div class="form-group <%= form_error?(form.object, :fax) %>">
+        <%= form.label :fax %>
+        <%= form.text_field :fax, placeholder: I18n.t(:"helpers.placeholder.fax"), class: "form-control" %>
+        <small><%= form_errors form.object, :fax %></small>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-md-6">
+      <div class="form-group <%= form_error?(form.object, :public_email) %>">
+        <%= form.label :public_email %>
+        <%= form.text_field :public_email, placeholder: I18n.t(:"helpers.placeholder.email"), class: "form-control" %>
+        <small><%= form_errors form.object, :public_email %></small>
+      </div>
+    </div>
+    <div class="col-xs-12 col-md-6">
+      <div class="form-group <%= form_error?(form.object, :website) %>">
+        <%= form.label :website %>
+        <%= form.text_field :website, placeholder: I18n.t(:"helpers.placeholder.website"), class: "form-control" %>
+        <small><%= form_errors form.object, :website %></small>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-md-6">
+      <div class="form-group <%= form_error?(form.object, :office_space) %>">
+        <%= form.label :office_space %>
+        <%= form.text_field :office_space, placeholder: I18n.t(:"helpers.placeholder.account.office_space"), class: "form-control" %>
+        <small><%= form_errors form.object, :office_space %></small>
+      </div>
+    </div>
+    <div class="col-xs-12 col-md-6">
+      <div class="form-group <%= form_error?(form.object, :deductible_office_space) %>">
+        <%= form.label :deductible_office_space %>
+        <%= form.text_field :deductible_office_space, placeholder: I18n.t(:"helpers.placeholder.account.deductible_office_space"), class: "form-control" %>
+        <small><%= form_errors form.object, :deductible_office_space %></small>
+      </div>
+    </div>
+  </div>
+  <%= render "shared/forms/submit", path: root_path %>
+<% end %>

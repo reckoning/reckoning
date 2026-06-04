@@ -1,0 +1,69 @@
+<% content_for :title do %>
+  <%= I18n.t(:"meta.title.account.edit") %>
+<% end %>
+<div class="row">
+  <div class="col-xs-12 col-md-12">
+    <div class="row">
+      <div class="col-xs-12 col-md-8">
+        <h1><%= I18n.t(:"headlines.account") %></h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-lg-10 col-md-9 col-sm-9">
+        <div class="tab-content">
+          <div class="tab-pane active" id="basic">
+            <fieldset>
+              <legend>
+                <%= I18n.t(:"labels.account.settings.basic") %>
+              </legend>
+              <%= render "accounts/basic" %>
+            </fieldset>
+          </div>
+          <div class="tab-pane" id="address">
+            <fieldset>
+              <legend>
+                <%= I18n.t(:"labels.account.settings.address") %>
+              </legend>
+              <%= render "accounts/address" %>
+            </fieldset>
+          </div>
+          <div class="tab-pane" id="banking">
+            <fieldset>
+              <legend>
+                <%= I18n.t(:"labels.account.settings.banking") %>
+              </legend>
+              <%= render "accounts/banking" %>
+            </fieldset>
+          </div>
+          <div class="tab-pane" id="taxes">
+            <fieldset>
+              <legend>
+                <%= I18n.t(:"labels.account.settings.taxes") %>
+              </legend>
+              <%= render "accounts/taxes" %>
+            </fieldset>
+          </div>
+          <div class="tab-pane" id="mailing">
+            <fieldset>
+              <legend>
+                <%= I18n.t(:"labels.account.settings.mailing") %>
+              </legend>
+              <%= render "accounts/mailing" %>
+            </fieldset>
+          </div>
+          <div class="tab-pane" id="offer">
+            <fieldset>
+              <legend>
+                <%= I18n.t(:"labels.account.settings.offer") %>
+              </legend>
+              <%= render "accounts/offer" %>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-lg-2 col-md-3 col-sm-3">
+        <%= render "accounts/nav" %>
+      </div>
+    </div>
+  </div>
+</div>
