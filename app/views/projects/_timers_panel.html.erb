@@ -1,0 +1,8 @@
+<% context ||= "info" %>
+<script>
+  window.projectId = "<%= project.id %>";
+</script>
+
+<div id="timers-calendar" class="timers-calendar" ng-strict-di="true" data-turbolinks="false">
+  <div class="row" ng-view="true"></div>
+</div>
