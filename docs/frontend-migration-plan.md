@@ -1,259 +1,309 @@
 # Frontend migration plan
 
-Exec-plan for moving Reckoning's frontend off the legacy Sprockets +
-AngularJS + Bootstrap 3 + CoffeeScript stack onto the modern stack
-fleetyards already runs in production.
+Exec plan for moving Reckoning's frontend off the legacy stack
+(Sprockets + AngularJS + jQuery + CoffeeScript + Bootstrap 3 +
+haml + slim) onto a Rails-native modern stack: **Vite + Hotwire +
+Stimulus + Tailwind + HERB-flavored ERB**, with **Vue 3 islands** on
+the two screens that genuinely need them.
 
-## Why now
+## Why this shape
 
-The P0 hardening series (Ruby 3.4, Rails 7.2, PG 17, Redis 7, CVE
-sweep, container deploy) settled the backend. The frontend is the
-last legacy surface — it's the largest remaining tech-debt block and
-the source of every "the JS won't minify" CI break.
+Reckoning is a CRUD app — customers, projects, invoices, offers,
+settings. The server already owns the truth; most screens are forms
+and lists. **Hotwire (Turbo + Stimulus) was designed for exactly this
+case**: keep server-rendered HTML, layer interactivity on top.
+
+There are two surfaces that are genuinely state-heavy — the
+**timesheet calendar** (drag-drop, day/week/month views) and the
+**invoice/offer line-item editor** (repeatable rows, live totals).
+Those get **Vue 3 islands**: a single Vue app mounted on one
+element, not a whole-app SPA.
+
+Net result: ~80% of the frontend is server-rendered HTML with
+sprinkles; ~20% is Vue. Same shape as the existing app, modernized.
+
+## Why HERB instead of straight ERB or sticking with haml/slim
+
+The repo today uses **both** haml (65 templates) and slim (69
+templates) — two engines for the same job. We collapse to one.
+
+- **HERB** (https://github.com/marcoroth/herb) is a modern HTML+ERB
+  compiler. Syntactically ERB-compatible, but parses HTML structure
+  so it catches unclosed tags / attribute typos at compile time.
+  Has lint + LSP + editor integration. Designed with Hotwire-style
+  Rails apps in mind.
+- **Plain ERB** would also work. Picking HERB buys us the tooling
+  for free, and the migration target is "valid ERB" either way —
+  HERB *is* ERB.
+- haml/slim's indentation-based syntax adds cognitive load when
+  you're also tracking Turbo Frame / Stimulus data attributes
+  nested in conditionals. ERB's tag-mirrors-HTML form is friendlier
+  for the Hotwire phase.
 
 ## Goals
 
-1. Vite-driven build pipeline with HMR in dev and code-splitting in prod.
-2. TypeScript across all new JS/TS.
-3. Tailwind 4 in place of Bootstrap 3.
-4. Stimulus or Vue 3 for interactive behavior (no AngularJS).
-5. Playwright for e2e (replaces Cypress 12).
-6. All `*.coffee` removed, all `*.haml`/`*.slim` either kept as
-   server-rendered or replaced by Vue components, never both at once
-   for a given screen.
-7. CI builds and ships the Sprockets-free image.
+1. **Vite** drives the bundle pipeline (HMR in dev, code-splitting in prod).
+2. **TypeScript** across all new JS/TS.
+3. **Tailwind 4** in place of Bootstrap 3.
+4. **HERB-flavored ERB** is the single template language. haml + slim both gone.
+5. **Hotwire (Turbo + Stimulus)** is the default interactive layer.
+6. **Vue 3 islands** only on the two screens that need them.
+7. **Playwright** for e2e, replacing Cypress 12.
+8. AngularJS, CoffeeScript, Sprockets, bower-rails, jquery-rails, turbolinks all gone.
 
 ## Non-goals
 
-- Rewriting business logic. Server-side controllers, models, jobs,
-  and PDF rendering (Grover) stay as-is.
-- Migrating away from haml/slim wholesale. Server-rendered views stay
-  server-rendered until a specific screen gets a Vue rewrite.
-- Native mobile. PWA is in scope (fleetyards ships it via
-  `vite-plugin-pwa`); a Capacitor / native shell is not.
+- Rewriting business logic. Controllers, models, jobs, PDF rendering (Grover) stay.
+- API-first / SPA-style design. The server keeps rendering HTML for the main app.
+- Native mobile. PWA-ready bundle is fine; a native shell isn't.
 
-## Target stack (mirrors fleetyards)
+## Target stack
 
-| Concern | Target |
-|---|---|
-| Bundler | Vite (`vite_rails`) |
-| Framework | Stimulus for simple sprinkles; Vue 3 + `<script setup lang="ts">` for component-heavy screens |
-| Types | TypeScript, `vue-tsc` for `.vue` files |
-| Styling | Tailwind 4 via `@tailwindcss/vite` |
-| Component lib | Headless UI primitives (Floating UI / Reka UI / hand-rolled — TBD per need) |
-| Forms | VeeValidate v4 + zod schemas (matches fleetyards) |
-| HTTP | `axios` (or `fetch` directly); `@tanstack/vue-query` for caching |
-| Lint | ESLint flat config + Prettier |
-| Tests | Vitest for unit, Playwright for e2e |
-| API client | Hand-written for now; OpenAPI + Orval is a separate workstream |
+| Concern | Target | Why |
+|---|---|---|
+| Bundler | Vite (`vite_rails`) | HMR, code-splitting, Rails 8 default |
+| Templates | HERB-flavored ERB | Single engine, compile-time HTML checks |
+| Routing | Server-side Rails + Turbo Drive | Reuses existing routes; SPA-like nav |
+| Frame swaps | `<turbo-frame>` | Partial updates without writing JS |
+| Async pushes | `<turbo-stream>` over ActionCable | Realtime list updates, flash notifications |
+| Behaviors | Stimulus controllers | Scoped JS via `data-controller` |
+| Heavy screens | Vue 3 + `<script setup lang="ts">` | Mounted as islands on 2 screens only |
+| Styling | Tailwind 4 via `@tailwindcss/vite` | Utility-first, gradual adoption |
+| Forms | Rails `form_with` + Turbo | No form library for 95% of cases |
+| Heavy forms | VeeValidate + Zod (inside Vue islands only) | When Rails forms aren't enough |
+| Tests | Vitest (Vue islands), Playwright (e2e) | |
+| Lint | ESLint + Prettier + HERB lint | |
 
 ## Phased delivery
 
-Each phase is one or a small number of PRs. Phases run **strictly in
-order** — earlier phases land and stabilize before the next starts.
-Vite runs **alongside** Sprockets the entire migration; we delete
-Sprockets only after every entrypoint has moved.
+Each phase is one or a short series of PRs. Phases run **strictly in
+order** — earlier phases ship and stabilize before the next starts.
+The legacy stack runs alongside the new throughout. Deletion only
+happens after the modern equivalent is proven.
 
-### Phase 0 — pin the existing stack (one PR, ~half day)
+### Phase 0 — inventory (optional, ~half day)
 
-Goal: prove the legacy stack still builds and ships, so any regression
-in later phases is provably mine.
+Goal: a written map of every JS entrypoint and template, so any
+later regression is provably ours.
 
-- [ ] Snapshot a known-good `public/assets/` build into the Docker
-      image's test stage. (Optional — only if asset bugs are common.)
-- [ ] Document the current `application.js` manifest and the AngularJS
-      entry points so we know what surface area we're moving.
+- [ ] `docs/frontend-inventory.md` listing every `//= require`,
+      every AngularJS controller, every haml/slim template path.
 
-Output: a short note in `docs/frontend-current-state.md` mapping every
-`//= require` to its current behavior.
+### Phase 1 — install Vite alongside Sprockets (1 PR, ~1 day)
 
-### Phase 1 — install Vite, keep Sprockets (one PR, ~1 day)
-
-Goal: get Vite building a single empty entrypoint into `public/vite/`,
-served alongside the existing Sprockets pipeline. Zero behavior change.
+Goal: Vite builds an empty entrypoint into `public/vite/`. Sprockets
+still serves the live app. Zero behavior change.
 
 - [ ] `bundle add vite_rails`
 - [ ] `bundle exec vite install` — generates `vite.config.ts`,
-      `app/frontend/entrypoints/application.{ts,scss}`, the
-      `bin/vite` shim, `Procfile.dev` update.
-- [ ] Add `@vitejs/plugin-vue` and `unplugin-vue-components` to
-      package.json (don't use them yet, but bundle them so the next
-      phase doesn't pull a flood of new deps).
-- [ ] Add `<%= vite_client_tag %>` and `<%= vite_typescript_tag 'application' %>`
-      to a NEW layout (`application_v2.html.erb`) — don't touch the
-      existing layout yet.
-- [ ] Update `Dockerfile` to copy `app/frontend/`, install pnpm
-      production deps, and run `bin/vite build` in the build stage.
-- [ ] Verify CI's `e2e-tests` still passes (it should — nothing
-      changed in the rendered output).
+      `app/frontend/entrypoints/application.{ts,scss}`, `bin/vite`,
+      `Procfile.dev` integration.
+- [ ] Update `Dockerfile` to copy `app/frontend/`, install pnpm deps,
+      run `bin/vite build` in the build stage.
+- [ ] Add `<%= vite_client_tag %>` to a **new** layout
+      `application_v2.html.erb` — old layout untouched.
 
-Exit criteria: `bin/vite build` produces a manifest in
-`public/vite/.vite/manifest.json`, the image builds, and
-`application_v2.html.erb` (if rendered manually) loads the Vite
-client without console errors.
+Exit: `bin/vite build` writes `public/vite/.vite/manifest.json`,
+Docker image still builds, CI green.
 
-### Phase 2 — Tailwind alongside Bootstrap (one PR, ~1 day)
-
-Goal: Tailwind utilities available in templates without removing
-Bootstrap. Both stylesheets compile, both ship.
+### Phase 2 — Tailwind alongside Bootstrap (1 PR, ~1 day)
 
 - [ ] `pnpm add -D tailwindcss @tailwindcss/vite`
 - [ ] Wire `tailwindcss()` into `vite.config.ts`.
-- [ ] Create `app/frontend/entrypoints/tailwind.css` with just
-      `@import "tailwindcss";`.
-- [ ] Add `<%= vite_stylesheet_tag 'tailwind.css' %>` to
-      `application_v2.html.erb` (only).
-- [ ] Add a "Tailwind probe" component on one low-traffic admin page
-      (e.g. `/backend/users`) using only Tailwind classes — visually
-      verify rendering matches expected.
+- [ ] `app/frontend/entrypoints/tailwind.css` with `@import "tailwindcss";`.
+- [ ] `<%= vite_stylesheet_tag 'tailwind.css' %>` in `application_v2.html.erb`.
+- [ ] Probe page (`/backend/users`) gets Tailwind utilities — visually verify.
 
-Exit criteria: a tailwind utility (`text-red-500`) renders red on the
-probe page; Bootstrap layouts elsewhere are unchanged.
+Exit: a Tailwind utility renders correctly on the probe page; every
+other screen still Bootstrap 3.
 
-### Phase 3 — Stimulus for the simplest interactive bits (one PR, ~2 days)
+### Phase 3 — HERB tooling + haml/slim → ERB conversion (multi-PR, ~3–5 days)
 
-Goal: replace jQuery-driven small interactions (tab toggles, dropdown
-opens, ladda buttons, noty notifications) with Stimulus. Vue stays out
-until we have a real reason.
+Goal: every template is plain ERB with HERB tooling validating
+structure. Two template engines collapse to one.
 
-- [ ] `pnpm add @hotwired/stimulus`
-- [ ] Create `app/frontend/controllers/` with one example controller
-      (e.g. `tabs_controller.ts`).
-- [ ] Migrate the simplest existing jQuery usage (likely
-      `app.coffee`'s tab init) to Stimulus.
-- [ ] Update the **single screen** that uses the new layout to drop
-      the jQuery init.
+- [ ] Add HERB tooling (`@herb-tools/cli` and/or the gem variant —
+      decide when phase starts).
+- [ ] Wire `herb lint` into CI as a new job (`herb-lint`).
+- [ ] Convert templates in batches of ~10, by domain area:
+  - [ ] `app/views/devise/`
+  - [ ] `app/views/accounts/`
+  - [ ] `app/views/customers/`
+  - [ ] `app/views/projects/`
+  - [ ] `app/views/invoices/`
+  - [ ] `app/views/offers/`
+  - [ ] `app/views/timesheet/`
+  - [ ] `app/views/current_user/`
+  - [ ] `app/views/backend/`
+  - [ ] `app/views/layouts/`
+  - [ ] `app/views/shared/` and remaining partials
+- [ ] Tooling: `haml2erb` and `slim2erb` (or hand-converted in small
+      batches — both formats translate mechanically).
+- [ ] Run the e2e suite + click through each migrated section
+      manually before merging that batch's PR.
+- [ ] After every batch lands and stabilizes: drop `gem "haml-rails"`,
+      `gem "haml"`, `gem "slim-rails"`.
 
-Exit criteria: a Stimulus controller works on at least one screen,
-shipped through the Vite pipeline, while every other screen still
-runs the legacy jQuery.
+Exit: 0 `.haml` files, 0 `.slim` files, every template parses under HERB.
 
-### Phase 4 — Vue 3 + the first real screen (one PR per screen, repeat)
+### Phase 4 — Hotwire baseline (1 PR, ~2 days)
 
-Goal: pick one AngularJS-heavy screen, rewrite it as a Vue 3 SFC, ship
-behind a feature flag.
+Goal: Turbo Drive + Stimulus loaded on every page, replacing
+Turbolinks and the bulk of jQuery sprinkles.
 
-The picks, in order of "easiest to validate":
+- [ ] `pnpm add @hotwired/turbo-rails @hotwired/stimulus`
+- [ ] `app/frontend/entrypoints/application.ts` imports turbo-rails
+      and starts Stimulus with a vite-glob controller registry.
+- [ ] Drop `gem "turbolinks"` and the `//= require turbolinks`.
+- [ ] Verify Devise sign-in/sign-out under Turbo Drive (Devise 5 is
+      Turbo-aware; logout links may need `data-turbo-method="delete"`).
+- [ ] Convert the simplest legacy jQuery init (`app.coffee`'s tab
+      handler) to `tabs_controller.ts` as the first real Stimulus
+      controller.
 
-1. The **dashboard widgets** (charts + counters) — read-only, no form
-   complexity.
-2. **Timesheet calendar** (`app/assets/javascripts/angular/timers_calendar/`)
-   — Angular today; a major Vue rewrite candidate.
-3. **Timesheet day/week view** (Angular).
-4. **Invoice form** (line items, totals) — the highest-traffic form,
-   touch last.
-5. **Offer form** — like invoice form.
+Exit: every page loads through Turbo Drive; one Stimulus controller
+actively in use.
 
-For each screen:
+### Phase 5 — Turbo Frames on CRUD screens (multi-PR, ~1 week)
 
-- [ ] Build a `.vue` component under
-      `app/frontend/components/<screen-name>/`.
-- [ ] Mount via `createApp(...).mount('#app-<screen>')` in
-      `app/frontend/entrypoints/<screen>.ts`.
-- [ ] The Rails view renders the mount-point `<div>` and the Vite tag
-      for that entrypoint.
-- [ ] Feature flag via env var (e.g. `NEW_TIMESHEET=1`) so we can
-      A/B compare in production briefly before flipping the default.
+Goal: high-traffic CRUD screens use `<turbo-frame>` for partial
+updates instead of full reloads. Each screen is its own small PR.
 
-Exit criteria per screen: visual + functional parity with the
-AngularJS original, validated by hand against staging.
+Lowest-risk-first order:
 
-### Phase 5 — drop AngularJS (one PR, ~half day after Phase 4 completes for every Angular screen)
+1. **Customer list/detail** — Turbo Frame pagination + edit-in-place.
+2. **Project list/detail** — same pattern.
+3. **Offer list** — Turbo Stream for inline state changes
+   (created → bided → accepted).
+4. **Invoice list** — Turbo Frame around the filter form + result table.
+5. **Settings tabs** — Turbo Frame per tab section.
+6. **Dashboard** — Turbo Frame around each widget; Stimulus for chart init.
 
-Goal: every Angular usage has a Vue equivalent. Time to delete.
+Each PR adds `<turbo-frame id="...">` wrappers, swaps the controller
+to render the partial inside the frame on XHR, ships Stimulus
+controllers for any remaining JS. Existing AngularJS/jQuery on
+these screens gets deleted in the same PR.
 
-- [ ] Remove `app/assets/javascripts/angular/` and the manifest
-      `//= require ./angular/init` / `//= require_tree ./angular`.
-- [ ] Drop the legacy `bower_components/angular*` packages.
-- [ ] Drop the legacy `gem "bower-rails"`.
+Exit: every CRUD screen renders without AngularJS / jQuery.
 
-### Phase 6 — Playwright for e2e (one PR, ~1 day)
+### Phase 6 — Vue 3 islands for the two complex screens (~2 weeks per island)
 
-Goal: Cypress 12 → Playwright. fleetyards uses the official
-`mcr.microsoft.com/playwright` container in CI.
+The two screens that justify Vue's complexity:
+
+1. **Timesheet** (`app/views/timesheet/`, current AngularJS in
+   `app/assets/javascripts/angular/timers_calendar/` and
+   `timesheet/`) — drag-drop calendar, day/week/month views,
+   autosave, keyboard nav.
+2. **Invoice/Offer line-item editor** — repeatable nested rows, live
+   totals, currency math, drag-reorder.
+
+Per island:
+
+- [ ] `app/frontend/islands/<name>/` with a Vue 3 SFC + types.
+- [ ] `app/frontend/entrypoints/<name>.ts` mounts onto a designated
+      `<div data-island="...">`.
+- [ ] The Rails view renders the mount-point + Vite tag for the entrypoint.
+- [ ] Tailwind classes on the Vue side (no duplicate styling layer).
+- [ ] Feature flag via env var (`NEW_TIMESHEET=1`, `NEW_LINE_ITEMS=1`).
+- [ ] Vitest specs for the island's components.
+- [ ] Playwright spec for the screen end-to-end.
+
+Exit per island: parity with the AngularJS original, validated
+against staging behind the flag for at least a week, then flag
+flipped to default-on.
+
+### Phase 7 — drop AngularJS (1 PR, ~half day)
+
+After both Vue islands are default-on:
+
+- [ ] Delete `app/assets/javascripts/angular/`.
+- [ ] Delete `//= require ./angular/init` + `//= require_tree ./angular`.
+- [ ] Delete `vendor/` Bower-managed Angular bundles.
+- [ ] Drop `gem "bower-rails"`.
+
+### Phase 8 — Cypress → Playwright (1 PR, ~1 day)
 
 - [ ] `pnpm add -D @playwright/test`
-- [ ] Create `playwright.config.ts` (use fleetyards' as the template).
-- [ ] Port the few existing Cypress specs to Playwright syntax (search
-      `cy.` → `await page.`).
+- [ ] `playwright.config.ts` with sharding configured for CI.
+- [ ] Port existing Cypress specs to Playwright syntax
+      (`cy.` → `await page.`).
 - [ ] Update `.github/workflows/e2e-tests.job.yml` to use the
-      Playwright container image and run `pnpm test:e2e`.
-- [ ] Delete `cypress/`, `cypress.config.ts`, the cypress gems.
+      `mcr.microsoft.com/playwright` image and run `pnpm test:e2e`.
+- [ ] Delete `cypress/`, `cypress.config.ts`, the cypress package.json
+      entries, the cypress GH Actions step.
 
-### Phase 7 — drop Bootstrap 3, drop Sprockets (one PR, ~1 week of grunt work)
+### Phase 9 — drop Bootstrap 3 + Sprockets (1 PR per cleanup, ~1 week of grunt work)
 
-Goal: every screen now styled with Tailwind. Time to delete the
-legacy stylesheet pipeline.
+After every screen has been migrated:
 
-- [ ] Verify no template still references a Bootstrap 3 class — grep
-      for `.btn-default`, `.col-md-*`, `.panel-*`, etc.
+- [ ] Grep-verify zero references to Bootstrap 3 classes
+      (`btn-default`, `col-md-*`, `panel-*`, `glyphicon`, etc.).
 - [ ] Drop `gem "bootstrap-sass"`, `gem "bourbon"`, `gem "sass-rails"`,
-      `gem "coffee-rails"`, `gem "jquery-rails"`, `gem "turbolinks"`,
-      `gem "uglifier"` (already replaced by `terser`).
-- [ ] Drop `app/assets/javascripts/` and `app/assets/stylesheets/`.
-- [ ] Drop the `application_v2.html.erb` shim — promote it to
-      `application.html.erb`.
-- [ ] Drop `//= require turbolinks` and `data-turbolinks-*` attributes.
+      `gem "coffee-rails"`, `gem "jquery-rails"`, `gem "uglifier"`.
+- [ ] Delete `app/assets/javascripts/` and `app/assets/stylesheets/`.
+- [ ] Promote `application_v2.html.erb` to `application.html.erb`.
 
-### Phase 8 — i18n-js 3 → 4, drop the v3 middleware
+### Phase 10 — i18n-js 3 → 4 (1 PR, ~half day)
 
-Coupled with the asset migration because `i18n-js` v3 ships a Rack
-middleware that writes a global JS object; v4 ships per-locale chunks
-loaded via the Vite manifest.
+v3 ships a Rack middleware that writes a global JS object; v4 ships
+per-locale chunks loaded via the Vite manifest.
 
 - [ ] `bundle update i18n-js` to v4.
-- [ ] Drop `config.middleware.use I18n::JS::Middleware` from
-      `config/application.rb`.
+- [ ] Drop `config.middleware.use I18n::JS::Middleware`.
 - [ ] Replace the legacy `i18n` JS reads with the v4 import pattern.
 
 ## Risk areas + mitigations
 
 | Risk | Mitigation |
 |---|---|
-| Big-bang migrations break invoices for live customers | Every phase ships behind a flag, A/B'd on a staging mirror first. The Capistrano deploy is still the source of truth until Kamal cutover completes. |
-| Tailwind classes don't visually match Bootstrap 3 layouts | Phase 2 ships one probe page; visually compare side-by-side before continuing. |
-| Vue rewrites lose Angular's two-way binding subtleties (typing-while-saving, dirty checks) | Each Vue screen needs its own e2e spec covering keyboard input, debounce, autosave. |
-| Vite + Rails asset_host / CDN config | Mirror fleetyards' `VITE_RUBY_ASSET_HOST` build arg. |
-| Test parallelization regresses | Knapsack-sharded minitest stays; Vitest runs in parallel; Playwright shards in CI like fleetyards does. |
-| AGENTS.md drift | Update AGENTS.md "Frontend modernization in flight" section as each phase lands. |
+| haml/slim → ERB conversion subtly changes whitespace and breaks layout | Phase 3 batches stay small (~10 templates) and ship one PR each; e2e + click-through before merge |
+| Turbo Drive double-submit on Devise forms | Test sign-in / sign-up / password reset flows explicitly in Phase 4 |
+| Stimulus event listeners stack across Turbo navigation | Use `connect()` / `disconnect()` properly; document the pattern in `AGENTS.md` |
+| Vue island can't read Rails-rendered locale data | Pass it through `data-` attributes on the mount point, parsed in the island's setup() |
+| Tailwind classes don't visually match Bootstrap 3 layouts | Probe page in Phase 2 catches macro issues; per-screen migration catches micro issues before merge |
+| Two test paradigms (server-rendered + Vue) get hard to maintain | Server-rendered: Playwright. Vue islands: Vitest + Playwright. Same Playwright config covers both. |
+| AGENTS.md drifts from reality as phases land | Update AGENTS.md's "Frontend modernization in flight" section at the end of each phase |
 
 ## Rollback strategy
 
-- Each phase is one PR (or a short series). Revert PR via the GitHub
-  UI takes the codebase to the prior known-good state.
-- For Phase 4+ (per-screen Vue rewrites), the feature flag is the
-  rollback — set it to off in env, Rails serves the legacy template.
-- For Phase 7 (Sprockets deletion) — irreversible without a revert.
-  Tag the commit before merging so we can `git checkout` it if a
-  problem only manifests in prod under load.
+- **Per-PR revert** is the default. Each phase is one PR (or a short
+  series); revert via the GitHub UI returns to the prior known-good
+  state.
+- **Phase 6 (Vue islands)**: feature flag flip. Env var off → Rails
+  serves the legacy AngularJS view.
+- **Phase 9 (Sprockets deletion)** is the only one-way door. Tag the
+  commit before merging so we can `git checkout` it if a problem
+  manifests only under prod load.
 
 ## Time estimates
 
-These assume one engineer working on this part-time alongside
-day-to-day feature work.
+Part-time, alongside day-to-day feature work:
 
-| Phase | Estimate | Notes |
-|---|---|---|
-| 0 — pin current state | 0.5 day | optional |
-| 1 — install Vite | 1 day | |
-| 2 — Tailwind alongside | 1 day | |
-| 3 — Stimulus | 2 days | |
-| 4 — Vue screens | 1-2 weeks per screen | × ~5 screens |
-| 5 — drop AngularJS | 0.5 day | |
-| 6 — Playwright | 1 day | |
-| 7 — drop Bootstrap + Sprockets | 1 week | |
-| 8 — i18n-js v4 | 0.5 day | |
+| Phase | Estimate |
+|---|---|
+| 0 — inventory | 0.5 day (optional) |
+| 1 — install Vite | 1 day |
+| 2 — Tailwind alongside | 1 day |
+| 3 — haml/slim → ERB | 3–5 days (batched) |
+| 4 — Hotwire baseline | 2 days |
+| 5 — Turbo Frames on CRUD | 1 week (parallelizable) |
+| 6 — Vue islands | 2 weeks × 2 = 4 weeks |
+| 7 — drop AngularJS | 0.5 day |
+| 8 — Cypress → Playwright | 1 day |
+| 9 — drop Bootstrap + Sprockets | 1 week |
+| 10 — i18n-js v4 | 0.5 day |
 
-Calendar: ~2-3 months at part-time. Compressed to ~6 weeks if focused.
+Calendar: ~2–3 months part-time, ~6 weeks focused.
 
 ## When this plan starts
 
-After:
-- #852 (release-please) merged
-- #853 (Kamal) merged and live deploy verified
-- #855 (Brakeman cleanup) merged
-- #856 (AGENTS.md) merged
-- Capistrano removed (the post-Kamal cleanup PR)
+After all in-flight infra PRs settle:
 
-These are infrastructure pieces that the frontend work shouldn't have
-to coordinate with mid-flight.
+- #852 (release-please) — merged ✓
+- #853 (Kamal) — merged ✓; live deploy verified
+- #855 (Brakeman cleanup) — merged ✓
+- #856 (AGENTS.md) — merged ✓
+- Capistrano removed (the post-Kamal cleanup PR — pending)
+
+These should land and stabilize before the frontend rewrite begins so
+the two workstreams don't have to coordinate mid-flight.
