@@ -28,10 +28,6 @@ gem "sidekiq-cron"
 # for sidekiq web
 gem "sinatra", ">= 4.2", require: nil
 
-gem "haml"
-gem "haml-rails"
-gem "slim-rails"
-
 gem "devise"
 gem "devise-two-factor"
 gem "jwt"

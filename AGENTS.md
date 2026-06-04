@@ -67,7 +67,7 @@ reckoning/
 ├── app/
 │   ├── controllers/       # Rails controllers (API in api/v1/)
 │   ├── models/            # ActiveRecord models
-│   ├── views/             # haml/slim templates
+│   ├── views/             # ERB templates
 │   ├── helpers/           # view helpers
 │   ├── mailers/           # mailers
 │   ├── workers/           # Sidekiq workers
