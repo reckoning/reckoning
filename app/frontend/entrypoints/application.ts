@@ -1,34 +1,25 @@
 // Vite entrypoint — modern asset pipeline lives here.
 //
 // Loaded on every page via `<%= vite_typescript_tag "application" %>`
-// in app/views/layouts/_head.slim alongside the legacy Sprockets bundle.
+// in app/views/layouts/_head.html.erb alongside the legacy Sprockets
+// bundle.
 //
-// Phase 4a of the frontend migration:
-// - Turbo is imported but DRIVE IS DISABLED. Turbolinks (legacy gem)
-//   still owns page navigation. Phase 4b flips the switch and drops
-//   Turbolinks.
-// - Stimulus IS started — fully additive, no conflict with the legacy
-//   stack. Controllers under app/frontend/controllers/ auto-register
+// Phase 4b of the frontend migration:
+// - Turbo Drive owns page navigation. The Turbolinks gem has been
+//   dropped from the Sprockets bundle.
+// - Stimulus controllers under app/frontend/controllers/ auto-register
 //   by filename (e.g. `tabs_controller.ts` → `data-controller="tabs"`).
-// - A `turbo:load → turbolinks:load` shim is installed so that when
-//   4b flips Turbo on, the 20+ existing `document.addEventListener
-//   ("turbolinks:load", …)` callsites in app/assets/javascripts/
-//   keep firing. The shim is a no-op today because Turbo isn't
-//   driving navigation yet.
+// - A `turbo:load → turbolinks:load` shim re-fires the legacy event
+//   so the 20+ `document.addEventListener("turbolinks:load", …)`
+//   callsites in app/assets/javascripts/ keep working under Turbo.
 
-import { session } from "@hotwired/turbo"
+import "@hotwired/turbo"
 import { Application } from "@hotwired/stimulus"
 
-// Disable Turbo Drive until Phase 4b. Turbo 8's module side-effect
-// calls `start()` on import; flipping `drive` to false immediately
-// after keeps Turbo dormant so Turbolinks (still installed via
-// Sprockets) keeps owning navigation.
-session.drive = false
-
-// `turbo:load` fires once on the initial page load (and again on every
-// Turbo navigation once drive is enabled). Re-emit it as
-// `turbolinks:load` so legacy scripts under app/assets/javascripts/
-// keep working when 4b removes Turbolinks.
+// `turbo:load` fires once on the initial page load AND on every Turbo
+// navigation. Re-emit it as `turbolinks:load` so legacy scripts under
+// app/assets/javascripts/ (noty, charts, datepickers, the AngularJS
+// bootstraps, etc.) keep wiring themselves up after each navigation.
 document.addEventListener("turbo:load", () => {
   document.dispatchEvent(new CustomEvent("turbolinks:load"))
 })

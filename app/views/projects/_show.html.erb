@@ -76,10 +76,10 @@
         </div>
       <% else %>
         <div class="pull-right hidden-xs hidden-sm">
-          <%= link_to I18n.t(:"actions.unarchive"), unarchive_project_path(project), class: "btn btn-default", method: :put %>
+          <%= link_to I18n.t(:"actions.unarchive"), unarchive_project_path(project), class: "btn btn-default", data: { turbo_method: :put } %>
         </div>
         <div class="btn-group btn-group-sm btn-group-justified visible-xs visible.sm">
-          <%= link_to I18n.t(:"actions.unarchive"), unarchive_project_path(project), class: "btn btn-default", method: :put %>
+          <%= link_to I18n.t(:"actions.unarchive"), unarchive_project_path(project), class: "btn btn-default", data: { turbo_method: :put } %>
         </div>
       <% end %>
     </div>

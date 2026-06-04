@@ -20,7 +20,7 @@
         <i class="fa fa-edit"></i>
       <% end %>
       <% unless user.confirmed? %>
-        <%= link_to send_welcome_backend_user_path(user), title: I18n.t(:"actions.send_welcome"), class: "btn btn-default btn-sm", method: :put do %>
+        <%= link_to send_welcome_backend_user_path(user), title: I18n.t(:"actions.send_welcome"), class: "btn btn-default btn-sm", data: { turbo_method: :put } do %>
           <i class="fa fa-send"></i>
         <% end %>
       <% end %>

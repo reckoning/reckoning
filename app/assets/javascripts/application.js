@@ -1,6 +1,5 @@
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
 //= require action_cable
 //= require spin.js/spin
 //= require ladda/js/ladda

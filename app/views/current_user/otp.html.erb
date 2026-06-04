@@ -35,7 +35,7 @@
                 </div>
               <% else %>
                 <p>
-                  <%= link_to I18n.t(:backup_codes, scope: "devise.otp"), otp_backup_codes_me_path, method: :post, class: "btn btn-warning" %>
+                  <%= link_to I18n.t(:backup_codes, scope: "devise.otp"), otp_backup_codes_me_path, data: { turbo_method: :post }, class: "btn btn-warning" %>
                 </p>
               <% end %>
 

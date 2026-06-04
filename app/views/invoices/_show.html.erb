@@ -64,7 +64,7 @@
             <% end %>
             <% if can? :pay, invoice %>
               <li>
-                <%= link_to pay_invoice_path(invoice), method: :put do %>
+                <%= link_to pay_invoice_path(invoice), data: { turbo_method: :put } do %>
                   <i class="fa fa-check-square-o"></i>
                   <%= I18n.t(:"actions.pay") %>
                 <% end %>
@@ -101,7 +101,7 @@
           </a>
         <% end %>
         <% if can? :pay, invoice %>
-          <%= link_to pay_invoice_path(invoice), method: :put, class: "btn btn-success" do %>
+          <%= link_to pay_invoice_path(invoice), data: { turbo_method: :put }, class: "btn btn-success" do %>
             <i class="fa fa-check-square-o"></i>
             <span class="hidden-xs hidden-sm"><%= I18n.t(:"actions.pay") %></span>
           <% end %>
