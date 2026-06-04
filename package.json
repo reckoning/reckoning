@@ -12,7 +12,9 @@
     "puppeteer": "^23.0.0"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.3.0",
     "cypress": "^12.17.4",
+    "tailwindcss": "^4.3.0",
     "typescript": "^5.2.2",
     "vite": "^7.3.5",
     "vite-plugin-ruby": "^5.2.2"

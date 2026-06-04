@@ -36,11 +36,12 @@ script src="https://kit.fontawesome.com/80d0ee6c6c.js" crossorigin="anonymous"
 = javascript_include_tag "application"
 = render 'layouts/js_defaults'
 
-/ Vite client + entrypoint. Loads alongside Sprockets through the
-/ frontend migration (docs/frontend-migration-plan.md). Entrypoint
-/ is empty in Phase 1; future phases will import Turbo, Stimulus,
-/ Tailwind, and the Vue islands.
+/ Vite client + entrypoints. Loads alongside Sprockets through the
+/ frontend migration (docs/frontend-migration-plan.md). The application
+/ entrypoint is empty in Phase 1; tailwind.css ships utility classes
+/ without preflight (Phase 2) so Tailwind and Bootstrap 3 coexist.
 == vite_client_tag
+== vite_stylesheet_tag "tailwind.css"
 == vite_typescript_tag "application"
 
 == csrf_meta_tags

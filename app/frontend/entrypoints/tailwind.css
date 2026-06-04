@@ -1,0 +1,22 @@
+/*
+ * Tailwind 4 entrypoint.
+ *
+ * Phase 2 of the frontend migration runs Tailwind ALONGSIDE Bootstrap 3.
+ * We skip Tailwind's `preflight` (CSS reset) so the existing Bootstrap 3
+ * baseline styles aren't disrupted. Tailwind utility classes still work
+ * everywhere — they just don't reset element defaults.
+ *
+ * When Bootstrap is removed in Phase 9, switch this file to a plain
+ * `@import "tailwindcss";` and the preflight will kick in.
+ */
+
+@layer theme, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/* Tailwind 4 auto-scans .html/.js/.ts/.vue etc. but not Rails template
+ * extensions. Point it at the server-rendered views and helpers. */
+@source "../../views/**/*.{haml,slim,erb}";
+@source "../../helpers/**/*.rb";
+@source "../../components/**/*.{html,erb,rb}";

@@ -3,6 +3,12 @@
 .row#users
   .col-xs-12.col-md-12
 
+    -# Tailwind 4 probe — Phase 2 of frontend migration. Renders an
+    -# emerald badge if Tailwind is loading; falls back to plain text
+    -# if not. Remove once Tailwind is exercised elsewhere in the app.
+    %div.inline-block.rounded.bg-emerald-500.px-2.py-1.text-xs.font-medium.text-white
+      Tailwind ok
+
     .row
       .col-xs-12.col-md-8
         %h1
