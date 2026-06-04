@@ -1,0 +1,21 @@
+<div class="panel panel-default" id="budgets-panel">
+  <div class="panel-heading">
+    <div class="panel-title">
+      <strong><%= I18n.t(:"dashboard.panels.expenses.title") %></strong>
+    </div>
+  </div>
+  <div class="list-group">
+    <% if @expenses.present? %>
+      <div class="list-group-item">
+        <%= I18n.t(:"dashboard.panels.expenses.current") %>
+        <strong class="pull-right"><%= number_to_currency(@expenses.sum(&:usable_value)) %></strong>
+      </div>
+    <% end %>
+    <% if @last_expenses.present? %>
+      <div class="list-group-item">
+        <%= I18n.t(:"dashboard.panels.expenses.last") %>
+        <strong class="pull-right"><%= number_to_currency(@last_expenses.sum(&:usable_value)) %></strong>
+      </div>
+    <% end %>
+  </div>
+</div>

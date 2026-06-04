@@ -1,0 +1,24 @@
+<ul class="nav navbar-nav">
+  <li class="<%= active_nav?("home") %>">
+    <%= link_to I18n.t(:"nav.header.home"), root_path %>
+  </li>
+  <li class="<%= active_nav?("invoices") %>">
+    <%= link_to I18n.t(:"nav.header.invoices"), invoices_path %>
+  </li>
+  <li class="<%= active_nav?("offers") %>">
+    <%= link_to I18n.t(:"nav.header.offers"), offers_path %>
+  </li>
+  <li class="<%= active_nav?("projects") %>">
+    <%= link_to I18n.t(:"nav.header.projects"), projects_path %>
+  </li>
+  <li class="<%= active_nav?("timesheet") %>">
+    <a href="<%= timesheet_path %>#/day/" data-no-turbolink="true" target="_self">
+      <%= I18n.t(:"nav.header.timesheet") %>
+    </a>
+  </li>
+  <% if can? :read, :expenses %>
+    <li class="<%= active_nav?("expenses") %>">
+      <%= link_to I18n.t(:"nav.header.expenses"), expenses_path %>
+    </li>
+  <% end %>
+</ul>

@@ -1,0 +1,29 @@
+<% context ||= "info" %>
+<div class="panel panel-<%= context %>">
+  <% if defined?(panel_title) %>
+    <div class="panel-heading">
+      <div class="panel-title">
+        <strong>
+          <%= panel_title %>
+        </strong>
+      </div>
+    </div>
+  <% end %>
+  <div class="list-group offers-list">
+    <% offers.each do |offer| %>
+      <a class="list-group-item" href="<%= offer_path(offer) %>">
+        <%= offer.ref_number %> | <%= offer.title %>
+        <div class="text-right">
+          <em>
+            <%= I18n.l offer.date, format: :month_year %>
+          </em>
+        </div>
+      </a>
+    <% end %>
+    <% if offers.empty? %>
+      <span class="list-group-item">
+        <%= I18n.t(:"labels.table.blank.offer") %>
+      </span>
+    <% end %>
+  </div>
+</div>

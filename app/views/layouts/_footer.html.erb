@@ -1,0 +1,14 @@
+<% unless content_for?(:hide_footer) %>
+  <footer id="main-footer">
+    <div class="row">
+      <div class="col-xs-12 col-md-6 copyright">
+        Copyright &copy; 2022
+        <%= link_to "Marten Klitzke", "mailto:info@reckoning.me", target: "_blank", data: { no_turbolink: "true" } %>
+      </div>
+
+      <div class="col-xs-12 col-md-6 version">
+        <%= I18n.t(:"version", version: Reckoning::CODENAME, version_number: Reckoning::VERSION) %>
+      </div>
+    </div>
+  </footer>
+<% end %>

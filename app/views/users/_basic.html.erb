@@ -1,0 +1,9 @@
+<div class="row">
+  <div class="col-xs-12 col-md-6">
+    <div class="form-group <%= form_error?(resource, :name) %>">
+      <%= form.label :name %>
+      <%= form.text_field :name, placeholder: I18n.t(:"helpers.placeholder.name"), class: "form-control" %>
+      <%= form_errors resource, :name %>
+    </div>
+  </div>
+</div>

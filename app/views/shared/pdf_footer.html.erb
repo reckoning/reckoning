@@ -1,0 +1,54 @@
+<style>
+  body { margin: 0; padding: 0; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  #pdf-footer-wrapper { width: 100%; padding: 0 18mm; }
+  #pagination { font-size: 9pt; text-align: right; margin-bottom: 4px; }
+  #pdf-footer { border-top: 1px solid #cacaca; width: 100%; padding-top: 5px; }
+  #pdf-footer address,
+  #pdf-footer .contact-information,
+  #pdf-footer .bank-information { display: inline-block; vertical-align: top; font-size: 8pt; line-height: 1.5em; font-style: normal; }
+  #pdf-footer address { width: 25%; }
+  #pdf-footer .contact-information { width: 38%; margin-top: 1.5em; }
+  #pdf-footer .bank-information { width: 34%; }
+</style>
+<div id="pdf-footer-wrapper">
+  <div id="pagination">
+    <%= I18n.t(:"pdf.page") %>
+    <span class="pageNumber"></span>
+    <%= I18n.t(:"pdf.page_from") %>
+    <span class="totalPages"></span>
+  </div>
+  <div id="pdf-footer">
+    <address>
+      <strong><%= resource.account.name %></strong>
+      <br>
+      <br>
+      <%= simple_format(resource.account.address) %>
+    </address>
+    <div class="contact-information">
+      <% if resource.account.telefon.present? %>
+        Tel: <%= resource.account.telefon %>
+      <% end %>
+      <% if resource.account.fax.present? %>
+        <br>
+        Fax: <%= resource.account.fax %>
+      <% end %>
+      <% if resource.account.public_email.present? %>
+        <br>
+        <%= resource.account.public_email %>
+      <% end %>
+      <br>
+      <% if resource.account.website.present? %>
+        <%= resource.account.website %>
+      <% end %>
+    </div>
+    <div class="bank-information">
+      <% if resource.account.bank.present? %>
+        <%= resource.account.bank %>
+        <br>
+      <% end %>
+      <%= "IBAN: #{resource.account.iban}" %>
+      <br>
+      <%= "BIC: #{resource.account.bic}" %>
+    </div>
+  </div>
+</div>

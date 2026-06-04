@@ -1,0 +1,16 @@
+<% path = "" unless defined?(path) %>
+<% active = "basic" unless defined?(active) %>
+<ul class="nav nav-tabs-vertical">
+  <li class="<%= "active" if active == "basic" %>">
+    <a href="<%= "#{path}#basic" %>" data-toggle="<%= "tab" if path.blank? %>">
+      <%= I18n.t("nav.subnav.user.basic") %>
+      <i class="fa fa-user fa-fw"></i>
+    </a>
+  </li>
+  <li class="<%= "active" if active == "security" %>">
+    <a href="<%= "#{path}#security" %>" data-toggle="<%= "tab" if path.blank? %>">
+      <%= I18n.t("nav.subnav.user.security") %>
+      <i class="fa fa-laptop fa-fw"></i>
+    </a>
+  </li>
+</ul>

@@ -1,0 +1,34 @@
+<% context ||= "info" %>
+<div class="panel panel-<%= context %>">
+  <% if defined?(panel_title) %>
+    <div class="panel-heading">
+      <div class="panel-title">
+        <strong>
+          <%= panel_title %>
+        </strong>
+      </div>
+    </div>
+  <% end %>
+  <div class="list-group invoices-list">
+    <% invoices.each do |invoice| %>
+      <a class="list-group-item" href="<%= invoice_path(invoice) %>">
+        <%= invoice.ref_number %> | <%= invoice.title %>
+        <div class="text-right">
+          <em>
+            <%= I18n.l invoice.date, format: :month_year %>
+          </em>
+        </div>
+        <% if invoice.charged? && invoice.payment_due_date < Time.now %>
+          <span class="label label-danger due-label">
+            <%= I18n.t(:"labels.invoice.due", date: time_ago_in_words(invoice.payment_due_date)) %>
+          </span>
+        <% end %>
+      </a>
+    <% end %>
+    <% if invoices.empty? %>
+      <span class="list-group-item">
+        <%= I18n.t(:"labels.table.blank.invoice") %>
+      </span>
+    <% end %>
+  </div>
+</div>

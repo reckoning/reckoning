@@ -1,0 +1,30 @@
+<hr>
+
+<div class="row">
+  <a class="anchor" id="pricing"></a>
+  <div class="col-xs-12 col-md-12">
+    <h2 class="hide">
+      <%= I18n.t(:"headlines.welcome.prices") %>
+    </h2>
+    <div class="row">
+      <div class="col-md-1"></div>
+      <% Plan.all.each do |plan| %>
+        <%= render "base/pricing_table", plan: plan %>
+      <% end %>
+    </div>
+    <div class="row">
+      <div class="col-md-1"></div>
+      <div class="col-md-10">
+        <div class="pricing-table-small-print text-right">
+          <%= I18n.t(:"plans.small_print", price: Plan.base.price) %>
+        </div>
+        <div class="text-center">
+          <a class="btn btn-success btn-lg" href="<%= new_registration_path %>">
+            <%= I18n.t(:"plans.cta_button") %>
+          </a>
+        </div>
+      </div>
+      <div class="col-md-1"></div>
+    </div>
+  </div>
+</div>

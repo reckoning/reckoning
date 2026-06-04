@@ -1,0 +1,68 @@
+<%= paginator.render do %>
+  <% total = @options[:total_pages] %>
+  <% url = @options[:url] %>
+  <% page = @options[:current_page].number %>
+  <ul class="pagination pull-right">
+    <li class="<%= "disabled" if page - 1 < 1 %>">
+      <% if page - 1 >= 1 %>
+        <a href="<%= plumb(page: page - 1) %>">
+          <%= raw(t "views.pagination.previous") %>
+        </a>
+      <% else %>
+        <a><%= raw(t "views.pagination.previous") %></a>
+      <% end %>
+    </li>
+    <% if total > 3 && page + 1 >= total %>
+      <li>
+        <a href="<%= plumb(page: 1) %>">1</a>
+      </li>
+    <% end %>
+    <% if total > 4 && page > 2 %>
+      <li class="disabled">
+        <a>..</a>
+      </li>
+    <% end %>
+    <% if page > 3 && page == total %>
+      <li>
+        <a href="<%= plumb(page: page - 2) %>"><%= page - 2 %></a>
+      </li>
+    <% end %>
+    <% if page > 1 %>
+      <li>
+        <a href="<%= plumb(page: page - 1) %>"><%= page - 1 %></a>
+      </li>
+    <% end %>
+    <li class="active">
+      <a><%= page %></a>
+    </li>
+    <% if page < total %>
+      <li>
+        <a href="<%= plumb(page: page + 1) %>"><%= page + 1 %></a>
+      </li>
+    <% end %>
+    <% if page < total - 2 && page === 1 %>
+      <li>
+        <a href="<%= plumb(page: page + 2) %>"><%= page + 2 %></a>
+      </li>
+    <% end %>
+    <% if total > 4 && page + 1 < total %>
+      <li class="disabled">
+        <a data-tooltip="<%= total %>">..</a>
+      </li>
+    <% end %>
+    <% if total > 3 && page - 1 <= 1 %>
+      <li>
+        <a href="<%= plumb(page: total) %>"><%= total %></a>
+      </li>
+    <% end %>
+    <li class="<%= "disabled" if page + 1 > total %>">
+      <% if page + 1 <= total %>
+        <a href="<%= plumb(page: page + 1) %>">
+          <%= raw(t "views.pagination.next") %>
+        </a>
+      <% else %>
+        <a><%= raw(t "views.pagination.next") %></a>
+      <% end %>
+    </li>
+  </ul>
+<% end %>

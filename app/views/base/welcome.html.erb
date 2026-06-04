@@ -1,0 +1,126 @@
+<% image_prefix = "" %>
+<div id="welcome">
+  <a id="github-link" href="https://github.com/reckoning/app">
+    <img src="<%= image_path("github.png") %>" alt="Fork it on GitHub">
+  </a>
+  <div class="row">
+    <a class="anchor" id="intro"></a>
+    <div class="col-xs-12 col-md-12">
+      <div class="page-header">
+        <h1>
+          <%= I18n.t(:"headlines.welcome.base") %>
+          <br>
+          <small>
+            <%= I18n.t(:"sublines.welcome") %>
+          </small>
+        </h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <a class="anchor" id="features"></a>
+    <div class="col-xs-12 col-md-12">
+      <h2 class="hide">
+        <%= I18n.t(:"headlines.welcome.screenshots") %>
+      </h2>
+      <div class="row">
+        <div class="col-xs-12 col-md-4">
+          <a class="thumbnail" href="<%= image_path("#{image_prefix}example-1.png") %>">
+            <%= image_tag "#{image_prefix}example-1-small.png" %>
+          </a>
+          <h4 class="text-center">
+            Rechnungen erstellen (inkl. PDF)
+          </h4>
+          <hr class="visible-xs">
+        </div>
+        <div class="col-xs-12 col-md-4">
+          <a class="thumbnail" href="<%= image_path("#{image_prefix}example-2.png") %>">
+            <%= image_tag "#{image_prefix}example-2-small.png" %>
+          </a>
+          <h4 class="text-center">
+            Rechnungsstatus erfassen
+          </h4>
+          <hr class="visible-xs">
+        </div>
+        <div class="col-xs-12 col-md-4">
+          <a class="thumbnail" href="<%= image_path("#{image_prefix}example-3.png") %>">
+            <%= image_tag "#{image_prefix}example-3-small.png" %>
+          </a>
+          <h4 class="text-center">
+            Datenbank für Kunden & Projekte
+          </h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <% if registration_enabled? %>
+    <hr>
+
+    <div class="row">
+      <a class="anchor" id="features"></a>
+      <div class="col-xs-12 col-md-12">
+        <h2>
+          <%= I18n.t(:"headlines.welcome.features") %>
+        </h2>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-md-4">
+          <ul>
+            <li>Rechnungen
+              <ul>
+                <li>Rechnungen für Kunden und einzelne Projekte erfassen.</li>
+                <li>Rechnungen als PDF erstellen, downloaden und direkt an den Kunden verschicken.</li>
+                <li>E-Mail Templates für jeden Kunden.</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-xs-12 col-md-4">
+          <ul>
+            <li>Zeiterfassung
+              <ul>
+                <li>Zeiten nachträglich in einer Wochenansicht oder für jeden Tag erfassen.</li>
+                <li>Zeiten direkt beim arbeiten erfassen in dem einfach ein Timer gestartet wird.</li>
+                <li>Stundenzettel werden automatisch generiert wenn Rechnungspositionen aus Einträgen der Zeiterfassung stammen.</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-xs-12 col-md-4">
+          <ul>
+            <li>Projekte &amp; Kunden
+              <ul>
+                <li>Erfassen sie alle ihre Kunden und die einzelnen Projekte.</li>
+                <li>Legen Sie Budgets für jedes Projekt fest und bekommen sie so Informationen über verbleibene Budgets.</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <% if Plan.base.present? %>
+      <%= render partial: "base/plans" %>
+    <% end %>
+  <% end %>
+
+  <div id="image-modal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button class="close" type="button" data-dismiss="modal" aria-hidden="true">
+            &times;
+          </button>
+          <h4></h4>
+        </div>
+        <div class="modal-body">
+          <img src="" alt="example-image">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

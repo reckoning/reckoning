@@ -1,0 +1,29 @@
+<% @settings.each do |root, values| %>
+  <% if %i[base mailer].include?(root) %>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <%= I18n.t(:"labels.panels.title.settings.#{root}") %>
+        </h3>
+      </div>
+      <table class="table table-bordered table-striped table-condensed">
+        <tbody>
+          <% values.each do |key, value| %>
+            <tr>
+              <td>
+                <%= I18n.t(:"activerecord.attributes.setting.#{root}.#{key}") %>
+              </td>
+              <td>
+                <% if value.is_a?(TrueClass) %>
+                  <%= I18n.t(:"#{value}") %>
+                <% else %>
+                  <%= value %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+<% end %>

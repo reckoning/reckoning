@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <%= render "layouts/head" %>
+  </head>
+  <body>
+    <div class="container">
+      <%== yield %>
+    </div>
+    <%= render "layouts/footer" %>
+  </body>
+</html>

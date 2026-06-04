@@ -1,0 +1,21 @@
+<div class="table-responsive">
+  <table class="table table-condensed table-hover table-bordered table-striped">
+    <thead>
+      <tr>
+        <th class="id"><%= sortable "id", I18n.t(:"labels.defaults.id") %></th>
+        <th><%= sortable "email", I18n.t(:"labels.defaults.email") %></th>
+        <th><%= sortable "current_sign_in_at", I18n.t(:"labels.user.current_sign_in_at") %></th>
+        <th><%= sortable "created_at", I18n.t(:"labels.defaults.created_at") %></th>
+        <th><%= sortable "admin", I18n.t(:"labels.user.admin") %></th>
+        <th class="actions three"><%= I18n.t(:"labels.defaults.actions") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render partial: "backend/users/show", collection: @users, as: :user %>
+
+      <% if @users.blank? %>
+        <%= render "shared/tables/blank", count: 4, resource: "user" %>
+      <% end %>
+    </tbody>
+  </table>
+</div>

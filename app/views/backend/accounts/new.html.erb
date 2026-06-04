@@ -1,0 +1,50 @@
+<% content_for :title do %>
+  <%= I18n.t(:"meta.title.backend.account.new") %>
+<% end %>
+<div class="row" id="account-new">
+  <div class="col-xs-12 col-md-12">
+    <div class="row">
+      <div class="col-xs-12 col-md-8">
+        <h1>
+          <%= I18n.t(:"headlines.backend.account.new") %>
+        </h1>
+      </div>
+
+      <div class="col-xs-12 col-md-4">
+        <div class="btn-group pull-right resource-nav">
+          <%= link_to I18n.t(:"nav.subnav.back"), backend_accounts_path, class: "btn btn-default" %>
+        </div>
+      </div>
+    </div>
+
+    <%= form_for [:backend, account] do |form| %>
+      <%= form.hidden_field :plan, value: :free %>
+      <div class="row">
+        <div class="col-xs-12 col-md-6">
+          <div class="form-group <%= form_error?(account, :name) %>">
+            <%= form.label :name %>
+            <%= form.text_field :name, placeholder: I18n.t(:"helpers.placeholder.account.name"), class: "form-control" %>
+            <small>
+              <%= form_errors account, :name %>
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <%= form.fields_for :users, account.users do |fields| %>
+        <div class="row">
+          <div class="col-xs-12 col-md-6">
+            <div class="form-group <%= form_error?(fields.object, :email) %>">
+              <%= fields.text_field :email, placeholder: I18n.t(:"helpers.placeholder.user.email"), class: "form-control" %>
+              <small>
+                <%= form_errors fields.object, :email %>
+              </small>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <%= render "shared/forms/submit", path: backend_accounts_path %>
+    <% end %>
+  </div>
+</div>

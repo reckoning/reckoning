@@ -1,0 +1,45 @@
+<div class="panel panel-default" id="overtime-panel">
+  <div class="panel-heading">
+    <div class="panel-title">
+      <strong>
+        <%= I18n.t("dashboard.panels.overtime") %>
+      </strong>
+    </div>
+  </div>
+  <div class="list-group">
+    <% if current_user.overtime? %>
+      <% current_account.customers.each do |customer| %>
+        <% overtime = customer.overtime(current_user.id) %>
+        <% if overtime && customer.weekly_hours %>
+          <div class="list-group-item list-group-item-<%= overtime_label(overtime, customer.weekly_hours) %>">
+            <%= customer.name %>
+            <strong class="pull-right">
+              <%= number_to_currency(overtime, unit: "h", precision: 2) %>
+            </strong>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <% weekly_hours = current_user.weekly_hours %>
+    <% daily_hours = current_user.daily_hours %>
+
+    <% if weekly_hours %>
+      <div class="list-group-item list-group-item-<%= weekly_hours_label(weekly_hours) %>">
+        <%= I18n.t("dashboard.panels.weekly_hours") %>
+        <strong class="pull-right">
+          <%= number_to_currency(weekly_hours, unit: "h", precision: 2) %>
+        </strong>
+      </div>
+    <% end %>
+
+    <% if daily_hours %>
+      <div class="list-group-item list-group-item-<%= daily_hours_label(daily_hours) %>">
+        <%= I18n.t("dashboard.panels.daily_hours") %>
+        <strong class="pull-right">
+          <%= number_to_currency(daily_hours, unit: "h", precision: 2) %>
+        </strong>
+      </div>
+    <% end %>
+  </div>
+</div>

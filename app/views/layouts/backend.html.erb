@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <meta name="turbolinks-cache-control" content="no-cache">
+    <%= render "layouts/head" %>
+  </head>
+  <body data-success="<%= flash[:success] %>" data-info="<%= notice %>" data-error="<%= alert %>" data-turbolinks="false">
+    <% if user_signed_in? || content_for?(:main_nav) %>
+      <%= render "layouts/backend/navigation" %>
+    <% end %>
+    <div class="container-fluid">
+      <%== yield %>
+    </div>
+
+    <%= render "layouts/footer" %>
+  </body>
+</html>

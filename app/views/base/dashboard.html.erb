@@ -1,0 +1,109 @@
+<% content_for :title do %>
+  <%= I18n.t(:"meta.title.dashboard") %>
+<% end %>
+<div class="row" id="dashboard">
+  <div class="col-xs-12 col-md-12">
+    <h1>
+      <%= I18n.t(:"headlines.dashboard") %>
+    </h1>
+    <div class="row">
+      <div class="col-xs-12 col-md-4">
+        <%= render "overtime_panel" %>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="panel-title">
+              <strong>
+                <%= I18n.t(:"dashboard.panels.summary") %>
+              </strong>
+            </div>
+          </div>
+          <div class="list-group">
+            <div class="list-group-item">
+              <%= I18n.t(:"dashboard.panels.uninvoiced") %>
+              <strong class="pull-right">
+                <%= number_to_currency(@uninvoiced_amount) %>
+              </strong>
+            </div>
+            <div class="list-group-item">
+              <%= I18n.t(:"dashboard.panels.charged_invoices") %>
+              <strong class="pull-right">
+                <%= number_to_currency(@charged_invoices.sum(:value)) %>
+              </strong>
+            </div>
+            <div class="list-group-item">
+              <%= I18n.t(:"dashboard.panels.paid_invoices") %>
+              <strong class="pull-right">
+                <%= number_to_currency(@paid_invoices.sum(:value)) %>
+              </strong>
+            </div>
+            <div class="list-group-item">
+              <%= I18n.t(:"dashboard.panels.all_invoices") %>
+              <strong class="pull-right">
+                <%= number_to_currency((@charged_invoices + @paid_invoices).sum(&:value)) %>
+              </strong>
+            </div>
+            <div class="list-group-item disabled">
+              <%= I18n.t(:"dashboard.panels.last_invoices", year: (Time.now - 1.year).year) %>
+              <strong class="pull-right">
+                <%= number_to_currency(@last_invoices.sum(:value)) %>
+              </strong>
+            </div>
+            <% if current_account.provision.present? %>
+              <div class="list-group-item">
+                <%= I18n.t(:"dashboard.panels.provision") %>
+                <strong class="pull-right">
+                  <%= number_to_currency(current_account.provision_value) %>
+                </strong>
+              </div>
+              <div class="list-group-item disabled">
+                <%= I18n.t(:"dashboard.panels.last_provision", year: (Time.now - 1.year).year) %>
+                <strong class="pull-right">
+                  <%= number_to_currency(current_account.last_provision_value) %>
+                </strong>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <% if @expenses.present? || @last_expenses.present? %>
+          <%= render "expenses_panel" %>
+        <% end %>
+
+        <%= render "budgets_panel", budgets: @budgets %>
+      </div>
+
+      <div class="col-xs-12 col-md-8">
+        <% if @charged_invoices.present? %>
+          <%= render "invoices_panel", panel_title: I18n.t(:"dashboard.panels.charged_invoices"), invoices: @charged_invoices, context: "warning" %>
+        <% end %>
+        <script>
+          window.invoicesChartData = <%= raw @invoices_chart_data.to_json %>;
+        </script>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="panel-title">
+              <strong><%= I18n.t(:"dashboard.panels.invoices_chart", year: I18n.l(Date.today, format: :year)) %></strong>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="chart chart-dashboard">
+              <div class="chart-inner" id="invoices-chart"></div>
+            </div>
+          </div>
+        </div>
+
+        <% if @paid_invoices.present? %>
+          <%= render "invoices_panel", panel_title: I18n.t(:"dashboard.panels.paid_invoices"), invoices: @paid_invoices, context: "success" %>
+        <% end %>
+
+        <% if @last_invoices.present? %>
+          <%= render "invoices_panel", panel_title: I18n.t(:"dashboard.panels.last_invoices", year: (Time.now - 1.year).year), invoices: @last_invoices %>
+        <% end %>
+
+        <% if @charged_invoices.blank? && @last_invoices.blank? && @paid_invoices.blank? %>
+          <%= render "shared/blank" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

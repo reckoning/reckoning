@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <%= render "layouts/head" %>
+  </head>
+  <body class="landing-page" data-success="<%= flash[:success] %>" data-info="<%= notice %>" data-error="<%= alert %>">
+    <%= render "layouts/landing_page/navigation" %>
+    <div class="container">
+      <%== yield %>
+    </div>
+
+    <%= render "layouts/footer" %>
+  </body>
+</html>
