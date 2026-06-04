@@ -27,31 +27,37 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-xs-12 col-md-8 filters">
-        <%= render "shared/tables/filter", resource: "invoice", name: "state", filters: Invoice.workflow_spec.state_names, translateable: true %>
-        <%= render "shared/tables/filter", resource: "invoice", name: "year", filters: current_invoice_years %>
-        <%= render "shared/tables/filter", resource: "invoice", name: "quarter", filters: quarters, translateable: "date.quarters" %>
-        <%= render "shared/tables/filter", resource: "invoice", name: "month", filters: months, translateable: "date.month_names" %>
-        <%= render "shared/tables/filter", resource: "invoice", name: "paid_in_year", filters: current_invoice_years %>
-        <%= render "shared/tables/filter", resource: "invoice", name: "paid_in_quarter", filters: quarters, translateable: "date.quarters" %>
-        <%= render "shared/tables/filter", resource: "invoice", name: "paid_in_month", filters: months, translateable: "date.month_names" %>
+    <%# Turbo Frame around filters, list, pagination — same pattern as
+        #873 (projects) and #874 (offers). Invoices have 7 filter
+        dropdowns (state, year, quarter, month, plus paid_in_* trio)
+        plus sortable columns — all benefit from partial swap. %>
+    <turbo-frame id="invoices-list" data-turbo-action="advance">
+      <div class="row">
+        <div class="col-xs-12 col-md-8 filters">
+          <%= render "shared/tables/filter", resource: "invoice", name: "state", filters: Invoice.workflow_spec.state_names, translateable: true %>
+          <%= render "shared/tables/filter", resource: "invoice", name: "year", filters: current_invoice_years %>
+          <%= render "shared/tables/filter", resource: "invoice", name: "quarter", filters: quarters, translateable: "date.quarters" %>
+          <%= render "shared/tables/filter", resource: "invoice", name: "month", filters: months, translateable: "date.month_names" %>
+          <%= render "shared/tables/filter", resource: "invoice", name: "paid_in_year", filters: current_invoice_years %>
+          <%= render "shared/tables/filter", resource: "invoice", name: "paid_in_quarter", filters: quarters, translateable: "date.quarters" %>
+          <%= render "shared/tables/filter", resource: "invoice", name: "paid_in_month", filters: months, translateable: "date.month_names" %>
+        </div>
+        <div class="col-xs-12 col-md-4">
+          <%= paginate @invoices %>
+        </div>
       </div>
-      <div class="col-xs-12 col-md-4">
-        <%= paginate @invoices %>
-      </div>
-    </div>
 
-    <% if @invoices.present? %>
-      <%= render partial: "invoices/list", :@invoices => @invoices %>
-    <% else %>
-      <%= render partial: "shared/blank" %>
-    <% end %>
+      <% if @invoices.present? %>
+        <%= render partial: "invoices/list", "@invoices": @invoices %>
+      <% else %>
+        <%= render partial: "shared/blank" %>
+      <% end %>
 
-    <div class="row">
-      <div class="col-xs-12 col-md-6">
-        <%= paginate @invoices %>
+      <div class="row">
+        <div class="col-xs-12 col-md-6">
+          <%= paginate @invoices %>
+        </div>
       </div>
-    </div>
+    </turbo-frame>
   </div>
 </div>
