@@ -53,7 +53,7 @@ Legacy (to be removed):
 - Sprockets `//= require` manifests
 - bower-rails
 
-Targets (mirroring fleetyards):
+Targets (see `docs/frontend-migration-plan.md` for the phased plan):
 
 - **Vite** (`vite_rails`) with `app/frontend/entrypoints/`
 - **Tailwind 4** via `@tailwindcss/vite`
@@ -261,8 +261,8 @@ Before reaching for changes:
   it that way unless there's a clear reason not to.
 - Check the migration-in-flight context above. Don't add new code to
   the legacy frontend stack (Sprockets/AngularJS/CoffeeScript/Bootstrap 3).
-- Read `.cursor/rules/` (none today — fleetyards has them, this repo
-  doesn't yet).
+- Read `.cursor/rules/` files if any exist (none today; long-form
+  conventions live in this file).
 
 ### While writing
 
