@@ -15,7 +15,7 @@
     <% end %>
 
     <% if invoice.send_via_mail? %>
-      <%= link_to send_mail_invoice_path(invoice), method: :put, class: "list-group-item" do %>
+      <%= link_to send_mail_invoice_path(invoice), data: { turbo_method: :put }, class: "list-group-item" do %>
         <i class="fa fa-paper-plane"></i>
         <%= I18n.t(:"actions.send_invoice") %>
       <% end %>

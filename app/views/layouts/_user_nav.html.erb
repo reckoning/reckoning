@@ -24,7 +24,7 @@
           </li>
         <% else %>
           <li>
-            <a href="<%= backend_root_path %>" data-turbolinks="false">
+            <a href="<%= backend_root_path %>" data-turbo="false">
               <%= I18n.t(:"nav.header.backend") %>
             </a>
           </li>
@@ -32,7 +32,7 @@
       <% end %>
       <li class="divider"></li>
       <li>
-        <%= link_to I18n.t(:"actions.sign_out"), destroy_user_session_path, method: :delete %>
+        <%= link_to I18n.t(:"actions.sign_out"), destroy_user_session_path, data: { turbo_method: :delete } %>
       </li>
     </ul>
   </li>
