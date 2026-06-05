@@ -22,7 +22,7 @@
           </div>
           <div class="col-xs-4 col-md-2">
             <div class="panel-list-action pull-right">
-              <a class="btn btn-default" href="<%= new_project_path(customer_id: customer) %>" title="<%= I18n.t(:"nav.subnav.new_project_for_customer", customer: customer.name) %>" data-toggle="tooltip">
+              <a class="btn btn-default" href="<%= new_project_path(customer_id: customer) %>" title="<%= I18n.t(:"nav.subnav.new_project_for_customer", customer: customer.name) %>" data-toggle="tooltip" data-controller="tooltip">
                 <i class="fa fa-plus"></i>
               </a>
             </div>

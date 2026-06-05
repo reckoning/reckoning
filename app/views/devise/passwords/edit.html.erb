@@ -15,7 +15,7 @@
     <%= form.password_field :password_confirmation, required: true, placeholder: I18n.t(:"helpers.placeholder.user.password_confirmation"), class: "form-control" %>
   </div>
 
-  <button class="btn-block btn btn-lg btn-primary btn-loading" data-loading-text="<%= I18n.t(:"actions.loading") %>">
+  <button class="btn-block btn btn-lg btn-primary btn-loading" data-controller="loading-button" data-loading-text="<%= I18n.t(:"actions.loading") %>">
     <%= I18n.t(:"actions.save_password") %>
   </button>
 <% end %>

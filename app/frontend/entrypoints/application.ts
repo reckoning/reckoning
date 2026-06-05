@@ -17,6 +17,7 @@ import "@hotwired/turbo"
 import { Application } from "@hotwired/stimulus"
 
 import { configureAccounting, installAccountingGlobal } from "../lib/accounting"
+import { configureMomentLocale } from "../lib/moment-locale"
 
 // PDF.js v4+ ships ESM-only. Lazy-loaded so the 1.5 MB pdfjs core +
 // worker don't ship on pages that never render a PDF (most of them).
@@ -62,6 +63,11 @@ if (i18nGlobal) {
   configureAccounting(i18nGlobal)
   installAccountingGlobal()
 }
+
+// moment.js stays loaded from Sprockets (still consumed by
+// chart.coffee + AngularJS as a global). Just configure the locale
+// + ISO week here, replacing what `App.Moment.init` used to do.
+configureMomentLocale()
 
 const application = Application.start()
 

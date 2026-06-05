@@ -76,7 +76,7 @@
             <div ng-repeat="timer in task.timers | forDate:date.date">
               <div ng-if="$last">
                 <div class="timesheet-timer invoiced" ng-if="timer.invoiced">
-                  <span title="<%= I18n.t(:"labels.timesheet.on_invoice") %>" data-toggle="tooltip" ng-bind="timer.sumForTask | toHours"></span>
+                  <span title="<%= I18n.t(:"labels.timesheet.on_invoice") %>" data-toggle="tooltip" data-controller="tooltip" ng-bind="timer.sumForTask | toHours"></span>
                 </div>
                 <div class="timesheet-timer started" ng-if="timer.startTimeForTask">
                   <timer start-time="timer.startTimeForTask" max-time-unit="'hour'">{{hours}}:{{mminutes}}</timer>
