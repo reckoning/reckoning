@@ -16,6 +16,30 @@
 import "@hotwired/turbo"
 import { Application } from "@hotwired/stimulus"
 
+// PDF.js v4+ ships ESM-only. Lazy-loaded so the 1.5 MB pdfjs core +
+// worker don't ship on pages that never render a PDF (most of them).
+// Triggered by `dispatchEvent(new CustomEvent("pdfjs:request"))` —
+// the legacy `app/pdf_viewer.coffee` fires this when it sees
+// `.pdf-viewer` mount points. After load, `window.pdfjsLib` is set
+// and a `pdfjs:ready` event fires so callers can start rendering.
+//
+// Replaces the v3.x Sprockets-loaded `//= require pdfjs-dist/build/pdf`
+// + UMD `window.pdfjsLib` global. Bumping to v4 closes 13 high-severity
+// transitive vulns (canvas → node-pre-gyp → tar/minimatch/etc.).
+let pdfjsLoad: Promise<unknown> | null = null
+document.addEventListener("pdfjs:request", async () => {
+  if (!pdfjsLoad) {
+    pdfjsLoad = (async () => {
+      const lib = await import("pdfjs-dist")
+      const { default: workerUrl } = await import("pdfjs-dist/build/pdf.worker.min.mjs?url")
+      lib.GlobalWorkerOptions.workerSrc = workerUrl
+      ;(window as unknown as { pdfjsLib: typeof lib }).pdfjsLib = lib
+    })()
+  }
+  await pdfjsLoad
+  document.dispatchEvent(new CustomEvent("pdfjs:ready"))
+})
+
 // `turbo:load` fires once on the initial page load AND on every Turbo
 // navigation. Re-emit it as `turbolinks:load` so legacy scripts under
 // app/assets/javascripts/ (noty, charts, datepickers, the AngularJS

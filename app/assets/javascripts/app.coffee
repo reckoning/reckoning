@@ -16,11 +16,18 @@ App.initInternal = ->
   Accounting = new App.Accounting()
   Accounting.init()
 
+  # pdfjs v4 is lazy-loaded from the Vite entrypoint to keep it off
+  # pages that don't render PDFs (most of them). Fire the request
+  # event when we see .pdf-viewer mount points; the Vite handler
+  # imports pdfjs + worker on demand, sets `window.pdfjsLib`, then
+  # dispatches `pdfjs:ready` so we can render.
   pdfViewers = $('.pdf-viewer')
   if pdfViewers.length > 0
-    pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJSWorkerPath
-    pdfViewers.each (_, viewer) ->
-      new App.PDFViewer($(viewer)).init()
+    document.addEventListener 'pdfjs:ready', ->
+      pdfViewers.each (_, viewer) ->
+        new App.PDFViewer($(viewer)).init()
+    , { once: true }
+    document.dispatchEvent(new CustomEvent('pdfjs:request'))
 
   Cable = new App.Cable()
   App.cable = Cable.consumer

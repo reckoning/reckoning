@@ -16,7 +16,6 @@
 //= require accounting.js/accounting
 //= require nprogress
 //= require underscore
-//= require pdfjs-dist/build/pdf
 //= require d3
 //= require nvd3
 //= require vendor/highcharts/highcharts
