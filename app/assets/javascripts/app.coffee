@@ -34,11 +34,6 @@ document.addEventListener 'turbolinks:load', ->
   App.init()
   App.initInternal() if AuthToken
 
-$(document).on 'click', '[data-geolocation]', (ev) ->
-  ev.preventDefault()
-  GeoLocation = new App.GeoLocation($(ev.target))
-  GeoLocation.start()
-
 $(document).on 'click', 'a.disabled', (ev) ->
   ev.preventDefault()
 
