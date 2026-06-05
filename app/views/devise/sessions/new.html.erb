@@ -2,7 +2,16 @@
   <%= I18n.t(:"meta.title.sign_in") %>
 <% end %>
 <% content_for :hide_navigation, true %>
-<%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "form-signin" }) do |f| %>
+<%# Opt the sign-in form out of Turbo Drive submissions. Devise's
+    `FailureApp` paths are subtly broken under Turbo: the recall
+    flow doesn't fire `turbo:load` so flash messages don't render
+    through the noty handler, and there's an edge case where
+    `request.format` ends up as something Devise treats as
+    non-navigational and answers with 401 instead of recalling
+    the action. Plain browser POST + 302 + full reload gives the
+    correct, well-trodden Devise behavior. Phase 9 follow-up:
+    re-enable once the Turbo/noty/Devise interaction is fixed. %>
+<%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "form-signin", data: { turbo: "false" } }) do |f| %>
   <h1 class="form-signin-heading">
     <a href="<%= root_path %>"><%= I18n.t(:"title.default") %></a>
     <% if current_account.present? %>
