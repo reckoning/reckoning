@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="col-xs-12 col-md-4 name">
-      <a class="plain" href="<%= invoice_path(invoice) %>">
+      <a class="plain" href="<%= invoice_path(invoice) %>" data-turbo-frame="_top">
         <%= invoice.title %>
       </a>
     </div>
@@ -40,14 +40,14 @@
           <ul class="dropdown-menu dropdown-menu-right" role="menu">
             <% if can? :read, invoice %>
               <li>
-                <a href="<%= invoice_path(invoice) %>">
+                <a href="<%= invoice_path(invoice) %>" data-turbo-frame="_top">
                   <%= I18n.t(:"actions.show") %>
                 </a>
               </li>
             <% end %>
             <% if can? :update, invoice %>
               <li>
-                <a href="<%= edit_invoice_path(invoice) %>">
+                <a href="<%= edit_invoice_path(invoice) %>" data-turbo-frame="_top">
                   <i class="fa fa-edit"></i>
                   <%= I18n.t(:"actions.edit") %>
                 </a>
@@ -56,7 +56,7 @@
             <% if can? :charge, invoice %>
               <% charge_confirm = invoice.send_via_mail? ? I18n.t(:"messages.confirm.charge_mail") : I18n.t(:"messages.confirm.charge") %>
               <li>
-                <a href="<%= charge_invoice_path(invoice) %>" data-method="PUT" data-notyConfirm="<%= charge_confirm %>">
+                <a href="<%= charge_invoice_path(invoice) %>" data-turbo-frame="_top" data-method="PUT" data-notyConfirm="<%= charge_confirm %>">
                   <i class="fa fa-envelope"></i>
                   <%= I18n.t(:"actions.charge") %>
                 </a>
@@ -64,7 +64,7 @@
             <% end %>
             <% if can? :pay, invoice %>
               <li>
-                <%= link_to pay_invoice_path(invoice), data: { turbo_method: :put } do %>
+                <%= link_to pay_invoice_path(invoice), data: { turbo_method: :put, turbo_frame: "_top" } do %>
                   <i class="fa fa-check-square-o"></i>
                   <%= I18n.t(:"actions.pay") %>
                 <% end %>
@@ -73,7 +73,7 @@
             <% if can? :destroy, invoice %>
               <li class="divider"></li>
               <li>
-                <a href="<%= invoice_path(invoice) %>" data-method="DELETE" data-notyConfirm="<%= I18n.t(:"messages.confirm.delete") %>">
+                <a href="<%= invoice_path(invoice) %>" data-turbo-frame="_top" data-method="DELETE" data-notyConfirm="<%= I18n.t(:"messages.confirm.delete") %>">
                   <i class="fa fa-trash"></i>
                   <%= I18n.t(:"actions.delete") %>
                 </a>
@@ -84,30 +84,30 @@
       </div>
 
       <div class="btn-group btn-group-justified visible-xs visible-sm">
-        <a class="btn btn-default" href="<%= invoice_path(invoice) %>">
+        <a class="btn btn-default" href="<%= invoice_path(invoice) %>" data-turbo-frame="_top">
           <%= I18n.t(:"actions.show") %>
         </a>
         <% if can? :update, invoice %>
-          <a class="btn btn-default" href="<%= edit_invoice_path(invoice) %>">
+          <a class="btn btn-default" href="<%= edit_invoice_path(invoice) %>" data-turbo-frame="_top">
             <i class="fa fa-edit"></i>
             <span class="hidden-xs hidden-sm"><%= I18n.t(:"actions.edit") %></span>
           </a>
         <% end %>
         <% if can? :charge, invoice %>
           <% charge_confirm = invoice.send_via_mail? ? I18n.t(:"messages.confirm.charge_mail") : I18n.t(:"messages.confirm.charge") %>
-          <a class="btn btn-default" href="<%= charge_invoice_path(invoice) %>" data-method="PUT" data-notyConfirm="<%= charge_confirm %>">
+          <a class="btn btn-default" href="<%= charge_invoice_path(invoice) %>" data-turbo-frame="_top" data-method="PUT" data-notyConfirm="<%= charge_confirm %>">
             <i class="fa fa-envelope"></i>
             <span class="hidden-xs hidden-sm"><%= I18n.t(:"actions.charge") %></span>
           </a>
         <% end %>
         <% if can? :pay, invoice %>
-          <%= link_to pay_invoice_path(invoice), data: { turbo_method: :put }, class: "btn btn-success" do %>
+          <%= link_to pay_invoice_path(invoice), data: { turbo_method: :put, turbo_frame: "_top" }, class: "btn btn-success" do %>
             <i class="fa fa-check-square-o"></i>
             <span class="hidden-xs hidden-sm"><%= I18n.t(:"actions.pay") %></span>
           <% end %>
         <% end %>
         <% if can? :destroy, invoice %>
-          <a class="btn btn-danger" href="<%= invoice_path(invoice) %>" data-method="DELETE" data-notyConfirm="<%= I18n.t(:"messages.confirm.delete") %>">
+          <a class="btn btn-danger" href="<%= invoice_path(invoice) %>" data-turbo-frame="_top" data-method="DELETE" data-notyConfirm="<%= I18n.t(:"messages.confirm.delete") %>">
             <i class="fa fa-trash"></i>
             <span class="hidden-xs hidden-sm"><%= I18n.t(:"actions.delete") %></span>
           </a>

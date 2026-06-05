@@ -1,7 +1,7 @@
 <div class="list-group-item">
   <div class="row">
     <div class="col-xs-12 col-md-4 project-name">
-      <a class="plain" href="<%= project_path(project) %>">
+      <a class="plain" href="<%= project_path(project) %>" data-turbo-frame="_top">
         <b><%= project.name %></b>
       </a>
     </div>
@@ -31,25 +31,25 @@
             </button>
             <ul class="dropdown-menu dropdown-menu-right" role="menu">
               <li>
-                <a href="<%= project_path(project) %>">
+                <a href="<%= project_path(project) %>" data-turbo-frame="_top">
                   <%= I18n.t(:"actions.show") %>
                 </a>
               </li>
               <li>
-                <a href="<%= new_invoice_path(project_id: project) %>">
+                <a href="<%= new_invoice_path(project_id: project) %>" data-turbo-frame="_top">
                   <i class="fa fa-plus"></i>
                   <%= I18n.t(:"actions.add_invoice") %>
                 </a>
               </li>
               <li>
-                <a href="<%= edit_project_path(project) %>">
+                <a href="<%= edit_project_path(project) %>" data-turbo-frame="_top">
                   <i class="fa fa-edit"></i>
                   <%= I18n.t(:"actions.edit") %>
                 </a>
               </li>
               <li class="divider"></li>
               <li>
-                <a href="<%= archive_v1_project_url(project) %>" data-redirect="<%= projects_path %>" data-method="PUT" data-notyConfirm="<%= I18n.t(:"messages.confirm.project.archive") %>">
+                <a href="<%= archive_v1_project_url(project) %>" data-turbo-frame="_top" data-redirect="<%= projects_path %>" data-method="PUT" data-notyConfirm="<%= I18n.t(:"messages.confirm.project.archive") %>">
                   <i class="fa fa-archive"></i>
                   <%= I18n.t(:"actions.archive") %>
                 </a>
@@ -58,28 +58,28 @@
           </div>
         </div>
         <div class="btn-group btn-group-justified visible-xs visible-sm">
-          <a class="btn btn-default" href="<%= project_path(project) %>">
+          <a class="btn btn-default" href="<%= project_path(project) %>" data-turbo-frame="_top">
             <%= I18n.t(:"actions.show") %>
           </a>
-          <a class="btn btn-default" href="<%= new_invoice_path(project_id: project) %>" title="<%= I18n.t(:"actions.add_invoice") %>">
+          <a class="btn btn-default" href="<%= new_invoice_path(project_id: project) %>" data-turbo-frame="_top" title="<%= I18n.t(:"actions.add_invoice") %>">
             <i class="fa fa-plus"></i>
             <span class="hidden-xs hidden-sm"><%= I18n.t(:"actions.add_invoice") %></span>
           </a>
-          <a class="btn btn-default" href="<%= edit_project_path(project) %>" title="<%= I18n.t(:"actions.edit") %>">
+          <a class="btn btn-default" href="<%= edit_project_path(project) %>" data-turbo-frame="_top" title="<%= I18n.t(:"actions.edit") %>">
             <i class="fa fa-edit"></i>
             <span class="hidden-xs hidden-sm"><%= I18n.t(:"actions.edit") %></span>
           </a>
-          <a class="btn btn-default" href="<%= archive_v1_project_url(project) %>" data-redirect="<%= projects_path %>" data-method="PUT" data-notyConfirm="<%= I18n.t(:"messages.confirm.project.archive") %>" title="<%= I18n.t(:"actions.archive") %>">
+          <a class="btn btn-default" href="<%= archive_v1_project_url(project) %>" data-turbo-frame="_top" data-redirect="<%= projects_path %>" data-method="PUT" data-notyConfirm="<%= I18n.t(:"messages.confirm.project.archive") %>" title="<%= I18n.t(:"actions.archive") %>">
             <i class="fa fa-archive"></i>
             <span class="hidden-xs hidden-sm"><%= I18n.t(:"actions.archive") %></span>
           </a>
         </div>
       <% else %>
         <div class="pull-right hidden-xs hidden-sm">
-          <%= link_to I18n.t(:"actions.unarchive"), unarchive_project_path(project), class: "btn btn-default", data: { turbo_method: :put } %>
+          <%= link_to I18n.t(:"actions.unarchive"), unarchive_project_path(project), class: "btn btn-default", data: { turbo_method: :put, turbo_frame: "_top" } %>
         </div>
         <div class="btn-group btn-group-sm btn-group-justified visible-xs visible.sm">
-          <%= link_to I18n.t(:"actions.unarchive"), unarchive_project_path(project), class: "btn btn-default", data: { turbo_method: :put } %>
+          <%= link_to I18n.t(:"actions.unarchive"), unarchive_project_path(project), class: "btn btn-default", data: { turbo_method: :put, turbo_frame: "_top" } %>
         </div>
       <% end %>
     </div>
