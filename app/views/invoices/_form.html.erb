@@ -15,7 +15,7 @@
     </div>
     <div class="col-xs-12 col-md-4">
       <div class="form-group <%= form_error?(invoice, :date) %>">
-        <div class="input-group datepicker">
+        <div class="input-group datepicker" data-controller="datepicker">
           <%= form.label :date, class: "input-group-addon" %>
           <%= form.date_field :date, class: "form-control", "data-value" => form.object.date %>
           <span class="input-group-btn">
@@ -29,7 +29,7 @@
     </div>
     <div class="col-xs-12 col-md-4">
       <div class="form-group <%= form_error?(invoice, :pay_date) %>">
-        <div class="input-group datepicker">
+        <div class="input-group datepicker" data-controller="datepicker">
           <%= form.label :pay_date, class: "input-group-addon" %>
           <%= form.date_field :pay_date, disabled: !form.object.paid?, class: "form-control", "data-value" => form.object.pay_date %>
           <span class="input-group-btn">
@@ -51,7 +51,7 @@
       <%= form_errors invoice, :ref %>
     </div>
     <div class="col-xs-12 col-md-4 form-group">
-      <div class="input-group datepicker">
+      <div class="input-group datepicker" data-controller="datepicker">
         <%= form.label :payment_due_date, class: "input-group-addon" %>
         <%= form.date_field :payment_due_date, class: "form-control", "data-value" => form.object.payment_due_date %>
         <span class="input-group-btn">
@@ -62,7 +62,7 @@
       </div>
     </div>
     <div class="col-xs-12 col-md-4 form-group">
-      <div class="input-group datepicker">
+      <div class="input-group datepicker" data-controller="datepicker">
         <%= form.label :delivery_date, class: "input-group-addon" %>
         <%= form.date_field :delivery_date, class: "form-control", "data-value" => form.object.delivery_date %>
         <span class="input-group-btn">

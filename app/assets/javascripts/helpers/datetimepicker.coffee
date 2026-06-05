@@ -78,9 +78,12 @@ window.Timepicker =
 
     picker
 
-document.addEventListener "turbolinks:load", ->
-  $('.datepicker').each ->
-    Datepicker.init($(@).find('input'))
-
-  $('.timepicker').each ->
-    Timepicker.init($(@).find('input'))
+# Datepicker init is now driven by the Stimulus
+# `datepicker_controller` (app/frontend/controllers/) which connects
+# on element insertion — including Turbo Frame swaps. The
+# `.timepicker` global init never had a callsite outside AngularJS
+# (which calls `Timepicker.init` directly from
+# angular/base/directives/timepicker.coffee), so it's dropped too.
+#
+# `window.Datepicker` / `window.Timepicker` themselves stay below
+# until Phase 7 retires the AngularJS directives that consume them.

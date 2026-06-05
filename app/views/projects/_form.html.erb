@@ -15,7 +15,7 @@
   </div>
   <div class="row">
     <div class="col-xs-12 col-md-6 form-group <%= form_error?(project, :start_date) %>">
-      <div class="input-group datepicker">
+      <div class="input-group datepicker" data-controller="datepicker">
         <%= form.label :start_date, class: "input-group-addon" %>
         <%= form.date_field :start_date, class: "form-control", "data-value" => form.object.start_date %>
         <span class="input-group-btn">
@@ -27,7 +27,7 @@
     </div>
 
     <div class="col-xs-12 col-md-6 form-group <%= form_error?(project, :end_date) %>">
-      <div class="input-group datepicker">
+      <div class="input-group datepicker" data-controller="datepicker">
         <%= form.label :end_date, class: "input-group-addon" %>
         <%= form.date_field :end_date, class: "form-control", "data-value" => form.object.end_date %>
         <span class="input-group-btn">

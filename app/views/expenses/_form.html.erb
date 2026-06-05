@@ -30,7 +30,7 @@
     </div>
     <div class="col-xs-12 col-md-4 js-toggle-interval-once <%= expense.once? ? "" : "hide" %>">
       <div class="form-group <%= form_error?(expense, :date) %>">
-        <div class="input-group datepicker">
+        <div class="input-group datepicker" data-controller="datepicker">
           <%= form.label :date, class: "input-group-addon" %>
           <%= form.date_field :date, value: I18n.l(Time.zone.now, format: :datepicker), class: "form-control", "data-value" => form.object.date %>
           <span class="input-group-btn">
@@ -44,7 +44,7 @@
     </div>
     <div class="col-xs-12 col-md-4 js-toggle-interval-other <%= expense.once? ? "hide" : "" %>">
       <div class="form-group <%= form_error?(expense, :started_at) %>">
-        <div class="input-group datepicker">
+        <div class="input-group datepicker" data-controller="datepicker">
           <%= form.label :started_at, class: "input-group-addon" %>
           <%= form.date_field :started_at, value: I18n.l(Time.zone.now, format: :datepicker), class: "form-control", "data-value" => form.object.started_at %>
           <span class="input-group-btn">
@@ -58,7 +58,7 @@
     </div>
     <div class="col-xs-12 col-md-4 js-toggle-interval-other <%= expense.once? ? "hide" : "" %>">
       <div class="form-group <%= form_error?(expense, :ended_at) %>">
-        <div class="input-group datepicker">
+        <div class="input-group datepicker" data-controller="datepicker">
           <%= form.label :ended_at, class: "input-group-addon" %>
           <%= form.date_field :ended_at, value: I18n.l(Time.zone.now, format: :datepicker), class: "form-control", "data-value" => form.object.ended_at %>
           <span class="input-group-btn">
