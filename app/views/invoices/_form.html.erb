@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-xs-12 col-md-4">
       <div class="form-group selectize <%= form_error?(invoice, :project_id) %>">
-        <select class="js-selectize" name="invoice[project_id]" id="invoice_project_id" placeholder="<%= I18n.t(:"helpers.prompt.invoice.project_id") %>">
+        <select class="js-selectize" data-controller="selectize" name="invoice[project_id]" id="invoice_project_id" placeholder="<%= I18n.t(:"helpers.prompt.invoice.project_id") %>">
           <option></option>
           <% projects.each do |project| %>
             <option value="<%= project.id %>"<%= ' selected'.html_safe if project.id == @invoice.project_id %> data-data="<%= project.to_json %>">

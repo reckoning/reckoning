@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-xs-12 col-md-3">
       <div class="form-group selectize <%= form_error?(expense, :expense_type) %>">
-        <select class="js-selectize" name="expense[expense_type]" id="expense_expense_type" placeholder="<%= I18n.t(:"helpers.prompt.expense.expense_type") %>">
+        <select class="js-selectize" data-controller="selectize" name="expense[expense_type]" id="expense_expense_type" placeholder="<%= I18n.t(:"helpers.prompt.expense.expense_type") %>">
           <option></option>
           <% Expense::VALID_TYPES.each do |type| %>
             <option value="<%= type %>" <%= "selected" if type.to_s == expense.expense_type %>>
@@ -16,7 +16,7 @@
 
     <div class="col-xs-12 col-md-3">
       <div class="form-group selectize <%= form_error?(expense, :afa_type_id) %>">
-        <%= form.collection_select :afa_type_id, AfaType.i18n.order(name: :asc).all, :id, :name, { include_blank: "" }, { placeholder: I18n.t(:"helpers.prompt.expense.afa_type"), class: "js-selectize" } %>
+        <%= form.collection_select :afa_type_id, AfaType.i18n.order(name: :asc).all, :id, :name, { include_blank: "" }, { placeholder: I18n.t(:"helpers.prompt.expense.afa_type"), class: "js-selectize", data: { controller: "selectize" } } %>
         <%= form_errors expense, :afa_type_id %>
       </div>
     </div>
@@ -24,7 +24,7 @@
   <div class="row">
     <div class="col-xs-12 col-md-4">
       <div class="form-group selectize <%= form_error?(expense, :interval) %>">
-        <%= form.select :interval, Expense.intervals.keys.map { |w| [Expense.human_enum_name(:interval, w), w] }, { include_blank: I18n.t(:"helpers.prompt.expense.interval") }, { class: "js-selectize" } %>
+        <%= form.select :interval, Expense.intervals.keys.map { |w| [Expense.human_enum_name(:interval, w), w] }, { include_blank: I18n.t(:"helpers.prompt.expense.interval") }, { class: "js-selectize", data: { controller: "selectize" } } %>
         <%= form_errors expense, :interval %>
       </div>
     </div>
