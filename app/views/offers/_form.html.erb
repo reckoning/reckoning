@@ -15,7 +15,7 @@
     </div>
     <div class="col-xs-12 col-md-6">
       <div class="form-group <%= form_error?(offer, :date) %>">
-        <div class="input-group datepicker">
+        <div class="input-group datepicker" data-controller="datepicker">
           <%= form.label :date, class: "input-group-addon" %>
           <%= form.date_field :date, class: "form-control", "data-value" => form.object.date %>
           <span class="input-group-btn">

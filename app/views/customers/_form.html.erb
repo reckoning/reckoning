@@ -22,7 +22,7 @@
           <div class="col-xs-12 col-md-6">
             <div class="form-group">
               <%= form.label :employment_date %>
-              <div class="input-group datepicker">
+              <div class="input-group datepicker" data-controller="datepicker">
                 <%= form.date_field :employment_date, class: "form-control", "data-value" => form.object.employment_date %>
                 <span class="input-group-btn">
                   <button class="btn btn-default" type="button">
@@ -35,7 +35,7 @@
           <div class="col-xs-12 col-md-6">
             <div class="form-group">
               <%= form.label :employment_end_date %>
-              <div class="input-group datepicker">
+              <div class="input-group datepicker" data-controller="datepicker">
                 <%= form.date_field :employment_end_date, class: "form-control", "data-value" => form.object.employment_end_date %>
                 <span class="input-group-btn">
                   <button class="btn btn-default" type="button">
