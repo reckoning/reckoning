@@ -220,7 +220,15 @@ Devise.setup do |config|
   # should add them to the navigational formats lists.
   #
   # The "*/*" below is required to match Internet Explorer requests.
-  # config.navigational_formats = ["*/*", :html]
+  # `:turbo_stream` is registered by `turbo-rails`'s
+  # `text/vnd.turbo-stream.html` MIME — without it here, Devise's
+  # `FailureApp#http_auth?` returns true for Turbo-submitted forms
+  # (since `:turbo_stream` isn't in the default `[:html]` list), and
+  # auth failures answer with a 401 instead of recalling the
+  # controller action with `flash.now[:alert]`. The user-visible
+  # symptom was: failed sign-ins showed no noty error toast after
+  # Turbo Drive enabled in Phase 4b.
+  config.navigational_formats = ["*/*", :html, :turbo_stream]
 
   # The default HTTP method used to sign out a resource. Default is :delete.
   config.sign_out_via = :delete
