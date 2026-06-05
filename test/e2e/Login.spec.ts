@@ -12,7 +12,7 @@ test.describe("Login", () => {
 
     await page.locator("input[name='user[email]']").fill("will@star.fleet")
     await page.locator("input[name='user[password]']").fill("enterprise")
-    await page.locator("button[type='submit']").click()
+    await page.getByTestId("submit-login").click()
 
     // The signed-in chrome renders `.user-email` with the current
     // user's email — defined in app/views/layouts/_user_nav.html.erb.
@@ -24,7 +24,7 @@ test.describe("Login", () => {
 
     await page.locator("input[name='user[email]']").fill("will@star.fleet")
     await page.locator("input[name='user[password]']").fill("definitely-not-enterprise")
-    await page.locator("button[type='submit']").click()
+    await page.getByTestId("submit-login").click()
 
     // Devise's failure_app re-renders the sign-in form with
     // `flash[:alert]`, which the layout writes onto `<body data-error="…">`
