@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-xs-12 col-md-6">
       <div class="form-group selectize <%= form_error?(project, :customer_id) %>">
-        <%= form.collection_select :customer_id, customers, :id, :name, { include_blank: "" }, { placeholder: I18n.t(:"helpers.prompt.project.customer_id"), class: "js-customer-selectize" } %>
+        <%= form.collection_select :customer_id, customers, :id, :name, { include_blank: "" }, { placeholder: I18n.t(:"helpers.prompt.project.customer_id"), class: "js-customer-selectize", data: { controller: "customer-selectize" } } %>
         <%= form_errors project, :customer_id %>
       </div>
     </div>
@@ -83,7 +83,7 @@
     </div>
     <div class="col-xs-6 col-md-3">
       <div class="form-group selectize <%= form_error?(project, :round_up) %>">
-        <select class="js-customer-selectize" id="project_round_up" name="project[round_up]">
+        <select class="js-customer-selectize" data-controller="customer-selectize" id="project_round_up" name="project[round_up]">
           <% Project::DEFAULT_ROUND_UP_OPTIONS.each do |key, value| %>
             <option value="<%= value %>"<%= ' selected'.html_safe if project.round_up.to_f == value %>>
               <%= key %>
