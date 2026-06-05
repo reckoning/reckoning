@@ -1,6 +1,6 @@
 <% path = "" unless defined?(path) %>
 <% active = "basic" unless defined?(active) %>
-<ul class="nav nav-tabs-vertical">
+<ul class="nav nav-tabs-vertical" data-controller="tabs">
   <li class="<%= "active" if active == "basic" %>">
     <a href="<%= "#{path}#basic" %>" data-toggle="<%= "tab" if path.blank? %>">
       <%= I18n.t("nav.subnav.user.basic") %>
