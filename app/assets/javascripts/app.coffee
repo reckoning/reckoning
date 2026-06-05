@@ -6,8 +6,10 @@ App.init = ->
   $('.btn.btn-loading').click ->
     $(@).button('loading')
 
-  Selectize = new App.Selectize()
-  Selectize.init()
+  # Selectize init is now driven by the Stimulus
+  # `selectize` / `customer-selectize` controllers
+  # (app/frontend/controllers/). The legacy `App.Selectize` class
+  # has been removed.
 
   Moment = new App.Moment()
   Moment.init()

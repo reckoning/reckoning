@@ -23,7 +23,7 @@
     <%= form.hidden_field :plan, value: params[:plan] || @account.plan %>
   <% else %>
     <div class="form-group selectize <%= form_error?(@account, :plan) %>">
-      <select class="js-selectize" name="account[plan]" id="account_plan">
+      <select class="js-selectize" data-controller="selectize" name="account[plan]" id="account_plan">
         <% Plan.all.each do |plan| %>
           <option value="<%= plan.code %>"<%= ' selected'.html_safe if plan.code == @account.plan || plan.code == params[:plan] %> data-data="<%= plan.to_builder.target! %>">
             <%= plan.name %>
