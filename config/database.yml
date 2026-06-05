@@ -10,9 +10,6 @@ production: &default
 staging:
   <<: *default
 
-ci:
-  <<: *default
-
 development:
   <<: *default
   database: <%= ENV["DB_NAME"] || "reckoning_dev#{ENV['WORKTREE_SUFFIX']}" %>

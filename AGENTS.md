@@ -59,6 +59,8 @@ Done (Phases 1–4 + Phase 5 in progress):
   (#871, #872)
 - Phase 5 — Turbo Frames on CRUD index pages
   (projects #873, offers #874, invoices #875)
+- Phase 8 — Cypress 12 → Playwright; cleared the last 11 dev-only
+  npm vulns
 
 Still legacy (to be removed in later phases):
 
@@ -71,7 +73,6 @@ Still legacy (to be removed in later phases):
 - CoffeeScript (`*.coffee` files, `coffee-rails` gem) — Phase 9
 - Sprockets `//= require` manifests — Phase 9
 - bower-rails — Phase 7
-- Cypress 12 — Phase 8, replaced by Playwright
 - i18n-js v3 — Phase 10
 
 ### Hotwire conventions
@@ -122,7 +123,7 @@ reckoning/
 │   ├── data/              # data_migrate migrations
 │   └── seeds.rb
 ├── test/                  # Minitest (fixtures + integration)
-├── cypress/               # e2e (Cypress 12 — being replaced)
+│   └── e2e/              # Playwright specs (alongside the Minitest suite)
 ├── lib/
 ├── docker/
 ├── Dockerfile             # multi-stage prod image
@@ -152,7 +153,7 @@ foreman start -f Procfile.dev        # Rails + sidekiq + (legacy) assets
 ```bash
 bundle exec rails test                                    # full minitest suite
 bundle exec rails test test/path/to/specific_test.rb      # single file
-pnpm test:e2e                                             # cypress (legacy)
+pnpm test:e2e                                             # playwright
 ```
 
 The CI runs tests sharded with `knapsack` (4 shards). To run a single
@@ -235,7 +236,7 @@ The auto-deploy on push-to-main is **disabled** (workflow has
 - `ruby-audit` — `bundle-audit check` (no ignores; sinatra ReDoS
   cleared by #821)
 - `seeds` — `rails db:seed` must succeed against a fresh DB
-- `e2e-tests` — Cypress
+- `e2e-tests` — Playwright
 - The `deploy` job is currently `if: false && ...` (gated off until
   Kamal cutover)
 

@@ -4,8 +4,12 @@
   "private": true,
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "test:e2e": "cypress run --browser chrome --headless",
-    "test:e2e:report": "generate-mochawesome-report --jsonDir test/reports/e2e --output test/reports/e2e/html --charts"
+    "test:e2e": "pnpm test:e2e:run",
+    "test:e2e:run": "playwright test",
+    "test:e2e:open": "playwright test --ui",
+    "test:e2e:report": "playwright show-report",
+    "test:e2e:install": "playwright install --with-deps",
+    "test:e2e:startserver": "RAILS_ENV=test WORKER_COUNT=0 bundle exec puma -C config/puma.rb"
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
@@ -14,8 +18,8 @@
     "puppeteer": "^23.0.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "@tailwindcss/vite": "^4.3.0",
-    "cypress": "^12.17.4",
     "tailwindcss": "^4.3.0",
     "typescript": "^5.2.2",
     "vite": "^7.3.5",
@@ -23,7 +27,7 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
-      "cypress",
+      "@playwright/test",
       "esbuild",
       "puppeteer"
     ]

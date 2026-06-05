@@ -6,16 +6,18 @@ on:
 jobs:
   e2e-tests:
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.60.0-noble
 
     env:
-      CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
       DB_NAME: fleetyards_test
-      DB_HOST: 127.0.0.1
+      DB_HOST: postgres
       DB_PORT: 5432
       DB_USER: root
       DB_PASSWORD: root
       TEST_SEEDS: 1
-      RAILS_ENV: ci
+      RAILS_ENV: test
+      WORKER_COUNT: 0
       RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
       # Test-only fallback values so Dependabot/fork PRs (which don't
       # inherit repo secrets) still boot Rails. Production / staging
@@ -29,6 +31,9 @@ jobs:
       RAILS_SERVE_STATIC_FILES: 1
       DISABLE_DATABASE_ENVIRONMENT_CHECK: 1
       JOBS: 1
+      PORT: 8270
+      PLAYWRIGHT_BASE_URL: http://localhost:8270
+      NODE_OPTIONS: "--max_old_space_size=4096"
 
     services:
       postgres:
@@ -37,8 +42,6 @@ jobs:
           POSTGRES_USER: root
           POSTGRES_DB: fleetyards_test
           POSTGRES_PASSWORD: root
-        ports:
-          - 5432:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -46,8 +49,6 @@ jobs:
           --health-retries 5
       redis:
         image: redis:7.4-alpine
-        ports:
-          - 6379:6379
         options: >-
           --health-cmd "redis-cli ping"
           --health-interval 10s
@@ -56,6 +57,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
+      - name: Install system dependencies
+        run: apt-get update && apt-get install -y --no-install-recommends libyaml-dev libvips-dev
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
@@ -67,17 +70,11 @@ jobs:
         run: bundle exec rails assets:precompile
       - name: Prefill DB
         run: bundle exec rails db:seed
-      - name: Cypress run
-        uses: cypress-io/github-action@v7
+      - name: Run e2e Tests
+        run: pnpm test:e2e:run
+      - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          start: bundle exec puma -C config/puma.rb
-          wait-on: "http://localhost:8270"
-          wait-on-timeout: 120
-          browser: chrome
-          # Recording + parallel need CYPRESS_RECORD_KEY, which Dependabot
-          # / fork PRs don't have. Fall back to a single-runner local run.
-          record: ${{ secrets.CYPRESS_RECORD_KEY != '' }}
-          parallel: ${{ secrets.CYPRESS_RECORD_KEY != '' }}
-        env:
-          PORT: 8270
-          CYPRESS_BASE_URL: http://localhost:8270
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

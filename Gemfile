@@ -159,4 +159,10 @@ group :development, :test do
   gem "byebug", platform: :mri
 
   gem "knapsack"
+
+  # Bridges the Playwright e2e suite to Rails-side helpers
+  # (DB clean, scenario seeding, eval). See
+  # `test/e2e/app_commands/` for the registered commands and
+  # `test/e2e/support/on-rails.ts` for the JS client.
+  gem "cypress-on-rails"
 end
