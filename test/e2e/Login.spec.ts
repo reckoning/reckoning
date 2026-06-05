@@ -29,6 +29,8 @@ test.describe("Login", () => {
     // Devise's failure_app re-renders the sign-in form with
     // `flash[:alert]`, which the layout writes onto `<body data-error="…">`
     // and helpers/noty.coffee shows as a `.noty_type__error` toast.
-    await notification.error("Invalid Email or password.")
+    // The default locale is :de — see `config/locales/de/devise.yml`
+    // (`devise.failure.invalid`).
+    await notification.error("Ungültige Anmeldedaten.")
   })
 })
