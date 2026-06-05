@@ -123,7 +123,7 @@ reckoning/
 │   ├── data/              # data_migrate migrations
 │   └── seeds.rb
 ├── test/                  # Minitest (fixtures + integration)
-├── e2e/                   # Playwright specs
+│   └── e2e/              # Playwright specs (alongside the Minitest suite)
 ├── lib/
 ├── docker/
 ├── Dockerfile             # multi-stage prod image
