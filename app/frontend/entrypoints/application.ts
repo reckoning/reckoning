@@ -16,6 +16,8 @@
 import "@hotwired/turbo"
 import { Application } from "@hotwired/stimulus"
 
+import { configureAccounting, installAccountingGlobal } from "../lib/accounting"
+
 // PDF.js v4+ ships ESM-only. Lazy-loaded so the 1.5 MB pdfjs core +
 // worker don't ship on pages that never render a PDF (most of them).
 // Triggered by `dispatchEvent(new CustomEvent("pdfjs:request"))` —
@@ -47,6 +49,19 @@ document.addEventListener("pdfjs:request", async () => {
 document.addEventListener("turbo:load", () => {
   document.dispatchEvent(new CustomEvent("turbolinks:load"))
 })
+
+// accounting.js was previously loaded from Sprockets
+// (`//= require accounting.js/accounting`) and configured by
+// `App.Accounting.init` (CoffeeScript). Now it ships from npm via
+// Vite; we configure the currency/number formats from the
+// Sprockets-set `window.I18n` and re-expose `window.accounting`
+// for the remaining CoffeeScript consumer (`app/chart.coffee`).
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const i18nGlobal = (window as any).I18n
+if (i18nGlobal) {
+  configureAccounting(i18nGlobal)
+  installAccountingGlobal()
+}
 
 const application = Application.start()
 
