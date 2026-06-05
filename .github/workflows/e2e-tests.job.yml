@@ -16,7 +16,8 @@ jobs:
       DB_USER: root
       DB_PASSWORD: root
       TEST_SEEDS: 1
-      RAILS_ENV: ci
+      RAILS_ENV: test
+      WORKER_COUNT: 0
       RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
       # Test-only fallback values so Dependabot/fork PRs (which don't
       # inherit repo secrets) still boot Rails. Production / staging

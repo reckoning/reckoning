@@ -9,7 +9,7 @@
     "test:e2e:open": "playwright test --ui",
     "test:e2e:report": "playwright show-report",
     "test:e2e:install": "playwright install --with-deps",
-    "test:e2e:startserver": "RAILS_ENV=test bundle exec puma -C config/puma.rb"
+    "test:e2e:startserver": "RAILS_ENV=test WORKER_COUNT=0 bundle exec puma -C config/puma.rb"
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
