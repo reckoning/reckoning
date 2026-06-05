@@ -1,4 +1,7 @@
-.turbolinks-progress-bar {
+// Turbo Drive's top-of-page progress bar (Phase 4b). The nprogress
+// styles below stay for AngularJS, which still uses NProgress in
+// angular/base/app.coffee until Phase 7.
+.turbo-progress-bar {
   background-color: $navbar-active !important;
 }
 
