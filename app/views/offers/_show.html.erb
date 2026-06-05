@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="col-xs-12 col-md-4 name">
-      <a class="plain" href="<%= offer_path(offer) %>">
+      <a class="plain" href="<%= offer_path(offer) %>" data-turbo-frame="_top">
         <%= offer.title %>
       </a>
     </div>
@@ -38,14 +38,14 @@
           <ul class="dropdown-menu dropdown-menu-right" role="menu">
             <% if can? :read, offer %>
               <li>
-                <a href="<%= offer_path(offer) %>">
+                <a href="<%= offer_path(offer) %>" data-turbo-frame="_top">
                   <%= I18n.t(:"actions.show") %>
                 </a>
               </li>
             <% end %>
             <% if can? :update, offer %>
               <li>
-                <a href="<%= edit_offer_path(offer) %>">
+                <a href="<%= edit_offer_path(offer) %>" data-turbo-frame="_top">
                   <i class="fa fa-edit"></i>
                   <%= I18n.t(:"actions.edit") %>
                 </a>
@@ -54,7 +54,7 @@
             <% if can? :destroy, offer %>
               <li class="divider"></li>
               <li>
-                <a href="<%= offer_path(offer) %>" data-method="DELETE" data-notyConfirm="<%= I18n.t(:"messages.confirm.delete") %>">
+                <a href="<%= offer_path(offer) %>" data-turbo-frame="_top" data-method="DELETE" data-notyConfirm="<%= I18n.t(:"messages.confirm.delete") %>">
                   <i class="fa fa-trash"></i>
                   <%= I18n.t(:"actions.delete") %>
                 </a>
@@ -65,17 +65,17 @@
       </div>
 
       <div class="btn-group btn-group-justified visible-xs visible-sm">
-        <a class="btn btn-default" href="<%= offer_path(offer) %>">
+        <a class="btn btn-default" href="<%= offer_path(offer) %>" data-turbo-frame="_top">
           <%= I18n.t(:"actions.show") %>
         </a>
         <% if can? :update, offer %>
-          <a class="btn btn-default" href="<%= edit_offer_path(offer) %>">
+          <a class="btn btn-default" href="<%= edit_offer_path(offer) %>" data-turbo-frame="_top">
             <i class="fa fa-edit"></i>
             <span class="hidden-xs hidden-sm"><%= I18n.t(:"actions.edit") %></span>
           </a>
         <% end %>
         <% if can? :destroy, offer %>
-          <a class="btn btn-danger" href="<%= offer_path(offer) %>" data-method="DELETE" data-notyConfirm="<%= I18n.t(:"messages.confirm.delete") %>">
+          <a class="btn btn-danger" href="<%= offer_path(offer) %>" data-turbo-frame="_top" data-method="DELETE" data-notyConfirm="<%= I18n.t(:"messages.confirm.delete") %>">
             <i class="fa fa-trash"></i>
             <span class="hidden-xs hidden-sm"><%= I18n.t(:"actions.delete") %></span>
           </a>
