@@ -33,7 +33,13 @@ test.describe("Login", () => {
     // `turbo:render` (not just `turbo:load`) so the noty handler
     // re-runs after the form-error response. Default locale is :de —
     // see `config/locales/de/devise.yml` (`devise.failure.invalid`).
-    await notification.error("Ungültige Anmeldedaten.")
+    //
+    // Diagnostic: first wait for the form to come back, then check
+    // body data-error before the toast assertion. This isolates
+    // whether Devise's recall ran (body attr set) from whether the
+    // noty handler fired (toast visible).
     await expect(page).toHaveURL(/\/signin$/)
+    await expect(page.locator("body")).toHaveAttribute("data-error", /Ungültige Anmeldedaten/)
+    await notification.error("Ungültige Anmeldedaten.")
   })
 })
