@@ -111,7 +111,7 @@
                      ["{company}", "Name des Kunden"]
                    ].each do |code, label| %>
                   <div class="list-group-item">
-                    <code title="<%= I18n.t(:"actions.paste") %>" data-target="#customer_email_template" data-toggle="tooltip">
+                    <code title="<%= I18n.t(:"actions.paste") %>" data-target="#customer_email_template" data-toggle="tooltip" data-controller="tooltip">
                       <%= code %>
                     </code>
                     <%= label %>

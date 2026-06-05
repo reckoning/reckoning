@@ -1,18 +1,13 @@
 window.App ||= {}
 
 App.init = ->
-  $('[data-toggle=tooltip]').tooltip()
-
-  $('.btn.btn-loading').click ->
-    $(@).button('loading')
-
-  # Selectize init is now driven by the Stimulus
-  # `selectize` / `customer-selectize` controllers
-  # (app/frontend/controllers/). The legacy `App.Selectize` class
-  # has been removed.
-
-  Moment = new App.Moment()
-  Moment.init()
+  # Tooltip / selectize / btn-loading / moment.locale init have
+  # all moved to Stimulus controllers + the Vite entrypoint
+  # (`app/frontend/controllers/tooltip_controller.ts`,
+  # `loading-button_controller.ts`, `selectize_controller.ts`,
+  # `app/frontend/lib/moment-locale.ts`). `App.init` is now a
+  # no-op but stays so the existing `turbolinks:load` callsite
+  # has something to call until app.coffee itself ports to Vite.
 
 App.initInternal = ->
   # accounting.js + its settings are now configured by

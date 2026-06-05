@@ -9,7 +9,7 @@
     <%= form_errors resource, :email %>
   </div>
 
-  <button class="btn-block btn btn-lg btn-primary btn-loading" data-loading-text="<%= I18n.t(:"actions.loading") %>">
+  <button class="btn-block btn btn-lg btn-primary btn-loading" data-controller="loading-button" data-loading-text="<%= I18n.t(:"actions.loading") %>">
     <%= I18n.t(:"actions.reset_password") %>
   </button>
 <% end %>
