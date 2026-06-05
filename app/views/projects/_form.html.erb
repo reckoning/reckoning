@@ -1,4 +1,4 @@
-<%= form_for project do |form| %>
+<%= form_for project, html: { data: { controller: "project-budget" } } do |form| %>
   <div class="row">
     <div class="col-xs-12 col-md-6">
       <div class="form-group selectize <%= form_error?(project, :customer_id) %>">
@@ -42,7 +42,7 @@
     <div class="col-xs-6 col-md-3 form-group <%= form_error?(project, :rate) %>">
       <%= form.label :rate %>
       <div class="input-group">
-        <%= form.number_field :rate, class: "form-control text-right" %>
+        <%= form.number_field :rate, class: "form-control text-right", data: { "project-budget-target": "rate", action: "change->project-budget#rateChanged" } %>
         <span class="input-group-addon">€/Std.</span>
       </div>
       <%= form_errors project, :rate %>
@@ -51,7 +51,7 @@
     <div class="col-xs-6 col-md-3 form-group <%= form_error?(project, :budget) %>">
       <%= form.label :budget %>
       <div class="input-group">
-        <%= form.number_field :budget, class: "form-control text-right", step: "any" %>
+        <%= form.number_field :budget, class: "form-control text-right", step: "any", data: { "project-budget-target": "budget", action: "change->project-budget#budgetChanged" } %>
         <span class="input-group-addon">€</span>
       </div>
       <%= form_errors project, :budget %>
@@ -60,7 +60,7 @@
     <div class="col-xs-6 col-md-3 form-group <%= form_error?(project, :budget_hours) %>">
       <%= form.label :budget_hours %>
       <div class="input-group">
-        <%= form.number_field :budget_hours, class: "form-control text-right", step: "any" %>
+        <%= form.number_field :budget_hours, class: "form-control text-right", step: "any", data: { "project-budget-target": "budgetHours", action: "change->project-budget#budgetHoursChanged" } %>
         <span class="input-group-addon">h</span>
       </div>
       <%= form_errors project, :budget_hours %>

@@ -1,4 +1,4 @@
-<%= form_for expense, html: { id: "expense-form" } do |form| %>
+<%= form_for expense, html: { id: "expense-form", data: { controller: "expense-interval" } } do |form| %>
   <div class="row">
     <div class="col-xs-12 col-md-3">
       <div class="form-group selectize <%= form_error?(expense, :expense_type) %>">
@@ -24,11 +24,11 @@
   <div class="row">
     <div class="col-xs-12 col-md-4">
       <div class="form-group selectize <%= form_error?(expense, :interval) %>">
-        <%= form.select :interval, Expense.intervals.keys.map { |w| [Expense.human_enum_name(:interval, w), w] }, { include_blank: I18n.t(:"helpers.prompt.expense.interval") }, { class: "js-selectize", data: { controller: "selectize" } } %>
+        <%= form.select :interval, Expense.intervals.keys.map { |w| [Expense.human_enum_name(:interval, w), w] }, { include_blank: I18n.t(:"helpers.prompt.expense.interval") }, { class: "js-selectize", data: { controller: "selectize", action: "change->expense-interval#toggle" } } %>
         <%= form_errors expense, :interval %>
       </div>
     </div>
-    <div class="col-xs-12 col-md-4 js-toggle-interval-once <%= expense.once? ? "" : "hide" %>">
+    <div class="col-xs-12 col-md-4 js-toggle-interval-once <%= expense.once? ? "" : "hide" %>" data-expense-interval-target="once">
       <div class="form-group <%= form_error?(expense, :date) %>">
         <div class="input-group datepicker" data-controller="datepicker">
           <%= form.label :date, class: "input-group-addon" %>
@@ -42,7 +42,7 @@
         <%= form_errors expense, :date, "input-group-btn-feedback" %>
       </div>
     </div>
-    <div class="col-xs-12 col-md-4 js-toggle-interval-other <%= expense.once? ? "hide" : "" %>">
+    <div class="col-xs-12 col-md-4 js-toggle-interval-other <%= expense.once? ? "hide" : "" %>" data-expense-interval-target="other">
       <div class="form-group <%= form_error?(expense, :started_at) %>">
         <div class="input-group datepicker" data-controller="datepicker">
           <%= form.label :started_at, class: "input-group-addon" %>
@@ -56,7 +56,7 @@
         <%= form_errors expense, :started_at, "input-group-btn-feedback" %>
       </div>
     </div>
-    <div class="col-xs-12 col-md-4 js-toggle-interval-other <%= expense.once? ? "hide" : "" %>">
+    <div class="col-xs-12 col-md-4 js-toggle-interval-other <%= expense.once? ? "hide" : "" %>" data-expense-interval-target="other">
       <div class="form-group <%= form_error?(expense, :ended_at) %>">
         <div class="input-group datepicker" data-controller="datepicker">
           <%= form.label :ended_at, class: "input-group-addon" %>
