@@ -25,6 +25,5 @@
 //= require_tree ./app
 //= require helper
 //= require_tree ./helpers
-//= require geoLocation
 //= require ./angular/init
 //= require_tree ./angular
