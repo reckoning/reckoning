@@ -8,7 +8,6 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
       DB_NAME: fleetyards_test
       DB_HOST: 127.0.0.1
       DB_PORT: 5432
@@ -29,6 +28,8 @@ jobs:
       RAILS_SERVE_STATIC_FILES: 1
       DISABLE_DATABASE_ENVIRONMENT_CHECK: 1
       JOBS: 1
+      PORT: 8270
+      PLAYWRIGHT_BASE_URL: http://localhost:8270
 
     services:
       postgres:
@@ -67,17 +68,27 @@ jobs:
         run: bundle exec rails assets:precompile
       - name: Prefill DB
         run: bundle exec rails db:seed
-      - name: Cypress run
-        uses: cypress-io/github-action@v7
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Boot Rails
+        run: bundle exec puma -C config/puma.rb &
+      - name: Wait for Rails to be ready
+        run: |
+          for i in $(seq 1 60); do
+            if curl -sf "$PLAYWRIGHT_BASE_URL" > /dev/null; then
+              echo "Rails up"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Rails did not boot within 120s"
+          exit 1
+      - name: Playwright run
+        run: pnpm exec playwright test
+      - name: Upload report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
         with:
-          start: bundle exec puma -C config/puma.rb
-          wait-on: "http://localhost:8270"
-          wait-on-timeout: 120
-          browser: chrome
-          # Recording + parallel need CYPRESS_RECORD_KEY, which Dependabot
-          # / fork PRs don't have. Fall back to a single-runner local run.
-          record: ${{ secrets.CYPRESS_RECORD_KEY != '' }}
-          parallel: ${{ secrets.CYPRESS_RECORD_KEY != '' }}
-        env:
-          PORT: 8270
-          CYPRESS_BASE_URL: http://localhost:8270
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

@@ -23,6 +23,8 @@ gems/*
 # test files
 coverage/*
 test/reports/*
+playwright-report/
+test-results/
 
 # app files
 files/*
