@@ -14,6 +14,9 @@ importers:
       '@hotwired/turbo':
         specifier: ^8.0.23
         version: 8.0.23
+      accounting:
+        specifier: ^0.4.1
+        version: 0.4.1
       pdfjs-dist:
         specifier: 4.10.38
         version: 4.10.38
@@ -535,6 +538,9 @@ packages:
 
   '@types/yauzl@2.10.0':
     resolution: {integrity: sha512-Cn6WYCm0tXv8p6k+A8PvbDG763EDpBoTzHdA+Q/MF6H3sapGjCm9NzoaJncJS9tUKSuCoDs9XHxYYsQDgxR6kw==}
+
+  accounting@0.4.1:
+    resolution: {integrity: sha512-RU6KY9Y5wllyaCNBo1W11ZOTnTHMMgOZkIwdOOs6W5ibMTp72i4xIbEA48djxVGqMNTUNbvrP/1nWg5Af5m2gQ==}
 
   agent-base@7.1.4:
     resolution: {integrity: sha512-MnA+YT8fwfJPgBx3m60MNqakm30XOkyIoH1y6huTQvC0PwZG7ki8NacLBcrPbNoo8vEZy7Jpuk7+jMO+CUovTQ==}
@@ -1476,6 +1482,8 @@ snapshots:
     dependencies:
       '@types/node': 18.15.11
     optional: true
+
+  accounting@0.4.1: {}
 
   agent-base@7.1.4: {}
 

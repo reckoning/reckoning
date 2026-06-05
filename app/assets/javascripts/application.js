@@ -13,7 +13,6 @@
 //= require i18n/translations
 //= require moment/moment
 //= require twix/dist/twix
-//= require accounting.js/accounting
 //= require nprogress
 //= require underscore
 //= require d3

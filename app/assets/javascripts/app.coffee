@@ -15,8 +15,10 @@ App.init = ->
   Moment.init()
 
 App.initInternal = ->
-  Accounting = new App.Accounting()
-  Accounting.init()
+  # accounting.js + its settings are now configured by
+  # app/frontend/lib/accounting.ts on Vite bundle parse, before
+  # this handler runs (turbo:load fires after DOMContentLoaded).
+  # `window.accounting` is set there too.
 
   # pdfjs v4 is lazy-loaded from the Vite entrypoint to keep it off
   # pages that don't render PDFs (most of them). Fire the request
