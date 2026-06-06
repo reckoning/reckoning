@@ -24,8 +24,15 @@ test.describe("Login", () => {
     // response Devise returns to a Turbo-style submission.
     // This isolates "did Devise set the flash" from "did Turbo +
     // noty render the toast".
-    await page.goto("/signin")
-    const csrf = await page.locator("meta[name='csrf-token']").getAttribute("content")
+    const gotoResponse = await page.goto("/signin")
+    const gotoStatus = gotoResponse?.status() ?? 0
+    const initialHtml = await page.content()
+    await testInfo.attach("initial-signin-page", {
+      body: `goto status: ${gotoStatus}\nurl: ${page.url()}\ntitle: ${await page.title()}\nhtml first 3000 chars:\n${initialHtml.slice(0, 3000)}`,
+      contentType: "text/plain",
+    })
+    const csrf =
+      (await page.locator("meta[name='csrf-token']").getAttribute("content", { timeout: 5000 })) ?? ""
     const directResponse = await page.request.post("/signin", {
       headers: {
         Accept: "text/vnd.turbo-stream.html, text/html, application/xhtml+xml",
