@@ -58,9 +58,14 @@ Done (Phases 1–4 + Phase 5 in progress):
 - Phase 4 — Turbo Drive + Stimulus baseline; Turbolinks gone
   (#871, #872)
 - Phase 5 — Turbo Frames on CRUD index pages
-  (projects #873, offers #874, invoices #875)
-- Phase 8 — Cypress 12 → Playwright; cleared the last 11 dev-only
-  npm vulns
+  (projects #873, offers #874, invoices #875) + customer edit
+  form (#888)
+- Phase 6a — Vue 3 islands foundation: `vue`, `@vitejs/plugin-vue`,
+  `app/frontend/islands/<name>/`, the `mountIslands(registry)`
+  helper, and a `hello` smoke-test SFC. Actual timesheet +
+  timers-calendar ports come next.
+- Phase 8 — Cypress 12 → Playwright + cypress-on-rails bridge;
+  cleared the last 11 dev-only npm vulns
 
 Still legacy (to be removed in later phases):
 

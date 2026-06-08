@@ -17,7 +17,7 @@
       "@/*": ["./app/frontend/*"],
       "~/*": ["*"]
     },
-    "types": ["cypress", "node", "vitest/globals", "vite/client"]
+    "types": ["node", "vite/client"]
   },
   "include": [
     "@types/*",
@@ -25,7 +25,6 @@
     "app/frontend/**/*.tsx",
     "app/frontend/**/*.vue",
     "app/frontend/**/*.d.ts",
-    "test/javascript/**/*.ts",
-    "cypress/**/*.ts"
+    "test/e2e/**/*.ts"
   ]
 }

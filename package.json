@@ -16,15 +16,18 @@
     "@hotwired/turbo": "^8.0.23",
     "accounting": "^0.4.1",
     "pdfjs-dist": "4.10.38",
-    "puppeteer": "^23.0.0"
+    "puppeteer": "^23.0.0",
+    "vue": "^3.5.35"
   },
   "devDependencies": {
     "@playwright/test": "^1.60.0",
     "@tailwindcss/vite": "^4.3.0",
+    "@vitejs/plugin-vue": "^6.0.7",
     "tailwindcss": "^4.3.0",
     "typescript": "^5.2.2",
     "vite": "^7.3.5",
-    "vite-plugin-ruby": "^5.2.2"
+    "vite-plugin-ruby": "^5.2.2",
+    "vue-tsc": "^3.3.4"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

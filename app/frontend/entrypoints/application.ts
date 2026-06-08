@@ -18,6 +18,8 @@ import { Application } from "@hotwired/stimulus"
 
 import { configureAccounting, installAccountingGlobal } from "../lib/accounting"
 import { configureMomentLocale } from "../lib/moment-locale"
+import { mountIslands } from "../lib/mount-islands"
+import Hello from "../islands/hello/Hello.vue"
 
 // PDF.js v4+ ships ESM-only. Lazy-loaded so the 1.5 MB pdfjs core +
 // worker don't ship on pages that never render a PDF (most of them).
@@ -89,6 +91,19 @@ if (i18nGlobal) {
 // chart.coffee + AngularJS as a global). Just configure the locale
 // + ISO week here, replacing what `App.Moment.init` used to do.
 configureMomentLocale()
+
+// Phase 6 — Vue 3 islands. The real timesheet + timers-calendar
+// ports live under `app/frontend/islands/<name>/`; for now we just
+// ship the foundation: Vue is installed, Vite knows how to compile
+// `.vue` SFCs, and the mounter walks `[data-island]` elements on
+// every Turbo navigation. The placeholder `hello` island acts as
+// a smoke test — drop `<div data-island="hello"></div>` into any
+// view and the SFC renders.
+const islandRegistry = {
+  hello: Hello,
+}
+mountIslands(islandRegistry)
+document.addEventListener("turbo:load", () => mountIslands(islandRegistry))
 
 const application = Application.start()
 
