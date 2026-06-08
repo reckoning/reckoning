@@ -27,10 +27,17 @@ test.describe("Login", () => {
     const gotoResponse = await page.goto("/signin")
     const gotoStatus = gotoResponse?.status() ?? 0
     const initialHtml = await page.content()
-    await testInfo.attach("initial-signin-page", {
-      body: `goto status: ${gotoStatus}\nurl: ${page.url()}\ntitle: ${await page.title()}\nhtml first 3000 chars:\n${initialHtml.slice(0, 3000)}`,
-      contentType: "text/plain",
-    })
+    const headSlice = initialHtml.slice(0, 4000).replace(/\n\s*/g, " ")
+    const csrfMatch = initialHtml.match(/<meta[^>]*name=["']csrf-token["'][^>]*>/i)?.[0]
+    const csrfParamMatch = initialHtml.match(/<meta[^>]*name=["']csrf-param["'][^>]*>/i)?.[0]
+    // eslint-disable-next-line no-console
+    console.log("[DIAG] goto status:", gotoStatus, "url:", page.url())
+    // eslint-disable-next-line no-console
+    console.log("[DIAG] csrf-token meta:", csrfMatch ?? "(not found)")
+    // eslint-disable-next-line no-console
+    console.log("[DIAG] csrf-param meta:", csrfParamMatch ?? "(not found)")
+    // eslint-disable-next-line no-console
+    console.log("[DIAG] HEAD slice 4000:", headSlice)
     const csrf =
       (await page.locator("meta[name='csrf-token']").getAttribute("content", { timeout: 5000 })) ?? ""
     const directResponse = await page.request.post("/signin", {
