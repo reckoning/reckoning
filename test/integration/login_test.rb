@@ -41,7 +41,11 @@ class LoginTest < ActionDispatch::IntegrationTest
       }
     }
 
-    assert_response :ok
+    # Devise.responder.error_status is set to :unprocessable_entity
+    # (422) in config/initializers/devise.rb so Turbo Drive renders
+    # the form-error response in place. Was :ok (200) prior — the
+    # default for Devise 5.x without the override.
+    assert_response :unprocessable_entity
 
     assert_equal I18n.t(:"devise.failure.invalid"), flash[:alert]
   end

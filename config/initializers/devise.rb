@@ -230,6 +230,21 @@ Devise.setup do |config|
   # Turbo Drive enabled in Phase 4b.
   config.navigational_formats = ["*/*", :html, :turbo_stream]
 
+  # Devise 5.x defaults its responder's `error_status` to `:ok` (200)
+  # and `redirect_status` to `:found` (302). Turbo Drive treats a
+  # `200 OK` response to a form submission as "everything's fine,
+  # please redirect" and does NOT replace the page body — so the
+  # `flash.now[:alert]` rendered into `<body data-error="…">`
+  # never reaches the user. Override both to the Turbo-friendly
+  # codes:
+  #
+  # - `error_status = :unprocessable_entity` (422) → Turbo replaces
+  #   the body in place with the re-rendered form + flash.
+  # - `redirect_status = :see_other` (303) → POST-then-GET pattern
+  #   Turbo expects for redirects after successful submits.
+  config.responder.error_status = :unprocessable_entity
+  config.responder.redirect_status = :see_other
+
   # The default HTTP method used to sign out a resource. Default is :delete.
   config.sign_out_via = :delete
 

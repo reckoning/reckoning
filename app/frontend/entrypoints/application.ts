@@ -43,13 +43,34 @@ document.addEventListener("pdfjs:request", async () => {
   document.dispatchEvent(new CustomEvent("pdfjs:ready"))
 })
 
-// `turbo:load` fires once on the initial page load AND on every Turbo
-// navigation. Re-emit it as `turbolinks:load` so legacy scripts under
-// app/assets/javascripts/ (noty, charts, datepickers, the AngularJS
-// bootstraps, etc.) keep wiring themselves up after each navigation.
-document.addEventListener("turbo:load", () => {
+// Re-fire `turbolinks:load` so legacy scripts under
+// app/assets/javascripts/ (noty's flash reader, chart.coffee,
+// invoice/offer/project page initializers, the AngularJS
+// bootstraps, etc.) keep working under Turbo. We listen to both
+// events because each catches a different navigation shape:
+//
+// - `turbo:load`: initial page load + Turbo Drive visits.
+// - `turbo:render`: also fires after form-error responses (e.g.
+//   Devise's 422 on a failed sign-in), where `turbo:load` doesn't.
+//   Without re-firing here, the layout's
+//   `<body data-error="…">` from `flash[:alert]` never reaches
+//   `helpers/noty.coffee` and the user sees no error toast.
+//
+// Both events can fire for the same navigation (turbo:render +
+// turbo:load on a Drive visit, and turbo:render fires twice on
+// visits served from cache). Fingerprint the body's flash data
+// attrs and only re-dispatch when they change so the legacy
+// handlers don't run repeatedly.
+let lastFlashFingerprint = ""
+const refireTurbolinksLoad = () => {
+  const ds = document.body?.dataset
+  const fingerprint = [ds?.success, ds?.info, ds?.alert, ds?.warning, ds?.error].join("|")
+  if (fingerprint === lastFlashFingerprint) return
+  lastFlashFingerprint = fingerprint
   document.dispatchEvent(new CustomEvent("turbolinks:load"))
-})
+}
+document.addEventListener("turbo:load", refireTurbolinksLoad)
+document.addEventListener("turbo:render", refireTurbolinksLoad)
 
 // accounting.js was previously loaded from Sprockets
 // (`//= require accounting.js/accounting`) and configured by

@@ -19,27 +19,24 @@ test.describe("Login", () => {
     await expect(page.locator(".user-email")).toContainText("will@star.fleet")
   })
 
-  test("invalid credentials keep the user on /signin with the Devise alert in the body", async ({ page }) => {
+  test("invalid credentials surface a noty error toast", async ({ page, notification }) => {
     await page.goto("/signin")
 
     await page.locator("input[name='user[email]']").fill("will@star.fleet")
     await page.locator("input[name='user[password]']").fill("definitely-not-enterprise")
     await page.getByTestId("submit-login").click()
 
-    // Devise's failure_app re-renders the sign-in form with
-    // `flash[:alert]`, which the layout writes onto `<body data-error="…">`.
-    // Default locale is :de — see `config/locales/de/devise.yml`
+    // Devise's `recall` re-renders the sign-in form with
+    // `flash.now[:alert]` (status 422 once `Devise.responder.error_status`
+    // is set to `:unprocessable_entity`, see
+    // `config/initializers/devise.rb`). The layout writes the alert
+    // onto `<body data-error="…">`. The shim in
+    // `app/frontend/entrypoints/application.ts` re-fires
+    // `turbolinks:load` after Turbo's `turbo:render` (which is the
+    // event that fires for form-error responses, not `turbo:load`).
+    // `helpers/noty.coffee` then reads the body attr and shows the
+    // toast. Default locale is :de — see `config/locales/de/devise.yml`
     // (`devise.failure.invalid`).
-    await expect(page.locator("body")).toHaveAttribute("data-error", /Ungültige Anmeldedaten/)
-    // And we're still on /signin, not redirected to the dashboard.
-    await expect(page).toHaveURL(/\/signin$/)
-    // KNOWN BUG: the noty `.noty_type__error` toast doesn't appear
-    // here because Turbo's response to Devise's 422 fires
-    // `turbo:render` but not `turbo:load`, so the
-    // `turbo:load → turbolinks:load` shim in
-    // app/frontend/entrypoints/application.ts never re-runs
-    // `helpers/noty.coffee`'s flash reader. Tracked as a Phase 9
-    // follow-up — fix is to extend the shim to also handle
-    // `turbo:render` once the noty flash handler can de-dupe.
+    await notification.error("Ungültige Anmeldedaten.")
   })
 })
