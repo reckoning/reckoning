@@ -1,8 +1,20 @@
 <% context ||= "info" %>
-<script>
-  window.projectId = "<%= project.id %>";
-</script>
+<% if new_frontend?(:timers_calendar) %>
+  <%# Phase 6 Vue island — gated by `NEW_TIMERS_CALENDAR=1`. The
+      mount-point is picked up by `mountIslands` in
+      `app/frontend/entrypoints/application.ts`. %>
+  <div
+    id="timers-calendar"
+    class="timers-calendar"
+    data-island="timers-calendar"
+    data-island-props="<%= {projectId: project.id}.to_json %>"
+  ></div>
+<% else %>
+  <script>
+    window.projectId = "<%= project.id %>";
+  </script>
 
-<div id="timers-calendar" class="timers-calendar" ng-strict-di="true" data-turbo="false">
-  <div class="row" ng-view="true"></div>
-</div>
+  <div id="timers-calendar" class="timers-calendar" ng-strict-di="true" data-turbo="false">
+    <div class="row" ng-view="true"></div>
+  </div>
+<% end %>

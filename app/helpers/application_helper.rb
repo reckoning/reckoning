@@ -83,4 +83,12 @@ module ApplicationHelper
       {name: index + 1, link: quarter}
     end
   end
+
+  # Phase 6 rollout helper. Each AngularJS-replacing Vue island is
+  # gated by a `NEW_<NAME>` env var so the legacy app keeps owning
+  # the screen in production while we land the Vue rewrite
+  # incrementally. Set `NEW_TIMERS_CALENDAR=1` in dev to opt in.
+  def new_frontend?(name)
+    ENV.fetch("NEW_#{name.to_s.upcase}", "").to_s == "1"
+  end
 end
