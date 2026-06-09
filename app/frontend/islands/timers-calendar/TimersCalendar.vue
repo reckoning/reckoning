@@ -1,31 +1,126 @@
 <script setup lang="ts">
-// Phase 6 scaffold for the timers-calendar island. Currently a
-// placeholder — full feature parity with the legacy AngularJS
-// `app/assets/javascripts/angular/timers_calendar/` happens in
-// follow-up PRs:
-//
-// - month grid (weeks × days, with business-day highlight)
-// - month-nav prev/next + jump-to-date
-// - load timers from `GET /api/v1/projects/:id/timers?month=…`
-// - click day → open timer modal (add/edit)
-// - drag-reorder + autosave
-//
-// Until then, this component renders behind an env-based feature
-// flag (`NEW_TIMERS_CALENDAR=1`) so the legacy AngularJS app
-// keeps owning the screen in production while we land the Vue
-// pieces incrementally.
-//
-// Props arrive from the `<div data-island-props>` JSON on the
-// mount-point — see `app/views/projects/_timers_panel.html.erb`.
-defineProps<{ projectId: string }>()
+import {computed, onMounted, ref, shallowRef} from "vue"
+import MonthGrid from "./components/MonthGrid.vue"
+import MonthNav from "./components/MonthNav.vue"
+import TimerModal from "./components/TimerModal.vue"
+import {useMonth} from "./composables/useMonth"
+import {useTimers} from "./composables/useTimers"
+import {listProjects} from "./api"
+import {businessDaysInMonth} from "./format"
+import type {Task, Timer} from "./types"
+
+interface Labels {
+  weekDays: string
+  today: string
+  addTimer: string
+  dayShort: string[]
+}
+
+const props = defineProps<{
+  projectId: string
+  labels?: Labels
+  monthLabels?: string[]
+}>()
+
+const labels = computed<Labels>(() => ({
+  weekDays: "weekdays",
+  today: "Today",
+  addTimer: "Add timer",
+  dayShort: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+  ...(props.labels ?? {}),
+}))
+
+const monthLabels = computed<string[]>(() =>
+  props.monthLabels && props.monthLabels.length === 12
+    ? props.monthLabels
+    : [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ],
+)
+
+const {month, prev, next, today, set: setMonth} = useMonth()
+const {timers, loading, error, refresh} = useTimers(props.projectId, month)
+
+const tasks = ref<Task[]>([])
+const tasksLoaded = ref(false)
+onMounted(async () => {
+  try {
+    const projects = await listProjects()
+    const project = projects.find((p) => p.id === props.projectId)
+    tasks.value = project?.tasks ?? []
+  } finally {
+    tasksLoaded.value = true
+  }
+})
+
+const modalDraft = shallowRef<(Partial<Timer> & {date: string; projectId: string}) | null>(null)
+
+function openAdd(date: string) {
+  modalDraft.value = {date, projectId: props.projectId}
+}
+
+function openEdit(timer: Timer) {
+  modalDraft.value = {...timer}
+}
+
+function closeModal() {
+  modalDraft.value = null
+}
+
+const businessDays = computed(() => businessDaysInMonth(month.value))
 </script>
 
 <template>
-  <div class="rounded border border-dashed border-emerald-400 bg-emerald-50 p-6 text-emerald-900">
-    <h3 class="text-lg font-medium">Timers calendar (Vue island)</h3>
-    <p class="mt-1 text-sm">
-      Phase 6 scaffold — feature parity with the AngularJS calendar is in flight.
-      <code class="rounded bg-emerald-100 px-1">projectId={{ projectId }}</code>
-    </p>
+  <div class="col-xs-12">
+    <MonthNav
+      :month="month"
+      :business-days="businessDays"
+      :today-label="labels.today"
+      :week-days-label="labels.weekDays"
+      :month-labels="monthLabels"
+      @prev="prev"
+      @next="next"
+      @today="today"
+      @jump="setMonth"
+    />
+
+    <div v-if="error" class="alert alert-danger">
+      Failed to load timers.
+      <a role="button" @click.prevent="refresh">Retry</a>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <MonthGrid
+          :month="month"
+          :timers="timers"
+          :day-short-labels="labels.dayShort"
+          :add-timer-title="labels.addTimer"
+          @add="openAdd"
+          @edit="openEdit"
+        />
+        <p v-if="loading" class="text-muted text-right" style="margin-top: 4px">Loading…</p>
+      </div>
+    </div>
+
+    <TimerModal
+      v-if="modalDraft && tasksLoaded"
+      :draft="modalDraft"
+      :tasks="tasks"
+      :project-id="projectId"
+      @close="closeModal"
+      @changed="refresh"
+    />
   </div>
 </template>

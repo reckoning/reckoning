@@ -14,9 +14,15 @@ importers:
       '@hotwired/turbo':
         specifier: ^8.0.23
         version: 8.0.23
+      '@rails/actioncable':
+        specifier: ^8.1.300
+        version: 8.1.300
       accounting:
         specifier: ^0.4.1
         version: 0.4.1
+      dayjs:
+        specifier: ^1.11.21
+        version: 1.11.21
       pdfjs-dist:
         specifier: 4.10.38
         version: 4.10.38
@@ -333,6 +339,9 @@ packages:
     resolution: {integrity: sha512-aBSREisdsGH890S2rQqK82qmQYU3uFpSH8wcZWHgHzl3LfzsxAKbLNiAG9mO8v1Y0UICBeClICxPJvyr0rcuxg==}
     engines: {node: '>=18'}
     hasBin: true
+
+  '@rails/actioncable@8.1.300':
+    resolution: {integrity: sha512-zOENQsq3NM2jyBY6Z2qtZa3V/R/6OEqA+LGKixQbBMl7kk/J3FXDRcszPe74LsHNgB01jCl/DXu/xA8sHt4I/g==}
 
   '@rolldown/pluginutils@1.0.1':
     resolution: {integrity: sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yRxHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw==}
@@ -734,6 +743,9 @@ packages:
   data-uri-to-buffer@6.0.2:
     resolution: {integrity: sha512-7hvf7/GW8e86rW0ptuwS3OcBGDjIi6SZva7hCyWC0yYry2cOPmLIjXAUHI6DK2HsnwJd9ifmt57i8eV2n4YNpw==}
     engines: {node: '>= 14'}
+
+  dayjs@1.11.21:
+    resolution: {integrity: sha512-98IT+HOahAisibz/yjKbzuOBwYcjJ7BCLPzARyHiyEBmRz4fatF+KPJszEHXsGYjUG234aH/cOjW1wwTbKUZlA==}
 
   debug@4.4.3:
     resolution: {integrity: sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==}
@@ -1448,6 +1460,8 @@ snapshots:
       - react-native-b4a
       - supports-color
 
+  '@rails/actioncable@8.1.300': {}
+
   '@rolldown/pluginutils@1.0.1': {}
 
   '@rollup/rollup-android-arm-eabi@4.61.1':
@@ -1782,6 +1796,8 @@ snapshots:
   csstype@3.2.3: {}
 
   data-uri-to-buffer@6.0.2: {}
+
+  dayjs@1.11.21: {}
 
   debug@4.4.3:
     dependencies:
