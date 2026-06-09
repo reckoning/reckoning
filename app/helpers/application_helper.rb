@@ -85,10 +85,12 @@ module ApplicationHelper
   end
 
   # Phase 6 rollout helper. Each AngularJS-replacing Vue island is
-  # gated by a `NEW_<NAME>` env var so the legacy app keeps owning
-  # the screen in production while we land the Vue rewrite
-  # incrementally. Set `NEW_TIMERS_CALENDAR=1` in dev to opt in.
+  # gated by a Flipper feature so the legacy app keeps owning the
+  # screen in production while we land the Vue rewrite incrementally.
+  # Toggle with `Flipper.enable(:new_timers_calendar)` (or per-user
+  # via `Flipper.enable_actor(...)`) — the UI mounts at
+  # `/backend/flipper` for admins.
   def new_frontend?(name)
-    ENV.fetch("NEW_#{name.to_s.upcase}", "").to_s == "1"
+    Flipper.enabled?(:"new_#{name}", current_user)
   end
 end

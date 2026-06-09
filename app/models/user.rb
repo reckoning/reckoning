@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  # Flipper actor support — exposes `flipper_id` (e.g. "User;42")
+  # so `Flipper.enabled?(:flag, user)` works for per-user gates.
+  include Flipper::Identifier
+
   devise :two_factor_authenticatable, :two_factor_backupable, :confirmable, :lockable, :recoverable,
     :registerable, :rememberable, :trackable, :validatable,
     otp_secret_encryption_key: ENV.fetch("DEVISE_OTP_SECRET", Rails.application.credentials.devise_otp),

@@ -37,6 +37,12 @@ gem "rqrcode"
 
 gem "cancancan"
 
+# Feature flags — DB-backed via Active Record. The UI mounts at
+# `/flipper` for admins (see config/routes.rb).
+gem "flipper"
+gem "flipper-active_record"
+gem "flipper-ui"
+
 gem "kaminari"
 gem "url_plumber"
 

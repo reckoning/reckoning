@@ -209,6 +209,18 @@ GEM
     faker (3.2.1)
       i18n (>= 1.8.11, < 2)
     ffi (1.16.1)
+    flipper (1.4.2)
+      concurrent-ruby (< 2)
+    flipper-active_record (1.4.2)
+      activerecord (>= 4.2, < 9)
+      flipper (~> 1.4.2)
+    flipper-ui (1.4.2)
+      erubi (>= 1.0.0, < 2.0.0)
+      flipper (~> 1.4.2)
+      rack (>= 1.4, < 4)
+      rack-protection (>= 1.5.3, < 5.0.0)
+      rack-session (>= 1.0.2, < 3.0.0)
+      sanitize (< 8)
     fugit (1.12.2)
       et-orbi (~> 1.4)
       raabro (~> 1.4)
@@ -468,6 +480,9 @@ GEM
       ffi (~> 1.12)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
+    sanitize (7.0.0)
+      crass (~> 1.0.2)
+      nokogiri (>= 1.16.8)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
     sassc (2.4.0)
@@ -635,6 +650,9 @@ DEPENDENCIES
   dynamic_fields_for_rails
   ed25519
   faker
+  flipper
+  flipper-active_record
+  flipper-ui
   grover
   highline
   i18n-js (~> 3.0)
