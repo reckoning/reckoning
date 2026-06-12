@@ -104,6 +104,21 @@ const refireTurbolinksLoad = () => {
   lastFingerprint = fingerprint
   document.dispatchEvent(new CustomEvent("turbolinks:load"))
 }
+
+// Body swap incoming — reset the fingerprint cache so the next
+// `turbo:render`/`turbo:load` re-fires `turbolinks:load` even when
+// the URL and flash are unchanged. Without this, `Turbo.visit` to
+// the current URL (e.g. refresh-after-save in the timers-calendar
+// island) silently dedups, leaves chart.coffee's Highcharts host
+// element empty, and visually the chart goes white.
+//
+// Turbo fires `turbo:before-render` before every body swap, both
+// for cached previews and for the fresh server response. The
+// fingerprint guard below catches the redundant case where both
+// `turbo:render` and `turbo:load` fire for the same render.
+document.addEventListener("turbo:before-render", () => {
+  lastFingerprint = ""
+})
 document.addEventListener("turbo:load", refireTurbolinksLoad)
 document.addEventListener("turbo:render", refireTurbolinksLoad)
 
