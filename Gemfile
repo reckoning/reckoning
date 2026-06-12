@@ -21,7 +21,7 @@ gem "data_migrate"
 gem "money"
 gem "stripe"
 
-gem "mobility", "~> 1.2.9"
+gem "mobility", "~> 1.3.2"
 
 gem "sidekiq"
 gem "sidekiq-cron"
@@ -108,7 +108,7 @@ gem "grover"
 
 gem "active_storage_validations"
 gem "aws-sdk-s3", require: false
-gem "image_processing", "~> 1.2"
+gem "image_processing", "~> 2.0"
 
 gem "nokogiri", ">= 1.7.1"
 
@@ -136,8 +136,8 @@ group :development do
   # Legacy Capistrano deploy — kept alongside Kamal while we cut over.
   # Drop these once `kamal deploy -d live` is the source of truth.
   gem "bcrypt_pbkdf", require: false
-  gem "capistrano", "~> 3.11", require: false
-  gem "capistrano-rails", "~> 1.4", require: false
+  gem "capistrano", "~> 3.20", require: false
+  gem "capistrano-rails", "~> 1.7", require: false
   gem "capistrano-rails-console", require: false
   gem "capistrano-rbenv", "~> 2.1", require: false
   gem "ed25519", require: false
