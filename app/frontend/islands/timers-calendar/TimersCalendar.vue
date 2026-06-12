@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {computed, onMounted, ref, shallowRef} from "vue"
+import {visit} from "@hotwired/turbo"
 import MonthGrid from "./components/MonthGrid.vue"
 import MonthNav from "./components/MonthNav.vue"
 import TimerModal from "./components/TimerModal.vue"
@@ -78,6 +79,23 @@ function closeModal() {
   modalDraft.value = null
 }
 
+// On a successful modal save / delete, also re-render the host
+// project show page so the stats panels above the calendar
+// (`Erfasste Stunden`, `Verbleibende Stunden`, …) and the
+// Highcharts budget diagram pick up the new timer value. The Vue
+// island's month state is in `?month=` so re-mounting picks up
+// where we left off.
+//
+// Drive visit, not full reload — Turbo will only swap the body
+// HTML (cached if the URL was just visited). Skipped on the
+// initial fetch from the `useTimers` watcher (which also calls
+// `refresh()`) — that path arrives via the cable/network and
+// shouldn't trigger a page refresh.
+function onModalChanged() {
+  refresh()
+  visit(window.location.href, {action: "replace"})
+}
+
 const businessDays = computed(() => businessDaysInMonth(month.value))
 </script>
 
@@ -120,7 +138,7 @@ const businessDays = computed(() => businessDaysInMonth(month.value))
       :tasks="tasks"
       :project-id="projectId"
       @close="closeModal"
-      @changed="refresh"
+      @changed="onModalChanged"
     />
   </div>
 </template>
