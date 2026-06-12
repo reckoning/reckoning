@@ -98,10 +98,12 @@ gem "typhoeus"
 # since 7.1; explicit `gem "redis"` is what feeds it.
 gem "redis"
 
-# connection_pool 3.0 changed its constructor; Rails 7.2's RedisCacheStore
-# still calls the 2.x API. Drop the pin after Rails 7.2 ships connection_pool 3
-# support (or after the Rails 8.x bump).
-gem "connection_pool", "< 4"
+# connection_pool 3.0 changed its constructor (`new(opts)` removed —
+# 3.x takes block-form only). Rails 7.2's RedisCacheStore still calls
+# the 2.x API and boots with `ArgumentError: wrong number of arguments
+# (given 1, expected 0)` against 3.x. Drop the pin after Rails 7.2
+# ships connection_pool 3 support (or after the Rails 8.x bump).
+gem "connection_pool", "< 3"
 
 # pdf rendering
 gem "grover"
