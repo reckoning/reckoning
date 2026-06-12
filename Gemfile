@@ -48,7 +48,7 @@ gem "vite_rails"
 
 gem "dynamic_fields_for_rails"
 
-gem "workflow", "~> 1.2.0"
+gem "workflow", "~> 3.1.1"
 
 gem "aasm"
 
