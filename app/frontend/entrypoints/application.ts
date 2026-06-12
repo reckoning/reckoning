@@ -61,8 +61,9 @@ document.addEventListener("pdfjs:request", async () => {
 //
 // Both events can fire for the same navigation (turbo:render +
 // turbo:load on a Drive visit, and turbo:render fires twice on
-// visits served from cache). Fingerprint the URL **and** the body
-// flash attrs so:
+// visits served from cache: once for the cached preview body,
+// once for the fresh body from the server). Fingerprint the URL
+// **and** the body flash attrs so:
 //
 // 1. Cross-page navigation always re-fires (different URL → different
 //    fingerprint), so AngularJS bootstraps, Highcharts inits, etc.
@@ -72,13 +73,24 @@ document.addEventListener("pdfjs:request", async () => {
 // 3. Same-URL same-flash re-renders dedup (turbo:render firing twice
 //    for one Drive visit, then turbo:load).
 //
-// Pre-fix, the fingerprint was flash-only and ≈ "||||" on every
-// page, so once any page fired, no subsequent navigation did. That
+// AND skip the cached-preview phase entirely — Turbo flags the
+// `<html>` element with `data-turbo-preview` while showing the
+// cached snapshot. If we re-fire turbolinks:load on the preview,
+// legacy handlers (chart.coffee, AngularJS bootstrap) initialize
+// against the stale body; Turbo then swaps the body for the fresh
+// server response, the now-fingerprinted-as-seen URL dedups the
+// re-fire, and the initialized state is orphaned in the old DOM —
+// e.g. the budget chart appears for a moment then vanishes. The
+// real `turbo:render`/`turbo:load` for the fresh body still fires
+// after the preview, so we don't miss it.
+//
+// Pre-fix-1, the fingerprint was flash-only ≈ "||||" on every page,
+// so once any page fired, no subsequent navigation did. That
 // silently broke every legacy `turbolinks:load` consumer past the
-// first page load — empty AngularJS calendars, stale Highcharts,
-// no re-init of chart.coffee on the project detail page, etc.
+// first page load.
 let lastFingerprint = ""
 const refireTurbolinksLoad = () => {
+  if (document.documentElement.hasAttribute("data-turbo-preview")) return
   const ds = document.body?.dataset
   const fingerprint = [
     window.location.pathname + window.location.search,
