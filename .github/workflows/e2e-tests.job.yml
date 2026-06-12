@@ -26,6 +26,12 @@ jobs:
       DEVISE_SECRET: ci-devise-secret-not-used-outside-tests
       DEVISE_JWT_SECRET: ci-devise-jwt-secret-not-used-outside-tests
       DEVISE_OTP_SECRET: ci-devise-otp-secret-not-used-outside-tests
+      # ActiveRecord encryption fallback — devise-two-factor 6.x stores
+      # `otp_secret` via `encrypts`. See
+      # config/initializers/active_record_encryption.rb.
+      ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY: ci-ar-encryption-primary-key-not-used-outside-tests
+      ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY: ci-ar-encryption-deterministic-key-not-used-tests
+      ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT: ci-ar-encryption-key-derivation-salt-not-used
       VITE_RUBY_MODE: production
       ON_SUBDOMAIN: false
       RAILS_SERVE_STATIC_FILES: 1
