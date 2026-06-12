@@ -1,20 +1,15 @@
 <script setup lang="ts">
-// Phase 6c scaffold for the timesheet island. Currently a
-// placeholder — full feature parity with the legacy AngularJS
-// `app/assets/javascripts/angular/timesheet/` happens in follow-up
-// commits on this branch:
+// Phase 6c root island for the timesheet. Switches between day
+// and week views via the `?view=day|week` URL query param.
 //
-// - day view (card list of timers, inline start/stop, edit modal)
-// - week view (7-column task grid with autosave cell editing)
-// - URL state for date + view (`?date=YYYY-MM-DD&view=day|week`)
-// - reuse TimerModal from the timers-calendar island
-// - new TaskModal for week-view "+ Aufgabe hinzufügen"
-//
-// Until the port is complete, the island renders behind the
-// Flipper feature `new_timesheet` (see ApplicationHelper#
-// new_frontend?). Toggle on locally with:
-//
-//   bundle exec rails runner 'Flipper.enable(:new_timesheet)'
+// Day view: live, reads timers via `useDayTimers`.
+// Week view: scaffold for the next commit on this branch.
+
+import {computed} from "vue"
+import DayNav from "./components/DayNav.vue"
+import DayView from "./components/DayView.vue"
+import {useTimesheetDate} from "./composables/useTimesheetDate"
+import type {Timer} from "../../lib/timers/types"
 
 interface Labels {
   day: string
@@ -26,18 +21,82 @@ interface Labels {
   dayLong: string[]
 }
 
-defineProps<{
+const props = defineProps<{
   locale?: string
   labels?: Labels
   monthLabels?: string[]
 }>()
+
+const labels = computed<Labels>(() => ({
+  day: "Day",
+  week: "Week",
+  today: "Today",
+  addTimer: "Add timer",
+  addTask: "Add task",
+  dayShort: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+  dayLong: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+  ...(props.labels ?? {}),
+}))
+
+const monthLabels = computed<string[]>(() =>
+  props.monthLabels && props.monthLabels.length === 12
+    ? props.monthLabels
+    : [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ],
+)
+
+const {date, view, isToday, setView, prev, next, today, jump} = useTimesheetDate()
+
+function onAdd(_date: string) {
+  // Modal lands in the next commit. For now the add button is
+  // wired but does nothing visible — keeps the click target
+  // present so layout / a11y don't change between commits.
+}
+
+function onEdit(_timer: Timer) {
+  // Same as above — modal is the next commit.
+}
 </script>
 
 <template>
   <div class="col-xs-12">
-    <div class="alert alert-info">
-      <strong>Timesheet (Vue island)</strong> — Phase 6c scaffold. Day and week views land
-      in follow-up commits on this branch.
+    <DayNav
+      :date="date"
+      :view="view"
+      :is-today="isToday"
+      :day-long-labels="labels.dayLong"
+      :month-labels="monthLabels"
+      :today-label="labels.today"
+      :day-label="labels.day"
+      :week-label="labels.week"
+      @prev="prev"
+      @next="next"
+      @today="today"
+      @jump="jump"
+      @view="setView"
+    />
+
+    <DayView v-if="view === 'day'" :date="date" @add="onAdd" @edit="onEdit" />
+
+    <div v-else class="row" style="margin-top: 12px">
+      <div class="col-xs-12">
+        <div class="alert alert-info">
+          Week view — placeholder. Grid + autosave cell editing land in the next commit
+          on this branch.
+        </div>
+      </div>
     </div>
   </div>
 </template>
