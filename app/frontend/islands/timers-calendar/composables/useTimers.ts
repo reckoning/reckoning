@@ -1,8 +1,8 @@
 import {ref, watch, onBeforeUnmount, type Ref} from "vue"
 import {createConsumer, type Consumer, type Subscription} from "@rails/actioncable"
-import {listTimers} from "../api"
-import {monthRange} from "../format"
-import type {Timer} from "../types"
+import {listTimers} from "../../../lib/timers/api"
+import {monthRange} from "../../../lib/timers/format"
+import type {Timer} from "../../../lib/timers/types"
 
 let consumer: Consumer | null = null
 function cable(): Consumer {

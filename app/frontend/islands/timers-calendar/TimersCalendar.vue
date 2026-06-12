@@ -6,9 +6,9 @@ import MonthNav from "./components/MonthNav.vue"
 import TimerModal from "./components/TimerModal.vue"
 import {useMonth} from "./composables/useMonth"
 import {useTimers} from "./composables/useTimers"
-import {listProjects} from "./api"
-import {businessDaysInMonth} from "./format"
-import type {Task, Timer} from "./types"
+import {listProjects} from "../../lib/timers/api"
+import {businessDaysInMonth} from "../../lib/timers/format"
+import type {Task, Timer} from "../../lib/timers/types"
 
 interface Labels {
   weekDays: string

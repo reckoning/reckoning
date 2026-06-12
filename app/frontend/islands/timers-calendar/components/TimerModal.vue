@@ -4,9 +4,9 @@
 // existing `.modal-*` and `.btn-*` styles apply.
 
 import {computed, onBeforeUnmount, onMounted, ref, watch} from "vue"
-import {formatHHMM, parseHHMM, runningDuration} from "../format"
-import {createTask, createTimer, deleteTimer, startTimer, stopTimer, updateTimer} from "../api"
-import type {Task, Timer} from "../types"
+import {formatHHMM, parseHHMM, runningDuration} from "../../../lib/timers/format"
+import {createTask, createTimer, deleteTimer, startTimer, stopTimer, updateTimer} from "../../../lib/timers/api"
+import type {Task, Timer} from "../../../lib/timers/types"
 
 const props = defineProps<{
   draft: Partial<Timer> & {date: string; projectId: string}
