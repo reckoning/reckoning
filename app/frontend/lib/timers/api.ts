@@ -62,22 +62,49 @@ export class ApiError extends Error {
   }
 }
 
+// `listTimers` accepts either a single `date` (day view) or a
+// `startDate`/`endDate` range (calendar month, week). `projectId`
+// is optional — omit it on the timesheet which is scoped per-user
+// across all projects.
 export async function listTimers(params: {
-  projectId: string
-  startDate: string
-  endDate: string
+  projectId?: string
+  date?: string
+  startDate?: string
+  endDate?: string
 }): Promise<Timer[]> {
-  const qs = new URLSearchParams({
-    projectId: params.projectId,
-    startDate: params.startDate,
-    endDate: params.endDate,
-  })
+  const qs = new URLSearchParams()
+  if (params.projectId) qs.set("projectId", params.projectId)
+  if (params.date) qs.set("date", params.date)
+  if (params.startDate) qs.set("startDate", params.startDate)
+  if (params.endDate) qs.set("endDate", params.endDate)
   const raw = await request<Timer[]>(`/api/v1/timers?${qs.toString()}`)
   return raw.map(normalizeTimer)
 }
 
 export function listProjects(): Promise<Project[]> {
   return request<Project[]>(`/api/v1/projects?sort=used`)
+}
+
+// Tasks the user has touched in the ISO week containing
+// `weekDate`. Used by the timesheet's week view to build the
+// grid of task rows. Each task includes its `timers` for the week.
+export async function listTasks(params: {weekDate: string}): Promise<TaskWithTimers[]> {
+  const qs = new URLSearchParams({weekDate: params.weekDate})
+  const raw = await request<TaskWithTimers[]>(`/api/v1/tasks?${qs.toString()}`)
+  return raw.map((t) => ({...t, timers: t.timers.map(normalizeTimer)}))
+}
+
+export type TaskWithTimers = {
+  id: string
+  name: string
+  label: string
+  billable: boolean
+  projectId: string
+  projectName: string
+  projectCustomerName: string | null
+  timers: Timer[]
+  createdAt: string
+  updatedAt: string
 }
 
 export async function createTimer(payload: TimerPayload, started: boolean): Promise<Timer> {
