@@ -61,15 +61,35 @@ document.addEventListener("pdfjs:request", async () => {
 //
 // Both events can fire for the same navigation (turbo:render +
 // turbo:load on a Drive visit, and turbo:render fires twice on
-// visits served from cache). Fingerprint the body's flash data
-// attrs and only re-dispatch when they change so the legacy
-// handlers don't run repeatedly.
-let lastFlashFingerprint = ""
+// visits served from cache). Fingerprint the URL **and** the body
+// flash attrs so:
+//
+// 1. Cross-page navigation always re-fires (different URL → different
+//    fingerprint), so AngularJS bootstraps, Highcharts inits, etc.
+//    run on every new page.
+// 2. The form-error case still fires (same URL, but new flash on
+//    the body → different fingerprint).
+// 3. Same-URL same-flash re-renders dedup (turbo:render firing twice
+//    for one Drive visit, then turbo:load).
+//
+// Pre-fix, the fingerprint was flash-only and ≈ "||||" on every
+// page, so once any page fired, no subsequent navigation did. That
+// silently broke every legacy `turbolinks:load` consumer past the
+// first page load — empty AngularJS calendars, stale Highcharts,
+// no re-init of chart.coffee on the project detail page, etc.
+let lastFingerprint = ""
 const refireTurbolinksLoad = () => {
   const ds = document.body?.dataset
-  const fingerprint = [ds?.success, ds?.info, ds?.alert, ds?.warning, ds?.error].join("|")
-  if (fingerprint === lastFlashFingerprint) return
-  lastFlashFingerprint = fingerprint
+  const fingerprint = [
+    window.location.pathname + window.location.search,
+    ds?.success,
+    ds?.info,
+    ds?.alert,
+    ds?.warning,
+    ds?.error,
+  ].join("|")
+  if (fingerprint === lastFingerprint) return
+  lastFingerprint = fingerprint
   document.dispatchEvent(new CustomEvent("turbolinks:load"))
 }
 document.addEventListener("turbo:load", refireTurbolinksLoad)
