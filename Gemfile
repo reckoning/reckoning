@@ -95,7 +95,7 @@ gem "redis"
 # connection_pool 3.0 changed its constructor; Rails 7.2's RedisCacheStore
 # still calls the 2.x API. Drop the pin after Rails 7.2 ships connection_pool 3
 # support (or after the Rails 8.x bump).
-gem "connection_pool", "< 3"
+gem "connection_pool", "< 4"
 
 # pdf rendering
 gem "grover"
