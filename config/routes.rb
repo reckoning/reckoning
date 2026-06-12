@@ -21,6 +21,7 @@ Rails.application.routes.draw do
 
     authenticate :user, ->(u) { u.admin? } do
       mount Sidekiq::Web => "/workers"
+      mount Flipper::UI.app(Flipper) => "/flipper"
     end
 
     root to: "base#dashboard"

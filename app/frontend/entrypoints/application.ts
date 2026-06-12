@@ -20,6 +20,7 @@ import { configureAccounting, installAccountingGlobal } from "../lib/accounting"
 import { configureMomentLocale } from "../lib/moment-locale"
 import { mountIslands } from "../lib/mount-islands"
 import Hello from "../islands/hello/Hello.vue"
+import TimersCalendar from "../islands/timers-calendar/TimersCalendar.vue"
 
 // PDF.js v4+ ships ESM-only. Lazy-loaded so the 1.5 MB pdfjs core +
 // worker don't ship on pages that never render a PDF (most of them).
@@ -60,17 +61,64 @@ document.addEventListener("pdfjs:request", async () => {
 //
 // Both events can fire for the same navigation (turbo:render +
 // turbo:load on a Drive visit, and turbo:render fires twice on
-// visits served from cache). Fingerprint the body's flash data
-// attrs and only re-dispatch when they change so the legacy
-// handlers don't run repeatedly.
-let lastFlashFingerprint = ""
+// visits served from cache: once for the cached preview body,
+// once for the fresh body from the server). Fingerprint the URL
+// **and** the body flash attrs so:
+//
+// 1. Cross-page navigation always re-fires (different URL → different
+//    fingerprint), so AngularJS bootstraps, Highcharts inits, etc.
+//    run on every new page.
+// 2. The form-error case still fires (same URL, but new flash on
+//    the body → different fingerprint).
+// 3. Same-URL same-flash re-renders dedup (turbo:render firing twice
+//    for one Drive visit, then turbo:load).
+//
+// AND skip the cached-preview phase entirely — Turbo flags the
+// `<html>` element with `data-turbo-preview` while showing the
+// cached snapshot. If we re-fire turbolinks:load on the preview,
+// legacy handlers (chart.coffee, AngularJS bootstrap) initialize
+// against the stale body; Turbo then swaps the body for the fresh
+// server response, the now-fingerprinted-as-seen URL dedups the
+// re-fire, and the initialized state is orphaned in the old DOM —
+// e.g. the budget chart appears for a moment then vanishes. The
+// real `turbo:render`/`turbo:load` for the fresh body still fires
+// after the preview, so we don't miss it.
+//
+// Pre-fix-1, the fingerprint was flash-only ≈ "||||" on every page,
+// so once any page fired, no subsequent navigation did. That
+// silently broke every legacy `turbolinks:load` consumer past the
+// first page load.
+let lastFingerprint = ""
 const refireTurbolinksLoad = () => {
+  if (document.documentElement.hasAttribute("data-turbo-preview")) return
   const ds = document.body?.dataset
-  const fingerprint = [ds?.success, ds?.info, ds?.alert, ds?.warning, ds?.error].join("|")
-  if (fingerprint === lastFlashFingerprint) return
-  lastFlashFingerprint = fingerprint
+  const fingerprint = [
+    window.location.pathname + window.location.search,
+    ds?.success,
+    ds?.info,
+    ds?.alert,
+    ds?.warning,
+    ds?.error,
+  ].join("|")
+  if (fingerprint === lastFingerprint) return
+  lastFingerprint = fingerprint
   document.dispatchEvent(new CustomEvent("turbolinks:load"))
 }
+
+// Body swap incoming — reset the fingerprint cache so the next
+// `turbo:render`/`turbo:load` re-fires `turbolinks:load` even when
+// the URL and flash are unchanged. Without this, `Turbo.visit` to
+// the current URL (e.g. refresh-after-save in the timers-calendar
+// island) silently dedups, leaves chart.coffee's Highcharts host
+// element empty, and visually the chart goes white.
+//
+// Turbo fires `turbo:before-render` before every body swap, both
+// for cached previews and for the fresh server response. The
+// fingerprint guard below catches the redundant case where both
+// `turbo:render` and `turbo:load` fire for the same render.
+document.addEventListener("turbo:before-render", () => {
+  lastFingerprint = ""
+})
 document.addEventListener("turbo:load", refireTurbolinksLoad)
 document.addEventListener("turbo:render", refireTurbolinksLoad)
 
@@ -101,6 +149,7 @@ configureMomentLocale()
 // view and the SFC renders.
 const islandRegistry = {
   hello: Hello,
+  "timers-calendar": TimersCalendar,
 }
 mountIslands(islandRegistry)
 document.addEventListener("turbo:load", () => mountIslands(islandRegistry))

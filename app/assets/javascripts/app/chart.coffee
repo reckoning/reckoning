@@ -1,8 +1,14 @@
+# NOTE: every `for x in xs` (and `for x, i in xs`) in this file was
+# rewritten to `.forEach` / `for i in [0...xs.length]`. The
+# coffee-script-source 1.12.2 gem (last 1.x release, 2017) emits a
+# broken `for (undefined; j < len; ...)` init clause on Node >= 17
+# so the legacy loop forms silently never iterate. The indexed-range
+# form (`for i in [0...n]`) and `.forEach` both compile correctly.
 window.Chart =
   generateSeries: (datasets, suffix) ->
     suffix ?= ' €'
     series = []
-    for dataset, i in datasets
+    datasets.forEach (dataset, _i) ->
       data = _.map dataset.data, (value) -> parseFloat(value)
       series.push
         color: dataset.color
@@ -22,7 +28,7 @@ window.Chart =
 
   generateCategories: (labels) ->
     categories = []
-    for month, i in labels
+    labels.forEach (month, _i) ->
       date = moment(month)
       dateFormattedShort = I18n.l("date.formats.month_short", date.toDate())
       dateFormattedLong = I18n.l("date.formats.month", date.toDate())
@@ -36,8 +42,11 @@ window.Chart =
 
   getCurrentWeek: (labels) ->
     currentWeek = {start: 0, end: 0}
-    for month, i in labels
-      date = moment(month)
+    # Indexed range loop (instead of `for month, i in labels`) so the
+    # `break` works AND coffee-script-source 1.12.2 emits a working
+    # for-loop. See top-of-file comment.
+    for i in [0...labels.length]
+      date = moment(labels[i])
       if date >= moment()
         currentWeek.start = i - 1.5
         currentWeek.end = i - 0.5
@@ -125,7 +134,7 @@ window.Chart =
         segments = []
         width = @plotWidth / @pointCount
         lastPosition = -1
-        for position in @xAxis[0].tickPositions
+        @xAxis[0].tickPositions.forEach (position) =>
           segmentPosition = @plotLeft
           segmentWidth = 0
           for i in [0..@pointCount - 1]
@@ -139,10 +148,12 @@ window.Chart =
             width: segmentWidth
 
           lastPosition = position
+          return
 
-        for segment, i in segments
+        segments.forEach (segment, i) ->
           $label = $($(id).find('.highcharts-xaxis-labels span')[i])
           $label.css('left', segment.position - (segment.width / 2) - ($label.width() / 2) - 1)
+          return
     options.xAxis['tickPositions'] = data.ticks
     options.yAxis['min'] = if data.datasets[0] && parseInt(data.datasets[0].data[0], 10) is 0 then undefined else 0
     options.yAxis.startOnTick = false

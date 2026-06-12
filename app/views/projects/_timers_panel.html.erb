@@ -1,8 +1,34 @@
 <% context ||= "info" %>
-<script>
-  window.projectId = "<%= project.id %>";
-</script>
+<% if new_frontend?(:timers_calendar) %>
+  <%# Phase 6 Vue island — gated by Flipper feature
+      `new_timers_calendar` (see ApplicationHelper#new_frontend?).
+      Mounted by `mountIslands` in
+      `app/frontend/entrypoints/application.ts`. %>
+  <%# Localized strings round-trip through `data-island-props` so the
+      Vue island doesn't need to consume i18n-js client-side. The
+      seven day-short labels are Monday-first to match ISO weeks. %>
+  <div
+    id="timers-calendar"
+    class="timers-calendar"
+    data-island="timers-calendar"
+    data-island-props="<%= {
+      projectId: project.id,
+      locale: I18n.locale.to_s,
+      monthLabels: (1..12).map { |m| I18n.l(Date.new(2024, m, 1), format: :month) },
+      labels: {
+        weekDays: I18n.t('labels.defaults.week_days'),
+        today: I18n.t('actions.today'),
+        addTimer: I18n.t('actions.add_timer'),
+        dayShort: (0..6).map { |i| I18n.l(Date.new(2024, 1, 1) + i, format: :day_short) },
+      },
+    }.to_json %>"
+  ></div>
+<% else %>
+  <script>
+    window.projectId = "<%= project.id %>";
+  </script>
 
-<div id="timers-calendar" class="timers-calendar" ng-strict-di="true" data-turbo="false">
-  <div class="row" ng-view="true"></div>
-</div>
+  <div id="timers-calendar" class="timers-calendar" ng-strict-di="true" data-turbo="false">
+    <div class="row" ng-view="true"></div>
+  </div>
+<% end %>
