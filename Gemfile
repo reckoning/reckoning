@@ -102,7 +102,7 @@ gem "grover"
 
 gem "active_storage_validations"
 gem "aws-sdk-s3", require: false
-gem "image_processing", "~> 1.2"
+gem "image_processing", "~> 2.0"
 
 gem "nokogiri", ">= 1.7.1"
 
