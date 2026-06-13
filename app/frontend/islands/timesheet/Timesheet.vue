@@ -1,13 +1,12 @@
 <script setup lang="ts">
 // Phase 6c root island for the timesheet. Switches between day
 // and week views via the `?view=day|week` URL query param.
-//
-// Day view: live, reads timers via `useDayTimers`.
-// Week view: scaffold for the next commit on this branch.
 
-import {computed} from "vue"
+import {computed, ref} from "vue"
 import DayNav from "./components/DayNav.vue"
 import DayView from "./components/DayView.vue"
+import WeekGrid from "./components/WeekGrid.vue"
+import TaskModal from "./components/TaskModal.vue"
 import {useTimesheetDate} from "./composables/useTimesheetDate"
 import type {Timer} from "../../lib/timers/types"
 
@@ -57,16 +56,31 @@ const monthLabels = computed<string[]>(() =>
       ],
 )
 
-const {date, view, isToday, setView, prev, next, today, jump} = useTimesheetDate()
+const {date, view, weekStart, isToday, setView, prev, next, today, jump} = useTimesheetDate()
+
+// Week-view task-add modal. Open from the WeekGrid header,
+// closes on cancel / after a task is added. WeekGrid re-fetches
+// itself when its `weekDate` changes; we trigger a small bump
+// of the key on add so the grid re-mounts and picks up the new
+// task without polling.
+const showTaskModal = ref(false)
+const weekGridKey = ref(0)
+
+function onAddTask() {
+  showTaskModal.value = true
+}
+
+function onTaskCreated() {
+  weekGridKey.value++
+}
 
 function onAdd(_date: string) {
-  // Modal lands in the next commit. For now the add button is
-  // wired but does nothing visible — keeps the click target
-  // present so layout / a11y don't change between commits.
+  // Timer add/edit modal lands in a follow-up. Day view's
+  // "Zeit hinzufügen" button is wired but no-op for now.
 }
 
 function onEdit(_timer: Timer) {
-  // Same as above — modal is the next commit.
+  // Same — modal is in a follow-up.
 }
 </script>
 
@@ -90,13 +104,20 @@ function onEdit(_timer: Timer) {
 
     <DayView v-if="view === 'day'" :date="date" @add="onAdd" @edit="onEdit" />
 
-    <div v-else class="row" style="margin-top: 12px">
-      <div class="col-xs-12">
-        <div class="alert alert-info">
-          Week view — placeholder. Grid + autosave cell editing land in the next commit
-          on this branch.
-        </div>
-      </div>
-    </div>
+    <WeekGrid
+      v-else
+      :key="weekGridKey"
+      :week-date="weekStart"
+      :day-short-labels="labels.dayShort"
+      :add-task-label="labels.addTask"
+      @add-task="onAddTask"
+    />
+
+    <TaskModal
+      v-if="showTaskModal"
+      :title="labels.addTask"
+      @close="showTaskModal = false"
+      @created="onTaskCreated"
+    />
   </div>
 </template>
