@@ -4,7 +4,7 @@ source "https://rubygems.org"
 
 ruby File.read(".tool-versions").match(/ruby (.*)\n/)[1].chomp
 
-gem "rails", "~> 7.2.2"
+gem "rails", "~> 8.1.3"
 
 # Ruby 3.4 removed these from the default gemset; Rails 7.0.x still
 # references them implicitly. Drop these lines after the Rails 7.1+ bump.
