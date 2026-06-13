@@ -103,7 +103,7 @@ gem "redis"
 # the 2.x API and boots with `ArgumentError: wrong number of arguments
 # (given 1, expected 0)` against 3.x. Drop the pin after Rails 7.2
 # ships connection_pool 3 support (or after the Rails 8.x bump).
-gem "connection_pool", "< 3"
+gem "connection_pool", "< 4"
 
 # pdf rendering
 gem "grover"
