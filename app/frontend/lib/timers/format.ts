@@ -1,24 +1,16 @@
-import dayjs, {Dayjs} from "dayjs"
+// Shared date / time helpers for timer-related Vue islands
+// (timers-calendar, timesheet). Calendar-grid-specific helpers
+// (e.g. `buildWeeks` for a 5-6 row month grid) live in the
+// individual island so this stays generic.
+
+import dayjs from "dayjs"
 import isoWeek from "dayjs/plugin/isoWeek"
 import customParseFormat from "dayjs/plugin/customParseFormat"
 
 dayjs.extend(isoWeek)
 dayjs.extend(customParseFormat)
 
-const ISO_DATE = "YYYY-MM-DD"
-
-export interface DayCell {
-  date: string
-  day: string
-  dayOfWeek: number
-  isCurrentMonth: boolean
-  isCurrentDay: boolean
-  isWeekend: boolean
-}
-
-export interface Week {
-  days: DayCell[]
-}
+export const ISO_DATE = "YYYY-MM-DD"
 
 export function todayISO(): string {
   return dayjs().format(ISO_DATE)
@@ -32,6 +24,18 @@ export function addMonths(dateISO: string, n: number): string {
   return dayjs(dateISO, ISO_DATE).add(n, "month").format(ISO_DATE)
 }
 
+export function addDays(dateISO: string, n: number): string {
+  return dayjs(dateISO, ISO_DATE).add(n, "day").format(ISO_DATE)
+}
+
+export function startOfIsoWeek(dateISO: string): string {
+  return dayjs(dateISO, ISO_DATE).startOf("isoWeek").format(ISO_DATE)
+}
+
+export function endOfIsoWeek(dateISO: string): string {
+  return dayjs(dateISO, ISO_DATE).endOf("isoWeek").format(ISO_DATE)
+}
+
 export function monthRange(monthDateISO: string): {startDate: string; endDate: string} {
   const m = dayjs(monthDateISO, ISO_DATE)
   return {
@@ -40,30 +44,18 @@ export function monthRange(monthDateISO: string): {startDate: string; endDate: s
   }
 }
 
-export function buildWeeks(monthDateISO: string): Week[] {
-  const today = todayISO()
-  const month = dayjs(monthDateISO, ISO_DATE).format("YYYY-MM")
-  let cursor: Dayjs = dayjs(monthDateISO, ISO_DATE).startOf("month").startOf("isoWeek")
-  const end = dayjs(monthDateISO, ISO_DATE).endOf("month").endOf("isoWeek")
-  const weeks: Week[] = []
-  while (cursor.isBefore(end) || cursor.isSame(end, "day")) {
-    const days: DayCell[] = []
-    for (let i = 0; i < 7; i++) {
-      const date = cursor.format(ISO_DATE)
-      const dow = cursor.isoWeekday()
-      days.push({
-        date,
-        day: cursor.format("D"),
-        dayOfWeek: dow,
-        isCurrentMonth: cursor.format("YYYY-MM") === month,
-        isCurrentDay: date === today,
-        isWeekend: dow >= 6,
-      })
-      cursor = cursor.add(1, "day")
-    }
-    weeks.push({days})
+// Inclusive Mon-Sun range for the ISO week containing the date.
+export function weekRange(dateISO: string): {startDate: string; endDate: string} {
+  return {
+    startDate: startOfIsoWeek(dateISO),
+    endDate: endOfIsoWeek(dateISO),
   }
-  return weeks
+}
+
+// Seven Mon-Sun day ISO dates for the week containing the date.
+export function weekDays(dateISO: string): string[] {
+  const start = dayjs(dateISO, ISO_DATE).startOf("isoWeek")
+  return Array.from({length: 7}, (_, i) => start.add(i, "day").format(ISO_DATE))
 }
 
 export function businessDaysInMonth(monthDateISO: string): number {
@@ -78,15 +70,11 @@ export function businessDaysInMonth(monthDateISO: string): number {
   return count
 }
 
-export function monthLabel(monthDateISO: string, locale: string): string {
-  return new Intl.DateTimeFormat(locale, {month: "long", year: "numeric"}).format(
-    dayjs(monthDateISO, ISO_DATE).toDate(),
-  )
-}
-
 export function isStartable(dateISO: string): boolean {
-  return dayjs(dateISO, ISO_DATE).isSame(dayjs(), "day") ||
+  return (
+    dayjs(dateISO, ISO_DATE).isSame(dayjs(), "day") ||
     dayjs(dateISO, ISO_DATE).isAfter(dayjs(), "day")
+  )
 }
 
 // "01:30" -> 1.5; "1.5" -> 1.5; "" / invalid -> 0
@@ -116,7 +104,11 @@ export function formatHHMM(hours: number): string {
 
 // Live duration display for a running timer:
 // elapsed = (now - startedAt) + storedValueHours
-export function runningDuration(startedAtISO: string, storedValueHours: number, nowMs: number): string {
+export function runningDuration(
+  startedAtISO: string,
+  storedValueHours: number,
+  nowMs: number,
+): string {
   const startedMs = Date.parse(startedAtISO)
   if (!Number.isFinite(startedMs)) return formatHHMM(storedValueHours)
   const elapsedHours = (nowMs - startedMs) / 3600000 + storedValueHours

@@ -1,6 +1,32 @@
 <% content_for :title do %>
   <%= I18n.t(:"meta.title.timesheet.index") %>
 <% end %>
-<div id="timesheet" class="timesheet" ng-strict-di="true" data-turbo="false">
-  <div class="row" ng-view="true"></div>
-</div>
+<% if new_frontend?(:timesheet) %>
+  <%# Phase 6c Vue island — gated by Flipper feature `new_timesheet`
+      (see ApplicationHelper#new_frontend?). Mounted by `mountIslands`
+      in `app/frontend/entrypoints/application.ts`. Localized strings
+      round-trip through `data-island-props` so the island doesn't
+      need to consume i18n-js client-side. %>
+  <div
+    id="timesheet"
+    class="timesheet"
+    data-island="timesheet"
+    data-island-props="<%= {
+      locale: I18n.locale.to_s,
+      monthLabels: (1..12).map { |m| I18n.l(Date.new(2024, m, 1), format: :month) },
+      labels: {
+        day: I18n.t('labels.defaults.day'),
+        week: I18n.t('labels.defaults.week'),
+        today: I18n.t('actions.today'),
+        addTimer: I18n.t('actions.add_timer'),
+        addTask: I18n.t('actions.add_task'),
+        dayShort: (0..6).map { |i| I18n.l(Date.new(2024, 1, 1) + i, format: :day_short) },
+        dayLong: (0..6).map { |i| I18n.l(Date.new(2024, 1, 1) + i, format: :day) },
+      },
+    }.to_json %>"
+  ></div>
+<% else %>
+  <div id="timesheet" class="timesheet" ng-strict-di="true" data-turbo="false">
+    <div class="row" ng-view="true"></div>
+  </div>
+<% end %>

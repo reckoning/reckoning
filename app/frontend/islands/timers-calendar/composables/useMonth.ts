@@ -1,5 +1,5 @@
 import {ref, onMounted, onBeforeUnmount} from "vue"
-import {startOfMonth, todayISO, addMonths} from "../format"
+import {startOfMonth, todayISO, addMonths} from "../../../lib/timers/format"
 
 const QUERY_KEY = "month"
 

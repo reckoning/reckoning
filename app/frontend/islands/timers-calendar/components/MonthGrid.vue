@@ -6,8 +6,8 @@
 //   .day > .day-number, .day > .timers > .timer / .add-timer
 
 import {computed} from "vue"
-import {buildWeeks} from "../format"
-import type {Timer} from "../types"
+import {buildWeeks} from "../calendar"
+import type {Timer} from "../../../lib/timers/types"
 import TimerBadge from "./TimerBadge.vue"
 
 const props = defineProps<{

@@ -21,6 +21,7 @@ import { configureMomentLocale } from "../lib/moment-locale"
 import { mountIslands } from "../lib/mount-islands"
 import Hello from "../islands/hello/Hello.vue"
 import TimersCalendar from "../islands/timers-calendar/TimersCalendar.vue"
+import Timesheet from "../islands/timesheet/Timesheet.vue"
 
 // PDF.js v4+ ships ESM-only. Lazy-loaded so the 1.5 MB pdfjs core +
 // worker don't ship on pages that never render a PDF (most of them).
@@ -150,6 +151,7 @@ configureMomentLocale()
 const islandRegistry = {
   hello: Hello,
   "timers-calendar": TimersCalendar,
+  timesheet: Timesheet,
 }
 mountIslands(islandRegistry)
 document.addEventListener("turbo:load", () => mountIslands(islandRegistry))
