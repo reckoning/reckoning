@@ -133,7 +133,7 @@ group :development do
   gem "web-console"
 
   # Deployment via Docker + Kamal (https://kamal-deploy.org).
-  gem "kamal", "~> 2.11", require: false
+  gem "kamal", "~> 2.12", require: false
 
   # Legacy Capistrano deploy — kept alongside Kamal while we cut over.
   # Drop these once `kamal deploy -d live` is the source of truth.
