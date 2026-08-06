@@ -1,9 +1,8 @@
-<div class="list-group-item" id="expense-<%= expense.id %>">
-  <div class="flex items-start gap-3">
-    <input type="checkbox" name="expense_ids[]" value="<%= expense.id %>" class="mt-1"
-      data-bulk-select-target="checkbox" data-action="bulk-select#refresh"
-      aria-label="<%= I18n.t(:"expenses.bulk.select_row") %>">
-    <div class="flex-1">
+<div class="list-group-item" id="expense-<%= expense.id %>" style="position: relative; padding-left: 48px;">
+  <input type="checkbox" name="expense_ids[]" value="<%= expense.id %>"
+    style="position: absolute; left: 18px; top: 50%; transform: translateY(-50%); margin: 0; z-index: 2;"
+    data-bulk-select-target="checkbox" data-action="bulk-select#refresh"
+    aria-label="<%= I18n.t(:"expenses.bulk.select_row") %>">
   <div class="row">
     <div class="col-xs-6 col-md-2">
       <% if expense.once? %>
@@ -32,8 +31,6 @@
       <div class="pull-right expense-price">
         <%= number_to_currency expense.usable_value %>
       </div>
-    </div>
-  </div>
     </div>
   </div>
 </div>
