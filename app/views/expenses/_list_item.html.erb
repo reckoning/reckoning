@@ -1,8 +1,8 @@
-<div class="list-group-item" id="expense-<%= expense.id %>" style="position: relative; padding-left: 48px;">
-  <input type="checkbox" name="expense_ids[]" value="<%= expense.id %>"
-    style="position: absolute; left: 18px; top: 50%; transform: translateY(-50%); margin: 0; z-index: 2;"
-    data-bulk-select-target="checkbox" data-action="bulk-select#refresh"
-    aria-label="<%= I18n.t(:"expenses.bulk.select_row") %>">
+<div class="list-group-item" id="expense-<%= expense.id %>" style="position: relative; padding-left: 44px;">
+  <%= check_box_tag "expense_ids[]", expense.id, false, class: "rk-checkbox",
+        id: "select-expense-#{expense.id}", "aria-label": I18n.t(:"expenses.bulk.select_row"),
+        style: "position: absolute; left: 16px; top: 50%; transform: translateY(-50%); z-index: 2;",
+        "data-bulk-select-target": "checkbox", "data-action": "change->bulk-select#refresh" %>
   <div class="row">
     <div class="col-xs-6 col-md-2">
       <% if expense.once? %>

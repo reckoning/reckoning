@@ -48,7 +48,8 @@
               <tr class="<%= "danger" if expense.errors.any? %>">
                 <td>
                   <%= hidden_field_tag "#{prefix}[include]", "0" %>
-                  <%= check_box_tag "#{prefix}[include]", "1", true %>
+                  <%= check_box_tag "#{prefix}[include]", "1", true, class: "rk-checkbox",
+                        id: "include-#{i}", "aria-label": I18n.t(:"expenses.bulk.select_row") %>
                 </td>
                 <td>
                   <%= hidden_field_tag "#{prefix}[id]", expense.id %>

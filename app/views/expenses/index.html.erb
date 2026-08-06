@@ -117,10 +117,11 @@
         </div>
 
         <div class="panel panel-list panel-default expense">
-          <div class="panel-heading" style="position: relative; padding-left: 48px;">
-            <input type="checkbox" style="position: absolute; left: 18px; top: 50%; transform: translateY(-50%); margin: 0; z-index: 2;"
-              data-bulk-select-target="selectAll" data-action="bulk-select#toggleAll"
-              aria-label="<%= I18n.t(:"expenses.bulk.select_all") %>">
+          <div class="panel-heading" style="position: relative; padding-left: 44px;">
+            <%= check_box_tag "select_all_expenses", "1", false, class: "rk-checkbox",
+                  id: "select-all-expenses", "aria-label": I18n.t(:"expenses.bulk.select_all"),
+                  style: "position: absolute; left: 16px; top: 50%; transform: translateY(-50%); z-index: 2;",
+                  "data-bulk-select-target": "selectAll", "data-action": "change->bulk-select#toggleAll" %>
             <div class="row">
               <div class="col-md-2 hidden-xs">
                 <%= I18n.t("activerecord.attributes.expense.date") %>
