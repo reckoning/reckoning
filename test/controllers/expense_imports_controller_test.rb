@@ -60,6 +60,23 @@ class ExpenseImportsControllerTest < ActionDispatch::IntegrationTest
 
       assert_response :found
       assert_equal "Dnsimple", data.account.expenses.order(:created_at).last.seller
+      assert_equal I18n.t(:"resources.messages.import.success", resource: I18n.t(:"resources.expense")), flash[:success]
+    end
+
+    it "keeps the active list filter after importing" do
+      get "/expenses", params: {year: "2025", type: "licenses"}
+
+      post "/expense_imports", params: {
+        expense_import: {
+          rows: {"0" => {include: "1", date: "2025-07-03", value: "7.96", seller: "X",
+                         description: "Y", expense_type: "licenses", vat_percent: "19",
+                         private_use_percent: "0", interval: "once"}}
+        }
+      }
+
+      assert_response :found
+      assert_includes response.location, "year=2025"
+      assert_includes response.location, "type=licenses"
     end
   end
 end

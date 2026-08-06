@@ -27,7 +27,7 @@ class ExpenseImportsController < ApplicationController
     authorize! :create, ExpenseImport
     @expense_import = ExpenseImport.new(create_params.merge(account_id: current_account.id))
     if @expense_import.save
-      redirect_to expenses_path(stored_params(:index, "expenses_controller")), flash: {success: resource_message(:expense, :import, :success)}
+      redirect_to expenses_path(stored_params(:index, "expenses")), flash: {success: resource_message(:expense, :import, :success)}
     else
       @expenses = @expense_import.selected_expenses
       render :preview, status: :unprocessable_entity

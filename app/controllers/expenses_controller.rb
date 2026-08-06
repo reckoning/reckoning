@@ -101,7 +101,7 @@ class ExpensesController < ApplicationController
       flash[:success] = I18n.t(:"expenses.bulk.updated", count: updated)
     end
 
-    redirect_to expenses_path(stored_params(:index, "expenses_controller"))
+    redirect_to expenses_path(stored_params(:index))
   end
 
   def bulk_destroy
@@ -115,7 +115,7 @@ class ExpensesController < ApplicationController
       flash[:success] = I18n.t(:"expenses.bulk.destroyed", count: destroyed)
     end
 
-    redirect_to expenses_path(stored_params(:index, "expenses_controller"))
+    redirect_to expenses_path(stored_params(:index))
   end
 
   private def bulk_ids
