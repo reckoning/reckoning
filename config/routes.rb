@@ -104,7 +104,9 @@ Rails.application.routes.draw do
   end
 
   resources :expenses, except: [:show]
-  resources :expense_imports, only: %i[new create]
+  resources :expense_imports, only: %i[new create] do
+    post :preview, on: :collection
+  end
 
   get "impressum" => "base#impressum"
   get "privacy" => "base#privacy"
