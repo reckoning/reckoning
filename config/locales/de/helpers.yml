@@ -93,6 +93,13 @@ de:
         receipt_missing: "Kein Beleg hinzugefügt"
         private_use_percent: "Private Nutzung?"
         remove_receipt: "Beleg entfernen?"
+      expense_import:
+        file: "CSV-Datei"
+        expense_type: "Standard-Typ"
+        interval: "Intervall"
+        vat_percent: "USt."
+        private_use_percent: "Private Nutzung"
+        skip_credits: "Gutschriften (positive Beträge) überspringen"
       vessel:
         license_plate: "Kennzeichen"
         initial_milage: "Start Laufleistung"

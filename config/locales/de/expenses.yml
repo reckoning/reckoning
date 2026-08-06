@@ -2,6 +2,20 @@ de:
   expenses:
     file_attached: "Beleg vorhanden"
     needs_receipt: "Beleg fehlt!"
+    import:
+      hint_bank: "Bankauszüge (z. B. ADAC-Kreditkarte) werden automatisch am Spaltenkopf erkannt. Die unten gewählten Werte werden als Vorschlag auf alle Zeilen angewendet und lassen sich in der Vorschau pro Zeile anpassen."
+      hint_columns: "Alternativ kann eine zuvor aus Reckoning exportierte CSV mit diesen Spalten hochgeladen werden:"
+      hint_id: "Wird eine id angegeben, wird der passende Datensatz aktualisiert statt neu angelegt."
+      defaults_title: "Standardwerte für importierte Bankzeilen"
+      continue: "Weiter zur Vorschau"
+      preview_hint: "Verkäufer, Beschreibung und Typ lassen sich vor dem Import anpassen. Zeilen ohne Häkchen werden übersprungen."
+      submit:
+        one: "1 Ausgabe importieren"
+        other: "%{count} Ausgaben importieren"
+      no_rows_selected: "Es wurde keine Zeile zum Importieren ausgewählt."
+      row_error: "Zeile %{row}: %{message}"
+      column:
+        include: "Import?"
     afa_types:
       computer: "Computer, Notebooks, Drucker, Monitore u.ä."
       smartphone: Mobilfunkendgeräte
