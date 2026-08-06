@@ -103,7 +103,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :expenses, except: [:show]
+  resources :expenses, except: [:show] do
+    collection do
+      post :bulk_update
+      post :bulk_destroy
+    end
+  end
   resources :expense_imports, only: %i[new create] do
     post :preview, on: :collection
   end
