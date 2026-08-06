@@ -16,6 +16,22 @@ de:
       row_error: "Zeile %{row}: %{message}"
       column:
         include: "Import?"
+    bulk:
+      select_row: "Ausgabe auswählen"
+      select_all: "Alle auswählen"
+      selected: "ausgewählt"
+      unchanged: "(unverändert)"
+      apply: "Anwenden"
+      delete: "Löschen"
+      confirm_delete: "Ausgewählte Ausgaben wirklich löschen?"
+      updated:
+        one: "1 Ausgabe aktualisiert."
+        other: "%{count} Ausgaben aktualisiert."
+      destroyed:
+        one: "1 Ausgabe gelöscht."
+        other: "%{count} Ausgaben gelöscht."
+      update_failure: "Es wurde nichts aktualisiert – bitte Ausgaben auswählen und mindestens ein Feld setzen."
+      destroy_failure: "Es wurde keine Ausgabe zum Löschen ausgewählt."
     afa_types:
       computer: "Computer, Notebooks, Drucker, Monitore u.ä."
       smartphone: Mobilfunkendgeräte
