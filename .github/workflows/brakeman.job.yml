@@ -11,5 +11,6 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+          cache-version: 1
       - name: Run Brakeman
         run: bundle exec brakeman --no-pager --format plain --exit-on-warn
