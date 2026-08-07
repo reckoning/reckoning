@@ -145,13 +145,26 @@ docker compose up -d                 # postgres + redis on ports 8241/8242
 bundle install
 pnpm install
 bin/setup                            # creates dev + test DBs, seeds, etc.
+
+op signin                            # dev secrets come from 1Password
+export OP_ACCOUNT=my.1password.eu
 ```
+
+No `.env` is needed. `.env.tpl` is committed and holds `op://` references
+instead of secrets; `bin/op` resolves them at run time. Machine-specific
+overrides (ports, `WORKTREE_SUFFIX`) go in `.env.local`, which is gitignored and
+read after the template.
 
 ### Development
 
 ```bash
-foreman start -f Procfile.dev        # Rails + sidekiq + (legacy) assets
+bin/op foreman start -f Procfile.dev  # Rails + sidekiq + (legacy) assets
+bin/op rails console
+bin/op rake db:migrate
 ```
+
+Anything needing dev secrets goes through `bin/op`. Commands that don't — tests,
+linters, generators — can run directly.
 
 ### Testing
 

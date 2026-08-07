@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Run a command with .env.tpl's op:// references resolved from 1Password.
+#
+# Usage: bin/op rails console
+#        bin/op rails runner 'puts Invoice.count'
+#        bin/op rake db:migrate
+#        bin/op foreman start
+set -euo pipefail
+
+# bin/ is on PATH via binstubs, and this script is itself named `op` — strip
+# bin/ from PATH before looking up the real 1Password CLI, or this recurses.
+script_dir="$(cd "$(dirname "$0")" && pwd)"
+clean_path="$(awk -v RS=: -v ORS=: -v skip="$script_dir" '$0 != skip' <<< "$PATH" | sed 's/:$//')"
+
+if ! PATH="$clean_path" command -v op &> /dev/null; then
+  echo "Error: the 1Password CLI (op) is not installed." >&2
+  echo "Install it from: https://developer.1password.com/docs/cli/get-started/" >&2
+  exit 1
+fi
+
+# .env.local last so per-worktree overrides win.
+env_args=()
+for env_file in .env.tpl .env.local; do
+  if [ -f "$env_file" ]; then
+    env_args+=(--env-file="$env_file")
+  fi
+done
+
+exec env PATH="$clean_path" op run "${env_args[@]}" -- "$@"
