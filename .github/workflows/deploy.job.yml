@@ -26,7 +26,6 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          cache-version: 1
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2
         with:

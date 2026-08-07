@@ -56,7 +56,6 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          cache-version: 1
       - uses: ./.github/workflows/js-setup-action
       - run: mkdir -p log
       - run: bundle exec rails db:create db:schema:load
