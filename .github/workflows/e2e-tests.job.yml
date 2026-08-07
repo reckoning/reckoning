@@ -69,6 +69,12 @@ jobs:
         with:
           bundler-cache: true
       - uses: ./.github/workflows/js-setup-action
+      # Install the browser build that matches the installed @playwright/test
+      # version. The container ships browsers for its own Playwright version,
+      # so a Dependabot bump of the npm package would otherwise fail with
+      # "Executable doesn't exist" until the image tag is bumped in lockstep.
+      - name: Install Playwright browser
+        run: pnpm exec playwright install --with-deps chromium
       - run: mkdir -p log && mkdir -p tmp/pids && rm -f tmp/pids/*
       - name: Setup DB
         run: bundle exec rails db:create db:schema:load
