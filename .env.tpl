@@ -28,5 +28,5 @@ DEVISE_OTP_SECRET=op://Reckoning/DEVISE_DEV/otp_secret
 # config/credentials.yml.enc already supplies the same values, so local
 # production dumps decrypt without them. CI sets its own throwaway keys.
 
-RECAPTCHA_KEY=op://Reckoning/RECAPTCHA_DEV/credential
-GOOGLE_API_KEY=op://Reckoning/GOOGLE_API_KEY_DEV/credential
+# RECAPTCHA_KEY and GOOGLE_API_KEY were in the old .env but are referenced
+# nowhere in app/, config/ or lib/. Dropped rather than carried forward.
