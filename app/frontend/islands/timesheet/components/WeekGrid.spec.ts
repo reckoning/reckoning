@@ -1,6 +1,7 @@
 import {describe, it, expect, beforeEach, vi} from "vitest"
 import {mount, flushPromises} from "@vue/test-utils"
 import type {Timer} from "../../../lib/timers/types"
+import type {TaskWithTimers} from "../../../lib/timers/api"
 
 // Spies shared with the mocked modules (hoisted above the imports).
 const {refresh, createTimer, updateTimer, deleteTimer} = vi.hoisted(() => ({
@@ -64,14 +65,28 @@ function makeTimer(overrides: Partial<Timer> = {}): Timer {
   }
 }
 
-function mountGrid() {
+function mountGrid(extraTasks?: TaskWithTimers[]) {
   return mount(WeekGrid, {
     props: {
       weekDate: "2026-06-10",
       dayShortLabels: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
       addTaskLabel: "Aufgabe hinzufügen",
+      extraTasks,
     },
   })
+}
+
+function makeRow(id: string): TaskWithTimers {
+  return {
+    id,
+    name: "Task",
+    label: "Label",
+    billable: true,
+    projectId: "p1",
+    projectName: "Project",
+    projectCustomerName: null,
+    timers: [],
+  }
 }
 
 async function emitSave(
@@ -81,6 +96,20 @@ async function emitSave(
   await wrapper.findComponent(WeekCell).vm.$emit("save", payload)
   await flushPromises()
 }
+
+describe("WeekGrid rows", () => {
+  it("renders tasks added this session that the week fetch does not return", () => {
+    const wrapper = mountGrid([makeRow("task2")])
+
+    expect(wrapper.findAll(".panel.panel-default")).toHaveLength(2)
+  })
+
+  it("does not duplicate an added task once the fetch returns it", () => {
+    const wrapper = mountGrid([makeRow("task1")])
+
+    expect(wrapper.findAll(".panel.panel-default")).toHaveLength(1)
+  })
+})
 
 describe("WeekGrid save semantics", () => {
   beforeEach(() => vi.clearAllMocks())

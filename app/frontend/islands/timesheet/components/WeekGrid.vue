@@ -25,6 +25,7 @@ const props = defineProps<{
   weekDate: string
   dayShortLabels: string[]
   addTaskLabel: string
+  extraTasks?: TaskWithTimers[]
 }>()
 
 const emit = defineEmits<{
@@ -34,6 +35,16 @@ const emit = defineEmits<{
 
 const weekDateRef = toRef(props, "weekDate")
 const {tasks, loading, error, refresh} = useWeekTasks(weekDateRef)
+
+// The API only returns tasks that already have timers in the week,
+// so a freshly added task has no row to type into. Rows added this
+// session are carried alongside until a save gives them timers and
+// the fetch picks them up on its own.
+const rows = computed<TaskWithTimers[]>(() => {
+  const fetched = tasks.value
+  const pending = (props.extraTasks ?? []).filter((e) => !fetched.some((t) => t.id === e.id))
+  return [...fetched, ...pending]
+})
 
 const days = computed(() =>
   weekDays(props.weekDate).map((date) => {
@@ -56,17 +67,14 @@ function taskTotal(task: TaskWithTimers): number {
 }
 
 function columnTotal(date: string): number {
-  return tasks.value.reduce(
+  return rows.value.reduce(
     (s, task) => s + timersForDate(task, date).reduce((ss, t) => ss + (Number(t.value) || 0), 0),
     0,
   )
 }
 
 const grandTotal = computed(() =>
-  tasks.value.reduce(
-    (s, task) => s + task.timers.reduce((ss, t) => ss + (Number(t.value) || 0), 0),
-    0,
-  ),
+  rows.value.reduce((s, task) => s + taskTotal(task), 0),
 )
 
 async function onCellSave(payload: {
@@ -91,11 +99,7 @@ async function onCellSave(payload: {
         .slice(0, -1)
         .reduce((s, t) => s + (Number(t.value) || 0), 0)
       const lastValue = Math.max(0, sumHours - otherSum)
-      await updateTimer(
-        last.id,
-        {date, value: lastValue, note: last.note, taskId: last.taskId},
-        false,
-      )
+      await updateTimer(last.id, {date, value: lastValue, note: last.note, taskId}, false)
     }
   } catch (e) {
     console.error("[timesheet] cell save failed:", e)
@@ -148,13 +152,13 @@ async function onTaskRemove(task: TaskWithTimers) {
       </div>
     </div>
 
-    <p v-if="loading && tasks.length === 0" class="text-muted">Lade…</p>
+    <p v-if="loading && rows.length === 0" class="text-muted">Lade…</p>
 
-    <div v-else-if="tasks.length === 0" class="timesheet-blank text-center text-muted">
+    <div v-else-if="rows.length === 0" class="timesheet-blank text-center text-muted">
       <p>Diese Woche keine Aufgaben.</p>
     </div>
 
-    <div v-for="task in tasks" :key="task.id" class="panel panel-default">
+    <div v-for="task in rows" :key="task.id" class="panel panel-default">
       <div class="panel-body row">
         <div class="col-xs-12 col-md-4 timesheet-task">
           <a :href="`/projects/${task.projectId}`">{{ task.projectName }}</a>
@@ -192,7 +196,7 @@ async function onTaskRemove(task: TaskWithTimers) {
       </div>
     </div>
 
-    <div v-if="tasks.length > 0" class="timesheet-footer row">
+    <div v-if="rows.length > 0" class="timesheet-footer row">
       <div class="col-xs-12 col-md-offset-4 col-md-6 timesheet-days">
         <div
           v-for="day in days"

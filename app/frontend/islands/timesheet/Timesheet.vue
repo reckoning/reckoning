@@ -2,12 +2,13 @@
 // Phase 6c root island for the timesheet. Switches between day
 // and week views via the `?view=day|week` URL query param.
 
-import {computed, ref} from "vue"
+import {computed, ref, watch} from "vue"
 import DayNav from "./components/DayNav.vue"
 import DayView from "./components/DayView.vue"
 import WeekGrid from "./components/WeekGrid.vue"
 import TaskModal from "./components/TaskModal.vue"
 import {useTimesheetDate} from "./composables/useTimesheetDate"
+import type {TaskWithTimers} from "../../lib/timers/api"
 import type {Timer} from "../../lib/timers/types"
 
 interface Labels {
@@ -58,20 +59,26 @@ const monthLabels = computed<string[]>(() =>
 
 const {date, view, weekStart, isToday, setView, prev, next, today, jump} = useTimesheetDate()
 
-// Week-view task-add modal. Open from the WeekGrid header,
-// closes on cancel / after a task is added. WeekGrid re-fetches
-// itself when its `weekDate` changes; we trigger a small bump
-// of the key on add so the grid re-mounts and picks up the new
-// task without polling.
+// Week-view task-add modal. `/api/v1/tasks?weekDate=` only returns
+// tasks that already have timers in the week, so a task picked here
+// is held as an extra row until its first cell is filled in.
 const showTaskModal = ref(false)
-const weekGridKey = ref(0)
+const addedTasks = ref<TaskWithTimers[]>([])
+
+watch(weekStart, () => {
+  addedTasks.value = []
+})
 
 function onAddTask() {
   showTaskModal.value = true
 }
 
-function onTaskCreated() {
-  weekGridKey.value++
+function onTaskCreated(task: TaskWithTimers) {
+  if (!addedTasks.value.some((t) => t.id === task.id)) addedTasks.value.push(task)
+}
+
+function onRemoveTask(task: TaskWithTimers) {
+  addedTasks.value = addedTasks.value.filter((t) => t.id !== task.id)
 }
 
 function onAdd(_date: string) {
@@ -106,11 +113,12 @@ function onEdit(_timer: Timer) {
 
     <WeekGrid
       v-else
-      :key="weekGridKey"
       :week-date="weekStart"
       :day-short-labels="labels.dayShort"
       :add-task-label="labels.addTask"
+      :extra-tasks="addedTasks"
       @add-task="onAddTask"
+      @remove-task="onRemoveTask"
     />
 
     <TaskModal

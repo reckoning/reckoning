@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 json.id timer.id
+json.task_id timer.task_id
 json.date timer.date
 json.value timer.value
 json.sum_for_task timer.sum_for_task
