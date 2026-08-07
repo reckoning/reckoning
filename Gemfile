@@ -4,7 +4,7 @@ source "https://rubygems.org"
 
 ruby File.read(".tool-versions").match(/ruby (.*)\n/)[1].chomp
 
-gem "rails", "~> 7.2.2"
+gem "rails", "~> 8.1.0"
 
 # Ruby 3.4 removed these from the default gemset; Rails 7.0.x still
 # references them implicitly. Drop these lines after the Rails 7.1+ bump.
@@ -52,7 +52,9 @@ gem "jbuilder"
 # frontend migration (see docs/frontend-migration-plan.md).
 gem "vite_rails"
 
-gem "dynamic_fields_for_rails"
+# Our own gem; consumed from git until it's dropped after the Rails→Vue
+# frontend migration. Pinned to the commit that lifts its `rails < 8` cap.
+gem "dynamic_fields_for_rails", git: "https://github.com/mortik/dynamic_fields_for_rails.git", ref: "45f265e2f974eb05d8fc978c96e8de63e6c26ae7"
 
 gem "workflow", "~> 1.2.0"
 
@@ -111,6 +113,7 @@ gem "grover"
 gem "active_storage_validations"
 gem "aws-sdk-s3", require: false
 gem "image_processing", "~> 2.0"
+gem "ruby-vips", "~> 2.0"
 
 gem "nokogiri", ">= 1.7.1"
 

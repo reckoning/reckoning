@@ -43,6 +43,11 @@ module Reckoning
 
     config.active_record.yaml_column_permitted_classes = [Symbol, Date, Time]
 
+    # Process Active Storage variants with libvips. Rails 8 eagerly loads the
+    # variant transformer at boot, so ruby-vips must be in the bundle and
+    # libvips present in every environment that boots the app.
+    config.active_storage.variant_processor = :vips
+
     config.exceptions_app = routes
 
     config.middleware.use I18n::JS::Middleware

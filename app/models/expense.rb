@@ -14,7 +14,7 @@ class Expense < ApplicationRecord
     BUSINESS_TYPES.include?(type)
   end.freeze
 
-  enum interval: {once: 0, weekly: 1, monthly: 2, quarterly: 3, yearly: 4}
+  enum :interval, {once: 0, weekly: 1, monthly: 2, quarterly: 3, yearly: 4}
 
   has_one_attached :receipt
 
