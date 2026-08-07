@@ -626,9 +626,11 @@ GEM
 
 PLATFORMS
   aarch64-linux
+  aarch64-linux-gnu
   arm64-darwin
   x86_64-darwin-20
   x86_64-linux
+  x86_64-linux-gnu
 
 DEPENDENCIES
   aasm
@@ -727,4 +729,4 @@ RUBY VERSION
    ruby 3.4.7p58
 
 BUNDLED WITH
-   2.4.10
+   2.6.9
