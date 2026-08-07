@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Trigger an on-demand Postgres backup to object storage, outside the nightly
+# schedule. Run this before anything that touches the live database.
+echo "Triggering on-demand database backup on live..."
+bundle exec kamal accessory exec db-backup -d live --reuse /backup.sh
+echo "Done!"

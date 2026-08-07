@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+#   bin/logs-live web -f
+#   bin/logs-live worker
+ROLE="${1:-web}"
+shift 2>/dev/null || true
+exec bundle exec kamal app logs -d live -r "$ROLE" "$@"
