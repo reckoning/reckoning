@@ -62,7 +62,7 @@ jobs:
           --health-retries 5
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Install system dependencies
         run: apt-get update && apt-get install -y --no-install-recommends libyaml-dev libvips-dev
       - uses: ruby/setup-ruby@v1
