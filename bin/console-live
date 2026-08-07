@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Rails console on live, sandboxed — every change is rolled back on exit.
+# Use bin/exec-live for a console that can actually write.
+ROLE="${1:-web}"
+shift 2>/dev/null || true
+exec bundle exec kamal app exec -i -d live -r "$ROLE" "bin/rails console --sandbox"

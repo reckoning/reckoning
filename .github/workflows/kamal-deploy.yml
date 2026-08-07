@@ -24,15 +24,19 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    # The repository environment is "Live"; inputs.destination is "live". Mapping
+    # explicitly avoids silently creating a second, unprotected environment.
     environment:
-      name: ${{ inputs.destination }}
+      name: Live
 
     env:
+      # Everything else is resolved from the Reckoning 1Password vault by
+      # .kamal/secrets-common and .kamal/secrets.<destination>.
+      OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+      # Pushing to ghcr.io only needs the built-in, repo-scoped token, so the
+      # registry PAT in the vault stays for local deploys.
       KAMAL_REGISTRY_USERNAME: ${{ github.repository_owner }}
       KAMAL_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      REDIS_URL: ${{ secrets.REDIS_URL }}
 
     steps:
       - uses: actions/checkout@v7
@@ -41,12 +45,21 @@ jobs:
         with:
           bundler-cache: true
 
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.SSH_KEY }}
-          known_hosts: ${{ secrets.KNOWN_HOSTS }}
-          if_key_exists: ignore
+      - uses: 1password/install-cli-action@v1
+
+      # Written straight to disk rather than through an env var or a third-party
+      # action, so the key never passes through the workflow environment.
+      # ssh-format=openssh is required: the raw field is PKCS#8, which OpenSSH
+      # cannot use for an ed25519 key.
+      - name: Install deploy key
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          op read "op://Reckoning/Deploy Key ${DESTINATION^}/private key?ssh-format=openssh" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+        env:
+          DESTINATION: ${{ inputs.destination }}
+          KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
 
       - name: kamal deploy -d ${{ inputs.destination }}
         run: |

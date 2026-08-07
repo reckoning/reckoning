@@ -145,13 +145,26 @@ docker compose up -d                 # postgres + redis on ports 8241/8242
 bundle install
 pnpm install
 bin/setup                            # creates dev + test DBs, seeds, etc.
+
+op signin                            # dev secrets come from 1Password
+export OP_ACCOUNT=my.1password.eu
 ```
+
+No `.env` is needed. `.env.tpl` is committed and holds `op://` references
+instead of secrets; `bin/op` resolves them at run time. Machine-specific
+overrides (ports, `WORKTREE_SUFFIX`) go in `.env.local`, which is gitignored and
+read after the template.
 
 ### Development
 
 ```bash
-foreman start -f Procfile.dev        # Rails + sidekiq + (legacy) assets
+bin/op foreman start -f Procfile.dev  # Rails + sidekiq + (legacy) assets
+bin/op rails console
+bin/op rake db:migrate
 ```
+
+Anything needing dev secrets goes through `bin/op`. Commands that don't — tests,
+linters, generators — can run directly.
 
 ### Testing
 
@@ -186,6 +199,36 @@ bundle exec kamal deploy -d live
 
 The auto-deploy on push-to-main is **disabled** (workflow has
 `if: false && ...` since #837) until the Kamal cutover.
+
+### Secrets (Kamal path)
+
+Every Kamal secret comes from the **`Reckoning` 1Password vault** via
+`.kamal/secrets-common` and `.kamal/secrets.<destination>`. Those files hold
+`op read` calls, not secret material, and are committed on purpose.
+
+```bash
+op signin
+export OP_ACCOUNT=my.1password.eu
+
+bundle exec kamal secrets print -d live   # verify resolution before deploying
+```
+
+CI uses `OP_SERVICE_ACCOUNT_TOKEN` instead of `OP_ACCOUNT`.
+
+Notes:
+
+- `RAILS_MASTER_KEY` decrypts `config/credentials/production.yml.enc`, which
+  supplies `secret_key_base`, the devise secrets, mailer credentials **and the
+  `active_record_encryption` keys**. A wrong key does not fail loudly — it makes
+  every encrypted column read back as garbage.
+- `DATABASE_URL`/`REDIS_URL` are built in `.kamal/secrets.live` from the
+  Postgres accessory credentials. They resolve over the Docker network
+  (`reckoning-db`, `reckoning-redis`) because live is a single node with
+  colocated datastores.
+- Servers, buckets and the accessory topology are provisioned by
+  [reckoning/infrastructure](https://github.com/reckoning/infrastructure).
+- The Capistrano path still reads `.env` and `config/credentials/production.key`
+  from disk. Both go away with the cutover.
 
 ## Conventions
 

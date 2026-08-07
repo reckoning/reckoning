@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Deploy to live. Secrets resolve through .kamal/secrets-common and
+# .kamal/secrets.live, so nothing needs exporting beyond the 1Password account.
+exec bundle exec kamal deploy -d live "$@"

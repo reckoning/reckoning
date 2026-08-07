@@ -6,6 +6,10 @@ local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
 
+# Retired. The Spaces bucket no longer exists, so this service cannot serve
+# anything — it stays only until config.active_storage.service is switched to
+# :hetzner at cutover, since removing it while it is still selected breaks boot.
+# Drop this block and the s3_key/s3_secret credentials together with the switch.
 digitalocean:
   service: S3
   bucket: reckoning
@@ -13,3 +17,11 @@ digitalocean:
   region: fra1
   access_key_id: <%= Rails.application.credentials.dig(:s3_key) %>
   secret_access_key: <%= Rails.application.credentials.dig(:s3_secret) %>
+
+hetzner:
+  service: S3
+  bucket: reckoning-live-storage
+  endpoint: https://nbg1.your-objectstorage.com
+  region: nbg1
+  access_key_id: <%= Rails.application.credentials.dig(:hetzner_s3_key) %>
+  secret_access_key: <%= Rails.application.credentials.dig(:hetzner_s3_secret) %>

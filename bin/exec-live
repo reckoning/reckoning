@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Run a command in the live app container.
+#   bin/exec-live web "bin/rails db:migrate"
+ROLE="${1:-web}"
+shift 2>/dev/null || true
+exec bundle exec kamal app exec -d live -r "$ROLE" "$@"
