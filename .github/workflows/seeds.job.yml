@@ -39,6 +39,8 @@ jobs:
           sudo sysctl -w fs.file-max=262144
           sudo sysctl -w vm.max_map_count=262144
       - run: mkdir -p log
+      - name: Install libvips (Active Storage vips variant processor)
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libvips42
       - run: bundle exec rails db:create db:schema:load
       - name: Run Seeds
         run: bundle exec rails db:seed

@@ -58,6 +58,8 @@ jobs:
           bundler-cache: true
       - uses: ./.github/workflows/js-setup-action
       - run: mkdir -p log
+      - name: Install libvips (Active Storage vips variant processor)
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libvips42
       - run: bundle exec rails db:create db:schema:load
       - name: Install Chromium system libs for Puppeteer
         run: |
