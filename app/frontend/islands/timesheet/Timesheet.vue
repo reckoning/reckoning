@@ -7,6 +7,7 @@ import DayNav from "./components/DayNav.vue"
 import DayView from "./components/DayView.vue"
 import WeekGrid from "./components/WeekGrid.vue"
 import TaskModal from "./components/TaskModal.vue"
+import TimerModal from "./components/TimerModal.vue"
 import {useTimesheetDate} from "./composables/useTimesheetDate"
 import type {TaskWithTimers} from "../../lib/timers/api"
 import type {Timer} from "../../lib/timers/types"
@@ -16,6 +17,7 @@ interface Labels {
   week: string
   today: string
   addTimer: string
+  editTimer: string
   addTask: string
   dayShort: string[]
   dayLong: string[]
@@ -32,6 +34,7 @@ const labels = computed<Labels>(() => ({
   week: "Week",
   today: "Today",
   addTimer: "Add timer",
+  editTimer: "Edit timer",
   addTask: "Add task",
   dayShort: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
   dayLong: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
@@ -81,13 +84,21 @@ function onRemoveTask(task: TaskWithTimers) {
   addedTasks.value = addedTasks.value.filter((t) => t.id !== task.id)
 }
 
-function onAdd(_date: string) {
-  // Timer add/edit modal lands in a follow-up. Day view's
-  // "Zeit hinzufügen" button is wired but no-op for now.
+// Day-view timer modal. A null draft means closed; `date` alone is
+// an add, a full timer is an edit.
+const timerDraft = ref<(Partial<Timer> & {date: string}) | null>(null)
+const dayViewRef = ref<InstanceType<typeof DayView> | null>(null)
+
+function onAdd(forDate: string) {
+  timerDraft.value = {date: forDate}
 }
 
-function onEdit(_timer: Timer) {
-  // Same — modal is in a follow-up.
+function onEdit(timer: Timer) {
+  timerDraft.value = {...timer}
+}
+
+function onTimerSaved() {
+  dayViewRef.value?.refresh()
 }
 </script>
 
@@ -109,7 +120,14 @@ function onEdit(_timer: Timer) {
       @view="setView"
     />
 
-    <DayView v-if="view === 'day'" :date="date" @add="onAdd" @edit="onEdit" />
+    <DayView
+      v-if="view === 'day'"
+      ref="dayViewRef"
+      :date="date"
+      :add-timer-label="labels.addTimer"
+      @add="onAdd"
+      @edit="onEdit"
+    />
 
     <WeekGrid
       v-else
@@ -126,6 +144,15 @@ function onEdit(_timer: Timer) {
       :title="labels.addTask"
       @close="showTaskModal = false"
       @created="onTaskCreated"
+    />
+
+    <TimerModal
+      v-if="timerDraft"
+      :draft="timerDraft"
+      :add-title="labels.addTimer"
+      :edit-title="labels.editTimer"
+      @close="timerDraft = null"
+      @saved="onTimerSaved"
     />
   </div>
 </template>

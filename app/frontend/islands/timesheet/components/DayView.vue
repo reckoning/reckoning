@@ -1,18 +1,13 @@
 <script setup lang="ts">
 // Day view: list of timer cards for the selected day.
 // Mirrors `app/views/templates/timesheets/day.html.erb`.
-//
-// Add/edit modal is not in this commit — the cards open an edit
-// flow in a follow-up. For now the day view is read-only; the
-// legacy AngularJS day view still owns mutations until the flag
-// flips and the modal ships.
 
 import {toRef} from "vue"
 import {useDayTimers} from "../composables/useDayTimers"
 import TimerCard from "./TimerCard.vue"
 import type {Timer} from "../../../lib/timers/types"
 
-const props = defineProps<{date: string}>()
+const props = defineProps<{date: string; addTimerLabel: string}>()
 const emit = defineEmits<{
   add: [date: string]
   edit: [timer: Timer]
@@ -20,6 +15,8 @@ const emit = defineEmits<{
 
 const dateRef = toRef(props, "date")
 const {timers, loading, error, refresh} = useDayTimers(dateRef)
+
+defineExpose({refresh})
 </script>
 
 <template>
@@ -49,7 +46,7 @@ const {timers, loading, error, refresh} = useDayTimers(dateRef)
         @click="emit('add', date)"
       >
         <i class="fa fa-plus" aria-hidden="true"></i>
-        Zeit hinzufügen
+        {{ addTimerLabel }}
       </button>
     </div>
   </div>
