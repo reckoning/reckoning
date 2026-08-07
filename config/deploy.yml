@@ -2,8 +2,10 @@
 # https://kamal-deploy.org/docs/configuration/
 #
 # Deploy with: kamal deploy -d live
-# (No DB/Redis accessories — reckoning's production already runs Postgres
-# and Redis externally; we keep that, just route DATABASE_URL/REDIS_URL.)
+#
+# Secrets are resolved from the Reckoning 1Password vault via .kamal/secrets-common
+# and .kamal/secrets.<destination>. Servers and accessories are provisioned by
+# https://github.com/reckoning/infrastructure.
 
 service: reckoning
 image: reckoning/app

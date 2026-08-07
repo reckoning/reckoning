@@ -1,5 +1,13 @@
 # Kamal destination: live
 # kamal deploy -d live
+#
+# The host is the server provisioned by reckoning/infrastructure:
+#   terraform workspace select live && terraform output -raw web_server_ips
+#
+# Postgres and Redis run as accessories on that same host — live is a single
+# node. If the datastores ever move to a dedicated accessories server, point the
+# accessory hosts at its private IP and update DATABASE_URL/REDIS_URL in
+# .kamal/secrets.live to match.
 
 servers:
   web:
@@ -16,3 +24,52 @@ env:
   clear:
     RAILS_ENV: production
     DOMAIN: reckoning.mortik.xyz
+
+accessories:
+  db:
+    image: postgres:16
+    host: reckoning.mortik.xyz
+    # Bound to loopback: on a colocated node the datastores must not be
+    # reachable from the public interface. The firewall only opens 22/80/443,
+    # but this way a firewall mistake isn't immediately an open database.
+    port: "127.0.0.1:5432:5432"
+    env:
+      clear:
+        POSTGRES_DB: reckoning_production
+      secret:
+        - POSTGRES_USER
+        - POSTGRES_PASSWORD
+    directories:
+      - data:/var/lib/postgresql/data
+    options:
+      memory: 1g
+
+  redis:
+    image: redis:7.2
+    host: reckoning.mortik.xyz
+    port: "127.0.0.1:6379:6379"
+    cmd: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+    directories:
+      - data:/data
+    options:
+      memory: 512m
+
+  db-backup:
+    image: eeshugerman/postgres-backup-s3:16
+    host: reckoning.mortik.xyz
+    env:
+      clear:
+        POSTGRES_HOST: reckoning-db
+        POSTGRES_DATABASE: reckoning_production
+        SCHEDULE: "0 3 * * *"
+        S3_ENDPOINT: https://nbg1.your-objectstorage.com
+        S3_BUCKET: reckoning-live-backups
+        S3_REGION: nbg1
+        BACKUP_KEEP_DAYS: "14"
+      secret:
+        - POSTGRES_USER
+        - POSTGRES_PASSWORD
+        - S3_ACCESS_KEY_ID
+        - S3_SECRET_ACCESS_KEY
+    options:
+      memory: 256m
