@@ -21,11 +21,12 @@ DEVISE_SECRET=op://Reckoning/DEVISE_DEV/secret
 DEVISE_JWT_SECRET=op://Reckoning/DEVISE_DEV/jwt_secret
 DEVISE_OTP_SECRET=op://Reckoning/DEVISE_DEV/otp_secret
 
-# Development keys only — production reads its encryption keys from
-# config/credentials/production.yml.enc. These will not decrypt production data.
-ACTIVE_RECORD_ENCRYPTION__PRIMARY_KEY=op://Reckoning/ACTIVE_RECORD_ENCRYPTION_DEV/primary_key
-ACTIVE_RECORD_ENCRYPTION__DETERMINISTIC_KEY=op://Reckoning/ACTIVE_RECORD_ENCRYPTION_DEV/deterministic_key
-ACTIVE_RECORD_ENCRYPTION__KEY_DERIVATION_SALT=op://Reckoning/ACTIVE_RECORD_ENCRYPTION_DEV/key_derivation_salt
+# No ACTIVE_RECORD_ENCRYPTION_* here on purpose. The old .env carried the
+# production keys under double-underscore names, which
+# config/initializers/active_record_encryption.rb never reads — it uses single
+# underscores, and only as a fallback for when credentials leave a key blank.
+# config/credentials.yml.enc already supplies the same values, so local
+# production dumps decrypt without them. CI sets its own throwaway keys.
 
 RECAPTCHA_KEY=op://Reckoning/RECAPTCHA_DEV/credential
 GOOGLE_API_KEY=op://Reckoning/GOOGLE_API_KEY_DEV/credential

@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 require "fileutils"
+require "json"
 require "zlib"
 require "open3"
 
@@ -18,6 +19,7 @@ def parse_int_flag(prefix)
 end
 
 PORT_OVERRIDE = parse_int_flag("--port")
+VITE_PORT_OVERRIDE = parse_int_flag("--vite-port")
 NAME_OVERRIDE = parse_flag("--name")
 trap("INT") do
   print "\n"
@@ -37,8 +39,21 @@ def detect_worktree
   File.basename(APP_ROOT)
 end
 
+def main_worktree_root
+  common_dir = `git -C "#{APP_ROOT}" rev-parse --path-format=absolute --git-common-dir 2>/dev/null`.strip
+  return nil if common_dir.empty? || !File.directory?(common_dir)
+
+  File.dirname(common_dir)
+end
+
 def worktree_port(name)
   8240 + (Zlib.crc32(name) % 500)
+end
+
+# Deliberately a separate range from worktree_port's 8240-8739: with a shared
+# base, one worktree's Vite port could land on another's Rails port.
+def worktree_vite_port(name)
+  8800 + (Zlib.crc32(name) % 500)
 end
 
 def sanitize_worktree_name(name)
@@ -61,7 +76,42 @@ def worktree_redis_db(name)
   2 + (Zlib.crc32(name) % 500)
 end
 
-def write_env_local(port, db_port, redis_port, redis_db, db_suffix, cookie_prefix: nil)
+def write_superset_ports(port, vite_port)
+  superset_dir = File.join(APP_ROOT, ".superset")
+  FileUtils.mkdir_p(superset_dir)
+
+  config = {
+    "ports" => [
+      {"port" => port, "label" => "App"},
+      {"port" => vite_port, "label" => "Vite"}
+    ]
+  }
+
+  File.write(File.join(superset_dir, "ports.json"), JSON.pretty_generate(config) + "\n")
+end
+
+# Git worktrees don't carry gitignored files, so a fresh worktree has no
+# credentials keys and `bin/rails` cannot decrypt config/credentials*.yml.enc
+# there. Link them from the main worktree rather than copying, so rotating a key
+# doesn't leave stale duplicates behind.
+def link_gitignored_keys(verbose:)
+  main_root = main_worktree_root
+  return if main_root.nil? || main_root == APP_ROOT
+
+  %w[config/master.key config/credentials/production.key].each do |rel|
+    source = File.join(main_root, rel)
+    target = File.join(APP_ROOT, rel)
+
+    next unless File.exist?(source)
+    next if File.symlink?(target) || File.exist?(target)
+
+    FileUtils.mkdir_p(File.dirname(target))
+    FileUtils.ln_s(source, target)
+    puts "   Linked #{rel} -> #{source}" if verbose
+  end
+end
+
+def write_env_local(port, db_port, redis_port, redis_db, db_suffix, vite_port, cookie_prefix: nil)
   env_local = File.join(APP_ROOT, ".env.local")
 
   user_content = ""
@@ -79,6 +129,8 @@ def write_env_local(port, db_port, redis_port, redis_db, db_suffix, cookie_prefi
     REDIS_URL=redis://localhost:#{redis_port}
     REDIS_DB=#{redis_db}
     WORKTREE_SUFFIX=#{db_suffix}
+    VITE_RUBY_HOST=localhost
+    VITE_RUBY_PORT=#{vite_port}
     DOMAIN=localhost:#{port}
     #{"COOKIE_PREFIX=#{cookie_prefix}" if cookie_prefix}
   ENV
@@ -97,6 +149,7 @@ if ARGV.include?("--help") || ARGV.include?("-h")
                       WARNING: affects all worktrees (shared Docker services)
       --name=NAME     Override the worktree name used for DB suffix, ports, etc.
       --port=N        Override the Rails port (default: derived from name)
+      --vite-port=N   Override the Vite dev server port (default: derived from name)
       --dev           Start the development server after setup
       --dev-<flag>    Forward --<flag> to bin/dev (e.g. --dev-docker, --dev-open)
       --verbose       Show full command output (default: concise status lines)
@@ -111,6 +164,7 @@ FileUtils.chdir APP_ROOT do
   wt_name = detect_worktree
   port = 8240
   db_port = 8241
+  vite_port = 8800
 
   if wt_name
     effective_name = NAME_OVERRIDE || wt_name
@@ -118,6 +172,7 @@ FileUtils.chdir APP_ROOT do
     db_port = worktree_db_port(effective_name)
     redis_port = worktree_redis_port(effective_name)
     redis_db = worktree_redis_db(effective_name)
+    vite_port = VITE_PORT_OVERRIDE || worktree_vite_port(effective_name)
     db_suffix = worktree_db_suffix(effective_name)
 
     if VERBOSE
@@ -125,6 +180,7 @@ FileUtils.chdir APP_ROOT do
       puts "   Rails port:  #{port}#{" (override)" if PORT_OVERRIDE}"
       puts "   DB port:     #{db_port}"
       puts "   Redis port:  #{redis_port}"
+      puts "   Vite port:   #{vite_port}#{" (override)" if VITE_PORT_OVERRIDE}"
       puts "   Redis DB:    #{redis_db}"
       puts "   DB suffix:   #{db_suffix}"
     else
@@ -132,9 +188,13 @@ FileUtils.chdir APP_ROOT do
     end
 
     cookie_prefix = "RECKONING_WT_#{sanitize_worktree_name(effective_name)}"
-    write_env_local(port, db_port, redis_port, redis_db, db_suffix, cookie_prefix:)
+    write_env_local(port, db_port, redis_port, redis_db, db_suffix, vite_port, cookie_prefix:)
     puts "   Wrote .env.local" if VERBOSE
+
+    link_gitignored_keys(verbose: VERBOSE)
   end
+
+  write_superset_ports(port, vite_port)
 
   unless system("command -v pnpm > /dev/null 2>&1")
     abort "pnpm is not installed. Install it via: npm install -g pnpm"
