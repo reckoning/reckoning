@@ -31,7 +31,11 @@ development:
 
 test:
   url: http://reckoning.test
-  domain: reckoning.test
+  # Overridable so the Playwright e2e run can point the Vue islands'
+  # `ApiBasePath` (derived from this domain) at the real test server
+  # host. The in-process Minitest suite leaves DOMAIN unset and keeps
+  # `reckoning.test`.
+  domain: <%= ENV["DOMAIN"] || "reckoning.test" %>
 
   registration: true
   demo: false

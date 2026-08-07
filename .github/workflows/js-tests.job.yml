@@ -1,0 +1,14 @@
+name: JS Tests Job
+
+on:
+  workflow_call:
+
+jobs:
+  js-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/workflows/js-setup-action
+      - name: Vitest
+        run: pnpm test:unit
+        shell: bash
