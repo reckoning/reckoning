@@ -32,8 +32,8 @@
             <i class="fa fa-down"></i>
             <%= I18n.t(:"nav.subnav.export") %>
           </a>
-          <a class="btn btn-default hidden-xs" href="<%= new_expense_import_path %>">
-            <i class="fa fa-down"></i>
+          <a class="btn btn-default" href="<%= new_expense_import_path %>">
+            <i class="fa fa-upload"></i>
             <%= I18n.t(:"nav.subnav.import") %>
           </a>
         </div>
@@ -75,27 +75,73 @@
     </div>
 
     <% if @expenses.present? %>
-      <div class="panel panel-list panel-default expense">
-        <div class="panel-heading">
-          <div class="row">
-            <div class="col-md-2 hidden-xs">
-              <%= I18n.t("activerecord.attributes.expense.date") %>
-            </div>
-            <div class="col-md-3 hidden-xs">
-              <%= I18n.t("activerecord.attributes.expense.description") %>
-            </div>
-            <div class="col-md-2 hidden-xs"><%= I18n.t("activerecord.attributes.expense.expense_type") %></div>
-            <div class="col-md-2 hidden-xs"><%= I18n.t("activerecord.attributes.expense.vat_value") %></div>
-            <div class="col-md-3 hidden-xs">
-              <%= I18n.t("activerecord.attributes.expense.receipt") %>
-              <div class="pull-right"><%= I18n.t("activerecord.attributes.expense.value") %></div>
+      <%= form_with url: bulk_update_expenses_path, method: :post, data: {controller: "bulk-select"} do |form| %>
+        <div class="panel panel-default hide" data-bulk-select-target="toolbar">
+          <div class="panel-body">
+            <div class="flex flex-wrap items-end gap-3">
+              <div>
+                <strong><span data-bulk-select-target="count">0</span> <%= I18n.t(:"expenses.bulk.selected") %></strong>
+              </div>
+              <div class="form-group" style="margin-bottom: 0">
+                <label><%= I18n.t(:"filter.expense_type.label") %></label>
+                <%= select_tag "bulk[expense_type]",
+                      options_for_select([[I18n.t(:"expenses.bulk.unchanged"), ""]] +
+                        Expense::VALID_TYPES.map { |type| [I18n.t(:"filter.expense_type.#{type}"), type] }),
+                      class: "form-control" %>
+              </div>
+              <div class="form-group" style="margin-bottom: 0">
+                <label><%= I18n.t(:"helpers.label.expense_import.vat_percent") %></label>
+                <div class="input-group">
+                  <%= number_field_tag "bulk[vat_percent]", nil, class: "form-control text-right", max: 100, min: 0,
+                        placeholder: I18n.t(:"expenses.bulk.unchanged") %>
+                  <span class="input-group-addon">%</span>
+                </div>
+              </div>
+              <div class="form-group" style="margin-bottom: 0">
+                <label><%= I18n.t(:"helpers.label.expense.private_use_percent") %></label>
+                <div class="input-group">
+                  <%= number_field_tag "bulk[private_use_percent]", nil, class: "form-control text-right", max: 100, min: 0,
+                        placeholder: I18n.t(:"expenses.bulk.unchanged") %>
+                  <span class="input-group-addon">%</span>
+                </div>
+              </div>
+              <div class="btn-group">
+                <%= form.submit I18n.t(:"expenses.bulk.apply"), class: "btn btn-primary" %>
+                <%= form.submit I18n.t(:"expenses.bulk.delete"),
+                      formaction: bulk_destroy_expenses_path,
+                      class: "btn btn-danger",
+                      data: {turbo_confirm: I18n.t(:"expenses.bulk.confirm_delete")} %>
+              </div>
             </div>
           </div>
         </div>
-        <div class="list-group">
-          <%= render partial: "expenses/list_item", collection: @expenses, as: :expense %>
+
+        <div class="panel panel-list panel-default expense">
+          <div class="panel-heading" style="position: relative; padding-left: 44px;">
+            <%= check_box_tag "select_all_expenses", "1", false, class: "rk-checkbox",
+                  id: "select-all-expenses", "aria-label": I18n.t(:"expenses.bulk.select_all"),
+                  style: "position: absolute; left: 16px; top: 50%; transform: translateY(-50%); z-index: 2;",
+                  "data-bulk-select-target": "selectAll", "data-action": "change->bulk-select#toggleAll" %>
+            <div class="row">
+              <div class="col-md-2 hidden-xs">
+                <%= I18n.t("activerecord.attributes.expense.date") %>
+              </div>
+              <div class="col-md-3 hidden-xs">
+                <%= I18n.t("activerecord.attributes.expense.description") %>
+              </div>
+              <div class="col-md-2 hidden-xs"><%= I18n.t("activerecord.attributes.expense.expense_type") %></div>
+              <div class="col-md-2 hidden-xs"><%= I18n.t("activerecord.attributes.expense.vat_value") %></div>
+              <div class="col-md-3 hidden-xs">
+                <%= I18n.t("activerecord.attributes.expense.receipt") %>
+                <div class="pull-right"><%= I18n.t("activerecord.attributes.expense.value") %></div>
+              </div>
+            </div>
+          </div>
+          <div class="list-group">
+            <%= render partial: "expenses/list_item", collection: @expenses, as: :expense %>
+          </div>
         </div>
-      </div>
+      <% end %>
     <% end %>
 
     <% if @expenses.blank? %>

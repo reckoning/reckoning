@@ -21,3 +21,6 @@ de:
       archive:
         success: "%{resource} erfolgreich archiviert."
         failure: "%{resource} konnte nicht archiviert werden."
+      import:
+        success: "%{resource} erfolgreich importiert."
+        failure: "%{resource} konnte nicht importiert werden."

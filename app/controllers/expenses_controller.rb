@@ -89,6 +89,46 @@ class ExpensesController < ApplicationController
     end
   end
 
+  def bulk_update
+    authorize! :update, Expense
+    expenses = current_account.expenses.where(id: bulk_ids)
+    attributes = bulk_attributes
+
+    if expenses.empty? || attributes.empty?
+      flash[:alert] = I18n.t(:"expenses.bulk.update_failure")
+    else
+      updated = expenses.count { |expense| expense.update(attributes) }
+      flash[:success] = I18n.t(:"expenses.bulk.updated", count: updated)
+    end
+
+    redirect_to expenses_path(stored_params(:index))
+  end
+
+  def bulk_destroy
+    authorize! :destroy, Expense
+    expenses = current_account.expenses.where(id: bulk_ids)
+
+    if expenses.empty?
+      flash[:alert] = I18n.t(:"expenses.bulk.destroy_failure")
+    else
+      destroyed = expenses.count { |expense| expense.destroy }
+      flash[:success] = I18n.t(:"expenses.bulk.destroyed", count: destroyed)
+    end
+
+    redirect_to expenses_path(stored_params(:index))
+  end
+
+  private def bulk_ids
+    Array(params[:expense_ids]).reject(&:blank?)
+  end
+
+  private def bulk_attributes
+    params.fetch(:bulk, {})
+      .permit(:expense_type, :vat_percent, :private_use_percent)
+      .to_h
+      .reject { |_, value| value.blank? }
+  end
+
   private def filter_params
     params.permit(:year, :type, :quarter, :month, :query)
   end

@@ -1,0 +1,100 @@
+<% content_for :title do %>
+  <%= I18n.t(:"meta.title.expense.import") %>
+<% end %>
+
+<div class="row" id="preview-expense-import">
+  <div class="col-xs-12 col-md-12">
+
+    <div class="row">
+      <div class="col-xs-12 col-md-8">
+        <h1><%= I18n.t(:"headlines.expense.import") %></h1>
+      </div>
+
+      <div class="col-xs-12 col-md-4">
+        <div class="btn-group-responsive pull-right resource-nav">
+          <%= link_to I18n.t(:"nav.subnav.back"), new_expense_import_path, class: "btn btn-default" %>
+        </div>
+      </div>
+    </div>
+
+    <p><%= I18n.t(:"expenses.import.preview_hint") %></p>
+
+    <% if @expense_import.errors.any? %>
+      <div id="error_explanation" class="alert alert-danger">
+        <ul>
+          <% @expense_import.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= form_for @expense_import, url: expense_imports_path, html: {data: {turbo: false}} do |f| %>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th><%= I18n.t(:"expenses.import.column.include") %></th>
+              <th><%= I18n.t(:"helpers.label.expense.date") %></th>
+              <th class="text-right"><%= I18n.t(:"helpers.label.expense.value") %></th>
+              <th><%= I18n.t(:"helpers.label.expense.seller") %></th>
+              <th><%= I18n.t(:"helpers.label.expense.description") %></th>
+              <th><%= I18n.t(:"helpers.label.expense_import.expense_type") %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @expenses.each_with_index do |expense, i| %>
+              <% prefix = "expense_import[rows][#{i}]" %>
+              <tr class="<%= "danger" if expense.errors.any? %>">
+                <td>
+                  <%= hidden_field_tag "#{prefix}[include]", "0" %>
+                  <%= check_box_tag "#{prefix}[include]", "1", true, class: "rk-checkbox",
+                        id: "include-#{i}", "aria-label": I18n.t(:"expenses.bulk.select_row") %>
+                </td>
+                <td>
+                  <%= hidden_field_tag "#{prefix}[id]", expense.id %>
+                  <%= hidden_field_tag "#{prefix}[date]", expense.date&.iso8601 %>
+                  <%= hidden_field_tag "#{prefix}[started_at]", expense.started_at&.iso8601 %>
+                  <%= hidden_field_tag "#{prefix}[ended_at]", expense.ended_at&.iso8601 %>
+                  <%= hidden_field_tag "#{prefix}[interval]", expense.interval %>
+                  <%= hidden_field_tag "#{prefix}[vat_percent]", expense.vat_percent %>
+                  <%= hidden_field_tag "#{prefix}[private_use_percent]", expense.private_use_percent %>
+                  <%= hidden_field_tag "#{prefix}[afa_type_id]", expense.afa_type_id %>
+                  <%= expense.date ? l(expense.date) : "—" %>
+                </td>
+                <td class="text-right">
+                  <%= hidden_field_tag "#{prefix}[value]", expense.value %>
+                  <%= number_to_currency(expense.value) %>
+                </td>
+                <td>
+                  <%= text_field_tag "#{prefix}[seller]", expense.seller, class: "form-control" %>
+                </td>
+                <td>
+                  <%= text_field_tag "#{prefix}[description]", expense.description, class: "form-control" %>
+                </td>
+                <td>
+                  <%= select_tag "#{prefix}[expense_type]",
+                        options_for_select(
+                          Expense::VALID_TYPES.map { |type| [I18n.t(:"filter.expense_type.#{type}"), type] },
+                          expense.expense_type
+                        ),
+                        class: "form-control" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+      <hr>
+
+      <div class="btn-group-responsive">
+        <button class="btn btn-primary btn-lg" type="submit">
+          <%= I18n.t(:"expenses.import.submit", count: @expenses.size) %>
+        </button>
+
+        <%= link_to I18n.t(:"actions.cancel"), expenses_path(stored_params(:index)), class: "btn btn-default" %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -20,3 +20,63 @@
 @source "../../views/**/*.erb";
 @source "../../helpers/**/*.rb";
 @source "../../components/**/*.{html,erb,rb}";
+
+/*
+ * Custom, dependency-free checkbox. Styles the native <input> directly via
+ * `appearance: none` so it renders identically across browsers with no
+ * pseudo-element/label trickery. Left unlayered (not in @layer) and given a
+ * type-qualified selector so it beats Bootstrap 3's `input[type=checkbox]`
+ * rules by specificity regardless of stylesheet order.
+ */
+input[type="checkbox"].rk-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  padding: 0;
+  flex: none;
+  box-sizing: border-box;
+  border: 1px solid #b9c2cc;
+  border-radius: 4px;
+  background-color: #fff;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+input[type="checkbox"].rk-checkbox:hover:not(:disabled) {
+  border-color: #428bca;
+}
+
+input[type="checkbox"].rk-checkbox:focus {
+  outline: none;
+}
+
+input[type="checkbox"].rk-checkbox:focus-visible {
+  outline: none;
+  border-color: #428bca;
+}
+
+input[type="checkbox"].rk-checkbox:checked {
+  background-color: #428bca;
+  border-color: #428bca;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23fff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 8.5l3 3 6-7'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+}
+
+input[type="checkbox"].rk-checkbox:indeterminate {
+  background-color: #428bca;
+  border-color: #428bca;
+  background-image: linear-gradient(#fff, #fff);
+  background-size: 10px 2px;
+}
+
+input[type="checkbox"].rk-checkbox:disabled {
+  background-color: #eeeeee;
+  border-color: #dddddd;
+  cursor: not-allowed;
+}

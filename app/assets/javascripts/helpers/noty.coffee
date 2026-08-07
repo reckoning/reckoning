@@ -99,9 +99,22 @@ window.displayError = (text, timeout) ->
 # new [data-notyConfirm] elements (e.g. project archive button after
 # a pagination/filter navigation). Bound once at script load — the
 # document survives both Turbo Drive and Turbo Frame navigations.
-$(document).on "click", "[data-notyConfirm]", (ev) ->
-  displayConfirm(ev, $(@))
-  return false
+#
+# Capture phase (the trailing `true`) is load-bearing: jquery_ujs is
+# required in application.js long before this file, so its delegated
+# `a[data-method]` handler sits on `document` *ahead* of us in bubble
+# order and would fire the DELETE/PUT request the instant you click —
+# before the confirm dialog is answered. Capturing on document runs
+# first of everything; stopImmediatePropagation then blocks both
+# jquery_ujs and Turbo, and we drive the confirm ourselves (the
+# request is issued from displayConfirm's OK callback).
+document.addEventListener "click", (ev) ->
+  el = ev.target?.closest?("[data-notyConfirm]")
+  return unless el
+  ev.preventDefault()
+  ev.stopImmediatePropagation()
+  displayConfirm(ev, $(el))
+, true
 
 document.addEventListener "turbolinks:load", () ->
   success = $('body').data('success');

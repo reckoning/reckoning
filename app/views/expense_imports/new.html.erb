@@ -20,44 +20,97 @@
 
     <div class="row">
       <div class="col-xs-12">
-        <p>A CSV or Excel file can be used to import records. The first row should be the column name. The following columns are allowed.</p>
+        <p><%= I18n.t(:"expenses.import.hint_bank") %></p>
+        <p><%= I18n.t(:"expenses.import.hint_columns") %></p>
 
         <ul>
           <% Expense.columns.each do |column| %>
             <% if column.name.in? ["id", *Expense.accessible_attributes] %>
               <li>
                 <strong><%= column.name %></strong>
-                <%= "- #{column.type.to_s.titleize} type" %>
+                <%= "- #{column.type.to_s.titleize}" %>
               </li>
             <% end %>
           <% end %>
         </ul>
 
-        <p>
-          If an <strong>id</strong> is supplied it will update the matching record instead of creating a new one.
-        </p>
+        <p><%= I18n.t(:"expenses.import.hint_id") %></p>
       </div>
     </div>
 
-    <%= form_for @expense_import do |f| %>
+    <%= form_for @expense_import, url: preview_expense_imports_path, html: {data: {turbo: false}} do |f| %>
 
-      <% if @expense_import.errors.any? %>
-        <div id="error_explanation">
-          <h3>
-            <%= pluralize(@expense_import.errors.count, "error") %>
-            prohibited this import from completing:
-          </h3>
-          <ul>
-            <% @expense_import.errors.full_messages.each do |msg| %>
-              <li><%= msg %></li>
-            <% end %>
-          </ul>
+      <div class="form-group">
+        <%= f.label :file, I18n.t(:"helpers.label.expense_import.file") %>
+        <%= f.file_field :file, class: "form-control" %>
+      </div>
+
+      <fieldset>
+        <legend><%= I18n.t(:"expenses.import.defaults_title") %></legend>
+
+        <div class="row">
+          <div class="col-xs-12 col-md-4">
+            <div class="form-group">
+              <%= f.label :expense_type %>
+              <%= f.select :expense_type,
+                    Expense::VALID_TYPES.map { |type| [I18n.t(:"filter.expense_type.#{type}"), type] },
+                    {}, class: "form-control" %>
+            </div>
+          </div>
+
+          <div class="col-xs-12 col-md-4">
+            <div class="form-group">
+              <%= f.label :interval %>
+              <%= f.select :interval,
+                    Expense.intervals.keys.map { |key| [Expense.human_enum_name(:interval, key), key] },
+                    {}, class: "form-control" %>
+            </div>
+          </div>
         </div>
-      <% end %>
 
-      <%= f.file_field :file %>
+        <div class="row">
+          <div class="col-xs-12 col-md-4">
+            <div class="form-group">
+              <%= f.label :vat_percent %>
+              <div class="input-group">
+                <%= f.number_field :vat_percent, class: "form-control text-right", max: 100, min: 0 %>
+                <span class="input-group-addon">%</span>
+              </div>
+            </div>
+          </div>
 
-      <%= render "shared/forms/submit", path: expenses_path(stored_params(:index)) %>
+          <div class="col-xs-12 col-md-4">
+            <div class="form-group">
+              <%= f.label :private_use_percent %>
+              <div class="input-group">
+                <%= f.number_field :private_use_percent, class: "form-control text-right", max: 100, min: 0 %>
+                <span class="input-group-addon">%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="form-group">
+              <label style="font-weight: normal; cursor: pointer;">
+                <%= f.check_box :skip_credits, class: "rk-checkbox", style: "margin-right: 8px;" %>
+                <%= I18n.t(:"helpers.label.expense_import.skip_credits") %>
+              </label>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <hr>
+
+      <div class="btn-group-responsive">
+        <button class="btn btn-primary btn-lg" type="submit">
+          <%= I18n.t(:"expenses.import.continue") %>
+        </button>
+
+        <%= link_to I18n.t(:"actions.cancel"), expenses_path(stored_params(:index)), class: "btn btn-default" %>
+      </div>
     <% end %>
   </div>
 </div>
