@@ -21,12 +21,5 @@ DEVISE_SECRET=op://Reckoning/DEVISE_DEV/secret
 DEVISE_JWT_SECRET=op://Reckoning/DEVISE_DEV/jwt_secret
 DEVISE_OTP_SECRET=op://Reckoning/DEVISE_DEV/otp_secret
 
-# No ACTIVE_RECORD_ENCRYPTION_* here on purpose. The old .env carried the
-# production keys under double-underscore names, which
-# config/initializers/active_record_encryption.rb never reads — it uses single
-# underscores, and only as a fallback for when credentials leave a key blank.
-# config/credentials.yml.enc already supplies the same values, so local
-# production dumps decrypt without them. CI sets its own throwaway keys.
-
-# RECAPTCHA_KEY and GOOGLE_API_KEY were in the old .env but are referenced
-# nowhere in app/, config/ or lib/. Dropped rather than carried forward.
+# No ACTIVE_RECORD_ENCRYPTION_* here on purpose: config/credentials.yml.enc
+# already supplies them, and credentials win over the initializer's ENV fallback.
