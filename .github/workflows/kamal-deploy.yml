@@ -45,7 +45,7 @@ jobs:
         with:
           bundler-cache: true
 
-      - uses: 1password/install-cli-action@v1
+      - uses: 1password/install-cli-action@v4
 
       # Written straight to disk rather than through an env var or a third-party
       # action, so the key never passes through the workflow environment.
