@@ -8,21 +8,28 @@
 # blank and credentials decrypt to nil — which then 500s any controller
 # that touches a model with `encrypts` (e.g. `devise-two-factor`'s
 # `otp_secret`). This env-var fallback lets those CI runs boot Rails
-# with throwaway keys. Real environments override neither path because
-# the env vars aren't set; credentials win.
+# with throwaway keys.
+#
+# The fallback runs in `after_initialize` and mutates the already-built
+# `ActiveRecord::Encryption.config` because Rails applies encryption
+# config from credentials inside an `on_load(:active_record_encryption)`
+# hook that fires *before* `config/initializers/*` load — assigning to
+# `config.active_record.encryption.*` here would be too late to reach it.
+# We only fill keys credentials left blank, so real environments keep
+# using their credential-backed keys untouched.
 
-primary_key = ENV["ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY"]
-deterministic_key = ENV["ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY"]
-key_derivation_salt = ENV["ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT"]
+Rails.application.config.after_initialize do
+  encryption = ActiveRecord::Encryption.config
 
-if primary_key.present?
-  Rails.application.config.active_record.encryption.primary_key = primary_key
-end
-
-if deterministic_key.present?
-  Rails.application.config.active_record.encryption.deterministic_key = deterministic_key
-end
-
-if key_derivation_salt.present?
-  Rails.application.config.active_record.encryption.key_derivation_salt = key_derivation_salt
+  # `has_*?` reads the raw ivar (`.presence`); the plain readers raise when a
+  # key is blank, so we must not touch them before deciding to fall back.
+  unless encryption.has_primary_key?
+    encryption.primary_key = ENV["ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY"].presence
+  end
+  unless encryption.has_deterministic_key?
+    encryption.deterministic_key = ENV["ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY"].presence
+  end
+  unless encryption.has_key_derivation_salt?
+    encryption.key_derivation_salt = ENV["ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT"].presence
+  end
 end
