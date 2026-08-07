@@ -1,4 +1,5 @@
-.bundle
+/.bundle/*
+!/.bundle/config
 .wti
 
 # logfiles and tempfiles.
