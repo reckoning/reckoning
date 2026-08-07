@@ -20,7 +20,7 @@
     "accounting": "^0.4.1",
     "dayjs": "^1.11.21",
     "pdfjs-dist": "4.10.38",
-    "puppeteer": "^23.0.0",
+    "puppeteer": "^25.5.0",
     "vue": "^3.5.40"
   },
   "devDependencies": {
