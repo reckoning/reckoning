@@ -24,8 +24,10 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    # The repository environment is "Live"; inputs.destination is "live". Mapping
+    # explicitly avoids silently creating a second, unprotected environment.
     environment:
-      name: ${{ inputs.destination }}
+      name: Live
 
     env:
       # Everything else is resolved from the Reckoning 1Password vault by
