@@ -34,6 +34,8 @@ en:
     timesheet:
       date: ~
       task: ~
+      day: Day
+      week: Week
       current_week: ~
       on_invoice: ~
     invoice:

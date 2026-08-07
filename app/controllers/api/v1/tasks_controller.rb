@@ -8,10 +8,10 @@ module Api
         scope = current_account.tasks
           .includes(project: [:customer]).references(:project)
         if week_date
-          date = Date.parse(week_date)
+          @week_range = Date.parse(week_date).all_week
           scope = scope.includes(:timers).references(:timers)
             .where(timers: {user_id: current_user.id})
-            .where(timers: {date: [date.all_week]})
+            .where(timers: {date: [@week_range]})
         end
         @tasks = scope.order("tasks.id ASC")
       end

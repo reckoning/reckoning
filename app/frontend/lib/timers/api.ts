@@ -103,8 +103,8 @@ export type TaskWithTimers = {
   projectName: string
   projectCustomerName: string | null
   timers: Timer[]
-  createdAt: string
-  updatedAt: string
+  createdAt?: string
+  updatedAt?: string
 }
 
 export async function createTimer(payload: TimerPayload, started: boolean): Promise<Timer> {

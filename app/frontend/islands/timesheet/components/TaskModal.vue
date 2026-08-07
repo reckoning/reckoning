@@ -7,7 +7,7 @@
 // Bootstrap 3 modal markup so the existing `.modal-*` styles apply.
 
 import {computed, onBeforeUnmount, onMounted, ref, watch} from "vue"
-import {createTask, listProjects} from "../../../lib/timers/api"
+import {createTask, listProjects, type TaskWithTimers} from "../../../lib/timers/api"
 import type {Project, Task} from "../../../lib/timers/types"
 
 const props = defineProps<{
@@ -16,7 +16,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   close: []
-  created: [task: Task]
+  created: [task: TaskWithTimers]
 }>()
 
 const projects = ref<Project[]>([])
@@ -85,8 +85,18 @@ async function onCreateTaskInline() {
 
 function onSave() {
   const task = tasksForProject.value.find((t) => t.id === taskId.value)
-  if (!task) return
-  emit("created", task)
+  const project = selectedProject.value
+  if (!task || !project) return
+  emit("created", {
+    id: task.id,
+    name: task.name,
+    label: task.label,
+    billable: task.billable,
+    projectId: project.id,
+    projectName: project.name,
+    projectCustomerName: project.customerName,
+    timers: [],
+  })
   emit("close")
 }
 </script>
