@@ -33,6 +33,24 @@ test.describe("Timesheet week view", () => {
     await expect(row.locator(".timesheet-row-sum")).toContainText("1:00")
   })
 
+  test("removes a row only after the confirm is accepted", async ({page, confirm}) => {
+    await signIn(page)
+    await page.goto("/timesheet?view=week")
+
+    const row = page.locator(".panel").filter({hasText: "E2E Task"})
+    await expect(row).toBeVisible()
+
+    await row.locator(".timesheet-task-actions button").click()
+    await confirm.cancel()
+    await expect(row).toBeVisible()
+    await expect(row.locator(".timesheet-row-sum")).toContainText("1:00")
+    await confirm.waitForClosed()
+
+    await row.locator(".timesheet-task-actions button").click()
+    await confirm.accept()
+    await expect(row).toHaveCount(0)
+  })
+
   test("autosaves a cell edit and recomputes the row total", async ({page}) => {
     await signIn(page)
     await page.goto("/timesheet?view=week")
