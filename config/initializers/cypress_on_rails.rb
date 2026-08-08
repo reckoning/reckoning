@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # cypress-on-rails wires Playwright (or Cypress) specs to Rails-side
-# helpers. The middleware is mounted in non-production envs and
+# helpers. The middleware is mounted in the test env only and
 # accepts POSTs that dispatch to ruby files under
 # `test/e2e/app_commands/`: DB cleaning, scenario seeding, ad-hoc
 # `eval`, plus the per-failure log capture.
@@ -13,7 +13,10 @@ if defined?(CypressOnRails)
   CypressOnRails.configure do |c|
     c.api_prefix = ""
     c.install_folder = Rails.root.join("test", "e2e").to_s
-    c.use_middleware = !Rails.env.production?
+    # Test env only: the middleware dispatches arbitrary app commands (incl. a
+    # truncating DB clean) at the app root, so a dev server on a port another
+    # app's e2e suite targets would wipe the dev database.
+    c.use_middleware = Rails.env.test?
     c.logger = Rails.logger
   end
 end
