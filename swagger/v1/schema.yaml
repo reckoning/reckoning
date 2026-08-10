@@ -427,6 +427,84 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/StandardError"
+  "/expense_imports":
+    post:
+      summary: Persist the rows kept from a preview
+      tags:
+      - ExpenseImports
+      operationId: createExpenseImport
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ExpenseImportInput"
+      responses:
+        '201':
+          description: imported
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/BulkResult"
+        '422':
+          description: nothing selected, or a row failed validation
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '403':
+          description: expenses not enabled for this account
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '400':
+          "$ref": "#/components/responses/SchemaValidationError"
+  "/expense_imports/preview":
+    post:
+      summary: Parse a bank statement into an editable preview
+      tags:
+      - ExpenseImports
+      operationId: previewExpenseImport
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              "$ref": "#/components/schemas/ExpenseImportPreviewInput"
+      responses:
+        '200':
+          description: parsed
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ExpenseImportPreview"
+        '422':
+          description: nothing could be parsed from the file
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '403':
+          description: expenses not enabled for this account
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '400':
+          "$ref": "#/components/responses/SchemaValidationError"
   "/expenses":
     get:
       summary: Expenses list
@@ -2925,6 +3003,166 @@ components:
       required:
       - expenseIds
       title: ExpenseBulkInput
+    ExpenseImportInput:
+      type: object
+      properties:
+        rows:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            properties:
+              include:
+                type:
+                - boolean
+                - string
+              date:
+                type:
+                - string
+                - 'null'
+                format: date
+              started_at:
+                type:
+                - string
+                - 'null'
+                format: date
+              ended_at:
+                type:
+                - string
+                - 'null'
+                format: date
+              value:
+                type:
+                - string
+                - number
+                - 'null'
+              vat_percent:
+                type:
+                - integer
+                - string
+                - 'null'
+              private_use_percent:
+                type:
+                - integer
+                - string
+                - 'null'
+              interval:
+                type:
+                - string
+                - 'null'
+              afa_type_id:
+                type:
+                - string
+                - 'null'
+                format: uuid
+              seller:
+                type:
+                - string
+                - 'null'
+              description:
+                type:
+                - string
+                - 'null'
+              expense_type:
+                type:
+                - string
+                - 'null'
+            additionalProperties: false
+      additionalProperties: false
+      required:
+      - rows
+      title: ExpenseImportInput
+    ExpenseImportPreview:
+      type: object
+      properties:
+        rows:
+          type: array
+          items:
+            "$ref": "#/components/schemas/ExpenseImportRow"
+      additionalProperties: false
+      required:
+      - rows
+      title: ExpenseImportPreview
+    ExpenseImportPreviewInput:
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+        expense_type:
+          type: string
+        vat_percent:
+          type:
+          - integer
+          - string
+        private_use_percent:
+          type:
+          - integer
+          - string
+        interval:
+          type: string
+        skip_credits:
+          type:
+          - boolean
+          - string
+          description: Skip incoming payments.
+      required:
+      - file
+      title: ExpenseImportPreviewInput
+    ExpenseImportRow:
+      type: object
+      properties:
+        date:
+          type:
+          - string
+          - 'null'
+          format: date
+        startedAt:
+          type:
+          - string
+          - 'null'
+          format: date
+        endedAt:
+          type:
+          - string
+          - 'null'
+          format: date
+        value:
+          type:
+          - string
+          - number
+          - 'null'
+        vatPercent:
+          type:
+          - integer
+          - 'null'
+        privateUsePercent:
+          type:
+          - integer
+          - 'null'
+        interval:
+          type:
+          - string
+          - 'null'
+        afaTypeId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        seller:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        expenseType:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+      title: ExpenseImportRow
     ExpenseInput:
       type: object
       properties:

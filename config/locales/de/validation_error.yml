@@ -24,6 +24,7 @@ de:
       destroy: "Ausgabe konnte nicht gelöscht werden."
       bulk_update: "Es wurden keine Ausgaben oder Felder zum Ändern ausgewählt."
       bulk_destroy: "Es wurden keine Ausgaben zum Löschen ausgewählt."
+      import: "Der Import konnte nicht verarbeitet werden."
       feature_disabled: "Ausgaben sind für dieses Konto nicht aktiviert."
     project:
       create: "Projekt konnte nicht erstellt werden."
