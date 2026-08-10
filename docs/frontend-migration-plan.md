@@ -1,5 +1,11 @@
 # Frontend migration plan
 
+> **Superseded from Phase 5 onward** by
+> [`vue-spa-migration-plan.md`](vue-spa-migration-plan.md), which moves the
+> app to a Vue 3 SPA on an `openapi-ruby` API instead of Hotwire. Phases 1–4
+> and 8 (Vite, Tailwind, ERB, Playwright) still describe what shipped and
+> remain accurate. Phases 5, 6, 7, 9, 10 are historical.
+
 Exec plan for moving Reckoning's frontend off the legacy stack
 (Sprockets + AngularJS + jQuery + CoffeeScript + Bootstrap 3 +
 haml + slim) onto a Rails-native modern stack: **Vite + Hotwire +
