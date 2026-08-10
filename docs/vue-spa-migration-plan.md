@@ -477,7 +477,7 @@ fetch boundary, which is why `types.ts` can legitimately declare `number`.
 When B4 moves the timesheet onto the generated client, that coercion has to
 move with it — the generated types will say `string`, correctly.
 
-### Phase A3–A8 — API buildout, one domain per PR pair
+### Phase A3–A8 — API buildout ✅ complete (69 operations)
 
 Order chosen so each SPA page can land right behind its API. Each PR:
 components → controller actions → jbuilder views → minitest DSL spec →
@@ -507,11 +507,10 @@ regenerated schema → regenerated client.
       action that does not exist, so the web route raises today.
 - [x] **A7** ✅ Offers, positions, and one transition endpoint covering the
       whole AASM machine (bid/accept/decline/cancel).
-- [~] **A8** Partly done. ✅ Expenses CRUD + bulk update/destroy (behind the
-      `feature_expenses` flag) and the dashboard totals endpoint.
-      **Outstanding:** expense imports (preview/create — multipart upload, so
-      the contract needs a non-JSON request body) and the backend admin
-      endpoints (accounts, users, `send_welcome`).
+- [x] **A8** ✅ Expenses CRUD + bulk update/destroy (behind the
+      `feature_expenses` flag), the dashboard totals endpoint, the backend
+      admin user endpoints, and the two-step expense import. Preview is the
+      API's only multipart endpoint.
 
 Exit per PR: new operations in `schema.yaml`, integration tests green,
 oasdiff reports additive-only.
