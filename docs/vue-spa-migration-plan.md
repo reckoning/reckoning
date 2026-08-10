@@ -387,29 +387,33 @@ Customers — 4 operations, 6 component classes, 11 tests — took well under a
 day including learning the gem. The ~90-operation estimate for A3–A8 holds;
 per-domain PRs of 2–3 days are the right granularity.
 
-### Phase A1 — OpenAPI foundation (1 PR, ~2 days)
+### Phase A1 — OpenAPI foundation ✅ done
 
-- [ ] `bundle add openapi-ruby -v "~> 4.0"`, `require "openapi_ruby"` in `Rakefile`.
-- [ ] `config/initializers/openapi_ruby.rb` — one schema (`v1/schema`),
+- [x] `gem "openapi-ruby", "~> 4.0", ">= 4.0.3"`.
+- [x] `config/initializers/openapi_ruby.rb` — one schema (`v1/schema`),
       `component_paths = ["app/api_components"]`, `camelize_keys = false`,
       `schema_output_format = :yaml`, `schema_output_dir = "swagger"`,
-      `request_validation = :enabled`, `response_validation = :disabled`.
-- [ ] `test/openapi_helper.rb` requiring `openapi_ruby/minitest`.
-- [ ] `pnpm add -D orval @redocly/cli` + `orval.config.ts` targeting
-      `swagger/v1/schema.yaml` → `app/frontend/services/api/`,
-      `client: "vue-query"`, `httpClient: "axios"`, mutator `axiosClient.ts`.
-- [ ] `postinstall: "pnpm generate-api-client"` in `package.json`;
-      gitignore the orval output.
-- [ ] `redocly.yaml` + `validate-schema` script.
-- [ ] CI: `schema-check` job — regenerate schema, fail if the committed
-      file differs; `redocly lint`; `oasdiff` against the merge base
-      (port `.github/workflows/api-schema-breaking.job.yml`) — reporting
-      only, **not** blocking until end of Phase C (D2). Ruby only; the job
-      needs no Postgres service (finding 2).
+      `response_validation = :disabled`. `request_validation` is
+      **`:warn_only`**, not `:enabled` as originally planned — see finding 6.
+- [x] `test/openapi_helper.rb` requiring `openapi_ruby/minitest`.
+- [x] `orval.config.ts` → `app/frontend/services/api/`, `client: "vue-query"`,
+      `httpClient: "axios"`, mutator `axiosClient.ts`.
+- [x] `postinstall: "pnpm generate-api-client"`; orval output gitignored.
+- [x] `redocly.yaml` + `validate-schema` script.
+- [x] CI: `api-schema.job.yml` (regenerate + `git diff --exit-code`, then
+      redocly lint) and `api-schema-breaking.job.yml` (oasdiff vs merge base,
+      `continue-on-error` until end of Phase C — D2). Both wired into
+      `main.yml`; `api-schema` added to the deploy gate. Ruby only, no
+      Postgres or Redis service (finding 2).
 
-Exit: `rake openapi_ruby:generate` writes a valid `swagger/v1/schema.yaml`
-containing the existing customers endpoints; CI green; `pnpm
-generate-api-client` produces compiling TS.
+Exit met: `rake openapi_ruby:generate` writes a valid
+`swagger/v1/schema.yaml` covering customers; `pnpm generate-api-client`
+produces TS that compiles clean under `tsc --noEmit`.
+
+CI steps were each exercised locally before commit: the drift check passes
+on a current schema and fails when a contract test changes without
+regeneration; redocly exits 0; oasdiff exits 0 against an empty base and 1
+when an endpoint is removed.
 
 ### Phase A2 — API conventions layer (1 PR, ~2 days)
 
