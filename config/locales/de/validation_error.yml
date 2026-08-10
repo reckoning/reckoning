@@ -5,6 +5,14 @@ de:
       update: "Kunde konnte nicht gespeichert werden."
       destroy: "Kunde konnte nicht gelöscht werden."
       destroy_failure_dependency: "Bitte löschen Sie zuerst alle Rechnungen für diesen Kunden."
+    invoice:
+      create: "Rechnung konnte nicht erstellt werden."
+      update: "Rechnung konnte nicht gespeichert werden."
+      destroy: "Rechnung konnte nicht gelöscht werden."
+      charge: "Rechnung konnte nicht gestellt werden."
+      pay: "Rechnung konnte nicht als bezahlt markiert werden."
+      send: "Rechnung konnte nicht versendet werden. Bitte hinterlegen Sie E-Mail und Vorlage beim Kunden."
+      send_test_mail: "Testmail konnte nicht versendet werden."
     project:
       create: "Projekt konnte nicht erstellt werden."
       update: "Projekt konnte nicht gespeichert werden."

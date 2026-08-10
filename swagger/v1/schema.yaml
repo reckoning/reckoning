@@ -219,6 +219,370 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/StandardError"
+  "/invoices":
+    get:
+      summary: Invoices list
+      tags:
+      - Invoices
+      operationId: invoices
+      parameters:
+      - "$ref": "#/components/parameters/PageParameter"
+      - "$ref": "#/components/parameters/PerPageParameter"
+      - name: state
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - created
+          - charged
+          - paid
+      - name: year
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: quarter
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 4
+      - name: month
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 12
+      - name: paid_in_year
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: paid_in_quarter
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: paid_in_month
+        in: query
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Invoices"
+          headers:
+            Link:
+              description: RFC 8288 pagination links.
+              schema:
+                type: string
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '400':
+          "$ref": "#/components/responses/SchemaValidationError"
+    post:
+      summary: Create new Invoice
+      tags:
+      - Invoices
+      operationId: createInvoice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/InvoiceInput"
+      responses:
+        '201':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Invoice"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+  "/invoices/{id}":
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: string
+        format: uuid
+      required: true
+    get:
+      summary: Get Invoice
+      tags:
+      - Invoices
+      operationId: invoice
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Invoice"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '400':
+          "$ref": "#/components/responses/SchemaValidationError"
+    patch:
+      summary: Update Invoice
+      tags:
+      - Invoices
+      operationId: updateInvoice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/InvoiceInput"
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Invoice"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+    delete:
+      summary: Destroy Invoice
+      tags:
+      - Invoices
+      operationId: destroyInvoice
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Message"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+  "/invoices/{id}/charge":
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: string
+        format: uuid
+      required: true
+    put:
+      summary: Charge an invoice
+      tags:
+      - Invoices
+      operationId: chargeInvoice
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Invoice"
+        '403':
+          description: not chargeable from this state
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Message"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '400':
+          "$ref": "#/components/responses/SchemaValidationError"
+  "/invoices/{id}/pay":
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: string
+        format: uuid
+      required: true
+    put:
+      summary: Mark an invoice paid
+      tags:
+      - Invoices
+      operationId: payInvoice
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Invoice"
+        '403':
+          description: not payable from this state
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Message"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '400':
+          "$ref": "#/components/responses/SchemaValidationError"
+  "/invoices/{id}/send_mail":
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: string
+        format: uuid
+      required: true
+    put:
+      summary: Email the invoice to the customer
+      tags:
+      - Invoices
+      operationId: sendInvoiceMail
+      responses:
+        '200':
+          description: queued
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Message"
+        '400':
+          description: customer has no invoice email or template
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+  "/invoices/{id}/send_test_mail":
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: string
+        format: uuid
+      required: true
+    post:
+      summary: Email a preview of the invoice
+      tags:
+      - Invoices
+      operationId: sendInvoiceTestMail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TestMailInput"
+      responses:
+        '200':
+          description: queued
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Message"
+        '400':
+          description: invalid address
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
   "/me":
     get:
       summary: Signed-in user's own record
@@ -1674,6 +2038,215 @@ components:
       items:
         "$ref": "#/components/schemas/Customer"
       title: Customers
+    Invoice:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        ref:
+          type:
+          - integer
+          - 'null'
+        refNumber:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        state:
+          type:
+          - string
+          - 'null'
+          enum:
+          - created
+          - charged
+          - paid
+          -
+        date:
+          type:
+          - string
+          - 'null'
+          format: date
+        deliveryDate:
+          type:
+          - string
+          - 'null'
+          format: date
+        paymentDueDate:
+          type:
+          - string
+          - 'null'
+          format: date
+        payDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        value:
+          type:
+          - string
+          - 'null'
+        vat:
+          type:
+          - string
+          - 'null'
+        customerId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        customerName:
+          type:
+          - string
+          - 'null'
+        projectId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        projectName:
+          type:
+          - string
+          - 'null'
+        editable:
+          type: boolean
+          description: False once the invoice has been charged.
+        sendable:
+          type: boolean
+          description: The customer has an invoice email and template.
+        positions:
+          type: array
+          items:
+            "$ref": "#/components/schemas/InvoicePosition"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      additionalProperties: false
+      required:
+      - id
+      - state
+      - positions
+      - editable
+      - sendable
+      - createdAt
+      - updatedAt
+      title: Invoice
+    InvoiceInput:
+      type: object
+      properties:
+        project_id:
+          type: string
+          format: uuid
+        customer_id:
+          type: string
+          format: uuid
+        ref:
+          type:
+          - integer
+          - 'null'
+        date:
+          type:
+          - string
+          - 'null'
+          format: date
+        delivery_date:
+          type:
+          - string
+          - 'null'
+          format: date
+        payment_due_date:
+          type:
+          - string
+          - 'null'
+          format: date
+        positions_attributes:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              description:
+                type:
+                - string
+                - 'null'
+              hours:
+                type:
+                - string
+                - number
+                - 'null'
+              rate:
+                type:
+                - string
+                - number
+                - 'null'
+              value:
+                type:
+                - string
+                - number
+                - 'null'
+              timer_ids:
+                type: array
+                items:
+                  type: string
+                  format: uuid
+              _destroy:
+                type: boolean
+            additionalProperties: false
+      additionalProperties: false
+      title: InvoiceInput
+    InvoicePosition:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        description:
+          type:
+          - string
+          - 'null'
+        hours:
+          type:
+          - string
+          - 'null'
+        rate:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        timerIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      additionalProperties: false
+      required:
+      - id
+      - timerIds
+      - createdAt
+      - updatedAt
+      title: InvoicePosition
+    Invoices:
+      type: array
+      items:
+        "$ref": "#/components/schemas/Invoice"
+      title: Invoices
     MeInput:
       type: object
       properties:
@@ -2131,6 +2704,15 @@ components:
       items:
         "$ref": "#/components/schemas/Task"
       title: Tasks
+    TestMailInput:
+      type: object
+      properties:
+        email:
+          type: string
+      additionalProperties: false
+      required:
+      - email
+      title: TestMailInput
     Timer:
       type: object
       properties:
