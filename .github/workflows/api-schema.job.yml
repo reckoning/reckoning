@@ -1,0 +1,37 @@
+name: Api Schema Job
+
+on:
+  workflow_call:
+
+jobs:
+  api-schema-current:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      # No database service: openapi-ruby >= 4.0.3 stubs the test-schema
+      # checks that would otherwise open a connection during generation.
+      - name: Regenerate schema
+        run: bundle exec rake openapi_ruby:generate
+
+      - name: Fail if the committed schema is stale
+        run: |
+          if ! git diff --exit-code --stat -- swagger/; then
+            echo "::error::swagger/ is out of date. Run 'bundle exec rake openapi_ruby:generate' and commit the result."
+            git diff -- swagger/
+            exit 1
+          fi
+
+  api-schema-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/workflows/js-setup-action
+      - name: Redocly lint
+        run: pnpm validate-schema
+        shell: bash
