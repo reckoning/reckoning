@@ -6,6 +6,12 @@ module Api
       include ActionController::HttpAuthentication::Token
 
       skip_authorization_check
+
+      # This is where a client without a session obtains its token, so there is
+      # no cookie to protect and no token it could have been given yet.
+      # Requiring one here would lock out every non-browser client.
+      skip_forgery_protection only: [:create]
+
       before_action :authenticate_user!, except: [:create]
 
       respond_to :json

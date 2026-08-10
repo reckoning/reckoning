@@ -134,6 +134,529 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/StandardError"
+  "/projects":
+    get:
+      summary: Projects list
+      tags:
+      - Projects
+      operationId: projects
+      parameters:
+      - name: state
+        in: query
+        required: false
+        description: Workflow state to filter by. Defaults to active.
+        schema:
+          type: string
+      - name: sort
+        in: query
+        required: false
+        description: '"used" orders by most recently tracked.'
+        schema:
+          type: string
+          enum:
+          - used
+      - name: withoutIds
+        in: query
+        required: false
+        description: Project ids to exclude.
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Projects"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '400':
+          "$ref": "#/components/responses/SchemaValidationError"
+  "/projects/{id}":
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: string
+        format: uuid
+      required: true
+    delete:
+      summary: Destroy Project
+      tags:
+      - Projects
+      operationId: destroyProject
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Message"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+  "/projects/{id}/archive":
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: string
+        format: uuid
+      required: true
+    put:
+      summary: Archive Project
+      tags:
+      - Projects
+      operationId: archiveProject
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Message"
+        '400':
+          description: already archived
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+  "/sessions":
+    post:
+      summary: Exchange credentials for a token
+      tags:
+      - Sessions
+      operationId: createSession
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/SessionInput"
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Session"
+        '400':
+          description: invalid credentials
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+    delete:
+      summary: Revoke the current token
+      tags:
+      - Sessions
+      operationId: destroySession
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+  "/tasks":
+    get:
+      summary: Tasks list
+      tags:
+      - Tasks
+      operationId: tasks
+      parameters:
+      - name: weekDate
+        in: query
+        required: false
+        description: Any date in a week. Restricts the nested timers to that week
+          and to the signed-in user.
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Tasks"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '400':
+          "$ref": "#/components/responses/SchemaValidationError"
+    post:
+      summary: Create new Task
+      tags:
+      - Tasks
+      operationId: createTask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TaskInput"
+      responses:
+        '201':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Task"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+  "/timers":
+    get:
+      summary: Timers list
+      tags:
+      - Timers
+      operationId: timers
+      parameters:
+      - name: date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: startDate
+        in: query
+        required: false
+        description: Combined with endDate to filter a range.
+        schema:
+          type: string
+          format: date
+      - name: endDate
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: projectId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      - name: uninvoiced
+        in: query
+        required: false
+        description: Present and non-blank restricts to uninvoiced timers.
+        schema:
+          type: string
+      - name: billable
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: running
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Timers"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '400':
+          "$ref": "#/components/responses/SchemaValidationError"
+    post:
+      summary: Create new Timer
+      tags:
+      - Timers
+      operationId: createTimer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TimerInput"
+      responses:
+        '201':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Timer"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+  "/timers/{id}":
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: string
+        format: uuid
+      required: true
+    put:
+      summary: Update Timer
+      tags:
+      - Timers
+      operationId: updateTimer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TimerInput"
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Timer"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+    delete:
+      summary: Destroy Timer
+      tags:
+      - Timers
+      operationId: destroyTimer
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Timer"
+        '400':
+          description: already invoiced
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Message"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+  "/timers/{id}/start":
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: string
+        format: uuid
+      required: true
+    put:
+      summary: Start Timer
+      tags:
+      - Timers
+      operationId: startTimer
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Timer"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Message"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+  "/timers/{id}/stop":
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: string
+        format: uuid
+      required: true
+    put:
+      summary: Stop Timer
+      tags:
+      - Timers
+      operationId: stopTimer
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Timer"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Message"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+  "/users":
+    get:
+      summary: Users list
+      tags:
+      - Users
+      operationId: users
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Users"
+        '403':
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Message"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+  "/users/current":
+    get:
+      summary: Signed-in user
+      tags:
+      - Users
+      operationId: currentUser
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/User"
+        '403':
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Message"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
 servers:
 - url: "/api/v1"
   description: Current host
@@ -275,6 +798,123 @@ components:
       items:
         "$ref": "#/components/schemas/Customer"
       title: Customers
+    Message:
+      type: object
+      properties:
+        message:
+          type: string
+      additionalProperties: false
+      required:
+      - message
+      title: Message
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        customerName:
+          type:
+          - string
+          - 'null'
+        label:
+          type: string
+        tasks:
+          type: array
+          items:
+            "$ref": "#/components/schemas/ProjectTask"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        links:
+          type: object
+          properties:
+            show:
+              type: object
+              properties:
+                href:
+                  type: string
+              required:
+              - href
+          additionalProperties: false
+      additionalProperties: false
+      required:
+      - id
+      - name
+      - tasks
+      - createdAt
+      - updatedAt
+      title: Project
+    ProjectTask:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        label:
+          type: string
+        billable:
+          type: boolean
+        projectId:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      additionalProperties: false
+      required:
+      - id
+      - name
+      - projectId
+      - createdAt
+      - updatedAt
+      title: ProjectTask
+    Projects:
+      type: array
+      items:
+        "$ref": "#/components/schemas/Project"
+      title: Projects
+    Session:
+      type: object
+      properties:
+        auth_token:
+          type: string
+          description: JWT for the Authorization header.
+      additionalProperties: false
+      required:
+      - auth_token
+      title: Session
+    SessionInput:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        otp_token:
+          type: string
+          description: Required when the account has 2FA enabled.
+        description:
+          type: string
+          description: Labels the token in the account's token list.
+        expires:
+          type: string
+          format: date-time
+      additionalProperties: false
+      required:
+      - email
+      - password
+      title: SessionInput
     StandardError:
       type: object
       properties:
@@ -286,6 +926,288 @@ components:
       required:
       - message
       title: StandardError
+    Task:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        label:
+          type: string
+        billable:
+          type: boolean
+        projectId:
+          type: string
+          format: uuid
+        projectName:
+          type: string
+        projectCustomerName:
+          type:
+          - string
+          - 'null'
+        timers:
+          type: array
+          items:
+            "$ref": "#/components/schemas/TaskTimer"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      additionalProperties: false
+      required:
+      - id
+      - name
+      - projectId
+      - timers
+      - createdAt
+      - updatedAt
+      title: Task
+    TaskInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        project_id:
+          type: string
+          format: uuid
+      additionalProperties: false
+      required:
+      - name
+      - project_id
+      title: TaskInput
+    TaskTimer:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        taskId:
+          type: string
+          format: uuid
+        date:
+          type:
+          - string
+          - 'null'
+          format: date
+        value:
+          type:
+          - string
+          - 'null'
+        sumForTask:
+          type:
+          - string
+          - 'null'
+        note:
+          type:
+          - string
+          - 'null'
+        started:
+          type: boolean
+        startedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        startTime:
+          type:
+          - integer
+          - 'null'
+          description: Epoch milliseconds.
+        startTimeForTask:
+          type:
+          - integer
+          - 'null'
+          description: Epoch milliseconds.
+        positionId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        invoiced:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      additionalProperties: false
+      required:
+      - id
+      - taskId
+      - started
+      - invoiced
+      - createdAt
+      - updatedAt
+      title: TaskTimer
+    Tasks:
+      type: array
+      items:
+        "$ref": "#/components/schemas/Task"
+      title: Tasks
+    Timer:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        date:
+          type:
+          - string
+          - 'null'
+          format: date
+        value:
+          type:
+          - string
+          - 'null'
+        sumForTask:
+          type:
+          - string
+          - 'null'
+        note:
+          type:
+          - string
+          - 'null'
+        started:
+          type: boolean
+        startedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        startTime:
+          type:
+          - integer
+          - 'null'
+          description: Epoch milliseconds.
+        startTimeForTask:
+          type:
+          - integer
+          - 'null'
+          description: Epoch milliseconds.
+        positionId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        invoiced:
+          type: boolean
+        taskId:
+          type: string
+          format: uuid
+        taskName:
+          type: string
+        taskLabel:
+          type: string
+        taskBillable:
+          type: boolean
+        projectId:
+          type: string
+          format: uuid
+        projectName:
+          type: string
+        projectCustomerName:
+          type:
+          - string
+          - 'null'
+        deleted:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        links:
+          type: object
+          properties:
+            project:
+              type: object
+              properties:
+                href:
+                  type: string
+              required:
+              - href
+          additionalProperties: false
+      additionalProperties: false
+      required:
+      - id
+      - taskId
+      - started
+      - invoiced
+      - deleted
+      - createdAt
+      - updatedAt
+      title: Timer
+    TimerInput:
+      type: object
+      properties:
+        task_id:
+          type: string
+          format: uuid
+        date:
+          type: string
+          format: date
+        value:
+          type:
+          - string
+          - number
+        note:
+          type:
+          - string
+          - 'null'
+        started:
+          type: boolean
+          description: Start the timer immediately after saving.
+      additionalProperties: false
+      required:
+      - task_id
+      title: TimerInput
+    Timers:
+      type: array
+      items:
+        "$ref": "#/components/schemas/Timer"
+      title: Timers
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        avatar:
+          type:
+          - string
+          - 'null'
+          format: uri
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      additionalProperties: false
+      required:
+      - id
+      - email
+      - createdAt
+      - updatedAt
+      title: User
+    Users:
+      type: array
+      items:
+        "$ref": "#/components/schemas/User"
+      title: Users
     ValidationError:
       type: object
       properties:
