@@ -30,7 +30,7 @@
     "@vue/test-utils": "^2.4.11",
     "happy-dom": "^20.11.1",
     "tailwindcss": "^4.3.3",
-    "typescript": "^5.2.2",
+    "typescript": "^7.0.2",
     "vite": "^8.2.0",
     "vite-plugin-ruby": "^5.2.2",
     "vitest": "^4.1.10",
