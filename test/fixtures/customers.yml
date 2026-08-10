@@ -9,3 +9,7 @@ klingon:
   name: "Klingon"
   contact_information:
     address: "Qo'nos"
+
+defiant_customer:
+  account: defiant
+  name: "Dominion"

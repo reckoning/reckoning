@@ -29,6 +29,42 @@ module Api
         end
       end
 
+      def show
+        @project = current_account.projects.find(params[:id])
+        authorize! :read, @project
+      end
+
+      def create
+        @project = current_account.projects.new(project_params)
+        authorize! :create, @project
+
+        if @project.save
+          render :show, status: :created
+        else
+          render json: ValidationError.new("project.create", @project.errors), status: :bad_request
+        end
+      end
+
+      def update
+        @project = current_account.projects.find(params[:id])
+        authorize! :update, @project
+
+        return render :show if @project.update(project_params)
+
+        render json: ValidationError.new("project.update", @project.errors), status: :bad_request
+      end
+
+      def unarchive
+        @project = current_account.projects.find(params[:id])
+        authorize! :archive, @project
+
+        if @project.archived? && @project.unarchive!
+          render json: {message: resource_message(:project, :unarchive, :success)}, status: :ok
+        else
+          render json: ValidationError.new("project.unarchive"), status: :bad_request
+        end
+      end
+
       def destroy
         @project = current_account.projects.find(params[:id])
         authorize! :destroy, @project
@@ -62,19 +98,7 @@ module Api
       end
 
       private def project_params
-        @project_params ||= params.permit(
-          :customer_id,
-          :name,
-          :rate,
-          :budget,
-          :budget_on_dashboard,
-          tasks_attributes: %i[
-            id
-            name
-            project_id
-            _destroy
-          ]
-        )
+        @project_params ||= openapi_params(::V1::Schemas::Inputs::ProjectInput)
       end
     end
   end

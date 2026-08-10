@@ -22,15 +22,16 @@ v1_api_routes = lambda do
 
   resource :account, only: %i[show update], controller: :account
 
-  resources :customers, only: %i[index show create destroy]
+  resources :customers, only: %i[index show create update destroy]
 
-  resources :projects, only: %i[index destroy] do
+  resources :projects, only: %i[index show create update destroy] do
     member do
       put :archive
+      put :unarchive
     end
   end
 
-  resources :tasks, only: %i[index create]
+  resources :tasks, only: %i[index create update destroy]
 
   resources :timers, only: %i[index create update destroy] do
     member do

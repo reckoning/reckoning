@@ -33,10 +33,82 @@ module Api
             schema ::V1::Schemas::StandardError
           end
         end
+
+        post("Create new Project") do
+          operationId "createProject"
+          tags "Projects"
+          consumes "application/json"
+          produces "application/json"
+
+          request_body required: true, content: {
+            "application/json" => {schema: ::V1::Schemas::Inputs::ProjectInput}
+          }
+
+          response(201, "successful") do
+            schema ::V1::Schemas::Project
+          end
+
+          response(400, "bad request") do
+            schema ::V1::Schemas::ValidationError
+          end
+
+          response(403, "customer belongs to another account") do
+            schema ::V1::Schemas::Message
+          end
+
+          response(401, "unauthorized") do
+            schema ::V1::Schemas::StandardError
+          end
+        end
       end
 
       api_path "/projects/{id}" do
         parameter name: "id", in: :path, schema: {type: :string, format: :uuid}, required: true
+
+        get("Get Project") do
+          operationId "project"
+          tags "Projects"
+          produces "application/json"
+
+          response(200, "successful") do
+            schema ::V1::Schemas::Project
+          end
+
+          response(404, "not found") do
+            schema ::V1::Schemas::StandardError
+          end
+
+          response(401, "unauthorized") do
+            schema ::V1::Schemas::StandardError
+          end
+        end
+
+        patch("Update Project") do
+          operationId "updateProject"
+          tags "Projects"
+          consumes "application/json"
+          produces "application/json"
+
+          request_body required: true, content: {
+            "application/json" => {schema: ::V1::Schemas::Inputs::ProjectInput}
+          }
+
+          response(200, "successful") do
+            schema ::V1::Schemas::Project
+          end
+
+          response(400, "bad request") do
+            schema ::V1::Schemas::ValidationError
+          end
+
+          response(404, "not found") do
+            schema ::V1::Schemas::StandardError
+          end
+
+          response(401, "unauthorized") do
+            schema ::V1::Schemas::StandardError
+          end
+        end
 
         delete("Destroy Project") do
           operationId "destroyProject"
@@ -124,6 +196,47 @@ module Api
           assert_api_response :delete, 404, path_params: {id: SecureRandom.uuid}
         end
 
+        it "shows a project" do
+          assert_api_response :get, 200, path_params: {id: project.id} do
+            assert_equal project.id, parsed_body["id"]
+          end
+        end
+
+        it "creates a project with nested tasks" do
+          assert_api_response :post, 201, body: {
+            name: "Deep Space 9",
+            customer_id: customers(:starfleet).id,
+            rate: "120.0",
+            tasks_attributes: [{name: "Station repairs"}]
+          } do
+            assert_equal "Deep Space 9", parsed_body["name"]
+            assert_equal ["Station repairs"], parsed_body["tasks"].map { |t| t["name"] }
+          end
+        end
+
+        it "rejects a project without a name" do
+          assert_api_response :post, 400, body: {name: "", customer_id: customers(:starfleet).id} do
+            assert_equal "validation_error.project.create", parsed_body["code"]
+            refute_includes parsed_body["message"], "Translation missing"
+          end
+        end
+
+        # Authorization runs through the customer's account, so a project
+        # pointed at another account's customer is refused outright.
+        it "refuses a project under another account's customer" do
+          assert_no_difference "Project.count" do
+            assert_api_response :post, 403, body: {name: "Infiltration", customer_id: customers(:defiant_customer).id}
+          end
+        end
+
+        it "updates a project" do
+          assert_api_response :patch, 200, path_params: {id: project.id}, body: {name: "Narendra III"} do
+            assert_equal "Narendra III", parsed_body["name"]
+          end
+
+          assert_equal "Narendra III", project.reload.name
+        end
+
         it "archives a project" do
           assert_api_response :put, 200, path_params: {id: project.id}
 
@@ -137,6 +250,60 @@ module Api
           assert_api_response :put, 400, path_params: {id: project.id} do
             assert_equal "validation_error.project.archive", parsed_body["code"]
           end
+        end
+      end
+    end
+
+    # Own class: /projects/{id}/archive and /unarchive are both PUT with a path
+    # param, and assert_api_response resolves to the first match.
+    class ProjectUnarchiveTest < ActionDispatch::IntegrationTest
+      include OpenapiRuby::Adapters::Minitest::DSL
+
+      openapi_schema :"v1/schema"
+
+      api_path "/projects/{id}/unarchive" do
+        parameter name: "id", in: :path, schema: {type: :string, format: :uuid}, required: true
+
+        put("Unarchive Project") do
+          operationId "unarchiveProject"
+          tags "Projects"
+          produces "application/json"
+
+          response(200, "successful") do
+            schema ::V1::Schemas::Message
+          end
+
+          response(400, "not archived") do
+            schema ::V1::Schemas::ValidationError
+          end
+
+          response(404, "not found") do
+            schema ::V1::Schemas::StandardError
+          end
+
+          response(401, "unauthorized") do
+            schema ::V1::Schemas::StandardError
+          end
+        end
+      end
+
+      let(:data) { users :data }
+      let(:project) { projects :narendra3 }
+
+      before { sign_in data }
+
+      it "unarchives an archived project" do
+        project.archive!
+        project.save
+
+        assert_api_response :put, 200, path_params: {id: project.id}
+
+        refute project.reload.archived?
+      end
+
+      it "refuses to unarchive an active project" do
+        assert_api_response :put, 400, path_params: {id: project.id} do
+          assert_equal "validation_error.project.unarchive", parsed_body["code"]
         end
       end
     end

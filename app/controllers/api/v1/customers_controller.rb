@@ -30,6 +30,15 @@ module Api
         end
       end
 
+      def update
+        @customer = current_account.customers.find(params[:id])
+        authorize! :update, @customer
+
+        return render :show if @customer.update(customer_params)
+
+        render json: ValidationError.new("customer.update", @customer.errors), status: :bad_request
+      end
+
       def destroy
         @customer = current_account.customers.find(params[:id])
         authorize! :destroy, @customer

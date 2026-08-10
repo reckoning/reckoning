@@ -78,6 +78,33 @@ module Api
           end
         end
 
+        patch("Update Customer") do
+          operationId "updateCustomer"
+          tags "Customers"
+          consumes "application/json"
+          produces "application/json"
+
+          request_body required: true, content: {
+            "application/json" => {schema: ::V1::Schemas::Inputs::CustomerInput}
+          }
+
+          response(200, "successful") do
+            schema ::V1::Schemas::Customer
+          end
+
+          response(400, "bad request") do
+            schema ::V1::Schemas::ValidationError
+          end
+
+          response(404, "not found") do
+            schema ::V1::Schemas::StandardError
+          end
+
+          response(401, "unauthorized") do
+            schema ::V1::Schemas::StandardError
+          end
+        end
+
         delete("Destroy Customer") do
           operationId "destroyCustomer"
           tags "Customers"
@@ -187,6 +214,23 @@ module Api
           assert_api_response :post, 400, body: {name: "Vulcan High Command", email: "not-an-email"} do
             assert_equal "validation_error.customer.create", parsed_body["code"]
             assert_includes parsed_body["errors"].keys, "email"
+          end
+        end
+
+        it "updates a customer" do
+          assert_api_response :patch, 200, path_params: {id: customer.id},
+            body: {name: "Starfleet Command", country: "US"} do
+            assert_equal "Starfleet Command", parsed_body["name"]
+            assert_equal "US", parsed_body["country"]
+          end
+
+          assert_equal "Starfleet Command", customer.reload.name
+        end
+
+        it "rejects an update that clears the name" do
+          assert_api_response :patch, 400, path_params: {id: customer.id}, body: {name: ""} do
+            assert_equal "validation_error.customer.update", parsed_body["code"]
+            refute_includes parsed_body["message"], "Translation missing"
           end
         end
 

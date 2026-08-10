@@ -2,9 +2,13 @@ de:
   validation_error:
     customer:
       create: "Kunde konnte nicht erstellt werden."
+      update: "Kunde konnte nicht gespeichert werden."
       destroy: "Kunde konnte nicht gelöscht werden."
       destroy_failure_dependency: "Bitte löschen Sie zuerst alle Rechnungen für diesen Kunden."
     project:
+      create: "Projekt konnte nicht erstellt werden."
+      update: "Projekt konnte nicht gespeichert werden."
+      unarchive: "Projekt konnte nicht reaktiviert werden."
       destroy: "Projekt konnte nicht gelöscht werden."
       destroy_failure_dependency: "Bitte löschen Sie zuerst alle Rechnungen für dieses Projekt."
       archive: "Projekt konnte nicht archiviert werden."
@@ -13,6 +17,9 @@ de:
       authentication: "Ungültige Anmeldedaten."
     task:
       create: "Aufgabe konnte nicht erstellt werden."
+      update: "Aufgabe konnte nicht gespeichert werden."
+      destroy: "Aufgabe konnte nicht gelöscht werden."
+      destroy_failure_dependency: "Bitte löschen Sie zuerst alle Zeiteinträge für diese Aufgabe."
     timer:
       create: "Zeiteintrag konnte nicht erstellt werden."
       update: "Zeiteintrag konnte nicht gespeichert werden."
