@@ -13,6 +13,9 @@ paths:
       tags:
       - Customers
       operationId: customers
+      parameters:
+      - "$ref": "#/components/parameters/PageParameter"
+      - "$ref": "#/components/parameters/PerPageParameter"
       responses:
         '200':
           description: successful
@@ -20,6 +23,17 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Customers"
+          headers:
+            Link:
+              description: 'RFC 8288 pagination links: self, first, prev, next, last.'
+              schema:
+                type: string
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
         '401':
           description: unauthorized
           content:
@@ -290,6 +304,29 @@ components:
       - code
       - message
       title: ValidationError
+  parameters:
+    PageParameter:
+      name: page
+      in: query
+      required: false
+      description: 1-based page number. Page boundaries are described by the Link
+        response header.
+      schema:
+        type: integer
+        minimum: 1
+    PerPageParameter:
+      name: perPage
+      in: query
+      required: false
+      description: Page size, or "all" to skip pagination entirely. Values above the
+        endpoint's maximum are rejected with 400.
+      schema:
+        oneOf:
+        - type: integer
+          minimum: 1
+        - type: string
+          enum:
+          - all
   securitySchemes:
     BearerAuth:
       type: http

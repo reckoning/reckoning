@@ -3,6 +3,7 @@
 module Api
   class BaseController < ActionController::API
     include ::AccountsConcern
+    include ::Pagination
     include ActionController::Cookies
     include ActionController::RequestForgeryProtection
 
@@ -29,6 +30,14 @@ module Api
 
     rescue_from CanCan::AccessDenied do |exception|
       render json: {message: exception.message}, status: :forbidden
+    end
+
+    rescue_from Pagination::MaxPerPageReached do
+      render json: {
+        code: "pagination.max_per_page_reached",
+        message: I18n.t("errors.pagination.max_per_page_reached",
+          default: "Requested page size is larger than this endpoint allows")
+      }, status: :bad_request
     end
 
     rescue_from ActionController::InvalidAuthenticityToken do

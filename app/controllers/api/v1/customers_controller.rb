@@ -7,9 +7,11 @@ module Api
         not_found(I18n.t("messages.record_not_found.customer", id: params[:id]))
       end
 
+      after_action -> { pagination_header(:customers) }, only: [:index]
+
       def index
         authorize! :index, Customer
-        @customers = current_account.customers
+        @customers = paginate(current_account.customers.order(:name))
       end
 
       def show

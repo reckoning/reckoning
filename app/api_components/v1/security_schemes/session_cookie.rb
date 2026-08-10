@@ -4,6 +4,7 @@ module V1
   module SecuritySchemes
     class SessionCookie
       include OpenapiRuby::Components::Base
+
       component_type :securitySchemes
 
       schema({

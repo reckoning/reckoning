@@ -4,6 +4,7 @@ module V1
   module SecuritySchemes
     class BearerAuth
       include OpenapiRuby::Components::Base
+
       component_type :securitySchemes
 
       schema({

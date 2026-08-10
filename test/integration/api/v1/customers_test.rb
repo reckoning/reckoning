@@ -15,8 +15,17 @@ module Api
           tags "Customers"
           produces "application/json"
 
+          parameter "$ref": "#/components/parameters/PageParameter"
+          parameter "$ref": "#/components/parameters/PerPageParameter"
+
           response(200, "successful") do
             schema ::V1::Schemas::Customers
+            header "Link", schema: {type: :string},
+              description: "RFC 8288 pagination links: self, first, prev, next, last."
+          end
+
+          response(400, "bad request") do
+            schema ::V1::Schemas::StandardError
           end
 
           response(401, "unauthorized") do
@@ -94,6 +103,7 @@ module Api
 
       let(:data) { users :data }
       let(:customer) { customers :starfleet }
+      let(:current_account_customer_count) { data.account.customers.count }
 
       describe "unauthorized" do
         it "does not list customers" do
@@ -125,6 +135,30 @@ module Api
         it "lists customers" do
           assert_api_response :get, 200 do
             assert_includes parsed_body.map { |item| item["name"] }, customer.name
+          end
+        end
+
+        it "describes the page boundaries in the Link header" do
+          assert_api_response :get, 200, params: {perPage: 1} do
+            assert_equal 1, parsed_body.size
+
+            links = response.headers["Link"]
+            assert_includes links, 'rel="self"'
+            assert_includes links, 'rel="next"'
+            assert_includes links, 'rel="last"'
+          end
+        end
+
+        it "returns every record when perPage is all" do
+          assert_api_response :get, 200, params: {perPage: "all"} do
+            assert_equal current_account_customer_count, parsed_body.size
+            refute_includes response.headers["Link"].to_s, 'rel="next"'
+          end
+        end
+
+        it "rejects a page size above the maximum" do
+          assert_api_response :get, 400, params: {perPage: 1_000} do
+            assert_equal "pagination.max_per_page_reached", parsed_body["code"]
           end
         end
 
