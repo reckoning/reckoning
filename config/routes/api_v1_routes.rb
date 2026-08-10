@@ -11,6 +11,15 @@ v1_api_routes = lambda do
     patch :password, action: :update_password
   end
 
+  scope path: "me" do
+    resource :otp, only: %i[create], controller: :otp do
+      get :qrcode
+      post :enable
+      post :disable
+      post :backup_codes
+    end
+  end
+
   resource :account, only: %i[show update], controller: :account
 
   resources :customers, only: %i[index show create destroy]

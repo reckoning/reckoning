@@ -232,6 +232,138 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/StandardError"
+  "/me/otp":
+    post:
+      summary: Begin two-factor enrollment
+      tags:
+      - Otp
+      operationId: createOtpEnrollment
+      responses:
+        '201':
+          description: secret generated
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OtpEnrollment"
+        '200':
+          description: already enrolled
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OtpEnrollment"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+  "/me/otp/backup_codes":
+    post:
+      summary: Regenerate backup codes
+      tags:
+      - Otp
+      operationId: regenerateOtpBackupCodes
+      responses:
+        '200':
+          description: regenerated
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OtpBackupCodes"
+        '400':
+          description: two-factor not enabled
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+  "/me/otp/disable":
+    post:
+      summary: Turn two-factor off
+      tags:
+      - Otp
+      operationId: disableOtp
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/OtpInput"
+      responses:
+        '200':
+          description: disabled
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OtpEnrollment"
+        '400':
+          description: invalid code
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+  "/me/otp/enable":
+    post:
+      summary: Turn two-factor on
+      tags:
+      - Otp
+      operationId: enableOtp
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/OtpInput"
+      responses:
+        '200':
+          description: enabled
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OtpBackupCodes"
+        '400':
+          description: invalid code
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+  "/me/otp/qrcode":
+    get:
+      summary: Provisioning QR code
+      tags:
+      - Otp
+      operationId: otpQrcode
+      responses:
+        '200':
+          description: successful
+          content:
+            image/svg+xml:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: unauthorized
+          content:
+            image/svg+xml:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
   "/me/password":
     patch:
       summary: Change the signed-in user's password
@@ -1284,6 +1416,46 @@ components:
       required:
       - message
       title: Message
+    OtpBackupCodes:
+      type: object
+      properties:
+        otpRequired:
+          type:
+          - boolean
+          - 'null'
+        backupCodes:
+          type: array
+          items:
+            type: string
+      additionalProperties: false
+      required:
+      - backupCodes
+      title: OtpBackupCodes
+    OtpEnrollment:
+      type: object
+      properties:
+        otpRequired:
+          type:
+          - boolean
+          - 'null'
+        provisioningUri:
+          type: string
+          description: otpauth:// URI for an authenticator app. Also available as
+            SVG from /me/otp/qrcode.
+      additionalProperties: false
+      required:
+      - provisioningUri
+      title: OtpEnrollment
+    OtpInput:
+      type: object
+      properties:
+        otp_attempt:
+          type: string
+          description: Current code from the authenticator app.
+      additionalProperties: false
+      required:
+      - otp_attempt
+      title: OtpInput
     PasswordChangeInput:
       type: object
       properties:
