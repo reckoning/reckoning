@@ -469,9 +469,13 @@ comment naming the phase that removes them.
 #### Wire-format finding
 
 Decimal columns (`Timer#value`, `sumForTask`) serialise as JSON **strings**,
-not numbers. `app/frontend/lib/timers/types.ts` declares `number` for both —
-wrong today, and silently so. The schema records the real type; Phase B4
-fixes the island when it moves onto the generated client.
+not numbers, so the schema records them as strings.
+
+*Correction to an earlier note here:* this is not a bug in the islands.
+`app/frontend/lib/timers/api.ts` coerces them in `normalizeTimer` at the
+fetch boundary, which is why `types.ts` can legitimately declare `number`.
+When B4 moves the timesheet onto the generated client, that coercion has to
+move with it — the generated types will say `string`, correctly.
 
 ### Phase A3–A8 — API buildout, one domain per PR pair
 

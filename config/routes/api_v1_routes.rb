@@ -34,6 +34,10 @@ v1_api_routes = lambda do
   resources :tasks, only: %i[index create update destroy]
 
   resources :timers, only: %i[index create update destroy] do
+    collection do
+      get :uninvoiced
+    end
+
     member do
       put :start
       put :stop
