@@ -70,6 +70,30 @@ module Api
         end
       end
 
+      # The flow the SPA uses: log in for a cookie, then call a protected
+      # endpoint with no Authorization header at all.
+      describe "cookie session" do
+        it "establishes a session the browser can reuse" do
+          assert_api_response :post, 200, body: {email: data.email, password: password}
+
+          get "/api/v1/me", headers: {"Accept" => "application/json"}
+
+          assert_response :ok
+          assert_equal data.id, JSON.parse(response.body)["id"]
+        end
+
+        it "clears the session on destroy" do
+          assert_api_response :post, 200, body: {email: data.email, password: password}
+          delete "/api/v1/sessions", headers: {"Accept" => "application/json"}
+
+          assert_response :ok
+
+          get "/api/v1/me", headers: {"Accept" => "application/json"}
+
+          assert_response :unauthorized
+        end
+      end
+
       describe "destroy" do
         it "is unauthorized without a token" do
           assert_api_response :delete, 401
