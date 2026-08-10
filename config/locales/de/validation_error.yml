@@ -44,7 +44,12 @@ de:
       create: "Zeiteintrag konnte nicht erstellt werden."
       update: "Zeiteintrag konnte nicht gespeichert werden."
       destroy: "Zeiteintrag konnte nicht gelöscht werden."
+    backend:
+      admin_only: "Dieser Bereich ist Administratoren vorbehalten."
     user:
+      create: "Benutzer konnte nicht erstellt werden."
+      destroy: "Benutzer konnte nicht gelöscht werden."
+      send_welcome: "Willkommens-E-Mail konnte nicht versendet werden."
       update: "Profil konnte nicht gespeichert werden."
     password:
       update: "Passwort konnte nicht geändert werden."
