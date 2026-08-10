@@ -496,14 +496,22 @@ regenerated schema → regenerated client.
         user-facing message. Added, with a test asserting a real translation.
       - Account fixtures had no `plan`, which the model requires, so any
         account update in a test failed for an unrelated reason.
-- [ ] **A4** Customers (add `update`) + Projects (add show/create/update/
-      unarchive) + Tasks (add update/destroy).
-- [ ] **A5** Timers + timesheet aggregates (day/week/month) + `uninvoiced`.
-- [ ] **A6** Invoices + invoice positions + the action endpoints
-      (`generate_positions`, `charge`, `pay`, `send_mail`, `send_test_mail`).
-- [ ] **A7** Offers + offer positions + state transitions.
-- [ ] **A8** Expenses + expense imports + dashboard stats + backend admin
-      (accounts, users, `send_welcome`).
+- [x] **A4** ✅ Customers `update`; Projects show/create/update/unarchive;
+      Tasks update/destroy. Project create authorizes the *instance*, so a
+      project pointed at another account's customer is 403.
+- [x] **A5** ✅ `uninvoiced` added. The day/week/month views needed no new
+      endpoints — the existing query params on /timers and /tasks serve them.
+- [x] **A6** ✅ Invoices, positions, charge/pay/send_mail/send_test_mail.
+      State transitions are enforced by the ability, so an invalid one is 403.
+      `generate_positions` was skipped: `config/routes.rb:64` maps it to an
+      action that does not exist, so the web route raises today.
+- [x] **A7** ✅ Offers, positions, and one transition endpoint covering the
+      whole AASM machine (bid/accept/decline/cancel).
+- [~] **A8** Partly done. ✅ Expenses CRUD + bulk update/destroy (behind the
+      `feature_expenses` flag) and the dashboard totals endpoint.
+      **Outstanding:** expense imports (preview/create — multipart upload, so
+      the contract needs a non-JSON request body) and the backend admin
+      endpoints (accounts, users, `send_welcome`).
 
 Exit per PR: new operations in `schema.yaml`, integration tests green,
 oasdiff reports additive-only.
