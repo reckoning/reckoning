@@ -415,22 +415,63 @@ on a current schema and fails when a contract test changes without
 regeneration; redocly exits 0; oasdiff exits 0 against an empty base and 1
 when an endpoint is removed.
 
-### Phase A2 — API conventions layer (1 PR, ~2 days)
+### Phase A2 — API conventions layer ✅ done
 
-- [ ] `Api::BaseController`: add `ActionController::Cookies`, `Pagination`
-      concern, consistent `rescue_from` set.
-- [ ] Verify the D1 CSRF posture: assert no API route mutates on `GET`, and
-      check what `Rails.configuration.app.cookie_domain` resolves to per
-      environment. No token CSRF unless that check turns something up.
-- [ ] Shared components: `StandardError`, `ValidationError`,
-      `PageParameter`, `PerPageParameter`, `SessionCookie` +
-      `BearerAuth` security schemes.
-- [ ] Port FleetYards' `app/controllers/concerns/pagination.rb` onto kaminari.
-- [ ] Backfill the 6 existing controllers with components + DSL specs so v1
-      is fully described before it grows.
+- [x] `Api::BaseController`: `ActionController::Cookies`, `Pagination`
+      concern, `rescue_from` for CanCan, `MaxPerPageReached` and
+      `InvalidAuthenticityToken`.
+- [x] D1 CSRF verified — **and the answer changed.**
+- [x] Shared components: `StandardError`, `ValidationError`, `Message`,
+      `PageParameter`, `PerPageParameter`, `SessionCookie` + `BearerAuth`.
+- [x] Pagination ported onto kaminari, wired into `customers#index`.
+- [x] All 19 v1 operations described (customers, projects, tasks, timers,
+      users, sessions).
 
-Exit: schema describes 100% of today's v1; the two CSRF checks above are
-answered in writing.
+Exit met: the schema covers 100% of today's v1, and the suite went from
+120 to 162 tests.
+
+#### D1 revisited — token CSRF is now in place
+
+The recommendation was to rely on `same_site: :lax` and skip token CSRF,
+conditional on two checks. Both were run:
+
+- **No API route mutates on `GET`.** Confirmed — every v1 `GET` is
+  index/show/current.
+- **`cookie_domain` resolves to `:all`.** The session cookie is therefore
+  shared across every account subdomain, and SameSite treats siblings as
+  same-site. It does not isolate tenants.
+
+So `protect_from_forgery with: :exception` is on `Api::BaseController`,
+skipped for Bearer-token requests. Two wrinkles worth knowing:
+
+- `ActionController::API` never receives
+  `config.action_controller.allow_forgery_protection` — that is applied at
+  boot to controllers that already include the module. The controller reads
+  it explicitly, defaulting to on.
+- `sessions#create` skips it: that is where a client without a session gets
+  its token, so requiring one would lock out every non-browser client.
+
+Every existing v1 client — AngularJS (`$httpProvider` default header), the
+Vue islands and the Stimulus controllers (`ApiHeaders`) — authenticates
+with a Bearer JWT, so none of them are affected.
+
+#### Reshaping is per-domain, not global (amends D2)
+
+D2 said v1 could be reshaped freely because the native apps were never
+released. True, but incomplete: **the live AngularJS frontend and the Vue
+islands are also v1 consumers.** Customers was safe to clean up because its
+only consumer reads `id` and `name`. `timer.links` is read by the Angular
+timer service, so it stays until Phase B5 deletes the code reading it.
+
+Check the consumers before reshaping a domain; the ported shapes carry a
+comment naming the phase that removes them.
+
+#### Wire-format finding
+
+Decimal columns (`Timer#value`, `sumForTask`) serialise as JSON **strings**,
+not numbers. `app/frontend/lib/timers/types.ts` declares `number` for both —
+wrong today, and silently so. The schema records the real type; Phase B4
+fixes the island when it moves onto the generated client.
 
 ### Phase A3–A8 — API buildout, one domain per PR pair
 
