@@ -48,6 +48,13 @@ v1_api_routes = lambda do
     end
   end
 
+  resources :expenses, only: %i[index show create update destroy] do
+    collection do
+      post :bulk_update
+      post :bulk_destroy
+    end
+  end
+
   resources :timers, only: %i[index create update destroy] do
     collection do
       get :uninvoiced

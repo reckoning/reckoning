@@ -18,6 +18,13 @@ de:
       update: "Angebot konnte nicht gespeichert werden."
       destroy: "Angebot konnte nicht gelöscht werden."
       transition: "Statuswechsel ist für dieses Angebot nicht möglich."
+    expense:
+      create: "Ausgabe konnte nicht erstellt werden."
+      update: "Ausgabe konnte nicht gespeichert werden."
+      destroy: "Ausgabe konnte nicht gelöscht werden."
+      bulk_update: "Es wurden keine Ausgaben oder Felder zum Ändern ausgewählt."
+      bulk_destroy: "Es wurden keine Ausgaben zum Löschen ausgewählt."
+      feature_disabled: "Ausgaben sind für dieses Konto nicht aktiviert."
     project:
       create: "Projekt konnte nicht erstellt werden."
       update: "Projekt konnte nicht gespeichert werden."

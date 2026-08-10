@@ -219,6 +219,238 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/StandardError"
+  "/expenses":
+    get:
+      summary: Expenses list
+      tags:
+      - Expenses
+      operationId: expenses
+      parameters:
+      - "$ref": "#/components/parameters/PageParameter"
+      - "$ref": "#/components/parameters/PerPageParameter"
+      - name: year
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: quarter
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 4
+      - name: month
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 12
+      - name: type
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: query
+        in: query
+        required: false
+        description: Free-text search over description and seller.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Expenses"
+          headers:
+            Link:
+              description: RFC 8288 pagination links.
+              schema:
+                type: string
+        '403':
+          description: expenses not enabled for this account
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '400':
+          "$ref": "#/components/responses/SchemaValidationError"
+    post:
+      summary: Create new Expense
+      tags:
+      - Expenses
+      operationId: createExpense
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ExpenseInput"
+      responses:
+        '201':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Expense"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '403':
+          description: expenses not enabled for this account
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+  "/expenses/bulk_update":
+    post:
+      summary: Apply the same attributes to many expenses
+      tags:
+      - Expenses
+      operationId: bulkUpdateExpenses
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ExpenseBulkInput"
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/BulkResult"
+        '400':
+          description: nothing selected to change
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+  "/expenses/{id}":
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: string
+        format: uuid
+      required: true
+    get:
+      summary: Get Expense
+      tags:
+      - Expenses
+      operationId: expense
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Expense"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '400':
+          "$ref": "#/components/responses/SchemaValidationError"
+    patch:
+      summary: Update Expense
+      tags:
+      - Expenses
+      operationId: updateExpense
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ExpenseInput"
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Expense"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+    delete:
+      summary: Destroy Expense
+      tags:
+      - Expenses
+      operationId: destroyExpense
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Message"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
   "/invoices":
     get:
       summary: Invoices list
@@ -2087,6 +2319,18 @@ components:
           - 'null'
       additionalProperties: false
       title: AccountInput
+    BulkResult:
+      type: object
+      properties:
+        count:
+          type: integer
+        message:
+          type: string
+      additionalProperties: false
+      required:
+      - count
+      - message
+      title: BulkResult
     CurrentUser:
       type: object
       properties:
@@ -2274,6 +2518,157 @@ components:
       items:
         "$ref": "#/components/schemas/Customer"
       title: Customers
+    Expense:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        expenseType:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        seller:
+          type:
+          - string
+          - 'null'
+        date:
+          type:
+          - string
+          - 'null'
+          format: date
+        value:
+          type:
+          - string
+          - 'null'
+        vatPercent:
+          type:
+          - integer
+          - 'null'
+        vatValue:
+          type:
+          - string
+          - 'null'
+        privateUsePercent:
+          type:
+          - integer
+          - 'null'
+        interval:
+          type:
+          - string
+          - 'null'
+          description: once, monthly, quarterly, yearly.
+        startedAt:
+          type:
+          - string
+          - 'null'
+          format: date
+        endedAt:
+          type:
+          - string
+          - 'null'
+          format: date
+        afaTypeId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      additionalProperties: false
+      required:
+      - id
+      - expenseType
+      - createdAt
+      - updatedAt
+      title: Expense
+    ExpenseBulkInput:
+      type: object
+      properties:
+        expenseIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        expense_type:
+          type:
+          - string
+          - 'null'
+        vat_percent:
+          type:
+          - integer
+          - 'null'
+        private_use_percent:
+          type:
+          - integer
+          - 'null'
+      additionalProperties: false
+      required:
+      - expenseIds
+      title: ExpenseBulkInput
+    ExpenseInput:
+      type: object
+      properties:
+        expense_type:
+          type: string
+        afa_type_id:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        description:
+          type:
+          - string
+          - 'null'
+        seller:
+          type:
+          - string
+          - 'null'
+        date:
+          type:
+          - string
+          - 'null'
+          format: date
+        value:
+          type:
+          - string
+          - number
+          - 'null'
+        private_use_percent:
+          type:
+          - integer
+          - 'null'
+        vat_percent:
+          type:
+          - integer
+          - 'null'
+        interval:
+          type:
+          - string
+          - 'null'
+        started_at:
+          type:
+          - string
+          - 'null'
+          format: date
+        ended_at:
+          type:
+          - string
+          - 'null'
+          format: date
+      additionalProperties: false
+      title: ExpenseInput
+    Expenses:
+      type: array
+      items:
+        "$ref": "#/components/schemas/Expense"
+      title: Expenses
     Invoice:
       type: object
       properties:
