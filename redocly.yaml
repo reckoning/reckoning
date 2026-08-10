@@ -1,0 +1,6 @@
+extends:
+  - recommended
+rules:
+  # Security schemes are declared as components but openapi-ruby 4.0.1 never
+  # emits the schema-level `security` block that would reference them.
+  no-unused-components: off
