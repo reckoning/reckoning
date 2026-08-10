@@ -7,6 +7,55 @@ info:
     name: GNU General Public License v3.0
     url: https://github.com/mortik/reckoning/blob/main/LICENSE
 paths:
+  "/account":
+    get:
+      summary: The signed-in user's account
+      tags:
+      - Account
+      operationId: account
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Account"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+    patch:
+      summary: Update account settings
+      tags:
+      - Account
+      operationId: updateAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/AccountInput"
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Account"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
   "/customers":
     get:
       summary: Customers list
@@ -711,6 +760,210 @@ servers:
   description: Current host
 components:
   schemas:
+    Account:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type:
+          - string
+          - 'null'
+        subdomain:
+          type:
+          - string
+          - 'null'
+        plan:
+          type:
+          - string
+          - 'null'
+        vatId:
+          type:
+          - string
+          - 'null'
+        tax:
+          type:
+          - string
+          - 'null'
+          description: Default tax rate, stored as a string.
+        provision:
+          type:
+          - string
+          - 'null'
+        bank:
+          type:
+          - string
+          - 'null'
+        accountNumber:
+          type:
+          - string
+          - 'null'
+        bankCode:
+          type:
+          - string
+          - 'null'
+        iban:
+          type:
+          - string
+          - 'null'
+        bic:
+          type:
+          - string
+          - 'null'
+        defaultFrom:
+          type:
+          - string
+          - 'null'
+        signature:
+          type:
+          - string
+          - 'null'
+        address:
+          type:
+          - string
+          - 'null'
+        country:
+          type:
+          - string
+          - 'null'
+        publicEmail:
+          type:
+          - string
+          - 'null'
+        telefon:
+          type:
+          - string
+          - 'null'
+        fax:
+          type:
+          - string
+          - 'null'
+        website:
+          type:
+          - string
+          - 'null'
+        officeSpace:
+          type:
+          - integer
+          - 'null'
+        deductibleOfficeSpace:
+          type:
+          - integer
+          - 'null'
+        offerHeadline:
+          type:
+          - string
+          - 'null'
+        featureExpenses:
+          type:
+          - boolean
+          - 'null'
+        featureLogbook:
+          type:
+          - boolean
+          - 'null'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      additionalProperties: false
+      required:
+      - id
+      - createdAt
+      - updatedAt
+      title: Account
+    AccountInput:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        subdomain:
+          type:
+          - string
+          - 'null'
+        vatId:
+          type:
+          - string
+          - 'null'
+        tax:
+          type:
+          - string
+          - 'null'
+        provision:
+          type:
+          - string
+          - 'null'
+        bank:
+          type:
+          - string
+          - 'null'
+        accountNumber:
+          type:
+          - string
+          - 'null'
+        bankCode:
+          type:
+          - string
+          - 'null'
+        iban:
+          type:
+          - string
+          - 'null'
+        bic:
+          type:
+          - string
+          - 'null'
+        defaultFrom:
+          type:
+          - string
+          - 'null'
+        signature:
+          type:
+          - string
+          - 'null'
+        address:
+          type:
+          - string
+          - 'null'
+        country:
+          type:
+          - string
+          - 'null'
+        publicEmail:
+          type:
+          - string
+          - 'null'
+        telefon:
+          type:
+          - string
+          - 'null'
+        fax:
+          type:
+          - string
+          - 'null'
+        website:
+          type:
+          - string
+          - 'null'
+        officeSpace:
+          type:
+          - integer
+          - 'null'
+        deductibleOfficeSpace:
+          type:
+          - integer
+          - 'null'
+        offerHeadline:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+      title: AccountInput
     CurrentUser:
       type: object
       properties:

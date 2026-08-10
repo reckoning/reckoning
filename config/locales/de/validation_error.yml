@@ -11,3 +11,13 @@ de:
     sessions:
       create: "Anmeldung fehlgeschlagen."
       authentication: "Ungültige Anmeldedaten."
+    task:
+      create: "Aufgabe konnte nicht erstellt werden."
+    timer:
+      create: "Zeiteintrag konnte nicht erstellt werden."
+      update: "Zeiteintrag konnte nicht gespeichert werden."
+      destroy: "Zeiteintrag konnte nicht gelöscht werden."
+    user:
+      update: "Profil konnte nicht gespeichert werden."
+    account:
+      update: "Kontoeinstellungen konnten nicht gespeichert werden."
