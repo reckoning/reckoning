@@ -795,6 +795,242 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/StandardError"
+  "/offers":
+    get:
+      summary: Offers list
+      tags:
+      - Offers
+      operationId: offers
+      parameters:
+      - "$ref": "#/components/parameters/PageParameter"
+      - "$ref": "#/components/parameters/PerPageParameter"
+      - name: state
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - created
+          - bided
+          - accepted
+          - declined
+          - canceled
+      - name: year
+        in: query
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Offers"
+          headers:
+            Link:
+              description: RFC 8288 pagination links.
+              schema:
+                type: string
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '400':
+          "$ref": "#/components/responses/SchemaValidationError"
+    post:
+      summary: Create new Offer
+      tags:
+      - Offers
+      operationId: createOffer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/OfferInput"
+      responses:
+        '201':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Offer"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+  "/offers/{id}":
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: string
+        format: uuid
+      required: true
+    get:
+      summary: Get Offer
+      tags:
+      - Offers
+      operationId: offer
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Offer"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '400':
+          "$ref": "#/components/responses/SchemaValidationError"
+    patch:
+      summary: Update Offer
+      tags:
+      - Offers
+      operationId: updateOffer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/OfferInput"
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Offer"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '403':
+          description: not editable in this state
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Message"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+    delete:
+      summary: Destroy Offer
+      tags:
+      - Offers
+      operationId: destroyOffer
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Message"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+  "/offers/{id}/transition/{event}":
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: string
+        format: uuid
+      required: true
+    - name: event
+      in: path
+      required: true
+      description: State machine event to apply.
+      schema:
+        type: string
+        enum:
+        - bid
+        - accept
+        - decline
+        - cancel
+    put:
+      summary: Move an offer through its state machine
+      tags:
+      - Offers
+      operationId: transitionOffer
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Offer"
+        '400':
+          description: event does not apply in this state
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '403':
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Message"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
   "/passwords":
     post:
       summary: Request a password reset email
@@ -2273,6 +2509,185 @@ components:
       required:
       - message
       title: Message
+    Offer:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        ref:
+          type:
+          - integer
+          - 'null'
+        refNumber:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        state:
+          type:
+          - string
+          - 'null'
+          enum:
+          - created
+          - bided
+          - accepted
+          - declined
+          - canceled
+          -
+        date:
+          type:
+          - string
+          - 'null'
+          format: date
+        description:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        rate:
+          type:
+          - string
+          - 'null'
+        customerId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        customerName:
+          type:
+          - string
+          - 'null'
+        projectId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        projectName:
+          type:
+          - string
+          - 'null'
+        editable:
+          type: boolean
+          description: False once bided or accepted.
+        positions:
+          type: array
+          items:
+            "$ref": "#/components/schemas/OfferPosition"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      additionalProperties: false
+      required:
+      - id
+      - state
+      - positions
+      - editable
+      - createdAt
+      - updatedAt
+      title: Offer
+    OfferInput:
+      type: object
+      properties:
+        project_id:
+          type: string
+          format: uuid
+        customer_id:
+          type: string
+          format: uuid
+        ref:
+          type:
+          - integer
+          - 'null'
+        date:
+          type:
+          - string
+          - 'null'
+          format: date
+        description:
+          type:
+          - string
+          - 'null'
+        positions_attributes:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              description:
+                type:
+                - string
+                - 'null'
+              hours:
+                type:
+                - string
+                - number
+                - 'null'
+              rate:
+                type:
+                - string
+                - number
+                - 'null'
+              value:
+                type:
+                - string
+                - number
+                - 'null'
+              _destroy:
+                type: boolean
+            additionalProperties: false
+      additionalProperties: false
+      title: OfferInput
+    OfferPosition:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        description:
+          type:
+          - string
+          - 'null'
+        hours:
+          type:
+          - string
+          - 'null'
+        rate:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      additionalProperties: false
+      required:
+      - id
+      - createdAt
+      - updatedAt
+      title: OfferPosition
+    Offers:
+      type: array
+      items:
+        "$ref": "#/components/schemas/Offer"
+      title: Offers
     OtpBackupCodes:
       type: object
       properties:

@@ -13,6 +13,11 @@ de:
       pay: "Rechnung konnte nicht als bezahlt markiert werden."
       send: "Rechnung konnte nicht versendet werden. Bitte hinterlegen Sie E-Mail und Vorlage beim Kunden."
       send_test_mail: "Testmail konnte nicht versendet werden."
+    offer:
+      create: "Angebot konnte nicht erstellt werden."
+      update: "Angebot konnte nicht gespeichert werden."
+      destroy: "Angebot konnte nicht gelöscht werden."
+      transition: "Statuswechsel ist für dieses Angebot nicht möglich."
     project:
       create: "Projekt konnte nicht erstellt werden."
       update: "Projekt konnte nicht gespeichert werden."
