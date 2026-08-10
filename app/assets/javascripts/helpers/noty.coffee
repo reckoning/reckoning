@@ -12,7 +12,13 @@ window.displayNoty = (text, type, timeout = 3000) ->
       speed: 500
     progressBar: true
 
-window.confirm = (message, okCallback, cancelCallback) ->
+# Callback-based confirm dialog. Deliberately NOT `window.confirm`:
+# this returns the noty object immediately instead of blocking, so
+# overriding the native one silently defeated every caller written as
+# `if (!confirm(msg)) return` — the action ran while the dialog was
+# still on screen. `app/frontend/lib/confirm.ts` wraps this in a
+# promise for the Vue islands.
+window.notyConfirm = (message, okCallback, cancelCallback) ->
   okButton =
     addClass: 'btn btn-primary'
     text: I18n.t('actions.ok')
@@ -28,7 +34,7 @@ window.confirm = (message, okCallback, cancelCallback) ->
     onClick: ($noty) ->
       $noty.close()
       if cancelCallback isnt undefined && _.isFunction(cancelCallback)
-        cancelCallBack()
+        cancelCallback()
       return false
 
   noty
@@ -36,6 +42,11 @@ window.confirm = (message, okCallback, cancelCallback) ->
     buttons: [okButton, cancelButton]
     layout: 'bottom'
     theme: 'metroui'
+    # Only the buttons dismiss this dialog. noty's default
+    # `closeWith: ['click']` let a click anywhere on the bar close it
+    # without running either callback, which leaves a promise-wrapped
+    # caller waiting forever.
+    closeWith: []
     animation:
       open: 'animated fadeInUp'
       close: 'animated fadeOutDown'

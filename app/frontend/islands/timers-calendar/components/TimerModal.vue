@@ -7,6 +7,7 @@ import {computed, onBeforeUnmount, onMounted, ref, watch} from "vue"
 import {formatHHMM, parseHHMM, runningDuration} from "../../../lib/timers/format"
 import {createTask, createTimer, deleteTimer, startTimer, stopTimer, updateTimer} from "../../../lib/timers/api"
 import type {Task, Timer} from "../../../lib/timers/types"
+import {confirmDialog} from "../../../lib/confirm"
 
 const props = defineProps<{
   draft: Partial<Timer> & {date: string; projectId: string}
@@ -130,7 +131,7 @@ async function onStop() {
 
 async function onDelete() {
   if (!id.value) return
-  if (!window.confirm("Delete this timer?")) return
+  if (!(await confirmDialog("Delete this timer?"))) return
   saving.value = true
   try {
     await deleteTimer(id.value)

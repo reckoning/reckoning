@@ -80,7 +80,7 @@ angular.module 'Timesheet'
       sum
 
     $scope.removeTask = (task) ->
-      confirm I18n.t('messages.confirm.timesheet.delete_task'), ->
+      notyConfirm I18n.t('messages.confirm.timesheet.delete_task'), ->
         task.timers.forEach (timer) ->
           if timer.id
             Timer.delete(timer.id)

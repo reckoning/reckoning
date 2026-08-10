@@ -75,7 +75,7 @@ angular.module 'Reckoning'
           selectize.addItem newTask.id
 
     $scope.delete = (timer) ->
-      confirm I18n.t('messages.confirm.timesheet.delete_timer'), ->
+      notyConfirm I18n.t('messages.confirm.timesheet.delete_timer'), ->
         Timer.delete(timer.id).success (data) ->
           $uibModalInstance.close({data: data, status: 'deleted'})
 

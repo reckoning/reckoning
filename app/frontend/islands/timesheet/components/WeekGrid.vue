@@ -18,6 +18,7 @@ import dayjs from "dayjs"
 import {useWeekTasks} from "../composables/useWeekTasks"
 import {weekDays, formatHHMM, ISO_DATE, todayISO} from "../../../lib/timers/format"
 import {createTimer, updateTimer, deleteTimer, type TaskWithTimers} from "../../../lib/timers/api"
+import {confirmDialog} from "../../../lib/confirm"
 import type {Timer} from "../../../lib/timers/types"
 import WeekCell from "./WeekCell.vue"
 
@@ -109,7 +110,7 @@ async function onCellSave(payload: {
 }
 
 async function onTaskRemove(task: TaskWithTimers) {
-  if (!window.confirm("Aufgabe und alle Zeiten dieser Woche löschen?")) return
+  if (!(await confirmDialog("Aufgabe und alle Zeiten dieser Woche löschen?"))) return
   try {
     for (const t of task.timers) {
       if (t.id) await deleteTimer(t.id)

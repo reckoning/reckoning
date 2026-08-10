@@ -4,11 +4,12 @@ import type {Timer} from "../../../lib/timers/types"
 import type {TaskWithTimers} from "../../../lib/timers/api"
 
 // Spies shared with the mocked modules (hoisted above the imports).
-const {refresh, createTimer, updateTimer, deleteTimer} = vi.hoisted(() => ({
+const {refresh, createTimer, updateTimer, deleteTimer, confirmDialog} = vi.hoisted(() => ({
   refresh: vi.fn(),
   createTimer: vi.fn(() => Promise.resolve({})),
   updateTimer: vi.fn(() => Promise.resolve({})),
   deleteTimer: vi.fn(() => Promise.resolve()),
+  confirmDialog: vi.fn(() => Promise.resolve(true)),
 }))
 
 vi.mock("../composables/useWeekTasks", async () => {
@@ -33,6 +34,7 @@ vi.mock("../composables/useWeekTasks", async () => {
 })
 
 vi.mock("../../../lib/timers/api", () => ({createTimer, updateTimer, deleteTimer}))
+vi.mock("../../../lib/confirm", () => ({confirmDialog}))
 
 import WeekGrid from "./WeekGrid.vue"
 import WeekCell from "./WeekCell.vue"
@@ -76,7 +78,7 @@ function mountGrid(extraTasks?: TaskWithTimers[]) {
   })
 }
 
-function makeRow(id: string): TaskWithTimers {
+function makeRow(id: string, timers: Timer[] = []): TaskWithTimers {
   return {
     id,
     name: "Task",
@@ -85,7 +87,7 @@ function makeRow(id: string): TaskWithTimers {
     projectId: "p1",
     projectName: "Project",
     projectCustomerName: null,
-    timers: [],
+    timers,
   }
 }
 
@@ -108,6 +110,42 @@ describe("WeekGrid rows", () => {
     const wrapper = mountGrid([makeRow("task1")])
 
     expect(wrapper.findAll(".panel.panel-default")).toHaveLength(1)
+  })
+})
+
+describe("WeekGrid row removal", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  // Row 0 is the fetched task, row 1 the extra one passed in below.
+  async function clickRemove(wrapper: ReturnType<typeof mountGrid>) {
+    await wrapper.findAll(".timesheet-task-actions button")[1].trigger("click")
+    await flushPromises()
+  }
+
+  it("deletes nothing until the confirm is answered", async () => {
+    let answer: (ok: boolean) => void = () => {}
+    confirmDialog.mockReturnValueOnce(new Promise<boolean>((resolve) => (answer = resolve)))
+    const wrapper = mountGrid([makeRow("task2", [makeTimer({id: "x"})])])
+
+    await clickRemove(wrapper)
+    expect(deleteTimer).not.toHaveBeenCalled()
+    expect(wrapper.emitted("removeTask")).toBeUndefined()
+
+    answer(true)
+    await flushPromises()
+    expect(deleteTimer).toHaveBeenCalledWith("x")
+    expect(wrapper.emitted("removeTask")).toHaveLength(1)
+  })
+
+  it("keeps the row when the confirm is cancelled", async () => {
+    confirmDialog.mockResolvedValueOnce(false)
+    const wrapper = mountGrid([makeRow("task2", [makeTimer({id: "x"})])])
+
+    await clickRemove(wrapper)
+
+    expect(deleteTimer).not.toHaveBeenCalled()
+    expect(refresh).not.toHaveBeenCalled()
+    expect(wrapper.emitted("removeTask")).toBeUndefined()
   })
 })
 

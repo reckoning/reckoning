@@ -37,12 +37,12 @@ jobs:
       RAILS_SERVE_STATIC_FILES: 1
       DISABLE_DATABASE_ENVIRONMENT_CHECK: 1
       JOBS: 1
-      PORT: 8270
-      PLAYWRIGHT_BASE_URL: http://localhost:8270
+      PORT: 8250
+      PLAYWRIGHT_BASE_URL: http://localhost:8250
       # Same-origin API base path for the Vue islands (ApiBasePath is
       # `//<app.domain>`); without this it defaults to `reckoning.test`,
       # which the browser can't resolve in CI.
-      DOMAIN: localhost:8270
+      DOMAIN: localhost:8250
       NODE_OPTIONS: "--max_old_space_size=4096"
 
     services:

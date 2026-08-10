@@ -18,6 +18,7 @@ import {
   updateTimer,
 } from "../../../lib/timers/api"
 import type {Project, Task, Timer} from "../../../lib/timers/types"
+import {confirmDialog} from "../../../lib/confirm"
 
 const props = defineProps<{
   draft: Partial<Timer> & {date: string}
@@ -160,7 +161,7 @@ async function onStop() {
 
 async function onDelete() {
   if (!id.value) return
-  if (!window.confirm("Diese Zeit löschen?")) return
+  if (!(await confirmDialog("Diese Zeit löschen?"))) return
   saving.value = true
   try {
     await deleteTimer(id.value)
