@@ -19,5 +19,9 @@ de:
       destroy: "Zeiteintrag konnte nicht gelöscht werden."
     user:
       update: "Profil konnte nicht gespeichert werden."
+    password:
+      update: "Passwort konnte nicht geändert werden."
     account:
+      create: "Konto konnte nicht erstellt werden."
       update: "Kontoeinstellungen konnten nicht gespeichert werden."
+      registration_disabled: "Die Registrierung ist derzeit deaktiviert."

@@ -232,6 +232,82 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/StandardError"
+  "/me/password":
+    patch:
+      summary: Change the signed-in user's password
+      tags:
+      - Me
+      operationId: updateMyPassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/PasswordChangeInput"
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CurrentUser"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+  "/passwords":
+    post:
+      summary: Request a password reset email
+      tags:
+      - Passwords
+      operationId: requestPasswordReset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/PasswordResetRequestInput"
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Message"
+        '400':
+          "$ref": "#/components/responses/SchemaValidationError"
+    put:
+      summary: Set a new password using a reset token
+      tags:
+      - Passwords
+      operationId: resetPassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/PasswordResetInput"
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Message"
+        '400':
+          description: invalid or expired token
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
   "/projects":
     get:
       summary: Projects list
@@ -349,6 +425,37 @@ paths:
                 "$ref": "#/components/schemas/StandardError"
         '401':
           description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+  "/registrations":
+    post:
+      summary: 'Sign up: create an account and its first user'
+      tags:
+      - Registrations
+      operationId: createRegistration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/RegistrationInput"
+      responses:
+        '201':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Registration"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '403':
+          description: registration disabled
           content:
             application/json:
               schema:
@@ -1177,6 +1284,46 @@ components:
       required:
       - message
       title: Message
+    PasswordChangeInput:
+      type: object
+      properties:
+        current_password:
+          type: string
+        password:
+          type: string
+          minLength: 8
+        password_confirmation:
+          type: string
+      additionalProperties: false
+      required:
+      - current_password
+      - password
+      title: PasswordChangeInput
+    PasswordResetInput:
+      type: object
+      properties:
+        reset_password_token:
+          type: string
+          description: From the reset email.
+        password:
+          type: string
+          minLength: 8
+        password_confirmation:
+          type: string
+      additionalProperties: false
+      required:
+      - reset_password_token
+      - password
+      title: PasswordResetInput
+    PasswordResetRequestInput:
+      type: object
+      properties:
+        email:
+          type: string
+      additionalProperties: false
+      required:
+      - email
+      title: PasswordResetRequestInput
     Project:
       type: object
       properties:
@@ -1254,6 +1401,58 @@ components:
       items:
         "$ref": "#/components/schemas/Project"
       title: Projects
+    Registration:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        plan:
+          type:
+          - string
+          - 'null'
+        createdAt:
+          type: string
+          format: date-time
+      additionalProperties: false
+      required:
+      - id
+      - name
+      - createdAt
+      title: Registration
+    RegistrationInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        plan:
+          type: string
+        users_attributes:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+                minLength: 8
+              password_confirmation:
+                type: string
+            additionalProperties: false
+            required:
+            - email
+            - password
+      additionalProperties: false
+      required:
+      - name
+      - plan
+      - users_attributes
+      title: RegistrationInput
     Session:
       type: object
       properties:

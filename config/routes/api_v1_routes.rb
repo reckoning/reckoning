@@ -3,7 +3,13 @@
 v1_api_routes = lambda do
   resource :sessions, only: %i[create destroy]
 
-  resource :me, only: %i[show update], controller: :me
+  resource :registrations, only: %i[create]
+
+  resource :passwords, only: %i[create update]
+
+  resource :me, only: %i[show update], controller: :me do
+    patch :password, action: :update_password
+  end
 
   resource :account, only: %i[show update], controller: :account
 
