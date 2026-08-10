@@ -1,0 +1,321 @@
+---
+openapi: 3.1.0
+info:
+  title: Reckoning API
+  version: v1
+  license:
+    name: GNU General Public License v3.0
+    url: https://github.com/mortik/reckoning/blob/main/LICENSE
+paths:
+  "/customers":
+    get:
+      summary: Customers list
+      tags:
+      - Customers
+      operationId: customers
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Customers"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+    post:
+      summary: Create new Customer
+      tags:
+      - Customers
+      operationId: createCustomer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CustomerInput"
+      responses:
+        '201':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Customer"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+  "/customers/{id}":
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: string
+        format: uuid
+      required: true
+    get:
+      summary: Get Customer
+      tags:
+      - Customers
+      operationId: customer
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Customer"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '400':
+          "$ref": "#/components/responses/SchemaValidationError"
+    delete:
+      summary: Destroy Customer
+      tags:
+      - Customers
+      operationId: destroyCustomer
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+servers:
+- url: "/api/v1"
+  description: Current host
+components:
+  schemas:
+    Customer:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        address:
+          type:
+          - string
+          - 'null'
+        country:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        telefon:
+          type:
+          - string
+          - 'null'
+        fax:
+          type:
+          - string
+          - 'null'
+        website:
+          type:
+          - string
+          - 'null'
+        paymentDue:
+          type:
+          - integer
+          - 'null'
+        invoiceEmail:
+          type:
+          - string
+          - 'null'
+        invoiceEmailCc:
+          type:
+          - string
+          - 'null'
+        invoiceEmailBcc:
+          type:
+          - string
+          - 'null'
+        defaultFrom:
+          type:
+          - string
+          - 'null'
+        emailTemplate:
+          type:
+          - string
+          - 'null'
+        offerDisclaimer:
+          type:
+          - string
+          - 'null'
+        employmentDate:
+          type:
+          - string
+          - 'null'
+          format: date
+        employmentEndDate:
+          type:
+          - string
+          - 'null'
+          format: date
+        weeklyHours:
+          type:
+          - integer
+          - 'null'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      additionalProperties: false
+      required:
+      - id
+      - name
+      - createdAt
+      - updatedAt
+      title: Customer
+    CustomerInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        address:
+          type: string
+        country:
+          type: string
+        email:
+          type: string
+        telefon:
+          type: string
+        fax:
+          type: string
+        website:
+          type: string
+        paymentDue:
+          type: integer
+        invoiceEmail:
+          type: string
+        invoiceEmailCc:
+          type: string
+        invoiceEmailBcc:
+          type: string
+        defaultFrom:
+          type: string
+        emailTemplate:
+          type: string
+        offerDisclaimer:
+          type: string
+        employmentDate:
+          type: string
+          format: date
+        employmentEndDate:
+          type: string
+          format: date
+        weeklyHours:
+          type: integer
+      additionalProperties: false
+      required:
+      - name
+      title: CustomerInput
+    Customers:
+      type: array
+      items:
+        "$ref": "#/components/schemas/Customer"
+      title: Customers
+    StandardError:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      additionalProperties: false
+      required:
+      - message
+      title: StandardError
+    ValidationError:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+      additionalProperties: false
+      required:
+      - code
+      - message
+      title: ValidationError
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT from POST /sessions. Used by non-browser clients.
+    SessionCookie:
+      type: apiKey
+      in: cookie
+      name: RECKONING_WT_vue_spa_openapi_migr_TEST
+      description: Devise session cookie. Used by the web frontend.
+  responses:
+    SchemaValidationError:
+      description: Request validation failed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              details:
+                type: array
+                items:
+                  type: string
+            required:
+            - error
+            - details
+security: []

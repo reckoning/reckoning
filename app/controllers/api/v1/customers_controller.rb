@@ -43,10 +43,7 @@ module Api
       end
 
       private def customer_params
-        @customer_params ||= params.permit(
-          :payment_due, :email_template, :invoice_email, :default_from, :name,
-          :address, :country, :email, :telefon, :fax, :website
-        )
+        @customer_params ||= openapi_params(::V1::Schemas::Inputs::CustomerInput)
       end
     end
   end
