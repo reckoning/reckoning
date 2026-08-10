@@ -10,6 +10,10 @@ Rails.application.routes.draw do
 
   draw :api_routes
 
+  # Serves swagger/v1/schema.yaml at /api-docs/schemas/v1/schema.
+  # The interactive UI stays off (`config.ui_enabled`).
+  mount OpenapiRuby::Engine => "/api-docs"
+
   namespace :backend do
     resources :accounts, except: [:show]
 
