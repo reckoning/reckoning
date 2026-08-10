@@ -479,8 +479,19 @@ Order chosen so each SPA page can land right behind its API. Each PR:
 components → controller actions → jbuilder views → minitest DSL spec →
 regenerated schema → regenerated client.
 
-- [ ] **A3** Auth + me + account — sessions (cookie), signup, password reset,
-      2FA, `GET/PATCH /me`, `GET/PATCH /account`.
+- [x] **A3** ✅ Auth + me + account. 32 operations described. Notes:
+      - Login stores the session, so one endpoint serves both the SPA
+        (cookie) and native clients (token).
+      - `/me` exists because `/users/current` authorizes against the User
+        class and is therefore admin-only. Granting self-read widened
+        `/api/v1/users` to every member until both User endpoints were moved
+        to `:manage` — class-level CanCan checks are satisfied by any
+        conditional rule on the class.
+      - `validation_error` had no keys for task, timer, user, account or
+        password, so those endpoints returned "Translation missing" as their
+        user-facing message. Added, with a test asserting a real translation.
+      - Account fixtures had no `plan`, which the model requires, so any
+        account update in a test failed for an unrelated reason.
 - [ ] **A4** Customers (add `update`) + Projects (add show/create/update/
       unarchive) + Tasks (add update/destroy).
 - [ ] **A5** Timers + timesheet aggregates (day/week/month) + `uninvoiced`.
