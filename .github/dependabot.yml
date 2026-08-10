@@ -16,6 +16,13 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 5
+    # TypeScript 7 moved the compiler into a native binary and reduced the
+    # `typescript` main export to a version string, so vue-tsc (and every
+    # other tool that patches the in-process JS compiler) cannot run on it.
+    # Drop this once Volar targets the `typescript/unstable/*` API.
+    ignore:
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
     groups:
       npm-patch-and-minor:
         update-types:

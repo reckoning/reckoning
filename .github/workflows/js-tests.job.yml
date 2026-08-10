@@ -9,6 +9,9 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: ./.github/workflows/js-setup-action
+      - name: Typecheck
+        run: pnpm typecheck
+        shell: bash
       - name: Vitest
         run: pnpm test:unit
         shell: bash
