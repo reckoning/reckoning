@@ -3,6 +3,8 @@
 v1_api_routes = lambda do
   resource :sessions, only: %i[create destroy]
 
+  resource :me, only: %i[show update], controller: :me
+
   resources :customers, only: %i[index show create destroy]
 
   resources :projects, only: %i[index destroy] do

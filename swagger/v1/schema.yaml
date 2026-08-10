@@ -134,6 +134,55 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/StandardError"
+  "/me":
+    get:
+      summary: Signed-in user's own record
+      tags:
+      - Me
+      operationId: me
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CurrentUser"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+    patch:
+      summary: Update the signed-in user's profile
+      tags:
+      - Me
+      operationId: updateMe
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/MeInput"
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CurrentUser"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
   "/projects":
     get:
       summary: Projects list
@@ -662,6 +711,57 @@ servers:
   description: Current host
 components:
   schemas:
+    CurrentUser:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        avatar:
+          type:
+          - string
+          - 'null'
+          format: uri
+        gravatar:
+          type:
+          - string
+          - 'null'
+        layout:
+          type:
+          - string
+          - 'null'
+        admin:
+          type:
+          - boolean
+          - 'null'
+        accountId:
+          type: string
+          format: uuid
+        otpRequired:
+          type:
+          - boolean
+          - 'null'
+          description: Two-factor authentication is enabled.
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      additionalProperties: false
+      required:
+      - id
+      - email
+      - accountId
+      - createdAt
+      - updatedAt
+      title: CurrentUser
     Customer:
       type: object
       properties:
@@ -798,6 +898,23 @@ components:
       items:
         "$ref": "#/components/schemas/Customer"
       title: Customers
+    MeInput:
+      type: object
+      properties:
+        email:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        gravatar:
+          type:
+          - string
+          - 'null'
+        layout:
+          type: string
+      additionalProperties: false
+      title: MeInput
     Message:
       type: object
       properties:
