@@ -219,6 +219,25 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/StandardError"
+  "/dashboard":
+    get:
+      summary: Totals for the home screen
+      tags:
+      - Dashboard
+      operationId: dashboard
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Dashboard"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
   "/expenses":
     get:
       summary: Expenses list
@@ -2518,6 +2537,48 @@ components:
       items:
         "$ref": "#/components/schemas/Customer"
       title: Customers
+    Dashboard:
+      type: object
+      properties:
+        year:
+          type: integer
+        uninvoicedAmount:
+          type:
+          - number
+          - string
+          - 'null'
+        chargedSum:
+          type:
+          - number
+          - string
+          - 'null'
+        paidSum:
+          type:
+          - number
+          - string
+          - 'null'
+        lastYearPaidSum:
+          type:
+          - number
+          - string
+          - 'null'
+        expensesSum:
+          type:
+          - number
+          - string
+          - 'null'
+        lastYearExpensesSum:
+          type:
+          - number
+          - string
+          - 'null'
+        openInvoicesCount:
+          type: integer
+      additionalProperties: false
+      required:
+      - year
+      - openInvoicesCount
+      title: Dashboard
     Expense:
       type: object
       properties:

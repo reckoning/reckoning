@@ -22,6 +22,8 @@ v1_api_routes = lambda do
 
   resource :account, only: %i[show update], controller: :account
 
+  resource :dashboard, only: %i[show], controller: :dashboard
+
   resources :customers, only: %i[index show create update destroy]
 
   resources :projects, only: %i[index show create update destroy] do
