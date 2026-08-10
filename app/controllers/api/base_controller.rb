@@ -3,6 +3,23 @@
 module Api
   class BaseController < ActionController::API
     include ::AccountsConcern
+    include ActionController::Cookies
+    include ActionController::RequestForgeryProtection
+
+    # `ActionController::API` ships without forgery protection, which is fine
+    # for the JWT clients but not for the SPA, which authenticates by session
+    # cookie. `same_site: :lax` on that cookie is not enough on its own here:
+    # `cookie_domain` resolves to `:all`, so the cookie is shared across every
+    # account subdomain and SameSite treats siblings as same-site.
+    protect_from_forgery with: :exception, unless: :token_authenticated?
+
+    # `config.action_controller.allow_forgery_protection` is applied at boot to
+    # controllers that already include RequestForgeryProtection — which
+    # `ActionController::API` does not. Without this, the test environment's
+    # blanket disable would silently not apply here. Defaults to on, so an
+    # environment that says nothing stays protected.
+    forgery_protection = Rails.application.config.action_controller.allow_forgery_protection
+    self.allow_forgery_protection = forgery_protection.nil? || forgery_protection
 
     before_action :authenticate_user!
 
@@ -12,6 +29,19 @@ module Api
 
     rescue_from CanCan::AccessDenied do |exception|
       render json: {message: exception.message}, status: :forbidden
+    end
+
+    rescue_from ActionController::InvalidAuthenticityToken do
+      render json: {
+        code: "invalid_authenticity_token",
+        message: I18n.t("errors.invalid_authenticity_token", default: "Invalid authenticity token")
+      }, status: :unprocessable_entity
+    end
+
+    # Bearer-token clients carry no cookie, so there is nothing for a
+    # cross-site request to ride on and nothing to verify.
+    private def token_authenticated?
+      request.headers["Authorization"].present?
     end
 
     # Permit params from an OpenAPI input component. The schema spells
