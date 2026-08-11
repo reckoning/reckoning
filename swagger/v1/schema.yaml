@@ -606,6 +606,43 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/StandardError"
+  "/expenses/bulk_destroy":
+    post:
+      summary: Destroy many expenses
+      tags:
+      - Expenses
+      operationId: bulkDestroyExpenses
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ExpenseBulkDestroyInput"
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/BulkResult"
+        '400':
+          description: nothing selected to destroy
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '403':
+          description: expenses not enabled for this account
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
   "/expenses/bulk_update":
     post:
       summary: Apply the same attributes to many expenses
@@ -2979,6 +3016,18 @@ components:
       - createdAt
       - updatedAt
       title: Expense
+    ExpenseBulkDestroyInput:
+      type: object
+      properties:
+        expenseIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+      additionalProperties: false
+      required:
+      - expenseIds
+      title: ExpenseBulkDestroyInput
     ExpenseBulkInput:
       type: object
       properties:
