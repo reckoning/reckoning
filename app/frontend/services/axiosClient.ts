@@ -34,10 +34,24 @@ export function onUnauthorized(handler: UnauthorizedHandler): void {
   unauthorizedHandler = handler;
 }
 
+let suppressDepth = 0;
+
+// Asking "is anyone signed in?" answers 401 for a signed-out visitor, which is
+// the expected answer rather than a session that just expired. Without this,
+// loading any public route — confirmation, unlock, password reset — would fire
+// the handler and bounce the visitor to the login screen.
+export function withoutUnauthorizedRedirect<T>(fn: () => Promise<T>): Promise<T> {
+  suppressDepth += 1;
+
+  return fn().finally(() => {
+    suppressDepth -= 1;
+  });
+}
+
 AXIOS_INSTANCE.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && suppressDepth === 0) {
       unauthorizedHandler?.();
     }
 

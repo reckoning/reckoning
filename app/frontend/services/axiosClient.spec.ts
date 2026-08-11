@@ -1,6 +1,11 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest"
 import type { AxiosAdapter, InternalAxiosRequestConfig } from "axios"
-import { AXIOS_INSTANCE, axiosClient, onUnauthorized } from "@/services/axiosClient"
+import {
+  AXIOS_INSTANCE,
+  axiosClient,
+  onUnauthorized,
+  withoutUnauthorizedRedirect,
+} from "@/services/axiosClient"
 
 function captureRequest(): { config: () => InternalAxiosRequestConfig | undefined } {
   let seen: InternalAxiosRequestConfig | undefined
@@ -84,6 +89,52 @@ describe("axiosClient", () => {
       )) as AxiosAdapter
 
     await expect(axiosClient({ url: "/me", method: "GET" })).rejects.toThrow()
+
+    expect(notified).toBe(1)
+  })
+
+  // Asking "is anyone signed in?" answers 401 for a signed-out visitor. Firing
+  // the handler for that bounced every public route — confirmation, unlock,
+  // password reset — to the login screen on first load.
+  it("stays quiet for a 401 inside withoutUnauthorizedRedirect", async () => {
+    let notified = 0
+    onUnauthorized(() => {
+      notified += 1
+    })
+
+    AXIOS_INSTANCE.defaults.adapter = (() =>
+      Promise.reject(
+        Object.assign(new Error("unauthorized"), {
+          isAxiosError: true,
+          response: { status: 401, data: {}, statusText: "", headers: {}, config: {} },
+        }),
+      )) as AxiosAdapter
+
+    await expect(
+      withoutUnauthorizedRedirect(() => axiosClient({ url: "/me", method: "GET" })),
+    ).rejects.toThrow()
+
+    expect(notified).toBe(0)
+  })
+
+  it("resumes notifying once the suppressed call finishes", async () => {
+    let notified = 0
+    onUnauthorized(() => {
+      notified += 1
+    })
+
+    AXIOS_INSTANCE.defaults.adapter = (() =>
+      Promise.reject(
+        Object.assign(new Error("unauthorized"), {
+          isAxiosError: true,
+          response: { status: 401, data: {}, statusText: "", headers: {}, config: {} },
+        }),
+      )) as AxiosAdapter
+
+    await expect(
+      withoutUnauthorizedRedirect(() => axiosClient({ url: "/me", method: "GET" })),
+    ).rejects.toThrow()
+    await expect(axiosClient({ url: "/customers", method: "GET" })).rejects.toThrow()
 
     expect(notified).toBe(1)
   })
