@@ -12,6 +12,11 @@
     "esModuleInterop": true,
     "lib": ["esnext", "dom", "dom.iterable"],
     "skipLibCheck": true,
+    // Resolved relative to this file: `baseUrl` is what TypeScript 7 drops,
+    // not `paths`. Kept in step with resolve.alias in vite.config.mts.
+    "paths": {
+      "@/*": ["./app/frontend/*"]
+    },
     "types": ["node", "vite/client"]
   },
   "include": [
