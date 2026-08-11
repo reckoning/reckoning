@@ -477,7 +477,7 @@ fetch boundary, which is why `types.ts` can legitimately declare `number`.
 When B4 moves the timesheet onto the generated client, that coercion has to
 move with it — the generated types will say `string`, correctly.
 
-### Phase A3–A8 — API buildout ✅ complete (69 operations)
+### Phase A3–A8 — API buildout ✅ complete (70 operations)
 
 Order chosen so each SPA page can land right behind its API. Each PR:
 components → controller actions → jbuilder views → minitest DSL spec →
@@ -510,7 +510,9 @@ regenerated schema → regenerated client.
 - [x] **A8** ✅ Expenses CRUD + bulk update/destroy (behind the
       `feature_expenses` flag), the dashboard totals endpoint, the backend
       admin user endpoints, and the two-step expense import. Preview is the
-      API's only multipart endpoint.
+      API's only multipart endpoint. `bulk_destroy` was described here but
+      shipped without an `api_path`, so it stayed out of the schema until B1
+      — the one endpoint this phase claimed and did not document.
 
 Exit per PR: new operations in `schema.yaml`, integration tests green,
 oasdiff reports additive-only.
@@ -548,8 +550,9 @@ against the real API.
 - **The account switcher is an indicator, not a switcher.** `CurrentUser`
   carries `accountId` but there is no endpoint listing a user's other
   accounts, so switching needs an API addition first.
-- **`/expenses/bulk_destroy` is still undocumented** — routed and implemented,
-  but no `api_path`, so it is absent from the schema despite A8's summary.
+- **`/expenses/bulk_destroy` is now documented** — it was routed and
+  implemented but had no `api_path`, so it was missing from the schema and the
+  generated client. 70 operations, not 69.
 
 ### Phase B2–B8 — page ports, one domain per PR
 
