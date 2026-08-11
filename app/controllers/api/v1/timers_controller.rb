@@ -20,6 +20,21 @@ module Api
         @timers = scope.order(created_at: :desc)
       end
 
+      # Candidates for an invoice position: billable work not yet on one.
+      # `withoutIds` lets the caller exclude timers already staged in the
+      # editor, so re-fetching doesn't offer them twice.
+      def uninvoiced
+        authorize! :index, Timer
+
+        scope = current_account.timers.uninvoiced.billable.not_empty
+        scope = scope.for_project(project_id) if project_id.present?
+        scope = scope.without_ids(without_timer_ids) if without_timer_ids.present?
+
+        @timers = scope.order(date: :asc)
+
+        render :index
+      end
+
       def create
         @timer ||= current_user.timers.new timer_params
         authorize! :create, @timer
@@ -99,6 +114,10 @@ module Api
 
       private def project_id
         @project_id ||= params[:projectId]
+      end
+
+      private def without_timer_ids
+        @without_timer_ids ||= params[:withoutIds]
       end
 
       private def limit

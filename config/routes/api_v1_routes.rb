@@ -3,17 +3,77 @@
 v1_api_routes = lambda do
   resource :sessions, only: %i[create destroy]
 
-  resources :customers, only: %i[index show create destroy]
+  resource :registrations, only: %i[create]
 
-  resources :projects, only: %i[index destroy] do
-    member do
-      put :archive
+  resource :passwords, only: %i[create update]
+
+  resource :me, only: %i[show update], controller: :me do
+    patch :password, action: :update_password
+  end
+
+  scope path: "me" do
+    resource :otp, only: %i[create], controller: :otp do
+      get :qrcode
+      post :enable
+      post :disable
+      post :backup_codes
     end
   end
 
-  resources :tasks, only: %i[index create]
+  resource :account, only: %i[show update], controller: :account
+
+  resource :dashboard, only: %i[show], controller: :dashboard
+
+  namespace :backend do
+    resources :users, only: %i[index show create update destroy] do
+      member do
+        post :send_welcome
+      end
+    end
+  end
+
+  resources :customers, only: %i[index show create update destroy]
+
+  resources :projects, only: %i[index show create update destroy] do
+    member do
+      put :archive
+      put :unarchive
+    end
+  end
+
+  resources :tasks, only: %i[index create update destroy]
+
+  resources :invoices, only: %i[index show create update destroy] do
+    member do
+      put :charge
+      put :pay
+      put :send_mail
+      post :send_test_mail
+    end
+  end
+
+  resources :offers, only: %i[index show create update destroy] do
+    member do
+      put "transition/:event", action: :transition, as: :transition
+    end
+  end
+
+  resource :expense_imports, only: %i[create], controller: :expense_imports do
+    post :preview
+  end
+
+  resources :expenses, only: %i[index show create update destroy] do
+    collection do
+      post :bulk_update
+      post :bulk_destroy
+    end
+  end
 
   resources :timers, only: %i[index create update destroy] do
+    collection do
+      get :uninvoiced
+    end
+
     member do
       put :start
       put :stop

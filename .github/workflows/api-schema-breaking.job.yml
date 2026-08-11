@@ -1,0 +1,47 @@
+name: Api Schema Breaking Changes Job
+
+on:
+  workflow_call:
+
+jobs:
+  api-schema-breaking:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Install oasdiff
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/oasdiff/oasdiff/main/install.sh | version=1.18.1 sh
+
+      - name: Get base branch schema
+        run: |
+          if [ "${{ github.event_name }}" = "merge_group" ]; then
+            BASE_SHA="${{ github.event.merge_group.base_sha }}"
+          elif [ -n "$GITHUB_BASE_REF" ]; then
+            BASE_SHA="origin/${GITHUB_BASE_REF}"
+          else
+            BASE_SHA="HEAD~1"
+          fi
+          mkdir -p .base/swagger/v1
+          git show "${BASE_SHA}:swagger/v1/schema.yaml" > .base/swagger/v1/schema.yaml 2>/dev/null \
+            || echo '{"openapi":"3.1.0","info":{"title":"empty","version":"0.0.0"},"paths":{}}' > .base/swagger/v1/schema.yaml
+
+      - name: Ensure ignore file exists
+        run: '[ -f swagger/v1/oasdiff-ignore.txt ] || touch swagger/v1/oasdiff-ignore.txt'
+
+      # Reporting only. v1 is still being reshaped and has no released client,
+      # so a breaking change is expected rather than exceptional. Drop
+      # `continue-on-error` at the end of Phase C, once the SPA is the only
+      # consumer and the contract is stable — see
+      # docs/vue-spa-migration-plan.md (D2).
+      - name: Report breaking changes
+        continue-on-error: true
+        run: |
+          oasdiff breaking --auto-upgrade --flatten-params \
+            .base/swagger/v1/schema.yaml swagger/v1/schema.yaml \
+            --fail-on WARN \
+            --err-ignore swagger/v1/oasdiff-ignore.txt \
+            --warn-ignore swagger/v1/oasdiff-ignore.txt

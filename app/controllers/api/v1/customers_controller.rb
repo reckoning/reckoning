@@ -7,9 +7,11 @@ module Api
         not_found(I18n.t("messages.record_not_found.customer", id: params[:id]))
       end
 
+      after_action -> { pagination_header(:customers) }, only: [:index]
+
       def index
         authorize! :index, Customer
-        @customers = current_account.customers
+        @customers = paginate(current_account.customers.order(:name))
       end
 
       def show
@@ -28,6 +30,15 @@ module Api
         end
       end
 
+      def update
+        @customer = current_account.customers.find(params[:id])
+        authorize! :update, @customer
+
+        return render :show if @customer.update(customer_params)
+
+        render json: ValidationError.new("customer.update", @customer.errors), status: :bad_request
+      end
+
       def destroy
         @customer = current_account.customers.find(params[:id])
         authorize! :destroy, @customer
@@ -43,10 +54,7 @@ module Api
       end
 
       private def customer_params
-        @customer_params ||= params.permit(
-          :payment_due, :email_template, :invoice_email, :default_from, :name,
-          :address, :country, :email, :telefon, :fax, :website
-        )
+        @customer_params ||= openapi_params(::V1::Schemas::Inputs::CustomerInput)
       end
     end
   end

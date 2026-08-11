@@ -1,10 +1,12 @@
 enterprise:
   name: Enterprise
+  plan: free
   contact_information:
     address: "Sector 001"
 
 defiant:
   name: Defiant
+  plan: free
   contact_information:
     telefon: "222"
     public_email: "info@defiant.sf"

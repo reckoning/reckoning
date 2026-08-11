@@ -1,0 +1,66 @@
+name: Api Schema Job
+
+on:
+  workflow_call:
+
+jobs:
+  api-schema-current:
+    runs-on: ubuntu-latest
+
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: postgresql://root:root@127.0.0.1:5432/reckoning_test
+      DATABASE_HOST: 127.0.0.1
+      DATABASE_USER: root
+
+    # The document is built from the DSL, never from the database, but
+    # `config.eager_load` is on in CI (config/environments/test.rb) and
+    # rails/test_help then calls `table_exists?` on every model. openapi-ruby's
+    # suppressor only neutralises `maintain_test_schema!`, which Rails 8.1 no
+    # longer routes that loop through — so booting the test env needs a server.
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: root
+          POSTGRES_DB: reckoning_test
+          POSTGRES_PASSWORD: root
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Install libvips (Active Storage vips variant processor)
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libvips42
+
+      - run: bundle exec rails db:create db:schema:load
+
+      - name: Regenerate schema
+        run: bundle exec rake openapi_ruby:generate
+
+      - name: Fail if the committed schema is stale
+        run: |
+          if ! git diff --exit-code --stat -- swagger/; then
+            echo "::error::swagger/ is out of date. Run 'RAILS_ENV=test bundle exec rake openapi_ruby:generate' and commit the result. RAILS_ENV matters: without it dotenv loads .env.local and bakes local overrides such as COOKIE_PREFIX into the document."
+            git diff -- swagger/
+            exit 1
+          fi
+
+  api-schema-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/workflows/js-setup-action
+      - name: Redocly lint
+        run: pnpm validate-schema
+        shell: bash

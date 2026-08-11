@@ -2,12 +2,62 @@ de:
   validation_error:
     customer:
       create: "Kunde konnte nicht erstellt werden."
+      update: "Kunde konnte nicht gespeichert werden."
       destroy: "Kunde konnte nicht gelöscht werden."
       destroy_failure_dependency: "Bitte löschen Sie zuerst alle Rechnungen für diesen Kunden."
+    invoice:
+      create: "Rechnung konnte nicht erstellt werden."
+      update: "Rechnung konnte nicht gespeichert werden."
+      destroy: "Rechnung konnte nicht gelöscht werden."
+      charge: "Rechnung konnte nicht gestellt werden."
+      pay: "Rechnung konnte nicht als bezahlt markiert werden."
+      send: "Rechnung konnte nicht versendet werden. Bitte hinterlegen Sie E-Mail und Vorlage beim Kunden."
+      send_test_mail: "Testmail konnte nicht versendet werden."
+    offer:
+      create: "Angebot konnte nicht erstellt werden."
+      update: "Angebot konnte nicht gespeichert werden."
+      destroy: "Angebot konnte nicht gelöscht werden."
+      transition: "Statuswechsel ist für dieses Angebot nicht möglich."
+    expense:
+      create: "Ausgabe konnte nicht erstellt werden."
+      update: "Ausgabe konnte nicht gespeichert werden."
+      destroy: "Ausgabe konnte nicht gelöscht werden."
+      bulk_update: "Es wurden keine Ausgaben oder Felder zum Ändern ausgewählt."
+      bulk_destroy: "Es wurden keine Ausgaben zum Löschen ausgewählt."
+      import: "Der Import konnte nicht verarbeitet werden."
+      feature_disabled: "Ausgaben sind für dieses Konto nicht aktiviert."
     project:
+      create: "Projekt konnte nicht erstellt werden."
+      update: "Projekt konnte nicht gespeichert werden."
+      unarchive: "Projekt konnte nicht reaktiviert werden."
       destroy: "Projekt konnte nicht gelöscht werden."
       destroy_failure_dependency: "Bitte löschen Sie zuerst alle Rechnungen für dieses Projekt."
       archive: "Projekt konnte nicht archiviert werden."
     sessions:
       create: "Anmeldung fehlgeschlagen."
       authentication: "Ungültige Anmeldedaten."
+    task:
+      create: "Aufgabe konnte nicht erstellt werden."
+      update: "Aufgabe konnte nicht gespeichert werden."
+      destroy: "Aufgabe konnte nicht gelöscht werden."
+      destroy_failure_dependency: "Bitte löschen Sie zuerst alle Zeiteinträge für diese Aufgabe."
+    timer:
+      create: "Zeiteintrag konnte nicht erstellt werden."
+      update: "Zeiteintrag konnte nicht gespeichert werden."
+      destroy: "Zeiteintrag konnte nicht gelöscht werden."
+    backend:
+      admin_only: "Dieser Bereich ist Administratoren vorbehalten."
+    user:
+      create: "Benutzer konnte nicht erstellt werden."
+      destroy: "Benutzer konnte nicht gelöscht werden."
+      send_welcome: "Willkommens-E-Mail konnte nicht versendet werden."
+      update: "Profil konnte nicht gespeichert werden."
+    password:
+      update: "Passwort konnte nicht geändert werden."
+    otp:
+      invalid_attempt: "Der eingegebene Code ist ungültig."
+      not_enabled: "Zwei-Faktor-Authentifizierung ist nicht aktiviert."
+    account:
+      create: "Konto konnte nicht erstellt werden."
+      update: "Kontoeinstellungen konnten nicht gespeichert werden."
+      registration_disabled: "Die Registrierung ist derzeit deaktiviert."

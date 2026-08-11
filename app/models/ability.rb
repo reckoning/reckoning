@@ -6,7 +6,7 @@ class Ability
   def initialize(user)
     user ||= User.new # guest user (not logged in)
 
-    can :update, User, id: user.id
+    can %i[read update], User, id: user.id
     can :update, Account, id: user.account_id
 
     setup_invoice_abilities(user)

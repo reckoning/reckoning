@@ -45,6 +45,13 @@ jobs:
   js-tests:
     uses: ./.github/workflows/js-tests.job.yml
 
+  api-schema:
+    needs: ruby-setup
+    uses: ./.github/workflows/api-schema.job.yml
+
+  api-schema-breaking:
+    uses: ./.github/workflows/api-schema-breaking.job.yml
+
   e2e-tests:
     needs: [ruby-setup]
     uses: ./.github/workflows/e2e-tests.job.yml
@@ -55,7 +62,7 @@ jobs:
   # smoke-tested against the new Ruby 3.4 / Rails 7.2 / PG 17 / Redis 7 stack.
   deploy:
     if: false && github.ref == 'refs/heads/main'
-    needs: [ruby-lint, brakeman, ruby-audit, ruby-tests, seeds, js-tests, e2e-tests]
+    needs: [ruby-lint, brakeman, ruby-audit, ruby-tests, seeds, js-tests, e2e-tests, api-schema]
     uses: ./.github/workflows/deploy.job.yml
     with:
       capEnv: live

@@ -64,3 +64,6 @@ node_modules
 
 # Per-worktree port config written by bin/setup
 /.superset/
+
+# Generated from swagger/v1/schema.yaml by `pnpm generate-api-client`
+/app/frontend/services/api/

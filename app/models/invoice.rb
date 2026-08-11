@@ -180,7 +180,7 @@ class Invoice < ApplicationRecord
   end
 
   def editable?
-    !state?(:charged) && !state?(:paid)
+    !charged? && !paid?
   end
 
   def set_value

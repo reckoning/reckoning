@@ -3,6 +3,7 @@ one:
   account: enterprise
   value: 9.99
   description: MyString
+  seller: "Daystrom Institute"
   date: 2015-11-23 19:01:57
 
 two:
@@ -10,4 +11,5 @@ two:
   account: enterprise
   value: 9.99
   description: MyString
+  seller: "Daystrom Institute"
   date: 2015-11-23 19:01:57
