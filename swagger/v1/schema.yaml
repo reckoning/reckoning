@@ -245,6 +245,19 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/StandardError"
+  "/config":
+    get:
+      summary: Settings the SPA needs before sign-in
+      tags:
+      - Config
+      operationId: appConfig
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/AppConfig"
   "/confirmations":
     post:
       summary: Resend the confirmation email
@@ -2732,6 +2745,21 @@ components:
           - 'null'
       additionalProperties: false
       title: AccountInput
+    AppConfig:
+      type: object
+      properties:
+        registrationEnabled:
+          type: boolean
+          description: Whether signup is offered. Mirrors Rails.configuration.app.registration.
+        accountName:
+          type:
+          - string
+          - 'null'
+          description: Name of the account the subdomain resolves to, if any.
+      additionalProperties: false
+      required:
+      - registrationEnabled
+      title: AppConfig
     BackendUser:
       type: object
       properties:
@@ -4067,6 +4095,9 @@ components:
         otp_token:
           type: string
           description: Required when the account has 2FA enabled.
+        remember_me:
+          type: boolean
+          description: Issue a persistent cookie. Ignored by token clients.
         description:
           type: string
           description: Labels the token in the account's token list.
