@@ -82,6 +82,32 @@ module Api
           assert_equal data.id, JSON.parse(response.body)["id"]
         end
 
+        # The login form's "Angemeldet bleiben" checkbox. Without this the SPA
+        # cannot offer it at all, since the session cookie dies with the browser.
+        #
+        # `config.rememberable_options` sets `secure: true`, and Rails declines
+        # to write a secure cookie over plain HTTP — so the request has to be
+        # SSL for the cookie to appear at all.
+        it "issues a remember cookie when asked" do
+          https!
+
+          assert_api_response :post, 200, body: {
+            email: data.email, password: password, remember_me: true
+          }
+
+          assert cookies[:remember_user_token].present?
+          assert data.reload.remember_created_at.present?
+        end
+
+        it "issues no remember cookie by default" do
+          https!
+
+          assert_api_response :post, 200, body: {email: data.email, password: password}
+
+          assert cookies[:remember_user_token].blank?
+          assert_nil data.reload.remember_created_at
+        end
+
         it "clears the session on destroy" do
           assert_api_response :post, 200, body: {email: data.email, password: password}
           delete "/api/v1/sessions", headers: {"Accept" => "application/json"}

@@ -4,6 +4,9 @@ module Api
   module V1
     class SessionsController < Api::BaseController
       include ActionController::HttpAuthentication::Token
+      # ActionController::API does not pick up Devise's rememberable helpers
+      # the way ActionController::Base does.
+      include Devise::Controllers::Rememberable
 
       skip_authorization_check
 
@@ -24,6 +27,9 @@ module Api
           # Stores the session, so the SPA gets a cookie from the same endpoint
           # that hands native clients a token. Each ignores the other's half.
           sign_in(:user, resource)
+          # Only meaningful to a cookie client; a token client has nothing to
+          # persist and simply never sends the flag.
+          remember_me(resource) if login_params[:remember_me]
           render json: {auth_token: JsonWebToken.encode(new_auth_token(resource.id).to_jwt_payload)}
           return
         end
@@ -69,7 +75,7 @@ module Api
       end
 
       private def login_params
-        @login_params ||= params.permit(:email, :password, :otp_token, :description, :expires)
+        @login_params ||= params.permit(:email, :password, :otp_token, :remember_me, :description, :expires)
       end
 
       private def invalid_login_attempt
