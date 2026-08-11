@@ -54,6 +54,10 @@ de:
       update: "Profil konnte nicht gespeichert werden."
     password:
       update: "Passwort konnte nicht geändert werden."
+    confirmation:
+      update: "E-Mail-Adresse konnte nicht bestätigt werden."
+    unlock:
+      update: "Konto konnte nicht entsperrt werden."
     otp:
       invalid_attempt: "Der eingegebene Code ist ungültig."
       not_enabled: "Zwei-Faktor-Authentifizierung ist nicht aktiviert."
