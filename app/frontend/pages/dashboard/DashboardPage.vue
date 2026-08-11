@@ -8,11 +8,11 @@ const currentUser = useCurrentUserStore()
 
 <template>
   <div class="p-4">
-    <h1 class="text-xl font-semibold" data-testid="dashboard-title">
+    <h1 class="text-xl font-semibold" data-test="dashboard-title">
       {{ t("dashboard.title") }}
     </h1>
 
-    <p v-if="currentUser.user" class="mt-2 text-gray-600" data-testid="dashboard-greeting">
+    <p v-if="currentUser.user" class="mt-2 text-gray-600" data-test="dashboard-greeting">
       {{ t("dashboard.greeting", { email: currentUser.user.email }) }}
     </p>
   </div>

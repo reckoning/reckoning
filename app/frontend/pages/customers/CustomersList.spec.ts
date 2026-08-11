@@ -47,8 +47,8 @@ describe("CustomersList", () => {
     const wrapper = mountList()
     await flushPromises()
 
-    expect(wrapper.get('[data-testid="customers"]').text()).toContain("Starfleet")
-    expect(wrapper.get('[data-testid="customers"]').text()).toContain("Klingon")
+    expect(wrapper.get('[data-test="customers"]').text()).toContain("Starfleet")
+    expect(wrapper.get('[data-test="customers"]').text()).toContain("Klingon")
   })
 
   it("shows an error state when the request fails", async () => {
@@ -59,6 +59,6 @@ describe("CustomersList", () => {
     const wrapper = mountList()
     await flushPromises()
 
-    expect(wrapper.find('[data-testid="error"]').exists()).toBe(true)
+    expect(wrapper.find('[data-test="error"]').exists()).toBe(true)
   })
 })

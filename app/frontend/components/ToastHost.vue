@@ -11,7 +11,7 @@ const levelClasses: Record<string, string> = {
 </script>
 
 <template>
-  <div class="fixed bottom-4 right-4 z-50 flex w-80 flex-col gap-2" data-testid="toasts">
+  <div class="fixed bottom-4 right-4 z-50 flex w-80 flex-col gap-2" data-test="toasts">
     <div
       v-for="toast in toasts.toasts"
       :key="toast.id"

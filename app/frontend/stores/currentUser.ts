@@ -42,6 +42,18 @@ export const useCurrentUserStore = defineStore(
       resolved.value = true;
     }
 
+    // Signing in changes who the cookie belongs to, so the cached answer has
+    // to be discarded rather than reused. `clear()` cannot serve here: it
+    // marks the store resolved, which is right for a 401 but would make the
+    // next `load()` return "signed out" without asking.
+    async function refresh(): Promise<CurrentUser | undefined> {
+      user.value = undefined;
+      resolved.value = false;
+      inFlight = undefined;
+
+      return load();
+    }
+
     // Also used by the 401 interceptor, where the server has already decided
     // the session is gone and there is nothing to sign out of.
     function clear(): void {
@@ -58,7 +70,7 @@ export const useCurrentUserStore = defineStore(
       }
     }
 
-    return { user, resolved, signedIn, load, set, clear, signOut };
+    return { user, resolved, signedIn, load, refresh, set, clear, signOut };
   },
   {
     // Only the identity is persisted, so a reload paints the shell before

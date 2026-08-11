@@ -48,8 +48,7 @@ const onSubmit = handleSubmit(async (values) => {
       ...(values.otpToken ? { otp_token: values.otpToken } : {}),
     })
 
-    currentUser.clear()
-    const user = await currentUser.load()
+    const user = await currentUser.refresh()
 
     if (!user) {
       failed.value = true
@@ -79,10 +78,10 @@ const onSubmit = handleSubmit(async (values) => {
           v-bind="emailAttrs"
           type="email"
           autocomplete="username"
-          data-testid="email"
+          data-test="email"
           class="w-full rounded border border-gray-300 px-3 py-2"
         />
-        <p v-if="errors.email" data-testid="email-error" class="mt-1 text-sm text-red-600">
+        <p v-if="errors.email" data-test="email-error" class="mt-1 text-sm text-red-600">
           {{ errors.email }}
         </p>
       </div>
@@ -97,10 +96,10 @@ const onSubmit = handleSubmit(async (values) => {
           v-bind="passwordAttrs"
           type="password"
           autocomplete="current-password"
-          data-testid="password"
+          data-test="password"
           class="w-full rounded border border-gray-300 px-3 py-2"
         />
-        <p v-if="errors.password" data-testid="password-error" class="mt-1 text-sm text-red-600">
+        <p v-if="errors.password" data-test="password-error" class="mt-1 text-sm text-red-600">
           {{ errors.password }}
         </p>
       </div>
@@ -116,18 +115,18 @@ const onSubmit = handleSubmit(async (values) => {
           type="text"
           inputmode="numeric"
           autocomplete="one-time-code"
-          data-testid="otp-token"
+          data-test="otp-token"
           class="w-full rounded border border-gray-300 px-3 py-2"
         />
       </div>
 
-      <p v-if="failed" data-testid="login-failed" class="text-sm text-red-600">
+      <p v-if="failed" data-test="login-failed" class="text-sm text-red-600">
         {{ t("login.failed") }}
       </p>
 
       <button
         type="submit"
-        data-testid="submit"
+        data-test="submit"
         :disabled="isSubmitting"
         class="w-full rounded bg-blue-600 px-4 py-2 font-medium text-white disabled:opacity-50"
       >

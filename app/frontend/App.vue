@@ -25,11 +25,11 @@ async function signOut(): Promise<void> {
           {{ t("nav.customers") }}
         </RouterLink>
 
-        <span v-if="currentUser.user" class="ml-auto text-sm text-gray-500" data-testid="account">
+        <span v-if="currentUser.user" class="ml-auto text-sm text-gray-500" data-test="account">
           {{ currentUser.user.email }}
         </span>
 
-        <button type="button" data-testid="sign-out" class="text-sm underline" @click="signOut">
+        <button type="button" data-test="sign-out" class="text-sm underline" @click="signOut">
           {{ t("nav.signOut") }}
         </button>
       </nav>

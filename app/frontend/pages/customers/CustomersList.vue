@@ -8,10 +8,10 @@ const {data: customers, isPending, isError} = useCustomers()
   <div class="p-4">
     <h1 class="text-xl font-semibold">Customers</h1>
 
-    <p v-if="isPending" data-testid="loading">Loading…</p>
-    <p v-else-if="isError" data-testid="error">Could not load customers.</p>
+    <p v-if="isPending" data-test="loading">Loading…</p>
+    <p v-else-if="isError" data-test="error">Could not load customers.</p>
 
-    <ul v-else data-testid="customers">
+    <ul v-else data-test="customers">
       <li v-for="customer in customers" :key="customer.id">
         {{ customer.name }}
       </li>

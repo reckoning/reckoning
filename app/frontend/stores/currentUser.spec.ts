@@ -88,6 +88,22 @@ describe("useCurrentUserStore", () => {
     expect(calls).toBe(1)
   })
 
+  // Signing in reuses a store that has already answered "signed out" for the
+  // guard, so refresh has to ask again instead of replaying that answer.
+  it("re-requests /me on refresh even after resolving", async () => {
+    stubTransport(() => Promise.reject(new Error("401")))
+
+    const store = useCurrentUserStore()
+    await store.load()
+    expect(store.signedIn).toBe(false)
+
+    stubTransport(() => jsonResponse(user))
+    await store.refresh()
+
+    expect(store.signedIn).toBe(true)
+    expect(store.user?.email).toBe(user.email)
+  })
+
   it("clears the user on sign out even when the request fails", async () => {
     stubTransport(() => jsonResponse(user))
 
