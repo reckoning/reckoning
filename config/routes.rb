@@ -117,6 +117,12 @@ Rails.application.routes.draw do
     post :preview, on: :collection
   end
 
+  # Vue SPA shell. Scoped to /app so vue-router owns everything beneath it and
+  # a reload of a client-side path still finds the shell. Deliberately not a
+  # global catch-all — the ERB screens keep their routes until Phase C.
+  get "app", to: "spa#index", as: :spa
+  get "app/*path", to: "spa#index"
+
   get "impressum" => "base#impressum"
   get "privacy" => "base#privacy"
   get "terms" => "base#terms"

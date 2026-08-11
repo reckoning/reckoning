@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title><%= title %></title>
+
+    <link rel="shortcut icon" type="image/png" href="<%= asset_url("favicon.png") %>">
+
+    <%# No Sprockets, no Bootstrap: the SPA shell is Tailwind-only. Preflight
+        is on here because there is no Bootstrap 3 stylesheet to protect. %>
+    <%= vite_client_tag %>
+    <%= vite_stylesheet_tag "tailwind.css" %>
+    <%= vite_typescript_tag "frontend" %>
+
+    <%# Api::BaseController verifies this token on cookie-authenticated
+        mutations; axiosClient reads it from here. %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
+    <div id="spa"></div>
+  </body>
+</html>
