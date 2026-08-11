@@ -4282,7 +4282,7 @@ components:
     SessionCookie:
       type: apiKey
       in: cookie
-      name: RECKONING_WT_vue_spa_openapi_migr_TEST
+      name: RECKONING_TEST
       description: Devise session cookie. Used by the web frontend.
   responses:
     SchemaValidationError:
