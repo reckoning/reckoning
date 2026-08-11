@@ -33,6 +33,19 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true },
   },
   {
+    // Devise mails a link carrying confirmation_token as a query param.
+    path: "/confirmation",
+    name: "confirmation",
+    component: () => import("@/pages/sessions/ConfirmationPage.vue"),
+    meta: { requiresAuth: false },
+  },
+  {
+    path: "/unlock",
+    name: "unlock",
+    component: () => import("@/pages/sessions/UnlockPage.vue"),
+    meta: { requiresAuth: false },
+  },
+  {
     path: "/settings/two-factor",
     name: "two-factor",
     component: () => import("@/pages/settings/TwoFactorPage.vue"),
