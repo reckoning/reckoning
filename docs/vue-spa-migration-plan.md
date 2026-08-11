@@ -515,24 +515,41 @@ regenerated schema → regenerated client.
 Exit per PR: new operations in `schema.yaml`, integration tests green,
 oasdiff reports additive-only.
 
-### Phase B1 — SPA shell (1 PR, ~3 days)
+### Phase B1 — SPA shell ✅ done
 
-- [ ] `pnpm add vue-router pinia pinia-plugin-persistedstate @tanstack/vue-query axios qs vee-validate zod`
-- [ ] `app/frontend/entrypoints/frontend.ts` — createApp + router + pinia +
-      VueQueryPlugin (mirrors FleetYards' entrypoint).
-- [ ] `app/frontend/services/axiosClient.ts` — `withCredentials: true`,
+- [x] `pnpm add vue-router pinia pinia-plugin-persistedstate @tanstack/vue-query axios qs vee-validate zod`
+      — plus `vue-i18n` and `@vee-validate/zod`.
+- [x] `app/frontend/entrypoints/frontend.ts` — createApp + router + pinia +
+      VueQueryPlugin.
+- [x] `app/frontend/services/axiosClient.ts` — `withCredentials: true`,
       `qs` param serializer, `X-CSRF-Token` header, 401 → redirect to login.
-- [ ] `App.vue` + app shell (nav, account switcher, flash/toast host) in
+- [x] `App.vue` + app shell (nav, signed-in account indicator, toast host) in
       Tailwind, no Bootstrap classes.
-- [ ] `plugins/Router` with a `requiresAuth` guard reading a pinia
+- [x] `plugins/Router` with a `requiresAuth` guard reading a pinia
       `useCurrentUserStore` hydrated from `GET /api/v1/me`.
-- [ ] `app/views/layouts/spa.html.erb` + a `SpaController#index`, mounted at
-      **one** throwaway route (`/app`) — no catch-all yet.
-- [ ] i18n: move `config/locales` strings the frontend needs into
-      `app/frontend/translations/` (vue-i18n), independent of i18n-js.
+- [x] `app/views/layouts/spa.html.erb` + a `SpaController#index` at `/app`.
+- [x] i18n: `app/frontend/translations/` (vue-i18n), independent of i18n-js.
 
-Exit: `/app` renders an authenticated shell with a working login → dashboard
-skeleton → logout round-trip, against the real API.
+Exit met: `test/e2e/Spa.spec.ts` drives login → dashboard → logout at `/app`
+against the real API.
+
+#### Notes
+
+- **Scoped catch-all, not a global one.** `/app/*path` also routes to the
+  shell, so reloading a client-side path finds it instead of a 404. It cannot
+  swallow a legacy route, and the global catch-all still waits for Phase C.
+- **`tsconfig` `paths` came back.** #954 removed `baseUrl`/`paths` on the
+  grounds that nothing imported through an alias — true on main, not here.
+  Only `paths` is restored (`baseUrl` is the part TypeScript 7 drops), and
+  `vite.config.mts` gained the matching `resolve.alias`, which it never had:
+  `@` previously resolved in vitest alone.
+- **Regenerating the schema needs `RAILS_ENV=test`.** Without it dotenv loads
+  `.env.local` and bakes local overrides (`COOKIE_PREFIX`) into `swagger/`.
+- **The account switcher is an indicator, not a switcher.** `CurrentUser`
+  carries `accountId` but there is no endpoint listing a user's other
+  accounts, so switching needs an API addition first.
+- **`/expenses/bulk_destroy` is still undocumented** — routed and implemented,
+  but no `api_path`, so it is absent from the schema despite A8's summary.
 
 ### Phase B2–B8 — page ports, one domain per PR
 
