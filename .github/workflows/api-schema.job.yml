@@ -50,7 +50,7 @@ jobs:
       - name: Fail if the committed schema is stale
         run: |
           if ! git diff --exit-code --stat -- swagger/; then
-            echo "::error::swagger/ is out of date. Run 'bundle exec rake openapi_ruby:generate' and commit the result."
+            echo "::error::swagger/ is out of date. Run 'RAILS_ENV=test bundle exec rake openapi_ruby:generate' and commit the result. RAILS_ENV matters: without it dotenv loads .env.local and bakes local overrides such as COOKIE_PREFIX into the document."
             git diff -- swagger/
             exit 1
           fi
