@@ -477,13 +477,14 @@ fetch boundary, which is why `types.ts` can legitimately declare `number`.
 When B4 moves the timesheet onto the generated client, that coercion has to
 move with it — the generated types will say `string`, correctly.
 
-### Phase A3–A8 — API buildout ✅ complete (70 operations)
+### Phase A3–A8 — API buildout ✅ complete (74 operations)
 
 Order chosen so each SPA page can land right behind its API. Each PR:
 components → controller actions → jbuilder views → minitest DSL spec →
 regenerated schema → regenerated client.
 
-- [x] **A3** ✅ Auth + me + account. 32 operations described. Notes:
+- [x] **A3** ✅ Auth + me + account. 32 operations described, plus the two
+      added in B2 (below). Notes:
       - Login stores the session, so one endpoint serves both the SPA
         (cookie) and native clients (token).
       - `/me` exists because `/users/current` authorizes against the User
@@ -562,7 +563,8 @@ Vue page + components, vue-query hooks from the generated client, VeeValidate
 for the flow, then **the Rails route is repointed at the SPA and the old ERB
 views + Angular/jQuery/Coffee for that screen are deleted in the same PR**.
 
-- [ ] **B2** Login / signup / password reset / 2FA.
+- [ ] **B2** Login / signup / password reset / 2FA. Confirmation and unlock
+      are part of this surface too — see the API gap note below.
 - [ ] **B3** Customers list + form; Projects list, detail, form; Tasks.
 - [ ] **B4** Timesheet (day/week/month) — reuses `app/frontend/islands/timesheet/`
       SFCs, promoted to `frontend/pages/timesheet/`; deletes
@@ -577,6 +579,22 @@ views + Angular/jQuery/Coffee for that screen are deleted in the same PR**.
 
 Exit per PR: the ported screen has no server-rendered ERB left, Playwright
 covers it, and the corresponding legacy JS is gone from the repo.
+
+#### API gap found at the start of B2
+
+The auth surface is wider than "login / signup / password reset / 2FA". `User`
+enables `:confirmable` and `:lockable`, and both are live — `lock_strategy` is
+`:failed_attempts`, `unlock_strategy` is `:email`, `reconfirmable` is on — so
+`devise/confirmations` and `devise/unlocks` are real screens reached from links
+in email, not vestigial.
+
+A3 built neither endpoint, which made B2 impossible as written: repointing
+`/signin` and deleting the ERB auth views would strand every unlock and
+confirmation link already in an inbox, and a locked-out account has no other
+way back in. `POST/PUT /confirmations` and `POST/PUT /unlocks` close that gap.
+
+Worth checking the same way before each remaining B phase: the ERB screen a
+phase deletes may reach further than the phase's one-line description.
 
 ### Phase C — legacy removal (multi-PR, ~1 week)
 

@@ -7,6 +7,10 @@ v1_api_routes = lambda do
 
   resource :passwords, only: %i[create update]
 
+  resource :confirmations, only: %i[create update]
+
+  resource :unlocks, only: %i[create update]
+
   resource :me, only: %i[show update], controller: :me do
     patch :password, action: :update_password
   end

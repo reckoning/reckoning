@@ -245,6 +245,51 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/StandardError"
+  "/confirmations":
+    post:
+      summary: Resend the confirmation email
+      tags:
+      - Confirmations
+      operationId: requestConfirmation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ConfirmationRequestInput"
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Message"
+        '400':
+          "$ref": "#/components/responses/SchemaValidationError"
+    put:
+      summary: Confirm an email address using a token
+      tags:
+      - Confirmations
+      operationId: confirmEmail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ConfirmationInput"
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Message"
+        '400':
+          description: invalid or expired token
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
   "/customers":
     get:
       summary: Customers list
@@ -2383,6 +2428,51 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/StandardError"
+  "/unlocks":
+    post:
+      summary: Resend the unlock email
+      tags:
+      - Unlocks
+      operationId: requestUnlock
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UnlockRequestInput"
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Message"
+        '400':
+          "$ref": "#/components/responses/SchemaValidationError"
+    put:
+      summary: Unlock an account using a token
+      tags:
+      - Unlocks
+      operationId: unlockAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UnlockInput"
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Message"
+        '400':
+          description: invalid or expired token
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
   "/users":
     get:
       summary: Users list
@@ -2717,6 +2807,25 @@ components:
       - count
       - message
       title: BulkResult
+    ConfirmationInput:
+      type: object
+      properties:
+        confirmation_token:
+          type: string
+          description: From the confirmation email.
+      additionalProperties: false
+      required:
+      - confirmation_token
+      title: ConfirmationInput
+    ConfirmationRequestInput:
+      type: object
+      properties:
+        email:
+          type: string
+      additionalProperties: false
+      required:
+      - email
+      title: ConfirmationRequestInput
     CurrentUser:
       type: object
       properties:
@@ -4246,6 +4355,25 @@ components:
       items:
         "$ref": "#/components/schemas/Timer"
       title: Timers
+    UnlockInput:
+      type: object
+      properties:
+        unlock_token:
+          type: string
+          description: From the unlock email.
+      additionalProperties: false
+      required:
+      - unlock_token
+      title: UnlockInput
+    UnlockRequestInput:
+      type: object
+      properties:
+        email:
+          type: string
+      additionalProperties: false
+      required:
+      - email
+      title: UnlockRequestInput
     User:
       type: object
       properties:
