@@ -22,8 +22,16 @@ This repo's Dependabot config differs from the other repos in a way that changes
   - Majors arrive as **individual, ungrouped PRs**. Any Dependabot PR here whose title names one package is therefore a major and needs a human.
   - `github-actions-all` groups by pattern, not update-type, so it **can** contain majors. Check its body.
 - **`typescript` majors are ignored** in `dependabot.yml`, with a comment: TS7 moved the compiler into a native binary and reduced the main export to a version string, so `vue-tsc` cannot run on it. Drop the ignore once Volar targets `typescript/unstable/*`. You will never see a TS major PR here — that is intentional, not an oversight.
-- **Squash only** (`mergeCommitAllowed: false`). Branches are deleted on merge. Auto-merge is enabled.
-- `main` uses **classic branch protection** (not a ruleset, unlike the infrastructure repos) with `strict: true` — every PR must be **up to date with `main`** before it can merge. Required checks:
+- **Squash only** (`mergeCommitAllowed: false`). Branches are deleted on merge.
+- **`main` has a merge queue.** This is the fact that shapes step 4, and it postdates the first version of this skill — do not carry over advice about serializing merges by hand.
+
+  ```
+  mergeMethod: SQUASH        mergingStrategy: ALLGREEN
+  maximumEntriesToBuild: 5   maximumEntriesToMerge: 5
+  ```
+
+  The queue rebases each entry onto the tip and runs the required checks itself, so **merging one PR no longer invalidates the others** — enqueue every safe PR in one pass.
+- `main` also uses **classic branch protection** (not a ruleset, unlike the infrastructure repos) with `strict: true`. Required checks:
 
   ```
   ruby-lint / ruby-lint
@@ -32,8 +40,8 @@ This repo's Dependabot config differs from the other repos in a way that changes
   e2e-tests / e2e-tests
   ```
 
-  `strict: true` is the operational headache: **every merge invalidates every other open PR.** Plan for it in step 4.
-- `allow_update_branch` is **disabled**, so there is no "Update branch" button — restacking goes through `@dependabot rebase`.
+  `strict: true` is still set, but the merge queue now absorbs it. It only bites for a PR you merge outside the queue.
+- `allow_update_branch` is **disabled**, so there is no "Update branch" button. Restacking goes through `@dependabot rebase` — but with the queue in place you rarely need it.
 - PR titles are conventional commits and become the squash subject. Never rewrite the title on merge.
 
 ---
@@ -107,10 +115,20 @@ All four `ruby-tests` shards are required — do not accept three of four, and d
 For **bundler** PRs, check whether `Gemfile` itself changed:
 
 ```bash
-gh pr diff <number> --repo reckoning/reckoning | grep -E '^(diff --git|[-+]gem )'
+gh api repos/reckoning/reckoning/pulls/<number>/files --paginate \
+  --jq '.[] | "\(.status)\t\(.filename)"' | grep -v vendor/cache
 ```
 
-- Only `Gemfile.lock` changed → fine.
+Use the files API, not `gh pr diff`. Gems are vendored into `vendor/cache/*.gem`, so a bundler diff contains binary blobs and `gh pr diff` refuses with *"the diff contains terminal escape sequences"* — the grep never runs and you get no signal either way. The files listing sidesteps it.
+
+If `Gemfile` is in the list, read what changed in it:
+
+```bash
+gh api repos/reckoning/reckoning/pulls/<number>/files --paginate \
+  --jq '.[] | select(.filename == "Gemfile") | .patch'
+```
+
+- Only `Gemfile.lock` changed → fine. Note this says nothing about the bump class: most gems here are declared unversioned (`gem "active_storage_validations"`), so a **major** also lands with no `Gemfile` change. Gate A classifies; Gate C only asks whether a pin was undone.
 - A `gem` line tightening `"~> 4.0"` → `"~> 4.1"` → fine.
 - An **upper bound removed or loosened** → stop and read the comment above the pin:
 
@@ -132,52 +150,65 @@ git log --oneline -5 --grep="<package-name>"
 
 #### Gate D — mergeable state
 
-`UNKNOWN` is common here — GitHub is still computing mergeability. Re-poll before deciding; do not treat it as a failure.
+`UNKNOWN` is common here — GitHub is still computing mergeability. Re-poll before deciding; do not treat it as a failure. A freshly listed queue is often all `UNKNOWN`; one re-poll usually settles it to `CLEAN`.
 
-`BEHIND` blocks the merge outright because of `strict: true`. Restack it:
+`BEHIND` is **not** a blocker any more — the merge queue rebases the entry itself. Enqueue it.
+
+`DIRTY` (conflicting) → the queue cannot fix a conflict. `@dependabot recreate`.
+
+### 4. Enqueue the safe ones
+
+The merge queue serializes for you: it rebases each entry onto the tip, runs the required checks, and merges in order. So enqueue **every** safe PR in one pass — there is no need to merge one and `@dependabot rebase` the rest.
 
 ```bash
-gh pr comment <number> --repo reckoning/reckoning --body "@dependabot rebase"
+gh pr merge <number> --repo reckoning/reckoning
 ```
 
-`DIRTY` (conflicting) → `@dependabot recreate`.
+Pass **no merge-method flag**. With a queue configured, `--squash` / `--merge` / `--rebase` make `gh` print:
 
-### 4. Merge the safe ones — one at a time
+```
+! The merge strategy for main is set by the merge queue
+```
 
-`strict: true` plus no merge queue means the queue must be **serialized**: merging one PR makes every other open PR out of date, and each rebase triggers a fresh CI run (including e2e).
+That line is a **notice, not an error** — `gh` exits non-zero but the PR *is* enqueued. Do not retry on seeing it. Confirm the real state rather than trusting the exit code:
 
-The practical approach:
+```bash
+gh api graphql -f query='
+{
+  repository(owner: "reckoning", name: "reckoning") {
+    mergeQueue(branch: "main") {
+      entries(first: 10) { nodes { position state pullRequest { number } } }
+    }
+  }
+}' --jq '.data.repository.mergeQueue.entries.nodes[]
+         | "\(.position) \(.state) #\(.pullRequest.number)"'
+```
 
-1. Pick the highest-value safe PR — normally the grouped `bundler-patch-and-minor` or `npm-patch-and-minor`, since one merge lands many packages.
-2. Merge it. Auto-merge is enabled, so if checks are still running you can queue it:
+`AWAITING_CHECKS` / `QUEUED` both mean successfully enqueued.
 
-   ```bash
-   gh pr merge <number> --repo reckoning/reckoning --squash --auto
-   ```
+The queue caps at **5 entries**; beyond that, enqueue the highest-value PRs first (the grouped ones, since one entry lands many packages) and leave the rest for the next run.
 
-   Otherwise plain `--squash`.
-3. Post `@dependabot rebase` on the remaining safe PRs.
-4. **Stop there.** Do not wait out a full rebase-and-CI cycle for each remaining PR — tell the user what is pending and let them re-run the skill once CI has caught up.
-
-Merging two or three grouped PRs per run is a good outcome in this repo. Do not try to drain the queue in one pass.
+**Then stop.** Do not wait out the queue — it takes a full CI cycle per entry including e2e. Report what is enqueued and let the user check back. An entry can still fail its queue build and get ejected; that is normal and shows up as a fresh open PR on the next run.
 
 ### 5. Report
 
 ```
-Merged / queued (N)
-  #957  grouped  ruby  bundler-patch-and-minor — 5 updates
+Queued to merge (N)
+  #965  grouped  ruby  bundler-patch-and-minor — 7 updates
+        stripe 19.4.0→19.5.0, sentry-{ruby,rails,sidekiq} 6.6.2→6.7.0,
+        bootsnap 1.24.6→1.25.0, simplecov 1.0.3→1.1.0, …
+  #964  grouped  js    npm-patch-and-minor — 4 updates
+        vite 8.2.0→8.2.1, vue 3.5.40→3.5.41, puppeteer 25.5.0→25.6.0, …
 
 Held — needs a decision (N)
-  #952  major  ruby  active_storage_validations 3.0.5 → 4.0.0
   #946  major  js    pdfjs-dist 4.10.38 → 6.2.108
         Exact pin. 4.10 was a deliberate Vite migration that closed 13 high-sev
         vulns; the worker setup is coupled to that major. Two-major jump.
-
-Rebasing — restacked after the merge, re-run once CI is green (N)
-  #956  grouped  js  npm-patch-and-minor — 3 updates
 ```
 
 For grouped PRs, list the packages so the user can see what actually landed. For each held major, say *why* in one line and what would unblock it.
+
+For a held major, do the legwork that makes the decision cheap — grep for the call sites and read the breaking-change list, then say how exposed this repo actually is. A major with one call site and an irrelevant breaking change is a different proposition from a coupled migration, and the user can only tell if you check. Still do not merge it unprompted.
 
 Do not merge anything in the held list without the user saying so.
 
@@ -186,6 +217,9 @@ Do not merge anything in the held list without the user saying so.
 ## Error Handling
 
 - **`gh` not authenticated** → tell the user to run `gh auth login` and stop.
-- **Merge rejected as out of date** → expected under `strict: true`; post `@dependabot rebase` and move on.
+- **`! The merge strategy for main is set by the merge queue`** → not an error. The PR was enqueued; `gh` is only telling you it ignored your merge-method flag. Verify with the queue query in step 4 and move on. Drop the flag next time.
+- **`gh pr diff` refuses over terminal escape sequences** → the vendored `.gem` blobs. Use the pull-files API (Gate C), not `--allow-escape-sequences`.
+- **Merge rejected as out of date** → the queue handles this; just enqueue. Only outside the queue does this need `@dependabot rebase`.
 - **Merge rejected** for any other reason → report it, leave the PR open, continue with the rest.
+- **Queue is full (5 entries)** → enqueue the highest-value PRs and leave the rest for the next run.
 - **e2e flake** → do not merge; offer `gh run rerun <run-id> --failed` and re-check.
