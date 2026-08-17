@@ -77,13 +77,30 @@ A grouped PR is only as safe as its widest member, so if the body reveals someth
 
 #### Gate B — CI is green
 
+A check that never reported is not a passing check, so the gate has to assert the required contexts are *present* as well as successful — filtering the rollup for failures alone returns empty output when a workflow has not been queued yet.
+
 ```bash
 gh pr view <number> --repo reckoning/reckoning \
   --json statusCheckRollup \
-  --jq '[.statusCheckRollup[] | select(.conclusion != "SUCCESS" and .conclusion != "SKIPPED" and .conclusion != "NEUTRAL")] | map("\(.name): \(.conclusion // .status)") | .[]'
+  --jq '
+    ["ruby-lint / ruby-lint",
+     "ruby-tests / ruby-tests (4, 0)", "ruby-tests / ruby-tests (4, 1)",
+     "ruby-tests / ruby-tests (4, 2)", "ruby-tests / ruby-tests (4, 3)",
+     "seeds / seeds", "e2e-tests / e2e-tests"] as $required
+    | [.statusCheckRollup[] | select(.name != null)] as $checks
+    | (($required - [$checks[].name]) | map("\(.): MISSING"))
+      + [$checks[]
+         | select(.conclusion != "SUCCESS" and .conclusion != "SKIPPED" and .conclusion != "NEUTRAL")
+         | "\(.name): \(.conclusion // .status)"]
+    | .[]'
 ```
 
-Empty output means green. All four `ruby-tests` shards are required — do not accept three of four.
+Empty output means green: every required context reported, none of them failing or still running.
+
+- `MISSING` → the check has not been created yet. Not a failure and not a pass — re-poll, and if it never appears, the workflow did not trigger and the PR needs a `@dependabot rebase` rather than a merge.
+- A conclusion of `null` shows up as its status (`QUEUED`, `IN_PROGRESS`) — also not green.
+
+All four `ruby-tests` shards are required — do not accept three of four, and do not accept three plus one `MISSING`.
 
 #### Gate C — no intentional pin is being undone
 
