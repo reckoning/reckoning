@@ -52,7 +52,9 @@ node_modules
 build
 
 # Local agent / editor state (Claude Code, Cursor, etc.)
-.claude/
+# Shared skills are checked in; everything else under .claude/ stays local.
+.claude/*
+!.claude/skills/
 
 
 # Vite Ruby
