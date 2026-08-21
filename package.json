@@ -25,11 +25,11 @@
     "@vee-validate/zod": "^4.15.1",
     "accounting": "^0.4.1",
     "axios": "^1.19.0",
-    "dayjs": "^1.11.21",
+    "dayjs": "^1.11.23",
     "pdfjs-dist": "4.10.38",
-    "pinia": "^4.0.2",
+    "pinia": "^4.0.3",
     "pinia-plugin-persistedstate": "^4.7.1",
-    "puppeteer": "^25.6.0",
+    "puppeteer": "^25.8.0",
     "qs": "^6.15.3",
     "vee-validate": "^4.15.1",
     "vue": "^3.5.41",
@@ -54,8 +54,8 @@
     "typescript": "^6.0.3",
     "vite": "^8.2.1",
     "vite-plugin-ruby": "^5.2.2",
-    "vitest": "^4.1.10",
-    "vue-tsc": "^3.3.9"
+    "vitest": "^4.1.11",
+    "vue-tsc": "^3.3.10"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
