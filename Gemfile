@@ -49,7 +49,7 @@ gem "url_plumber"
 gem "jbuilder"
 
 # openapi
-gem "openapi-ruby", "~> 4.0", ">= 4.0.3"
+gem "openapi-ruby", "~> 4.2"
 
 # Modern asset pipeline. Lives alongside Sprockets during the
 # frontend migration (see docs/frontend-migration-plan.md).
