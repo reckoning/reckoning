@@ -39,6 +39,18 @@ export default {
     backToLogin: "Zur Anmeldung",
     failed: "Registrierung fehlgeschlagen.",
   },
+  confirmation: {
+    confirming: "E-Mail-Adresse wird bestätigt...",
+    resendPrompt: "Bestätigungs-E-Mail erneut senden",
+    resend: "E-Mail senden",
+    failed: "Der Bestätigungslink ist ungültig oder abgelaufen.",
+  },
+  unlock: {
+    unlocking: "Konto wird entsperrt...",
+    resendPrompt: "Entsperr-E-Mail erneut senden",
+    resend: "E-Mail senden",
+    failed: "Der Entsperrlink ist ungültig oder abgelaufen.",
+  },
   twoFactor: {
     title: "Zwei-Faktor-Autorisierung",
     enableExplain: "Scanen Sie diesen QRCode und geben Sie einen der generierten Tokens ein.",

@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import { me } from "@/services/api/services/me/me";
 import { destroySession } from "@/services/api/services/sessions/sessions";
+import { withoutUnauthorizedRedirect } from "@/services/axiosClient";
 import type { CurrentUser } from "@/services/api/models";
 
 export const useCurrentUserStore = defineStore(
@@ -20,7 +21,7 @@ export const useCurrentUserStore = defineStore(
       if (resolved.value) return user.value;
       if (inFlight) return inFlight;
 
-      inFlight = me()
+      inFlight = withoutUnauthorizedRedirect(() => me())
         .then((current) => {
           user.value = current;
           return current;

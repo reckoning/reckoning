@@ -84,6 +84,17 @@ test.describe("SPA shell", () => {
     expect(cookies.some((c) => c.name.startsWith("RECKONING"))).toBe(true)
   })
 
+  // Loading a public route directly asks /me, which answers 401 for a
+  // signed-out visitor. That used to trip the global unauthorized handler and
+  // bounce straight back to login — only reachable on a fresh load, so
+  // clicking through from the login page never caught it.
+  test("opens a public route directly without bouncing to login", async ({ page }) => {
+    await page.goto("/app/password/new")
+
+    await expect(page).toHaveURL(/\/app\/password\/new$/)
+    await expect(page.getByTestId("email")).toBeVisible()
+  })
+
   test("validates the form before calling the api", async ({ page }) => {
     await page.goto("/app/login")
 

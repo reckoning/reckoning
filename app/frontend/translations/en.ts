@@ -39,6 +39,18 @@ export default {
     backToLogin: "Sign in",
     failed: "Registration failed.",
   },
+  confirmation: {
+    confirming: "Confirming your email address...",
+    resendPrompt: "Resend the confirmation email",
+    resend: "Send email",
+    failed: "That confirmation link is invalid or has expired.",
+  },
+  unlock: {
+    unlocking: "Unlocking your account...",
+    resendPrompt: "Resend the unlock email",
+    resend: "Send email",
+    failed: "That unlock link is invalid or has expired.",
+  },
   twoFactor: {
     title: "Two-factor authentication",
     enableExplain: "Scan this QR code and enter one of the generated tokens.",
