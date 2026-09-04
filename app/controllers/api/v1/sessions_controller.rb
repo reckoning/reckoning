@@ -23,7 +23,7 @@ module Api
         resource = User.find_for_database_authentication(email: login_params[:email])
         return invalid_login_attempt unless resource
 
-        if resource.valid_password?(login_params[:password]) && validate_otp(resource)
+        if valid_credentials?(resource)
           # Stores the session, so the SPA gets a cookie from the same endpoint
           # that hands native clients a token. Each ignores the other's half.
           sign_in(:user, resource)
@@ -64,6 +64,18 @@ module Api
         @jwt_token ||= begin
           auth_params, _options = token_and_options(request)
           JsonWebToken.decode(auth_params)
+        end
+      end
+
+      # Lockable counts attempts from inside `valid_for_authentication?`, which
+      # is what the warden strategies behind /signin go through. Checking the
+      # password on its own skips the counter entirely, so this endpoint could
+      # be hammered indefinitely while the server-rendered form locked the same
+      # account after `maximum_attempts`. It also refuses an already-locked
+      # account holding the right password.
+      private def valid_credentials?(resource)
+        resource.valid_for_authentication? do
+          resource.valid_password?(login_params[:password]) && validate_otp(resource)
         end
       end
 

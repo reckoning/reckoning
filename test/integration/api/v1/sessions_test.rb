@@ -120,6 +120,49 @@ module Api
         end
       end
 
+      # Lockable is live (`lock_strategy = :failed_attempts`,
+      # `unlock_strategy = :email`), and the counter has to move on this
+      # endpoint too or the SPA login is a way around the lock.
+      describe "lockable" do
+        it "counts a wrong password toward the lock" do
+          assert_api_response :post, 400, body: {email: data.email, password: "wrong"}
+
+          assert_equal 1, data.reload.failed_attempts
+        end
+
+        it "locks the account once the attempts run out" do
+          data.update!(failed_attempts: ::User.maximum_attempts - 1)
+
+          assert_api_response :post, 400, body: {email: data.email, password: "wrong"}
+
+          assert data.reload.access_locked?
+        end
+
+        it "mails the unlock instructions when it locks" do
+          data.update!(failed_attempts: ::User.maximum_attempts - 1)
+
+          assert_emails 1 do
+            assert_api_response :post, 400, body: {email: data.email, password: "wrong"}
+          end
+        end
+
+        it "refuses a locked account holding the right password" do
+          data.lock_access!(send_instructions: false)
+
+          assert_api_response :post, 400, body: {email: data.email, password: password} do
+            assert_equal "session.create", parsed_body["code"]
+          end
+        end
+
+        it "clears the counter after a successful sign-in" do
+          data.update!(failed_attempts: 3)
+
+          assert_api_response :post, 200, body: {email: data.email, password: password}
+
+          assert_equal 0, data.reload.failed_attempts
+        end
+      end
+
       describe "destroy" do
         it "is unauthorized without a token" do
           assert_api_response :delete, 401
