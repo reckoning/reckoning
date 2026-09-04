@@ -7,7 +7,15 @@ class ApplicationController < ActionController::Base
   check_authorization unless: :unauthorized_controllers
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_url, alert: exception.message
+    redirect_to root_url, alert: access_denied_message(exception)
+  end
+
+  # Everything is read-only once the trial runs out, so CanCan's generic
+  # "not authorized" would leave someone guessing what they did wrong.
+  private def access_denied_message(exception)
+    return I18n.t("trial.denied") if current_account&.trial_expired?
+
+    exception.message
   end
 
   before_action :authenticate_user!, :set_default_nav

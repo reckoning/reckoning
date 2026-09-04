@@ -22,12 +22,11 @@ class Account < ApplicationRecord
   # rubocop:enable Rails/UniqueValidationWithoutIndex
   validates :subdomain, exclusion: {in: %w[www app admin api backend reckoning]}
   validates_associated :users
-  validates :stripe_token, :stripe_email, presence: true, on: :create, if: :on_paid_plan?
 
   accepts_nested_attributes_for :users
 
   before_save :calculate_office_percent
-  before_create :set_trial_end_date
+  before_create :start_trial
 
   def uninvoiced_amount
     projects.active.where("rate IS NOT NULL AND rate > 0").sum do |project|
@@ -45,11 +44,35 @@ class Account < ApplicationRecord
     self.deductible_office_percent = (100.0 * deductible_office_space / office_space).ceil
   end
 
-  def set_trial_end_date
+  # Signing up costs nothing and asks for no card, so every new account gets
+  # the same fortnight. `Ability` turns read-only when it runs out.
+  TRIAL_LENGTH = 14.days
+
+  def start_trial
     return if on_plan?(:free)
 
     self.trial_used = true
-    self.trial_end_at = 30.days.from_now
+    self.trial_end_at = TRIAL_LENGTH.from_now
+  end
+
+  def trial?
+    trial_end_at.present?
+  end
+
+  def trial_active?
+    trial? && trial_end_at.future?
+  end
+
+  def trial_expired?
+    trial? && trial_end_at.past?
+  end
+
+  # Counted in whole days, rounded up: with eight hours left a banner saying
+  # "0 days" is worse than useless.
+  def trial_days_left
+    return 0 unless trial_active?
+
+    ((trial_end_at - Time.current) / 1.day).ceil
   end
 
   def provision_value
