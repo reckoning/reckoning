@@ -26,6 +26,25 @@ class LoginTest < ActionDispatch::IntegrationTest
     assert_redirected_to "/app/login?return=%2Finvoices%3Fpage%3D2"
   end
 
+  # The login ends in a page load, so a carried path is fetched with a GET
+  # whatever the request that failed was. `PATCH /customers/1` replayed as a
+  # GET is a route that does not exist.
+  it "does not carry a path that cannot be replayed" do
+    patch customer_path(customers(:starfleet)), params: {customer: {name: "Renamed"}}
+
+    assert_redirected_to "/signin"
+    follow_redirect!
+    assert_redirected_to "/app/login"
+  end
+
+  # An xhr request never reaches the handover at all: Devise answers it with
+  # 401 before `redirect_url` is consulted (`http_authenticatable_on_xhr`).
+  it "answers an xhr request instead of handing it over" do
+    get "/invoices", xhr: true
+
+    assert_response :unauthorized
+  end
+
   it "leaves no alert behind for the next server-rendered page" do
     get "/invoices"
     follow_redirect!
