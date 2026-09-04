@@ -33,6 +33,22 @@ Rails.application.routes.draw do
 
   mount ActionCable.server => "/cable"
 
+  # The SPA owns confirmation, unlock and password reset since phase B2.
+  # These paths stay rather than moving into the mail templates, because a
+  # link Devise sent last month is already sitting in someone's inbox and has
+  # to keep working — including for a locked account, which has no other way
+  # back in. The token travels in the query string, so it comes along.
+  spa_screen = ->(path) do
+    redirect { |_params, request| [path, request.query_string.presence].compact.join("?") }
+  end
+
+  get "/users/confirmation", to: spa_screen.call("/app/confirmation")
+  get "/users/confirmation/new", to: spa_screen.call("/app/confirmation")
+  get "/users/unlock", to: spa_screen.call("/app/unlock")
+  get "/users/unlock/new", to: spa_screen.call("/app/unlock")
+  get "/users/password/new", to: spa_screen.call("/app/password/new")
+  get "/users/password/edit", to: spa_screen.call("/app/password/edit")
+
   devise_for :users,
     skip: %i[sessions registrations],
     controllers: {registrations: "registrations"}
