@@ -619,6 +619,21 @@ Only once B8 has landed and stabilized.
 Exit: `rg 'angular|jquery|coffee|bootstrap'` over `app/` returns nothing but
 PDF-template hits.
 
+#### Dark mode and the redesign come after, not during
+
+A **dark mode and a general visual redesign are planned**, and both wait for
+this phase deliberately. While old and new screens coexist a user crosses
+between them constantly, so the SPA replicates the Bootstrap 3 look on
+purpose — `spa.css` measures its values off the server-rendered login.
+Redesigning during B3–B8 would mean styling fifty-odd screens to a look that
+then gets thrown away, and leaving the app half-and-half for months.
+
+What that costs now is a habit rather than work: colours belong in the
+`@theme` block in `app/frontend/entrypoints/spa.css`, never written into a
+utility class as a raw value (`text-[#a94442]`). Tokens make the redesign a
+swap in one block; raw values would have to be hunted through every page.
+Preflight going on in this phase is the moment the palette is free to change.
+
 ## Testing strategy
 
 | Layer | Tool | Notes |
