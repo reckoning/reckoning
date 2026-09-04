@@ -596,6 +596,31 @@ way back in. `POST/PUT /confirmations` and `POST/PUT /unlocks` close that gap.
 Worth checking the same way before each remaining B phase: the ERB screen a
 phase deletes may reach further than the phase's one-line description.
 
+#### Second gap: the session endpoint skipped the strategy chain
+
+Writing the parity coverage the deletion is gated on turned up two ways
+`POST /sessions` did not behave like `/signin`, both from checking the password
+directly instead of through `valid_for_authentication?`:
+
+- **Lockable never counted.** `failed_attempts` stayed at zero however often
+  the endpoint was called, so an account could be hammered through the SPA
+  login while the same account locked after `maximum_attempts` through the
+  ERB form. A locked account holding the right password was refused, but only
+  because `sign_in` trips Devise's activatable hook — which answered with an
+  undocumented 401 from Warden's failure app rather than the endpoint's own
+  error shape.
+- **Backup codes were not accepted.** `/signin` stacks
+  `two_factor_backupable` ahead of `two_factor_authenticatable`, so its one
+  field takes either a TOTP code or a backup code. The endpoint only ever
+  consumed TOTP, which left the codes the B2 settings screen hands out
+  unusable for signing in — the one path back in for a user who lost their
+  authenticator.
+
+Both are closed, with `otp-required`, backup-code and lockout coverage at the
+API level and in Playwright. The gate for deleting the ERB auth views is
+therefore met; what remains for B2 is repointing the mailer links and the
+signup question.
+
 ### Phase C — legacy removal (multi-PR, ~1 week)
 
 Only once B8 has landed and stabilized.
