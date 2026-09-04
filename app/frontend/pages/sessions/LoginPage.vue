@@ -91,9 +91,9 @@ const onSubmit = handleSubmit(async (values) => {
           autofocus
           :placeholder="t('login.email')"
           data-test="email"
-          class="block w-full rounded border border-field-border p-[10px] text-[16px] text-field placeholder:text-[#999] focus:border-[#66afe9] focus:outline-none"
+          class="block w-full rounded border border-field-border p-[10px] text-[16px] text-field placeholder:text-placeholder focus:border-field-focus focus:outline-none"
         />
-        <p v-if="errors.email" data-test="email-error" class="mt-1 text-[13px] text-[#a94442]">
+        <p v-if="errors.email" data-test="email-error" class="mt-1 text-[13px] text-danger">
           {{ errors.email }}
         </p>
       </div>
@@ -106,9 +106,9 @@ const onSubmit = handleSubmit(async (values) => {
           autocomplete="current-password"
           :placeholder="t('login.password')"
           data-test="password"
-          class="block w-full rounded border border-field-border p-[10px] text-[16px] text-field placeholder:text-[#999] focus:border-[#66afe9] focus:outline-none"
+          class="block w-full rounded border border-field-border p-[10px] text-[16px] text-field placeholder:text-placeholder focus:border-field-focus focus:outline-none"
         />
-        <p v-if="errors.password" data-test="password-error" class="mt-1 text-[13px] text-[#a94442]">
+        <p v-if="errors.password" data-test="password-error" class="mt-1 text-[13px] text-danger">
           {{ errors.password }}
         </p>
       </div>
@@ -122,7 +122,7 @@ const onSubmit = handleSubmit(async (values) => {
           autocomplete="one-time-code"
           :placeholder="t('login.otpToken')"
           data-test="otp-token"
-          class="block w-full rounded border border-field-border p-[10px] text-[16px] text-field placeholder:text-[#999] focus:border-[#66afe9] focus:outline-none"
+          class="block w-full rounded border border-field-border p-[10px] text-[16px] text-field placeholder:text-placeholder focus:border-field-focus focus:outline-none"
         />
       </div>
 
@@ -132,14 +132,14 @@ const onSubmit = handleSubmit(async (values) => {
           v-model="rememberMe"
           type="checkbox"
           data-test="remember-me"
-          class="h-[18px] w-[18px] rounded-[4px] border border-[#b9c2cc] accent-brand"
+          class="h-[18px] w-[18px] rounded-[4px] border border-control-border accent-brand"
         />
         <label for="remember-me" class="text-[14px] font-normal text-muted">
           {{ t("login.rememberMe") }}
         </label>
       </div>
 
-      <p v-if="failed" data-test="login-failed" class="mb-[10px] text-[14px] text-[#a94442]">
+      <p v-if="failed" data-test="login-failed" class="mb-[10px] text-[14px] text-danger">
         {{ t("login.failed") }}
       </p>
 
@@ -147,7 +147,7 @@ const onSubmit = handleSubmit(async (values) => {
         type="submit"
         data-test="submit"
         :disabled="isSubmitting"
-        class="block w-full rounded-md border border-brand-border bg-brand px-4 py-[10px] text-[18px] font-normal text-white hover:bg-[#3276b1] disabled:opacity-65"
+        class="block w-full rounded-md border border-brand-border bg-brand px-4 py-[10px] text-[18px] font-normal text-white hover:bg-brand-hover disabled:opacity-65"
       >
         {{ isSubmitting ? t("login.submitting") : t("login.submit") }}
       </button>
@@ -171,7 +171,7 @@ const onSubmit = handleSubmit(async (values) => {
         <a
           href="/signup"
           data-test="sign-up"
-          class="block w-full rounded border border-field-border bg-white px-3 py-[6px] text-center text-[14px] text-ink hover:bg-[#e6e6e6]"
+          class="block w-full rounded border border-field-border bg-surface px-3 py-[6px] text-center text-[14px] text-ink hover:bg-control-hover"
         >
           {{ t("login.signUp") }}
         </a>

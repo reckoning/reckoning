@@ -8,7 +8,10 @@
  * button chrome.
  *
  * Values below are measured from the Bootstrap 3 login so the two screens
- * match while both exist.
+ * match while both exist. They live here as tokens rather than in the pages
+ * so the planned dark mode and redesign are a swap in this block — a colour
+ * written into a utility class (`text-[#a94442]`) would have to be hunted
+ * down in every page instead.
  */
 
 @import "tailwindcss";
@@ -19,11 +22,21 @@
 @theme {
   --color-brand: #428bca;
   --color-brand-border: #357ebd;
+  --color-brand-hover: #3276b1;
   --color-ink: #333333;
   --color-field: #555555;
   --color-field-border: #cccccc;
+  --color-field-focus: #66afe9;
+  --color-placeholder: #999999;
   --color-rule: #eeeeee;
   --color-muted: #808080;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f5f5f5;
+  --color-control-border: #b9c2cc;
+  --color-control-hover: #e6e6e6;
+  --color-danger: #a94442;
+  --color-warning: #f0ad4e;
+  --color-warning-border: #eea236;
 
   --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-brand: Orbitron, sans-serif;
@@ -35,6 +48,6 @@
     font-size: 14px;
     line-height: 1.428571429;
     color: var(--color-ink);
-    background-color: #fff;
+    background-color: var(--color-surface);
   }
 }
