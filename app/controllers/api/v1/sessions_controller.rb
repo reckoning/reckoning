@@ -23,7 +23,7 @@ module Api
         resource = User.find_for_database_authentication(email: login_params[:email])
         return invalid_login_attempt unless resource
 
-        if resource.valid_password?(login_params[:password]) && validate_otp(resource)
+        if valid_credentials?(resource)
           # Stores the session, so the SPA gets a cookie from the same endpoint
           # that hands native clients a token. Each ignores the other's half.
           sign_in(:user, resource)
@@ -67,11 +67,29 @@ module Api
         end
       end
 
-      private def validate_otp(resource)
-        return true unless resource.otp_required_for_login
-        return if login_params[:otp_token].nil?
+      # Lockable counts attempts from inside `valid_for_authentication?`, which
+      # is what the warden strategies behind /signin go through. Checking the
+      # password on its own skips the counter entirely, so this endpoint could
+      # be hammered indefinitely while the server-rendered form locked the same
+      # account after `maximum_attempts`. It also refuses an already-locked
+      # account holding the right password.
+      private def valid_credentials?(resource)
+        resource.valid_for_authentication? do
+          resource.valid_password?(login_params[:password]) && valid_second_factor?(resource)
+        end
+      end
 
-        resource.validate_and_consume_otp!(login_params[:otp_token])
+      # /signin stacks two strategies, `two_factor_backupable` ahead of
+      # `two_factor_authenticatable`, so its single field takes either a TOTP
+      # code or one of the backup codes. Accepting only the former here left
+      # the codes the settings screen hands out unusable for signing in — the
+      # one path a user who lost their authenticator has.
+      private def valid_second_factor?(resource)
+        return true unless resource.otp_required_for_login
+        return false if login_params[:otp_token].blank?
+
+        resource.validate_and_consume_otp!(login_params[:otp_token]) ||
+          resource.invalidate_otp_backup_code!(login_params[:otp_token])
       end
 
       private def login_params
