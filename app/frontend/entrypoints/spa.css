@@ -1,0 +1,40 @@
+/*
+ * Tailwind entrypoint for the SPA shell only.
+ *
+ * `tailwind.css` deliberately omits preflight so Tailwind can coexist with
+ * Bootstrap 3 on the server-rendered pages. The SPA has no Bootstrap to
+ * protect and genuinely needs the reset — without it the shell inherits the
+ * browser defaults, which is why it rendered in a serif face with native
+ * button chrome.
+ *
+ * Values below are measured from the Bootstrap 3 login so the two screens
+ * match while both exist.
+ */
+
+@import "tailwindcss";
+
+@source "../**/*.vue";
+@source "../**/*.ts";
+
+@theme {
+  --color-brand: #428bca;
+  --color-brand-border: #357ebd;
+  --color-ink: #333333;
+  --color-field: #555555;
+  --color-field-border: #cccccc;
+  --color-rule: #eeeeee;
+  --color-muted: #808080;
+
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-brand: Orbitron, sans-serif;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: var(--color-ink);
+    background-color: #fff;
+  }
+}

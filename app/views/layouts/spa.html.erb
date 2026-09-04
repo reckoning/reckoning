@@ -8,10 +8,14 @@
 
     <link rel="shortcut icon" type="image/png" href="<%= asset_url("favicon.png") %>">
 
-    <%# No Sprockets, no Bootstrap: the SPA shell is Tailwind-only. Preflight
-        is on here because there is no Bootstrap 3 stylesheet to protect. %>
+    <%# The brand face, same as the server-rendered layout. %>
+    <%= stylesheet_link_tag "https://fonts.googleapis.com/css?family=Orbitron:400,500,700,900" %>
+
+    <%# No Sprockets, no Bootstrap. `spa.css` is a separate entrypoint from
+        `tailwind.css` because this document needs Tailwind's preflight, which
+        the shared one omits to avoid disturbing Bootstrap 3. %>
     <%= vite_client_tag %>
-    <%= vite_stylesheet_tag "tailwind.css" %>
+    <%= vite_stylesheet_tag "spa.css" %>
     <%= vite_typescript_tag "frontend" %>
 
     <%# Api::BaseController verifies this token on cookie-authenticated

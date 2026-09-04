@@ -14,6 +14,19 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: false },
   },
   {
+    path: "/password/new",
+    name: "password-reset-request",
+    component: () => import("@/pages/sessions/PasswordResetRequestPage.vue"),
+    meta: { requiresAuth: false },
+  },
+  {
+    // Devise mails a link carrying reset_password_token as a query param.
+    path: "/password/edit",
+    name: "password-reset",
+    component: () => import("@/pages/sessions/PasswordResetPage.vue"),
+    meta: { requiresAuth: false },
+  },
+  {
     path: "/",
     name: "dashboard",
     component: () => import("@/pages/dashboard/DashboardPage.vue"),

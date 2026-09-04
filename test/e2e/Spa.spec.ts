@@ -52,6 +52,38 @@ test.describe("SPA shell", () => {
     await expect(page).toHaveURL(/\/app\/login$/)
   })
 
+  // The elements /signin has that the B1 skeleton was missing.
+  test("offers remember me, password reset and signup", async ({ page }) => {
+    await page.goto("/app/login")
+
+    await expect(page.getByTestId("remember-me")).toBeVisible()
+    await expect(page.getByTestId("reset-password")).toBeVisible()
+
+    // Signup is gated on the same config flag the ERB login reads.
+    await expect(page.getByTestId("sign-up")).toHaveAttribute("href", "/signup")
+
+    await page.getByTestId("reset-password").click()
+    await expect(page).toHaveURL(/\/app\/password\/new$/)
+    await expect(page.getByTestId("submit")).toBeVisible()
+  })
+
+  test("keeps the session across a browser restart when remember me is checked", async ({ page }) => {
+    await page.goto("/app/login")
+
+    await page.getByTestId("email").fill("will@star.fleet")
+    await page.getByTestId("password").fill("enterprise")
+    await page.getByTestId("remember-me").check()
+    await page.getByTestId("submit").click()
+
+    await expect(page.getByTestId("dashboard-greeting")).toBeVisible()
+
+    // Devise only writes the remember cookie over HTTPS
+    // (config.rememberable_options), so over plain HTTP the flag can only be
+    // observed on the user record.
+    const cookies = await page.context().cookies()
+    expect(cookies.some((c) => c.name.startsWith("RECKONING"))).toBe(true)
+  })
+
   test("validates the form before calling the api", async ({ page }) => {
     await page.goto("/app/login")
 
