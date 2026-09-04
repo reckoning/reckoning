@@ -12,7 +12,7 @@ const currentUser = useCurrentUserStore()
       {{ t("dashboard.title") }}
     </h1>
 
-    <p v-if="currentUser.user" class="mt-2 text-gray-600" data-test="dashboard-greeting">
+    <p v-if="currentUser.user" class="mt-2 text-muted" data-test="dashboard-greeting">
       {{ t("dashboard.greeting", { email: currentUser.user.email }) }}
     </p>
   </div>
