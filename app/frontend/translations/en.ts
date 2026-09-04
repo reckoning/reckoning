@@ -3,6 +3,7 @@ export default {
   nav: {
     dashboard: "Dashboard",
     customers: "Customers",
+    security: "Security",
     signOut: "Sign out",
   },
   login: {
@@ -37,6 +38,17 @@ export default {
     haveAccount: "Already registered?",
     backToLogin: "Sign in",
     failed: "Registration failed.",
+  },
+  twoFactor: {
+    title: "Two-factor authentication",
+    enableExplain: "Scan this QR code and enter one of the generated tokens.",
+    disableExplain: "To switch two-factor authentication off, enter one of the generated tokens.",
+    backupExplain: "Keep these backup codes somewhere safe.",
+    backupCodes: "Generate backup codes",
+    otpToken: "One-time token",
+    enable: "Enable",
+    disable: "Disable",
+    failed: "That token was not accepted.",
   },
   dashboard: {
     title: "Dashboard",

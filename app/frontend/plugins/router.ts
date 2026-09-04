@@ -33,6 +33,12 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true },
   },
   {
+    path: "/settings/two-factor",
+    name: "two-factor",
+    component: () => import("@/pages/settings/TwoFactorPage.vue"),
+    meta: { requiresAuth: true },
+  },
+  {
     path: "/customers",
     name: "customers",
     component: () => import("@/pages/customers/CustomersList.vue"),

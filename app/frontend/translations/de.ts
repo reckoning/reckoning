@@ -3,6 +3,7 @@ export default {
   nav: {
     dashboard: "Übersicht",
     customers: "Kunden",
+    security: "Sicherheit",
     signOut: "Abmelden",
   },
   login: {
@@ -37,6 +38,18 @@ export default {
     haveAccount: "Bereits registriert?",
     backToLogin: "Zur Anmeldung",
     failed: "Registrierung fehlgeschlagen.",
+  },
+  twoFactor: {
+    title: "Zwei-Faktor-Autorisierung",
+    enableExplain: "Scanen Sie diesen QRCode und geben Sie einen der generierten Tokens ein.",
+    disableExplain:
+      "Wenn Sie die Zwei-Faktor-Autorisierung wieder deaktivieren wollen, geben Sie einen der generierten Tokens ein.",
+    backupExplain: "Speichern Sie diese Backup Codes an einem sicherem Ort.",
+    backupCodes: "Backup Codes generieren",
+    otpToken: "Einmal-Token",
+    enable: "Aktivieren",
+    disable: "Deaktivieren",
+    failed: "Der Token wurde nicht akzeptiert.",
   },
   dashboard: {
     title: "Übersicht",

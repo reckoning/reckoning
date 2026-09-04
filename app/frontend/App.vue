@@ -26,6 +26,9 @@ async function signOut(): Promise<void> {
         <RouterLink :to="{ name: 'customers' }">
           {{ t("nav.customers") }}
         </RouterLink>
+        <RouterLink :to="{ name: 'two-factor' }" data-test="nav-two-factor">
+          {{ t("nav.security") }}
+        </RouterLink>
 
         <span v-if="currentUser.user" class="ml-auto text-sm text-gray-500" data-test="account">
           {{ currentUser.user.email }}
