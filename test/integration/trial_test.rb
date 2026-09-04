@@ -11,6 +11,35 @@ class TrialTest < ActionDispatch::IntegrationTest
     account.update_columns(plan: "basic", trial_used: true, trial_end_at: when_)
   end
 
+  describe "the banner" do
+    it "counts the days down" do
+      trial_ending(5.days.from_now)
+      sign_in user
+
+      get root_path
+
+      assert_select "[data-test=?]", "trial-banner", text: /noch 5 Tage/
+    end
+
+    it "says so once the trial is over" do
+      trial_ending(1.minute.ago)
+      sign_in user
+
+      get root_path
+
+      assert_select "[data-test=?]", "trial-banner", text: /abgelaufen/
+    end
+
+    it "stays away from an account that has no trial" do
+      account.update_columns(trial_end_at: nil, trial_used: false)
+      sign_in user
+
+      get root_path
+
+      assert_select "[data-test=?]", "trial-banner", false
+    end
+  end
+
   describe "after the trial" do
     it "explains a refused write instead of shrugging" do
       trial_ending(1.minute.ago)

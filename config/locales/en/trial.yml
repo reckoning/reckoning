@@ -1,3 +1,7 @@
 en:
   trial:
+    active:
+      one: "Trial: %{count} day left."
+      other: "Trial: %{count} days left."
+    expired: "Your trial has ended. Your data stays available, but nothing can be created or changed."
     denied: "That is not possible once the trial has ended. Reading and exporting still work."

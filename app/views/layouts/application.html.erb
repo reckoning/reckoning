@@ -10,6 +10,9 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-xs-12 col-md-10 col-md-offset-2 col-xl-11 col-xl-offset-1">
+          <% if user_signed_in? %>
+            <%= render "layouts/trial_banner" %>
+          <% end %>
           <%== yield %>
         </div>
       </div>

@@ -1,3 +1,7 @@
 de:
   trial:
+    active:
+      one: "Testphase: noch %{count} Tag."
+      other: "Testphase: noch %{count} Tage."
+    expired: "Deine Testphase ist abgelaufen. Du kommst weiterhin an alle Daten, kannst aber nichts mehr anlegen oder ändern."
     denied: "Das geht nach Ablauf der Testphase nicht mehr. Lesen und Exportieren bleibt möglich."
