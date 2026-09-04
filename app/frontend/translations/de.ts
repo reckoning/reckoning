@@ -4,6 +4,7 @@ export default {
     dashboard: "Übersicht",
     customers: "Kunden",
     security: "Sicherheit",
+    legacy: "Klassische Ansicht",
     signOut: "Abmelden",
   },
   login: {

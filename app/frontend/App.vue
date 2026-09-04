@@ -30,6 +30,13 @@ async function signOut(): Promise<void> {
           {{ t("nav.security") }}
         </RouterLink>
 
+        <!-- Most of the product is still server-rendered, and signing in now
+             lands here rather than there. Until phase C folds the two into one
+             nav, this is the way across. -->
+        <a href="/" class="text-sm" data-test="nav-legacy">
+          {{ t("nav.legacy") }}
+        </a>
+
         <span v-if="currentUser.user" class="ml-auto text-sm text-gray-500" data-test="account">
           {{ currentUser.user.email }}
         </span>
