@@ -55,6 +55,25 @@ test.describe("Confirmation and unlock", () => {
     expect(locked).toBe(false)
   })
 
+  // Devise's mails keep building /users/... urls, so a link sent before these
+  // screens moved has to arrive at the SPA — the whole chain: rails redirect,
+  // vue route, api call.
+  test("unlocks from the url the mail actually carries", async ({ page }) => {
+    const token = (await appEval(`
+      user = User.find_by(email: "will@star.fleet")
+      user.lock_access!(send_instructions: false)
+      user.send_unlock_instructions
+    `)) as string
+
+    await page.goto(`/users/unlock?unlock_token=${token}`)
+
+    await expect(page).toHaveURL(new RegExp(`/app/unlock\\?unlock_token=${token}$`))
+    await expect(page.getByTestId("unlock-message")).toBeVisible()
+
+    const locked = await appEval(`User.find_by(email: "will@star.fleet").access_locked?`)
+    expect(locked).toBe(false)
+  })
+
   test("offers a fresh unlock email when the link has expired", async ({ page }) => {
     await page.goto("/app/unlock?unlock_token=stale")
 
