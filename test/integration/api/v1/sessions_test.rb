@@ -120,6 +120,59 @@ module Api
         end
       end
 
+      # The account has 2FA on, so the password alone is not enough. Both
+      # factors go through the one endpoint the SPA has.
+      describe "two-factor" do
+        before do
+          data.otp_secret = ::User.generate_otp_secret
+          data.otp_required_for_login = true
+          data.save!
+        end
+
+        it "rejects the password on its own" do
+          assert_api_response :post, 400, body: {email: data.email, password: password} do
+            assert_equal "session.create", parsed_body["code"]
+          end
+        end
+
+        it "accepts a current totp code" do
+          assert_api_response :post, 200, body: {
+            email: data.email, password: password, otp_token: data.current_otp
+          }
+        end
+
+        it "rejects a wrong totp code" do
+          assert_api_response :post, 400, body: {
+            email: data.email, password: password, otp_token: "000000"
+          }
+        end
+
+        # The codes the settings screen hands out are the only way back in for
+        # someone who lost their authenticator, and /signin takes them in this
+        # same field.
+        it "accepts a backup code" do
+          code = data.generate_otp_backup_codes!.first
+          data.save!
+
+          assert_api_response :post, 200, body: {
+            email: data.email, password: password, otp_token: code
+          }
+        end
+
+        it "consumes the backup code it accepted" do
+          code = data.generate_otp_backup_codes!.first
+          data.save!
+
+          assert_api_response :post, 200, body: {
+            email: data.email, password: password, otp_token: code
+          }
+
+          assert_api_response :post, 400, body: {
+            email: data.email, password: password, otp_token: code
+          }
+        end
+      end
+
       # Lockable is live (`lock_strategy = :failed_attempts`,
       # `unlock_strategy = :email`), and the counter has to move on this
       # endpoint too or the SPA login is a way around the lock.

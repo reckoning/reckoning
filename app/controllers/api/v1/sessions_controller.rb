@@ -75,15 +75,21 @@ module Api
       # account holding the right password.
       private def valid_credentials?(resource)
         resource.valid_for_authentication? do
-          resource.valid_password?(login_params[:password]) && validate_otp(resource)
+          resource.valid_password?(login_params[:password]) && valid_second_factor?(resource)
         end
       end
 
-      private def validate_otp(resource)
+      # /signin stacks two strategies, `two_factor_backupable` ahead of
+      # `two_factor_authenticatable`, so its single field takes either a TOTP
+      # code or one of the backup codes. Accepting only the former here left
+      # the codes the settings screen hands out unusable for signing in — the
+      # one path a user who lost their authenticator has.
+      private def valid_second_factor?(resource)
         return true unless resource.otp_required_for_login
-        return if login_params[:otp_token].nil?
+        return false if login_params[:otp_token].blank?
 
-        resource.validate_and_consume_otp!(login_params[:otp_token])
+        resource.validate_and_consume_otp!(login_params[:otp_token]) ||
+          resource.invalidate_otp_backup_code!(login_params[:otp_token])
       end
 
       private def login_params
