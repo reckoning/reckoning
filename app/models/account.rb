@@ -27,7 +27,7 @@ class Account < ApplicationRecord
   accepts_nested_attributes_for :users
 
   before_save :calculate_office_percent
-  before_create :set_trail_end_date
+  before_create :set_trial_end_date
 
   def uninvoiced_amount
     projects.active.where("rate IS NOT NULL AND rate > 0").sum do |project|
@@ -45,11 +45,11 @@ class Account < ApplicationRecord
     self.deductible_office_percent = (100.0 * deductible_office_space / office_space).ceil
   end
 
-  def set_trail_end_date
+  def set_trial_end_date
     return if on_plan?(:free)
 
-    self.trail_used = true
-    self.trail_end_at = 30.days.from_now
+    self.trial_used = true
+    self.trial_end_at = 30.days.from_now
   end
 
   def provision_value
