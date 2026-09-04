@@ -17,8 +17,8 @@ async function signOut(): Promise<void> {
 <template>
   <!-- White, like the server-rendered layout. `flow-root` stops the auth
        pages' top margin collapsing out and dragging the shell down with it. -->
-  <div class="flow-root min-h-screen bg-white text-ink">
-    <header v-if="currentUser.signedIn" class="border-b border-rule bg-white">
+  <div class="flow-root min-h-screen bg-surface text-ink">
+    <header v-if="currentUser.signedIn" class="border-b border-rule bg-surface">
       <nav class="mx-auto flex max-w-6xl items-center gap-6 px-4 py-3">
         <RouterLink :to="{ name: 'dashboard' }" class="font-semibold">
           {{ t("nav.dashboard") }}

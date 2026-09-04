@@ -88,7 +88,7 @@ async function regenerate(): Promise<void> {
       {{ t("twoFactor.title") }}
     </h1>
 
-    <p v-if="failed" data-test="two-factor-failed" class="mb-4 text-[14px] text-[#a94442]">
+    <p v-if="failed" data-test="two-factor-failed" class="mb-4 text-[14px] text-danger">
       {{ t("twoFactor.failed") }}
     </p>
 
@@ -96,7 +96,7 @@ async function regenerate(): Promise<void> {
          codes in the clear and never again. -->
     <div v-if="codes" class="mb-6" data-test="backup-codes">
       <p class="mb-2 text-[14px]">{{ t("twoFactor.backupExplain") }}</p>
-      <pre class="max-w-sm rounded border border-field-border bg-[#f5f5f5] p-3 text-[13px]">{{ codes.join("\n") }}</pre>
+      <pre class="max-w-sm rounded border border-field-border bg-surface-muted p-3 text-[13px]">{{ codes.join("\n") }}</pre>
     </div>
 
     <template v-if="enabled">
@@ -106,7 +106,7 @@ async function regenerate(): Promise<void> {
         type="button"
         data-test="regenerate-codes"
         :disabled="busy"
-        class="mb-6 rounded border border-[#eea236] bg-[#f0ad4e] px-4 py-2 text-[14px] text-white disabled:opacity-65"
+        class="mb-6 rounded border border-warning-border bg-warning px-4 py-2 text-[14px] text-white disabled:opacity-65"
         @click="regenerate"
       >
         {{ t("twoFactor.backupCodes") }}
@@ -120,7 +120,7 @@ async function regenerate(): Promise<void> {
           autocomplete="one-time-code"
           :placeholder="t('twoFactor.otpToken')"
           data-test="otp-token"
-          class="mb-3 block w-full rounded border border-field-border p-[10px] text-[16px] text-field placeholder:text-[#999] focus:border-[#66afe9] focus:outline-none"
+          class="mb-3 block w-full rounded border border-field-border p-[10px] text-[16px] text-field placeholder:text-placeholder focus:border-field-focus focus:outline-none"
         />
         <button
           type="submit"
@@ -140,7 +140,7 @@ async function regenerate(): Promise<void> {
 
       <pre
         v-if="provisioningUri"
-        class="mb-4 max-w-lg overflow-x-auto rounded border border-field-border bg-[#f5f5f5] p-3 text-[12px]"
+        class="mb-4 max-w-lg overflow-x-auto rounded border border-field-border bg-surface-muted p-3 text-[12px]"
         data-test="provisioning-uri"
         >{{ provisioningUri }}</pre
       >
@@ -153,7 +153,7 @@ async function regenerate(): Promise<void> {
           autocomplete="one-time-code"
           :placeholder="t('twoFactor.otpToken')"
           data-test="otp-token"
-          class="mb-3 block w-full rounded border border-field-border p-[10px] text-[16px] text-field placeholder:text-[#999] focus:border-[#66afe9] focus:outline-none"
+          class="mb-3 block w-full rounded border border-field-border p-[10px] text-[16px] text-field placeholder:text-placeholder focus:border-field-focus focus:outline-none"
         />
         <button
           type="submit"

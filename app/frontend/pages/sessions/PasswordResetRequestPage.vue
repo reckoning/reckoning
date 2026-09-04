@@ -58,14 +58,14 @@ const onSubmit = handleSubmit(async (values) => {
           autofocus
           :placeholder="t('login.email')"
           data-test="email"
-          class="block w-full rounded border border-field-border p-[10px] text-[16px] text-field placeholder:text-[#999] focus:border-[#66afe9] focus:outline-none"
+          class="block w-full rounded border border-field-border p-[10px] text-[16px] text-field placeholder:text-placeholder focus:border-field-focus focus:outline-none"
         />
-        <p v-if="errors.email" data-test="email-error" class="mt-1 text-[13px] text-[#a94442]">
+        <p v-if="errors.email" data-test="email-error" class="mt-1 text-[13px] text-danger">
           {{ errors.email }}
         </p>
       </div>
 
-      <p v-if="failed" data-test="reset-failed" class="mb-[10px] text-[14px] text-[#a94442]">
+      <p v-if="failed" data-test="reset-failed" class="mb-[10px] text-[14px] text-danger">
         {{ t("passwordReset.failed") }}
       </p>
 
@@ -73,7 +73,7 @@ const onSubmit = handleSubmit(async (values) => {
         type="submit"
         data-test="submit"
         :disabled="isSubmitting"
-        class="block w-full rounded-md border border-brand-border bg-brand px-4 py-[10px] text-[18px] font-normal text-white hover:bg-[#3276b1] disabled:opacity-65"
+        class="block w-full rounded-md border border-brand-border bg-brand px-4 py-[10px] text-[18px] font-normal text-white hover:bg-brand-hover disabled:opacity-65"
       >
         {{ isSubmitting ? t("login.submitting") : t("passwordReset.requestSubmit") }}
       </button>
