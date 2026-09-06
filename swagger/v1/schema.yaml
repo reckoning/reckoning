@@ -3918,6 +3918,49 @@ components:
           - 'null'
         label:
           type: string
+        customerId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        workflowState:
+          type: string
+        rate:
+          type:
+          - string
+          - 'null'
+        budget:
+          type:
+          - string
+          - 'null'
+        budgetHours:
+          type:
+          - string
+          - 'null'
+        budgetOnDashboard:
+          type:
+          - boolean
+          - 'null'
+        invoiceAddition:
+          type:
+          - string
+          - 'null'
+        startDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        endDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        timerValues:
+          type: string
+        budgetPercent:
+          type:
+          - string
+          - 'null'
         tasks:
           type: array
           items:
@@ -3943,6 +3986,7 @@ components:
       required:
       - id
       - name
+      - workflowState
       - tasks
       - createdAt
       - updatedAt
@@ -3974,6 +4018,16 @@ components:
           type:
           - string
           - 'null'
+        start_date:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        end_date:
+          type:
+          - string
+          - 'null'
+          format: date-time
         tasks_attributes:
           type: array
           items:

@@ -17,6 +17,8 @@ module V1
             budget_hours: {type: [:string, :number]},
             budget_on_dashboard: {type: :boolean},
             invoice_addition: {type: [:string, :null]},
+            start_date: {type: [:string, :null], format: "date-time"},
+            end_date: {type: [:string, :null], format: "date-time"},
             tasks_attributes: {
               type: :array,
               items: {
