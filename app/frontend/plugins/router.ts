@@ -57,6 +57,12 @@ const routes: RouteRecordRaw[] = [
     component: () => import("@/pages/customers/CustomersList.vue"),
     meta: { requiresAuth: true },
   },
+  {
+    path: "/customers/:id/edit",
+    name: "customer-edit",
+    component: () => import("@/pages/customers/CustomerForm.vue"),
+    meta: { requiresAuth: true },
+  },
 ];
 
 export const router = createRouter({

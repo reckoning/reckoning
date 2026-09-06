@@ -117,6 +117,20 @@ module Api
           assert_equal "Starfleet Command", customer.reload.name
         end
 
+        # The ERB form could empty these by submitting a blank field, which
+        # Rails cast to nil. The SPA has to send null to do the same — and a
+        # payment period of 0 is not an empty one, it makes invoices due
+        # immediately.
+        it "clears a number when sent null" do
+          customer.update!(payment_due: 14, weekly_hours: 40)
+
+          assert_api_response :patch, 200, path_params: {id: customer.id},
+            body: {name: customer.name, paymentDue: nil, weeklyHours: nil}
+
+          assert_nil customer.reload.payment_due
+          assert_nil customer.reload.weekly_hours
+        end
+
         it "rejects an update that clears the name" do
           assert_api_response :patch, 400, path_params: {id: customer.id}, body: {name: ""} do
             assert_equal "validation_error.customer.update", parsed_body["code"]

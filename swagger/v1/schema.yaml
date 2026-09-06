@@ -3011,7 +3011,9 @@ components:
         website:
           type: string
         paymentDue:
-          type: integer
+          type:
+          - integer
+          - 'null'
         invoiceEmail:
           type: string
         invoiceEmailCc:
@@ -3031,7 +3033,9 @@ components:
           type: string
           format: date
         weeklyHours:
-          type: integer
+          type:
+          - integer
+          - 'null'
       additionalProperties: false
       required:
       - name

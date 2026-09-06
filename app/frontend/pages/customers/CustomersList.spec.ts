@@ -1,9 +1,10 @@
 import {describe, it, expect, afterEach} from "vitest"
-import {flushPromises, mount} from "@vue/test-utils"
+import {RouterLinkStub, flushPromises, mount} from "@vue/test-utils"
 import {VueQueryPlugin} from "@tanstack/vue-query"
 import type {AxiosAdapter} from "axios"
 import CustomersList from "./CustomersList.vue"
 import {AXIOS_INSTANCE} from "@/services/axiosClient"
+import {i18n} from "@/plugins/i18n"
 import type {Customer} from "@/services/api/models"
 
 // Swap only the transport so the mutator, vue-query and the generated
@@ -25,7 +26,10 @@ function customer(overrides: Partial<Customer> = {}): Customer {
 function mountList() {
   return mount(CustomersList, {
     global: {
-      plugins: [[VueQueryPlugin, {queryClientConfig: {defaultOptions: {queries: {retry: false}}}}]],
+      plugins: [[VueQueryPlugin, {queryClientConfig: {defaultOptions: {queries: {retry: false}}}}], i18n],
+      // The list links each row at the edit route now; the route itself is
+      // the router's business, not this component's.
+      stubs: {RouterLink: RouterLinkStub},
     },
   })
 }

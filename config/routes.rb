@@ -110,7 +110,11 @@ Rails.application.routes.draw do
 
   resources :positions, only: %i[new destroy]
 
-  resources :customers, only: %i[edit update]
+  # The SPA owns the customer screens (phase B3). The name stays because the
+  # project list still links here, and a bookmark on the old path should land
+  # on the new screen rather than a 404.
+  get "customers/:id/edit", to: redirect("/app/customers/%{id}/edit"), as: :edit_customer
+
   resources :projects, except: [:destroy] do
     member do
       put :unarchive
