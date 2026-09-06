@@ -1,19 +1,29 @@
 <script setup lang="ts">
-import {useCustomers} from "@/services/api/services/customers/customers"
+import { RouterLink } from "vue-router"
+import { useI18n } from "vue-i18n"
+import { useCustomers } from "@/services/api/services/customers/customers"
 
-const {data: customers, isPending, isError} = useCustomers()
+const { t } = useI18n()
+const { data: customers, isPending, isError } = useCustomers()
 </script>
 
 <template>
   <div class="p-4">
-    <h1 class="text-xl font-semibold">Customers</h1>
+    <h1 class="mb-4 text-[24px] font-medium">{{ t("customers.title") }}</h1>
 
-    <p v-if="isPending" data-test="loading">Loading…</p>
-    <p v-else-if="isError" data-test="error">Could not load customers.</p>
+    <p v-if="isPending" data-test="loading">{{ t("customers.loading") }}</p>
+    <p v-else-if="isError" data-test="error">{{ t("customers.loadFailed") }}</p>
+    <p v-else-if="customers && customers.length === 0" data-test="empty">{{ t("customers.empty") }}</p>
 
-    <ul v-else data-test="customers">
-      <li v-for="customer in customers" :key="customer.id">
-        {{ customer.name }}
+    <ul v-else class="divide-y divide-rule border-y border-rule" data-test="customers">
+      <li v-for="customer in customers" :key="customer.id" class="py-2">
+        <RouterLink
+          :to="{ name: 'customer-edit', params: { id: customer.id } }"
+          class="text-brand"
+          :data-test="`customer-${customer.id}`"
+        >
+          {{ customer.name }}
+        </RouterLink>
       </li>
     </ul>
   </div>
