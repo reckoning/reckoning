@@ -1,0 +1,9 @@
+<% if current_account&.trial_active? %>
+  <div class="alert alert-info" data-test="trial-banner">
+    <%= t("trial.active", count: current_account.trial_days_left) %>
+  </div>
+<% elsif current_account&.trial_expired? %>
+  <div class="alert alert-warning" data-test="trial-banner">
+    <%= t("trial.expired") %>
+  </div>
+<% end %>

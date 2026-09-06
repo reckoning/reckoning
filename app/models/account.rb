@@ -22,12 +22,11 @@ class Account < ApplicationRecord
   # rubocop:enable Rails/UniqueValidationWithoutIndex
   validates :subdomain, exclusion: {in: %w[www app admin api backend reckoning]}
   validates_associated :users
-  validates :stripe_token, :stripe_email, presence: true, on: :create, if: :on_paid_plan?
 
   accepts_nested_attributes_for :users
 
   before_save :calculate_office_percent
-  before_create :set_trail_end_date
+  before_create :start_trial
 
   def uninvoiced_amount
     projects.active.where("rate IS NOT NULL AND rate > 0").sum do |project|
@@ -45,11 +44,44 @@ class Account < ApplicationRecord
     self.deductible_office_percent = (100.0 * deductible_office_space / office_space).ceil
   end
 
-  def set_trail_end_date
-    return if on_plan?(:free)
+  # Signing up costs nothing and asks for no card, so every new account gets
+  # the same fortnight. `Ability` turns read-only when it runs out.
+  TRIAL_LENGTH = 14.days
 
-    self.trail_used = true
-    self.trail_end_at = 30.days.from_now
+  def start_trial
+    if on_plan?(:free)
+      # The columns carry a database default so that an insert from the old
+      # release during a deploy still starts a trial — see the migration. A
+      # free plan has to say "no trial" out loud, or that default fills it in
+      # and the account goes read-only a fortnight later. Assigning nil is not
+      # enough: unchanged, the adapter writes DEFAULT rather than NULL.
+      attribute_will_change!("trial_end_at")
+      self.trial_used = false
+      return
+    end
+
+    self.trial_used = true
+    self.trial_end_at = TRIAL_LENGTH.from_now
+  end
+
+  def trial?
+    trial_end_at.present?
+  end
+
+  def trial_active?
+    trial? && trial_end_at.future?
+  end
+
+  def trial_expired?
+    trial? && trial_end_at.past?
+  end
+
+  # Counted in whole days, rounded up: with eight hours left a banner saying
+  # "0 days" is worse than useless.
+  def trial_days_left
+    return 0 unless trial_active?
+
+    ((trial_end_at - Time.current) / 1.day).ceil
   end
 
   def provision_value
