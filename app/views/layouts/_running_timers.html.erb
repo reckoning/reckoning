@@ -3,7 +3,7 @@
   <div class="panel panel-default timer" data-timer="<%= timer.to_builder.target! if timer.present? %>">
     <div class="panel-body">
       <h3 class="timer-project"></h3>
-      <a class="pull-right" href="<%= timesheet_path(anchor: "/day/#{timer.date}") if timer.present? %>">
+      <a class="pull-right" href="<%= timesheet_path(date: timer.date) if timer.present? %>">
         <span class="timer-value"></span>
         <i class="fa fa-circle-o-notch fa-spin"></i>
       </a>

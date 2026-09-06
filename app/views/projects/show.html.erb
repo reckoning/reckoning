@@ -48,7 +48,7 @@
                   <%= number_to_currency(project.timer_values, unit: "h", precision: 2) %>
                 </div>
                 <div class="subline">
-                  <a href="<%= timesheet_path(project_id: project) %>#/day/<%= I18n.l(Time.zone.now.to_date, format: :db) %>/new">
+                  <a href="<%= timesheet_path(date: I18n.l(Time.zone.now.to_date, format: :db)) %>">
                     <i class="fa fa-clock-o"></i>
                     <%= I18n.t(:"actions.add_timer") %>
                   </a>

@@ -1,6 +1,5 @@
-# Seeds a signed-in-able user with the `new_timesheet` Flipper flag on
-# and one task that already has a timer in the CURRENT ISO week, so the
-# week-view grid renders a row.
+# Seeds a signed-in-able user and one task that already has a timer in the
+# CURRENT ISO week, so the week-view grid renders a row.
 #
 # The tasks API (`Api::V1::TasksController#index`) inner-joins timers for
 # the current user + requested week when `weekDate` is given, so a task
@@ -23,8 +22,6 @@ unless user
   )
   user.save(validate: false)
 end
-
-Flipper.enable(:new_timesheet)
 
 customer = account.customers.build(name: "E2E Customer")
 customer.save(validate: false)

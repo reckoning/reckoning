@@ -5,7 +5,16 @@ export default {
     customers: "Customers",
     security: "Security",
     legacy: "Classic view",
+    timesheet: "Timesheet",
     signOut: "Sign out",
+  },
+  timesheet: {
+    day: "Day",
+    week: "Week",
+    today: "Today",
+    addTimer: "Add timer",
+    editTimer: "Edit timer",
+    addTask: "Add task",
   },
   projects: {
     title: "Projects",
