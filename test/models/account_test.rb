@@ -42,6 +42,27 @@ class AccountTest < ActiveSupport::TestCase
     end
   end
 
+  # The deploy window. `deploy.rb` migrates before it restarts, so for a
+  # moment the old release is still serving — and its schema cache predates
+  # these columns, so its INSERT does not name them. The column defaults are
+  # what stands in: without them an account created in those seconds would
+  # come out with no trial at all and keep write access forever.
+  describe "an insert that does not name the trial columns" do
+    it "still starts a trial" do
+      id = ActiveRecord::Base.connection.select_value(<<~SQL)
+        INSERT INTO accounts (name, plan, created_at, updated_at)
+        VALUES ('Deploy Window', 'basic', now(), now())
+        RETURNING id
+      SQL
+
+      account = Account.find(id)
+
+      assert account.trial_active?
+      assert account.trial_used?
+      assert_in_delta 14.days.from_now, account.trial_end_at, 1.minute
+    end
+  end
+
   describe "trial state" do
     it "is active while the end date is ahead" do
       account = build_account

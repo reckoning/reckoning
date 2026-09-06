@@ -38,8 +38,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_09_05_090000) do
     t.integer "deductible_office_space"
     t.integer "deductible_office_percent"
     t.text "offer_headline"
-    t.datetime "trial_end_at", precision: nil
-    t.boolean "trial_used"
+    t.datetime "trial_end_at", precision: nil, default: -> { "(now() + 'P14D'::interval)" }
+    t.boolean "trial_used", default: true
   end
 
   create_table "active_storage_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

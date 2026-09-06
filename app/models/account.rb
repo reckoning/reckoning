@@ -49,7 +49,16 @@ class Account < ApplicationRecord
   TRIAL_LENGTH = 14.days
 
   def start_trial
-    return if on_plan?(:free)
+    if on_plan?(:free)
+      # The columns carry a database default so that an insert from the old
+      # release during a deploy still starts a trial — see the migration. A
+      # free plan has to say "no trial" out loud, or that default fills it in
+      # and the account goes read-only a fortnight later. Assigning nil is not
+      # enough: unchanged, the adapter writes DEFAULT rather than NULL.
+      attribute_will_change!("trial_end_at")
+      self.trial_used = false
+      return
+    end
 
     self.trial_used = true
     self.trial_end_at = TRIAL_LENGTH.from_now
