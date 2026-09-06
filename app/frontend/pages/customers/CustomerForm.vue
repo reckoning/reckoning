@@ -21,10 +21,18 @@ const { data: customer, isPending, isError } = useCustomer(id)
 const { mutateAsync: update, isPending: saving } = useUpdateCustomer()
 const { mutateAsync: destroy } = useDestroyCustomer()
 
+// An emptied number input hands over "", and coercing that yields 0 — which
+// for `paymentDue` is not "no payment period" but "due immediately". Blank
+// has to travel as null, which is why the API takes null for these two.
+const nullableInt = z.preprocess(
+  (value) => (value === "" || value === null || value === undefined ? null : Number(value)),
+  z.number().int().nonnegative().nullable(),
+)
+
 // Mirrors CustomerInput. The API requires a name and nothing else, so the
 // rest is optional here too rather than inventing rules the server does not
 // have. Empty strings are sent as-is: the server stores them, which is how
-// clearing a field works.
+// clearing a text field works.
 const schema = toTypedSchema(
   z.object({
     name: z.string().min(1),
@@ -34,8 +42,8 @@ const schema = toTypedSchema(
     telefon: z.string().optional(),
     fax: z.string().optional(),
     website: z.string().optional(),
-    paymentDue: z.coerce.number().int().nonnegative().optional(),
-    weeklyHours: z.coerce.number().int().nonnegative().optional(),
+    paymentDue: nullableInt,
+    weeklyHours: nullableInt,
     employmentDate: z.string().optional(),
     employmentEndDate: z.string().optional(),
     invoiceEmail: z.string().email().or(z.literal("")).optional(),
@@ -96,10 +104,11 @@ watch(
   { immediate: true },
 )
 
-// The tokens the mail template understands, lifted from the ERB form. Clicking
-// one appends it rather than replacing the caret position — the caret is not
-// worth tracking for a paste helper.
-const templateTokens = ["{{customer}}", "{{invoice_ref}}", "{{invoice_date}}", "{{payment_due}}", "{{total}}"]
+// The tokens the invoice mailer actually substitutes. Anything else would be
+// sent to the customer verbatim, so this list is not a place to improvise —
+// it matches the gsubs in `app/mailers/invoice_mailer.rb` one for one. Clicking appends rather than
+// inserting at the caret, which is not worth tracking for a paste helper.
+const templateTokens = ["{date}", "{month}", "{project}", "{company}"] as const
 
 function appendToken(token: string): void {
   emailTemplate.value = `${emailTemplate.value ?? ""}${token}`
@@ -254,10 +263,12 @@ const tabs = computed(() => [
               v-for="token in templateTokens"
               :key="token"
               type="button"
-              class="rounded border border-field-border bg-surface-muted px-2 py-1 font-mono text-[12px]"
+              class="rounded border border-field-border bg-surface-muted px-2 py-1 text-left text-[12px]"
+              :data-test="`token-${token.replace(/[{}]/g, '')}`"
               @click="appendToken(token)"
             >
-              {{ token }}
+              <code class="font-mono">{{ token }}</code>
+              <span class="ml-2 text-muted">{{ t(`customer.tokens.${token.replace(/[{}]/g, "")}`) }}</span>
             </button>
           </div>
         </div>

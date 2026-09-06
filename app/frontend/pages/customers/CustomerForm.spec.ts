@@ -113,10 +113,43 @@ describe("CustomerForm", () => {
 
     await wrapper.get('[data-test="tab-email"]').trigger("click")
     await wrapper.get('[data-test="email-template"]').setValue("Hallo ")
-    await wrapper.get('[data-test="template-tokens"] button').trigger("click")
+    await wrapper.get('[data-test="token-company"]').trigger("click")
     await flushPromises()
 
     expect((wrapper.get('[data-test="email-template"]').element as HTMLTextAreaElement).value)
-      .toBe("Hallo {{customer}}")
+      .toBe("Hallo {company}")
+  })
+
+  // Only the four the invoice mailer substitutes; anything else would reach
+  // the customer verbatim.
+  it("offers exactly the tokens the mailer understands", async () => {
+    const wrapper = await mountForm()
+
+    await wrapper.get('[data-test="tab-email"]').trigger("click")
+
+    const offered = wrapper
+      .findAll('[data-test="template-tokens"] code')
+      .map((node) => node.text())
+
+    expect(offered).toEqual(["{date}", "{month}", "{project}", "{company}"])
+  })
+
+  // "" coerces to 0, and a payment period of zero is not an empty one — it
+  // makes every new invoice due on the spot.
+  it("clears a number instead of sending zero", async () => {
+    const requests: AxiosRequestConfig[] = []
+    const wrapper = await mountForm(requests)
+
+    await wrapper.get('[data-test="payment-due"]').setValue("")
+    await wrapper.get('form').trigger("submit")
+
+    const update = await vi.waitFor(() => {
+      const request = requests.find((entry) => entry.method?.toLowerCase() === "patch")
+      expect(request).toBeTruthy()
+
+      return request
+    })
+
+    expect(JSON.parse(String(update?.data)).paymentDue).toBeNull()
   })
 })

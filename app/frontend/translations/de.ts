@@ -24,6 +24,12 @@ export default {
     deleted: "Kunde gelöscht.",
     deleteFailed: "Löschen fehlgeschlagen.",
     confirmDelete: "Diesen Kunden wirklich löschen?",
+    tokens: {
+      date: "Rechnungsdatum",
+      month: "Rechnungsmonat",
+      project: "Name des Projekts",
+      company: "Name des Kunden",
+    },
     tabs: {
       basic: "Basis",
       email: "E-Mail",

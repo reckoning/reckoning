@@ -24,6 +24,12 @@ export default {
     deleted: "Customer deleted.",
     deleteFailed: "Could not delete.",
     confirmDelete: "Delete this customer?",
+    tokens: {
+      date: "Invoice date",
+      month: "Invoice month",
+      project: "Project name",
+      company: "Customer name",
+    },
     tabs: {
       basic: "Basics",
       email: "Email",

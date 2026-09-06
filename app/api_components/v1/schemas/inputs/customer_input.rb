@@ -16,7 +16,7 @@ module V1
             telefon: {type: :string},
             fax: {type: :string},
             website: {type: :string},
-            paymentDue: {type: :integer},
+            paymentDue: {type: [:integer, :null]},
             invoiceEmail: {type: :string},
             invoiceEmailCc: {type: :string},
             invoiceEmailBcc: {type: :string},
@@ -25,7 +25,7 @@ module V1
             offerDisclaimer: {type: :string},
             employmentDate: {type: :string, format: :date},
             employmentEndDate: {type: :string, format: :date},
-            weeklyHours: {type: :integer}
+            weeklyHours: {type: [:integer, :null]}
           },
           additionalProperties: false,
           required: %w[name]
