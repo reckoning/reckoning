@@ -201,25 +201,25 @@ function errorText(e: unknown): string {
 
 <template>
   <div>
-    <div class="modal-backdrop fade in"></div>
+    <div class="fixed inset-0 z-40 bg-ink/40"></div>
     <div
-      class="modal fade in"
+      class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4"
       tabindex="-1"
       role="dialog"
       aria-modal="true"
       style="display: block"
       @click.self="emit('close')"
     >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
+      <div class="relative z-50 w-full max-w-lg" role="document">
+        <div class="rounded border border-rule bg-surface shadow-lg">
+          <div class="flex items-center justify-between border-b border-rule px-4 py-3">
             <button class="close" type="button" aria-label="Close" @click="emit('close')">
               <span aria-hidden="true">&times;</span>
             </button>
-            <h2 class="modal-title">{{ title }}</h2>
+            <h2 class="text-base font-semibold">{{ title }}</h2>
           </div>
 
-          <div class="modal-body">
+          <div class="px-4 py-3">
             <p v-if="isInvoiced" class="alert alert-success">
               Diese Zeit wurde bereits abgerechnet und kann nicht geändert werden.
             </p>
@@ -227,10 +227,10 @@ function errorText(e: unknown): string {
             <p v-if="projectsLoading" class="text-muted">Lade Projekte…</p>
 
             <template v-else>
-              <div class="row">
-                <div class="col-xs-12">
-                  <label class="control-label">Projekt</label>
-                  <select v-model="projectId" class="form-control" :disabled="isInvoiced">
+              <div class="grid grid-cols-12 items-center gap-2">
+                <div class="col-span-12">
+                  <label class="block text-sm font-medium">Projekt</label>
+                  <select v-model="projectId" class="block w-full rounded border border-field-border p-2 text-sm" :disabled="isInvoiced">
                     <option value="">— Projekt wählen —</option>
                     <option v-for="p in projects" :key="p.id" :value="p.id">
                       {{ p.name }}{{ p.customerName ? ` — ${p.customerName}` : "" }}
@@ -239,12 +239,12 @@ function errorText(e: unknown): string {
                 </div>
               </div>
 
-              <div class="row" style="margin-top: 12px">
-                <div class="col-xs-12">
-                  <label class="control-label">Aufgabe</label>
+              <div class="grid grid-cols-12 items-center gap-2" style="margin-top: 12px">
+                <div class="col-span-12">
+                  <label class="block text-sm font-medium">Aufgabe</label>
                   <select
                     v-model="taskId"
-                    class="form-control"
+                    class="block w-full rounded border border-field-border p-2 text-sm"
                     :disabled="isInvoiced || !projectId"
                   >
                     <option value="">— Aufgabe wählen —</option>
@@ -255,26 +255,26 @@ function errorText(e: unknown): string {
 
                   <div v-if="projectId && !isInvoiced" style="margin-top: 6px">
                     <a v-if="!showCreateTask" role="button" @click.prevent="showCreateTask = true">
-                      <i class="fa fa-plus" aria-hidden="true"></i> Neue Aufgabe
+                      <span aria-hidden="true">+</span> Neue Aufgabe
                     </a>
-                    <div v-else class="input-group">
+                    <div v-else class="flex items-stretch gap-1">
                       <input
                         v-model="newTaskName"
                         type="text"
-                        class="form-control"
+                        class="block w-full rounded border border-field-border p-2 text-sm"
                         placeholder="Name der Aufgabe"
                         @keydown.enter.prevent="onCreateTaskInline"
                       />
                       <span class="input-group-btn">
                         <button
                           type="button"
-                          class="btn btn-primary"
+                          class="rounded border border-brand-border bg-brand px-3 py-1 text-sm text-white hover:bg-brand-hover disabled:opacity-60"
                           :disabled="!newTaskName.trim() || saving"
                           @click="onCreateTaskInline"
                         >
                           Anlegen
                         </button>
-                        <button type="button" class="btn btn-default" @click="showCreateTask = false">
+                        <button type="button" class="rounded border border-field-border bg-surface px-3 py-1 text-sm hover:bg-control-hover disabled:opacity-60" @click="showCreateTask = false">
                           Abbrechen
                         </button>
                       </span>
@@ -284,17 +284,17 @@ function errorText(e: unknown): string {
               </div>
             </template>
 
-            <div class="row" style="margin-top: 12px">
-              <div class="col-xs-12 col-md-8">
+            <div class="grid grid-cols-12 items-center gap-2" style="margin-top: 12px">
+              <div class="col-span-12 md:col-span-8">
                 <textarea
                   v-model="note"
-                  class="form-control"
+                  class="block w-full rounded border border-field-border p-2 text-sm"
                   rows="3"
                   placeholder="Notiz"
                   :disabled="isInvoiced"
                 ></textarea>
               </div>
-              <div class="col-xs-12 col-md-4">
+              <div class="col-span-12 md:col-span-4">
                 <br class="visible-sm visible-xs" />
                 <div v-if="isRunning" class="modal-timer">
                   {{ runningDisplay }}
@@ -303,55 +303,55 @@ function errorText(e: unknown): string {
                   v-else
                   v-model="valueText"
                   type="text"
-                  class="input-lg form-control text-right"
+                  class="input-lg block w-full rounded border border-field-border p-2 text-sm text-right"
                   placeholder="0:00"
                   :disabled="isInvoiced"
                 />
               </div>
             </div>
 
-            <div v-if="!isInvoiced" class="row">
-              <div class="col-xs-12" style="margin-top: 10px">
-                <label class="control-label">Datum</label>
-                <input v-model="date" type="date" class="form-control" :disabled="isRunning" />
+            <div v-if="!isInvoiced" class="grid grid-cols-12 items-center gap-2">
+              <div class="col-span-12" style="margin-top: 10px">
+                <label class="block text-sm font-medium">Datum</label>
+                <input v-model="date" type="date" class="block w-full rounded border border-field-border p-2 text-sm" :disabled="isRunning" />
               </div>
             </div>
 
-            <p v-if="errorMessage" class="alert alert-danger" style="margin-top: 12px">
+            <p v-if="errorMessage" class="rounded border border-danger p-2 text-sm text-danger" style="margin-top: 12px">
               {{ errorMessage }}
             </p>
           </div>
 
-          <div class="modal-footer">
+          <div class="flex justify-end gap-2 border-t border-rule px-4 py-3">
             <div v-if="canDelete" class="pull-left">
-              <button type="button" class="btn btn-danger" @click="onDelete">Löschen</button>
+              <button type="button" class="rounded border border-danger px-3 py-1 text-sm text-danger hover:bg-surface-muted" @click="onDelete">Löschen</button>
             </div>
-            <div class="pull-right">
-              <button type="button" class="btn btn-default btn-lg" @click="emit('close')">
+            <div class="ml-auto">
+              <button type="button" class="rounded border border-field-border bg-surface px-3 py-1 text-sm hover:bg-control-hover disabled:opacity-60 px-4 py-2" @click="emit('close')">
                 Abbrechen
               </button>
               <button
                 v-if="canStop"
                 type="button"
-                class="btn btn-default btn-lg"
+                class="rounded border border-field-border bg-surface px-3 py-1 text-sm hover:bg-control-hover disabled:opacity-60 px-4 py-2"
                 title="Stopp"
                 @click="onStop"
               >
-                <i class="fa fa-stop" aria-hidden="true"></i>
+                <span aria-hidden="true">■</span>
               </button>
               <button
                 v-if="canPlay"
                 type="button"
-                class="btn btn-default btn-lg"
+                class="rounded border border-field-border bg-surface px-3 py-1 text-sm hover:bg-control-hover disabled:opacity-60 px-4 py-2"
                 title="Start"
                 @click="onPlay"
               >
-                <i class="fa fa-play" aria-hidden="true"></i>
+                <span aria-hidden="true">▶</span>
               </button>
               <button
                 v-if="!isInvoiced"
                 type="button"
-                class="btn btn-primary btn-lg"
+                class="rounded border border-brand-border bg-brand px-3 py-1 text-sm text-white hover:bg-brand-hover disabled:opacity-60 px-4 py-2"
                 :disabled="!canSave"
                 @click="onSave"
               >

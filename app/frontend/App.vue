@@ -26,6 +26,9 @@ async function signOut(): Promise<void> {
         <RouterLink :to="{ name: 'customers' }">
           {{ t("nav.customers") }}
         </RouterLink>
+        <RouterLink :to="{ name: 'timesheet' }" data-test="nav-timesheet">
+          {{ t("nav.timesheet") }}
+        </RouterLink>
         <RouterLink :to="{ name: 'two-factor' }" data-test="nav-two-factor">
           {{ t("nav.security") }}
         </RouterLink>

@@ -90,7 +90,7 @@ function onKeydown(e: KeyboardEvent) {
 <template>
   <div class="text-right timesheet-day">
     <div v-if="runningTimer" class="timesheet-timer started">
-      <i class="fa fa-circle-o-notch fa-spin" aria-hidden="true"></i>
+      <span data-test="running-spinner" class="inline-block animate-spin" aria-hidden="true">◌</span>
       <span class="tabular-nums">{{ runningDisplay }}</span>
     </div>
     <div v-else-if="invoiced" class="timesheet-timer invoiced">
@@ -100,7 +100,7 @@ function onKeydown(e: KeyboardEvent) {
       <input
         v-model="text"
         type="text"
-        class="form-control text-right"
+        class="block w-full rounded border border-field-border p-2 text-sm text-right"
         :placeholder="'0:00'"
         @blur="onBlur"
         @keydown="onKeydown"

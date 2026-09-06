@@ -95,16 +95,20 @@ Rails.application.routes.draw do
     end
   end
 
-  resource :timesheet, only: [:show]
+  # The SPA owns the timesheet (phase B4). The name stays: the main
+  # navigation links `timesheet_path`.
+  get "timesheet", to: redirect { |_params, request|
+    ["/app/timesheet", request.query_string.presence].compact.join("?")
+  }, as: :timesheet
 
   resource :template, only: [] do
     template "blank"
     template "datepicker"
     template "month_timers"
-    template "day_timesheets"
-    template "week_timesheets"
+    # Kept for the timers calendar, which renders this modal from
+    # `angular/timers_calendar/controllers/month.coffee`. It goes with that
+    # screen in phase B5, not with the timesheet.
     template "timer_modal_timesheets"
-    template "task_modal_timesheets"
     template "index_logbooks"
   end
 

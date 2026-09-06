@@ -53,7 +53,7 @@ describe("WeekCell", () => {
 
     expect(wrapper.find("input").exists()).toBe(false)
     expect(wrapper.find(".started").exists()).toBe(true)
-    expect(wrapper.find(".fa-spin").exists()).toBe(true)
+    expect(wrapper.find('[data-test="running-spinner"]').exists()).toBe(true)
   })
 
   it("shows an empty input when there are no timers", () => {
