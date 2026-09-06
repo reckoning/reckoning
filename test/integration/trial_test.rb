@@ -5,7 +5,7 @@ require "test_helper"
 class TrialTest < ActionDispatch::IntegrationTest
   let(:user) { users(:will) }
   let(:account) { accounts(:enterprise) }
-  let(:project) { projects(:narendra3) }
+  let(:invoice) { invoices(:january) }
 
   def trial_ending(when_)
     account.update_columns(plan: "basic", trial_used: true, trial_end_at: when_)
@@ -44,12 +44,13 @@ class TrialTest < ActionDispatch::IntegrationTest
     it "explains a refused write instead of shrugging" do
       trial_ending(1.minute.ago)
       sign_in user
+      unchanged = invoice.ref
 
-      patch project_path(project), params: {project: {name: "Renamed"}}
+      patch invoice_path(invoice), params: {invoice: {ref: "00042"}}
 
       assert_redirected_to root_url
       assert_equal I18n.t("trial.denied"), flash[:alert]
-      assert_equal "Narendra 3", project.reload.name
+      assert_equal unchanged, invoice.reload.ref
     end
 
     it "still serves the screens the data lives on" do

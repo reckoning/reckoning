@@ -108,6 +108,71 @@ module Api
           assert_equal "Narendra III", project.reload.name
         end
 
+        # The payload was shaped for the AngularJS project service and carried
+        # little more than a name. The SPA list and form need what the ERB
+        # screens read off the record.
+        it "returns what the list and the form need" do
+          project.update!(rate: 90, budget: 1000, budget_hours: 20, invoice_addition: "Danke")
+
+          assert_api_response :get, 200, path_params: {id: project.id} do
+            assert_equal project.customer_id, parsed_body["customerId"]
+            assert_equal "active", parsed_body["workflowState"]
+            assert_equal "90.0", parsed_body["rate"]
+            assert_equal "1000.0", parsed_body["budget"]
+            assert_equal "20.0", parsed_body["budgetHours"]
+            assert_equal "Danke", parsed_body["invoiceAddition"]
+            assert_equal "10.0", parsed_body["roundUp"]
+            assert parsed_body.key?("timerValues")
+            assert parsed_body.key?("budgetPercent")
+          end
+        end
+
+        # Dividing by a budget nobody set is what the ERB guarded before it
+        # drew the progress bar.
+        it "leaves the budget share empty when there is no budget" do
+          project.update!(budget: 0, budget_hours: 0)
+
+          assert_api_response :get, 200, path_params: {id: project.id} do
+            assert_nil parsed_body["budgetPercent"]
+          end
+        end
+
+        # Both were on the ERB form and in no input schema, so the SPA form
+        # could not have carried them over.
+        it "writes the dates the ERB form had" do
+          assert_api_response :patch, 200, path_params: {id: project.id}, body: {
+            name: project.name,
+            start_date: "2026-01-01T00:00:00Z",
+            end_date: "2026-06-30T00:00:00Z"
+          }
+
+          assert_equal Date.new(2026, 1, 1), project.reload.start_date.to_date
+          assert_equal Date.new(2026, 6, 30), project.reload.end_date.to_date
+        end
+
+        # The ERB select offered a blank option, so a client can send one —
+        # and `belongs_to :customer` is required, so the model refuses it. The
+        # point is that it comes back as a validation error the form can show,
+        # not as a schema rejection the user cannot read.
+        it "refuses to clear the customer, readably" do
+          assert_api_response :patch, 400, path_params: {id: project.id},
+            body: {name: project.name, customer_id: nil} do
+            assert_equal "validation_error.project.update", parsed_body["code"]
+            assert_includes parsed_body["errors"].keys, "customer"
+          end
+
+          assert project.reload.customer_id.present?
+        end
+
+        # A raw select in the ERB form, easy to miss: it decides how recorded
+        # time is rounded when it is billed.
+        it "writes the rounding interval" do
+          assert_api_response :patch, 200, path_params: {id: project.id},
+            body: {name: project.name, round_up: 900}
+
+          assert_equal 900, project.reload.round_up
+        end
+
         it "is not found for a project from another account" do
           assert_api_response :delete, 404, path_params: {id: SecureRandom.uuid}
         end

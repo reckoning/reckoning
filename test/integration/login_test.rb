@@ -30,7 +30,7 @@ class LoginTest < ActionDispatch::IntegrationTest
   # whatever the request that failed was. `PATCH /customers/1` replayed as a
   # GET is a route that does not exist.
   it "does not carry a path that cannot be replayed" do
-    patch project_path(projects(:narendra3)), params: {project: {name: "Renamed"}}
+    patch invoice_path(invoices(:january)), params: {invoice: {ref: "00042"}}
 
     assert_redirected_to "/signin"
     follow_redirect!
