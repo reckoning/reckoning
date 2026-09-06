@@ -121,6 +121,7 @@ module Api
             assert_equal "1000.0", parsed_body["budget"]
             assert_equal "20.0", parsed_body["budgetHours"]
             assert_equal "Danke", parsed_body["invoiceAddition"]
+            assert_equal "10.0", parsed_body["roundUp"]
             assert parsed_body.key?("timerValues")
             assert parsed_body.key?("budgetPercent")
           end
@@ -147,6 +148,29 @@ module Api
 
           assert_equal Date.new(2026, 1, 1), project.reload.start_date.to_date
           assert_equal Date.new(2026, 6, 30), project.reload.end_date.to_date
+        end
+
+        # The ERB select offered a blank option, so a client can send one —
+        # and `belongs_to :customer` is required, so the model refuses it. The
+        # point is that it comes back as a validation error the form can show,
+        # not as a schema rejection the user cannot read.
+        it "refuses to clear the customer, readably" do
+          assert_api_response :patch, 400, path_params: {id: project.id},
+            body: {name: project.name, customer_id: nil} do
+            assert_equal "validation_error.project.update", parsed_body["code"]
+            assert_includes parsed_body["errors"].keys, "customer"
+          end
+
+          assert project.reload.customer_id.present?
+        end
+
+        # A raw select in the ERB form, easy to miss: it decides how recorded
+        # time is rounded when it is billed.
+        it "writes the rounding interval" do
+          assert_api_response :patch, 200, path_params: {id: project.id},
+            body: {name: project.name, round_up: 900}
+
+          assert_equal 900, project.reload.round_up
         end
 
         it "is not found for a project from another account" do

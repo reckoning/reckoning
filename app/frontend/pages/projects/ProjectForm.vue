@@ -5,10 +5,16 @@ import { useI18n } from "vue-i18n"
 import { useForm } from "vee-validate"
 import { toTypedSchema } from "@vee-validate/zod"
 import * as z from "zod"
-import { useProject, useCreateProject, useUpdateProject } from "@/services/api/services/projects/projects"
+import {
+  useProject,
+  useCreateProject,
+  useUpdateProject,
+  useDestroyProject,
+} from "@/services/api/services/projects/projects"
 import { useCustomers } from "@/services/api/services/customers/customers"
 import { useAccount } from "@/services/api/services/account/account"
 import { useToastsStore } from "@/stores/toasts"
+import { confirmDialog } from "@/lib/confirm"
 
 const route = useRoute()
 const router = useRouter()
@@ -28,6 +34,11 @@ const missingAddress = computed(() => !editing.value && !(account.value?.address
 const { data: project } = useProject(id.value ?? "", { query: { enabled: editing.value } })
 const { mutateAsync: create } = useCreateProject()
 const { mutateAsync: update } = useUpdateProject()
+const { mutateAsync: destroy } = useDestroyProject()
+
+// The values `Project::DEFAULT_ROUND_UP_OPTIONS` renders, in seconds, which
+// is what the ERB select submitted.
+const roundUpOptions = [0, 900, 1800, 3600] as const
 
 // Tasks are edited inline, the way `fields_for :tasks` did it. A row the user
 // removes keeps its id and travels with `_destroy`, since that is how the
@@ -52,7 +63,10 @@ const decimal = z
 const schema = toTypedSchema(
   z.object({
     name: z.string().min(1),
-    customer_id: z.string().uuid().optional(),
+    // `belongs_to :customer` is required, so the server refuses a project
+    // without one. Saying so here beats a submit that silently does nothing.
+    customer_id: z.string().uuid(),
+    round_up: decimal,
     rate: decimal,
     budget: decimal,
     budget_hours: decimal,
@@ -70,6 +84,7 @@ const { defineField, handleSubmit, errors, setValues } = useForm({
 
 const [name, nameAttrs] = defineField("name")
 const [customerId, customerIdAttrs] = defineField("customer_id")
+const [roundUp, roundUpAttrs] = defineField("round_up")
 const [rate, rateAttrs] = defineField("rate")
 const [budget, budgetAttrs] = defineField("budget")
 const [budgetHours, budgetHoursAttrs] = defineField("budget_hours")
@@ -77,6 +92,12 @@ const [budgetOnDashboard, budgetOnDashboardAttrs] = defineField("budget_on_dashb
 const [invoiceAddition, invoiceAdditionAttrs] = defineField("invoice_addition")
 const [startDate, startDateAttrs] = defineField("start_date")
 const [endDate, endDateAttrs] = defineField("end_date")
+
+function normalizeRoundUp(value: string | null | undefined): string {
+  const seconds = Number(value)
+
+  return roundUpOptions.some((option) => option === seconds) ? String(seconds) : ""
+}
 
 // The API speaks date-time; the input speaks date.
 function toDateInput(value: string | null | undefined): string {
@@ -99,6 +120,11 @@ watch(
       budget: loaded.budget ?? "",
       budget_hours: loaded.budgetHours ?? "",
       budget_on_dashboard: loaded.budgetOnDashboard ?? true,
+      // Stored as a decimal ("900.0"), offered as an option value ("900").
+      // The ERB compared numerically for the same reason. A value that
+      // matches no option — the 10.0 column default, which no option ever
+      // wrote — leaves the select blank and stays untouched on save.
+      round_up: normalizeRoundUp(loaded.roundUp),
       invoice_addition: loaded.invoiceAddition ?? "",
       start_date: toDateInput(loaded.startDate),
       end_date: toDateInput(loaded.endDate),
@@ -113,6 +139,21 @@ watch(
   },
   { immediate: true },
 )
+
+async function removeProject(): Promise<void> {
+  if (!id.value) return
+  if (!(await confirmDialog(t("project.confirmDelete")))) return
+
+  try {
+    await destroy({ id: id.value })
+    toasts.push("success", t("project.deleted"))
+    await router.push({ name: "projects" })
+  } catch {
+    // The endpoint refuses a project that still has invoices, which is the
+    // usual reason this fails.
+    toasts.push("error", t("project.deleteFailed"))
+  }
+}
 
 function addTask(): void {
   tasks.value.push({ name: "", billable: true, destroyed: false })
@@ -172,9 +213,14 @@ const save = handleSubmit(async (values) => {
         {{ editing ? project?.name : t("project.newTitle") }}
       </h1>
 
-      <RouterLink :to="{ name: 'projects' }" class="text-sm underline" data-test="back">
-        {{ t("project.back") }}
-      </RouterLink>
+      <div class="flex gap-3">
+        <RouterLink :to="{ name: 'projects' }" class="text-sm underline" data-test="back">
+          {{ t("project.back") }}
+        </RouterLink>
+        <button v-if="editing" type="button" class="text-sm text-danger underline" data-test="delete" @click="removeProject">
+          {{ t("project.delete") }}
+        </button>
+      </div>
     </div>
 
     <p v-if="missingAddress" class="max-w-2xl border border-warning-border bg-warning p-3 text-sm text-white" data-test="missing-address">
@@ -191,6 +237,9 @@ const save = handleSubmit(async (values) => {
             {{ customer.name }}
           </option>
         </select>
+        <span v-if="errors.customer_id" data-test="customer-error" class="text-[13px] text-danger">
+          {{ errors.customer_id }}
+        </span>
       </label>
 
       <label class="text-sm">
@@ -217,6 +266,15 @@ const save = handleSubmit(async (values) => {
       <label class="flex items-center gap-2 text-sm">
         <input v-model="budgetOnDashboard" v-bind="budgetOnDashboardAttrs" type="checkbox" data-test="budget-on-dashboard" class="h-[18px] w-[18px] rounded border border-control-border accent-brand" />
         {{ t("project.fields.budgetOnDashboard") }}
+      </label>
+
+      <label class="text-sm">
+        {{ t("project.fields.roundUp") }}
+        <select v-model="roundUp" v-bind="roundUpAttrs" data-test="round-up" class="mt-1 block w-full rounded border border-field-border p-2">
+          <option v-for="option in roundUpOptions" :key="option" :value="String(option)">
+            {{ t(`project.roundUp.${option}`) }}
+          </option>
+        </select>
       </label>
 
       <label class="text-sm">

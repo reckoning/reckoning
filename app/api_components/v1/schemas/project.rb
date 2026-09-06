@@ -20,6 +20,7 @@ module V1
           budget: {type: [:string, :null]},
           budgetHours: {type: [:string, :null]},
           budgetOnDashboard: {type: [:boolean, :null]},
+          roundUp: {type: [:string, :null]},
           invoiceAddition: {type: [:string, :null]},
           startDate: {type: [:string, :null], format: "date-time"},
           endDate: {type: [:string, :null], format: "date-time"},

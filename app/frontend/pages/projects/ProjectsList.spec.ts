@@ -13,6 +13,7 @@ function project(overrides: Partial<Project> = {}): Project {
     id: "aaaaaaaa-0000-4000-8000-000000000001",
     name: "Narendra 3",
     workflowState: "active",
+    customerId: "cccccccc-0000-4000-8000-000000000001",
     customerName: "Starfleet",
     tasks: [],
     timerValues: "12.5",
@@ -55,8 +56,18 @@ describe("ProjectsList", () => {
   it("groups by customer and keeps the customerless together", async () => {
     const wrapper = mountList([
       project(),
-      project({id: "aaaaaaaa-0000-4000-8000-000000000002", name: "Wolf 359", customerName: "Klingon"}),
-      project({id: "aaaaaaaa-0000-4000-8000-000000000003", name: "Utopia", customerName: null}),
+      project({
+        id: "aaaaaaaa-0000-4000-8000-000000000002",
+        name: "Wolf 359",
+        customerId: "cccccccc-0000-4000-8000-000000000002",
+        customerName: "Klingon",
+      }),
+      project({
+        id: "aaaaaaaa-0000-4000-8000-000000000003",
+        name: "Utopia",
+        customerId: null,
+        customerName: null,
+      }),
     ])
     await flushPromises()
 
@@ -64,6 +75,22 @@ describe("ProjectsList", () => {
 
     // happy-dom has no <html lang>, so the i18n plugin falls back to English.
     expect(headings).toEqual(["Klingon", "Starfleet", "Without a customer"])
+  })
+
+  // Nothing stops two customers of one account from sharing a name.
+  it("keeps two customers of the same name apart", async () => {
+    const wrapper = mountList([
+      project(),
+      project({
+        id: "aaaaaaaa-0000-4000-8000-000000000004",
+        name: "Wolf 359",
+        customerId: "cccccccc-0000-4000-8000-000000000009",
+        customerName: "Starfleet",
+      }),
+    ])
+    await flushPromises()
+
+    expect(wrapper.findAll("section")).toHaveLength(2)
   })
 
   it("asks the API for the archived ones when the filter flips", async () => {

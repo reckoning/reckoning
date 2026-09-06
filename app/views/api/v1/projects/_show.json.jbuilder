@@ -10,6 +10,7 @@ json.rate project.rate
 json.budget project.budget
 json.budget_hours project.budget_hours
 json.budget_on_dashboard project.budget_on_dashboard
+json.round_up project.round_up
 json.invoice_addition project.invoice_addition
 json.start_date project.start_date
 json.end_date project.end_date

@@ -9,13 +9,18 @@ module V1
         schema({
           type: :object,
           properties: {
-            customer_id: {type: :string, format: :uuid},
+            # The ERB select offered a blank option, so a project can be left
+            # without a customer — and an existing one can be cleared.
+            customer_id: {type: [:string, :null], format: :uuid},
             name: {type: :string, minLength: 1},
             # Decimal columns; accepted as string or number, returned as string.
             rate: {type: [:string, :number]},
             budget: {type: [:string, :number]},
             budget_hours: {type: [:string, :number]},
             budget_on_dashboard: {type: :boolean},
+            # Timer rounding. The ERB form set it from
+            # `Project::DEFAULT_ROUND_UP_OPTIONS`.
+            round_up: {type: [:string, :number]},
             invoice_addition: {type: [:string, :null]},
             start_date: {type: [:string, :null], format: "date-time"},
             end_date: {type: [:string, :null], format: "date-time"},

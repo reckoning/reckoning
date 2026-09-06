@@ -24,19 +24,27 @@ const { data: projects, isPending, isError } = useProjects(params)
 const { mutateAsync: archive } = useArchiveProject()
 const { mutateAsync: unarchive } = useUnarchiveProject()
 
-// The ERB list groups by customer and sorts each group by name.
+// The ERB list groups by customer and sorts each group by name. Keyed by id,
+// not by the displayed name: nothing stops two customers of one account from
+// sharing a name, and their projects are not one group.
 const grouped = computed(() => {
-  const groups = new Map<string, Project[]>()
+  const groups = new Map<string, {customer: string; projects: Project[]}>()
 
   for (const project of projects.value ?? []) {
-    const key = project.customerName ?? t("projects.withoutCustomer")
-    groups.set(key, [...(groups.get(key) ?? []), project])
+    const key = project.customerId ?? "none"
+    const group = groups.get(key) ?? {
+      customer: project.customerName ?? t("projects.withoutCustomer"),
+      projects: [],
+    }
+
+    group.projects.push(project)
+    groups.set(key, group)
   }
 
-  return [...groups.entries()]
-    .map(([customer, entries]) => ({
-      customer,
-      projects: [...entries].sort((a, b) => a.name.localeCompare(b.name)),
+  return [...groups.values()]
+    .map((group) => ({
+      ...group,
+      projects: [...group.projects].sort((a, b) => a.name.localeCompare(b.name)),
     }))
     .sort((a, b) => a.customer.localeCompare(b.customer))
 })
@@ -126,7 +134,7 @@ async function toggleArchive(project: Project): Promise<void> {
     <p v-else-if="grouped.length === 0" data-test="empty">{{ t("projects.empty") }}</p>
 
     <div v-else class="flex flex-col gap-6" data-test="projects">
-      <section v-for="group in grouped" :key="group.customer" class="border border-rule">
+      <section v-for="group in grouped" :key="group.customer + group.projects[0].id" class="border border-rule">
         <h2 class="border-b border-rule bg-surface-muted px-3 py-2 text-sm font-semibold">
           {{ group.customer }}
         </h2>

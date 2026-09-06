@@ -9,6 +9,7 @@ import {AXIOS_INSTANCE} from "@/services/axiosClient"
 import {i18n} from "@/plugins/i18n"
 
 const PROJECT_ID = "aaaaaaaa-0000-4000-8000-000000000001"
+const CUSTOMER_ID = "cccccccc-0000-4000-8000-000000000001"
 const TASK_ID = "bbbbbbbb-0000-4000-8000-000000000001"
 
 // One adapter for every endpoint the page touches: the project, the customer
@@ -21,10 +22,12 @@ function respond(requests: AxiosRequestConfig[], account: {address: string | nul
     const data = url.includes("/account")
       ? {id: "cccccccc-0000-4000-8000-000000000001", name: "Enterprise", ...account}
       : url.includes("/customers")
-        ? []
+        ? [{id: CUSTOMER_ID, name: "Starfleet"}]
         : {
             id: PROJECT_ID,
             name: "Narendra 3",
+            customerId: CUSTOMER_ID,
+            roundUp: "900.0",
             workflowState: "active",
             rate: "90.0",
             tasks: [{id: TASK_ID, name: "Away mission", billable: true}],
@@ -82,6 +85,7 @@ async function submitted(requests: AxiosRequestConfig[], method: "post" | "patch
 describe("ProjectForm", () => {
   afterEach(() => {
     delete AXIOS_INSTANCE.defaults.adapter
+    vi.unstubAllGlobals()
     vi.restoreAllMocks()
   })
 
@@ -126,6 +130,7 @@ describe("ProjectForm", () => {
     const requests: AxiosRequestConfig[] = []
     const wrapper = await mountForm("/projects/new", requests)
 
+    await wrapper.get('[data-test="customer"]').setValue(CUSTOMER_ID)
     await wrapper.get('[data-test="name"]').setValue("Wolf 359")
     await wrapper.get("form").trigger("submit")
 
@@ -133,6 +138,55 @@ describe("ProjectForm", () => {
 
     expect(body.name).toBe("Wolf 359")
     expect("budget" in body).toBe(false)
+  })
+
+  // `belongs_to :customer` is required, so the server would refuse it anyway —
+  // the point is that the form says so instead of doing nothing.
+  it("says a customer is missing rather than swallowing the submit", async () => {
+    const requests: AxiosRequestConfig[] = []
+    const wrapper = await mountForm("/projects/new", requests)
+
+    await wrapper.get('[data-test="name"]').setValue("Wolf 359")
+    await wrapper.get("form").trigger("submit")
+
+    await vi.waitFor(() => {
+      expect(wrapper.find('[data-test="customer-error"]').exists()).toBe(true)
+    })
+    expect(requests.some((entry) => entry.method?.toLowerCase() === "post")).toBe(false)
+  })
+
+  // A raw <select> in the ERB form, and it decides how tracked time is
+  // rounded when it gets billed.
+  it("carries the rounding interval", async () => {
+    const requests: AxiosRequestConfig[] = []
+    const wrapper = await mountForm(`/projects/${PROJECT_ID}/edit`, requests)
+
+    expect((wrapper.get('[data-test="round-up"]').element as HTMLSelectElement).value).toBe("900")
+
+    await wrapper.get('[data-test="round-up"]').setValue("1800")
+    await wrapper.get("form").trigger("submit")
+
+    const body = await submitted(requests, "patch")
+
+    expect(body.round_up).toBe("1800")
+  })
+
+  it("deletes the project after a confirm", async () => {
+    vi.stubGlobal("confirm", vi.fn(() => true))
+    const requests: AxiosRequestConfig[] = []
+    const wrapper = await mountForm(`/projects/${PROJECT_ID}/edit`, requests)
+
+    await wrapper.get('[data-test="delete"]').trigger("click")
+
+    await vi.waitFor(() => {
+      expect(requests.some((entry) => entry.method?.toLowerCase() === "delete")).toBe(true)
+    })
+  })
+
+  it("offers no delete while the project does not exist yet", async () => {
+    const wrapper = await mountForm("/projects/new")
+
+    expect(wrapper.find('[data-test="delete"]').exists()).toBe(false)
   })
 
   // The ERB `new` action refused to render without an account address.

@@ -3941,6 +3941,10 @@ components:
           type:
           - boolean
           - 'null'
+        roundUp:
+          type:
+          - string
+          - 'null'
         invoiceAddition:
           type:
           - string
@@ -3995,7 +3999,9 @@ components:
       type: object
       properties:
         customer_id:
-          type: string
+          type:
+          - string
+          - 'null'
           format: uuid
         name:
           type: string
@@ -4014,6 +4020,10 @@ components:
           - number
         budget_on_dashboard:
           type: boolean
+        round_up:
+          type:
+          - string
+          - number
         invoice_addition:
           type:
           - string
