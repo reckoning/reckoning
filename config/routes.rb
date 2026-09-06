@@ -58,8 +58,10 @@ Rails.application.routes.draw do
     post "signup" => "accounts#create", :as => :registration
     get "settings" => "registrations#edit", :as => :edit_user_registration
     patch "settings" => "registrations#update", :as => :update_user_registration
-    get "signin" => "sessions#new", :as => :new_user_session
-    post "signin" => "sessions#create", :as => :user_session
+    # The SPA renders the login. The name stays so the handful of
+    # `new_user_session_path` callers keep working, and a bookmark on /signin
+    # still lands somewhere sensible.
+    get "signin" => redirect("/app/login"), :as => :new_user_session
     delete "signout" => "sessions#destroy", :as => :destroy_user_session
   end
 

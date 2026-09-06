@@ -11,12 +11,15 @@ test.describe("Timesheet week view", () => {
     await appScenario("timesheet_week")
   })
 
+  // The login is the SPA's now. The session cookie it sets is the same one the
+  // server-rendered timesheet reads, so signing in there and navigating here
+  // is a full page load and nothing else.
   async function signIn(page: Page) {
-    await page.goto("/signin")
-    await page.locator("input[name='user[email]']").fill("will@star.fleet")
-    await page.locator("input[name='user[password]']").fill("enterprise")
-    await page.getByTestId("submit-login").click()
-    await expect(page.locator(".user-email")).toContainText("will@star.fleet")
+    await page.goto("/app/login")
+    await page.getByTestId("email").fill("will@star.fleet")
+    await page.getByTestId("password").fill("enterprise")
+    await page.getByTestId("submit").click()
+    await expect(page.getByTestId("dashboard-greeting")).toBeVisible()
   }
 
   test("renders the seeded task row with its week total", async ({page}) => {

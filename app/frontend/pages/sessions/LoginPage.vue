@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue"
 import { useRouter, useRoute, RouterLink } from "vue-router"
+import { safeReturnPath } from "@/lib/return-path"
 import { useI18n } from "vue-i18n"
 import { useForm } from "vee-validate"
 import { toTypedSchema } from "@vee-validate/zod"
@@ -61,6 +62,14 @@ const onSubmit = handleSubmit(async (values) => {
 
     if (!user) {
       failed.value = true
+      return
+    }
+
+    // A server-rendered screen sent us here. It lives outside the SPA, so
+    // going back to it is a page load, not a route change.
+    const returnTo = safeReturnPath(route.query.return)
+    if (returnTo) {
+      window.location.assign(returnTo)
       return
     }
 
