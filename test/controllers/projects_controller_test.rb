@@ -2,98 +2,67 @@
 
 require "test_helper"
 
+# The list and the form are the SPA's since phase B3. What is left here is the
+# detail page — it renders the offers and invoices panels, which belong to B6
+# and B7 — plus the handover for the paths that moved.
 class ProjectsControllerTest < ActionDispatch::IntegrationTest
+  let(:will) { users :will }
   let(:project) { projects :narendra3 }
 
-  describe "unauthorized" do
-    it "Unauthrized user cant view projects index" do
-      get "/projects"
-
-      assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
-    end
-
-    it "Unauthrized user cant view projects new" do
-      get "/projects/new"
-
-      assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
-    end
-
-    it "Unauthrized user cant create new project" do
-      post "/projects", params: {project: {project_id: "foo", date: Time.zone.today}}
-
-      assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
-    end
-
-    it "Unauthrized user cant view project edit" do
-      get "/projects/#{project.id}/edit"
-
-      assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
-    end
-
-    it "Unauthrized user cant update project" do
-      put "/projects/#{project.id}", params: {project: {date: Time.zone.today - 1}}
-
-      assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
-    end
-  end
-
-  describe "missing dependencies" do
-    let(:worf) { users :worf }
-
-    it "redirects to user edit if address is missing" do
-      sign_in worf
-
-      get "/projects/new"
-
-      assert_response :found
-
-      assert_equal I18n.t(:"messages.missing_address"), flash[:alert]
-    end
-  end
-
-  describe "happy path" do
-    let(:will) { users :will }
-    let(:outpost6) { projects :outpost6 }
-
-    before do
+  describe "the paths that moved" do
+    it "sends the list to the spa" do
       sign_in will
-    end
 
-    it "User can view the project list" do
       get "/projects"
 
-      assert_response :ok
+      assert_redirected_to "/app/projects"
     end
 
-    it "User can view the new project page" do
+    it "sends the new form to the spa" do
+      sign_in will
+
       get "/projects/new"
 
-      assert_response :ok
+      assert_redirected_to "/app/projects/new"
     end
 
-    it "User can view the edit project page" do
+    it "sends the edit form to the spa" do
+      sign_in will
+
       get "/projects/#{project.id}/edit"
 
+      assert_redirected_to "/app/projects/#{project.id}/edit"
+    end
+
+    # The SPA writes through the API, so the routes the ERB forms posted to
+    # are gone rather than left dangling.
+    it "no longer answers create or update" do
+      sign_in will
+
+      post "/projects", params: {project: {name: "Wolf 359"}}
+      assert_response :not_found
+
+      patch "/projects/#{project.id}", params: {project: {name: "Wolf 359"}}
+      assert_response :not_found
+
+      assert_equal "Narendra 3", project.reload.name
+    end
+  end
+
+  describe "the detail page" do
+    it "is unreachable when signed out" do
+      get "/projects/#{project.id}"
+
+      assert_response :found
+      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
+    end
+
+    it "renders for the account it belongs to" do
+      sign_in will
+
+      get "/projects/#{project.id}"
+
       assert_response :ok
-    end
-
-    it "User can create a new project" do
-      post "/projects", params: {project: {customer_id: project.customer.id, name: "foo"}}
-
-      assert_response :found
-      assert_equal I18n.t(:"resources.messages.create.success", resource: I18n.t(:"resources.project")), flash[:success]
-    end
-
-    it "User can update project" do
-      put "/projects/#{project.id}", params: {project: {name: "bar"}}
-
-      assert_response :found
-      assert_equal I18n.t(:"resources.messages.update.success", resource: I18n.t(:"resources.project")), flash[:success]
     end
   end
 end
