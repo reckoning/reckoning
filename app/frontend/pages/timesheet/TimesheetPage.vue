@@ -13,6 +13,7 @@ import WeekGrid from "./components/WeekGrid.vue"
 import TaskModal from "./components/TaskModal.vue"
 import TimerModal from "./components/TimerModal.vue"
 import {useTimesheetDate} from "./composables/useTimesheetDate"
+import {weekdayNames, monthNames} from "./labels"
 import type {TaskWithTimers} from "@/lib/timers/api"
 import type {Timer} from "@/lib/timers/types"
 
@@ -25,23 +26,11 @@ const labels = computed(() => ({
   addTimer: t("timesheet.addTimer"),
   editTimer: t("timesheet.editTimer"),
   addTask: t("timesheet.addTask"),
-  dayShort: weekdayNames("short"),
-  dayLong: weekdayNames("long"),
+  dayShort: weekdayNames(locale.value, "short"),
+  dayLong: weekdayNames(locale.value, "long"),
 }))
 
-// 2024-01-01 was a Monday, so seven days from there is one ISO week in the
-// order the grid renders it.
-function weekdayNames(width: "short" | "long"): string[] {
-  const format = new Intl.DateTimeFormat(locale.value, {weekday: width})
-
-  return Array.from({length: 7}, (_, index) => format.format(new Date(Date.UTC(2024, 0, 1 + index))))
-}
-
-const monthLabels = computed<string[]>(() => {
-  const format = new Intl.DateTimeFormat(locale.value, {month: "long"})
-
-  return Array.from({length: 12}, (_, index) => format.format(new Date(Date.UTC(2024, index, 1))))
-})
+const monthLabels = computed<string[]>(() => monthNames(locale.value))
 
 const {date, view, weekStart, isToday, setView, prev, next, today, jump} = useTimesheetDate()
 

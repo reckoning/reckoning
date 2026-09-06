@@ -49,7 +49,7 @@ const byDate = computed(() => {
         class="day"
         :class="{'current-month': cell.isCurrentMonth, 'current-day': cell.isCurrentDay}"
       >
-        <a class="day-number" :href="`/timesheet/#/day/${cell.date}`" data-turbo="false">{{
+        <a class="day-number" :href="`/timesheet?date=${cell.date}`" data-turbo="false">{{
           cell.day
         }}</a>
         <div class="timers">
