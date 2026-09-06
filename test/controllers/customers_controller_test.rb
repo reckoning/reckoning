@@ -2,42 +2,37 @@
 
 require "test_helper"
 
+# The customer screens are the SPA's since phase B3. What is left on the Rails
+# side is the handover: the old path still resolves, so the link on the
+# project list and any bookmark land on the new screen.
 class CustomersControllerTest < ActionDispatch::IntegrationTest
   let(:data) { users :data }
   let(:customer) { customers :starfleet }
 
-  describe "unauthorized" do
-    it "Unauthrized user cant view customer edit" do
-      get "/customers/#{customer.id}/edit"
+  it "sends the edit path to the spa" do
+    sign_in data
 
-      assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
-    end
+    get "/customers/#{customer.id}/edit"
 
-    it "Unauthrized user cant update customer" do
-      put "/customers/#{customer.id}", params: {customer: {name: "bar"}}
-
-      assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
-    end
+    assert_redirected_to "/app/customers/#{customer.id}/edit"
   end
 
-  describe "happy path" do
-    before do
-      sign_in data
-    end
+  # No sign-in check of its own: the SPA route guard asks the API, and the
+  # redirect target is not worth protecting — it renders the shell either way.
+  it "sends a signed-out visitor there too" do
+    get "/customers/#{customer.id}/edit"
 
-    it "User can view the edit customer page" do
-      get "/customers/#{customer.id}/edit"
+    assert_redirected_to "/app/customers/#{customer.id}/edit"
+  end
 
-      assert_response :ok
-    end
+  # The SPA writes through the API, so the route the ERB form posted to is
+  # gone rather than left dangling.
+  it "no longer answers the update it used to serve" do
+    sign_in data
 
-    it "User can update customer" do
-      put "/customers/#{customer.id}", params: {customer: {name: "bar"}}
+    put "/customers/#{customer.id}", params: {customer: {name: "bar"}}
 
-      assert_response :found
-      assert_equal I18n.t(:"resources.messages.update.success", resource: I18n.t(:"resources.customer")), flash[:success]
-    end
+    assert_response :not_found
+    assert_equal "Starfleet", customer.reload.name
   end
 end

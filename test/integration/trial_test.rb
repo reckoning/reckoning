@@ -5,7 +5,7 @@ require "test_helper"
 class TrialTest < ActionDispatch::IntegrationTest
   let(:user) { users(:will) }
   let(:account) { accounts(:enterprise) }
-  let(:customer) { customers(:starfleet) }
+  let(:project) { projects(:narendra3) }
 
   def trial_ending(when_)
     account.update_columns(plan: "basic", trial_used: true, trial_end_at: when_)
@@ -45,11 +45,11 @@ class TrialTest < ActionDispatch::IntegrationTest
       trial_ending(1.minute.ago)
       sign_in user
 
-      patch customer_path(customer), params: {customer: {name: "Renamed"}}
+      patch project_path(project), params: {project: {name: "Renamed"}}
 
       assert_redirected_to root_url
       assert_equal I18n.t("trial.denied"), flash[:alert]
-      assert_equal "Starfleet", customer.reload.name
+      assert_equal "Narendra 3", project.reload.name
     end
 
     it "still serves the screens the data lives on" do
