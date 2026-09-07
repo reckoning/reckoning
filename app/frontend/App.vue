@@ -157,13 +157,18 @@ const trial = computed(() => account.value?.trial)
           : 'px-4 py-5'
       "
     >
-      <UiAlert v-if="trial?.active" variant="info" data-test="trial-banner">
-        {{ t("trial.active", { count: trial.daysLeft ?? 0 }, trial.daysLeft ?? 0) }}
-      </UiAlert>
+      <!-- Hinter der Anmeldeprüfung: die Kontodaten bleiben nach dem Abmelden
+           im Cache der Query, und ein Banner auf dem Anmeldebildschirm wäre
+           die Auskunft eines Kontos, das gerade niemand ist. -->
+      <template v-if="currentUser.signedIn">
+        <UiAlert v-if="trial?.active" variant="info" data-test="trial-banner">
+          {{ t("trial.active", { count: trial.daysLeft ?? 0 }, trial.daysLeft ?? 0) }}
+        </UiAlert>
 
-      <UiAlert v-else-if="trial?.expired" variant="warning" data-test="trial-banner">
-        {{ t("trial.expired") }}
-      </UiAlert>
+        <UiAlert v-else-if="trial?.expired" variant="warning" data-test="trial-banner">
+          {{ t("trial.expired") }}
+        </UiAlert>
+      </template>
 
       <RouterView />
     </div>
