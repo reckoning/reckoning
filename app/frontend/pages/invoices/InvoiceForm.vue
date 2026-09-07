@@ -323,8 +323,12 @@ async function save(): Promise<void> {
       <div class="grid max-w-3xl gap-3 sm:grid-cols-2">
         <label class="text-sm">
           {{ t("invoiceForm.fields.project") }}
-          <select v-model="projectId" data-test="project" class="mt-1 block w-full rounded border border-field-border p-2">
-            <option value="">{{ t("invoiceForm.fields.noProject") }}</option>
+          <!-- `belongs_to :project` is required, so an invoice never has none.
+               The empty entry is the "nothing picked yet" of a new invoice;
+               on an existing one it would promise a clearing the server
+               cannot carry out. -->
+          <select v-model="projectId" required data-test="project" class="mt-1 block w-full rounded border border-field-border p-2">
+            <option v-if="!editing" value="">{{ t("invoiceForm.fields.noProject") }}</option>
             <option v-for="entry in projects ?? []" :key="entry.id" :value="entry.id">
               {{ entry.label ?? entry.name }}
             </option>

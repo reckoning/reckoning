@@ -279,6 +279,31 @@ describe("InvoiceForm", () => {
     expect(wrapper.find('[data-test="project"]').exists()).toBe(true)
   })
 
+  // `belongs_to :project` is required. Offering "no project" on an existing
+  // invoice promised a clearing that the PATCH quietly dropped — the field
+  // said one thing, the record kept another.
+  it("offers no empty project on an existing invoice", async () => {
+    const {wrapper} = await mountForm(`/invoices/${INVOICE_ID}/edit`, {
+      invoice: {
+        id: INVOICE_ID,
+        state: "created",
+        date: "2026-03-01",
+        editable: true,
+        sendable: false,
+        abilities: {charge: true, pay: false, update: true, destroy: true, sendMail: false},
+        projectId: PROJECT_ID,
+        positions: [],
+        createdAt: "2026-01-01T00:00:00Z",
+        updatedAt: "2026-01-01T00:00:00Z",
+      },
+    })
+
+    const values = wrapper.get('[data-test="project"]').findAll("option").map((option) => option.attributes("value"))
+
+    expect(values).not.toContain("")
+    expect(values).toContain(PROJECT_ID)
+  })
+
   // A saved row built from tracked time cannot follow the invoice to another
   // project — the server refuses that time — so it goes with the project it
   // came from, and the server is told to remove it.
