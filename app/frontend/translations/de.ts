@@ -70,6 +70,7 @@ export default {
     },
   },
   project: {
+    loading: "Wird geladen…",
     newTitle: "Neues Projekt",
     back: "Zur Übersicht",
     save: "Speichern",

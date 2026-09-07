@@ -31,7 +31,13 @@ const { data: account } = useAccount()
 // an invoice cannot be issued without one. The check has to live here now, or
 // the guard would have quietly disappeared with the screen.
 const missingAddress = computed(() => !editing.value && !(account.value?.address ?? "").trim())
-const { data: project } = useProject(id.value ?? "", { query: { enabled: editing.value } })
+
+// Editing has to wait for the record. Rendering the fields first looks
+// harmless but is not: a task row added before the record arrives is wiped by
+// the first fill, and the row the user typed into never existed as far as the
+// form is concerned.
+const loading = computed(() => editing.value && isPending.value)
+const { data: project, isPending } = useProject(id.value ?? "", { query: { enabled: editing.value } })
 const { mutateAsync: create } = useCreateProject()
 const { mutateAsync: update } = useUpdateProject()
 const { mutateAsync: destroy } = useDestroyProject()
@@ -231,7 +237,9 @@ const save = handleSubmit(async (values) => {
       </div>
     </div>
 
-    <p v-if="missingAddress" class="max-w-2xl border border-warning-border bg-warning p-3 text-sm text-white" data-test="missing-address">
+    <p v-if="loading" data-test="loading">{{ t("project.loading") }}</p>
+
+    <p v-else-if="missingAddress" class="max-w-2xl border border-warning-border bg-warning p-3 text-sm text-white" data-test="missing-address">
       {{ t("project.missingAddress") }}
       <a href="/settings#address" class="underline" data-test="account-settings">{{ t("project.toSettings") }}</a>
     </p>
