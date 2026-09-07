@@ -4,8 +4,12 @@ import { computed } from "vue"
 // `.btn` with the three variants the screens use, plus `link` for the inline
 // text buttons in the action lists.
 const props = withDefaults(
-  defineProps<{variant?: "default" | "primary" | "danger" | "link"; block?: boolean}>(),
-  {variant: "default", block: false},
+  defineProps<{
+    variant?: "default" | "primary" | "danger" | "link"
+    size?: "default" | "large" | "small"
+    block?: boolean
+  }>(),
+  {variant: "default", size: "default", block: false},
 )
 
 const VARIANTS = {
@@ -15,8 +19,15 @@ const VARIANTS = {
   link: "border-transparent bg-transparent text-brand hover:underline",
 } as const
 
+const SIZES = {
+  default: "rounded-bs px-3 py-1.5 text-base",
+  large: "rounded-bs-lg px-4 py-2.5 text-lg",
+  small: "rounded-bs-sm px-2.5 py-1 text-small",
+} as const
+
 const classes = computed(() => [
-  "inline-block rounded-bs border px-3 py-1.5 text-center align-middle text-base leading-[1.428571429] whitespace-nowrap select-none disabled:opacity-65",
+  "inline-block border text-center align-middle leading-[1.428571429] whitespace-nowrap select-none disabled:opacity-65",
+  SIZES[props.size],
   VARIANTS[props.variant],
   props.block ? "block w-full" : "",
 ])
