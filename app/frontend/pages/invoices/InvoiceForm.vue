@@ -7,6 +7,12 @@ import { useProjects, useProject } from "@/services/api/services/projects/projec
 import { useUninvoicedTimers } from "@/services/api/services/timers/timers"
 import { useAccount } from "@/services/api/services/account/account"
 import { useToastsStore } from "@/stores/toasts"
+import UiAlert from "@/components/ui/UiAlert.vue"
+import UiButton from "@/components/ui/UiButton.vue"
+import UiFormActions from "@/components/ui/UiFormActions.vue"
+import UiInput from "@/components/ui/UiInput.vue"
+import UiInputGroup from "@/components/ui/UiInputGroup.vue"
+import UiPanel from "@/components/ui/UiPanel.vue"
 
 const route = useRoute()
 const router = useRouter()
@@ -127,10 +133,15 @@ watch(project, (loaded) => {
   const rate = String(loaded.rate ?? "")
 
   for (const row of rows.value) {
-    if (!row.rateFromProject) continue
+    // A row typed before the project's rate arrived is waiting for it: hours
+    // and no rate. Without this the rate stays empty for good, because
+    // `recalculate` only ever ran while the query was still in flight.
+    const waiting = !row.id && row.hours !== "" && row.rate === ""
+
+    if (!row.rateFromProject && !waiting) continue
 
     row.rate = rate
-    // Nothing to derive a value from, so the stale one goes rather than
+    // Nothing to derive a value from, so a stale value goes rather than
     // being billed.
     if (rate === "") row.value = ""
     row.rateFromProject = rate !== ""
@@ -295,189 +306,206 @@ async function save(): Promise<void> {
 </script>
 
 <template>
-  <div class="p-4">
-    <div class="mb-4 flex items-center justify-between">
-      <h1 class="text-[24px] font-medium" data-test="invoice-form-title">
+  <div id="invoice-form">
+    <div class="flex flex-wrap items-start gap-4">
+      <h1 class="grow" data-test="invoice-form-title">
         {{ editing ? t("invoiceForm.editTitle") : t("invoiceForm.newTitle") }}
       </h1>
 
-      <RouterLink :to="{ name: 'invoices' }" class="text-sm underline" data-test="back">
-        {{ t("invoiceForm.back") }}
-      </RouterLink>
+      <div class="max-md:w-full">
+        <RouterLink :to="{ name: 'invoices' }" data-test="back">
+          <UiButton class="max-md:w-full">{{ t("invoiceForm.back") }}</UiButton>
+        </RouterLink>
+      </div>
     </div>
 
-    <p v-if="editing && isPending" data-test="loading">{{ t("invoiceForm.loading") }}</p>
+    <p v-if="editing && isPending" class="mt-4" data-test="loading">{{ t("invoiceForm.loading") }}</p>
 
-    <p v-else-if="editing && isError" data-test="load-failed">{{ t("invoiceForm.loadFailed") }}</p>
+    <p v-else-if="editing && isError" class="mt-4" data-test="load-failed">
+      {{ t("invoiceForm.loadFailed") }}
+    </p>
 
-    <p v-else-if="missingAddress" class="max-w-2xl border border-warning-border bg-warning p-3 text-sm text-white" data-test="missing-address">
+    <UiAlert v-else-if="missingAddress" variant="warning" class="mt-4" data-test="missing-address">
       {{ t("invoiceForm.missingAddress") }}
-      <a href="/settings#address" class="underline" data-test="account-settings">{{ t("invoiceForm.toSettings") }}</a>
-    </p>
+      <a href="/settings#address" data-test="account-settings">{{ t("invoiceForm.toSettings") }}</a>
+    </UiAlert>
 
-    <p v-else-if="limitReached" class="max-w-2xl border border-warning-border bg-warning p-3 text-sm text-white" data-test="limit-reached">
+    <UiAlert v-else-if="limitReached" variant="warning" class="mt-4" data-test="limit-reached">
       {{ t("invoices.limitReached") }}
-    </p>
+    </UiAlert>
 
-    <form v-else class="flex flex-col gap-4" @submit.prevent="save">
-      <div class="grid max-w-3xl gap-3 sm:grid-cols-2">
-        <label class="text-sm">
-          {{ t("invoiceForm.fields.project") }}
-          <select v-model="projectId" data-test="project" class="mt-1 block w-full rounded border border-field-border p-2">
-            <option value="">{{ t("invoiceForm.fields.noProject") }}</option>
-            <option v-for="entry in projects ?? []" :key="entry.id" :value="entry.id">
-              {{ entry.label ?? entry.name }}
-            </option>
-          </select>
-        </label>
+    <form v-else class="mt-4" @submit.prevent="save">
+      <div class="grid gap-4 md:grid-cols-3">
+        <UiInput v-model="projectId" as="select" data-test="project">
+          <option value="">{{ t("invoiceForm.fields.noProject") }}</option>
+          <option v-for="entry in projects ?? []" :key="entry.id" :value="entry.id">
+            {{ entry.label ?? entry.name }}
+          </option>
+        </UiInput>
 
-        <label class="text-sm">
-          {{ t("invoiceForm.fields.ref") }}
-          <input v-model="ref_" type="number" data-test="ref" class="mt-1 block w-full rounded border border-field-border p-2" />
-        </label>
+        <UiInputGroup :addon="t('invoiceForm.fields.date')">
+          <UiInput v-model="date" type="date" data-test="date" />
+        </UiInputGroup>
 
-        <label class="text-sm">
-          {{ t("invoiceForm.fields.date") }}
-          <input v-model="date" type="date" data-test="date" class="mt-1 block w-full rounded border border-field-border p-2" />
-        </label>
+        <UiInputGroup :addon="t('invoiceForm.fields.ref')">
+          <UiInput v-model="ref_" type="number" data-test="ref" />
+        </UiInputGroup>
 
-        <label class="text-sm">
-          {{ t("invoiceForm.fields.deliveryDate") }}
-          <input v-model="deliveryDate" type="date" data-test="delivery-date" class="mt-1 block w-full rounded border border-field-border p-2" />
-        </label>
+        <UiInputGroup :addon="t('invoiceForm.fields.deliveryDate')">
+          <UiInput v-model="deliveryDate" type="date" data-test="delivery-date" />
+        </UiInputGroup>
 
-        <label class="text-sm">
-          {{ t("invoiceForm.fields.paymentDueDate") }}
-          <input v-model="paymentDueDate" type="date" data-test="payment-due-date" class="mt-1 block w-full rounded border border-field-border p-2" />
-        </label>
+        <UiInputGroup :addon="t('invoiceForm.fields.paymentDueDate')">
+          <UiInput v-model="paymentDueDate" type="date" data-test="payment-due-date" />
+        </UiInputGroup>
       </div>
 
-      <fieldset class="border-t border-rule pt-3">
-        <legend class="text-sm font-semibold">{{ t("invoiceForm.positions") }}</legend>
+      <UiPanel class="mt-5" :title="t('invoiceForm.positions')">
+        <template #body>
+          <div class="flex flex-col gap-2" data-test="positions">
+            <div
+              v-for="{ row, index } in visibleRows"
+              :key="row.id ?? `new-${index}`"
+              class="grid grid-cols-12 items-start gap-2"
+            >
+              <div class="col-span-12 md:col-span-5">
+                <UiInput
+                  v-model="row.description"
+                  :placeholder="t('invoiceForm.fields.description')"
+                  :data-test="`position-description-${index}`"
+                />
+              </div>
 
-        <div class="flex flex-col gap-2" data-test="positions">
-          <div v-for="{ row, index } in visibleRows" :key="row.id ?? `new-${index}`" class="flex flex-wrap items-center gap-2">
-            <input
-              v-model="row.description"
-              type="text"
-              :placeholder="t('invoiceForm.fields.description')"
-              :data-test="`position-description-${index}`"
-              class="min-w-60 grow rounded border border-field-border p-2 text-sm"
-            />
+              <div class="col-span-4 md:col-span-2">
+                <UiInputGroup :addon="t('invoiceForm.fields.rateAddon')">
+                  <UiInput
+                    v-model="row.rate"
+                    type="number"
+                    step="0.01"
+                    class="text-right"
+                    :data-test="`position-rate-${index}`"
+                    @input="rateTyped(row)"
+                  />
+                </UiInputGroup>
+              </div>
 
-            <input
-              v-model="row.rate"
-              type="number"
-              step="0.01"
-              :placeholder="t('invoiceForm.fields.rate')"
-              :data-test="`position-rate-${index}`"
-              class="w-24 rounded border border-field-border p-2 text-right text-sm tabular-nums"
-              @input="rateTyped(row)"
-            />
+              <!-- Hours belong to the timers behind the row, so a generated
+                   one shows them and does not offer them for editing. -->
+              <div class="col-span-4 md:col-span-2">
+                <UiInputGroup v-if="row.timerIds.length === 0" :addon="t('invoiceForm.fields.hoursAddon')">
+                  <UiInput
+                    v-model="row.hours"
+                    type="number"
+                    step="0.01"
+                    class="text-right"
+                    :data-test="`position-hours-${index}`"
+                    @input="recalculate(row)"
+                  />
+                </UiInputGroup>
+                <div v-else class="py-1.5 text-right tabular-nums" :data-test="`position-hours-fixed-${index}`">
+                  {{ row.hours }} {{ t("invoiceForm.fields.hoursAddon") }}
+                </div>
+              </div>
 
-            <!-- Hours belong to the timers behind the row, so a generated one
-                 shows them and does not offer them for editing. -->
-            <input
-              v-if="row.timerIds.length === 0"
-              v-model="row.hours"
-              type="number"
-              step="0.01"
-              :placeholder="t('invoiceForm.fields.hours')"
-              :data-test="`position-hours-${index}`"
-              class="w-24 rounded border border-field-border p-2 text-right text-sm tabular-nums"
-              @input="recalculate(row)"
-            />
-            <span
-              v-else
-              class="w-24 p-2 text-right text-sm tabular-nums text-muted"
-              :data-test="`position-hours-fixed-${index}`"
-            >{{ row.hours }}</span>
+              <div class="col-span-4 md:col-span-2">
+                <UiInputGroup v-if="row.hours === ''">
+                  <UiInput
+                    v-model="row.value"
+                    type="number"
+                    step="0.01"
+                    class="text-right"
+                    :data-test="`position-value-${index}`"
+                  />
+                  <template #addon>€</template>
+                </UiInputGroup>
+                <div v-else class="py-1.5 text-right tabular-nums" :data-test="`position-value-computed-${index}`">
+                  {{ row.value }}
+                </div>
+              </div>
 
-            <input
-              v-if="row.hours === ''"
-              v-model="row.value"
-              type="number"
-              step="0.01"
-              :placeholder="t('invoiceForm.fields.value')"
-              :data-test="`position-value-${index}`"
-              class="w-28 rounded border border-field-border p-2 text-right text-sm tabular-nums"
-            />
-            <span
-              v-else
-              class="w-28 p-2 text-right text-sm tabular-nums"
-              :data-test="`position-value-computed-${index}`"
-            >{{ row.value }}</span>
-
-            <button type="button" class="text-sm text-danger underline" :data-test="`position-remove-${index}`" @click="removeRow(index)">
-              {{ t("invoiceForm.removePosition") }}
-            </button>
+              <div class="col-span-12 md:col-span-1 md:text-right">
+                <UiButton
+                  type="button"
+                  variant="danger"
+                  class="max-md:w-full"
+                  :data-test="`position-remove-${index}`"
+                  @click="removeRow(index)"
+                >
+                  ×
+                </UiButton>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div class="mt-3 flex flex-wrap items-center gap-2">
-          <button type="button" class="rounded border border-field-border px-3 py-1 text-sm" data-test="add-position" @click="addRow">
-            {{ t("invoiceForm.addPosition") }}
-          </button>
+          <div class="mt-4 flex flex-wrap items-center gap-2">
+            <UiButton type="button" data-test="add-position" @click="addRow">
+              + {{ t("invoiceForm.addPosition") }}
+            </UiButton>
 
-          <button type="button" class="rounded border border-field-border px-3 py-1 text-sm" data-test="generate-positions" @click="openPicker">
-            {{ t("invoiceForm.generatePositions") }}
-          </button>
+            <UiButton type="button" data-test="generate-positions" @click="openPicker">
+              {{ t("invoiceForm.generatePositions") }}
+            </UiButton>
 
-          <span class="ml-auto text-sm font-semibold tabular-nums" data-test="total">
-            {{ money.format(total) }}
-          </span>
-        </div>
-      </fieldset>
+            <span class="ml-auto font-bold tabular-nums" data-test="total">
+              {{ money.format(total) }}
+            </span>
+          </div>
+        </template>
+      </UiPanel>
 
-      <button
-        type="submit"
-        class="self-start rounded-md border border-brand-border bg-brand px-4 py-2 text-white hover:bg-brand-hover disabled:opacity-60"
-        :disabled="busy"
-        data-test="submit"
-      >
-        {{ t("invoiceForm.save") }}
-      </button>
+      <UiFormActions
+        :save-label="t('invoiceForm.save')"
+        :cancel-label="t('invoiceForm.cancel')"
+        :busy="busy"
+        @cancel="router.push({ name: 'invoices' })"
+      />
     </form>
 
     <!-- The picker the ERB opened as a Bootstrap modal. One task becomes one
          position, with the timers behind it carried along so the same time is
          never invoiced twice. -->
-    <div v-if="pickerOpen" class="fixed inset-0 z-40 bg-ink/40" @click="pickerOpen = false"></div>
+    <div v-if="pickerOpen" class="fixed inset-0 z-40 bg-ink/50" @click="pickerOpen = false"></div>
     <div v-if="pickerOpen" class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4">
-      <div class="relative z-50 w-full max-w-lg rounded border border-rule bg-surface shadow-lg" data-test="position-picker">
-        <div class="flex items-center justify-between border-b border-rule px-4 py-3">
-          <h2 class="text-base font-semibold">{{ t("invoiceForm.pickerTitle") }}</h2>
-          <button type="button" class="text-sm underline" data-test="picker-close" @click="pickerOpen = false">
-            {{ t("invoiceForm.close") }}
+      <div
+        class="relative z-50 mt-10 w-full max-w-lg rounded-bs-lg border border-ink/20 bg-surface shadow-[0_5px_15px_rgba(0,0,0,0.5)]"
+        data-test="position-picker"
+      >
+        <div class="flex items-center justify-between border-b border-rule px-4 py-3.5">
+          <h3>{{ t("invoiceForm.pickerTitle") }}</h3>
+          <button type="button" class="text-2xl leading-none opacity-20 hover:opacity-50" data-test="picker-close" @click="pickerOpen = false">
+            ×
           </button>
         </div>
 
-        <div class="px-4 py-3">
+        <div class="px-4 py-3.5">
           <p v-if="loadingTimers" data-test="picker-loading">{{ t("invoiceForm.loading") }}</p>
-          <p v-else-if="candidates.length === 0" data-test="picker-empty">{{ t("invoiceForm.nothingUninvoiced") }}</p>
+          <p v-else-if="candidates.length === 0" data-test="picker-empty">
+            {{ t("invoiceForm.nothingUninvoiced") }}
+          </p>
 
           <label
             v-for="candidate in candidates"
             :key="candidate.taskId"
-            class="flex items-center gap-2 py-1 text-sm"
+            class="flex items-center gap-2 py-1"
             :data-test="`candidate-${candidate.taskId}`"
           >
-            <input v-model="picked" type="checkbox" :value="candidate.taskId" class="h-[18px] w-[18px] rounded border border-control-border accent-brand" />
+            <input v-model="picked" type="checkbox" :value="candidate.taskId" class="size-4 accent-brand" />
             <span class="grow">{{ candidate.name }}</span>
             <span class="tabular-nums text-muted">{{ candidate.hours }} h</span>
           </label>
         </div>
 
-        <div class="flex justify-end gap-2 border-t border-rule px-4 py-3">
-          <button
+        <div class="flex justify-end gap-2 border-t border-rule px-4 py-3.5">
+          <UiButton type="button" @click="pickerOpen = false">{{ t("invoiceForm.close") }}</UiButton>
+          <UiButton
             type="button"
-            class="rounded-md border border-brand-border bg-brand px-4 py-2 text-sm text-white hover:bg-brand-hover disabled:opacity-60"
+            variant="primary"
             :disabled="picked.length === 0"
             data-test="take-picked"
             @click="takePicked"
           >
             {{ t("invoiceForm.takePicked") }}
-          </button>
+          </UiButton>
         </div>
       </div>
     </div>
