@@ -50,6 +50,10 @@ v1_api_routes = lambda do
   resources :tasks, only: %i[index create update destroy]
 
   resources :invoices, only: %i[index show create update destroy] do
+    collection do
+      get :summary
+    end
+
     member do
       put :charge
       put :pay

@@ -15,9 +15,28 @@ module Api
         scope = current_account.invoices
           .filter_result(filter_params)
           .includes(:customer, :project)
-          .order(ref: :desc)
+          .references(:customers)
+          .order(order_clause)
 
         @invoices = paginate(scope)
+      end
+
+      # The list shows what the filtered set adds up to, which paging cannot
+      # answer: page two knows nothing about page one's total. Same filters,
+      # so the numbers belong to the same set the list is showing.
+      def summary
+        authorize! :read, Invoice
+
+        scope = current_account.invoices.filter_result(filter_params)
+
+        @count = scope.count
+        @value = scope.sum(&:value)
+        @vat = scope.sum(&:vat)
+        # Deliberately unfiltered: this fills the year dropdown, so it has to
+        # offer the years you could switch to, not only the one you are on.
+        @years = current_account.invoices.distinct
+          .pluck(Arel.sql("EXTRACT(YEAR FROM date)::int"))
+          .compact.sort.reverse
       end
 
       def show
@@ -110,6 +129,27 @@ module Api
 
       private def find_invoice
         current_account.invoices.find(params[:id])
+      end
+
+      # The columns the server-rendered list let you sort by. Anything else
+      # falls back to the newest invoice first, which is what the endpoint did
+      # before it could sort at all.
+      SORTABLE = {
+        "ref" => "invoices.ref",
+        "date" => "invoices.date",
+        "value" => "invoices.value",
+        "state" => "invoices.workflow_state",
+        "customer" => "customers.name"
+      }.freeze
+
+      private def order_clause
+        column = SORTABLE[params[:sort]]
+
+        return {ref: :desc} unless column
+
+        direction = (params[:direction] == "asc") ? "asc" : "desc"
+
+        Arel.sql("#{column} #{direction}")
       end
 
       private def filter_params

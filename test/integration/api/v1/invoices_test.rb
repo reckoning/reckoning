@@ -25,6 +25,11 @@ module Api
           parameter name: "paid_in_year", in: :query, required: false, schema: {type: :integer}
           parameter name: "paid_in_quarter", in: :query, required: false, schema: {type: :integer}
           parameter name: "paid_in_month", in: :query, required: false, schema: {type: :integer}
+          parameter name: "sort", in: :query, required: false,
+            description: "Column to order by. Anything else falls back to the newest first.",
+            schema: {type: :string, enum: %w[ref date value state customer]}
+          parameter name: "direction", in: :query, required: false,
+            schema: {type: :string, enum: %w[asc desc]}
 
           response(200, "successful") do
             schema ::V1::Schemas::Invoices
@@ -64,6 +69,18 @@ module Api
       let(:invoice) { invoices :january }
       let(:project) { projects :narendra3 }
 
+      # `before_save :set_value` recomputes the column from the positions, so
+      # a value passed to `create!` is thrown away — it goes in past the
+      # callback. `ref` is unique per account, hence the running number.
+      def invoice_worth(value)
+        invoice = accounts(:enterprise).invoices.create!(
+          customer: customers(:starfleet), project: projects(:narendra3),
+          date: Date.new(2026, 3, 1), ref: accounts(:enterprise).invoices.maximum(:ref).to_i + 1
+        )
+        invoice.update_columns(value: value)
+        invoice
+      end
+
       describe "unauthorized" do
         it "does not list invoices" do
           assert_api_response :get, 401
@@ -86,6 +103,37 @@ module Api
         it "does not leak another account's invoices" do
           assert_api_response :get, 200 do
             refute_includes parsed_body.map { |item| item["id"] }, invoices(:february).id
+          end
+        end
+
+        # The server-rendered list sorted by five columns; the endpoint only
+        # ever answered newest-first.
+        it "sorts by the columns the list offers" do
+          cheap = invoice_worth(10)
+          dear = invoice_worth(5000)
+
+          assert_api_response :get, 200, params: {sort: "value", direction: "asc"} do
+            ids = parsed_body.map { |item| item["id"] }
+
+            assert_operator ids.index(cheap.id), :<, ids.index(dear.id)
+          end
+
+          assert_api_response :get, 200, params: {sort: "value", direction: "desc"} do
+            ids = parsed_body.map { |item| item["id"] }
+
+            assert_operator ids.index(dear.id), :<, ids.index(cheap.id)
+          end
+        end
+
+        # Without a sort it stays what it always was: newest ref first.
+        it "falls back to the newest first" do
+          low = invoice_worth(10)
+          high = invoice_worth(20)
+
+          assert_api_response :get, 200 do
+            ids = parsed_body.map { |item| item["id"] }
+
+            assert_operator ids.index(high.id), :<, ids.index(low.id)
           end
         end
 

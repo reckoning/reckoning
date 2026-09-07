@@ -1,0 +1,6 @@
+# frozen_string_literal: true
+
+json.count @count
+json.value @value
+json.vat @vat
+json.years @years
