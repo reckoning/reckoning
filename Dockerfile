@@ -44,7 +44,12 @@ RUN apt-get update -qq && \
 # documents that load no external resources, so a linked or embedded webfont
 # never reaches them — as system fonts these do. See vendor/fonts/README.md.
 COPY vendor/fonts/*.ttf /usr/local/share/fonts/
-RUN fc-cache -f
+# The build fails rather than shipping documents on the fallback: fontconfig
+# reads the family out of the file, so a swapped file with a different family
+# name inside would leave every PDF silently unstyled.
+RUN fc-cache -f && \
+    fc-match "Noto Sans" | grep -q NotoSans.ttf && \
+    fc-match "Orbitron" | grep -q Orbitron.ttf
 
 # jemalloc for reduced fragmentation/memory under Ruby
 ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2

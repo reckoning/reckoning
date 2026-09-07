@@ -41,4 +41,35 @@ class PdfFontsTest < ActionDispatch::IntegrationTest
     assert_includes footer, "Noto Sans"
     assert_not_includes footer, "Helvetica"
   end
+
+  # A name in a stylesheet only resolves if a font of that family is installed.
+  # `fc-cache` reads the family out of the file rather than off the filename,
+  # so a file swapped for one with a different family name inside would leave
+  # every document on the fallback again — silently. The Dockerfile asserts the
+  # same thing against fontconfig when the image is built.
+  it "ships fonts whose own family names are the ones asked for" do
+    {"NotoSans.ttf" => "Noto Sans", "Orbitron.ttf" => "Orbitron"}.each do |file, family|
+      assert_equal family, font_family(Rails.root.join("vendor/fonts", file)),
+        "#{file} calls itself something else, so the stylesheets would never find it"
+    end
+  end
+
+  # The `name` table of a TrueType file: name ID 16 is the typographic family
+  # a variable font prefers, name ID 1 the legacy one.
+  private def font_family(path)
+    data = path.binread
+    count, = data[4, 2].unpack("n")
+    records = count.times.map { |index| data[12 + (index * 16), 16].unpack("a4NNN") }
+    _, _, offset, = records.find { |tag, _| tag == "name" }
+
+    name_count, string_offset = data[offset + 2, 4].unpack("nn")
+    names = name_count.times.map do |index|
+      platform, _, _, name_id, length, name_offset = data[offset + 6 + (index * 12), 12].unpack("n6")
+      next unless platform == 3
+
+      [name_id, data[offset + string_offset + name_offset, length].encode("UTF-8", "UTF-16BE")]
+    end.compact.to_h
+
+    names[16] || names[1]
+  end
 end
