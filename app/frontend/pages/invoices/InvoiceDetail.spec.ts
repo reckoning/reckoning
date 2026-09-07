@@ -43,6 +43,7 @@ async function mountDetail(record = invoice(), requests: AxiosRequestConfig[] = 
     routes: [
       {path: "/invoices", name: "invoices", component: {template: "<div />"}},
       {path: "/invoices/:id", name: "invoice", component: InvoiceDetail},
+      {path: "/invoices/:id/edit", name: "invoice-edit", component: {template: "<div />"}},
     ],
   })
   await router.push(`/invoices/${ID}`)

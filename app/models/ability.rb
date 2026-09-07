@@ -33,7 +33,15 @@ class Ability
   end
 
   def setup_invoice_abilities(user)
-    can %i[read create update destroy check send], Invoice, account_id: user.account_id
+    can %i[read update destroy check send], Invoice, account_id: user.account_id
+
+    # Creating is the one that is capped on a demo deployment. As an ability
+    # it holds for every path — `authorize!` in the API refuses it, and the
+    # invoice payload reports it, so a client can grey the button out instead
+    # of finding out with a 403.
+    unless user.account&.invoice_limit_reached?(user)
+      can :create, Invoice, account_id: user.account_id
+    end
 
     can :pay, Invoice do |invoice|
       %i[charged].include?(invoice.current_state.to_sym) && invoice.account_id == user.account_id

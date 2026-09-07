@@ -194,9 +194,14 @@ async function removeInvoice(): Promise<void> {
         <a v-if="hasTimesheet" :href="timesheetPdf" target="_blank" class="text-brand underline" data-test="timesheet-pdf">
           {{ t("invoice.downloadTimesheet") }}
         </a>
-        <a v-if="abilities?.update" :href="`/invoices/${id}/edit`" class="text-brand underline" data-test="edit">
+        <RouterLink
+          v-if="abilities?.update"
+          :to="{ name: 'invoice-edit', params: { id } }"
+          class="text-brand underline"
+          data-test="edit"
+        >
           {{ t("invoice.edit") }}
-        </a>
+        </RouterLink>
         <button
           v-if="abilities?.sendMail"
           type="button"

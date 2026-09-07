@@ -7,16 +7,6 @@ class InvoicesController < ApplicationController
   before_action :check_limit, only: %i[new create]
   before_action :check_dependencies, only: [:new]
 
-  def send_mail
-    authorize! :send, invoice
-    if invoice.send_via_mail?
-      InvoiceMailerWorker.perform_async invoice.id
-      redirect_to invoice_path(invoice), flash: {success: I18n.t(:"messages.invoice.send.success")}
-    else
-      redirect_to invoice_path(invoice), alert: I18n.t(:"messages.invoice.send.failure")
-    end
-  end
-
   def send_test_mail
     authorize! :send, invoice
 
@@ -59,81 +49,6 @@ class InvoicesController < ApplicationController
           render "timesheet_pdf", layout: "pdf"
         end
       end
-    end
-  end
-
-  def new
-    authorize! :create, Invoice
-    @invoice ||= if project
-      project.invoices.new
-    else
-      current_account.invoices.new
-    end
-    invoice.positions << InvoicePosition.new
-  end
-
-  def edit
-    authorize! :update, invoice
-  end
-
-  def create
-    @invoice = current_account.invoices.new(invoice_params)
-    authorize! :create, invoice
-    if invoice.save
-      redirect_to invoices_path, flash: {success: resource_message(:invoice, :create, :success)}
-    else
-      flash.now[:alert] = resource_message(:invoice, :create, :failure)
-      render "new"
-    end
-  end
-
-  def update
-    authorize! :update, invoice
-    if invoice.update(invoice_params)
-      redirect_to invoices_path, flash: {success: resource_message(:invoice, :update, :success)}
-    else
-      flash.now[:alert] = resource_message(:invoice, :update, :failure)
-      render "edit"
-    end
-  end
-
-  def charge
-    authorize! :charge, invoice
-
-    if invoice.charge!
-      flash.now[:success] = I18n.t(:"messages.invoice.charge.success")
-    else
-      flash.now[:alert] = I18n.t(:"messages.invoice.charge.failure")
-    end
-
-    respond_to do |format|
-      format.js { render json: {}, status: :ok }
-      format.html { redirect_back(fallback_location: root_path) }
-    end
-  end
-
-  def pay
-    authorize! :pay, invoice
-    if invoice.pay!
-      flash.now[:success] = I18n.t(:"messages.invoice.pay.success")
-    else
-      flash.now[:alert] = I18n.t(:"messages.invoice.pay.failure")
-    end
-    redirect_back(fallback_location: root_path)
-  end
-
-  def destroy
-    authorize! :destroy, invoice
-
-    if invoice.destroy
-      flash.now[:success] = resource_message(:invoice, :destroy, :success)
-    else
-      flash.now[:alert] = resource_message(:invoice, :destroy, :failure)
-    end
-
-    respond_to do |format|
-      format.js { render json: {}, status: :ok }
-      format.html { redirect_to invoices_path }
     end
   end
 

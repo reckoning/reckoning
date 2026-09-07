@@ -57,7 +57,7 @@ class ApplicationController < ActionController::Base
   helper_method :registration_enabled?
 
   private def invoice_limit_reached?
-    !current_user.admin? && Rails.configuration.app.demo && current_account.invoices.count >= 2
+    current_account.invoice_limit_reached?(current_user)
   end
   helper_method :invoice_limit_reached?
 

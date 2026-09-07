@@ -44,6 +44,7 @@ async function mountList(requests: AxiosRequestConfig[] = [], path = "/invoices"
       {path: "/invoices", name: "invoices", component: InvoicesList},
       // The row links at the detail route; where it leads is the router's
       // business, not this component's.
+      {path: "/invoices/new", name: "invoice-new", component: {template: "<div />"}},
       {path: "/invoices/:id", name: "invoice", component: {template: "<div />"}},
     ],
   })
