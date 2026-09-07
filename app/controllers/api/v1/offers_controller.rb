@@ -22,9 +22,26 @@ module Api
         scope = current_account.offers
           .filter_result(filter_params)
           .includes(:customer, :project)
-          .order(ref: :desc)
+          .references(:customers)
+          .order(*order_clause)
 
         @offers = paginate(scope)
+      end
+
+      # The list shows what the filtered set adds up to, which paging cannot
+      # answer: page two knows nothing about page one's total. Same filters,
+      # so the numbers belong to the same set the list is showing.
+      def summary
+        authorize! :read, Offer
+
+        scope = current_account.offers.filter_result(filter_params)
+
+        @count = scope.count
+        @value = scope.sum(&:value)
+        # Deliberately unfiltered: this fills the year dropdown, so it has to
+        # offer the years you could switch to, not only the one you are on.
+        @years = current_account.offers.where.not(date: nil)
+          .distinct.pluck(:date).map(&:year).uniq.sort.reverse
       end
 
       def show
@@ -83,6 +100,25 @@ module Api
 
       private def find_offer
         current_account.offers.find(params[:id])
+      end
+
+      # Ordering by an interpolated column name would hand the query planner
+      # user input, so every sort resolves to a hash of known columns.
+      private def order_clause
+        direction = (params[:direction] == "asc") ? :asc : :desc
+
+        # `ref` closes every order: dates, values, states and customer names
+        # all repeat, and offset paging over a tie can show a row twice or
+        # skip it entirely. It is unique per account, so nothing is left
+        # undecided.
+        case params[:sort]
+        when "ref" then [{ref: direction}]
+        when "date" then [{date: direction}, {ref: :desc}]
+        when "value" then [{value: direction}, {ref: :desc}]
+        when "state" then [{aasm_state: direction}, {ref: :desc}]
+        when "customer" then [{customers: {name: direction}}, {ref: :desc}]
+        else [{ref: :desc}]
+        end
       end
 
       private def filter_params
