@@ -97,6 +97,19 @@ module Api
           end
         end
 
+        # Both year dropdowns are fed from this list, and `paid_in_year`
+        # filters on `pay_date` — an invoice dated in 2025 and paid in 2026
+        # has to make 2026 selectable.
+        it "offers the years invoices were paid in too" do
+          paid = invoice_worth(100, date: Date.new(2025, 12, 1))
+          paid.update_columns(pay_date: Date.new(2026, 1, 15))
+
+          assert_api_response :get, 200 do
+            assert_includes parsed_body["years"], 2026
+            assert_includes parsed_body["years"], 2025
+          end
+        end
+
         # The february fixture belongs to the defiant account.
         it "leaves another account's invoices out" do
           invoice_worth(100)

@@ -15,6 +15,7 @@ export default {
     loading: "Wird geladen…",
     loadFailed: "Rechnungen konnten nicht geladen werden.",
     empty: "Keine Rechnungen.",
+    limitReached: "In der Demo sind maximal zwei Rechnungen möglich.",
     previous: "Zurück",
     next: "Weiter",
     summary: "{count} Rechnungen",

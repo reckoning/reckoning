@@ -24,11 +24,16 @@ const INVOICE = {
 
 const SUMMARY = {count: 2, value: "350.0", vat: "66.5", years: [2026, 2024]}
 
-async function mountList(requests: AxiosRequestConfig[] = [], path = "/invoices") {
+async function mountList(requests: AxiosRequestConfig[] = [], path = "/invoices", limitReached = false) {
   AXIOS_INSTANCE.defaults.adapter = async (config) => {
     requests.push(config)
 
-    const data = String(config.url).includes("summary") ? SUMMARY : [INVOICE]
+    const url = String(config.url)
+    const data = url.includes("summary")
+      ? SUMMARY
+      : url.includes("/account")
+        ? {id: "eeeeeeee-0000-4000-8000-000000000001", name: "Enterprise", invoiceLimitReached: limitReached}
+        : [INVOICE]
 
     return {data, status: 200, statusText: "OK", headers: {}, config}
   }
@@ -124,6 +129,31 @@ describe("InvoicesList", () => {
     await vi.waitFor(() => {
       expect(router.currentRoute.value.query.page).toBeUndefined()
     })
+  })
+
+  // The API hands over a bare YYYY-MM-DD. Read as UTC midnight and printed
+  // in local time, that is the previous day west of Greenwich.
+  it("prints the date it was given, in any timezone", async () => {
+    const original = process.env.TZ
+    process.env.TZ = "America/Los_Angeles"
+
+    try {
+      const {wrapper} = await mountList()
+
+      expect(wrapper.get('[data-test="invoices"]').text()).toContain("2026")
+      expect(wrapper.get('[data-test="invoices"]').text()).not.toContain("28")
+    } finally {
+      process.env.TZ = original
+    }
+  })
+
+  // A demo deployment caps non-admins at two invoices, and the server bounces
+  // them back to a list that never renders the flash saying why.
+  it("offers no new invoice when the demo limit is reached", async () => {
+    const {wrapper} = await mountList([], "/invoices", true)
+
+    expect(wrapper.find('[data-test="new-invoice"]').exists()).toBe(false)
+    expect(wrapper.find('[data-test="new-invoice-disabled"]').exists()).toBe(true)
   })
 
   // A short page means there is nothing after it.

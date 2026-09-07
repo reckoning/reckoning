@@ -3,6 +3,7 @@ import { computed } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useInvoices, useInvoiceSummary } from "@/services/api/services/invoices/invoices"
+import { useAccount } from "@/services/api/services/account/account"
 
 const route = useRoute()
 const router = useRouter()
@@ -65,6 +66,12 @@ const summaryParams = computed(() => {
 
 const { data: invoices, isPending, isError } = useInvoices(params)
 const { data: summary } = useInvoiceSummary(summaryParams)
+const { data: account } = useAccount()
+
+// A demo deployment caps non-admins at two invoices, and the server bounces
+// them back — to a list that does not render the flash saying why. The ERB
+// screen greyed the button out, so this one does too.
+const limitReached = computed(() => account.value?.invoiceLimitReached === true)
 
 function go(changes: Record<string, string | number | undefined>): void {
   const query: Record<string, string> = {}
@@ -91,10 +98,15 @@ function sortBy(column: string): void {
 const money = computed(
   () => new Intl.NumberFormat(locale.value, {style: "currency", currency: "EUR"}),
 )
-const dates = computed(() => new Intl.DateTimeFormat(locale.value, {dateStyle: "medium"}))
+// `date` arrives as a bare YYYY-MM-DD. `new Date("2026-03-01")` is UTC
+// midnight, and formatted in local time that is the 28th of February west of
+// Greenwich — so the anchor is read and printed in UTC.
+const dates = computed(
+  () => new Intl.DateTimeFormat(locale.value, {dateStyle: "medium", timeZone: "UTC"}),
+)
 
 function formatDate(value: string | null | undefined): string {
-  return value ? dates.value.format(new Date(value)) : ""
+  return value ? dates.value.format(new Date(`${value.slice(0, 10)}T00:00:00Z`)) : ""
 }
 
 const monthOptions = computed(() => {
@@ -131,12 +143,21 @@ const hasNextPage = computed(() => (invoices.value?.length ?? 0) === PER_PAGE)
       <h1 class="text-[24px] font-medium">{{ t("invoices.title") }}</h1>
 
       <a
+        v-if="!limitReached"
         href="/invoices/new"
         class="rounded-md border border-brand-border bg-brand px-4 py-2 text-sm text-white hover:bg-brand-hover"
         data-test="new-invoice"
       >
         {{ t("invoices.new") }}
       </a>
+      <span
+        v-else
+        class="cursor-not-allowed rounded-md border border-field-border bg-surface-muted px-4 py-2 text-sm text-muted"
+        :title="t('invoices.limitReached')"
+        data-test="new-invoice-disabled"
+      >
+        {{ t("invoices.new") }}
+      </span>
     </div>
 
     <div class="mb-4 flex flex-wrap gap-2" data-test="filters">

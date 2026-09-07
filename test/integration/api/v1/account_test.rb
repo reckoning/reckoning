@@ -66,6 +66,14 @@ module Api
       describe "signed in" do
         before { sign_in data }
 
+        # A demo deployment caps non-admins at two invoices. The
+        # server-rendered list greyed its button out; the SPA has to be told.
+        it "says whether the invoice limit is reached" do
+          assert_api_response :get, 200 do
+            assert_equal false, parsed_body["invoiceLimitReached"]
+          end
+        end
+
         it "returns the caller's own account" do
           assert_api_response :get, 200 do
             assert_equal account.id, parsed_body["id"]

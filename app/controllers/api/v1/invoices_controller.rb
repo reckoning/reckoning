@@ -16,7 +16,7 @@ module Api
           .filter_result(filter_params)
           .includes(:customer, :project)
           .references(:customers)
-          .order(order_clause)
+          .order(*order_clause)
 
         @invoices = paginate(scope)
       end
@@ -34,9 +34,10 @@ module Api
         @vat = scope.sum(&:vat)
         # Deliberately unfiltered: this fills the year dropdown, so it has to
         # offer the years you could switch to, not only the one you are on.
-        @years = current_account.invoices.distinct
-          .pluck(Arel.sql("EXTRACT(YEAR FROM date)::int"))
-          .compact.sort.reverse
+        # Both dropdowns are fed from it, and `paid_in_year` filters on
+        # `pay_date` — an invoice dated in 2025 and paid in 2026 has to make
+        # 2026 selectable.
+        @years = (invoice_years(:date) + invoice_years(:pay_date)).uniq.sort.reverse
       end
 
       def show
@@ -137,16 +138,24 @@ module Api
       # Brakeman does not have to take a whitelist's word for it. Anything
       # else falls back to the newest invoice first, which is what this
       # endpoint did before it could sort at all.
+      private def invoice_years(column)
+        current_account.invoices.where.not(column => nil).distinct.pluck(column).map(&:year)
+      end
+
       private def order_clause
         direction = (params[:direction] == "asc") ? :asc : :desc
 
+        # `ref` closes every order: dates, values, states and customer names
+        # all repeat, and offset paging over a tie can show a row twice or
+        # skip it entirely. It is unique per account, so nothing is left
+        # undecided.
         case params[:sort]
-        when "ref" then {ref: direction}
-        when "date" then {date: direction}
-        when "value" then {value: direction}
-        when "state" then {workflow_state: direction}
-        when "customer" then {customers: {name: direction}}
-        else {ref: :desc}
+        when "ref" then [{ref: direction}]
+        when "date" then [{date: direction}, {ref: :desc}]
+        when "value" then [{value: direction}, {ref: :desc}]
+        when "state" then [{workflow_state: direction}, {ref: :desc}]
+        when "customer" then [{customers: {name: direction}}, {ref: :desc}]
+        else [{ref: :desc}]
         end
       end
 

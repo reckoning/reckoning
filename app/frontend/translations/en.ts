@@ -15,6 +15,7 @@ export default {
     loading: "Loading…",
     loadFailed: "Could not load invoices.",
     empty: "No invoices.",
+    limitReached: "A demo instance allows at most two invoices.",
     previous: "Previous",
     next: "Next",
     summary: "{count} invoices",

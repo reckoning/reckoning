@@ -125,6 +125,20 @@ module Api
           end
         end
 
+        # Values, dates, states and customer names all repeat, and offset
+        # paging over a tie can show a row twice or skip it. `ref` closes the
+        # order so nothing is left undecided.
+        it "breaks ties by ref so paging cannot repeat a row" do
+          first = invoice_worth(100)
+          second = invoice_worth(100)
+
+          assert_api_response :get, 200, params: {sort: "value", direction: "asc"} do
+            tied = parsed_body.select { |item| item["value"] == "100.0" }.map { |item| item["id"] }
+
+            assert_equal [second.id, first.id], tied & [second.id, first.id]
+          end
+        end
+
         # Without a sort it stays what it always was: newest ref first.
         it "falls back to the newest first" do
           low = invoice_worth(10)
