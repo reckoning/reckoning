@@ -40,8 +40,12 @@
     frontend migration (docs/frontend-migration-plan.md). The application
     entrypoint is empty in Phase 1; tailwind.css ships utility classes
     without preflight (Phase 2) so Tailwind and Bootstrap 3 coexist. %>
+<%# `turbo-track` because the SPA shell is a different document: crossing into
+    `/app` has to be a full page load, not a Turbo Drive head merge. A merge
+    keeps Bootstrap loaded, and unlayered CSS beats Tailwind's `@layer`
+    utilities, so the SPA renders unstyled. %>
 <%= vite_client_tag %>
-<%= vite_stylesheet_tag "tailwind.css" %>
-<%= vite_typescript_tag "application" %>
+<%= vite_stylesheet_tag "tailwind.css", data: {turbo_track: "reload"} %>
+<%= vite_typescript_tag "application", data: {turbo_track: "reload"} %>
 
 <%= csrf_meta_tags %>

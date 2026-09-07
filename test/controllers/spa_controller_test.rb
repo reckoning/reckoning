@@ -45,6 +45,16 @@ class SpaControllerTest < ActionDispatch::IntegrationTest
     ActionController::Base.allow_forgery_protection = original
   end
 
+  # Crossing between the two documents has to be a full page load. A Turbo
+  # Drive head merge keeps Bootstrap's unlayered CSS around, and that beats
+  # Tailwind's `@layer` utilities — the SPA then renders unstyled.
+  it "makes the shell's assets a full reload for turbo drive" do
+    get "/app"
+
+    assert_select "link[data-turbo-track=?]", "reload"
+    assert_select "script[data-turbo-track=?]", "reload"
+  end
+
   # The shell must not drag in Bootstrap or the Sprockets bundle.
   it "does not load the legacy asset pipeline" do
     get "/app"

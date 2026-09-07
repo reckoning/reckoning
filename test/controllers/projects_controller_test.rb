@@ -64,5 +64,17 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
       assert_response :ok
     end
+
+    # The other half of the handover: crossing into `/app` has to be a full
+    # page load. A Turbo Drive head merge keeps Bootstrap's unlayered CSS
+    # around, and that beats Tailwind's `@layer` utilities.
+    it "marks the shared layout's assets as a full reload" do
+      sign_in will
+
+      get "/projects/#{project.id}"
+
+      assert_select "link[data-turbo-track=?]", "reload"
+      assert_select "script[data-turbo-track=?]", "reload"
+    end
   end
 end
