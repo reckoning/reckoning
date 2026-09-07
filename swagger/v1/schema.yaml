@@ -1518,6 +1518,26 @@ paths:
         required: false
         schema:
           type: integer
+      - name: sort
+        in: query
+        required: false
+        description: Column to order by. Anything else falls back to the newest first.
+        schema:
+          type: string
+          enum:
+          - ref
+          - date
+          - value
+          - state
+          - customer
+      - name: direction
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
       responses:
         '200':
           description: successful
@@ -1568,6 +1588,44 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/StandardError"
+  "/offers/summary":
+    get:
+      summary: What the filtered offers add up to
+      tags:
+      - Offers
+      operationId: offerSummary
+      parameters:
+      - name: state
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - created
+          - bided
+          - accepted
+          - declined
+          - canceled
+      - name: year
+        in: query
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OfferSummary"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '400':
+          "$ref": "#/components/responses/SchemaValidationError"
   "/offers/{id}":
     parameters:
     - name: id
@@ -3947,6 +4005,23 @@ components:
       - createdAt
       - updatedAt
       title: OfferPosition
+    OfferSummary:
+      type: object
+      properties:
+        count:
+          type: integer
+        value:
+          type: string
+        years:
+          type: array
+          items:
+            type: integer
+      additionalProperties: false
+      required:
+      - count
+      - value
+      - years
+      title: OfferSummary
     Offers:
       type: array
       items:
