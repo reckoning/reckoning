@@ -104,11 +104,6 @@ Rails.application.routes.draw do
   resource :template, only: [] do
     template "blank"
     template "datepicker"
-    template "month_timers"
-    # Kept for the timers calendar, which renders this modal from
-    # `angular/timers_calendar/controllers/month.coffee`. It goes with that
-    # screen in phase B5, not with the timesheet.
-    template "timer_modal_timesheets"
     template "index_logbooks"
   end
 
