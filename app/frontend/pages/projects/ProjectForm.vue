@@ -108,10 +108,18 @@ function toDateTime(value: string | undefined): string | null {
   return value ? new Date(`${value}T00:00:00Z`).toISOString() : null
 }
 
+// Only the first answer for a given project fills the form. vue-query refetches
+// — on window focus, on reconnect — and re-running this would throw away
+// whatever the user has typed since, including a task row they just added.
+const filledFrom = ref<string | undefined>()
+
 watch(
   project,
   (loaded) => {
     if (!loaded) return
+    if (filledFrom.value === loaded.id) return
+
+    filledFrom.value = loaded.id
 
     setValues({
       name: loaded.name,

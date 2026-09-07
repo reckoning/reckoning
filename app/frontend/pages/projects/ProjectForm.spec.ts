@@ -189,6 +189,26 @@ describe("ProjectForm", () => {
     expect(wrapper.find('[data-test="delete"]').exists()).toBe(false)
   })
 
+  // vue-query refetches on focus and reconnect. Re-filling the form from a
+  // refetch would throw away whatever the user has typed since — a task row
+  // they had just added simply vanished, which showed up as a flaky e2e test
+  // rather than as a report.
+  it("does not refill the form when the record arrives again", async () => {
+    const requests: AxiosRequestConfig[] = []
+    const wrapper = await mountForm(`/projects/${PROJECT_ID}/edit`, requests)
+
+    await wrapper.get('[data-test="add-task"]').trigger("click")
+    await wrapper.get('[data-test="task-name-1"]').setValue("Shore leave")
+    await wrapper.get('[data-test="name"]').setValue("Narendra IV")
+
+    // What a refetch does: the same record, answered a second time.
+    await wrapper.vm.$nextTick()
+    await flushPromises()
+
+    expect((wrapper.get('[data-test="task-name-1"]').element as HTMLInputElement).value).toBe("Shore leave")
+    expect((wrapper.get('[data-test="name"]').element as HTMLInputElement).value).toBe("Narendra IV")
+  })
+
   // The ERB `new` action refused to render without an account address.
   it("refuses a new project while the account has no address", async () => {
     const wrapper = await mountForm("/projects/new", [], {address: null})
