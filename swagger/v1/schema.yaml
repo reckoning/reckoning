@@ -2749,6 +2749,22 @@ components:
           - 'null'
         invoiceLimitReached:
           type: boolean
+        trial:
+          type: object
+          properties:
+            active:
+              type: boolean
+            expired:
+              type: boolean
+            daysLeft:
+              type:
+              - integer
+              - 'null'
+          additionalProperties: false
+          required:
+          - active
+          - expired
+          - daysLeft
         country:
           type:
           - string

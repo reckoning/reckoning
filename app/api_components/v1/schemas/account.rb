@@ -24,6 +24,19 @@ module V1
           signature: {type: [:string, :null]},
           address: {type: [:string, :null]},
           invoiceLimitReached: {type: :boolean},
+          # The trial, so the SPA can say what the server-rendered layout says
+          # in its banner: how long is left, or that it has run out and the
+          # account reads but no longer writes.
+          trial: {
+            type: :object,
+            properties: {
+              active: {type: :boolean},
+              expired: {type: :boolean},
+              daysLeft: {type: [:integer, :null]}
+            },
+            additionalProperties: false,
+            required: %w[active expired daysLeft]
+          },
           country: {type: [:string, :null]},
           publicEmail: {type: [:string, :null]},
           telefon: {type: [:string, :null]},
