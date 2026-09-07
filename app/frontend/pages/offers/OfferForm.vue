@@ -18,7 +18,7 @@ const editing = computed(() => id.value !== undefined)
 const { data: offer, isPending, isError } = useOffer(id.value ?? "", {
   query: { enabled: editing.value },
 })
-const { data: projects } = useProjects({}, { query: { enabled: !editing.value } })
+const { data: projects } = useProjects()
 const { data: account } = useAccount()
 const { mutateAsync: create } = useCreateOffer()
 const { mutateAsync: update } = useUpdateOffer()
@@ -95,16 +95,22 @@ watch(
 // What the ERB tracked as `oldProjectRate`: a rate the project filled in
 // follows the new project. A rate typed by hand stays put, which is why the
 // rows carry the fact rather than being compared against the old rate.
-watch(projectRate, (next) => {
-  // The project query blanks out while the newly picked one loads, and that
-  // gap is not a rate.
-  const rate = String(next ?? "")
-  if (rate === "") return
+//
+// Keyed on the record rather than on its rate: the query blanks out while the
+// newly picked project loads, and a blank rate is indistinguishable from a
+// project that has none — which would leave the old project's rate in place.
+watch(project, (loaded) => {
+  if (!loaded || loaded.id !== projectId.value) return
+
+  const rate = String(loaded.rate ?? "")
 
   for (const row of rows.value) {
     if (!row.rateFromProject) continue
 
     row.rate = rate
+    // Nothing to derive a value from, so the stale one goes.
+    if (rate === "") row.value = ""
+    row.rateFromProject = rate !== ""
     recalculate(row)
   }
 })
@@ -219,7 +225,7 @@ async function save(): Promise<void> {
 
     <form v-else class="flex flex-col gap-4" @submit.prevent="save">
       <div class="grid max-w-3xl gap-3 sm:grid-cols-2">
-        <label v-if="!editing" class="text-sm">
+        <label class="text-sm">
           {{ t("offerForm.fields.project") }}
           <select v-model="projectId" data-test="project" class="mt-1 block w-full rounded border border-field-border p-2">
             <option value="">{{ t("offerForm.fields.noProject") }}</option>
