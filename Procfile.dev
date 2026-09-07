@@ -1,4 +1,0 @@
-web: ./bin/rails s
-worker: ./bin/sidekiq -C config/sidekiq.yml -v
-docker-compose: docker compose up
-vite: bin/vite dev

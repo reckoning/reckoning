@@ -1,2 +1,3 @@
-web: bundle exec puma -C config/puma.rb
-worker: bundle exec sidekiq
+web: ./bin/rails s
+worker: ./bin/sidekiq -C config/sidekiq.yml -v
+vite: ./bin/vite dev

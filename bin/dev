@@ -8,33 +8,33 @@ if [ -f .env.local ]; then
 fi
 
 dev_port="${PORT:-8240}"
-services=(web worker)
+services=(web worker vite)
 
 for arg in "$@"; do
   case "$arg" in
-    --docker)      use_docker=1 ;;
     --rdbg)        use_rdbg=1 ;;
     --open)        open_browser=1 ;;
     --no-web)      no_web=1 ;;
     --no-worker)   no_worker=1 ;;
+    --no-vite)     no_vite=1 ;;
     --only=*)      only="${arg#--only=}" ;;
     --help|-h)
       cat <<EOF
 Usage: bin/dev [OPTIONS]
 
-Start the development server (Rails, Sidekiq).
+Start the development server (Rails, Sidekiq, Vite).
 
 Options:
-  --docker       Include Docker Compose services
   --rdbg         Attach Ruby debugger (rdbg) to the Rails server
   --open         Open browser when server is ready
 
   --no-web       Skip Rails server
   --no-worker    Skip Sidekiq worker
+  --no-vite      Skip Vite dev server
 
   --only=SVC     Start only the listed services (comma-separated)
-                 Available: web, worker
-                 Example: --only=web
+                 Available: web, worker, vite
+                 Example: --only=web,vite
 
   --help         Show this help message
 EOF
@@ -48,7 +48,7 @@ EOF
   esac
 done
 
-if [ -n "$only" ] && { [ -n "$no_web" ] || [ -n "$no_worker" ]; }; then
+if [ -n "$only" ] && { [ -n "$no_web" ] || [ -n "$no_worker" ] || [ -n "$no_vite" ]; }; then
   echo "Error: --only and --no-* flags cannot be combined." >&2
   exit 1
 fi
@@ -60,12 +60,13 @@ fi
 
 # Determine which services to start
 if [ -n "$only" ]; then
-  run_web=0; run_worker=0
+  run_web=0; run_worker=0; run_vite=0
   IFS=',' read -ra selected <<< "$only"
   for svc in "${selected[@]}"; do
     case "$svc" in
       web)    run_web=1 ;;
       worker) run_worker=1 ;;
+      vite)   run_vite=1 ;;
       *)
         echo "Unknown service: $svc (available: ${services[*]})" >&2
         exit 1
@@ -73,15 +74,13 @@ if [ -n "$only" ]; then
     esac
   done
 else
-  run_web=1; run_worker=1
+  run_web=1; run_worker=1; run_vite=1
   [ -n "$no_web" ]    && run_web=0
   [ -n "$no_worker" ] && run_worker=0
+  [ -n "$no_vite" ]   && run_vite=0
 fi
 
-run_docker=0
-[ -n "$use_docker" ] && run_docker=1
-
-formation="web=${run_web},worker=${run_worker},docker-compose=${run_docker}"
+formation="web=${run_web},worker=${run_worker},vite=${run_vite}"
 
 if ! gem list foreman -i --silent; then
   echo "Installing foreman..."
@@ -103,4 +102,4 @@ if [ -n "$open_browser" ]; then
   ) &
 fi
 
-exec foreman start -f Procfile.dev -m "$formation" -p "$dev_port" -e /dev/null
+exec bin/op foreman start -f Procfile -m "$formation" -p "$dev_port" -e /dev/null
