@@ -26,11 +26,15 @@ const OFFER = {
 
 const SUMMARY = {count: 2, value: "350.0", years: [2026, 2024]}
 
-async function mountList(requests: AxiosRequestConfig[] = [], path = "/offers") {
+async function mountList(
+  requests: AxiosRequestConfig[] = [],
+  path = "/offers",
+  summary: Record<string, unknown> = SUMMARY,
+) {
   AXIOS_INSTANCE.defaults.adapter = async (config) => {
     requests.push(config)
 
-    const data = String(config.url).includes("summary") ? SUMMARY : [OFFER]
+    const data = String(config.url).includes("summary") ? summary : [OFFER]
 
     return {data, status: 200, statusText: "OK", headers: {}, config}
   }
@@ -160,5 +164,16 @@ describe("OffersList", () => {
 
     expect(wrapper.get('[data-test="next-page"]').attributes("disabled")).toBeDefined()
     expect(wrapper.get('[data-test="prev-page"]').attributes("disabled")).toBeDefined()
+  })
+
+  // A full page says nothing about what follows it: the filtered total does.
+  it("offers a next page only while the total says there is one", async () => {
+    const full = await mountList([], "/offers", {count: 50, value: "1.0", years: [2026]})
+
+    expect(full.wrapper.get('[data-test="next-page"]').attributes("disabled")).toBeUndefined()
+
+    const last = await mountList([], "/offers?page=2", {count: 50, value: "1.0", years: [2026]})
+
+    expect(last.wrapper.get('[data-test="next-page"]').attributes("disabled")).toBeDefined()
   })
 })

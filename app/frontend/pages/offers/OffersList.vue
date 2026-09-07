@@ -100,9 +100,10 @@ const yearOptions = computed(() =>
 
 const STATES = ["created", "bided", "accepted", "declined", "canceled"] as const
 
-// The API pages; the client cannot read the Link header through the generated
-// mutator, so a full page is taken as "there may be more".
-const hasNextPage = computed(() => (offers.value?.length ?? 0) === PER_PAGE)
+// The client cannot read the Link header through the generated mutator, so
+// the filtered total answers it instead: a full last page would otherwise
+// offer a next page that is empty.
+const hasNextPage = computed(() => page.value * PER_PAGE < (summary.value?.count ?? 0))
 </script>
 
 <template>
