@@ -109,18 +109,31 @@ Rails.application.routes.draw do
   # `:id` cannot swallow the member routes above.
   get "invoices/:id", to: redirect("/app/invoices/%{id}"), as: :invoice
 
-  # The SPA owns the offers list (phase B7). Declared before the resource so
-  # it wins the GET, and left unnamed on purpose: `offers_path` comes from the
-  # resource's create route and generates the same "/offers" this catches.
+  # The SPA owns the offer screens (phase B7). The list keeps its query — the
+  # main navigation links `offers_path` — and the name comes back here now
+  # that the resource no longer carries `create` to provide it.
   get "offers", to: redirect { |_params, request|
     ["/app/offers", request.query_string.presence].compact.join("?")
-  }
+  }, as: :offers
 
-  resources :offers, except: [:index] do
+  # `?project_id=` survives: the project page links a new offer for itself.
+  get "offers/new", to: redirect { |_params, request|
+    ["/app/offers/new", request.query_string.presence].compact.join("?")
+  }, as: :new_offer
+  get "offers/:id/edit", to: redirect("/app/offers/%{id}/edit"), as: :edit_offer
+
+  # What is left of the server-rendered offer: the PDF, which the plan keeps
+  # server-rendered on purpose. Creating, updating, deleting and the state
+  # machine all go through /api/v1 now, and their actions are gone.
+  resources :offers, only: [] do
     member do
       get "/pdf/:pdf" => "offers#pdf", :as => :pdf, :defaults => {format: :pdf}
     end
   end
+
+  # Named because the dashboard's offer panel links it. Declared after the
+  # resource so its `:id` cannot swallow the member routes above.
+  get "offers/:id", to: redirect("/app/offers/%{id}"), as: :offer
 
   # The SPA owns the timesheet (phase B4). The name stays: the main
   # navigation links `timesheet_path`.

@@ -621,6 +621,42 @@ API level and in Playwright. The gate for deleting the ERB auth views is
 therefore met; what remains for B2 is repointing the mailer links and the
 signup question.
 
+#### What B7 turned up
+
+The one-line phase description said "list + detail + line-item editor + state
+transitions". Three of those four were not what the ERB screens suggested:
+
+- **The state transitions had no UI at all.** `Offer` has had the AASM machine
+  since long before this plan, and A7 gave it `PUT
+  /api/v1/offers/:id/transition/:event` — but no server-rendered screen ever
+  rendered a button for any of it. The states were only reachable from a
+  console. The SPA detail page is the first consumer.
+- **The position modal was dead.** `offers/_form` opened a Bootstrap modal
+  whose submit called `App.offer.addPositions` — lowercase `offer`, while the
+  CoffeeScript defines `App.Offer`, and `addPositions`/`loadPositions` exist
+  only in `invoice.coffee`. Nothing ever filled the modal. Offers only ever
+  got blank rows, so the SPA form has no timer picker: there is no behaviour
+  to port, and offer positions carry no `timer_ids`.
+- **The status filter never worked.** `Offer.filter_state` checked the
+  requested state against `Invoice.workflow_spec.state_names`, which shares
+  only `created` with the offer's own states.
+- **`offers/_test_mail_form` was orphaned.** It posted to
+  `send_test_mail_invoice_path` and no view rendered it, which is what kept
+  that legacy invoice route alive. Both are gone.
+
+Two things are deliberately left for phase C, because fixing them means
+changing a response shape:
+
+- **`Offer#title` and `Invoice#title` return markup.** `safe_join` of
+  `<strong>customer</strong> - project`, which through JSON is a string of
+  HTML. Both are in the API payload; the SPA lists show customer and project
+  as their own columns instead.
+- **`editable` disagrees with the ability.** `Offer#editable?` is
+  `!bided? && !accepted?`, while `can :update` covers `created` and `bided`.
+  The payload carries both; the SPA follows `abilities`, and the transitions
+  authorize `:transition` rather than `:update` — otherwise re-bidding a
+  declined offer, which the machine allows, would be unreachable.
+
 ### Phase C — legacy removal (multi-PR, ~1 week)
 
 Only once B8 has landed and stabilized.
