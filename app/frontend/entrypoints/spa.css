@@ -20,34 +20,123 @@
 @source "../**/*.ts";
 
 @theme {
+  /* Bootstrap 3's own palette, which the server-rendered app runs on
+     unmodified apart from `$brand-primary` (set to the same blue) and the
+     type scale below. */
   --color-brand: #428bca;
   --color-brand-border: #357ebd;
   --color-brand-hover: #3276b1;
+  --color-brand-hover-border: #285e8e;
   --color-ink: #333333;
   --color-field: #555555;
   --color-field-border: #cccccc;
   --color-field-focus: #66afe9;
   --color-placeholder: #999999;
+  --color-addon: #eeeeee;
+
+  /* `--color-rule` is Bootstrap's `$gray-lighter` (its lightest divider, used
+     inside a panel) and `--color-rule-strong` its `$panel-default-border` —
+     the line around panels, list groups and tables. */
   --color-rule: #eeeeee;
-  --color-muted: #808080;
+  --color-rule-strong: #dddddd;
+
+  --color-muted: #777777;
+  --color-muted-strong: #666666;
   --color-surface: #ffffff;
   --color-surface-muted: #f5f5f5;
+  --color-surface-stripe: #f9f9f9;
+
   --color-control-border: #b9c2cc;
   --color-control-hover: #e6e6e6;
-  --color-danger: #a94442;
+  --color-control-hover-border: #adadad;
+
+  --color-success: #5cb85c;
+  --color-success-border: #4cae4c;
+  --color-info: #5bc0de;
+  --color-info-border: #46b8da;
   --color-warning: #f0ad4e;
   --color-warning-border: #eea236;
+  --color-danger: #d9534f;
+  --color-danger-border: #d43f3a;
+  --color-danger-hover: #d2322d;
+  --color-danger-hover-border: #ac2925;
+  --color-danger-text: #a94442;
+
+  /* The four alert flavours, each a fill, a border and a text colour. */
+  --color-alert-info: #d9edf7;
+  --color-alert-info-border: #bce8f1;
+  --color-alert-info-text: #31708f;
+  --color-alert-success: #dff0d8;
+  --color-alert-success-border: #d6e9c6;
+  --color-alert-success-text: #3c763d;
+  --color-alert-warning: #fcf8e3;
+  --color-alert-warning-border: #faebcc;
+  --color-alert-warning-text: #8a6d3b;
+  --color-alert-danger: #f2dede;
+  --color-alert-danger-border: #ebccd1;
+  --color-alert-danger-text: #a94442;
+
+  /* The navigation is a fixed aside on a wide screen and a drawer on a narrow
+     one (`partials/_navbar-aside.scss`), painted in Bootstrap's navbar
+     colours. */
+  --color-nav: #f8f8f8;
+  --color-nav-border: #e7e7e7;
+  --color-nav-shadow: #cdcdcd;
+  --color-nav-link: #777777;
+  --color-nav-link-hover: #333333;
+  --color-nav-active: #e8e8e8;
 
   --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-brand: Orbitron, sans-serif;
+
+  /* `$font-size-base: 14px` with the headline scale from
+     `app/assets/stylesheets/application.scss`. */
+  --text-base: 14px;
+  --text-base--line-height: 1.428571429;
+  --text-h1: 30px;
+  --text-h2: 23px;
+  --text-h3: 17px;
+  --text-small: 12px;
+
+  --radius-bs: 4px;
+  --radius-bs-lg: 6px;
+  --radius-bs-sm: 3px;
 }
+
 
 @layer base {
   body {
     font-family: var(--font-sans);
-    font-size: 14px;
-    line-height: 1.428571429;
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
     color: var(--color-ink);
     background-color: var(--color-surface);
+  }
+
+  /* `partials/_typography.scss`: the two largest headlines carry the brand
+     face, everything below it stays in the body face. */
+  h1 {
+    font-family: var(--font-brand);
+    font-size: var(--text-h1);
+    line-height: 1.1;
+  }
+
+  h2 {
+    font-family: var(--font-brand);
+    font-size: var(--text-h2);
+    line-height: 1.1;
+  }
+
+  h3 {
+    font-size: var(--text-h3);
+    line-height: 1.1;
+  }
+
+  a {
+    color: var(--color-brand);
+  }
+
+  a:hover {
+    color: var(--color-brand-hover-border);
   }
 }

@@ -20,6 +20,7 @@ const OFFER = {
   projectName: "Narendra III",
   positions: [],
   editable: true,
+  abilities: {update: true, destroy: true, transitions: ["bid"]},
   createdAt: "2026-01-01T00:00:00Z",
   updatedAt: "2026-01-01T00:00:00Z",
 }
@@ -30,11 +31,12 @@ async function mountList(
   requests: AxiosRequestConfig[] = [],
   path = "/offers",
   summary: Record<string, unknown> = SUMMARY,
+  offer: Record<string, unknown> = OFFER,
 ) {
   AXIOS_INSTANCE.defaults.adapter = async (config) => {
     requests.push(config)
 
-    const data = String(config.url).includes("summary") ? summary : [OFFER]
+    const data = String(config.url).includes("summary") ? summary : [offer]
 
     return {data, status: 200, statusText: "OK", headers: {}, config}
   }
@@ -83,7 +85,7 @@ describe("OffersList", () => {
   it("names the state it was given", async () => {
     const {wrapper} = await mountList()
 
-    expect(wrapper.get('[data-test="offers"]').text()).toContain("Open")
+    expect(wrapper.get('[data-test="offers"]').text()).toContain("Sent")
   })
 
   // The total under a filtered table has to be the total of that table, which
@@ -94,13 +96,15 @@ describe("OffersList", () => {
     expect(wrapper.get('[data-test="summary-value"]').text()).toContain("350")
   })
 
+  // The filters are the dropdown buttons the server-rendered list used, not
+  // selects: a click opens the menu, a click picks the value.
   it("fills the year filter from the years the account has offers in", async () => {
     const {wrapper} = await mountList()
 
-    const years = wrapper.get('[data-test="filter-year"]').findAll("option").map((o) => o.text())
+    await wrapper.get('[data-test="filter-year"]').trigger("click")
 
-    expect(years).toContain("2026")
-    expect(years).toContain("2024")
+    expect(wrapper.find('[data-test="filter-year-2026"]').exists()).toBe(true)
+    expect(wrapper.find('[data-test="filter-year-2024"]').exists()).toBe(true)
   })
 
   // The query is the state, so a filtered, sorted page is a link.
@@ -108,7 +112,8 @@ describe("OffersList", () => {
     const requests: AxiosRequestConfig[] = []
     const {wrapper, router} = await mountList(requests)
 
-    await wrapper.get('[data-test="filter-state"]').setValue("accepted")
+    await wrapper.get('[data-test="filter-state"]').trigger("click")
+    await wrapper.get('[data-test="filter-state-accepted"]').trigger("click")
 
     await vi.waitFor(() => {
       expect(router.currentRoute.value.query.state).toBe("accepted")
@@ -135,7 +140,8 @@ describe("OffersList", () => {
 
     expect(wrapper.get('[data-test="page"]').text()).toBe("3")
 
-    await wrapper.get('[data-test="filter-state"]').setValue("accepted")
+    await wrapper.get('[data-test="filter-state"]').trigger("click")
+    await wrapper.get('[data-test="filter-state-accepted"]').trigger("click")
 
     await vi.waitFor(() => {
       expect(router.currentRoute.value.query.page).toBeUndefined()
@@ -156,6 +162,24 @@ describe("OffersList", () => {
     } finally {
       process.env.TZ = original
     }
+  })
+
+  // An accepted offer is no longer editable, and an expired trial writes
+  // nothing at all — the row must not offer what the API refuses.
+  it("offers editing only while the endpoint allows it", async () => {
+    const open = await mountList()
+
+    await open.wrapper.get(`[data-test="actions-${OFFER.id}"]`).trigger("click")
+    expect(open.wrapper.text()).toContain("Edit")
+
+    const closed = await mountList([], "/offers", SUMMARY, {
+      ...OFFER,
+      state: "accepted",
+      abilities: {update: false, destroy: true, transitions: []},
+    })
+
+    await closed.wrapper.get(`[data-test="actions-${OFFER.id}"]`).trigger("click")
+    expect(closed.wrapper.text()).not.toContain("Edit")
   })
 
   // A short page means there is nothing after it.

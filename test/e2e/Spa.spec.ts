@@ -23,6 +23,9 @@ test.describe("SPA shell", () => {
     await expect(page.getByTestId("dashboard-greeting")).toContainText("will@star.fleet")
     await expect(page).toHaveURL(/\/app\/?$/)
 
+    // Signing out lives in the user menu, the way the server-rendered aside
+    // has it.
+    await page.getByTestId("user-menu").click()
     await page.getByTestId("sign-out").click()
 
     await expect(page).toHaveURL(/\/app\/login$/)

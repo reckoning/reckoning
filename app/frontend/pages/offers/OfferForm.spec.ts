@@ -160,9 +160,7 @@ describe("OfferForm", () => {
     await flushPromises()
     await flushPromises()
 
-    // A number input hands back "90" for the typed "90.0"; what matters is
-    // that it is not the new project's 50.
-    expect((wrapper.get('[data-test="position-rate-0"]').element as HTMLInputElement).value).toBe("90")
+    expect((wrapper.get('[data-test="position-rate-0"]').element as HTMLInputElement).value).toBe("90.0")
     expect(wrapper.get('[data-test="position-value-computed-0"]').text()).toBe("180")
   })
 
@@ -181,10 +179,8 @@ describe("OfferForm", () => {
     expect(body.project_id).toBe(PROJECT_ID)
     expect(body.date).toBe("2026-08-01")
     expect(body.description).toBe("Sector survey")
-    // `v-model` on a number input hands over a number, which the input
-    // schema takes as readily as a string.
     expect(body.positions_attributes).toEqual([
-      {description: "Design", hours: 4, rate: "90.0", value: "360"},
+      {description: "Design", hours: "4", rate: "90.0", value: "360"},
     ])
   })
 

@@ -17,6 +17,9 @@ test.describe("Two-factor settings", () => {
   })
 
   test("offers enrollment with a qr code and a provisioning uri", async ({ page }) => {
+    // Security sits in the user menu, the way the server-rendered aside has
+    // the account screens.
+    await page.getByTestId("user-menu").click()
     await page.getByTestId("nav-two-factor").click()
 
     await expect(page).toHaveURL(/\/app\/settings\/two-factor$/)

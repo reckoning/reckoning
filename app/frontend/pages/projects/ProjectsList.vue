@@ -12,6 +12,14 @@ import {
 import type { Project } from "@/services/api/models"
 import { useToastsStore } from "@/stores/toasts"
 import { confirmDialog } from "@/lib/confirm"
+import UiButton from "@/components/ui/UiButton.vue"
+import UiDropdown from "@/components/ui/UiDropdown.vue"
+import UiDropdownDivider from "@/components/ui/UiDropdownDivider.vue"
+import UiDropdownItem from "@/components/ui/UiDropdownItem.vue"
+import UiListGroup from "@/components/ui/UiListGroup.vue"
+import UiListGroupItem from "@/components/ui/UiListGroupItem.vue"
+import UiPanel from "@/components/ui/UiPanel.vue"
+import UiProgress from "@/components/ui/UiProgress.vue"
 
 const { t, locale } = useI18n()
 const toasts = useToastsStore()
@@ -28,11 +36,12 @@ const { mutateAsync: unarchive } = useUnarchiveProject()
 // not by the displayed name: nothing stops two customers of one account from
 // sharing a name, and their projects are not one group.
 const grouped = computed(() => {
-  const groups = new Map<string, {customer: string; projects: Project[]}>()
+  const groups = new Map<string, {id?: string; customer: string; projects: Project[]}>()
 
   for (const project of projects.value ?? []) {
     const key = project.customerId ?? "none"
     const group = groups.get(key) ?? {
+      id: project.customerId ?? undefined,
       customer: project.customerName ?? t("projects.withoutCustomer"),
       projects: [],
     }
@@ -93,98 +102,145 @@ async function toggleArchive(project: Project): Promise<void> {
 </script>
 
 <template>
-  <div class="p-4">
-    <div class="mb-4 flex items-center justify-between">
-      <h1 class="text-[24px] font-medium">
+  <div id="projects">
+    <div class="flex flex-wrap items-start gap-4">
+      <h1 class="grow">
         {{ state === "archived" ? t("projects.titleArchived") : t("projects.title") }}
       </h1>
 
-      <RouterLink
-        :to="{ name: 'project-new' }"
-        class="rounded-md border border-brand-border bg-brand px-4 py-2 text-sm text-white hover:bg-brand-hover"
-        data-test="new-project"
-      >
-        {{ t("projects.new") }}
-      </RouterLink>
+      <div class="max-md:w-full">
+        <RouterLink :to="{ name: 'project-new' }" data-test="new-project">
+          <UiButton as="span" variant="primary" class="max-md:w-full">+ {{ t("projects.new") }}</UiButton>
+        </RouterLink>
+      </div>
     </div>
 
-    <nav class="mb-4 flex gap-2" data-test="filters">
-      <button
-        type="button"
-        class="rounded border border-field-border px-3 py-1 text-sm"
-        :class="state === 'active' ? 'bg-brand text-white' : 'bg-surface'"
-        data-test="filter-active"
-        @click="state = 'active'"
-      >
-        {{ t("projects.filters.active") }}
-      </button>
-      <button
-        type="button"
-        class="rounded border border-field-border px-3 py-1 text-sm"
-        :class="state === 'archived' ? 'bg-brand text-white' : 'bg-surface'"
+    <!-- One button that swaps the list, the way the server-rendered filter
+         did: there are only the two states. -->
+    <div class="mt-4" data-test="filters">
+      <UiButton
+        v-if="state === 'active'"
         data-test="filter-archived"
         @click="state = 'archived'"
       >
         {{ t("projects.filters.archived") }}
-      </button>
-    </nav>
+      </UiButton>
+      <UiButton v-else data-test="filter-active" @click="state = 'active'">
+        {{ t("projects.filters.active") }}
+      </UiButton>
+    </div>
 
-    <p v-if="isPending" data-test="loading">{{ t("projects.loading") }}</p>
-    <p v-else-if="isError" data-test="error">{{ t("projects.loadFailed") }}</p>
-    <p v-else-if="grouped.length === 0" data-test="empty">{{ t("projects.empty") }}</p>
+    <p v-if="isPending" class="mt-4" data-test="loading">{{ t("projects.loading") }}</p>
+    <p v-else-if="isError" class="mt-4" data-test="error">{{ t("projects.loadFailed") }}</p>
+    <p v-else-if="grouped.length === 0" class="mt-4" data-test="empty">{{ t("projects.empty") }}</p>
 
-    <div v-else class="flex flex-col gap-6" data-test="projects">
-      <section v-for="group in grouped" :key="group.customer + group.projects[0].id" class="border border-rule">
-        <h2 class="border-b border-rule bg-surface-muted px-3 py-2 text-sm font-semibold">
-          {{ group.customer }}
-        </h2>
+    <div v-else class="mt-4" data-test="projects">
+      <UiPanel
+        v-for="group in grouped"
+        :key="group.customer + group.projects[0].id"
+        list
+        data-test="customer-group"
+      >
+        <template #heading>
+          <div class="grid grid-cols-12 items-center gap-2">
+            <div class="col-span-8 md:col-span-4" data-test="customer-name">
+              <a v-if="group.id" :href="`/customers/${group.id}/edit`" class="text-brand">
+                <strong>{{ group.customer }}</strong>
+              </a>
+              <strong v-else>{{ group.customer }}</strong>
+            </div>
+            <div class="hidden md:col-span-2 md:block">{{ t("projects.columns.budget") }}</div>
+            <div class="hidden md:col-span-4 md:block">{{ t("projects.columns.hours") }}</div>
+            <div class="col-span-4 text-right md:col-span-2">
+              <RouterLink
+                v-if="group.id"
+                :to="{ name: 'project-new', query: { customer_id: group.id } }"
+                :title="t('projects.newFor', { customer: group.customer })"
+                :data-test="`new-project-${group.id}`"
+              >
+                <UiButton as="span">+</UiButton>
+              </RouterLink>
+            </div>
+          </div>
+        </template>
 
-        <ul class="divide-y divide-rule">
-          <li
+        <UiListGroup>
+          <UiListGroupItem
             v-for="project in group.projects"
             :key="project.id"
-            class="flex flex-wrap items-center gap-3 px-3 py-2"
             :data-test="`project-${project.id}`"
           >
-            <a :href="`/projects/${project.id}`" class="min-w-40 grow font-medium text-brand">
-              {{ project.name }}
-            </a>
+            <div class="grid grid-cols-12 items-center gap-y-2 gap-x-2">
+              <div class="col-span-12 md:col-span-4">
+                <a :href="`/projects/${project.id}`" class="text-ink hover:text-ink">
+                  <b>{{ project.name }}</b>
+                </a>
+              </div>
 
-            <span v-if="budgetOf(project) > 0" class="w-28 text-right tabular-nums">
-              {{ money.format(budgetOf(project)) }}
-            </span>
+              <div class="col-span-6 tabular-nums md:col-span-2">
+                <b v-if="budgetOf(project) > 0">{{ money.format(budgetOf(project)) }}</b>
+              </div>
 
-            <span class="w-24 text-right tabular-nums" :data-test="`hours-${project.id}`">
-              {{ hours.format(Number(project.timerValues ?? 0)) }} h
-            </span>
+              <div class="col-span-6 md:col-span-4">
+                <UiProgress
+                  v-if="budgetOf(project) > 0"
+                  :percent="progressOf(project)"
+                  :data-test="`progress-${project.id}`"
+                />
+                <span v-else class="tabular-nums" :data-test="`hours-${project.id}`">
+                  {{ hours.format(Number(project.timerValues ?? 0)) }} h
+                </span>
+              </div>
 
-            <span v-if="project.budgetPercent != null" class="h-2 w-24 rounded bg-surface-muted">
-              <span
-                class="block h-2 rounded bg-brand"
-                :style="{ width: `${progressOf(project)}%` }"
-                :data-test="`progress-${project.id}`"
-              ></span>
-            </span>
+              <div class="col-span-12 md:col-span-2 md:text-right">
+                <UiDropdown align="right" class="max-md:!flex max-md:w-full">
+                  <template #toggle="{ toggle }">
+                    <UiButton
+                      class="max-md:w-full"
+                      :data-test="`actions-${project.id}`"
+                      @click="toggle"
+                    >
+                      {{ t("projects.actions") }}
+                      <span class="ml-1 inline-block border-t-4 border-r-4 border-l-4 border-transparent border-t-current"></span>
+                    </UiButton>
+                  </template>
 
-            <RouterLink
-              :to="{ name: 'project-edit', params: { id: project.id } }"
-              class="text-sm underline"
-              :data-test="`edit-${project.id}`"
-            >
-              {{ t("projects.edit") }}
-            </RouterLink>
-
-            <button
-              type="button"
-              class="text-sm underline"
-              :data-test="`archive-${project.id}`"
-              @click="toggleArchive(project)"
-            >
-              {{ project.workflowState === "archived" ? t("projects.unarchive") : t("projects.archive") }}
-            </button>
-          </li>
-        </ul>
-      </section>
+                  <template #menu>
+                    <UiDropdownItem>
+                      <a :href="`/projects/${project.id}`">{{ t("projects.show") }}</a>
+                    </UiDropdownItem>
+                    <UiDropdownItem v-if="project.workflowState === 'active'">
+                      <RouterLink
+                        :to="{ name: 'invoice-new', query: { project_id: project.id } }"
+                      >
+                        + {{ t("projects.addInvoice") }}
+                      </RouterLink>
+                    </UiDropdownItem>
+                    <UiDropdownItem>
+                      <RouterLink
+                        :to="{ name: 'project-edit', params: { id: project.id } }"
+                        :data-test="`edit-${project.id}`"
+                      >
+                        {{ t("projects.edit") }}
+                      </RouterLink>
+                    </UiDropdownItem>
+                    <UiDropdownDivider />
+                    <UiDropdownItem>
+                      <button
+                        type="button"
+                        :data-test="`archive-${project.id}`"
+                        @click="toggleArchive(project)"
+                      >
+                        {{ project.workflowState === "archived" ? t("projects.unarchive") : t("projects.archive") }}
+                      </button>
+                    </UiDropdownItem>
+                  </template>
+                </UiDropdown>
+              </div>
+            </div>
+          </UiListGroupItem>
+        </UiListGroup>
+      </UiPanel>
     </div>
   </div>
 </template>

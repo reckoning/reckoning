@@ -19,6 +19,9 @@ interface Options {
   account?: Record<string, unknown>
   uninvoiced?: Record<string, unknown>[]
   invoiceStatus?: number
+  // Held back so a test can type into the form while the project's rate is
+  // still in flight.
+  projectGate?: Promise<void>
 }
 
 // The schema calls `rate` nullable, so a client cannot assume a value.
@@ -38,6 +41,10 @@ function respond(requests: AxiosRequestConfig[], options: Options) {
     if (url.includes("/timers/uninvoiced")) data = options.uninvoiced ?? []
     else if (url.includes("/account")) data = {id: "acc", name: "Enterprise", address: "Sector 001", ...options.account}
     else if (url.includes("/projects/")) {
+      // Held back so a test can type into the form while the rate is still in
+      // flight.
+      if (options.projectGate) await options.projectGate
+
       const requested = url.split("/projects/")[1]
 
       data = {
@@ -151,7 +158,8 @@ describe("InvoiceForm", () => {
     await flushPromises()
 
     // The two timers of that task add up, and the hours are fixed.
-    expect(wrapper.get('[data-test="position-hours-fixed-1"]').text()).toBe("2")
+    // The hours carry the unit the ERB put in the field's addon.
+    expect(wrapper.get('[data-test="position-hours-fixed-1"]').text()).toContain("2")
     expect((wrapper.get('[data-test="position-description-1"]').element as HTMLInputElement).value)
       .toBe("Away mission")
 
@@ -230,9 +238,7 @@ describe("InvoiceForm", () => {
     await flushPromises()
     await flushPromises()
 
-    // A number input hands back "90" for the typed "90.0"; what matters is
-    // that it is not the new project's 50.
-    expect((wrapper.get('[data-test="position-rate-0"]').element as HTMLInputElement).value).toBe("90")
+    expect((wrapper.get('[data-test="position-rate-0"]').element as HTMLInputElement).value).toBe("90.0")
     expect(wrapper.get('[data-test="position-value-computed-0"]').text()).toBe("180")
   })
 
@@ -256,6 +262,31 @@ describe("InvoiceForm", () => {
     // Nothing left to derive the value from, so the stale one is gone rather
     // than being billed.
     expect(wrapper.get('[data-test="position-value-computed-0"]').text()).toBe("")
+  })
+
+  // The rate used to be filled in only at the moment hours were typed, so a
+  // row typed before the project's rate arrived kept an empty rate for good —
+  // and the position went out without one.
+  it("fills the rate once the project's rate arrives", async () => {
+    let openGate = () => {}
+    const gate = new Promise<void>((resolve) => {
+      openGate = resolve
+    })
+
+    const {wrapper} = await mountForm(`/invoices/new?project_id=${PROJECT_ID}`, {projectGate: gate})
+
+    await wrapper.get('[data-test="position-hours-0"]').setValue("2")
+    await flushPromises()
+
+    expect((wrapper.get('[data-test="position-rate-0"]').element as HTMLInputElement).value).toBe("")
+
+    openGate()
+
+    await vi.waitFor(() => {
+      expect((wrapper.get('[data-test="position-rate-0"]').element as HTMLInputElement).value).toBe("90.0")
+    })
+
+    expect(wrapper.get('[data-test="position-value-computed-0"]').text()).toBe("180")
   })
 
   // The ERB form rendered the project select for `new` and `edit` alike, and

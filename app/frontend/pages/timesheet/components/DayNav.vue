@@ -1,13 +1,18 @@
 <script setup lang="ts">
 // Mirrors the legacy
 // `app/views/templates/timesheets/day.html.erb` /
-// `week.html.erb` header — Bootstrap 3 `.btn-group` /
-// `.resource-nav` so the existing styles apply.
+// `week.html.erb` header: the paging buttons and the day/week switch as two
+// button groups, with the active view filled in.
 
 import {computed, ref} from "vue"
 import type {TimesheetView} from "../composables/useTimesheetDate"
 import dayjs from "dayjs"
 import {ISO_DATE} from "../../../lib/timers/format"
+
+import { useI18n } from "vue-i18n"
+import UiButton from "../../../components/ui/UiButton.vue"
+
+const { t } = useI18n()
 
 const props = defineProps<{
   date: string
@@ -69,13 +74,17 @@ function onDateInput(e: Event) {
     <div class="col-span-12 md:col-span-7">
       <h2>{{ heading }}</h2>
     </div>
+
     <div class="col-span-12 md:col-span-5">
-      <div class="ml-auto resource-nav" style="display: flex; gap: 8px; flex-wrap: wrap">
-        <div class="btn-group btn-group-justified-responsive resource-nav">
-          <a class="rounded border border-field-border bg-surface px-3 py-1 text-sm hover:bg-control-hover disabled:opacity-60" role="button" @click.prevent="emit('prev')">
+      <div class="flex flex-wrap justify-end gap-2">
+        <!-- One `.btn-group`: the buttons share an outline, only the ends are
+             rounded. -->
+        <div class="flex [&>*:not(:first-child)]:-ml-px [&>*:not(:first-child)]:rounded-l-none [&>*:not(:last-child)]:rounded-r-none">
+          <UiButton :title="t('timesheet.previousDay')" @click="emit('prev')">
             <span aria-hidden="true">‹</span>
-          </a>
-          <a class="rounded border border-field-border bg-surface px-3 py-1 text-sm hover:bg-control-hover disabled:opacity-60 date-picker-trigger" role="button" @click.prevent="openPicker">
+          </UiButton>
+
+          <UiButton class="date-picker-trigger" :title="t('timesheet.pickDate')" @click="openPicker">
             <span aria-hidden="true">📅</span>
             <input
               ref="hiddenInputRef"
@@ -86,36 +95,24 @@ function onDateInput(e: Event) {
               aria-hidden="true"
               @change="onDateInput"
             />
-          </a>
-          <a
-            class="rounded border border-field-border bg-surface px-3 py-1 text-sm hover:bg-control-hover disabled:opacity-60"
-            role="button"
-            :class="{disabled: isToday}"
-            @click.prevent="!isToday && emit('today')"
-          >
+          </UiButton>
+
+          <UiButton :disabled="isToday" @click="!isToday && emit('today')">
             {{ todayLabel }}
-          </a>
-          <a class="rounded border border-field-border bg-surface px-3 py-1 text-sm hover:bg-control-hover disabled:opacity-60" role="button" @click.prevent="emit('next')">
+          </UiButton>
+
+          <UiButton :title="t('timesheet.nextDay')" @click="emit('next')">
             <span aria-hidden="true">›</span>
-          </a>
+          </UiButton>
         </div>
-        <div class="btn-group">
-          <a
-            class="rounded border border-field-border bg-surface px-3 py-1 text-sm hover:bg-control-hover disabled:opacity-60"
-            role="button"
-            :class="{active: view === 'day'}"
-            @click.prevent="emit('view', 'day')"
-          >
+
+        <div class="flex [&>*:not(:first-child)]:-ml-px [&>*:not(:first-child)]:rounded-l-none [&>*:not(:last-child)]:rounded-r-none">
+          <UiButton :variant="view === 'day' ? 'primary' : 'default'" @click="emit('view', 'day')">
             {{ dayLabel }}
-          </a>
-          <a
-            class="rounded border border-field-border bg-surface px-3 py-1 text-sm hover:bg-control-hover disabled:opacity-60"
-            role="button"
-            :class="{active: view === 'week'}"
-            @click.prevent="emit('view', 'week')"
-          >
+          </UiButton>
+          <UiButton :variant="view === 'week' ? 'primary' : 'default'" @click="emit('view', 'week')">
             {{ weekLabel }}
-          </a>
+          </UiButton>
         </div>
       </div>
     </div>

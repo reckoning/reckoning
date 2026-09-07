@@ -94,13 +94,15 @@ describe("InvoicesList", () => {
     expect(wrapper.get('[data-test="summary-vat"]').text()).toContain("66")
   })
 
+  // The filters are the dropdown buttons the server-rendered list used, not
+  // selects: a click opens the menu, a click picks the value.
   it("fills the year filter from the years the account has invoices in", async () => {
     const {wrapper} = await mountList()
 
-    const years = wrapper.get('[data-test="filter-year"]').findAll("option").map((o) => o.text())
+    await wrapper.get('[data-test="filter-year"]').trigger("click")
 
-    expect(years).toContain("2026")
-    expect(years).toContain("2024")
+    expect(wrapper.find('[data-test="filter-year-2026"]').exists()).toBe(true)
+    expect(wrapper.find('[data-test="filter-year-2024"]').exists()).toBe(true)
   })
 
   // The query is the state, so a filtered, sorted page is a link.
@@ -108,7 +110,8 @@ describe("InvoicesList", () => {
     const requests: AxiosRequestConfig[] = []
     const {wrapper, router} = await mountList(requests)
 
-    await wrapper.get('[data-test="filter-state"]').setValue("paid")
+    await wrapper.get('[data-test="filter-state"]').trigger("click")
+    await wrapper.get('[data-test="filter-state-paid"]').trigger("click")
 
     await vi.waitFor(() => {
       expect(router.currentRoute.value.query.state).toBe("paid")
@@ -135,7 +138,8 @@ describe("InvoicesList", () => {
 
     expect(wrapper.get('[data-test="page"]').text()).toBe("3")
 
-    await wrapper.get('[data-test="filter-state"]').setValue("paid")
+    await wrapper.get('[data-test="filter-state"]').trigger("click")
+    await wrapper.get('[data-test="filter-state-paid"]').trigger("click")
 
     await vi.waitFor(() => {
       expect(router.currentRoute.value.query.page).toBeUndefined()

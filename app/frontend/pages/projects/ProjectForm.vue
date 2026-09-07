@@ -15,6 +15,10 @@ import { useCustomers } from "@/services/api/services/customers/customers"
 import { useAccount } from "@/services/api/services/account/account"
 import { useToastsStore } from "@/stores/toasts"
 import { confirmDialog } from "@/lib/confirm"
+import UiAlert from "@/components/ui/UiAlert.vue"
+import UiButton from "@/components/ui/UiButton.vue"
+import UiFormActions from "@/components/ui/UiFormActions.vue"
+import UiPanel from "@/components/ui/UiPanel.vue"
 
 const route = useRoute()
 const router = useRouter()
@@ -83,9 +87,16 @@ const schema = toTypedSchema(
   }),
 )
 
+// `new_project_path(customer_id: customer)` in the server-rendered list: the
+// plus button in a customer's panel heading opens the form with that customer
+// already chosen. The query carries it here.
+const customerFromQuery = computed(() =>
+  typeof route.query.customer_id === "string" ? route.query.customer_id : undefined,
+)
+
 const { defineField, handleSubmit, errors, setValues } = useForm({
   validationSchema: schema,
-  initialValues: { budget_on_dashboard: true },
+  initialValues: { budget_on_dashboard: true, customer_id: customerFromQuery.value },
 })
 
 const [name, nameAttrs] = defineField("name")
@@ -218,130 +229,144 @@ const save = handleSubmit(async (values) => {
     toasts.push("error", t("project.saveFailed"))
   }
 })
+
+// The `.form-control` shape, inline because these fields carry VeeValidate's
+// own bindings rather than going through `UiInput`.
+const FIELD =
+  "block w-full rounded-bs border border-field-border bg-surface px-3 py-1.5 text-base leading-[1.428571429] text-field shadow-[inset_0_1px_1px_rgba(0,0,0,0.075)] placeholder:text-placeholder focus:border-field-focus focus:shadow-[inset_0_1px_1px_rgba(0,0,0,0.075),0_0_8px_rgba(102,175,233,0.6)] focus:outline-none"
 </script>
 
 <template>
-  <div class="p-4">
-    <div class="mb-4 flex items-center justify-between">
-      <h1 class="text-[24px] font-medium" data-test="project-title">
+  <div id="project">
+    <div class="flex flex-wrap items-start gap-4">
+      <h1 class="grow" data-test="project-title">
         {{ editing ? project?.name : t("project.newTitle") }}
       </h1>
 
-      <div class="flex gap-3">
-        <RouterLink :to="{ name: 'projects' }" class="text-sm underline" data-test="back">
-          {{ t("project.back") }}
-        </RouterLink>
-        <button v-if="editing" type="button" class="text-sm text-danger underline" data-test="delete" @click="removeProject">
+      <div class="flex flex-wrap gap-2 max-md:w-full max-md:flex-col">
+        <UiButton
+          v-if="editing"
+          variant="danger"
+          type="button"
+          data-test="delete"
+          @click="removeProject"
+        >
           {{ t("project.delete") }}
-        </button>
+        </UiButton>
+        <RouterLink :to="{ name: 'projects' }" data-test="back">
+          <UiButton as="span" class="max-md:w-full">{{ t("project.back") }}</UiButton>
+        </RouterLink>
       </div>
     </div>
 
-    <p v-if="loading" data-test="loading">{{ t("project.loading") }}</p>
+    <p v-if="loading" class="mt-4" data-test="loading">{{ t("project.loading") }}</p>
 
-    <p v-else-if="missingAddress" class="max-w-2xl border border-warning-border bg-warning p-3 text-sm text-white" data-test="missing-address">
+    <UiAlert v-else-if="missingAddress" variant="warning" class="mt-4" data-test="missing-address">
       {{ t("project.missingAddress") }}
-      <a href="/settings#address" class="underline" data-test="account-settings">{{ t("project.toSettings") }}</a>
-    </p>
+      <a href="/settings#address" data-test="account-settings">{{ t("project.toSettings") }}</a>
+    </UiAlert>
 
-    <form v-else class="flex max-w-2xl flex-col gap-3" @submit="save">
-      <label class="text-sm">
-        {{ t("project.fields.customer") }}
-        <select v-model="customerId" v-bind="customerIdAttrs" data-test="customer" class="mt-1 block w-full rounded border border-field-border p-2">
+    <form v-else class="mt-4 max-w-3xl" @submit="save">
+      <label class="mb-4 block">
+        <span class="mb-1 inline-block font-bold">{{ t("project.fields.customer") }}</span>
+        <select v-model="customerId" v-bind="customerIdAttrs" data-test="customer" :class="FIELD">
           <option value="">{{ t("project.fields.noCustomer") }}</option>
           <option v-for="customer in customers ?? []" :key="customer.id" :value="customer.id">
             {{ customer.name }}
           </option>
         </select>
-        <span v-if="errors.customer_id" data-test="customer-error" class="text-[13px] text-danger">
+        <span v-if="errors.customer_id" data-test="customer-error" class="mt-1 block text-danger-text">
           {{ errors.customer_id }}
         </span>
       </label>
 
-      <label class="text-sm">
-        {{ t("project.fields.name") }}
-        <input v-model="name" v-bind="nameAttrs" type="text" data-test="name" class="mt-1 block w-full rounded border border-field-border p-2" />
-        <span v-if="errors.name" data-test="name-error" class="text-[13px] text-danger">{{ errors.name }}</span>
+      <label class="mb-4 block">
+        <span class="mb-1 inline-block font-bold">{{ t("project.fields.name") }}</span>
+        <input v-model="name" v-bind="nameAttrs" type="text" data-test="name" :class="FIELD" />
+        <span v-if="errors.name" data-test="name-error" class="mt-1 block text-danger-text">{{ errors.name }}</span>
       </label>
 
-      <label class="text-sm">
-        {{ t("project.fields.rate") }}
-        <input v-model="rate" v-bind="rateAttrs" type="number" step="0.01" min="0" data-test="rate" class="mt-1 block w-full rounded border border-field-border p-2" />
+      <label class="mb-4 block">
+        <span class="mb-1 inline-block font-bold">{{ t("project.fields.rate") }}</span>
+        <input v-model="rate" v-bind="rateAttrs" type="number" step="0.01" min="0" data-test="rate" :class="FIELD" />
       </label>
 
-      <label class="text-sm">
-        {{ t("project.fields.budget") }}
-        <input v-model="budget" v-bind="budgetAttrs" type="number" step="0.01" min="0" data-test="budget" class="mt-1 block w-full rounded border border-field-border p-2" />
+      <label class="mb-4 block">
+        <span class="mb-1 inline-block font-bold">{{ t("project.fields.budget") }}</span>
+        <input v-model="budget" v-bind="budgetAttrs" type="number" step="0.01" min="0" data-test="budget" :class="FIELD" />
       </label>
 
-      <label class="text-sm">
-        {{ t("project.fields.budgetHours") }}
-        <input v-model="budgetHours" v-bind="budgetHoursAttrs" type="number" step="0.01" min="0" data-test="budget-hours" class="mt-1 block w-full rounded border border-field-border p-2" />
+      <label class="mb-4 block">
+        <span class="mb-1 inline-block font-bold">{{ t("project.fields.budgetHours") }}</span>
+        <input v-model="budgetHours" v-bind="budgetHoursAttrs" type="number" step="0.01" min="0" data-test="budget-hours" :class="FIELD" />
       </label>
 
-      <label class="flex items-center gap-2 text-sm">
-        <input v-model="budgetOnDashboard" v-bind="budgetOnDashboardAttrs" type="checkbox" data-test="budget-on-dashboard" class="h-[18px] w-[18px] rounded border border-control-border accent-brand" />
+      <label class="mb-4 flex items-center gap-2">
+        <input v-model="budgetOnDashboard" v-bind="budgetOnDashboardAttrs" type="checkbox" data-test="budget-on-dashboard" class="size-4 accent-brand" />
         {{ t("project.fields.budgetOnDashboard") }}
       </label>
 
-      <label class="text-sm">
-        {{ t("project.fields.roundUp") }}
-        <select v-model="roundUp" v-bind="roundUpAttrs" data-test="round-up" class="mt-1 block w-full rounded border border-field-border p-2">
+      <label class="mb-4 block">
+        <span class="mb-1 inline-block font-bold">{{ t("project.fields.roundUp") }}</span>
+        <select v-model="roundUp" v-bind="roundUpAttrs" data-test="round-up" :class="FIELD">
           <option v-for="option in roundUpOptions" :key="option" :value="String(option)">
             {{ t(`project.roundUp.${option}`) }}
           </option>
         </select>
       </label>
 
-      <label class="text-sm">
-        {{ t("project.fields.startDate") }}
-        <input v-model="startDate" v-bind="startDateAttrs" type="date" data-test="start-date" class="mt-1 block w-full rounded border border-field-border p-2" />
+      <label class="mb-4 block">
+        <span class="mb-1 inline-block font-bold">{{ t("project.fields.startDate") }}</span>
+        <input v-model="startDate" v-bind="startDateAttrs" type="date" data-test="start-date" :class="FIELD" />
       </label>
 
-      <label class="text-sm">
-        {{ t("project.fields.endDate") }}
-        <input v-model="endDate" v-bind="endDateAttrs" type="date" data-test="end-date" class="mt-1 block w-full rounded border border-field-border p-2" />
+      <label class="mb-4 block">
+        <span class="mb-1 inline-block font-bold">{{ t("project.fields.endDate") }}</span>
+        <input v-model="endDate" v-bind="endDateAttrs" type="date" data-test="end-date" :class="FIELD" />
       </label>
 
-      <label class="text-sm">
-        {{ t("project.fields.invoiceAddition") }}
-        <textarea v-model="invoiceAddition" v-bind="invoiceAdditionAttrs" rows="4" data-test="invoice-addition" class="mt-1 block w-full rounded border border-field-border p-2"></textarea>
+      <label class="mb-4 block">
+        <span class="mb-1 inline-block font-bold">{{ t("project.fields.invoiceAddition") }}</span>
+        <textarea v-model="invoiceAddition" v-bind="invoiceAdditionAttrs" rows="4" data-test="invoice-addition" :class="FIELD"></textarea>
       </label>
 
-      <fieldset class="mt-2 border-t border-rule pt-3">
-        <legend class="text-sm font-semibold">{{ t("project.tasks") }}</legend>
-
+      <UiPanel :title="t('project.tasks')">
+        <template #body>
         <div class="flex flex-col gap-2" data-test="tasks">
-          <div v-for="{ task, index } in visibleTasks" :key="task.id ?? `new-${index}`" class="flex items-center gap-2">
+          <div v-for="{ task, index } in visibleTasks" :key="task.id ?? `new-${index}`" class="flex flex-wrap items-center gap-2">
             <input
               v-model="task.name"
               type="text"
               :placeholder="t('project.fields.taskName')"
               :data-test="`task-name-${index}`"
-              class="grow rounded border border-field-border p-2 text-sm"
+              :class="FIELD"
             />
-            <label class="flex items-center gap-1 text-sm">
-              <input v-model="task.billable" type="checkbox" :data-test="`task-billable-${index}`" class="h-[18px] w-[18px] rounded border border-control-border accent-brand" />
+            <label class="flex items-center gap-1 whitespace-nowrap">
+              <input v-model="task.billable" type="checkbox" :data-test="`task-billable-${index}`" class="size-4 accent-brand" />
               {{ t("project.fields.billable") }}
             </label>
-            <button type="button" class="text-sm text-danger underline" :data-test="`task-remove-${index}`" @click="removeTask(index)">
-              {{ t("project.removeTask") }}
-            </button>
+            <UiButton
+              type="button"
+              variant="danger"
+              :data-test="`task-remove-${index}`"
+              @click="removeTask(index)"
+            >
+              ×
+            </UiButton>
           </div>
         </div>
 
-        <button type="button" class="mt-2 rounded border border-field-border px-3 py-1 text-sm" data-test="add-task" @click="addTask">
-          {{ t("project.addTask") }}
-        </button>
-      </fieldset>
+          <UiButton type="button" class="mt-4" data-test="add-task" @click="addTask">
+            + {{ t("project.addTask") }}
+          </UiButton>
+        </template>
+      </UiPanel>
 
-      <button
-        type="submit"
-        class="mt-4 self-start rounded-md border border-brand-border bg-brand px-4 py-2 text-white hover:bg-brand-hover"
-        data-test="submit"
-      >
-        {{ t("project.save") }}
-      </button>
+      <UiFormActions
+        :save-label="t('project.save')"
+        :cancel-label="t('project.cancel')"
+        @cancel="router.push({ name: 'projects' })"
+      />
     </form>
   </div>
 </template>

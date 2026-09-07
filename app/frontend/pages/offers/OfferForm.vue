@@ -6,6 +6,12 @@ import { useOffer, useCreateOffer, useUpdateOffer } from "@/services/api/service
 import { useProjects, useProject } from "@/services/api/services/projects/projects"
 import { useAccount } from "@/services/api/services/account/account"
 import { useToastsStore } from "@/stores/toasts"
+import UiAlert from "@/components/ui/UiAlert.vue"
+import UiButton from "@/components/ui/UiButton.vue"
+import UiFormActions from "@/components/ui/UiFormActions.vue"
+import UiInput from "@/components/ui/UiInput.vue"
+import UiInputGroup from "@/components/ui/UiInputGroup.vue"
+import UiPanel from "@/components/ui/UiPanel.vue"
 
 const route = useRoute()
 const router = useRouter()
@@ -105,10 +111,16 @@ watch(project, (loaded) => {
   const rate = String(loaded.rate ?? "")
 
   for (const row of rows.value) {
-    if (!row.rateFromProject) continue
+    // A row typed before the project's rate arrived is waiting for it: hours
+    // and no rate. Without this the rate stays empty for good, because
+    // `recalculate` only ever ran while the query was still in flight.
+    const waiting = !row.id && row.hours !== "" && row.rate === ""
+
+    if (!row.rateFromProject && !waiting) continue
 
     row.rate = rate
-    // Nothing to derive a value from, so the stale one goes.
+    // Nothing to derive a value from, so a stale value goes rather than
+    // being billed.
     if (rate === "") row.value = ""
     row.rateFromProject = rate !== ""
     recalculate(row)
@@ -203,132 +215,143 @@ async function save(): Promise<void> {
 </script>
 
 <template>
-  <div class="p-4">
-    <div class="mb-4 flex items-center justify-between">
-      <h1 class="text-[24px] font-medium" data-test="offer-form-title">
+  <div id="offer-form">
+    <div class="flex flex-wrap items-start gap-4">
+      <h1 class="grow" data-test="offer-form-title">
         {{ editing ? t("offerForm.editTitle") : t("offerForm.newTitle") }}
       </h1>
 
-      <RouterLink :to="{ name: 'offers' }" class="text-sm underline" data-test="back">
-        {{ t("offerForm.back") }}
-      </RouterLink>
+      <div class="max-md:w-full">
+        <RouterLink :to="{ name: 'offers' }" data-test="back">
+          <UiButton as="span" class="max-md:w-full">{{ t("offerForm.back") }}</UiButton>
+        </RouterLink>
+      </div>
     </div>
 
-    <p v-if="editing && isPending" data-test="loading">{{ t("offerForm.loading") }}</p>
+    <p v-if="editing && isPending" class="mt-4" data-test="loading">{{ t("offerForm.loading") }}</p>
 
-    <p v-else-if="editing && isError" data-test="load-failed">{{ t("offerForm.loadFailed") }}</p>
-
-    <p v-else-if="missingAddress" class="max-w-2xl border border-warning-border bg-warning p-3 text-sm text-white" data-test="missing-address">
-      {{ t("offerForm.missingAddress") }}
-      <a href="/settings#address" class="underline" data-test="account-settings">{{ t("offerForm.toSettings") }}</a>
+    <p v-else-if="editing && isError" class="mt-4" data-test="load-failed">
+      {{ t("offerForm.loadFailed") }}
     </p>
 
-    <form v-else class="flex flex-col gap-4" @submit.prevent="save">
-      <div class="grid max-w-3xl gap-3 sm:grid-cols-2">
-        <label class="text-sm">
-          {{ t("offerForm.fields.project") }}
-          <select v-model="projectId" data-test="project" class="mt-1 block w-full rounded border border-field-border p-2">
-            <option value="">{{ t("offerForm.fields.noProject") }}</option>
-            <option v-for="entry in projects ?? []" :key="entry.id" :value="entry.id">
-              {{ entry.label ?? entry.name }}
-            </option>
-          </select>
-        </label>
+    <UiAlert v-else-if="missingAddress" variant="warning" class="mt-4" data-test="missing-address">
+      {{ t("offerForm.missingAddress") }}
+      <a href="/settings#address" data-test="account-settings">{{ t("offerForm.toSettings") }}</a>
+    </UiAlert>
 
-        <label class="text-sm">
-          {{ t("offerForm.fields.ref") }}
-          <input v-model="ref_" type="number" data-test="ref" class="mt-1 block w-full rounded border border-field-border p-2" />
-        </label>
+    <form v-else class="mt-4" @submit.prevent="save">
+      <div class="grid gap-4 md:grid-cols-2">
+        <UiInput v-model="projectId" as="select" data-test="project">
+          <option value="">{{ t("offerForm.fields.noProject") }}</option>
+          <option v-for="entry in projects ?? []" :key="entry.id" :value="entry.id">
+            {{ entry.label ?? entry.name }}
+          </option>
+        </UiInput>
 
-        <label class="text-sm">
-          {{ t("offerForm.fields.date") }}
-          <input v-model="date" type="date" data-test="date" class="mt-1 block w-full rounded border border-field-border p-2" />
-        </label>
+        <UiInputGroup :addon="t('offerForm.fields.date')">
+          <UiInput v-model="date" type="date" data-test="date" />
+        </UiInputGroup>
+
+        <UiInputGroup :addon="t('offerForm.fields.ref')">
+          <UiInput v-model="ref_" type="number" data-test="ref" />
+        </UiInputGroup>
       </div>
 
-      <label class="max-w-3xl text-sm">
-        {{ t("offerForm.fields.description") }}
-        <textarea
-          v-model="description"
-          rows="6"
-          data-test="description"
-          class="mt-1 block w-full rounded border border-field-border p-2"
-        ></textarea>
-      </label>
+      <div class="mt-4 max-w-3xl">
+        <label class="mb-1 inline-block font-bold">{{ t("offerForm.fields.description") }}</label>
+        <UiInput v-model="description" as="textarea" rows="6" data-test="description" />
+      </div>
 
-      <fieldset class="border-t border-rule pt-3">
-        <legend class="text-sm font-semibold">{{ t("offerForm.positions") }}</legend>
+      <UiPanel class="mt-5" :title="t('offerForm.positions')">
+        <template #body>
+          <div class="flex flex-col gap-2" data-test="positions">
+            <div
+              v-for="{ row, index } in visibleRows"
+              :key="row.id ?? `new-${index}`"
+              class="grid grid-cols-12 items-start gap-2"
+            >
+              <div class="col-span-12 md:col-span-5">
+                <UiInput
+                  v-model="row.description"
+                  :placeholder="t('offerForm.fields.positionDescription')"
+                  :data-test="`position-description-${index}`"
+                />
+              </div>
 
-        <div class="flex flex-col gap-2" data-test="positions">
-          <div v-for="{ row, index } in visibleRows" :key="row.id ?? `new-${index}`" class="flex flex-wrap items-center gap-2">
-            <input
-              v-model="row.description"
-              type="text"
-              :placeholder="t('offerForm.fields.positionDescription')"
-              :data-test="`position-description-${index}`"
-              class="min-w-60 grow rounded border border-field-border p-2 text-sm"
-            />
+              <div class="col-span-4 md:col-span-2">
+                <UiInputGroup :addon="t('offerForm.fields.rateAddon')">
+                  <UiInput
+                    v-model="row.rate"
+                    type="number"
+                    step="0.01"
+                    class="text-right"
+                    :data-test="`position-rate-${index}`"
+                    @input="rateTyped(row)"
+                  />
+                </UiInputGroup>
+              </div>
 
-            <input
-              v-model="row.rate"
-              type="number"
-              step="0.01"
-              :placeholder="t('offerForm.fields.rate')"
-              :data-test="`position-rate-${index}`"
-              class="w-24 rounded border border-field-border p-2 text-right text-sm tabular-nums"
-              @input="rateTyped(row)"
-            />
+              <div class="col-span-4 md:col-span-2">
+                <UiInputGroup :addon="t('offerForm.fields.hoursAddon')">
+                  <UiInput
+                    v-model="row.hours"
+                    type="number"
+                    step="0.01"
+                    class="text-right"
+                    :data-test="`position-hours-${index}`"
+                    @input="recalculate(row)"
+                  />
+                </UiInputGroup>
+              </div>
 
-            <input
-              v-model="row.hours"
-              type="number"
-              step="0.01"
-              :placeholder="t('offerForm.fields.hours')"
-              :data-test="`position-hours-${index}`"
-              class="w-24 rounded border border-field-border p-2 text-right text-sm tabular-nums"
-              @input="recalculate(row)"
-            />
+              <div class="col-span-4 md:col-span-2">
+                <UiInputGroup v-if="row.hours === ''">
+                  <UiInput
+                    v-model="row.value"
+                    type="number"
+                    step="0.01"
+                    class="text-right"
+                    :data-test="`position-value-${index}`"
+                  />
+                  <template #addon>€</template>
+                </UiInputGroup>
+                <div v-else class="py-1.5 text-right tabular-nums" :data-test="`position-value-computed-${index}`">
+                  {{ row.value }}
+                </div>
+              </div>
 
-            <input
-              v-if="row.hours === ''"
-              v-model="row.value"
-              type="number"
-              step="0.01"
-              :placeholder="t('offerForm.fields.value')"
-              :data-test="`position-value-${index}`"
-              class="w-28 rounded border border-field-border p-2 text-right text-sm tabular-nums"
-            />
-            <span
-              v-else
-              class="w-28 p-2 text-right text-sm tabular-nums"
-              :data-test="`position-value-computed-${index}`"
-            >{{ row.value }}</span>
-
-            <button type="button" class="text-sm text-danger underline" :data-test="`position-remove-${index}`" @click="removeRow(index)">
-              {{ t("offerForm.removePosition") }}
-            </button>
+              <div class="col-span-12 md:col-span-1 md:text-right">
+                <UiButton
+                  type="button"
+                  variant="danger"
+                  class="max-md:w-full"
+                  :data-test="`position-remove-${index}`"
+                  @click="removeRow(index)"
+                >
+                  ×
+                </UiButton>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div class="mt-3 flex flex-wrap items-center gap-2">
-          <button type="button" class="rounded border border-field-border px-3 py-1 text-sm" data-test="add-position" @click="addRow">
-            {{ t("offerForm.addPosition") }}
-          </button>
+          <div class="mt-4 flex flex-wrap items-center gap-2">
+            <UiButton type="button" data-test="add-position" @click="addRow">
+              + {{ t("offerForm.addPosition") }}
+            </UiButton>
 
-          <span class="ml-auto text-sm font-semibold tabular-nums" data-test="total">
-            {{ money.format(total) }}
-          </span>
-        </div>
-      </fieldset>
+            <span class="ml-auto font-bold tabular-nums" data-test="total">
+              {{ money.format(total) }}
+            </span>
+          </div>
+        </template>
+      </UiPanel>
 
-      <button
-        type="submit"
-        class="self-start rounded-md border border-brand-border bg-brand px-4 py-2 text-white hover:bg-brand-hover disabled:opacity-60"
-        :disabled="busy"
-        data-test="submit"
-      >
-        {{ t("offerForm.save") }}
-      </button>
+      <UiFormActions
+        :save-label="t('offerForm.save')"
+        :cancel-label="t('offerForm.cancel')"
+        :busy="busy"
+        @cancel="router.push({ name: 'offers' })"
+      />
     </form>
   </div>
 </template>

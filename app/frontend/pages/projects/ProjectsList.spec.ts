@@ -71,7 +71,7 @@ describe("ProjectsList", () => {
     ])
     await flushPromises()
 
-    const headings = wrapper.findAll("section h2").map((node) => node.text())
+    const headings = wrapper.findAll('[data-test="customer-name"]').map((node) => node.text())
 
     // happy-dom has no <html lang>, so the i18n plugin falls back to English.
     expect(headings).toEqual(["Klingon", "Starfleet", "Without a customer"])
@@ -90,7 +90,7 @@ describe("ProjectsList", () => {
     ])
     await flushPromises()
 
-    expect(wrapper.findAll("section")).toHaveLength(2)
+    expect(wrapper.findAll('[data-test="customer-group"]')).toHaveLength(2)
   })
 
   it("asks the API for the archived ones when the filter flips", async () => {
@@ -112,7 +112,8 @@ describe("ProjectsList", () => {
     const wrapper = mountList([project({budgetPercent: "180.0"})])
     await flushPromises()
 
-    const bar = wrapper.get('[data-test="progress-aaaaaaaa-0000-4000-8000-000000000001"]')
+    // The width sits on the bar inside the track.
+    const bar = wrapper.get('[data-test="progress-aaaaaaaa-0000-4000-8000-000000000001"] > div')
 
     expect(bar.attributes("style")).toContain("width: 100%")
   })
