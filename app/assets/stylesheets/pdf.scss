@@ -14,6 +14,12 @@ body {
   color: #333;
 }
 
+h1,
+h2,
+h3 {
+  font-family: Orbitron, sans-serif;
+}
+
 @import "partials/table";
 
 table {
@@ -108,21 +114,9 @@ tr {
   page-break-inside: avoid;
 }
 
-#pdf-header {
-  top: 0;
-  width: 100%;
-  text-align: right;
-  border-bottom: 1px solid #cacaca;
-  font-size: 20pt;
-  font-weight: normal;
-  font-style: italic;
-  color: #2ba6cb !important;
-  font-family: Orbitron, sans-serif !important;
-}
-
 #pagination {
   font-size: 12px;
-  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-family: "Noto Sans", sans-serif;
   text-align: right;
 }
 

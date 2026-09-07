@@ -27,6 +27,7 @@ RUN apt-get update -qq && \
       poppler-utils \
       postgresql-client \
       shared-mime-info \
+      fontconfig \
       fonts-liberation \
       libnss3 libatk-bridge2.0-0 libdrm2 libxkbcommon0 libgbm1 libasound2t64 \
       libxshmfence1 libxcomposite1 libxdamage1 libxrandr2 libpango-1.0-0 \
@@ -38,6 +39,17 @@ RUN apt-get update -qq && \
     apt-get update -qq && \
     apt-get install --no-install-recommends -y google-chrome-stable && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
+
+# The PDF fonts. Chrome renders a PDF's running header and footer as separate
+# documents that load no external resources, so a linked or embedded webfont
+# never reaches them — as system fonts these do. See vendor/fonts/README.md.
+COPY vendor/fonts/*.ttf /usr/local/share/fonts/
+# The build fails rather than shipping documents on the fallback: fontconfig
+# reads the family out of the file, so a swapped file with a different family
+# name inside would leave every PDF silently unstyled.
+RUN fc-cache -f && \
+    fc-match "Noto Sans" | grep -q NotoSans.ttf && \
+    fc-match "Orbitron" | grep -q Orbitron.ttf
 
 # jemalloc for reduced fragmentation/memory under Ruby
 ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
