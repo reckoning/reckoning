@@ -9,14 +9,18 @@ module V1
         schema({
           type: :object,
           properties: {
-            task_id: {type: :string, format: :uuid},
+            # camelCase, like the rest of the wire format: every client sends
+            # `taskId`, and `Api::BaseController#openapi_params` underscores it
+            # on the way in. Declared as `task_id` this validated nothing and
+            # warned on every timer written.
+            taskId: {type: :string, format: :uuid},
             date: {type: :string, format: :date},
             value: {type: [:string, :number]},
             note: {type: [:string, :null]},
             started: {type: :boolean, description: "Start the timer immediately after saving."}
           },
           additionalProperties: false,
-          required: %w[task_id]
+          required: %w[taskId]
         })
       end
     end

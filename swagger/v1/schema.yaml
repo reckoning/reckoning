@@ -4429,7 +4429,7 @@ components:
     TimerInput:
       type: object
       properties:
-        task_id:
+        taskId:
           type: string
           format: uuid
         date:
@@ -4448,7 +4448,7 @@ components:
           description: Start the timer immediately after saving.
       additionalProperties: false
       required:
-      - task_id
+      - taskId
       title: TimerInput
     Timers:
       type: array
