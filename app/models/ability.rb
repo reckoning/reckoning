@@ -58,6 +58,12 @@ class Ability
     can :update, Offer do |offer|
       (offer.created? || offer.bided?) && offer.account_id == user.account_id
     end
+
+    # Moving an offer along is not editing it: the state machine lets a
+    # declined or canceled offer be bid again, while editing its content stops
+    # at bided. Authorizing transitions as `update` would have made those
+    # transitions unreachable.
+    can :transition, Offer, account_id: user.account_id
   end
 
   def setup_expenses_abilities(account_id)

@@ -83,30 +83,30 @@ async function regenerate(): Promise<void> {
 </script>
 
 <template>
-  <div class="px-4 py-6">
-    <h1 class="mb-4 text-[24px] font-medium" data-test="two-factor-title">
+  <div id="two-factor">
+    <h1 data-test="two-factor-title">
       {{ t("twoFactor.title") }}
     </h1>
 
-    <p v-if="failed" data-test="two-factor-failed" class="mb-4 text-[14px] text-danger">
+    <p v-if="failed" data-test="two-factor-failed" class="mt-4 text-danger-text">
       {{ t("twoFactor.failed") }}
     </p>
 
     <!-- Shown once, right after enabling or regenerating: the API returns the
          codes in the clear and never again. -->
     <div v-if="codes" class="mb-6" data-test="backup-codes">
-      <p class="mb-2 text-[14px]">{{ t("twoFactor.backupExplain") }}</p>
-      <pre class="max-w-sm rounded border border-field-border bg-surface-muted p-3 text-[13px]">{{ codes.join("\n") }}</pre>
+      <p class="mb-2">{{ t("twoFactor.backupExplain") }}</p>
+      <pre class="max-w-sm rounded-bs border border-rule-strong bg-surface-muted p-3 text-small">{{ codes.join("\n") }}</pre>
     </div>
 
     <template v-if="enabled">
-      <p class="mb-4 text-[14px]" data-test="two-factor-enabled">{{ t("twoFactor.disableExplain") }}</p>
+      <p class="mb-4" data-test="two-factor-enabled">{{ t("twoFactor.disableExplain") }}</p>
 
       <button
         type="button"
         data-test="regenerate-codes"
         :disabled="busy"
-        class="mb-6 rounded border border-warning-border bg-warning px-4 py-2 text-[14px] text-white disabled:opacity-65"
+        class="mb-6 rounded-bs border border-warning-border bg-warning px-3 py-1.5 text-white disabled:opacity-65"
         @click="regenerate"
       >
         {{ t("twoFactor.backupCodes") }}
@@ -120,13 +120,13 @@ async function regenerate(): Promise<void> {
           autocomplete="one-time-code"
           :placeholder="t('twoFactor.otpToken')"
           data-test="otp-token"
-          class="mb-3 block w-full rounded border border-field-border p-[10px] text-[16px] text-field placeholder:text-placeholder focus:border-field-focus focus:outline-none"
+          class="mb-3 block w-full rounded-bs border border-field-border px-3 py-1.5 text-field shadow-[inset_0_1px_1px_rgba(0,0,0,0.075)] placeholder:text-placeholder focus:border-field-focus focus:outline-none"
         />
         <button
           type="submit"
           data-test="disable-otp"
           :disabled="busy"
-          class="rounded-md border border-brand-border bg-brand px-4 py-[10px] text-[18px] text-white disabled:opacity-65"
+          class="rounded-bs-lg border border-brand-border bg-brand px-4 py-2.5 text-lg text-white hover:bg-brand-hover disabled:opacity-65"
         >
           {{ t("twoFactor.disable") }}
         </button>
@@ -134,13 +134,13 @@ async function regenerate(): Promise<void> {
     </template>
 
     <template v-else>
-      <p class="mb-4 text-[14px]">{{ t("twoFactor.enableExplain") }}</p>
+      <p class="mb-4">{{ t("twoFactor.enableExplain") }}</p>
 
       <img :src="qrcodeUrl" alt="" class="mb-3 h-48 w-48" data-test="otp-qrcode" />
 
       <pre
         v-if="provisioningUri"
-        class="mb-4 max-w-lg overflow-x-auto rounded border border-field-border bg-surface-muted p-3 text-[12px]"
+        class="mb-4 max-w-lg overflow-x-auto rounded-bs border border-rule-strong bg-surface-muted p-3 text-small"
         data-test="provisioning-uri"
         >{{ provisioningUri }}</pre
       >
@@ -153,13 +153,13 @@ async function regenerate(): Promise<void> {
           autocomplete="one-time-code"
           :placeholder="t('twoFactor.otpToken')"
           data-test="otp-token"
-          class="mb-3 block w-full rounded border border-field-border p-[10px] text-[16px] text-field placeholder:text-placeholder focus:border-field-focus focus:outline-none"
+          class="mb-3 block w-full rounded-bs border border-field-border px-3 py-1.5 text-field shadow-[inset_0_1px_1px_rgba(0,0,0,0.075)] placeholder:text-placeholder focus:border-field-focus focus:outline-none"
         />
         <button
           type="submit"
           data-test="enable-otp"
           :disabled="busy"
-          class="rounded-md border border-brand-border bg-brand px-4 py-[10px] text-[18px] text-white disabled:opacity-65"
+          class="rounded-bs-lg border border-brand-border bg-brand px-4 py-2.5 text-lg text-white hover:bg-brand-hover disabled:opacity-65"
         >
           {{ t("twoFactor.enable") }}
         </button>

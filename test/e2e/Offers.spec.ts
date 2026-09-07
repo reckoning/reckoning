@@ -42,7 +42,8 @@ test.describe("Offers", () => {
   test("filters, and the total follows the filter", async ({ page }) => {
     await page.goto("/app/offers")
 
-    await page.getByTestId("filter-state").selectOption("accepted")
+    await page.getByTestId("filter-state").click()
+    await page.getByTestId("filter-state-accepted").click()
 
     await expect(page.getByTestId("offers")).not.toContainText("00002")
     await expect(page.getByTestId("summary-value")).toContainText("100")
@@ -56,7 +57,8 @@ test.describe("Offers", () => {
 
     await expect(page).toHaveURL(/sort=value&direction=desc/)
 
-    const firstRow = page.getByTestId("offers").locator("tbody tr").first()
+    // The list is a panel of rows again, not a table.
+    const firstRow = page.locator('[data-test^="offer-"]').first()
     await expect(firstRow).toContainText("00002")
   })
 

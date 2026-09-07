@@ -8,6 +8,9 @@ import * as z from "zod"
 import { useCustomer, useUpdateCustomer, useDestroyCustomer } from "@/services/api/services/customers/customers"
 import { useToastsStore } from "@/stores/toasts"
 import { confirmDialog } from "@/lib/confirm"
+import UiButton from "@/components/ui/UiButton.vue"
+import UiFormActions from "@/components/ui/UiFormActions.vue"
+import UiNavTabs from "@/components/ui/UiNavTabs.vue"
 
 const route = useRoute()
 const router = useRouter()
@@ -140,122 +143,117 @@ const tabs = computed(() => [
   { key: "email" as const, label: t("customer.tabs.email") },
   { key: "offer" as const, label: t("customer.tabs.offer") },
 ])
+
+// The `.form-control` shape, inline because these fields carry VeeValidate's
+// own bindings rather than going through `UiInput`.
+const FIELD =
+  "block w-full rounded-bs border border-field-border bg-surface px-3 py-1.5 text-base leading-[1.428571429] text-field shadow-[inset_0_1px_1px_rgba(0,0,0,0.075)] placeholder:text-placeholder focus:border-field-focus focus:shadow-[inset_0_1px_1px_rgba(0,0,0,0.075),0_0_8px_rgba(102,175,233,0.6)] focus:outline-none"
 </script>
 
 <template>
-  <div class="p-4">
+  <div id="customer">
     <p v-if="isPending" data-test="loading">{{ t("customer.loading") }}</p>
     <p v-else-if="isError" data-test="error">{{ t("customer.loadFailed") }}</p>
 
     <div v-else>
-      <div class="mb-4 flex items-center justify-between">
-        <h1 class="text-[24px] font-medium" data-test="customer-title">{{ customer?.name }}</h1>
+      <div class="flex flex-wrap items-start gap-4">
+        <h1 class="grow" data-test="customer-title">{{ customer?.name }}</h1>
 
-        <div class="flex gap-2">
-          <RouterLink :to="{ name: 'customers' }" class="text-sm underline" data-test="back">
-            {{ t("customer.back") }}
-          </RouterLink>
-          <button type="button" class="text-sm text-danger underline" data-test="delete" @click="remove">
+        <div class="flex flex-wrap gap-2 max-md:w-full max-md:flex-col">
+          <UiButton variant="danger" type="button" data-test="delete" @click="remove">
             {{ t("customer.delete") }}
-          </button>
+          </UiButton>
+          <RouterLink :to="{ name: 'customers' }" data-test="back">
+            <UiButton as="span" class="max-md:w-full">{{ t("customer.back") }}</UiButton>
+          </RouterLink>
         </div>
       </div>
 
-      <nav class="mb-4 flex gap-4 border-b border-rule" data-test="tabs">
-        <button
-          v-for="entry in tabs"
-          :key="entry.key"
-          type="button"
-          class="border-b-2 pb-2 text-sm"
-          :class="tab === entry.key ? 'border-brand text-brand' : 'border-transparent text-muted'"
-          :data-test="`tab-${entry.key}`"
-          @click="tab = entry.key"
-        >
-          {{ entry.label }}
-        </button>
-      </nav>
+      <div class="mt-4" data-test="tabs">
+        <UiNavTabs :tabs="tabs.map((entry) => ({ key: entry.key, label: entry.label }))" :active="tab" @select="tab = $event as typeof tab" />
+      </div>
 
-      <form class="max-w-2xl" @submit="save">
-        <div v-show="tab === 'basic'" class="flex flex-col gap-3">
-          <label class="text-sm">
-            {{ t("customer.fields.name") }}
-            <input v-model="name" v-bind="nameAttrs" type="text" data-test="name" class="mt-1 block w-full rounded border border-field-border p-2" />
-            <span v-if="errors.name" data-test="name-error" class="text-[13px] text-danger">{{ errors.name }}</span>
+      <form class="mt-4 max-w-3xl" @submit="save">
+        <div v-show="tab === 'basic'">
+          <label class="mb-4 block">
+            <span class="mb-1 inline-block font-bold">{{ t("customer.fields.name") }}</span>
+            <input v-model="name" v-bind="nameAttrs" type="text" data-test="name" :class="FIELD" />
+            <span v-if="errors.name" data-test="name-error" class="mt-1 block text-danger-text">{{ errors.name }}</span>
           </label>
 
-          <label class="text-sm">
-            {{ t("customer.fields.address") }}
-            <textarea v-model="address" v-bind="addressAttrs" rows="3" data-test="address" class="mt-1 block w-full rounded border border-field-border p-2"></textarea>
+          <label class="mb-4 block">
+            <span class="mb-1 inline-block font-bold">{{ t("customer.fields.address") }}</span>
+            <textarea v-model="address" v-bind="addressAttrs" rows="3" data-test="address" :class="FIELD"></textarea>
           </label>
 
-          <label class="text-sm">
-            {{ t("customer.fields.country") }}
-            <input v-model="country" v-bind="countryAttrs" type="text" data-test="country" class="mt-1 block w-full rounded border border-field-border p-2" />
+          <label class="mb-4 block">
+            <span class="mb-1 inline-block font-bold">{{ t("customer.fields.country") }}</span>
+            <input v-model="country" v-bind="countryAttrs" type="text" data-test="country" :class="FIELD" />
           </label>
 
-          <label class="text-sm">
-            {{ t("customer.fields.email") }}
-            <input v-model="email" v-bind="emailAttrs" type="email" data-test="email" class="mt-1 block w-full rounded border border-field-border p-2" />
-            <span v-if="errors.email" data-test="email-error" class="text-[13px] text-danger">{{ errors.email }}</span>
+          <label class="mb-4 block">
+            <span class="mb-1 inline-block font-bold">{{ t("customer.fields.email") }}</span>
+            <input v-model="email" v-bind="emailAttrs" type="email" data-test="email" :class="FIELD" />
+            <span v-if="errors.email" data-test="email-error" class="mt-1 block text-danger-text">{{ errors.email }}</span>
           </label>
 
-          <label class="text-sm">
-            {{ t("customer.fields.telefon") }}
-            <input v-model="telefon" v-bind="telefonAttrs" type="text" data-test="telefon" class="mt-1 block w-full rounded border border-field-border p-2" />
+          <label class="mb-4 block">
+            <span class="mb-1 inline-block font-bold">{{ t("customer.fields.telefon") }}</span>
+            <input v-model="telefon" v-bind="telefonAttrs" type="text" data-test="telefon" :class="FIELD" />
           </label>
 
-          <label class="text-sm">
-            {{ t("customer.fields.fax") }}
-            <input v-model="fax" v-bind="faxAttrs" type="text" data-test="fax" class="mt-1 block w-full rounded border border-field-border p-2" />
+          <label class="mb-4 block">
+            <span class="mb-1 inline-block font-bold">{{ t("customer.fields.fax") }}</span>
+            <input v-model="fax" v-bind="faxAttrs" type="text" data-test="fax" :class="FIELD" />
           </label>
 
-          <label class="text-sm">
-            {{ t("customer.fields.website") }}
-            <input v-model="website" v-bind="websiteAttrs" type="text" data-test="website" class="mt-1 block w-full rounded border border-field-border p-2" />
+          <label class="mb-4 block">
+            <span class="mb-1 inline-block font-bold">{{ t("customer.fields.website") }}</span>
+            <input v-model="website" v-bind="websiteAttrs" type="text" data-test="website" :class="FIELD" />
           </label>
 
-          <label class="text-sm">
-            {{ t("customer.fields.paymentDue") }}
-            <input v-model="paymentDue" v-bind="paymentDueAttrs" type="number" min="0" data-test="payment-due" class="mt-1 block w-full rounded border border-field-border p-2" />
-            <span v-if="errors.paymentDue" data-test="payment-due-error" class="text-[13px] text-danger">{{ errors.paymentDue }}</span>
+          <label class="mb-4 block">
+            <span class="mb-1 inline-block font-bold">{{ t("customer.fields.paymentDue") }}</span>
+            <input v-model="paymentDue" v-bind="paymentDueAttrs" type="number" min="0" data-test="payment-due" :class="FIELD" />
+            <span v-if="errors.paymentDue" data-test="payment-due-error" class="mt-1 block text-danger-text">{{ errors.paymentDue }}</span>
           </label>
 
-          <label class="text-sm">
-            {{ t("customer.fields.employmentDate") }}
-            <input v-model="employmentDate" v-bind="employmentDateAttrs" type="date" data-test="employment-date" class="mt-1 block w-full rounded border border-field-border p-2" />
+          <label class="mb-4 block">
+            <span class="mb-1 inline-block font-bold">{{ t("customer.fields.employmentDate") }}</span>
+            <input v-model="employmentDate" v-bind="employmentDateAttrs" type="date" data-test="employment-date" :class="FIELD" />
           </label>
 
-          <label class="text-sm">
-            {{ t("customer.fields.employmentEndDate") }}
-            <input v-model="employmentEndDate" v-bind="employmentEndDateAttrs" type="date" data-test="employment-end-date" class="mt-1 block w-full rounded border border-field-border p-2" />
+          <label class="mb-4 block">
+            <span class="mb-1 inline-block font-bold">{{ t("customer.fields.employmentEndDate") }}</span>
+            <input v-model="employmentEndDate" v-bind="employmentEndDateAttrs" type="date" data-test="employment-end-date" :class="FIELD" />
           </label>
 
-          <label class="text-sm">
-            {{ t("customer.fields.weeklyHours") }}
-            <input v-model="weeklyHours" v-bind="weeklyHoursAttrs" type="number" min="0" data-test="weekly-hours" class="mt-1 block w-full rounded border border-field-border p-2" />
+          <label class="mb-4 block">
+            <span class="mb-1 inline-block font-bold">{{ t("customer.fields.weeklyHours") }}</span>
+            <input v-model="weeklyHours" v-bind="weeklyHoursAttrs" type="number" min="0" data-test="weekly-hours" :class="FIELD" />
           </label>
         </div>
 
-        <div v-show="tab === 'email'" class="flex flex-col gap-3">
-          <label class="text-sm">
-            {{ t("customer.fields.invoiceEmail") }}
-            <input v-model="invoiceEmail" v-bind="invoiceEmailAttrs" type="email" data-test="invoice-email" class="mt-1 block w-full rounded border border-field-border p-2" />
-            <span v-if="errors.invoiceEmail" data-test="invoice-email-error" class="text-[13px] text-danger">{{ errors.invoiceEmail }}</span>
+        <div v-show="tab === 'email'">
+          <label class="mb-4 block">
+            <span class="mb-1 inline-block font-bold">{{ t("customer.fields.invoiceEmail") }}</span>
+            <input v-model="invoiceEmail" v-bind="invoiceEmailAttrs" type="email" data-test="invoice-email" :class="FIELD" />
+            <span v-if="errors.invoiceEmail" data-test="invoice-email-error" class="mt-1 block text-danger-text">{{ errors.invoiceEmail }}</span>
           </label>
 
-          <label class="text-sm">
-            {{ t("customer.fields.invoiceEmailCc") }}
-            <input v-model="invoiceEmailCc" v-bind="invoiceEmailCcAttrs" type="text" data-test="invoice-email-cc" class="mt-1 block w-full rounded border border-field-border p-2" />
+          <label class="mb-4 block">
+            <span class="mb-1 inline-block font-bold">{{ t("customer.fields.invoiceEmailCc") }}</span>
+            <input v-model="invoiceEmailCc" v-bind="invoiceEmailCcAttrs" type="text" data-test="invoice-email-cc" :class="FIELD" />
           </label>
 
-          <label class="text-sm">
-            {{ t("customer.fields.invoiceEmailBcc") }}
-            <input v-model="invoiceEmailBcc" v-bind="invoiceEmailBccAttrs" type="text" data-test="invoice-email-bcc" class="mt-1 block w-full rounded border border-field-border p-2" />
+          <label class="mb-4 block">
+            <span class="mb-1 inline-block font-bold">{{ t("customer.fields.invoiceEmailBcc") }}</span>
+            <input v-model="invoiceEmailBcc" v-bind="invoiceEmailBccAttrs" type="text" data-test="invoice-email-bcc" :class="FIELD" />
           </label>
 
-          <label class="text-sm">
-            {{ t("customer.fields.emailTemplate") }}
-            <textarea v-model="emailTemplate" v-bind="emailTemplateAttrs" rows="8" data-test="email-template" class="mt-1 block w-full rounded border border-field-border p-2 font-mono text-[13px]"></textarea>
+          <label class="mb-4 block">
+            <span class="mb-1 inline-block font-bold">{{ t("customer.fields.emailTemplate") }}</span>
+            <textarea v-model="emailTemplate" v-bind="emailTemplateAttrs" rows="8" data-test="email-template" :class="[FIELD, 'font-mono text-small']"></textarea>
           </label>
 
           <div class="flex flex-wrap gap-2" data-test="template-tokens">
@@ -273,21 +271,19 @@ const tabs = computed(() => [
           </div>
         </div>
 
-        <div v-show="tab === 'offer'" class="flex flex-col gap-3">
-          <label class="text-sm">
-            {{ t("customer.fields.offerDisclaimer") }}
-            <textarea v-model="offerDisclaimer" v-bind="offerDisclaimerAttrs" rows="6" data-test="offer-disclaimer" class="mt-1 block w-full rounded border border-field-border p-2"></textarea>
+        <div v-show="tab === 'offer'">
+          <label class="mb-4 block">
+            <span class="mb-1 inline-block font-bold">{{ t("customer.fields.offerDisclaimer") }}</span>
+            <textarea v-model="offerDisclaimer" v-bind="offerDisclaimerAttrs" rows="6" data-test="offer-disclaimer" :class="FIELD"></textarea>
           </label>
         </div>
 
-        <button
-          type="submit"
-          class="mt-4 rounded-md border border-brand-border bg-brand px-4 py-2 text-white hover:bg-brand-hover disabled:opacity-60"
-          :disabled="saving"
-          data-test="submit"
-        >
-          {{ t("customer.save") }}
-        </button>
+        <UiFormActions
+          :save-label="t('customer.save')"
+          :cancel-label="t('customer.cancel')"
+          :busy="saving"
+          @cancel="router.push({ name: 'customers' })"
+        />
       </form>
     </div>
   </div>

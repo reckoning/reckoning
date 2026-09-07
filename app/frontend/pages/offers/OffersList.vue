@@ -3,6 +3,16 @@ import { computed } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useOffers, useOfferSummary } from "@/services/api/services/offers/offers"
+import UiButton from "@/components/ui/UiButton.vue"
+import UiDropdown from "@/components/ui/UiDropdown.vue"
+import UiDropdownItem from "@/components/ui/UiDropdownItem.vue"
+import UiFilter from "@/components/ui/UiFilter.vue"
+import UiLabel from "@/components/ui/UiLabel.vue"
+import UiListGroup from "@/components/ui/UiListGroup.vue"
+import UiListGroupItem from "@/components/ui/UiListGroupItem.vue"
+import UiPagination from "@/components/ui/UiPagination.vue"
+import UiPanel from "@/components/ui/UiPanel.vue"
+import UiSortHeader from "@/components/ui/UiSortHeader.vue"
 
 const route = useRoute()
 const router = useRouter()
@@ -86,8 +96,10 @@ const money = computed(
 // `date` arrives as a bare YYYY-MM-DD. `new Date("2026-03-01")` is UTC
 // midnight, and formatted in local time that is the 28th of February west of
 // Greenwich — so the anchor is read and printed in UTC.
+// The server-rendered list printed `format: :month_year` — "%B %Y" — rather
+// than a full date.
 const dates = computed(
-  () => new Intl.DateTimeFormat(locale.value, {dateStyle: "medium", timeZone: "UTC"}),
+  () => new Intl.DateTimeFormat(locale.value, {month: "long", year: "numeric", timeZone: "UTC"}),
 )
 
 function formatDate(value: string | null | undefined): string {
@@ -100,6 +112,18 @@ const yearOptions = computed(() =>
 
 const STATES = ["created", "bided", "accepted", "declined", "canceled"] as const
 
+// The filter names the states in the plural, the way `filter.offer_state`
+// does; a row names one of them.
+const stateOptions = computed(() =>
+  STATES.map((state) => ({value: state, label: t(`offers.filters.states.${state}`)})),
+)
+
+// `offer_label` in the helper that went with the ERB list: a draft is grey,
+// everything else the brand colour.
+function stateVariant(state: string | null | undefined): "default" | "primary" {
+  return state === "created" ? "default" : "primary"
+}
+
 // The client cannot read the Link header through the generated mutator, so
 // the filtered total answers it instead: a full last page would otherwise
 // offer a next page that is empty.
@@ -107,112 +131,144 @@ const hasNextPage = computed(() => page.value * PER_PAGE < (summary.value?.count
 </script>
 
 <template>
-  <div class="p-4">
-    <div class="mb-4 flex items-center justify-between">
-      <h1 class="text-[24px] font-medium">{{ t("offers.title") }}</h1>
+  <div id="offers">
+    <div class="flex flex-wrap items-start gap-4">
+      <h1 class="grow">
+        {{ t("offers.title") }}
+        <br />
+        <small class="block text-[65%] text-muted" data-test="summary">
+          <span data-test="summary-value">
+            {{ t("offers.sum", { sum: money.format(Number(summary?.value ?? 0)) }) }}
+          </span>
+        </small>
+      </h1>
 
-      <a
-        href="/offers/new"
-        class="rounded-md border border-brand-border bg-brand px-4 py-2 text-sm text-white hover:bg-brand-hover"
-        data-test="new-offer"
-      >
-        {{ t("offers.new") }}
-      </a>
+      <div class="max-md:w-full">
+        <a href="/offers/new" data-test="new-offer">
+          <UiButton as="span" variant="primary" class="max-md:w-full">+ {{ t("offers.new") }}</UiButton>
+        </a>
+      </div>
     </div>
 
-    <div class="mb-4 flex flex-wrap gap-2" data-test="filters">
-      <select
-        :value="queryValue('state')"
-        data-test="filter-state"
-        class="rounded border border-field-border p-2 text-sm"
-        @change="setFilter('state', ($event.target as HTMLSelectElement).value)"
-      >
-        <option value="">{{ t("offers.filters.state") }}</option>
-        <option v-for="state in STATES" :key="state" :value="state">
-          {{ t(`offers.states.${state}`) }}
-        </option>
-      </select>
+    <div class="mt-4 flex flex-wrap items-start justify-between gap-y-4">
+      <div class="flex flex-wrap gap-1.5" data-test="filters">
+        <UiFilter
+          :label="t('offers.filters.state')"
+          :model-value="queryValue('state')"
+          :options="stateOptions"
+          :reset-title="t('offers.filters.reset')"
+          test="filter-state"
+          @update:model-value="setFilter('state', $event)"
+        />
+        <UiFilter
+          :label="t('offers.filters.year')"
+          :model-value="queryValue('year')"
+          :options="yearOptions"
+          :reset-title="t('offers.filters.reset')"
+          test="filter-year"
+          @update:model-value="setFilter('year', $event)"
+        />
+      </div>
 
-      <select
-        :value="queryValue('year')"
-        data-test="filter-year"
-        class="rounded border border-field-border p-2 text-sm"
-        @change="setFilter('year', ($event.target as HTMLSelectElement).value)"
-      >
-        <option value="">{{ t("offers.filters.year") }}</option>
-        <option v-for="option in yearOptions" :key="option.value" :value="option.value">
-          {{ option.label }}
-        </option>
-      </select>
+      <UiPagination
+        :page="page"
+        :has-next="hasNextPage"
+        :previous-label="t('offers.previous')"
+        :next-label="t('offers.next')"
+        class="max-md:w-full"
+        @go="go({ page: $event })"
+      />
     </div>
 
-    <p v-if="isPending" data-test="loading">{{ t("offers.loading") }}</p>
-    <p v-else-if="isError" data-test="error">{{ t("offers.loadFailed") }}</p>
-    <p v-else-if="offers && offers.length === 0" data-test="empty">{{ t("offers.empty") }}</p>
+    <p v-if="isPending" class="mt-4" data-test="loading">{{ t("offers.loading") }}</p>
+    <p v-else-if="isError" class="mt-4" data-test="error">{{ t("offers.loadFailed") }}</p>
+    <p v-else-if="offers && offers.length === 0" class="mt-4" data-test="empty">
+      {{ t("offers.empty") }}
+    </p>
 
-    <div v-else class="overflow-x-auto">
-      <table class="w-full border-collapse text-sm" data-test="offers">
-        <thead>
-          <tr class="border-b border-rule-strong text-left">
-            <th v-for="column in ['ref', 'customer', 'date', 'value', 'state']" :key="column" class="px-2 py-2">
-              <button type="button" class="font-semibold underline" :data-test="`sort-${column}`" @click="sortBy(column)">
-                {{ t(`offers.columns.${column}`) }}
-                <span v-if="sort === column" aria-hidden="true">{{ direction === "asc" ? "↑" : "↓" }}</span>
-              </button>
-            </th>
-            <th class="px-2 py-2">{{ t("offers.columns.project") }}</th>
-          </tr>
-        </thead>
+    <UiPanel v-else class="mt-4" list data-test="offers">
+      <template #heading>
+        <div class="hidden grid-cols-12 gap-2 md:grid">
+          <div class="col-span-1">
+            <UiSortHeader column="ref" :label="t('offers.columns.ref')" :sort="sort" :direction="direction" @sort="sortBy" />
+          </div>
+          <div class="col-span-4">
+            <UiSortHeader column="customer" :label="t('offers.columns.customer')" :sort="sort" :direction="direction" @sort="sortBy" />
+          </div>
+          <div class="col-span-2">
+            <UiSortHeader column="date" :label="t('offers.columns.date')" :sort="sort" :direction="direction" @sort="sortBy" />
+          </div>
+          <div class="col-span-2 text-right">
+            <UiSortHeader column="value" :label="t('offers.columns.value')" :sort="sort" :direction="direction" @sort="sortBy" />
+          </div>
+          <div class="col-span-1">
+            <UiSortHeader column="state" :label="t('offers.columns.state')" :sort="sort" :direction="direction" @sort="sortBy" />
+          </div>
+        </div>
+      </template>
 
-        <tbody>
-          <tr v-for="offer in offers" :key="offer.id" class="border-b border-rule" :data-test="`offer-${offer.id}`">
-            <td class="px-2 py-2 tabular-nums">
-              <a :href="`/offers/${offer.id}`" class="text-brand">{{ offer.refNumber ?? offer.ref }}</a>
-            </td>
-            <td class="px-2 py-2">{{ offer.customerName }}</td>
-            <td class="px-2 py-2 tabular-nums">{{ formatDate(offer.date) }}</td>
-            <td class="px-2 py-2 text-right tabular-nums">{{ money.format(Number(offer.value ?? 0)) }}</td>
-            <td class="px-2 py-2">{{ offer.state ? t(`offers.states.${offer.state}`) : "" }}</td>
-            <td class="px-2 py-2">{{ offer.projectName }}</td>
-          </tr>
-        </tbody>
+      <UiListGroup>
+        <UiListGroupItem v-for="offer in offers" :key="offer.id" :data-test="`offer-${offer.id}`">
+          <div class="grid grid-cols-12 items-center gap-y-2 gap-x-2">
+            <div class="col-span-6 tabular-nums md:col-span-1">
+              {{ offer.refNumber ?? offer.ref }}
+            </div>
 
-        <tfoot v-if="summary">
-          <tr class="font-semibold" data-test="summary">
-            <td class="px-2 py-2" colspan="3">
-              {{ t("offers.summary", { count: summary.count }) }}
-            </td>
-            <td class="px-2 py-2 text-right tabular-nums" data-test="summary-value">
-              {{ money.format(Number(summary.value)) }}
-            </td>
-            <td class="px-2 py-2" colspan="2"></td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
+            <div class="col-span-6 text-right md:hidden">
+              <UiLabel :variant="stateVariant(offer.state)">
+                {{ offer.state ? t(`offers.states.${offer.state}`) : "" }}
+              </UiLabel>
+            </div>
 
-    <nav class="mt-4 flex items-center gap-3" data-test="pagination">
-      <button
-        type="button"
-        class="rounded border border-field-border px-3 py-1 text-sm disabled:opacity-50"
-        :disabled="page === 1"
-        data-test="prev-page"
-        @click="go({ page: page - 1 })"
-      >
-        {{ t("offers.previous") }}
-      </button>
+            <div class="col-span-12 md:col-span-4">
+              <a :href="`/offers/${offer.id}`" class="text-ink hover:text-ink">
+                <strong>{{ offer.customerName }}</strong>
+                <span v-if="offer.projectName"> - {{ offer.projectName }}</span>
+              </a>
+            </div>
 
-      <span class="text-sm text-muted" data-test="page">{{ page }}</span>
+            <div class="col-span-6 md:col-span-2">{{ formatDate(offer.date) }}</div>
 
-      <button
-        type="button"
-        class="rounded border border-field-border px-3 py-1 text-sm disabled:opacity-50"
-        :disabled="!hasNextPage"
-        data-test="next-page"
-        @click="go({ page: page + 1 })"
-      >
-        {{ t("offers.next") }}
-      </button>
-    </nav>
+            <div class="col-span-6 text-right tabular-nums md:col-span-2">
+              <b>{{ money.format(Number(offer.value ?? 0)) }}</b>
+            </div>
+
+            <div class="hidden md:col-span-1 md:block">
+              <UiLabel :variant="stateVariant(offer.state)">
+                {{ offer.state ? t(`offers.states.${offer.state}`) : "" }}
+              </UiLabel>
+            </div>
+
+            <div class="col-span-12 md:col-span-2 md:text-right">
+              <UiDropdown align="right" class="max-md:!flex max-md:w-full">
+                <template #toggle="{ toggle }">
+                  <UiButton class="max-md:w-full" :data-test="`actions-${offer.id}`" @click="toggle">
+                    {{ t("offers.actions") }}
+                    <span class="ml-1 inline-block border-t-4 border-r-4 border-l-4 border-transparent border-t-current"></span>
+                  </UiButton>
+                </template>
+
+                <template #menu>
+                  <UiDropdownItem>
+                    <a :href="`/offers/${offer.id}`">{{ t("offers.show") }}</a>
+                  </UiDropdownItem>
+                  <UiDropdownItem v-if="offer.abilities?.update">
+                    <a :href="`/offers/${offer.id}/edit`">{{ t("offers.edit") }}</a>
+                  </UiDropdownItem>
+                </template>
+              </UiDropdown>
+            </div>
+          </div>
+        </UiListGroupItem>
+      </UiListGroup>
+    </UiPanel>
+
+    <UiPagination
+      :page="page"
+      :has-next="hasNextPage"
+      :previous-label="t('offers.previous')"
+      :next-label="t('offers.next')"
+      @go="go({ page: $event })"
+    />
   </div>
 </template>

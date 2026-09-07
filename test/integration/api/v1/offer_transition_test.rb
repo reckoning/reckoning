@@ -74,6 +74,33 @@ module Api
       it "rejects an unknown event" do
         assert_api_response :put, 400, path_params: {id: offer.id, event: "explode"}
       end
+
+      # Editing an offer's content stops at bided, but the machine lets a
+      # declined one be bid again. Authorizing the transition as `update`
+      # would have made that unreachable.
+      it "bids a declined offer again" do
+        offer.bid!
+        offer.decline!
+
+        assert_api_response :put, 200, path_params: {id: offer.id, event: "bid"} do
+          assert_equal "bided", parsed_body["state"]
+        end
+      end
+
+      it "refuses to move an offer along once the trial has run out" do
+        accounts(:enterprise).update_columns(plan: "basic", trial_used: true, trial_end_at: 1.minute.ago)
+
+        assert_api_response :put, 403, path_params: {id: offer.id, event: "bid"}
+
+        assert_equal "created", offer.reload.aasm_state
+      end
+
+      # The buttons the client may show, straight from the machine.
+      it "reports the events that apply from here" do
+        assert_api_response :put, 200, path_params: {id: offer.id, event: "bid"} do
+          assert_equal %w[accept decline cancel], parsed_body["abilities"]["transitions"]
+        end
+      end
     end
   end
 end

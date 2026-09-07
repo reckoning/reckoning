@@ -83,6 +83,15 @@ async function submitted(requests: AxiosRequestConfig[], method: "post" | "patch
 }
 
 describe("ProjectForm", () => {
+
+  // The plus button in a customer's panel heading opens the form for that
+  // customer — `new_project_path(customer_id:)` in the server-rendered list.
+  it("takes the customer from the query for a new project", async () => {
+    const wrapper = await mountForm(`/projects/new?customer_id=${CUSTOMER_ID}`)
+
+    expect((wrapper.get('[data-test="customer"]').element as HTMLSelectElement).value)
+      .toBe(CUSTOMER_ID)
+  })
   afterEach(() => {
     delete AXIOS_INSTANCE.defaults.adapter
     vi.unstubAllGlobals()

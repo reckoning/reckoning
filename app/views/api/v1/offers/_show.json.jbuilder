@@ -14,6 +14,13 @@ json.customer_name offer.customer&.name
 json.project_id offer.project_id
 json.project_name offer.project&.name
 json.editable offer.editable?
+json.abilities do
+  json.update can?(:update, offer)
+  json.destroy can?(:destroy, offer)
+  # What the state machine allows from here, and nothing at all when this user
+  # may not move the offer along — an expired trial reads and does not write.
+  json.transitions can?(:transition, offer) ? offer.aasm.events(permitted: true).map(&:name) : []
+end
 json.positions offer.positions.order(:created_at) do |position|
   json.partial! "api/v1/offers/position", position: position
 end

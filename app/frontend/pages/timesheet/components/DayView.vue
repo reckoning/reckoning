@@ -3,9 +3,13 @@
 // Mirrors `app/views/templates/timesheets/day.html.erb`.
 
 import {toRef} from "vue"
+import {useI18n} from "vue-i18n"
 import {useDayTimers} from "../composables/useDayTimers"
 import TimerCard from "./TimerCard.vue"
+import UiButton from "../../../components/ui/UiButton.vue"
 import type {Timer} from "../../../lib/timers/types"
+
+const { t } = useI18n()
 
 const props = defineProps<{date: string; addTimerLabel: string}>()
 const emit = defineEmits<{
@@ -20,16 +24,20 @@ defineExpose({refresh})
 </script>
 
 <template>
-  <div class="grid grid-cols-12 items-center gap-2" style="margin-top: 12px">
+  <div class="mt-3 grid grid-cols-12 items-start gap-2">
     <div class="col-span-12 md:col-span-9">
-      <div v-if="error" class="rounded border border-danger p-2 text-sm text-danger">
-        Konnte Zeiten nicht laden. <a role="button" @click.prevent="refresh">Erneut laden</a>
+      <div
+        v-if="error"
+        class="mb-2.5 rounded-bs border border-alert-danger-border bg-alert-danger px-4 py-3.5 text-alert-danger-text"
+      >
+        {{ t("timesheet.timersFailed") }}
+        <a role="button" @click.prevent="refresh">{{ t("timesheet.retry") }}</a>
       </div>
 
-      <p v-if="loading && timers.length === 0" class="text-muted">Lade…</p>
+      <p v-if="loading && timers.length === 0" class="text-muted">{{ t("timesheet.loading") }}</p>
 
-      <div v-else-if="timers.length === 0" class="timesheet-blank text-center text-muted">
-        <p>Keine Zeiten an diesem Tag.</p>
+      <div v-else-if="timers.length === 0" class="py-4 text-center text-muted">
+        <p>{{ t("timesheet.noTimers") }}</p>
       </div>
 
       <TimerCard
@@ -39,15 +47,11 @@ defineExpose({refresh})
         @edit="emit('edit', timer)"
       />
     </div>
+
     <div class="col-span-12 md:col-span-3">
-      <button
-        type="button"
-        class="rounded border border-brand-border bg-brand px-3 py-1 text-sm text-white hover:bg-brand-hover disabled:opacity-60 btn-block"
-        @click="emit('add', date)"
-      >
-        <span aria-hidden="true">+</span>
-        {{ addTimerLabel }}
-      </button>
+      <UiButton variant="primary" block @click="emit('add', date)">
+        + {{ addTimerLabel }}
+      </UiButton>
     </div>
   </div>
 </template>

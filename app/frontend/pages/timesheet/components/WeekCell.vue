@@ -88,19 +88,19 @@ function onKeydown(e: KeyboardEvent) {
 </script>
 
 <template>
-  <div class="text-right timesheet-day">
-    <div v-if="runningTimer" class="timesheet-timer started">
+  <div class="px-px text-right">
+    <div v-if="runningTimer" class="px-0.5 pt-0.5 text-brand" data-test="cell-running">
       <span data-test="running-spinner" class="inline-block animate-spin" aria-hidden="true">◌</span>
       <span class="tabular-nums">{{ runningDisplay }}</span>
     </div>
-    <div v-else-if="invoiced" class="timesheet-timer invoiced">
+    <div v-else-if="invoiced" class="px-0.5 pt-0.5" data-test="cell-invoiced">
       <span class="tabular-nums" :title="'On invoice'">{{ formatHHMM(sumHours) }}</span>
     </div>
-    <div v-else class="timesheet-timer">
+    <div v-else>
       <input
         v-model="text"
         type="text"
-        class="block w-full rounded border border-field-border p-2 text-sm text-right"
+        class="block w-full rounded-bs border border-field-border bg-surface px-2 py-1 text-right leading-[1.428571429] text-field shadow-[inset_0_1px_1px_rgba(0,0,0,0.075)] placeholder:text-placeholder focus:border-field-focus focus:outline-none"
         :placeholder="'0:00'"
         @blur="onBlur"
         @keydown="onKeydown"

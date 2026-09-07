@@ -1,7 +1,7 @@
 <script setup lang="ts">
-// Week view spreadsheet grid: 7-column day header, one grid grid-cols-12 items-center gap-2 per
-// task with editable per-day cells, footer with column + grand
-// totals. Mirrors `app/views/templates/timesheets/week.html.erb`.
+// Week view spreadsheet grid: 7-column day header, one row per task with
+// editable per-day cells, footer with column + grand totals. Mirrors
+// `app/views/templates/timesheets/week.html.erb`.
 //
 // Save logic (autosave on cell blur, see WeekCell):
 //   - The cell emits the new `sumHours` for (task, date).
@@ -11,9 +11,10 @@
 //     existing timer (preserving older ones, same as the legacy
 //     `calculateTimerValue` rule) or create a new one if none.
 //   - `useWeekTasks.refresh()` re-fetches after the operation
-//     completes so the grid grid-cols-12 items-center gap-2 + column totals reflect the truth.
+//     completes so the row and column totals reflect the truth.
 
 import {computed, toRef} from "vue"
+import {useI18n} from "vue-i18n"
 import dayjs from "dayjs"
 import {useWeekTasks} from "../composables/useWeekTasks"
 import {weekDays, formatHHMM, ISO_DATE, todayISO} from "../../../lib/timers/format"
@@ -21,6 +22,9 @@ import {createTimer, updateTimer, deleteTimer, type TaskWithTimers} from "../../
 import {confirmDialog} from "../../../lib/confirm"
 import type {Timer} from "../../../lib/timers/types"
 import WeekCell from "./WeekCell.vue"
+import UiButton from "../../../components/ui/UiButton.vue"
+
+const { t } = useI18n()
 
 const props = defineProps<{
   weekDate: string
@@ -123,29 +127,28 @@ async function onTaskRemove(task: TaskWithTimers) {
 </script>
 
 <template>
-  <div class="col-span-12 timesheet-week-page" style="margin-top: 12px">
-    <div v-if="error" class="rounded border border-danger p-2 text-sm text-danger">
-      Konnte Aufgaben nicht laden. <a role="button" @click.prevent="refresh">Erneut laden</a>
+  <div class="mt-3" data-test="week-grid">
+    <div v-if="error" class="mb-2.5 rounded-bs border border-alert-danger-border bg-alert-danger px-4 py-3.5 text-alert-danger-text">
+      {{ t("timesheet.tasksFailed") }}
+      <a role="button" @click.prevent="refresh">{{ t("timesheet.retry") }}</a>
     </div>
 
-    <div class="timesheet-header grid grid-cols-12 items-center gap-2">
-      <div class="col-span-12 md:col-span-4 timesheet-actions">
-        <div class="btn-group btn-group-justified-responsive resource-nav">
-          <a class="rounded border border-brand-border bg-brand px-3 py-1 text-sm text-white hover:bg-brand-hover disabled:opacity-60" role="button" @click.prevent="emit('addTask')">
-            <span aria-hidden="true">+</span>
-            {{ addTaskLabel }}
-          </a>
-        </div>
+    <div class="grid grid-cols-12 items-end gap-2 px-4 py-1.5">
+      <div class="col-span-12 md:col-span-4">
+        <UiButton variant="primary" class="max-md:w-full" @click="emit('addTask')">
+          + {{ addTaskLabel }}
+        </UiButton>
       </div>
-      <div class="col-span-12 md:col-span-6 timesheet-days">
+
+      <div class="col-span-12 grid grid-cols-7 md:col-span-6">
         <div
           v-for="day in days"
           :key="day.date"
-          class="timesheet-day"
-          :class="{'timesheet-today': day.isToday}"
+          class="px-px pb-1 pr-2 text-right"
+          :class="day.isToday ? 'shadow-[inset_0_-4px_0_var(--color-brand)]' : ''"
         >
           <a :href="`?date=${day.date}&view=day`">
-            <span class="hidden-xs">{{ day.shortLabel }}</span>
+            <span class="max-sm:hidden">{{ day.shortLabel }}</span>
             <br />
             <span>{{ day.dayNumber }}</span>
           </a>
@@ -153,21 +156,29 @@ async function onTaskRemove(task: TaskWithTimers) {
       </div>
     </div>
 
-    <p v-if="loading && rows.length === 0" class="text-muted">Lade…</p>
+    <p v-if="loading && rows.length === 0" class="text-muted">{{ t("timesheet.loading") }}</p>
 
-    <div v-else-if="rows.length === 0" class="timesheet-blank text-center text-muted">
-      <p>Diese Woche keine Aufgaben.</p>
+    <div v-else-if="rows.length === 0" class="py-4 text-center text-muted">
+      <p>{{ t("timesheet.noTasks") }}</p>
     </div>
 
-    <div v-for="task in rows" :key="task.id" data-test="task-row" class="rounded border border-rule bg-surface">
-      <div class="p-3 grid grid-cols-12 items-center gap-2">
-        <div class="col-span-12 md:col-span-4 timesheet-task">
+    <div
+      v-for="task in rows"
+      :key="task.id"
+      data-test="task-row"
+      class="mb-2.5 rounded-bs border border-rule-strong bg-surface"
+    >
+      <div class="grid grid-cols-12 items-center gap-2 px-4 py-2.5">
+        <div class="col-span-12 md:col-span-4" data-test="task-name">
           <a :href="`/projects/${task.projectId}`">{{ task.projectName }}</a>
-          <small v-if="task.projectCustomerName"> | {{ task.projectCustomerName }}</small>
+          <small v-if="task.projectCustomerName" class="text-muted">
+            | {{ task.projectCustomerName }}
+          </small>
           <br />
           <span>{{ task.label }}</span>
         </div>
-        <div class="col-span-12 md:col-span-6 timesheet-days">
+
+        <div class="col-span-12 grid grid-cols-7 md:col-span-6" data-test="week-cells">
           <WeekCell
             v-for="day in days"
             :key="day.date"
@@ -177,40 +188,37 @@ async function onTaskRemove(task: TaskWithTimers) {
             @save="onCellSave"
           />
         </div>
-        <div class="col-span-3 col-start-8 md:col-start-auto md:col-span-1">
-          <div class="text-right timesheet-row-sum">
-            <span class="tabular-nums">{{ formatHHMM(taskTotal(task)) }}</span>
-          </div>
+
+        <div
+          class="col-span-3 col-start-8 text-right tabular-nums md:col-span-1 md:col-start-auto"
+          data-test="row-sum"
+        >
+          {{ formatHHMM(taskTotal(task)) }}
         </div>
-        <div class="col-span-2 md:col-span-1">
-          <div class="text-right timesheet-task-actions">
-            <button
-              type="button"
-              class="px-2 py-1 text-sm text-muted hover:text-ink"
-              title="Aufgabe löschen"
-              @click="onTaskRemove(task)"
-            >
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
+
+        <div class="col-span-2 text-right md:col-span-1">
+          <button
+            type="button"
+            class="px-2 py-1 text-muted hover:text-ink"
+            :title="t('timesheet.removeTask')"
+            :data-test="`remove-task-${task.id}`"
+            @click="onTaskRemove(task)"
+          >
+            <span aria-hidden="true">×</span>
+          </button>
         </div>
       </div>
     </div>
 
-    <div v-if="rows.length > 0" class="timesheet-footer grid grid-cols-12 items-center gap-2">
-      <div class="col-span-12 md:col-start-5 md:col-span-6 timesheet-days">
-        <div
-          v-for="day in days"
-          :key="day.date"
-          class="timesheet-day timesheet-col-sum"
-        >
-          <span class="tabular-nums">{{ formatHHMM(columnTotal(day.date)) }}</span>
+    <div v-if="rows.length > 0" class="grid grid-cols-12 items-center gap-2 px-4 py-1.5">
+      <div class="col-span-12 grid grid-cols-7 md:col-span-6 md:col-start-5">
+        <div v-for="day in days" :key="day.date" class="px-px pr-3 text-right tabular-nums">
+          {{ formatHHMM(columnTotal(day.date)) }}
         </div>
       </div>
-      <div class="col-span-12 md:col-span-1 timesheet-sum">
-        <div class="text-right">
-          <span class="tabular-nums">{{ formatHHMM(grandTotal) }}</span>
-        </div>
+
+      <div class="col-span-12 text-right tabular-nums md:col-span-1">
+        {{ formatHHMM(grandTotal) }}
       </div>
     </div>
   </div>

@@ -32,3 +32,8 @@ json.updated_at account.updated_at
 # cannot know without being told, and being refused after the fact is worse
 # than a button that is visibly unavailable.
 json.invoice_limit_reached account.invoice_limit_reached?(current_user)
+json.trial do
+  json.active account.trial_active?
+  json.expired account.trial_expired?
+  json.days_left account.trial? ? account.trial_days_left : nil
+end

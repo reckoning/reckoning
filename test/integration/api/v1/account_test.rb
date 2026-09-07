@@ -74,6 +74,40 @@ module Api
           end
         end
 
+        # The server-rendered layout carries a banner counting the trial down,
+        # and another saying it has run out. The SPA has no layout to read it
+        # from.
+        it "reports a running trial with the days left" do
+          account.update_columns(plan: "basic", trial_used: true, trial_end_at: 5.days.from_now)
+
+          assert_api_response :get, 200 do
+            assert_equal true, parsed_body["trial"]["active"]
+            assert_equal false, parsed_body["trial"]["expired"]
+            assert_equal 5, parsed_body["trial"]["daysLeft"]
+          end
+        end
+
+        it "reports a trial that has run out" do
+          account.update_columns(plan: "basic", trial_used: true, trial_end_at: 1.minute.ago)
+
+          assert_api_response :get, 200 do
+            assert_equal false, parsed_body["trial"]["active"]
+            assert_equal true, parsed_body["trial"]["expired"]
+            assert_equal 0, parsed_body["trial"]["daysLeft"]
+          end
+        end
+
+        # An account that never had one is neither, and has no count.
+        it "reports no trial at all" do
+          account.update_columns(trial_end_at: nil, trial_used: false)
+
+          assert_api_response :get, 200 do
+            assert_equal false, parsed_body["trial"]["active"]
+            assert_equal false, parsed_body["trial"]["expired"]
+            assert_nil parsed_body["trial"]["daysLeft"]
+          end
+        end
+
         it "returns the caller's own account" do
           assert_api_response :get, 200 do
             assert_equal account.id, parsed_body["id"]

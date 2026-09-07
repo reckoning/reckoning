@@ -94,6 +94,24 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true },
   },
   {
+    path: "/offers/new",
+    name: "offer-new",
+    component: () => import("@/pages/offers/OfferForm.vue"),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/offers/:id",
+    name: "offer",
+    component: () => import("@/pages/offers/OfferDetail.vue"),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/offers/:id/edit",
+    name: "offer-edit",
+    component: () => import("@/pages/offers/OfferForm.vue"),
+    meta: { requiresAuth: true },
+  },
+  {
     path: "/invoices",
     name: "invoices",
     component: () => import("@/pages/invoices/InvoicesList.vue"),

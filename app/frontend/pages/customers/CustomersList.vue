@@ -2,29 +2,36 @@
 import { RouterLink } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useCustomers } from "@/services/api/services/customers/customers"
+import UiListGroup from "@/components/ui/UiListGroup.vue"
+import UiListGroupItem from "@/components/ui/UiListGroupItem.vue"
+import UiPanel from "@/components/ui/UiPanel.vue"
 
 const { t } = useI18n()
 const { data: customers, isPending, isError } = useCustomers()
 </script>
 
 <template>
-  <div class="p-4">
-    <h1 class="mb-4 text-[24px] font-medium">{{ t("customers.title") }}</h1>
+  <div id="customers">
+    <h1>{{ t("customers.title") }}</h1>
 
-    <p v-if="isPending" data-test="loading">{{ t("customers.loading") }}</p>
-    <p v-else-if="isError" data-test="error">{{ t("customers.loadFailed") }}</p>
-    <p v-else-if="customers && customers.length === 0" data-test="empty">{{ t("customers.empty") }}</p>
+    <p v-if="isPending" class="mt-4" data-test="loading">{{ t("customers.loading") }}</p>
+    <p v-else-if="isError" class="mt-4" data-test="error">{{ t("customers.loadFailed") }}</p>
+    <p v-else-if="customers && customers.length === 0" class="mt-4" data-test="empty">
+      {{ t("customers.empty") }}
+    </p>
 
-    <ul v-else class="divide-y divide-rule border-y border-rule" data-test="customers">
-      <li v-for="customer in customers" :key="customer.id" class="py-2">
-        <RouterLink
-          :to="{ name: 'customer-edit', params: { id: customer.id } }"
-          class="text-brand"
-          :data-test="`customer-${customer.id}`"
-        >
-          {{ customer.name }}
-        </RouterLink>
-      </li>
-    </ul>
+    <UiPanel v-else class="mt-4" list data-test="customers">
+      <UiListGroup>
+        <UiListGroupItem v-for="customer in customers" :key="customer.id" interactive>
+          <RouterLink
+            :to="{ name: 'customer-edit', params: { id: customer.id } }"
+            class="text-ink hover:text-ink"
+            :data-test="`customer-${customer.id}`"
+          >
+            <b>{{ customer.name }}</b>
+          </RouterLink>
+        </UiListGroupItem>
+      </UiListGroup>
+    </UiPanel>
   </div>
 </template>

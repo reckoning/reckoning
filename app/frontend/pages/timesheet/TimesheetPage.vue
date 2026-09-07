@@ -75,7 +75,7 @@ function onTimerSaved() {
 </script>
 
 <template>
-  <div class="col-span-12">
+  <div id="timesheet">
     <DayNav
       :date="date"
       :view="view"

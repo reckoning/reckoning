@@ -26,9 +26,11 @@ test.describe("Projects", () => {
   test("lists projects under their customer and edits one", async ({ page }) => {
     await page.goto("/app/projects")
 
-    await expect(page.getByRole("heading", { name: "Starfleet" })).toBeVisible()
+    await expect(page.getByTestId("customer-name")).toContainText("Starfleet")
     await expect(page.getByText("Narendra 3")).toBeVisible()
 
+    // Editing lives in the row's actions dropdown, the way it did before.
+    await page.locator('[data-test^="actions-"]').first().click()
     await page.getByText("Bearbeiten").first().click()
 
     await expect(page.getByTestId("name")).toHaveValue("Narendra 3")
@@ -58,6 +60,7 @@ test.describe("Projects", () => {
   test("archives a project and finds it under the archived filter", async ({ page }) => {
     await page.goto("/app/projects")
 
+    await page.locator('[data-test^="actions-"]').first().click()
     page.once("dialog", (dialog) => dialog.accept())
     await page.getByText("Archivieren").first().click()
 

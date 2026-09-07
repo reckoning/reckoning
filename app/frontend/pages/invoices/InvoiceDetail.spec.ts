@@ -75,12 +75,15 @@ describe("InvoiceDetail", () => {
     vi.restoreAllMocks()
   })
 
-  it("shows the invoice and its positions", async () => {
+  // The server-rendered screen put the document itself on the page rather
+  // than repeating its numbers beside it: the headline, the state, the
+  // preview and the two side panels.
+  it("shows the invoice, its state and its downloads", async () => {
     const {wrapper} = await mountDetail()
 
     expect(wrapper.get('[data-test="invoice-title"]').text()).toContain("00001")
-    expect(wrapper.get('[data-test="positions"]').text()).toContain("Work")
-    expect(wrapper.get('[data-test="value"]').text()).toContain("100")
+    expect(wrapper.get('[data-test="state"]').text()).toContain("Draft")
+    expect(wrapper.get('[data-test="invoice-pdf"]').attributes("href")).toContain("/pdf/")
   })
 
   // The ability allows charging a created invoice and paying a charged one,

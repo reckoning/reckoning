@@ -156,6 +156,19 @@ module Api
           end
         end
 
+        # The offer's PDF carries the account's address as the sender. The
+        # ERB `new` action refused to render without one; going straight to
+        # the API used to skip that guard entirely.
+        it "refuses an offer from an account with no address" do
+          accounts(:enterprise).update!(address: nil)
+
+          assert_api_response :post, 400, body: {
+            project_id: project.id,
+            date: "2026-08-01",
+            positions_attributes: [{description: "Design", hours: "4.0", rate: "150.0"}]
+          }
+        end
+
         it "creates an offer with positions" do
           assert_api_response :post, 201, body: {
             project_id: project.id,
