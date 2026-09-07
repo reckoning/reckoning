@@ -70,7 +70,26 @@ test.describe("Invoice detail", () => {
     await page.getByTestId("charge").click()
 
     await expect(page.getByTestId("charge")).toBeVisible()
+    // Declining is not a failure, and it used to say so anyway.
+    await expect(page.getByText("Aktion fehlgeschlagen.")).toHaveCount(0)
     expect(await appEval(`Invoice.first.workflow_state`)).toBe("created")
+  })
+
+  // An expired trial reads everything and writes nothing. Offering the
+  // buttons anyway means a 403 for every click.
+  test("offers no write actions once the trial has run out", async ({ page }) => {
+    const id = (await appEval(`Invoice.first.id`)) as string
+    await appEval(`
+      Account.find_by(name: "Enterprise")
+        .update_columns(plan: "basic", trial_used: true, trial_end_at: 1.minute.ago)
+    `)
+
+    await page.goto(`/app/invoices/${id}`)
+
+    await expect(page.getByTestId("invoice-title")).toContainText("00001")
+    await expect(page.getByTestId("charge")).toHaveCount(0)
+    await expect(page.getByTestId("edit")).toHaveCount(0)
+    await expect(page.getByTestId("delete")).toHaveCount(0)
   })
 
   test("forwards the old rails path to the spa", async ({ page }) => {

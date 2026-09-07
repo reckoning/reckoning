@@ -34,11 +34,11 @@ const { mutateAsync: destroy } = useDestroyInvoice()
 const testMailAddress = ref("")
 const busy = ref(false)
 
-// The ability allows charging a created invoice and paying a charged one, and
-// answers 403 for anything else — so the buttons follow the state rather than
-// offering an action the server will refuse.
-const chargeable = computed(() => invoice.value?.state === "created")
-const payable = computed(() => invoice.value?.state === "charged")
+// What this user may do, as the endpoint reports it. Deriving it from the
+// state was wrong twice over: an expired trial reads everything and writes
+// nothing, and `editable` is a property of the record rather than a
+// permission. Both cases offered buttons the API answers with 403.
+const abilities = computed(() => invoice.value?.abilities)
 
 // `invoice.timers` is `through: :positions`, so a timesheet exists exactly
 // when some position was built from tracked time.
@@ -86,15 +86,17 @@ async function run(action: () => Promise<unknown>, message: string): Promise<voi
   }
 }
 
-const chargeInvoice = () =>
-  run(async () => {
-    const confirmed = await confirmDialog(
-      invoice.value?.sendable ? t("invoice.confirmChargeMail") : t("invoice.confirmCharge"),
-    )
-    if (!confirmed) throw new Error("cancelled")
+// The confirm happens outside `run`: declining is not a failed action, and
+// throwing to get out of it produced a "that did not work" toast after the
+// user had deliberately said no.
+async function chargeInvoice(): Promise<void> {
+  const confirmed = await confirmDialog(
+    invoice.value?.sendable ? t("invoice.confirmChargeMail") : t("invoice.confirmCharge"),
+  )
+  if (!confirmed) return
 
-    return charge({id})
-  }, t("invoice.charged"))
+  await run(() => charge({id}), t("invoice.charged"))
+}
 
 const payInvoice = () => run(() => pay({id}), t("invoice.paid"))
 const mailInvoice = () => run(() => sendMail({id}), t("invoice.mailed"))
@@ -139,7 +141,7 @@ async function removeInvoice(): Promise<void> {
 
         <div class="ml-auto flex flex-wrap gap-2">
           <button
-            v-if="chargeable"
+            v-if="abilities?.charge"
             type="button"
             class="rounded-md border border-brand-border bg-brand px-4 py-2 text-sm text-white hover:bg-brand-hover disabled:opacity-60"
             :disabled="busy"
@@ -150,7 +152,7 @@ async function removeInvoice(): Promise<void> {
           </button>
 
           <button
-            v-if="payable"
+            v-if="abilities?.pay"
             type="button"
             class="rounded-md border border-brand-border bg-brand px-4 py-2 text-sm text-white hover:bg-brand-hover disabled:opacity-60"
             :disabled="busy"
@@ -192,11 +194,11 @@ async function removeInvoice(): Promise<void> {
         <a v-if="hasTimesheet" :href="timesheetPdf" target="_blank" class="text-brand underline" data-test="timesheet-pdf">
           {{ t("invoice.downloadTimesheet") }}
         </a>
-        <a v-if="invoice.editable" :href="`/invoices/${id}/edit`" class="text-brand underline" data-test="edit">
+        <a v-if="abilities?.update" :href="`/invoices/${id}/edit`" class="text-brand underline" data-test="edit">
           {{ t("invoice.edit") }}
         </a>
         <button
-          v-if="invoice.sendable"
+          v-if="abilities?.sendMail"
           type="button"
           class="text-brand underline disabled:opacity-60"
           :disabled="busy"
@@ -205,7 +207,13 @@ async function removeInvoice(): Promise<void> {
         >
           {{ t("invoice.sendMail") }}
         </button>
-        <button type="button" class="text-danger underline" data-test="delete" @click="removeInvoice">
+        <button
+          v-if="abilities?.destroy"
+          type="button"
+          class="text-danger underline"
+          data-test="delete"
+          @click="removeInvoice"
+        >
           {{ t("invoice.delete") }}
         </button>
       </div>
@@ -233,7 +241,15 @@ async function removeInvoice(): Promise<void> {
         </tbody>
       </table>
 
-      <form class="mb-6 flex max-w-md items-end gap-2" data-test="test-mail-form" @submit.prevent="mailTest">
+      <!-- Only when a mail could actually go out: without an invoice email
+           template `InvoiceMailer#send_mail` gsubs a missing string and the
+           job dies, after the form has already reported success. -->
+      <form
+        v-if="invoice.sendable"
+        class="mb-6 flex max-w-md items-end gap-2"
+        data-test="test-mail-form"
+        @submit.prevent="mailTest"
+      >
         <label class="grow text-sm">
           {{ t("invoice.testMail") }}
           <input

@@ -23,6 +23,7 @@ function invoice(overrides: Record<string, unknown> = {}) {
     customerName: "Starfleet",
     editable: true,
     sendable: false,
+    abilities: {charge: true, pay: false, update: true, destroy: true, sendMail: false},
     positions: [{id: "p1", description: "Work", hours: "2.0", rate: "90.0", value: "180.0", timerIds: []}],
     createdAt: "2026-01-01T00:00:00Z",
     updatedAt: "2026-01-01T00:00:00Z",
@@ -92,7 +93,9 @@ describe("InvoiceDetail", () => {
   })
 
   it("offers paying once it is charged", async () => {
-    const {wrapper} = await mountDetail(invoice({state: "charged"}))
+    const {wrapper} = await mountDetail(
+      invoice({state: "charged", abilities: {charge: false, pay: true, update: true, destroy: true, sendMail: false}}),
+    )
 
     expect(wrapper.find('[data-test="charge"]').exists()).toBe(false)
     expect(wrapper.find('[data-test="pay"]').exists()).toBe(true)
@@ -129,6 +132,53 @@ describe("InvoiceDetail", () => {
       invoice({positions: [{id: "p1", description: "Work", timerIds: ["t1"]}]}),
     )
     expect(withTimers.find('[data-test="timesheet-pdf"]').exists()).toBe(true)
+  })
+
+  // Deriving the buttons from the state was wrong twice over: an expired trial
+  // reads everything and writes nothing, and `editable` is a property of the
+  // record rather than a permission. Both offered buttons the API answers 403.
+  it("offers nothing to write when the abilities are closed", async () => {
+    const {wrapper} = await mountDetail(
+      invoice({
+        editable: true,
+        sendable: true,
+        abilities: {charge: false, pay: false, update: false, destroy: false, sendMail: false},
+      }),
+    )
+
+    expect(wrapper.find('[data-test="charge"]').exists()).toBe(false)
+    expect(wrapper.find('[data-test="pay"]').exists()).toBe(false)
+    expect(wrapper.find('[data-test="edit"]').exists()).toBe(false)
+    expect(wrapper.find('[data-test="delete"]').exists()).toBe(false)
+    expect(wrapper.find('[data-test="send-mail"]').exists()).toBe(false)
+  })
+
+  // Without an invoice email template the mailer gsubs a missing string and
+  // the job dies — after the form has already reported success.
+  it("hides the test mail form when no mail can go out", async () => {
+    const {wrapper} = await mountDetail()
+
+    expect(wrapper.find('[data-test="test-mail-form"]').exists()).toBe(false)
+  })
+
+  it("offers the test mail form when the customer can receive one", async () => {
+    const {wrapper} = await mountDetail(
+      invoice({sendable: true, abilities: {charge: true, pay: false, update: true, destroy: true, sendMail: true}}),
+    )
+
+    expect(wrapper.find('[data-test="test-mail-form"]').exists()).toBe(true)
+  })
+
+  // Declining is not a failed action, and it used to say "that did not work".
+  it("says nothing when the charge confirm is declined", async () => {
+    vi.stubGlobal("confirm", vi.fn(() => false))
+    const {wrapper} = await mountDetail()
+
+    await wrapper.get('[data-test="charge"]').trigger("click")
+    await flushPromises()
+
+    expect(wrapper.text()).not.toContain("fehlgeschlagen")
+    expect(wrapper.text()).not.toContain("did not work")
   })
 
   it("marks a charged invoice past its due date as overdue", async () => {
