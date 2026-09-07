@@ -142,14 +142,14 @@ const hasNextPage = computed(() => (invoices.value?.length ?? 0) === PER_PAGE)
     <div class="mb-4 flex items-center justify-between">
       <h1 class="text-[24px] font-medium">{{ t("invoices.title") }}</h1>
 
-      <a
+      <RouterLink
         v-if="!limitReached"
-        href="/invoices/new"
+        :to="{ name: 'invoice-new' }"
         class="rounded-md border border-brand-border bg-brand px-4 py-2 text-sm text-white hover:bg-brand-hover"
         data-test="new-invoice"
       >
         {{ t("invoices.new") }}
-      </a>
+      </RouterLink>
       <span
         v-else
         class="cursor-not-allowed rounded-md border border-field-border bg-surface-muted px-4 py-2 text-sm text-muted"

@@ -127,6 +127,23 @@ module Api
         end
       end
 
+      # The ERB form let the project be changed on an existing invoice, and the
+      # form does again. Time tracked against the old project cannot come
+      # along — `InvoicePosition` refuses it — so the position is destroyed in
+      # the same request, which has to be allowed to go through.
+      it "moves an invoice to another project, dropping the time that stays behind" do
+        position = invoice.positions.create!(description: "Away mission", hours: 2, rate: 90)
+        position.timers << timers(:twohours)
+
+        assert_api_response :patch, 200, path_params: {id: invoice.id}, body: {
+          project_id: projects(:outpost6).id,
+          positions_attributes: [{id: position.id, _destroy: true}]
+        } do
+          assert_equal projects(:outpost6).id, parsed_body["projectId"]
+          assert_empty parsed_body["positions"]
+        end
+      end
+
       it "destroys an invoice" do
         assert_api_response :delete, 200, path_params: {id: invoice.id}
 

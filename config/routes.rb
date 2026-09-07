@@ -85,23 +85,29 @@ Rails.application.routes.draw do
     ["/app/invoices", request.query_string.presence].compact.join("?")
   }, as: :invoices
 
-  resources :invoices, except: %i[index show] do
+  # The SPA owns the form too (phase B6). Declared before the resource so
+  # `/invoices/new` reaches the SPA rather than the ERB screen, and named to
+  # keep `new_invoice_path` — the dashboard and the project page link it.
+  get "invoices/new", to: redirect { |_params, request|
+    ["/app/invoices/new", request.query_string.presence].compact.join("?")
+  }, as: :new_invoice
+  get "invoices/:id/edit", to: redirect("/app/invoices/%{id}/edit"), as: :edit_invoice
+
+  # What is left of the server-rendered invoice: the PDFs, which the plan keeps
+  # server-rendered on purpose. Charging, paying, mailing, creating, updating
+  # and deleting all go through /api/v1 now, and their actions are gone.
+  resources :invoices, only: [] do
     member do
-      put :charge
-      put :pay
-      put :send_mail
-      post :send_test_mail
       get "/pdf/:pdf" => "invoices#pdf", :as => :pdf, :defaults => {format: :pdf}
       get "/timesheet-pdf/:pdf" => "invoices#timesheet", :as => :timesheet_pdf, :defaults => {format: :pdf}
     end
   end
 
-  # The SPA owns the detail page (phase B6). Unnamed: `invoice_path` already
-  # comes from the resource's update and destroy on this same path, and
-  # naming it again collides. Declared *after* the resource on purpose — ahead
-  # of it, `:id` swallows `/invoices/new`. `edit`, `new` and the PDF routes
-  # stay server-rendered, which is why the resource keeps them.
-  get "invoices/:id", to: redirect("/app/invoices/%{id}")
+  # The SPA owns the detail page (phase B6). Named, now that the resource no
+  # longer carries `update` and `destroy` to provide `invoice_path` — the
+  # dashboard and project panels link it. Declared after the resource so its
+  # `:id` cannot swallow the member routes above.
+  get "invoices/:id", to: redirect("/app/invoices/%{id}"), as: :invoice
 
   resources :offers do
     member do

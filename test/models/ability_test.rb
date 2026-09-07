@@ -85,6 +85,52 @@ class AbilityTest < ActiveSupport::TestCase
     end
   end
 
+  # The cap used to live in `ApplicationController`, where only the
+  # server-rendered screens could see it — so the API, and with it the SPA,
+  # could write past it.
+  describe "the demo invoice cap" do
+    before do
+      @demo = Rails.configuration.app.demo
+      Rails.configuration.app.demo = true
+    end
+
+    after { Rails.configuration.app.demo = @demo }
+
+    it "stops a third invoice on a demo deployment" do
+      account.invoices.destroy_all
+      2.times do |index|
+        account.invoices.create!(customer: customer, project: projects(:narendra3),
+          date: Date.new(2026, 3, 1), ref: index + 1)
+      end
+
+      refute Ability.new(user.reload).can?(:create, Invoice.new(account_id: account.id))
+    end
+
+    it "leaves reading and updating alone" do
+      account.invoices.destroy_all
+      2.times do |index|
+        account.invoices.create!(customer: customer, project: projects(:narendra3),
+          date: Date.new(2026, 3, 1), ref: index + 1)
+      end
+
+      ability = Ability.new(user.reload)
+
+      assert ability.can?(:read, account.invoices.first)
+      assert ability.can?(:update, account.invoices.first)
+    end
+
+    it "does not stop an admin" do
+      account.invoices.destroy_all
+      2.times do |index|
+        account.invoices.create!(customer: customer, project: projects(:narendra3),
+          date: Date.new(2026, 3, 1), ref: index + 1)
+      end
+      user.update_columns(admin: true)
+
+      assert Ability.new(user.reload).can?(:create, Invoice.new(account_id: account.id))
+    end
+  end
+
   describe "an account that never had a trial" do
     it "is not treated as expired" do
       account.update_columns(trial_end_at: nil, trial_used: false)

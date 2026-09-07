@@ -76,6 +76,7 @@ en:
       charge:
         success: ~
         failure: ~
+      foreign_timers: ~
       pdf_generating: ~
       pdf_generated: ~
       missing_address: ~

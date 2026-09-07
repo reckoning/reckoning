@@ -47,6 +47,7 @@ de:
       charge:
         success: "Rechnung erfolgreich in Rechnung gestellt."
         failure: "Rechnung konnte nicht in Rechnung gestellt werden."
+      foreign_timers: "Zeiten aus einem anderen Projekt können nicht abgerechnet werden"
       pdf_generating: "PDF wird generiert"
       pdf_generated: "PDF wurde erfolgreich erstellt."
       files_missing: 'Bitte warten Sie bis die Rechnung erstellt wurde oder klicken Sie erneut auf "Rechnung erstellen".'

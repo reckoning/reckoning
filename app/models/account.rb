@@ -34,6 +34,18 @@ class Account < ApplicationRecord
     end + invoices.includes(:customer, :project).order("date DESC").created.sum(:value)
   end
 
+  # A demo deployment caps non-admins at two invoices. It used to live in
+  # `ApplicationController`, where only the server-rendered screens could see
+  # it — so the API, and therefore the SPA, could write past it.
+  DEMO_INVOICE_LIMIT = 2
+
+  def invoice_limit_reached?(user)
+    return false if user&.admin?
+    return false unless Rails.configuration.app.demo
+
+    invoices.count >= DEMO_INVOICE_LIMIT
+  end
+
   def on_paid_plan?
     !on_plan?(:free)
   end
