@@ -119,7 +119,7 @@ async function removeOffer(): Promise<void> {
           </UiButton>
 
           <RouterLink :to="{ name: 'offers' }" data-test="back">
-            <UiButton class="max-md:w-full">{{ t("offer.back") }}</UiButton>
+            <UiButton as="span" class="max-md:w-full">{{ t("offer.back") }}</UiButton>
           </RouterLink>
         </div>
       </div>

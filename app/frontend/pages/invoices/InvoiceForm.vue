@@ -314,7 +314,7 @@ async function save(): Promise<void> {
 
       <div class="max-md:w-full">
         <RouterLink :to="{ name: 'invoices' }" data-test="back">
-          <UiButton class="max-md:w-full">{{ t("invoiceForm.back") }}</UiButton>
+          <UiButton as="span" class="max-md:w-full">{{ t("invoiceForm.back") }}</UiButton>
         </RouterLink>
       </div>
     </div>

@@ -164,7 +164,7 @@ const FIELD =
             {{ t("customer.delete") }}
           </UiButton>
           <RouterLink :to="{ name: 'customers' }" data-test="back">
-            <UiButton class="max-md:w-full">{{ t("customer.back") }}</UiButton>
+            <UiButton as="span" class="max-md:w-full">{{ t("customer.back") }}</UiButton>
           </RouterLink>
         </div>
       </div>

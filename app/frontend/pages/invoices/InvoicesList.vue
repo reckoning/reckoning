@@ -186,7 +186,7 @@ const hasNextPage = computed(() => page.value * PER_PAGE < (summary.value?.count
 
       <div class="max-md:w-full">
         <RouterLink v-if="!limitReached" :to="{ name: 'invoice-new' }" data-test="new-invoice">
-          <UiButton variant="primary" class="max-md:w-full">+ {{ t("invoices.new") }}</UiButton>
+          <UiButton as="span" variant="primary" class="max-md:w-full">+ {{ t("invoices.new") }}</UiButton>
         </RouterLink>
         <UiButton
           v-else

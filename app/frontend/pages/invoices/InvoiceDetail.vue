@@ -181,7 +181,7 @@ async function removeInvoice(): Promise<void> {
           </UiButton>
 
           <RouterLink :to="{ name: 'invoices' }" data-test="back">
-            <UiButton class="max-md:w-full">{{ t("invoice.back") }}</UiButton>
+            <UiButton as="span" class="max-md:w-full">{{ t("invoice.back") }}</UiButton>
           </RouterLink>
         </div>
       </div>

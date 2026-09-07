@@ -3,13 +3,17 @@ import { computed } from "vue"
 
 // `.btn` with the three variants the screens use, plus `link` for the inline
 // text buttons in the action lists.
+// `as: "span"` für den Fall, dass das Ganze schon in einem Link steckt: ein
+// `<button>` in einem `<a>` ist ein zweites Bedienelement im ersten, was Fokus
+// und Auslösen für Tastatur und Screenreader unklar macht.
 const props = withDefaults(
   defineProps<{
     variant?: "default" | "primary" | "danger" | "link"
     size?: "default" | "large" | "small"
+    as?: "button" | "span"
     block?: boolean
   }>(),
-  {variant: "default", size: "default", block: false},
+  {variant: "default", size: "default", as: "button", block: false},
 )
 
 const VARIANTS = {
@@ -34,7 +38,7 @@ const classes = computed(() => [
 </script>
 
 <template>
-  <button :class="classes">
+  <component :is="as" :class="[classes, as === 'span' ? 'cursor-pointer' : '']">
     <slot />
-  </button>
+  </component>
 </template>

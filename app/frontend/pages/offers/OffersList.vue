@@ -145,7 +145,7 @@ const hasNextPage = computed(() => page.value * PER_PAGE < (summary.value?.count
 
       <div class="max-md:w-full">
         <a href="/offers/new" data-test="new-offer">
-          <UiButton variant="primary" class="max-md:w-full">+ {{ t("offers.new") }}</UiButton>
+          <UiButton as="span" variant="primary" class="max-md:w-full">+ {{ t("offers.new") }}</UiButton>
         </a>
       </div>
     </div>
@@ -252,7 +252,7 @@ const hasNextPage = computed(() => page.value * PER_PAGE < (summary.value?.count
                   <UiDropdownItem>
                     <a :href="`/offers/${offer.id}`">{{ t("offers.show") }}</a>
                   </UiDropdownItem>
-                  <UiDropdownItem>
+                  <UiDropdownItem v-if="offer.abilities?.update">
                     <a :href="`/offers/${offer.id}/edit`">{{ t("offers.edit") }}</a>
                   </UiDropdownItem>
                 </template>

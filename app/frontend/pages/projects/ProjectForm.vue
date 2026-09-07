@@ -87,9 +87,16 @@ const schema = toTypedSchema(
   }),
 )
 
+// `new_project_path(customer_id: customer)` in the server-rendered list: the
+// plus button in a customer's panel heading opens the form with that customer
+// already chosen. The query carries it here.
+const customerFromQuery = computed(() =>
+  typeof route.query.customer_id === "string" ? route.query.customer_id : undefined,
+)
+
 const { defineField, handleSubmit, errors, setValues } = useForm({
   validationSchema: schema,
-  initialValues: { budget_on_dashboard: true },
+  initialValues: { budget_on_dashboard: true, customer_id: customerFromQuery.value },
 })
 
 const [name, nameAttrs] = defineField("name")
@@ -247,7 +254,7 @@ const FIELD =
           {{ t("project.delete") }}
         </UiButton>
         <RouterLink :to="{ name: 'projects' }" data-test="back">
-          <UiButton class="max-md:w-full">{{ t("project.back") }}</UiButton>
+          <UiButton as="span" class="max-md:w-full">{{ t("project.back") }}</UiButton>
         </RouterLink>
       </div>
     </div>

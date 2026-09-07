@@ -110,7 +110,7 @@ async function toggleArchive(project: Project): Promise<void> {
 
       <div class="max-md:w-full">
         <RouterLink :to="{ name: 'project-new' }" data-test="new-project">
-          <UiButton variant="primary" class="max-md:w-full">+ {{ t("projects.new") }}</UiButton>
+          <UiButton as="span" variant="primary" class="max-md:w-full">+ {{ t("projects.new") }}</UiButton>
         </RouterLink>
       </div>
     </div>
@@ -158,7 +158,7 @@ async function toggleArchive(project: Project): Promise<void> {
                 :title="t('projects.newFor', { customer: group.customer })"
                 :data-test="`new-project-${group.id}`"
               >
-                <UiButton>+</UiButton>
+                <UiButton as="span">+</UiButton>
               </RouterLink>
             </div>
           </div>
