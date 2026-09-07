@@ -19,7 +19,7 @@ const editing = computed(() => id.value !== undefined)
 const { data: invoice, isPending, isError } = useInvoice(id.value ?? "", {
   query: { enabled: editing.value },
 })
-const { data: projects } = useProjects({}, { query: { enabled: !editing.value } })
+const { data: projects } = useProjects()
 const { data: account } = useAccount()
 const { mutateAsync: create } = useCreateInvoice()
 const { mutateAsync: update } = useUpdateInvoice()
@@ -95,29 +95,45 @@ watch(
 
 // Rows built from tracked time belong to the project they came from: the
 // invoice takes its customer and its rate from the project, and the server
-// refuses time from anywhere else. Switching projects drops them; hand-typed
-// rows stay. Editing cannot change the project, so this is the new form only.
+// refuses time from anywhere else. Switching projects therefore takes them
+// with it — a saved one is marked for destruction rather than dropped, so the
+// server removes it — while rows typed by hand stay.
 watch(projectId, (next, previous) => {
-  if (editing.value || previous === "" || next === previous) return
+  if (previous === "" || next === previous) return
 
-  rows.value = rows.value.filter((row) => row.timerIds.length === 0)
+  rows.value = rows.value.filter((row) => {
+    if (row.timerIds.length === 0) return true
+    if (!row.id) return false
 
-  if (rows.value.length === 0) rows.value = [emptyRow()]
+    row.destroyed = true
+    row.timerIds = []
+
+    return true
+  })
+
+  if (rows.value.every((row) => row.destroyed)) rows.value.push(emptyRow())
 })
 
 // What the ERB did through `oldProjectRate`: a rate the project filled in
 // follows the new project. A rate typed by hand stays put, which is why the
 // rows carry the flag rather than being compared against the old rate.
-watch(projectRate, (next) => {
-  // The project query blanks out while the newly picked one loads, and that
-  // gap is not a rate.
-  const rate = String(next ?? "")
-  if (rate === "") return
+//
+// Keyed on the record rather than on its rate: the query blanks out while the
+// newly picked project loads, and a blank rate is indistinguishable from a
+// project that has none — which would leave the old project's rate in place.
+watch(project, (loaded) => {
+  if (!loaded || loaded.id !== projectId.value) return
+
+  const rate = String(loaded.rate ?? "")
 
   for (const row of rows.value) {
     if (!row.rateFromProject) continue
 
     row.rate = rate
+    // Nothing to derive a value from, so the stale one goes rather than
+    // being billed.
+    if (rate === "") row.value = ""
+    row.rateFromProject = rate !== ""
     recalculate(row)
   }
 })
@@ -305,7 +321,7 @@ async function save(): Promise<void> {
 
     <form v-else class="flex flex-col gap-4" @submit.prevent="save">
       <div class="grid max-w-3xl gap-3 sm:grid-cols-2">
-        <label v-if="!editing" class="text-sm">
+        <label class="text-sm">
           {{ t("invoiceForm.fields.project") }}
           <select v-model="projectId" data-test="project" class="mt-1 block w-full rounded border border-field-border p-2">
             <option value="">{{ t("invoiceForm.fields.noProject") }}</option>

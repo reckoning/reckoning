@@ -12,6 +12,7 @@ const INVOICE_ID = "dddddddd-0000-4000-8000-000000000001"
 const PROJECT_ID = "aaaaaaaa-0000-4000-8000-000000000001"
 const POSITION_ID = "eeeeeeee-0000-4000-8000-000000000001"
 const OTHER_PROJECT_ID = "aaaaaaaa-0000-4000-8000-000000000002"
+const RATELESS_PROJECT_ID = "aaaaaaaa-0000-4000-8000-000000000003"
 
 interface Options {
   invoice?: Record<string, unknown>
@@ -20,7 +21,12 @@ interface Options {
   invoiceStatus?: number
 }
 
-const PROJECT_RATES: Record<string, string> = {[PROJECT_ID]: "90.0", [OTHER_PROJECT_ID]: "50.0"}
+// The schema calls `rate` nullable, so a client cannot assume a value.
+const PROJECT_RATES: Record<string, string | null> = {
+  [PROJECT_ID]: "90.0",
+  [OTHER_PROJECT_ID]: "50.0",
+  [RATELESS_PROJECT_ID]: null,
+}
 
 function respond(requests: AxiosRequestConfig[], options: Options) {
   AXIOS_INSTANCE.defaults.adapter = async (config) => {
@@ -34,11 +40,18 @@ function respond(requests: AxiosRequestConfig[], options: Options) {
     else if (url.includes("/projects/")) {
       const requested = url.split("/projects/")[1]
 
-      data = {id: requested, name: "Narendra 3", rate: PROJECT_RATES[requested] ?? "90.0", workflowState: "active", tasks: []}
+      data = {
+        id: requested,
+        name: "Narendra 3",
+        rate: requested in PROJECT_RATES ? PROJECT_RATES[requested] : "90.0",
+        workflowState: "active",
+        tasks: [],
+      }
     } else if (url.includes("/projects")) {
       data = [
         {id: PROJECT_ID, name: "Narendra 3", label: "Narendra 3", workflowState: "active", tasks: []},
         {id: OTHER_PROJECT_ID, name: "Outpost 6", label: "Outpost 6", workflowState: "active", tasks: []},
+        {id: RATELESS_PROJECT_ID, name: "Rateless", label: "Rateless", workflowState: "active", tasks: []},
       ]
     } else if (url.includes("/invoices")) data = options.invoice ?? {}
 
@@ -221,6 +234,84 @@ describe("InvoiceForm", () => {
     // that it is not the new project's 50.
     expect((wrapper.get('[data-test="position-rate-0"]').element as HTMLInputElement).value).toBe("90")
     expect(wrapper.get('[data-test="position-value-computed-0"]').text()).toBe("180")
+  })
+
+  // The project query blanks out while the newly picked project loads, and a
+  // blank rate is indistinguishable from a project that has none — which is
+  // why the carry keys on the record rather than on the rate.
+  it("clears a carried rate when the new project has none", async () => {
+    const {wrapper} = await mountForm(`/invoices/new?project_id=${PROJECT_ID}`)
+
+    await wrapper.get('[data-test="position-hours-0"]').setValue("2")
+    await flushPromises()
+
+    expect((wrapper.get('[data-test="position-rate-0"]').element as HTMLInputElement).value).toBe("90.0")
+
+    await wrapper.get('[data-test="project"]').setValue(RATELESS_PROJECT_ID)
+
+    await vi.waitFor(() => {
+      expect((wrapper.get('[data-test="position-rate-0"]').element as HTMLInputElement).value).toBe("")
+    })
+
+    // Nothing left to derive the value from, so the stale one is gone rather
+    // than being billed.
+    expect(wrapper.get('[data-test="position-value-computed-0"]').text()).toBe("")
+  })
+
+  // The ERB form rendered the project select for `new` and `edit` alike, and
+  // the API still takes a project change — the port had dropped it.
+  it("offers the project on the edit form too", async () => {
+    const {wrapper} = await mountForm(`/invoices/${INVOICE_ID}/edit`, {
+      invoice: {
+        id: INVOICE_ID,
+        state: "created",
+        date: "2026-03-01",
+        editable: true,
+        sendable: false,
+        abilities: {charge: true, pay: false, update: true, destroy: true, sendMail: false},
+        projectId: PROJECT_ID,
+        positions: [],
+        createdAt: "2026-01-01T00:00:00Z",
+        updatedAt: "2026-01-01T00:00:00Z",
+      },
+    })
+
+    expect(wrapper.find('[data-test="project"]').exists()).toBe(true)
+  })
+
+  // A saved row built from tracked time cannot follow the invoice to another
+  // project — the server refuses that time — so it goes with the project it
+  // came from, and the server is told to remove it.
+  it("destroys a saved timer position when the project changes", async () => {
+    const {wrapper, requests} = await mountForm(`/invoices/${INVOICE_ID}/edit`, {
+      invoice: {
+        id: INVOICE_ID,
+        state: "created",
+        date: "2026-03-01",
+        editable: true,
+        sendable: false,
+        abilities: {charge: true, pay: false, update: true, destroy: true, sendMail: false},
+        projectId: PROJECT_ID,
+        positions: [
+          {id: POSITION_ID, description: "Away mission", hours: "2.0", rate: "90.0", value: "180.0", timerIds: ["t1"]},
+        ],
+        createdAt: "2026-01-01T00:00:00Z",
+        updatedAt: "2026-01-01T00:00:00Z",
+      },
+    })
+
+    await wrapper.get('[data-test="project"]').setValue(OTHER_PROJECT_ID)
+    await flushPromises()
+
+    await wrapper.get("form").trigger("submit")
+    const body = await submitted(requests, "patch")
+    const generated = body.positions_attributes.find(
+      (position: {id?: string}) => position.id === POSITION_ID,
+    )
+
+    expect(body.project_id).toBe(OTHER_PROJECT_ID)
+    expect(generated._destroy).toBe(true)
+    expect(generated.timer_ids).toEqual([])
   })
 
   // A failed load used to render an empty, editable form, which turned a read

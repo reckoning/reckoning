@@ -123,4 +123,32 @@ test.describe("Invoice form", () => {
     await page.goto(`/invoices/new?project_id=${id}`)
     await expect(page).toHaveURL(new RegExp(`/app/invoices/new\\?project_id=${id}$`))
   })
+
+  // The ERB form rendered the project select for `new` and `edit` alike. Time
+  // tracked against the old project cannot follow the invoice, so the
+  // generated position goes with the project it came from.
+  test("moves an invoice to another project", async ({ page }) => {
+    await appEval(`
+      account = Account.find_by(name: "Enterprise")
+      customer = Customer.find_by(name: "Starfleet")
+      customer.projects.create!(name: "Outpost 6", rate: 50)
+      invoice = account.invoices.create!(customer: customer, project: Project.find_by(name: "Narendra 3"), date: Date.new(2026, 3, 1), ref: 1)
+      position = invoice.positions.create!(description: "Away mission", hours: 2, rate: 90)
+      position.timers << Timer.first
+      invoice.save!
+    `)
+    const id = (await appEval(`Invoice.first.id`)) as string
+    const other = (await appEval(`Project.find_by(name: "Outpost 6").id`)) as string
+
+    await page.goto(`/app/invoices/${id}/edit`)
+
+    await expect(page.getByTestId("position-description-0")).toHaveValue("Away mission")
+
+    await page.getByTestId("project").selectOption(other)
+    await page.getByTestId("submit").click()
+
+    await expect(page.getByTestId("invoice-title")).toBeVisible()
+    expect(await appEval(`Invoice.first.project.name`)).toBe("Outpost 6")
+    expect(await appEval(`Invoice.first.positions.count`)).toBe(0)
+  })
 })
