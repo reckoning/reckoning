@@ -60,7 +60,6 @@ module Reckoning
 
     config.app = config_for("app/main")
     config.redis = config_for(:redis)
-    config.basic_auth = config_for(:basic_auth)
 
     # Disable Google's FLoC User Tracking - as recommended by Andy Croll ;) https://andycroll.com/ruby/opt-out-of-google-floc-tracking-in-rails/
     config.action_dispatch.default_headers["Permissions-Policy"] = "interest-cohort=()"

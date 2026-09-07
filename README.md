@@ -15,12 +15,10 @@ Reckoning is a simple tool for invoicing
 
 ## Setup
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
-
 To run Reckoning on your local machine you need to install:
 
 - postgresql with activated hstore on the used database
-- WKHTMLTOPDF to generate Invoices
+- Google Chrome, which Grover drives to generate Invoice PDFs
 
 ## ToDo:
 
