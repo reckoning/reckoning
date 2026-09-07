@@ -90,7 +90,4 @@ module ApplicationHelper
   # Toggle with `Flipper.enable(:new_timers_calendar)` (or per-user
   # via `Flipper.enable_actor(...)`) — the UI mounts at
   # `/backend/flipper` for admins.
-  def new_frontend?(name)
-    Flipper.enabled?(:"new_#{name}", current_user)
-  end
 end

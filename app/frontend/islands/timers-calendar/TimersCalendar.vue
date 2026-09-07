@@ -100,7 +100,7 @@ const businessDays = computed(() => businessDaysInMonth(month.value))
 </script>
 
 <template>
-  <div class="col-xs-12">
+  <div class="col-xs-12" data-test="timers-calendar">
     <MonthNav
       :month="month"
       :business-days="businessDays"

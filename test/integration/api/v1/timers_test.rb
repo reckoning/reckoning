@@ -74,7 +74,7 @@ module Api
         end
 
         it "does not create a timer" do
-          assert_api_response :post, 401, body: {task_id: task.id, value: "1.0"}
+          assert_api_response :post, 401, body: {taskId: task.id, value: "1.0"}
         end
       end
 
@@ -95,8 +95,12 @@ module Api
           end
         end
 
+        # Every client — the timesheet, the calendar, even the AngularJS
+        # service — sends `taskId`. The schema said `task_id`, so runtime
+        # validation warned on every write while `openapi_params` quietly
+        # underscored the key and made it work anyway.
         it "creates a timer on a task" do
-          assert_api_response :post, 201, body: {task_id: task.id, date: "2026-08-10", value: "1.5"} do
+          assert_api_response :post, 201, body: {taskId: task.id, date: "2026-08-10", value: "1.5"} do
             assert_equal task.id, parsed_body["taskId"]
             # Decimals cross the wire as strings.
             assert_equal "1.5", parsed_body["value"]

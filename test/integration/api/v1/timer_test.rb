@@ -70,7 +70,7 @@ module Api
 
       it "updates a timer" do
         assert_api_response :put, 200, path_params: {id: timer.id},
-          body: {task_id: task.id, value: "3.25", note: "Diplomatic incident"} do
+          body: {taskId: task.id, value: "3.25", note: "Diplomatic incident"} do
           assert_equal "3.25", parsed_body["value"]
           assert_equal "Diplomatic incident", parsed_body["note"]
         end

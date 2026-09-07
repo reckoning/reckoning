@@ -1,8 +1,10 @@
 angular.module 'Blank', ['Reckoning']
 
 
-# See the comment in `angular/timers_calendar/app.coffee` for why
-# these guards are required.
+# The guards below: Turbo fires this on every navigation, and bootstrapping
+# an element Angular already owns raises. The app that carried the original
+# explanation, the timers calendar, is gone — this is the last Angular mount
+# left, and it goes with the invoice and offer lists in B6/B7.
 document.addEventListener "turbolinks:load", ->
   el = document.getElementById("blank")
   return unless el
