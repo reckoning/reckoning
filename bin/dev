@@ -107,4 +107,4 @@ if [ -n "$open_browser" ]; then
   ) &
 fi
 
-exec foreman start -f Procfile -m "$formation" -p "$dev_port" -e /dev/null
+exec bin/op foreman start -f Procfile -m "$formation" -p "$dev_port" -e /dev/null

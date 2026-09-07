@@ -158,7 +158,7 @@ read after the template.
 ### Development
 
 ```bash
-bin/op foreman start -f Procfile.dev  # Rails + sidekiq + (legacy) assets
+bin/dev                               # Rails + sidekiq + vite (see --help)
 bin/op rails console
 bin/op rake db:migrate
 ```
