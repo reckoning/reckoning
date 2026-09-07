@@ -37,7 +37,8 @@ module Api
         scope = current_account.offers.filter_result(filter_params)
 
         @count = scope.count
-        @value = scope.sum(&:value)
+        # `value` is a stored, non-null column, so the database adds it up.
+        @value = scope.sum(:value)
         # Deliberately unfiltered: this fills the year dropdown, so it has to
         # offer the years you could switch to, not only the one you are on.
         @years = current_account.offers.where.not(date: nil)
