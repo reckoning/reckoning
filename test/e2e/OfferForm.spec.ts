@@ -61,6 +61,30 @@ test.describe("Offer form", () => {
     expect(await appEval(`Offer.first.positions.count`)).toBe(0)
   })
 
+  // The ERB form rendered the project select for `new` and `edit` alike.
+  test("moves an offer to another project", async ({ page }) => {
+    await appEval(`
+      account = Account.find_by(name: "Enterprise")
+      customer = Customer.find_by(name: "Starfleet")
+      customer.projects.create!(name: "Outpost 6", rate: 50)
+      offer = account.offers.create!(project: Project.find_by(name: "Narendra 3"), date: Date.new(2026, 3, 1), ref: 1)
+      offer.positions.create!(description: "Design", hours: 2, rate: 90)
+      offer.save!
+    `)
+    const id = (await appEval(`Offer.first.id`)) as string
+    const other = (await appEval(`Project.find_by(name: "Outpost 6").id`)) as string
+
+    await page.goto(`/app/offers/${id}/edit`)
+
+    await expect(page.getByTestId("position-description-0")).toHaveValue("Design")
+
+    await page.getByTestId("project").selectOption(other)
+    await page.getByTestId("submit").click()
+
+    await expect(page.getByTestId("offer-title")).toBeVisible()
+    expect(await appEval(`Offer.first.project.name`)).toBe("Outpost 6")
+  })
+
   // The offer's PDF carries the account address as the sender, and the model
   // refuses the create without one.
   test("refuses a new offer while the account has no address", async ({ page }) => {

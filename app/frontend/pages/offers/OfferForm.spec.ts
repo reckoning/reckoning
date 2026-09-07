@@ -12,8 +12,14 @@ const OFFER_ID = "cccccccc-0000-4000-8000-000000000001"
 const PROJECT_ID = "aaaaaaaa-0000-4000-8000-000000000001"
 const OTHER_PROJECT_ID = "aaaaaaaa-0000-4000-8000-000000000002"
 const POSITION_ID = "eeeeeeee-0000-4000-8000-000000000001"
+const RATELESS_PROJECT_ID = "aaaaaaaa-0000-4000-8000-000000000003"
 
-const PROJECT_RATES: Record<string, string> = {[PROJECT_ID]: "90.0", [OTHER_PROJECT_ID]: "50.0"}
+// The schema calls `rate` nullable, so a client cannot assume a value.
+const PROJECT_RATES: Record<string, string | null> = {
+  [PROJECT_ID]: "90.0",
+  [OTHER_PROJECT_ID]: "50.0",
+  [RATELESS_PROJECT_ID]: null,
+}
 
 interface Options {
   offer?: Record<string, unknown>
@@ -32,11 +38,18 @@ function respond(requests: AxiosRequestConfig[], options: Options) {
     else if (url.includes("/projects/")) {
       const requested = url.split("/projects/")[1]
 
-      data = {id: requested, name: "Narendra 3", rate: PROJECT_RATES[requested] ?? "90.0", workflowState: "active", tasks: []}
+      data = {
+        id: requested,
+        name: "Narendra 3",
+        rate: requested in PROJECT_RATES ? PROJECT_RATES[requested] : "90.0",
+        workflowState: "active",
+        tasks: [],
+      }
     } else if (url.includes("/projects")) {
       data = [
         {id: PROJECT_ID, name: "Narendra 3", label: "Narendra 3", workflowState: "active", tasks: []},
         {id: OTHER_PROJECT_ID, name: "Outpost 6", label: "Outpost 6", workflowState: "active", tasks: []},
+        {id: RATELESS_PROJECT_ID, name: "Rateless", label: "Rateless", workflowState: "active", tasks: []},
       ]
     } else if (url.includes("/offers")) data = options.offer ?? {}
 
@@ -173,6 +186,43 @@ describe("OfferForm", () => {
     expect(body.positions_attributes).toEqual([
       {description: "Design", hours: 4, rate: "90.0", value: "360"},
     ])
+  })
+
+  // The ERB form rendered the project select for `new` and `edit` alike, and
+  // the API still takes a project change — the port had dropped it.
+  it("offers the project on the edit form too", async () => {
+    const {wrapper} = await mountForm(`/offers/${OFFER_ID}/edit`, {
+      offer: {
+        id: OFFER_ID,
+        state: "created",
+        date: "2026-03-01",
+        editable: true,
+        abilities: {update: true, destroy: true, transitions: ["bid"]},
+        projectId: PROJECT_ID,
+        positions: [],
+        createdAt: "2026-01-01T00:00:00Z",
+        updatedAt: "2026-01-01T00:00:00Z",
+      },
+    })
+
+    expect(wrapper.find('[data-test="project"]').exists()).toBe(true)
+  })
+
+  // A blank rate is indistinguishable from a project that has none, which is
+  // why the carry keys on the record rather than on the rate.
+  it("clears a carried rate when the new project has none", async () => {
+    const {wrapper} = await mountForm(`/offers/new?project_id=${PROJECT_ID}`)
+
+    await wrapper.get('[data-test="position-hours-0"]').setValue("2")
+    await flushPromises()
+
+    await wrapper.get('[data-test="project"]').setValue(RATELESS_PROJECT_ID)
+
+    await vi.waitFor(() => {
+      expect((wrapper.get('[data-test="position-rate-0"]').element as HTMLInputElement).value).toBe("")
+    })
+
+    expect(wrapper.get('[data-test="position-value-computed-0"]').text()).toBe("")
   })
 
   it("marks a saved position for destruction rather than dropping it", async () => {
