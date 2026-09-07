@@ -40,7 +40,12 @@ async function mountList(requests: AxiosRequestConfig[] = [], path = "/invoices"
 
   const router = createRouter({
     history: createMemoryHistory(),
-    routes: [{path: "/invoices", name: "invoices", component: InvoicesList}],
+    routes: [
+      {path: "/invoices", name: "invoices", component: InvoicesList},
+      // The row links at the detail route; where it leads is the router's
+      // business, not this component's.
+      {path: "/invoices/:id", name: "invoice", component: {template: "<div />"}},
+    ],
   })
   await router.push(path)
   await router.isReady()

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue"
-import { useRoute, useRouter } from "vue-router"
+import { useRoute, useRouter, RouterLink } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useInvoices, useInvoiceSummary } from "@/services/api/services/invoices/invoices"
 import { useAccount } from "@/services/api/services/account/account"
@@ -266,7 +266,10 @@ const hasNextPage = computed(() => (invoices.value?.length ?? 0) === PER_PAGE)
         <tbody>
           <tr v-for="invoice in invoices" :key="invoice.id" class="border-b border-rule" :data-test="`invoice-${invoice.id}`">
             <td class="px-2 py-2 tabular-nums">
-              <a :href="`/invoices/${invoice.id}`" class="text-brand">{{ invoice.refNumber ?? invoice.ref }}</a>
+              <RouterLink
+                :to="{ name: 'invoice', params: { id: invoice.id } }"
+                class="text-brand"
+              >{{ invoice.refNumber ?? invoice.ref }}</RouterLink>
             </td>
             <td class="px-2 py-2">{{ invoice.customerName }}</td>
             <td class="px-2 py-2 tabular-nums">{{ formatDate(invoice.date) }}</td>
