@@ -72,7 +72,10 @@ Rails.application.configure do
     url: Rails.configuration.redis.url,
     namespace: "reckoning-#{Rails.env}",
     error_handler: ->(method:, returning:, exception:) {
-      Sentry.capture_exception(exception, level: "warning", tags: {method: method, returning: returning})
+      Appsignal.report_error(exception) do |transaction|
+        transaction.set_namespace("cache")
+        transaction.add_tags(method: method, returning: returning)
+      end
     }
   }
 

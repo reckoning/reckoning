@@ -7,6 +7,10 @@ require "capistrano/rails"
 require "capistrano/rails/console"
 require "capistrano/data_migrate"
 
+# Sends a deploy marker to AppSignal on `deploy:finished`; the revision and
+# environment come from `current_revision` and `:appsignal_env`.
+require "appsignal/capistrano"
+
 require "capistrano/scm/git"
 install_plugin Capistrano::SCM::Git
 

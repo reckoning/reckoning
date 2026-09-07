@@ -35,6 +35,11 @@ module Reckoning
 
     config.lograge.enabled = true
 
+    # AppSignal evaluates config/appsignal.rb when it starts, which by default
+    # happens before config/initializers/* have run. Deferring the start lets
+    # that file read `Git.revision_short` and the filter_parameters list.
+    config.appsignal.start_at = :after_initialize
+
     config.action_view.field_error_proc = proc { |html_tag, _instance|
       # rubocop:disable Rails/OutputSafety
       html_tag.to_s.html_safe

@@ -89,7 +89,7 @@ RUN pnpm rebuild esbuild
 # Application code
 COPY . .
 
-# Stamp the build with the deploy SHA so the admin UI / Sentry can show it
+# Stamp the build with the deploy SHA so the admin UI / AppSignal can show it
 ARG GIT_REVISION=""
 RUN if [ -n "$GIT_REVISION" ]; then echo "$GIT_REVISION" > REVISION; fi
 
