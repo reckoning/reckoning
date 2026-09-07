@@ -34,6 +34,10 @@ interface Row {
   hours: string
   value: string
   timerIds: string[]
+  // Set when the project filled the rate in rather than the user. Comparing
+  // the rate against the project's would mistake a hand-typed rate that
+  // happens to match for one this form wrote.
+  rateFromProject: boolean
   destroyed: boolean
 }
 
@@ -60,7 +64,7 @@ const limitReached = computed(() => !editing.value && account.value?.invoiceLimi
 const blocked = computed(() => missingAddress.value || limitReached.value)
 
 function emptyRow(): Row {
-  return {description: "", rate: "", hours: "", value: "", timerIds: [], destroyed: false}
+  return {description: "", rate: "", hours: "", value: "", timerIds: [], rateFromProject: false, destroyed: false}
 }
 
 watch(
@@ -81,6 +85,8 @@ watch(
       hours: position.hours ?? "",
       value: position.value ?? "",
       timerIds: position.timerIds ?? [],
+      // A saved rate is data, whoever typed it.
+      rateFromProject: false,
       destroyed: false,
     }))
   },
@@ -99,23 +105,17 @@ watch(projectId, (next, previous) => {
   if (rows.value.length === 0) rows.value = [emptyRow()]
 })
 
-// What the ERB did through `oldProjectRate`: a rate the old project filled in
-// follows the new one. A rate typed by hand does not.
-const filledRate = ref("")
-
+// What the ERB did through `oldProjectRate`: a rate the project filled in
+// follows the new project. A rate typed by hand stays put, which is why the
+// rows carry the flag rather than being compared against the old rate.
 watch(projectRate, (next) => {
   // The project query blanks out while the newly picked one loads, and that
-  // gap is not a rate: taking it would forget which rate was filled in.
+  // gap is not a rate.
   const rate = String(next ?? "")
   if (rate === "") return
 
-  const previous = filledRate.value
-  filledRate.value = rate
-
-  if (previous === "" || previous === rate) return
-
   for (const row of rows.value) {
-    if (row.rate !== previous) continue
+    if (!row.rateFromProject) continue
 
     row.rate = rate
     recalculate(row)
@@ -141,9 +141,19 @@ const visibleRows = computed(() =>
 function recalculate(row: Row): void {
   if (row.hours === "") return
 
-  if (row.rate === "") row.rate = String(projectRate.value ?? "")
+  if (row.rate === "") {
+    row.rate = String(projectRate.value ?? "")
+    row.rateFromProject = row.rate !== ""
+  }
 
   if (row.rate !== "") row.value = String(Number(row.hours) * Number(row.rate))
+}
+
+// Typing in the rate field makes the rate the user's, so a later project
+// change leaves it alone.
+function rateTyped(row: Row): void {
+  row.rateFromProject = false
+  recalculate(row)
 }
 
 function addRow(): void {
@@ -213,6 +223,7 @@ function takePicked(): void {
       hours: String(candidate.hours),
       value: "",
       timerIds: candidate.timerIds,
+      rateFromProject: String(projectRate.value ?? "") !== "",
       destroyed: false,
     }
     recalculate(row)
@@ -345,7 +356,7 @@ async function save(): Promise<void> {
               :placeholder="t('invoiceForm.fields.rate')"
               :data-test="`position-rate-${index}`"
               class="w-24 rounded border border-field-border p-2 text-right text-sm tabular-nums"
-              @input="recalculate(row)"
+              @input="rateTyped(row)"
             />
 
             <!-- Hours belong to the timers behind the row, so a generated one
