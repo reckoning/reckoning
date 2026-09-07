@@ -4,59 +4,49 @@ import {VueQueryPlugin} from "@tanstack/vue-query"
 import {createPinia} from "pinia"
 import {createRouter, createMemoryHistory} from "vue-router"
 import type {AxiosRequestConfig} from "axios"
-import InvoicesList from "./InvoicesList.vue"
+import OffersList from "./OffersList.vue"
 import {AXIOS_INSTANCE} from "@/services/axiosClient"
 import {i18n} from "@/plugins/i18n"
 
-const INVOICE = {
-  id: "dddddddd-0000-4000-8000-000000000001",
+const OFFER = {
+  id: "cccccccc-0000-4000-8000-000000000001",
   ref: 1,
   refNumber: "00001",
-  state: "created",
+  state: "bided",
   date: "2026-03-01",
   value: "100.0",
-  vat: "19.0",
+  rate: "150.0",
   customerName: "Starfleet",
+  projectName: "Narendra III",
   positions: [],
+  editable: true,
   createdAt: "2026-01-01T00:00:00Z",
   updatedAt: "2026-01-01T00:00:00Z",
 }
 
-const SUMMARY = {count: 2, value: "350.0", vat: "66.5", years: [2026, 2024]}
+const SUMMARY = {count: 2, value: "350.0", years: [2026, 2024]}
 
 async function mountList(
   requests: AxiosRequestConfig[] = [],
-  path = "/invoices",
-  limitReached = false,
+  path = "/offers",
   summary: Record<string, unknown> = SUMMARY,
 ) {
   AXIOS_INSTANCE.defaults.adapter = async (config) => {
     requests.push(config)
 
-    const url = String(config.url)
-    const data = url.includes("summary")
-      ? summary
-      : url.includes("/account")
-        ? {id: "eeeeeeee-0000-4000-8000-000000000001", name: "Enterprise", invoiceLimitReached: limitReached}
-        : [INVOICE]
+    const data = String(config.url).includes("summary") ? summary : [OFFER]
 
     return {data, status: 200, statusText: "OK", headers: {}, config}
   }
 
   const router = createRouter({
     history: createMemoryHistory(),
-    routes: [
-      {path: "/invoices", name: "invoices", component: InvoicesList},
-      // The row links at the detail route; where it leads is the router's
-      // business, not this component's.
-      {path: "/invoices/new", name: "invoice-new", component: {template: "<div />"}},
-      {path: "/invoices/:id", name: "invoice", component: {template: "<div />"}},
-    ],
+    routes: [{path: "/offers", name: "offers", component: OffersList}],
   })
   await router.push(path)
   await router.isReady()
 
-  const wrapper = mount(InvoicesList, {
+  const wrapper = mount(OffersList, {
     global: {
       plugins: [
         [VueQueryPlugin, {queryClientConfig: {defaultOptions: {queries: {retry: false}}}}],
@@ -72,7 +62,7 @@ async function mountList(
   return {wrapper, router}
 }
 
-describe("InvoicesList", () => {
+describe("OffersList", () => {
   afterEach(() => {
     delete AXIOS_INSTANCE.defaults.adapter
     vi.restoreAllMocks()
@@ -81,8 +71,19 @@ describe("InvoicesList", () => {
   it("lists what the endpoint returns", async () => {
     const {wrapper} = await mountList()
 
-    expect(wrapper.get('[data-test="invoices"]').text()).toContain("Starfleet")
-    expect(wrapper.get('[data-test="invoices"]').text()).toContain("00001")
+    const table = wrapper.get('[data-test="offers"]').text()
+
+    expect(table).toContain("Starfleet")
+    expect(table).toContain("00001")
+    expect(table).toContain("Narendra III")
+  })
+
+  // The state names the SPA prints are its own: the Rails locale spelled the
+  // canceled state `cancelled`, which no AASM state ever matched.
+  it("names the state it was given", async () => {
+    const {wrapper} = await mountList()
+
+    expect(wrapper.get('[data-test="offers"]').text()).toContain("Open")
   })
 
   // The total under a filtered table has to be the total of that table, which
@@ -91,10 +92,9 @@ describe("InvoicesList", () => {
     const {wrapper} = await mountList()
 
     expect(wrapper.get('[data-test="summary-value"]').text()).toContain("350")
-    expect(wrapper.get('[data-test="summary-vat"]').text()).toContain("66")
   })
 
-  it("fills the year filter from the years the account has invoices in", async () => {
+  it("fills the year filter from the years the account has offers in", async () => {
     const {wrapper} = await mountList()
 
     const years = wrapper.get('[data-test="filter-year"]').findAll("option").map((o) => o.text())
@@ -108,11 +108,11 @@ describe("InvoicesList", () => {
     const requests: AxiosRequestConfig[] = []
     const {wrapper, router} = await mountList(requests)
 
-    await wrapper.get('[data-test="filter-state"]').setValue("paid")
+    await wrapper.get('[data-test="filter-state"]').setValue("accepted")
 
     await vi.waitFor(() => {
-      expect(router.currentRoute.value.query.state).toBe("paid")
-      expect(requests.some((entry) => entry.params?.state === "paid")).toBe(true)
+      expect(router.currentRoute.value.query.state).toBe("accepted")
+      expect(requests.some((entry) => entry.params?.state === "accepted")).toBe(true)
     })
   })
 
@@ -131,11 +131,11 @@ describe("InvoicesList", () => {
   })
 
   it("drops back to the first page when the filter changes", async () => {
-    const {wrapper, router} = await mountList([], "/invoices?page=3")
+    const {wrapper, router} = await mountList([], "/offers?page=3")
 
     expect(wrapper.get('[data-test="page"]').text()).toBe("3")
 
-    await wrapper.get('[data-test="filter-state"]').setValue("paid")
+    await wrapper.get('[data-test="filter-state"]').setValue("accepted")
 
     await vi.waitFor(() => {
       expect(router.currentRoute.value.query.page).toBeUndefined()
@@ -151,31 +151,11 @@ describe("InvoicesList", () => {
     try {
       const {wrapper} = await mountList()
 
-      expect(wrapper.get('[data-test="invoices"]').text()).toContain("2026")
-      expect(wrapper.get('[data-test="invoices"]').text()).not.toContain("28")
+      expect(wrapper.get('[data-test="offers"]').text()).toContain("2026")
+      expect(wrapper.get('[data-test="offers"]').text()).not.toContain("28")
     } finally {
       process.env.TZ = original
     }
-  })
-
-  // A demo deployment caps non-admins at two invoices, and the server bounces
-  // them back to a list that never renders the flash saying why.
-  it("offers no new invoice when the demo limit is reached", async () => {
-    const {wrapper} = await mountList([], "/invoices", true)
-
-    expect(wrapper.find('[data-test="new-invoice"]').exists()).toBe(false)
-    expect(wrapper.find('[data-test="new-invoice-disabled"]').exists()).toBe(true)
-  })
-
-  // A full page says nothing about what follows it: the filtered total does.
-  it("offers a next page only while the total says there is one", async () => {
-    const full = await mountList([], "/invoices", false, {count: 50, value: "1.0", vat: "0.0", years: [2026]})
-
-    expect(full.wrapper.get('[data-test="next-page"]').attributes("disabled")).toBeUndefined()
-
-    const last = await mountList([], "/invoices?page=2", false, {count: 50, value: "1.0", vat: "0.0", years: [2026]})
-
-    expect(last.wrapper.get('[data-test="next-page"]').attributes("disabled")).toBeDefined()
   })
 
   // A short page means there is nothing after it.
@@ -184,5 +164,16 @@ describe("InvoicesList", () => {
 
     expect(wrapper.get('[data-test="next-page"]').attributes("disabled")).toBeDefined()
     expect(wrapper.get('[data-test="prev-page"]').attributes("disabled")).toBeDefined()
+  })
+
+  // A full page says nothing about what follows it: the filtered total does.
+  it("offers a next page only while the total says there is one", async () => {
+    const full = await mountList([], "/offers", {count: 50, value: "1.0", years: [2026]})
+
+    expect(full.wrapper.get('[data-test="next-page"]').attributes("disabled")).toBeUndefined()
+
+    const last = await mountList([], "/offers?page=2", {count: 50, value: "1.0", years: [2026]})
+
+    expect(last.wrapper.get('[data-test="next-page"]').attributes("disabled")).toBeDefined()
   })
 })

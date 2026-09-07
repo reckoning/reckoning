@@ -61,8 +61,11 @@ class Offer < ApplicationRecord
     year(year)
   end
 
+  # Against the offer's own states: this used to ask the invoice workflow,
+  # whose names only overlap in `created`, so every other filter silently
+  # returned everything.
   def self.filter_state(state)
-    return all if state.blank? || Invoice.workflow_spec.state_names.exclude?(state.to_sym)
+    return all if state.blank? || aasm.states.map(&:name).exclude?(state.to_sym)
 
     send(state)
   end

@@ -57,7 +57,7 @@ class TrialTest < ActionDispatch::IntegrationTest
       trial_ending(1.minute.ago)
       sign_in user
 
-      get offers_path
+      get root_path
 
       assert_response :success
     end
