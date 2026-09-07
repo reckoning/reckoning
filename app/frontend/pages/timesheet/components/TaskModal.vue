@@ -7,8 +7,14 @@
 // Bootstrap 3 modal markup so the existing `.modal-*` styles apply.
 
 import {computed, onBeforeUnmount, onMounted, ref, watch} from "vue"
+import {useI18n} from "vue-i18n"
 import {createTask, listProjects, type TaskWithTimers} from "../../../lib/timers/api"
 import type {Project, Task} from "../../../lib/timers/types"
+
+import UiButton from "../../../components/ui/UiButton.vue"
+import UiInput from "../../../components/ui/UiInput.vue"
+
+const { t } = useI18n()
 
 const props = defineProps<{
   title: string
@@ -103,102 +109,91 @@ function onSave() {
 
 <template>
   <div>
-    <div class="fixed inset-0 z-40 bg-ink/40"></div>
+    <div class="fixed inset-0 z-40 bg-ink/50"></div>
     <div
       class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4"
       tabindex="-1"
       role="dialog"
       aria-modal="true"
-      style="display: block"
       @click.self="emit('close')"
     >
-      <div class="relative z-50 w-full max-w-lg" role="document">
-        <div class="rounded border border-rule bg-surface shadow-lg">
-          <div class="flex items-center justify-between border-b border-rule px-4 py-3">
-            <button class="close" type="button" aria-label="Close" @click="emit('close')">
+      <div class="relative z-50 mt-10 w-full max-w-lg" role="document">
+        <div class="rounded-bs-lg border border-ink/20 bg-surface shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
+          <div class="flex items-center justify-between border-b border-rule px-4 py-3.5">
+            <h3>{{ title }}</h3>
+            <button
+              type="button"
+              class="text-2xl leading-none opacity-20 hover:opacity-50"
+              :aria-label="t('timerModal.close')"
+              @click="emit('close')"
+            >
               <span aria-hidden="true">&times;</span>
             </button>
-            <h2 class="text-base font-semibold">{{ title }}</h2>
           </div>
 
-          <div class="px-4 py-3">
-            <p v-if="projectsLoading" class="text-muted">Lade Projekte…</p>
+          <div class="px-4 py-3.5">
+            <p v-if="projectsLoading" class="text-muted">{{ t("timerModal.loadingProjects") }}</p>
 
             <template v-else>
-              <div class="grid grid-cols-12 items-center gap-2">
-                <div class="col-span-12">
-                  <label class="block text-sm font-medium">Projekt</label>
-                  <select v-model="projectId" class="block w-full rounded border border-field-border p-2 text-sm">
-                    <option value="">— Projekt wählen —</option>
-                    <option v-for="p in projects" :key="p.id" :value="p.id">
-                      {{ p.name }}{{ p.customerName ? ` — ${p.customerName}` : "" }}
-                    </option>
-                  </select>
-                </div>
-              </div>
+              <label class="mb-4 block">
+                <span class="mb-1 inline-block font-bold">{{ t("timerModal.project") }}</span>
+                <UiInput v-model="projectId" as="select">
+                  <option value="">{{ t("timerModal.pickProject") }}</option>
+                  <option v-for="p in projects" :key="p.id" :value="p.id">
+                    {{ p.name }}{{ p.customerName ? ` — ${p.customerName}` : "" }}
+                  </option>
+                </UiInput>
+              </label>
 
-              <div class="grid grid-cols-12 items-center gap-2" style="margin-top: 12px">
-                <div class="col-span-12">
-                  <label class="block text-sm font-medium">Aufgabe</label>
-                  <select v-model="taskId" class="block w-full rounded border border-field-border p-2 text-sm" :disabled="!projectId">
-                    <option value="">— Aufgabe wählen —</option>
-                    <option v-for="t in tasksForProject" :key="t.id" :value="t.id">
-                      {{ t.name }}{{ t.billable ? " (fakturierbar)" : "" }}
-                    </option>
-                  </select>
+              <label class="mb-1 block">
+                <span class="mb-1 inline-block font-bold">{{ t("timerModal.task") }}</span>
+                <UiInput v-model="taskId" as="select" :disabled="!projectId">
+                  <option value="">{{ t("timerModal.pickTask") }}</option>
+                  <option v-for="entry in tasksForProject" :key="entry.id" :value="entry.id">
+                    {{ entry.name }}{{ entry.billable ? ` (${t("timerModal.billable")})` : "" }}
+                  </option>
+                </UiInput>
+              </label>
 
-                  <div v-if="projectId" style="margin-top: 6px">
-                    <a v-if="!showCreate" role="button" @click.prevent="showCreate = true">
-                      <span aria-hidden="true">+</span> Neue Aufgabe
-                    </a>
-                    <div v-else class="flex items-stretch gap-1">
-                      <input
-                        v-model="newTaskName"
-                        type="text"
-                        class="block w-full rounded border border-field-border p-2 text-sm"
-                        placeholder="Name der Aufgabe"
-                        @keydown.enter.prevent="onCreateTaskInline"
-                      />
-                      <span class="input-group-btn">
-                        <button
-                          type="button"
-                          class="rounded border border-brand-border bg-brand px-3 py-1 text-sm text-white hover:bg-brand-hover disabled:opacity-60"
-                          :disabled="!newTaskName.trim() || saving"
-                          @click="onCreateTaskInline"
-                        >
-                          Anlegen
-                        </button>
-                        <button
-                          type="button"
-                          class="rounded border border-field-border bg-surface px-3 py-1 text-sm hover:bg-control-hover disabled:opacity-60"
-                          @click="showCreate = false"
-                        >
-                          Abbrechen
-                        </button>
-                      </span>
-                    </div>
-                  </div>
+              <div v-if="projectId" class="mb-4">
+                <a v-if="!showCreate" role="button" @click.prevent="showCreate = true">
+                  + {{ t("timerModal.newTask") }}
+                </a>
+                <div v-else class="flex">
+                  <UiInput
+                    v-model="newTaskName"
+                    class="rounded-r-none"
+                    :placeholder="t('timerModal.taskName')"
+                    @keydown.enter.prevent="onCreateTaskInline"
+                  />
+                  <UiButton
+                    variant="primary"
+                    class="-ml-px rounded-none"
+                    :disabled="!newTaskName.trim() || saving"
+                    @click="onCreateTaskInline"
+                  >
+                    {{ t("timerModal.createTask") }}
+                  </UiButton>
+                  <UiButton class="-ml-px rounded-l-none" @click="showCreate = false">
+                    {{ t("timerModal.cancel") }}
+                  </UiButton>
                 </div>
               </div>
             </template>
 
-            <p v-if="errorMessage" class="rounded border border-danger p-2 text-sm text-danger" style="margin-top: 12px">
+            <p
+              v-if="errorMessage"
+              class="mt-4 rounded-bs border border-alert-danger-border bg-alert-danger px-4 py-3.5 text-alert-danger-text"
+            >
               {{ errorMessage }}
             </p>
           </div>
 
-          <div class="flex justify-end gap-2 border-t border-rule px-4 py-3">
-            <button type="button" class="rounded border border-field-border bg-surface px-3 py-1 text-sm hover:bg-control-hover disabled:opacity-60 px-4 py-2" @click="emit('close')">
-              Abbrechen
-            </button>
-            <button
-              type="button"
-              class="rounded border border-brand-border bg-brand px-3 py-1 text-sm text-white hover:bg-brand-hover disabled:opacity-60 px-4 py-2"
-              :disabled="!canSave"
-              @click="onSave"
-            >
-              Hinzufügen
-            </button>
+          <div class="flex flex-wrap justify-end gap-2 border-t border-rule px-4 py-3.5">
+            <UiButton @click="emit('close')">{{ t("timerModal.cancel") }}</UiButton>
+            <UiButton variant="primary" :disabled="!canSave" @click="onSave">
+              {{ t("taskModal.add") }}
+            </UiButton>
           </div>
         </div>
       </div>

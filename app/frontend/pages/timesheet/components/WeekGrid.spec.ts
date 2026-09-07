@@ -37,6 +37,7 @@ vi.mock("../../../lib/timers/api", () => ({createTimer, updateTimer, deleteTimer
 vi.mock("../../../lib/confirm", () => ({confirmDialog}))
 
 import WeekGrid from "./WeekGrid.vue"
+import {i18n} from "@/plugins/i18n"
 import WeekCell from "./WeekCell.vue"
 
 function makeTimer(overrides: Partial<Timer> = {}): Timer {
@@ -75,6 +76,7 @@ function mountGrid(extraTasks?: TaskWithTimers[]) {
       addTaskLabel: "Aufgabe hinzufügen",
       extraTasks,
     },
+    global: {plugins: [i18n]},
   })
 }
 
@@ -118,7 +120,7 @@ describe("WeekGrid row removal", () => {
 
   // Row 0 is the fetched task, row 1 the extra one passed in below.
   async function clickRemove(wrapper: ReturnType<typeof mountGrid>) {
-    await wrapper.findAll(".timesheet-task-actions button")[1].trigger("click")
+    await wrapper.findAll('[data-test^="remove-task-"]')[1].trigger("click")
     await flushPromises()
   }
 

@@ -42,7 +42,7 @@ describe("WeekCell", () => {
     const wrapper = mountCell([makeTimer({value: 2, positionId: "pos-1"})])
 
     expect(wrapper.find("input").exists()).toBe(false)
-    expect(wrapper.find(".invoiced").exists()).toBe(true)
+    expect(wrapper.find('[data-test="cell-invoiced"]').exists()).toBe(true)
     expect(wrapper.text()).toContain("2:00")
   })
 
@@ -52,7 +52,7 @@ describe("WeekCell", () => {
     ])
 
     expect(wrapper.find("input").exists()).toBe(false)
-    expect(wrapper.find(".started").exists()).toBe(true)
+    expect(wrapper.find('[data-test="cell-running"]').exists()).toBe(true)
     expect(wrapper.find('[data-test="running-spinner"]').exists()).toBe(true)
   })
 

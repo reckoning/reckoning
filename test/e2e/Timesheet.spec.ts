@@ -22,14 +22,14 @@ test.describe("Timesheet week view", () => {
     await signIn(page)
     await page.goto("/app/timesheet?view=week")
 
-    await expect(page.locator(".timesheet-week-page")).toBeVisible()
+    await expect(page.getByTestId("week-grid")).toBeVisible()
 
     const row = page.getByTestId("task-row").filter({hasText: "E2E Task"})
-    await expect(row.locator(".timesheet-task")).toContainText("E2E Project")
-    await expect(row.locator(".timesheet-task")).toContainText("E2E Task")
+    await expect(row.getByTestId("task-name")).toContainText("E2E Project")
+    await expect(row.getByTestId("task-name")).toContainText("E2E Task")
 
     // Monday cell pre-filled from the seeded 1h timer → row sum 1:00.
-    await expect(row.locator(".timesheet-row-sum")).toContainText("1:00")
+    await expect(row.getByTestId("row-sum")).toContainText("1:00")
   })
 
   // The confirm used to be noty's, drawn by the legacy layout. On an SPA page
@@ -55,12 +55,12 @@ test.describe("Timesheet week view", () => {
     await expect(row).toBeVisible()
 
     page.once("dialog", (dialog) => dialog.dismiss())
-    await row.locator(".timesheet-task-actions button").click()
+    await row.locator('[data-test^="remove-task-"]').click()
     await expect(row).toBeVisible()
-    await expect(row.locator(".timesheet-row-sum")).toContainText("1:00")
+    await expect(row.getByTestId("row-sum")).toContainText("1:00")
 
     page.once("dialog", (dialog) => dialog.accept())
-    await row.locator(".timesheet-task-actions button").click()
+    await row.locator('[data-test^="remove-task-"]').click()
     await expect(row).toHaveCount(0)
   })
 
@@ -69,12 +69,12 @@ test.describe("Timesheet week view", () => {
     await page.goto("/app/timesheet?view=week")
 
     const row = page.getByTestId("task-row").filter({hasText: "E2E Task"})
-    const inputs = row.locator(".timesheet-days input")
+    const inputs = row.getByTestId("week-cells").locator("input")
 
     // Tuesday (index 1) is empty; adding 2h takes the row from 1:00 to 3:00.
     await inputs.nth(1).fill("2:00")
     await inputs.nth(1).blur()
 
-    await expect(row.locator(".timesheet-row-sum")).toContainText("3:00")
+    await expect(row.getByTestId("row-sum")).toContainText("3:00")
   })
 })

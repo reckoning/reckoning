@@ -41,28 +41,30 @@ const display = computed(() => {
 </script>
 
 <template>
-  <div class="rounded border border-rule bg-surface timesheet-timer" :class="variant">
-    <div class="p-3">
+  <div class="mb-2.5 rounded-bs border border-rule-strong bg-surface" :class="variant">
+    <div class="px-4 py-2.5">
       <div class="grid grid-cols-12 items-center gap-2">
         <div class="col-span-12 md:col-span-9">
-          <h3 class="timesheet-timer-project">
+          <h3>
             <a :href="timer.links?.project?.href ?? `/projects/${timer.projectId}`">
               {{ timer.projectName }}
             </a>
-            <small v-if="timer.projectCustomerName"> {{ timer.projectCustomerName }}</small>
+            <small v-if="timer.projectCustomerName" class="text-muted">
+              {{ timer.projectCustomerName }}
+            </small>
           </h3>
-          <div class="timesheet-timer-task">{{ timer.taskLabel }}</div>
-          <div v-if="timer.note" class="timesheet-timer-note text-muted">{{ timer.note }}</div>
+          <div>{{ timer.taskLabel }}</div>
+          <div v-if="timer.note" class="text-muted">{{ timer.note }}</div>
         </div>
-        <div class="col-span-12 md:col-span-3 text-right">
-          <div class="timesheet-timer-value">
+        <div class="col-span-12 flex items-center justify-end gap-2 md:col-span-3">
+          <div :class="timer.started ? 'text-brand' : ''">
             <span v-if="timer.started" class="inline-block animate-spin" aria-hidden="true">◌</span>
             <span class="tabular-nums">{{ display }}</span>
           </div>
           <button
             v-if="!timer.positionId"
             type="button"
-            class="rounded border border-field-border bg-surface px-3 py-1 text-sm hover:bg-control-hover disabled:opacity-60 btn-sm"
+            class="rounded-bs-sm border border-field-border bg-surface px-2.5 py-1 text-small hover:border-control-hover-border hover:bg-control-hover disabled:opacity-65"
             :title="'Edit'"
             @click="emit('edit')"
           >
