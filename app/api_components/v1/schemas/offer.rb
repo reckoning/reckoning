@@ -21,13 +21,30 @@ module V1
           customerName: {type: [:string, :null]},
           projectId: {type: [:string, :null], format: :uuid},
           projectName: {type: [:string, :null]},
-          editable: {type: :boolean, description: "False once bided or accepted."},
+          editable: {type: :boolean, description: "False once bided or accepted. Says nothing about permissions — see abilities.update."},
+          # What this user may do with this offer, model state and the user's
+          # own abilities together. An expired trial reads everything and
+          # writes nothing, which no model-level flag says.
+          abilities: {
+            type: :object,
+            properties: {
+              update: {type: :boolean},
+              destroy: {type: :boolean},
+              transitions: {
+                type: :array,
+                items: {type: :string, enum: %w[bid accept decline cancel]},
+                description: "Events the offer can be moved along by right now."
+              }
+            },
+            additionalProperties: false,
+            required: %w[update destroy transitions]
+          },
           positions: {type: :array, items: V1::Schemas::OfferPosition},
           createdAt: {type: :string, format: "date-time"},
           updatedAt: {type: :string, format: "date-time"}
         },
         additionalProperties: false,
-        required: %w[id state positions editable createdAt updatedAt]
+        required: %w[id state positions editable abilities createdAt updatedAt]
       })
     end
   end

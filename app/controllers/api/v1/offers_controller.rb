@@ -85,7 +85,7 @@ module Api
       # ones: the SPA sends the event name and AASM decides whether it applies.
       def transition
         @offer = find_offer
-        authorize! :update, @offer
+        authorize! :transition, @offer
 
         event = TRANSITIONS[params[:event]]
 
