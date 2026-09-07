@@ -15,6 +15,14 @@ import {
 import PdfViewer from "@/components/PdfViewer.vue"
 import { useToastsStore } from "@/stores/toasts"
 import { confirmDialog } from "@/lib/confirm"
+import UiButton from "@/components/ui/UiButton.vue"
+import UiInput from "@/components/ui/UiInput.vue"
+import UiInputGroup from "@/components/ui/UiInputGroup.vue"
+import UiLabel from "@/components/ui/UiLabel.vue"
+import UiListGroup from "@/components/ui/UiListGroup.vue"
+import UiListGroupItem from "@/components/ui/UiListGroupItem.vue"
+import UiNavTabs from "@/components/ui/UiNavTabs.vue"
+import UiPanel from "@/components/ui/UiPanel.vue"
 
 const route = useRoute()
 const router = useRouter()
@@ -33,6 +41,18 @@ const { mutateAsync: destroy } = useDestroyInvoice()
 
 const testMailAddress = ref("")
 const busy = ref(false)
+
+// The preview was a tab strip: the invoice, and the timesheet beside it when
+// there is one.
+const tab = ref<"invoice" | "timesheet">("invoice")
+
+const tabs = computed(() => {
+  const entries = [{key: "invoice", label: t("invoice.preview")}]
+
+  if (hasTimesheet.value) entries.push({key: "timesheet", label: t("invoice.timesheetPreview")})
+
+  return entries
+})
 
 // What this user may do, as the endpoint reports it. Deriving it from the
 // state was wrong twice over: an expired trial reads everything and writes
@@ -121,171 +141,127 @@ async function removeInvoice(): Promise<void> {
 </script>
 
 <template>
-  <div class="p-4">
+  <div id="invoice">
     <p v-if="isPending" data-test="loading">{{ t("invoice.loading") }}</p>
     <p v-else-if="isError" data-test="error">{{ t("invoice.loadFailed") }}</p>
 
-    <div v-else-if="invoice">
-      <div class="mb-4 flex flex-wrap items-center gap-3">
-        <h1 class="text-[24px] font-medium" data-test="invoice-title">
+    <template v-else-if="invoice">
+      <div class="flex flex-wrap items-start gap-4">
+        <h1 class="grow" data-test="invoice-title">
           {{ t("invoice.title", { ref: invoice.refNumber ?? invoice.ref }) }}
+          <small v-if="overdue" class="text-[65%]">
+            <UiLabel variant="danger" data-test="overdue">{{ t("invoice.overdue") }}</UiLabel>
+          </small>
+          <small class="ml-1 text-[65%]">
+            <UiLabel :variant="invoice.state === 'paid' ? 'success' : invoice.state === 'created' ? 'default' : 'primary'" data-test="state">
+              {{ t(`invoices.states.${invoice.state}`) }}
+            </UiLabel>
+          </small>
         </h1>
 
-        <span v-if="overdue" class="rounded border border-danger px-2 py-1 text-[13px] text-danger" data-test="overdue">
-          {{ t("invoice.overdue") }}
-        </span>
-
-        <span class="rounded border border-rule px-2 py-1 text-[13px] text-muted" data-test="state">
-          {{ t(`invoices.states.${invoice.state}`) }}
-        </span>
-
-        <div class="ml-auto flex flex-wrap gap-2">
-          <button
+        <div class="flex flex-wrap gap-2 max-md:w-full max-md:flex-col">
+          <UiButton
             v-if="abilities?.charge"
-            type="button"
-            class="rounded-md border border-brand-border bg-brand px-4 py-2 text-sm text-white hover:bg-brand-hover disabled:opacity-60"
+            variant="primary"
             :disabled="busy"
             data-test="charge"
             @click="chargeInvoice"
           >
             {{ t("invoice.charge") }}
-          </button>
+          </UiButton>
 
-          <button
+          <UiButton
             v-if="abilities?.pay"
-            type="button"
-            class="rounded-md border border-brand-border bg-brand px-4 py-2 text-sm text-white hover:bg-brand-hover disabled:opacity-60"
+            variant="primary"
             :disabled="busy"
             data-test="pay"
             @click="payInvoice"
           >
             {{ t("invoice.pay") }}
-          </button>
+          </UiButton>
 
-          <RouterLink :to="{ name: 'invoices' }" class="rounded border border-field-border px-4 py-2 text-sm" data-test="back">
-            {{ t("invoice.back") }}
+          <RouterLink :to="{ name: 'invoices' }" data-test="back">
+            <UiButton class="max-md:w-full">{{ t("invoice.back") }}</UiButton>
           </RouterLink>
         </div>
       </div>
 
-      <dl class="mb-4 grid grid-cols-2 gap-2 text-sm sm:grid-cols-4" data-test="facts">
-        <div>
-          <dt class="text-muted">{{ t("invoice.fields.customer") }}</dt>
-          <dd>{{ invoice.customerName }}</dd>
-        </div>
-        <div>
-          <dt class="text-muted">{{ t("invoice.fields.date") }}</dt>
-          <dd class="tabular-nums">{{ formatDate(invoice.date) }}</dd>
-        </div>
-        <div>
-          <dt class="text-muted">{{ t("invoice.fields.paymentDueDate") }}</dt>
-          <dd class="tabular-nums">{{ formatDate(invoice.paymentDueDate) }}</dd>
-        </div>
-        <div>
-          <dt class="text-muted">{{ t("invoice.fields.value") }}</dt>
-          <dd class="tabular-nums" data-test="value">{{ money.format(Number(invoice.value ?? 0)) }}</dd>
-        </div>
-      </dl>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        <!-- The preview, which is where the invoice's own numbers are: the
+             server-rendered screen showed the document rather than repeating
+             it beside itself. -->
+        <div class="md:col-span-2">
+          <UiNavTabs :tabs="tabs" :active="tab" @select="tab = $event as 'invoice' | 'timesheet'" />
 
-      <div class="mb-6 flex flex-wrap gap-3 text-sm">
-        <a :href="invoicePdf" target="_blank" class="text-brand underline" data-test="invoice-pdf">
-          {{ t("invoice.downloadInvoice") }}
-        </a>
-        <a v-if="hasTimesheet" :href="timesheetPdf" target="_blank" class="text-brand underline" data-test="timesheet-pdf">
-          {{ t("invoice.downloadTimesheet") }}
-        </a>
-        <RouterLink
-          v-if="abilities?.update"
-          :to="{ name: 'invoice-edit', params: { id } }"
-          class="text-brand underline"
-          data-test="edit"
-        >
-          {{ t("invoice.edit") }}
-        </RouterLink>
-        <button
-          v-if="abilities?.sendMail"
-          type="button"
-          class="text-brand underline disabled:opacity-60"
-          :disabled="busy"
-          data-test="send-mail"
-          @click="mailInvoice"
-        >
-          {{ t("invoice.sendMail") }}
-        </button>
-        <button
-          v-if="abilities?.destroy"
-          type="button"
-          class="text-danger underline"
-          data-test="delete"
-          @click="removeInvoice"
-        >
-          {{ t("invoice.delete") }}
-        </button>
+          <div class="border border-t-0 border-rule-strong p-4">
+            <PdfViewer v-if="tab === 'invoice'" :src="invoicePdf" data-test="invoice-preview" />
+            <PdfViewer v-else :src="timesheetPdf" data-test="timesheet-preview" />
+          </div>
+        </div>
+
+        <div class="md:pt-10">
+          <UiPanel :title="t('invoice.downloads')">
+            <UiListGroup>
+              <UiListGroupItem interactive>
+                <a :href="invoicePdf" target="_blank" data-test="invoice-pdf">
+                  {{ t("invoice.downloadInvoice") }}
+                </a>
+              </UiListGroupItem>
+              <UiListGroupItem v-if="hasTimesheet" interactive>
+                <a :href="timesheetPdf" target="_blank" data-test="timesheet-pdf">
+                  {{ t("invoice.downloadTimesheet") }}
+                </a>
+              </UiListGroupItem>
+            </UiListGroup>
+          </UiPanel>
+
+          <UiPanel :title="t('invoice.actions')">
+            <UiListGroup>
+              <UiListGroupItem v-if="abilities?.update" interactive>
+                <RouterLink :to="{ name: 'invoice-edit', params: { id } }" data-test="edit">
+                  {{ t("invoice.edit") }}
+                </RouterLink>
+              </UiListGroupItem>
+
+              <UiListGroupItem v-if="abilities?.sendMail" interactive>
+                <button type="button" :disabled="busy" data-test="send-mail" @click="mailInvoice">
+                  {{ t("invoice.sendMail") }}
+                </button>
+              </UiListGroupItem>
+
+              <UiListGroupItem v-if="abilities?.destroy" interactive>
+                <button type="button" class="text-danger-text" data-test="delete" @click="removeInvoice">
+                  {{ t("invoice.delete") }}
+                </button>
+              </UiListGroupItem>
+            </UiListGroup>
+          </UiPanel>
+
+          <!-- Only when a mail could actually go out: without an invoice email
+               template `InvoiceMailer#send_mail` gsubs a missing string and
+               the job dies, after the form has already reported success. -->
+          <UiPanel v-if="invoice.sendable" :title="t('invoice.testMail')">
+            <template #body>
+              <form data-test="test-mail-form" @submit.prevent="mailTest">
+                <UiInputGroup>
+                  <UiInput
+                    v-model="testMailAddress"
+                    type="email"
+                    required
+                    :placeholder="t('invoice.testMailPlaceholder')"
+                    data-test="test-mail-email"
+                  />
+                  <template #button>
+                    <UiButton variant="primary" :disabled="busy" data-test="send-test-mail">
+                      {{ t("invoice.send") }}
+                    </UiButton>
+                  </template>
+                </UiInputGroup>
+              </form>
+            </template>
+          </UiPanel>
+        </div>
       </div>
-
-      <table class="mb-6 w-full border-collapse text-sm" data-test="positions">
-        <thead>
-          <tr class="border-b border-rule-strong text-left">
-            <th class="px-2 py-2">{{ t("invoice.positions.description") }}</th>
-            <th class="px-2 py-2 text-right">{{ t("invoice.positions.hours") }}</th>
-            <th class="px-2 py-2 text-right">{{ t("invoice.positions.rate") }}</th>
-            <th class="px-2 py-2 text-right">{{ t("invoice.positions.value") }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="position in invoice.positions ?? []" :key="position.id" class="border-b border-rule">
-            <td class="px-2 py-2">{{ position.description }}</td>
-            <td class="px-2 py-2 text-right tabular-nums">{{ position.hours }}</td>
-            <td class="px-2 py-2 text-right tabular-nums">
-              {{ position.rate ? money.format(Number(position.rate)) : "" }}
-            </td>
-            <td class="px-2 py-2 text-right tabular-nums">
-              {{ position.value ? money.format(Number(position.value)) : "" }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <!-- Only when a mail could actually go out: without an invoice email
-           template `InvoiceMailer#send_mail` gsubs a missing string and the
-           job dies, after the form has already reported success. -->
-      <form
-        v-if="invoice.sendable"
-        class="mb-6 flex max-w-md items-end gap-2"
-        data-test="test-mail-form"
-        @submit.prevent="mailTest"
-      >
-        <label class="grow text-sm">
-          {{ t("invoice.testMail") }}
-          <input
-            v-model="testMailAddress"
-            type="email"
-            required
-            data-test="test-mail-email"
-            class="mt-1 block w-full rounded border border-field-border p-2"
-          />
-        </label>
-        <button
-          type="submit"
-          class="rounded border border-field-border px-3 py-2 text-sm disabled:opacity-60"
-          :disabled="busy"
-          data-test="send-test-mail"
-        >
-          {{ t("invoice.send") }}
-        </button>
-      </form>
-
-      <section class="flex flex-col gap-6">
-        <div>
-          <h2 class="mb-2 text-base font-semibold">{{ t("invoice.preview") }}</h2>
-          <PdfViewer :src="invoicePdf" data-test="invoice-preview" />
-        </div>
-
-        <div v-if="hasTimesheet">
-          <h2 class="mb-2 text-base font-semibold">{{ t("invoice.timesheetPreview") }}</h2>
-          <PdfViewer :src="timesheetPdf" data-test="timesheet-preview" />
-        </div>
-      </section>
-    </div>
+    </template>
   </div>
 </template>

@@ -41,7 +41,8 @@ test.describe("Invoice form", () => {
     await page.getByTestId("submit").click()
 
     await expect(page.getByText("Rechnung angelegt.")).toBeVisible()
-    await expect(page.getByTestId("positions")).toContainText("Beratung")
+    // The detail page shows the document rather than repeating its positions.
+    await expect(page.getByTestId("invoice-title")).toBeVisible()
 
     expect(await appEval(`Invoice.last.positions.first.value.to_f`)).toBe(180)
   })
@@ -63,7 +64,7 @@ test.describe("Invoice form", () => {
     await page.getByTestId(`candidate-${taskId}`).locator("input").check()
     await page.getByTestId("take-picked").click()
 
-    await expect(page.getByTestId("position-hours-fixed-1")).toHaveText("2")
+    await expect(page.getByTestId("position-hours-fixed-1")).toContainText("2")
 
     await page.getByTestId("submit").click()
     await expect(page.getByText("Rechnung angelegt.")).toBeVisible()

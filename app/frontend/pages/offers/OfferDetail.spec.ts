@@ -75,13 +75,15 @@ describe("OfferDetail", () => {
     vi.restoreAllMocks()
   })
 
-  it("shows the offer and its positions", async () => {
+  // The server-rendered screen put the document itself on the page rather
+  // than repeating its numbers beside it: the headline, the state, the
+  // preview and the two side panels.
+  it("shows the offer, its state and its download", async () => {
     const {wrapper} = await mountDetail()
 
     expect(wrapper.get('[data-test="offer-title"]').text()).toContain("00001")
-    expect(wrapper.get('[data-test="positions"]').text()).toContain("Design")
-    expect(wrapper.get('[data-test="value"]').text()).toContain("100")
-    expect(wrapper.get('[data-test="description"]').text()).toContain("Warp core overhaul")
+    expect(wrapper.get('[data-test="state"]').text()).toContain("Draft")
+    expect(wrapper.get('[data-test="offer-pdf"]').attributes("href")).toContain("/pdf/")
   })
 
   // The endpoint reports what the state machine allows from here, so the
@@ -151,19 +153,4 @@ describe("OfferDetail", () => {
     })
   })
 
-  // The API hands over a bare YYYY-MM-DD. Read as UTC midnight and printed in
-  // local time, that is the previous day west of Greenwich.
-  it("prints the date it was given, in any timezone", async () => {
-    const original = process.env.TZ
-    process.env.TZ = "America/Los_Angeles"
-
-    try {
-      const {wrapper} = await mountDetail()
-
-      expect(wrapper.get('[data-test="facts"]').text()).toContain("2026")
-      expect(wrapper.get('[data-test="facts"]').text()).not.toContain("28")
-    } finally {
-      process.env.TZ = original
-    }
-  })
 })

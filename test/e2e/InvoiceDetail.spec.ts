@@ -24,14 +24,16 @@ test.describe("Invoice detail", () => {
     await expect(page.getByTestId("dashboard-greeting")).toBeVisible()
   })
 
-  test("shows the invoice, its positions and its state", async ({ page }) => {
+  // The server-rendered screen put the document itself on the page rather
+  // than repeating its numbers beside it.
+  test("shows the invoice, its state and its downloads", async ({ page }) => {
     const id = (await appEval(`Invoice.first.id`)) as string
 
     await page.goto(`/app/invoices/${id}`)
 
     await expect(page.getByTestId("invoice-title")).toContainText("00001")
-    await expect(page.getByTestId("positions")).toContainText("Away mission")
-    await expect(page.getByTestId("state")).toContainText("Erstellt")
+    await expect(page.getByTestId("state")).toContainText("Entwurf")
+    await expect(page.getByTestId("invoice-pdf")).toBeVisible()
   })
 
   // The point of porting the viewer rather than linking out: pdf.js has to

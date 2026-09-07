@@ -13,6 +13,12 @@ import type { OfferAbilitiesTransitionsItem } from "@/services/api/models/OfferA
 import PdfViewer from "@/components/PdfViewer.vue"
 import { useToastsStore } from "@/stores/toasts"
 import { confirmDialog } from "@/lib/confirm"
+import UiButton from "@/components/ui/UiButton.vue"
+import UiLabel from "@/components/ui/UiLabel.vue"
+import UiListGroup from "@/components/ui/UiListGroup.vue"
+import UiListGroupItem from "@/components/ui/UiListGroupItem.vue"
+import UiNavTabs from "@/components/ui/UiNavTabs.vue"
+import UiPanel from "@/components/ui/UiPanel.vue"
 
 const route = useRoute()
 const router = useRouter()
@@ -27,6 +33,10 @@ const { mutateAsync: transition } = useTransitionOffer()
 const { mutateAsync: destroy } = useDestroyOffer()
 
 const busy = ref(false)
+
+// The preview was a tab strip with a single tab; kept so the screen reads the
+// same as the invoice beside it.
+const tabs = computed(() => [{key: "offer", label: t("offer.preview")}])
 
 // What this user may do, as the endpoint reports it — the state machine's own
 // answer plus the user's abilities. An expired trial reads everything and
@@ -81,112 +91,74 @@ async function removeOffer(): Promise<void> {
 </script>
 
 <template>
-  <div class="p-4">
+  <div id="offer">
     <p v-if="isPending" data-test="loading">{{ t("offer.loading") }}</p>
     <p v-else-if="isError" data-test="error">{{ t("offer.loadFailed") }}</p>
 
-    <div v-else-if="offer">
-      <div class="mb-4 flex flex-wrap items-center gap-3">
-        <h1 class="text-[24px] font-medium" data-test="offer-title">
+    <template v-else-if="offer">
+      <div class="flex flex-wrap items-start gap-4">
+        <h1 class="grow" data-test="offer-title">
           {{ t("offer.title", { ref: offer.refNumber ?? offer.ref }) }}
+          <small class="ml-1 text-[65%]">
+            <UiLabel :variant="offer.state === 'created' ? 'default' : 'primary'" data-test="state">
+              {{ t(`offers.states.${offer.state}`) }}
+            </UiLabel>
+          </small>
         </h1>
 
-        <span class="rounded border border-rule px-2 py-1 text-[13px] text-muted" data-test="state">
-          {{ t(`offers.states.${offer.state}`) }}
-        </span>
-
-        <div class="ml-auto flex flex-wrap gap-2">
-          <button
+        <div class="flex flex-wrap gap-2 max-md:w-full max-md:flex-col">
+          <UiButton
             v-for="event in abilities?.transitions ?? []"
             :key="event"
-            type="button"
-            class="rounded-md border border-brand-border bg-brand px-4 py-2 text-sm text-white hover:bg-brand-hover disabled:opacity-60"
+            variant="primary"
             :disabled="busy"
             :data-test="`transition-${event}`"
             @click="moveAlong(event)"
           >
             {{ t(`offer.transitions.${event}`) }}
-          </button>
+          </UiButton>
 
-          <RouterLink :to="{ name: 'offers' }" class="rounded border border-field-border px-4 py-2 text-sm" data-test="back">
-            {{ t("offer.back") }}
+          <RouterLink :to="{ name: 'offers' }" data-test="back">
+            <UiButton class="max-md:w-full">{{ t("offer.back") }}</UiButton>
           </RouterLink>
         </div>
       </div>
 
-      <dl class="mb-4 grid grid-cols-2 gap-2 text-sm sm:grid-cols-4" data-test="facts">
-        <div>
-          <dt class="text-muted">{{ t("offer.fields.customer") }}</dt>
-          <dd>{{ offer.customerName }}</dd>
-        </div>
-        <div>
-          <dt class="text-muted">{{ t("offer.fields.project") }}</dt>
-          <dd>{{ offer.projectName }}</dd>
-        </div>
-        <div>
-          <dt class="text-muted">{{ t("offer.fields.date") }}</dt>
-          <dd class="tabular-nums">{{ formatDate(offer.date) }}</dd>
-        </div>
-        <div>
-          <dt class="text-muted">{{ t("offer.fields.value") }}</dt>
-          <dd class="tabular-nums" data-test="value">{{ money.format(Number(offer.value ?? 0)) }}</dd>
-        </div>
-      </dl>
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        <div class="md:col-span-2">
+          <UiNavTabs :tabs="tabs" active="offer" />
 
-      <div class="mb-6 flex flex-wrap gap-3 text-sm">
-        <a :href="offerPdf" target="_blank" class="text-brand underline" data-test="offer-pdf">
-          {{ t("offer.download") }}
-        </a>
-        <RouterLink
-          v-if="abilities?.update"
-          :to="{ name: 'offer-edit', params: { id } }"
-          class="text-brand underline"
-          data-test="edit"
-        >
-          {{ t("offer.edit") }}
-        </RouterLink>
-        <button
-          v-if="abilities?.destroy"
-          type="button"
-          class="text-danger underline"
-          data-test="delete"
-          @click="removeOffer"
-        >
-          {{ t("offer.delete") }}
-        </button>
+          <div class="border border-t-0 border-rule-strong p-4">
+            <PdfViewer :src="offerPdf" data-test="offer-preview" />
+          </div>
+        </div>
+
+        <div class="md:pt-10">
+          <UiPanel :title="t('offer.downloads')">
+            <UiListGroup>
+              <UiListGroupItem interactive>
+                <a :href="offerPdf" target="_blank" data-test="offer-pdf">{{ t("offer.download") }}</a>
+              </UiListGroupItem>
+            </UiListGroup>
+          </UiPanel>
+
+          <UiPanel :title="t('offer.actions')">
+            <UiListGroup>
+              <UiListGroupItem v-if="abilities?.update" interactive>
+                <RouterLink :to="{ name: 'offer-edit', params: { id } }" data-test="edit">
+                  {{ t("offer.edit") }}
+                </RouterLink>
+              </UiListGroupItem>
+
+              <UiListGroupItem v-if="abilities?.destroy" interactive>
+                <button type="button" class="text-danger-text" data-test="delete" @click="removeOffer">
+                  {{ t("offer.delete") }}
+                </button>
+              </UiListGroupItem>
+            </UiListGroup>
+          </UiPanel>
+        </div>
       </div>
-
-      <p v-if="offer.description" class="mb-6 max-w-3xl whitespace-pre-line text-sm" data-test="description">
-        {{ offer.description }}
-      </p>
-
-      <table class="mb-6 w-full border-collapse text-sm" data-test="positions">
-        <thead>
-          <tr class="border-b border-rule-strong text-left">
-            <th class="px-2 py-2">{{ t("offer.positions.description") }}</th>
-            <th class="px-2 py-2 text-right">{{ t("offer.positions.hours") }}</th>
-            <th class="px-2 py-2 text-right">{{ t("offer.positions.rate") }}</th>
-            <th class="px-2 py-2 text-right">{{ t("offer.positions.value") }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="position in offer.positions ?? []" :key="position.id" class="border-b border-rule">
-            <td class="px-2 py-2">{{ position.description }}</td>
-            <td class="px-2 py-2 text-right tabular-nums">{{ position.hours }}</td>
-            <td class="px-2 py-2 text-right tabular-nums">
-              {{ position.rate ? money.format(Number(position.rate)) : "" }}
-            </td>
-            <td class="px-2 py-2 text-right tabular-nums">
-              {{ position.value ? money.format(Number(position.value)) : "" }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <section>
-        <h2 class="mb-2 text-base font-semibold">{{ t("offer.preview") }}</h2>
-        <PdfViewer :src="offerPdf" data-test="offer-preview" />
-      </section>
-    </div>
+    </template>
   </div>
 </template>
