@@ -37,7 +37,8 @@ table {
 }
 
 body {
-  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  // Im Image installiert (vendor/fonts), damit jeder Host dasselbe setzt.
+  font-family: "Noto Sans", sans-serif;
   line-height: 1.428571429;
   background: white;
 }

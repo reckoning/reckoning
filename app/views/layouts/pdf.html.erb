@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
 
-    <%= stylesheet_link_tag "https://fonts.googleapis.com/css?family=Orbitron:900" %>
-    <%= stylesheet_link_tag "http://fonts.googleapis.com/css?family=Droid+Sans:400" %>
+    <%# Keine Schrift aus dem Netz: Orbitron und Noto Sans sind im Image
+        installiert (vendor/fonts). Ein Link erreicht die laufende Kopfzeile
+        nicht, weil Chrome sie als eigenes Dokument rendert. %>
 
     <style type="text/css">
       <%= Rails.application.assets["pdf.css"].to_s %>
