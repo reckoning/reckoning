@@ -304,6 +304,93 @@ describe("InvoiceForm", () => {
     expect(values).toContain(PROJECT_ID)
   })
 
+  // `GET /projects` answers with the active ones, and a project can be
+  // archived long after an invoice was written against it. Without its own
+  // project in the list the required select has nothing to match, and the
+  // invoice cannot be saved at all.
+  it("keeps an archived project selectable on its own invoice", async () => {
+    const ARCHIVED = "aaaaaaaa-0000-4000-8000-000000000099"
+    const {wrapper} = await mountForm(`/invoices/${INVOICE_ID}/edit`, {
+      invoice: {
+        id: INVOICE_ID,
+        state: "created",
+        date: "2026-03-01",
+        editable: true,
+        sendable: false,
+        abilities: {charge: true, pay: false, update: true, destroy: true, sendMail: false},
+        projectId: ARCHIVED,
+        projectName: "Sternenbasis 12",
+        positions: [],
+        createdAt: "2026-01-01T00:00:00Z",
+        updatedAt: "2026-01-01T00:00:00Z",
+      },
+    })
+
+    const select = wrapper.get('[data-test="project"]')
+
+    expect(select.findAll("option").map((option) => option.attributes("value"))).toContain(ARCHIVED)
+    expect((select.element as HTMLSelectElement).value).toBe(ARCHIVED)
+  })
+
+  // Switching the project is a choice, not a demolition: a row is only
+  // decided about when the form is submitted, so passing through another
+  // project on the way leaves the invoice as it was.
+  it("brings a generated row back when the project comes back", async () => {
+    const {wrapper, requests} = await mountForm(`/invoices/${INVOICE_ID}/edit`, {
+      invoice: {
+        id: INVOICE_ID,
+        state: "created",
+        date: "2026-03-01",
+        editable: true,
+        sendable: false,
+        abilities: {charge: true, pay: false, update: true, destroy: true, sendMail: false},
+        projectId: PROJECT_ID,
+        positions: [
+          {id: POSITION_ID, description: "Away mission", hours: "2.0", rate: "90.0", value: "180.0", timerIds: ["t1"]},
+        ],
+        createdAt: "2026-01-01T00:00:00Z",
+        updatedAt: "2026-01-01T00:00:00Z",
+      },
+    })
+
+    await wrapper.get('[data-test="project"]').setValue(OTHER_PROJECT_ID)
+    await flushPromises()
+
+    expect(wrapper.find('[data-test="position-description-0"]').exists()).toBe(false)
+
+    await wrapper.get('[data-test="project"]').setValue(PROJECT_ID)
+    await flushPromises()
+
+    expect((wrapper.get('[data-test="position-description-0"]').element as HTMLInputElement).value)
+      .toBe("Away mission")
+
+    await wrapper.get("form").trigger("submit")
+    const body = await submitted(requests, "patch")
+    const saved = body.positions_attributes.find((position: {id?: string}) => position.id === POSITION_ID)
+
+    expect(saved._destroy).toBeUndefined()
+    expect(saved.timer_ids).toEqual(["t1"])
+  })
+
+  // A project without a rate is still the project the rate comes from — the
+  // next one that has one has to reach the row.
+  it("fills the rate again after a project without one", async () => {
+    const {wrapper} = await mountForm(`/invoices/new?project_id=${PROJECT_ID}`)
+
+    await wrapper.get('[data-test="position-hours-0"]').setValue("2")
+    await flushPromises()
+
+    await wrapper.get('[data-test="project"]').setValue(RATELESS_PROJECT_ID)
+    await vi.waitFor(() => {
+      expect((wrapper.get('[data-test="position-rate-0"]').element as HTMLInputElement).value).toBe("")
+    })
+
+    await wrapper.get('[data-test="project"]').setValue(OTHER_PROJECT_ID)
+    await vi.waitFor(() => {
+      expect((wrapper.get('[data-test="position-rate-0"]').element as HTMLInputElement).value).toBe("50.0")
+    })
+  })
+
   // A saved row built from tracked time cannot follow the invoice to another
   // project — the server refuses that time — so it goes with the project it
   // came from, and the server is told to remove it.

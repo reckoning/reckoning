@@ -34,6 +34,10 @@ interface Row {
   hours: string
   value: string
   timerIds: string[]
+  // Which project the time behind this row was tracked against. The row fits
+  // the invoice only while the invoice stays on that project — remembering it
+  // rather than dropping the row makes switching away and back reversible.
+  timerProjectId?: string
   // Set when the project filled the rate in rather than the user. Comparing
   // the rate against the project's would mistake a hand-typed rate that
   // happens to match for one this form wrote.
@@ -55,6 +59,25 @@ const { data: project } = useProject(projectId, {
 })
 
 const projectRate = computed(() => project.value?.rate ?? "")
+
+// `GET /projects` answers with the active ones. An invoice whose project has
+// been archived since would open on a required select with no matching entry
+// — unsavable, and silently wrong before it was required. Its own project
+// therefore joins the list.
+const projectOptions = computed(() => {
+  const entries = (projects.value ?? []).map((entry) => ({
+    id: entry.id,
+    label: entry.label ?? entry.name,
+  }))
+
+  const own = invoice.value?.projectId
+
+  if (own && !entries.some((entry) => entry.id === own)) {
+    entries.unshift({id: own, label: invoice.value?.projectName ?? own})
+  }
+
+  return entries
+})
 
 // The ERB `new` action refused to render without an account address — an
 // invoice cannot be issued without one — and refused a third invoice on a
@@ -85,6 +108,7 @@ watch(
       hours: position.hours ?? "",
       value: position.value ?? "",
       timerIds: position.timerIds ?? [],
+      timerProjectId: loaded.projectId ?? undefined,
       // A saved rate is data, whoever typed it.
       rateFromProject: false,
       destroyed: false,
@@ -95,23 +119,12 @@ watch(
 
 // Rows built from tracked time belong to the project they came from: the
 // invoice takes its customer and its rate from the project, and the server
-// refuses time from anywhere else. Switching projects therefore takes them
-// with it — a saved one is marked for destruction rather than dropped, so the
-// server removes it — while rows typed by hand stay.
-watch(projectId, (next, previous) => {
-  if (previous === "" || next === previous) return
-
-  rows.value = rows.value.filter((row) => {
-    if (row.timerIds.length === 0) return true
-    if (!row.id) return false
-
-    row.destroyed = true
-    row.timerIds = []
-
-    return true
-  })
-
-  if (rows.value.every((row) => row.destroyed)) rows.value.push(emptyRow())
+// refuses time from anywhere else. They leave the form with the project they
+// belong to and come back with it — what the submitted request makes of them
+// is decided in `positionsAttributes`, so nothing is destroyed on the way
+// through an intermediate selection..
+watch(projectId, () => {
+  if (visibleRows.value.length === 0) rows.value.push(emptyRow())
 })
 
 // What the ERB did through `oldProjectRate`: a rate the project filled in
@@ -131,9 +144,9 @@ watch(project, (loaded) => {
 
     row.rate = rate
     // Nothing to derive a value from, so the stale one goes rather than
-    // being billed.
+    // being billed. The marker stays: the rate still belongs to whichever
+    // project is chosen, and the next one with a rate fills it in.
     if (rate === "") row.value = ""
-    row.rateFromProject = rate !== ""
     recalculate(row)
   }
 })
@@ -147,8 +160,16 @@ watch(
   { immediate: true },
 )
 
+// A row from another project's time is not shown: it is not part of this
+// invoice while the invoice sits on this project.
+function belongsToProject(row: Row): boolean {
+  return row.timerProjectId === undefined || row.timerProjectId === projectId.value
+}
+
 const visibleRows = computed(() =>
-  rows.value.map((row, index) => ({row, index})).filter(({row}) => !row.destroyed),
+  rows.value
+    .map((row, index) => ({row, index}))
+    .filter(({row}) => !row.destroyed && belongsToProject(row)),
 )
 
 // What the ERB did on every keystroke: hours imply a rate, and a rate with
@@ -159,7 +180,9 @@ function recalculate(row: Row): void {
 
   if (row.rate === "") {
     row.rate = String(projectRate.value ?? "")
-    row.rateFromProject = row.rate !== ""
+    // Only a rate that was actually filled in sets the marker — a project
+    // without one must not turn the row into a hand-typed rate.
+    if (row.rate !== "") row.rateFromProject = true
   }
 
   if (row.rate !== "") row.value = String(Number(row.hours) * Number(row.rate))
@@ -239,6 +262,7 @@ function takePicked(): void {
       hours: String(candidate.hours),
       value: "",
       timerIds: candidate.timerIds,
+      timerProjectId: projectId.value,
       rateFromProject: String(projectRate.value ?? "") !== "",
       destroyed: false,
     }
@@ -256,15 +280,23 @@ const money = computed(
 function positionsAttributes() {
   return rows.value
     .filter((row) => row.id || row.description.trim() !== "" || row.value !== "")
-    .map((row) => ({
-      ...(row.id ? {id: row.id} : {}),
-      description: row.description,
-      hours: row.hours === "" ? null : row.hours,
-      rate: row.rate === "" ? null : row.rate,
-      value: row.value === "" ? null : row.value,
-      timer_ids: row.timerIds,
-      ...(row.destroyed ? {_destroy: true} : {}),
-    }))
+    // A saved row whose time belongs to another project is removed — the
+    // server refuses that time on this invoice. An unsaved one simply never
+    // goes along.
+    .filter((row) => row.id || belongsToProject(row))
+    .map((row) => {
+      const foreign = !belongsToProject(row)
+
+      return {
+        ...(row.id ? {id: row.id} : {}),
+        description: row.description,
+        hours: row.hours === "" ? null : row.hours,
+        rate: row.rate === "" ? null : row.rate,
+        value: row.value === "" ? null : row.value,
+        timer_ids: foreign ? [] : row.timerIds,
+        ...(row.destroyed || foreign ? {_destroy: true} : {}),
+      }
+    })
 }
 
 async function save(): Promise<void> {
@@ -329,8 +361,8 @@ async function save(): Promise<void> {
                cannot carry out. -->
           <select v-model="projectId" required data-test="project" class="mt-1 block w-full rounded border border-field-border p-2">
             <option v-if="!editing" value="">{{ t("invoiceForm.fields.noProject") }}</option>
-            <option v-for="entry in projects ?? []" :key="entry.id" :value="entry.id">
-              {{ entry.label ?? entry.name }}
+            <option v-for="entry in projectOptions" :key="entry.id" :value="entry.id">
+              {{ entry.label }}
             </option>
           </select>
         </label>
