@@ -24,13 +24,18 @@ const INVOICE = {
 
 const SUMMARY = {count: 2, value: "350.0", vat: "66.5", years: [2026, 2024]}
 
-async function mountList(requests: AxiosRequestConfig[] = [], path = "/invoices", limitReached = false) {
+async function mountList(
+  requests: AxiosRequestConfig[] = [],
+  path = "/invoices",
+  limitReached = false,
+  summary: Record<string, unknown> = SUMMARY,
+) {
   AXIOS_INSTANCE.defaults.adapter = async (config) => {
     requests.push(config)
 
     const url = String(config.url)
     const data = url.includes("summary")
-      ? SUMMARY
+      ? summary
       : url.includes("/account")
         ? {id: "eeeeeeee-0000-4000-8000-000000000001", name: "Enterprise", invoiceLimitReached: limitReached}
         : [INVOICE]
@@ -160,6 +165,17 @@ describe("InvoicesList", () => {
 
     expect(wrapper.find('[data-test="new-invoice"]').exists()).toBe(false)
     expect(wrapper.find('[data-test="new-invoice-disabled"]').exists()).toBe(true)
+  })
+
+  // A full page says nothing about what follows it: the filtered total does.
+  it("offers a next page only while the total says there is one", async () => {
+    const full = await mountList([], "/invoices", false, {count: 50, value: "1.0", vat: "0.0", years: [2026]})
+
+    expect(full.wrapper.get('[data-test="next-page"]').attributes("disabled")).toBeUndefined()
+
+    const last = await mountList([], "/invoices?page=2", false, {count: 50, value: "1.0", vat: "0.0", years: [2026]})
+
+    expect(last.wrapper.get('[data-test="next-page"]').attributes("disabled")).toBeDefined()
   })
 
   // A short page means there is nothing after it.
