@@ -15,8 +15,8 @@
         `tailwind.css` because this document needs Tailwind's preflight, which
         the shared one omits to avoid disturbing Bootstrap 3. %>
     <%= vite_client_tag %>
-    <%= vite_stylesheet_tag "spa.css" %>
-    <%= vite_typescript_tag "frontend" %>
+    <%= vite_stylesheet_tag "spa.css", data: {turbo_track: "reload"} %>
+    <%= vite_typescript_tag "frontend", data: {turbo_track: "reload"} %>
 
     <%= appsignal_meta_tags %>
 
