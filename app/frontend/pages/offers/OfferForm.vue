@@ -241,8 +241,12 @@ async function save(): Promise<void> {
 
     <form v-else class="mt-4" @submit.prevent="save">
       <div class="grid gap-4 md:grid-cols-2">
-        <UiInput v-model="projectId" as="select" data-test="project">
-          <option value="">{{ t("offerForm.fields.noProject") }}</option>
+        <!-- `belongs_to :project` is required, so an offer never has none. The
+             empty entry is the "nothing picked yet" of a new offer; on an
+             existing one it would promise a clearing the server cannot carry
+             out. -->
+        <UiInput v-model="projectId" as="select" required data-test="project">
+          <option v-if="!editing" value="">{{ t("offerForm.fields.noProject") }}</option>
           <option v-for="entry in projects ?? []" :key="entry.id" :value="entry.id">
             {{ entry.label ?? entry.name }}
           </option>

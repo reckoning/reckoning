@@ -221,6 +221,29 @@ describe("OfferForm", () => {
     expect(wrapper.get('[data-test="position-value-computed-0"]').text()).toBe("")
   })
 
+  // `belongs_to :project` is required. Offering "no project" on an existing
+  // offer promised a clearing that the PATCH quietly dropped.
+  it("offers no empty project on an existing offer", async () => {
+    const {wrapper} = await mountForm(`/offers/${OFFER_ID}/edit`, {
+      offer: {
+        id: OFFER_ID,
+        state: "created",
+        date: "2026-03-01",
+        editable: true,
+        abilities: {update: true, destroy: true, transitions: ["bid"]},
+        projectId: PROJECT_ID,
+        positions: [],
+        createdAt: "2026-01-01T00:00:00Z",
+        updatedAt: "2026-01-01T00:00:00Z",
+      },
+    })
+
+    const values = wrapper.get('[data-test="project"]').findAll("option").map((option) => option.attributes("value"))
+
+    expect(values).not.toContain("")
+    expect(values).toContain(PROJECT_ID)
+  })
+
   it("marks a saved position for destruction rather than dropping it", async () => {
     const {wrapper, requests} = await mountForm(`/offers/${OFFER_ID}/edit`, {
       offer: {
