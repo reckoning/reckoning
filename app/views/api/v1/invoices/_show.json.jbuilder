@@ -17,6 +17,18 @@ json.project_id invoice.project_id
 json.project_name invoice.project&.name
 json.editable invoice.editable?
 json.sendable invoice.send_via_mail?
+# What *this* user may do with *this* invoice, not what the record allows.
+# The two differ: an expired trial reads everything and writes nothing (see
+# `Ability#setup_expired_trial_abilities`), and the state machine decides the
+# rest. Without this a client can only guess, and guessing means offering
+# buttons the endpoint answers with 403.
+json.abilities do
+  json.charge can?(:charge, invoice)
+  json.pay can?(:pay, invoice)
+  json.update can?(:update, invoice)
+  json.destroy can?(:destroy, invoice)
+  json.send_mail invoice.send_via_mail? && can?(:send, invoice)
+end
 json.positions invoice.positions.order(:created_at) do |position|
   json.partial! "api/v1/invoices/position", position: position
 end

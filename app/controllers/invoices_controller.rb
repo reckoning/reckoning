@@ -7,10 +7,6 @@ class InvoicesController < ApplicationController
   before_action :check_limit, only: %i[new create]
   before_action :check_dependencies, only: [:new]
 
-  def show
-    authorize! :read, invoice
-  end
-
   def send_mail
     authorize! :send, invoice
     if invoice.send_via_mail?

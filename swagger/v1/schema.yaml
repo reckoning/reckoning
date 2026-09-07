@@ -3576,6 +3576,26 @@ components:
         sendable:
           type: boolean
           description: The customer has an invoice email and template.
+        abilities:
+          type: object
+          properties:
+            charge:
+              type: boolean
+            pay:
+              type: boolean
+            update:
+              type: boolean
+            destroy:
+              type: boolean
+            sendMail:
+              type: boolean
+          additionalProperties: false
+          required:
+          - charge
+          - pay
+          - update
+          - destroy
+          - sendMail
         positions:
           type: array
           items:
@@ -3593,6 +3613,7 @@ components:
       - positions
       - editable
       - sendable
+      - abilities
       - createdAt
       - updatedAt
       title: Invoice

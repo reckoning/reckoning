@@ -78,6 +78,20 @@ class InvoicesControllerTest < ActionDispatch::IntegrationTest
       assert_redirected_to "/app/invoices"
     end
 
+    it "sends the detail page to the spa" do
+      get "/invoices/#{invoice.id}"
+
+      assert_redirected_to "/app/invoices/#{invoice.id}"
+    end
+
+    # The redirect is declared after the resource for this reason: ahead of it,
+    # `:id` matches "new" and the form becomes unreachable.
+    it "still serves the new form rather than treating it as an id" do
+      get "/invoices/new"
+
+      assert_response :ok
+    end
+
     # A filtered, sorted link has to survive the handover, or every bookmark
     # and every redirect after an action lands on an unfiltered page.
     it "carries the query into the spa" do

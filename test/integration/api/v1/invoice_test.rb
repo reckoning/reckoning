@@ -92,6 +92,31 @@ module Api
         end
       end
 
+      # A client cannot derive these: the state machine decides charge and pay,
+      # and an expired trial reads everything while writing nothing. Guessing
+      # means offering buttons the endpoint answers with 403.
+      it "says what this user may do with this invoice" do
+        assert_api_response :get, 200, path_params: {id: invoice.id} do
+          abilities = parsed_body["abilities"]
+
+          assert_equal true, abilities["charge"], "a created invoice can be charged"
+          assert_equal false, abilities["pay"], "a created invoice cannot be paid"
+          assert_equal true, abilities["update"]
+        end
+      end
+
+      it "closes the actions when the trial has run out" do
+        accounts(:enterprise).update_columns(plan: "basic", trial_used: true, trial_end_at: 1.minute.ago)
+
+        assert_api_response :get, 200, path_params: {id: invoice.id} do
+          abilities = parsed_body["abilities"]
+
+          assert_equal false, abilities["charge"]
+          assert_equal false, abilities["update"]
+          assert_equal false, abilities["destroy"]
+        end
+      end
+
       it "is not found for another account's invoice" do
         assert_api_response :get, 404, path_params: {id: invoices(:february).id}
       end
