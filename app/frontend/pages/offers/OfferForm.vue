@@ -29,6 +29,10 @@ interface Row {
   rate: string
   hours: string
   value: string
+  // Set when the project filled the rate in rather than the user. Comparing
+  // the rate against the project's would mistake a hand-typed rate that
+  // happens to match for one this form wrote.
+  rateFromProject: boolean
   destroyed: boolean
 }
 
@@ -52,7 +56,7 @@ const projectRate = computed(() => project.value?.rate ?? "")
 const missingAddress = computed(() => !editing.value && !(account.value?.address ?? "").trim())
 
 function emptyRow(): Row {
-  return {description: "", rate: "", hours: "", value: "", destroyed: false}
+  return {description: "", rate: "", hours: "", value: "", rateFromProject: false, destroyed: false}
 }
 
 watch(
@@ -71,6 +75,8 @@ watch(
       rate: position.rate ?? "",
       hours: position.hours ?? "",
       value: position.value ?? "",
+      // A saved rate is data, whoever typed it.
+      rateFromProject: false,
       destroyed: false,
     }))
   },
@@ -87,22 +93,16 @@ watch(
 )
 
 // What the ERB tracked as `oldProjectRate`: a rate the project filled in
-// follows the new project, a rate typed by hand does not.
-const filledRate = ref("")
-
+// follows the new project. A rate typed by hand stays put, which is why the
+// rows carry the fact rather than being compared against the old rate.
 watch(projectRate, (next) => {
   // The project query blanks out while the newly picked one loads, and that
-  // gap is not a rate: taking it would forget which rate was filled in.
+  // gap is not a rate.
   const rate = String(next ?? "")
   if (rate === "") return
 
-  const previous = filledRate.value
-  filledRate.value = rate
-
-  if (previous === "" || previous === rate) return
-
   for (const row of rows.value) {
-    if (row.rate !== previous) continue
+    if (!row.rateFromProject) continue
 
     row.rate = rate
     recalculate(row)
@@ -119,9 +119,19 @@ const visibleRows = computed(() =>
 function recalculate(row: Row): void {
   if (row.hours === "") return
 
-  if (row.rate === "") row.rate = String(projectRate.value ?? "")
+  if (row.rate === "") {
+    row.rate = String(projectRate.value ?? "")
+    row.rateFromProject = row.rate !== ""
+  }
 
   if (row.rate !== "") row.value = String(Number(row.hours) * Number(row.rate))
+}
+
+// Typing in the rate field makes the rate the user's, so a later project
+// change leaves it alone.
+function rateTyped(row: Row): void {
+  row.rateFromProject = false
+  recalculate(row)
 }
 
 function addRow(): void {
@@ -260,7 +270,7 @@ async function save(): Promise<void> {
               :placeholder="t('offerForm.fields.rate')"
               :data-test="`position-rate-${index}`"
               class="w-24 rounded border border-field-border p-2 text-right text-sm tabular-nums"
-              @input="recalculate(row)"
+              @input="rateTyped(row)"
             />
 
             <input

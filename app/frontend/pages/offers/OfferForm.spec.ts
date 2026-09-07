@@ -133,6 +133,26 @@ describe("OfferForm", () => {
     expect(wrapper.get('[data-test="position-value-computed-0"]').text()).toBe("100")
   })
 
+  // Comparing the rate against the project's would mistake a hand-typed rate
+  // that happens to match for one this form filled in.
+  it("leaves a hand-typed rate alone when the project changes", async () => {
+    const {wrapper} = await mountForm(`/offers/new?project_id=${PROJECT_ID}`)
+
+    // Exactly the project's rate, but typed rather than filled in.
+    await wrapper.get('[data-test="position-rate-0"]').setValue("90.0")
+    await wrapper.get('[data-test="position-hours-0"]').setValue("2")
+    await flushPromises()
+
+    await wrapper.get('[data-test="project"]').setValue(OTHER_PROJECT_ID)
+    await flushPromises()
+    await flushPromises()
+
+    // A number input hands back "90" for the typed "90.0"; what matters is
+    // that it is not the new project's 50.
+    expect((wrapper.get('[data-test="position-rate-0"]').element as HTMLInputElement).value).toBe("90")
+    expect(wrapper.get('[data-test="position-value-computed-0"]').text()).toBe("180")
+  })
+
   it("creates an offer with its positions", async () => {
     const {wrapper, requests} = await mountForm(`/offers/new?project_id=${PROJECT_ID}`)
 
