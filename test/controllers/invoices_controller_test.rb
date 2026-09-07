@@ -6,11 +6,13 @@ class InvoicesControllerTest < ActionDispatch::IntegrationTest
   let(:invoice) { invoices :january }
 
   describe "unauthorized" do
-    it "Unauthrized user cant view invoices index" do
+    # The list is the SPA's since phase B6. The path still resolves — the
+    # navigation links it and so do the redirects after charging or paying —
+    # and the SPA's own guard decides who gets in.
+    it "sends the list to the spa, signed in or not" do
       get "/invoices"
 
-      assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
+      assert_redirected_to "/app/invoices"
     end
 
     it "Unauthrized user cant view invoices new" do
@@ -70,10 +72,18 @@ class InvoicesControllerTest < ActionDispatch::IntegrationTest
       sign_in data
     end
 
-    it "User can view the invoice list" do
+    it "sends the list to the spa" do
       get "/invoices"
 
-      assert_response :ok
+      assert_redirected_to "/app/invoices"
+    end
+
+    # A filtered, sorted link has to survive the handover, or every bookmark
+    # and every redirect after an action lands on an unfiltered page.
+    it "carries the query into the spa" do
+      get "/invoices?state=paid&sort=value&direction=asc"
+
+      assert_redirected_to "/app/invoices?state=paid&sort=value&direction=asc"
     end
 
     it "User can view the new invoice page" do

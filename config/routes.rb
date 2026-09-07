@@ -77,7 +77,15 @@ Rails.application.routes.draw do
 
   resource :password, only: %i[edit update]
 
-  resources :invoices do
+  # The SPA owns the invoice list (phase B6). The name stays: the main
+  # navigation links `invoices_path`, and so do the redirects after charging
+  # or paying an invoice. The query travels with it, so a filtered, sorted
+  # link keeps working.
+  get "invoices", to: redirect { |_params, request|
+    ["/app/invoices", request.query_string.presence].compact.join("?")
+  }, as: :invoices
+
+  resources :invoices, except: [:index] do
     member do
       put :generate_positions
       put :charge
