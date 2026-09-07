@@ -18,6 +18,8 @@
     <%= vite_stylesheet_tag "spa.css" %>
     <%= vite_typescript_tag "frontend" %>
 
+    <%= appsignal_meta_tags %>
+
     <%# Api::BaseController verifies this token on cookie-authenticated
         mutations; axiosClient reads it from here. %>
     <%= csrf_meta_tags %>

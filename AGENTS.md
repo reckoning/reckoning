@@ -25,6 +25,9 @@ rendered as PDFs and emailed.
 - **Authz** CanCanCan
 - **Templating** ERB (every view; haml + slim removed in Phase 3)
 - **PDF** Grover (puppeteer + Google Chrome)
+- **Monitoring** AppSignal — the Ruby agent covers Rails + Sidekiq
+  (`config/appsignal.rb`), and `@appsignal/javascript` covers the Vue
+  SPA. Replaced Sentry.
 - **Storage** ActiveStorage on DigitalOcean Spaces (S3-compatible) in
   production
 - **Frontend toolchain** Vite (`vite_rails`) with TS entrypoints under

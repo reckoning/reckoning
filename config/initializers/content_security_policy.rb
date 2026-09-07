@@ -15,7 +15,7 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   connect_src = [
-    :self, :data, main_url, cable_url, "https://sentry.io", "https://fonts.googleapis.com",
+    :self, :data, main_url, cable_url, "https://appsignal-endpoint.net", "https://fonts.googleapis.com",
     "https://fonts.gstatic.com", "https://kit.fontawesome.com", "https://pro.fontawesome.com",
     "https://kit-pro.fontawesome.com", "https://kit-free.fontawesome.com",
     "https://ka-p.fontawesome.com", "https://www.gstatic.com"
@@ -86,6 +86,4 @@ Rails.application.config.content_security_policy do |policy|
   policy.frame_ancestors :none
 
   policy.upgrade_insecure_requests true unless Rails.env.development? || Rails.env.test?
-
-  # policy.report_uri Rails.application.credentials.sentry_csp_uri if Rails.application.credentials.sentry_csp_uri.present?
 end
