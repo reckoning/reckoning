@@ -3897,7 +3897,30 @@ components:
           - 'null'
         editable:
           type: boolean
-          description: False once bided or accepted.
+          description: False once bided or accepted. Says nothing about permissions
+            — see abilities.update.
+        abilities:
+          type: object
+          properties:
+            update:
+              type: boolean
+            destroy:
+              type: boolean
+            transitions:
+              type: array
+              items:
+                type: string
+                enum:
+                - bid
+                - accept
+                - decline
+                - cancel
+              description: Events the offer can be moved along by right now.
+          additionalProperties: false
+          required:
+          - update
+          - destroy
+          - transitions
         positions:
           type: array
           items:
@@ -3914,6 +3937,7 @@ components:
       - state
       - positions
       - editable
+      - abilities
       - createdAt
       - updatedAt
       title: Offer
