@@ -109,7 +109,14 @@ Rails.application.routes.draw do
   # `:id` cannot swallow the member routes above.
   get "invoices/:id", to: redirect("/app/invoices/%{id}"), as: :invoice
 
-  resources :offers do
+  # The SPA owns the offers list (phase B7). Declared before the resource so
+  # it wins the GET, and left unnamed on purpose: `offers_path` comes from the
+  # resource's create route and generates the same "/offers" this catches.
+  get "offers", to: redirect { |_params, request|
+    ["/app/offers", request.query_string.presence].compact.join("?")
+  }
+
+  resources :offers, except: [:index] do
     member do
       get "/pdf/:pdf" => "offers#pdf", :as => :pdf, :defaults => {format: :pdf}
     end

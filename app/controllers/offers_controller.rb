@@ -6,16 +6,6 @@ class OffersController < ApplicationController
   before_action :set_active_nav
   before_action :check_dependencies, only: [:new]
 
-  def index
-    authorize! :read, Invoice
-    @offers = current_account.offers
-      .filter_result(filter_params)
-      .includes(:customer, :project).references(:customers)
-      .order("#{sort_column} #{sort_direction}")
-      .page(params.fetch(:page, nil))
-      .per(10)
-  end
-
   def show
     authorize! :read, offer
   end
@@ -111,11 +101,6 @@ class OffersController < ApplicationController
       ]
     )
   end
-
-  private def filter_params
-    params.permit(:state, :year)
-  end
-  helper_method :filter_params
 
   private def project
     @project ||= current_account.projects.find_by(id: params.fetch(:project_id, nil))
