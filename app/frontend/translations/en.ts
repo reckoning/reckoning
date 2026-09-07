@@ -7,6 +7,7 @@ export default {
     legacy: "Classic view",
     timesheet: "Timesheet",
     invoices: "Invoices",
+    offers: "Offers",
     signOut: "Sign out",
   },
   pdf: {
@@ -117,6 +118,35 @@ export default {
       paidInYear: "Paid in year: all",
       paidInQuarter: "Paid in quarter: all",
       paidInMonth: "Paid in month: all",
+    },
+  },
+  offers: {
+    title: "Offers",
+    new: "New offer",
+    loading: "Loading…",
+    loadFailed: "Offers could not be loaded.",
+    empty: "No offers.",
+    previous: "Previous",
+    next: "Next",
+    summary: "{count} offers",
+    columns: {
+      ref: "No.",
+      customer: "Customer",
+      date: "Date",
+      value: "Amount",
+      state: "State",
+      project: "Project",
+    },
+    states: {
+      created: "Draft",
+      bided: "Open",
+      accepted: "Accepted",
+      declined: "Declined",
+      canceled: "Canceled",
+    },
+    filters: {
+      state: "State: all",
+      year: "Year: all",
     },
   },
   timesheet: {
