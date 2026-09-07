@@ -20,6 +20,7 @@ const OFFER = {
   projectName: "Narendra III",
   positions: [],
   editable: true,
+  abilities: {update: true, destroy: true, transitions: ["bid"]},
   createdAt: "2026-01-01T00:00:00Z",
   updatedAt: "2026-01-01T00:00:00Z",
 }
@@ -30,11 +31,12 @@ async function mountList(
   requests: AxiosRequestConfig[] = [],
   path = "/offers",
   summary: Record<string, unknown> = SUMMARY,
+  offer: Record<string, unknown> = OFFER,
 ) {
   AXIOS_INSTANCE.defaults.adapter = async (config) => {
     requests.push(config)
 
-    const data = String(config.url).includes("summary") ? summary : [OFFER]
+    const data = String(config.url).includes("summary") ? summary : [offer]
 
     return {data, status: 200, statusText: "OK", headers: {}, config}
   }
@@ -160,6 +162,24 @@ describe("OffersList", () => {
     } finally {
       process.env.TZ = original
     }
+  })
+
+  // An accepted offer is no longer editable, and an expired trial writes
+  // nothing at all — the row must not offer what the API refuses.
+  it("offers editing only while the endpoint allows it", async () => {
+    const open = await mountList()
+
+    await open.wrapper.get(`[data-test="actions-${OFFER.id}"]`).trigger("click")
+    expect(open.wrapper.text()).toContain("Edit")
+
+    const closed = await mountList([], "/offers", SUMMARY, {
+      ...OFFER,
+      state: "accepted",
+      abilities: {update: false, destroy: true, transitions: []},
+    })
+
+    await closed.wrapper.get(`[data-test="actions-${OFFER.id}"]`).trigger("click")
+    expect(closed.wrapper.text()).not.toContain("Edit")
   })
 
   // A short page means there is nothing after it.
