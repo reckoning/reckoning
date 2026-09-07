@@ -103,13 +103,13 @@ describe("WeekGrid rows", () => {
   it("renders tasks added this session that the week fetch does not return", () => {
     const wrapper = mountGrid([makeRow("task2")])
 
-    expect(wrapper.findAll(".panel.panel-default")).toHaveLength(2)
+    expect(wrapper.findAll('[data-test="task-row"]')).toHaveLength(2)
   })
 
   it("does not duplicate an added task once the fetch returns it", () => {
     const wrapper = mountGrid([makeRow("task1")])
 
-    expect(wrapper.findAll(".panel.panel-default")).toHaveLength(1)
+    expect(wrapper.findAll('[data-test="task-row"]')).toHaveLength(1)
   })
 })
 

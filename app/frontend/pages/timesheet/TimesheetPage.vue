@@ -1,70 +1,42 @@
 <script setup lang="ts">
-// Phase 6c root island for the timesheet. Switches between day
-// and week views via the `?view=day|week` URL query param.
+// The timesheet: day and week views, switched by the `?view=` query.
+// Promoted from the Vue island it was in phase 6c — the labels it used to
+// receive from Rails through `data-island-props` now come from vue-i18n, and
+// the month and weekday names from `Intl`, which knows them for every locale
+// the app might grow into.
 
 import {computed, ref, watch} from "vue"
+import {useI18n} from "vue-i18n"
 import DayNav from "./components/DayNav.vue"
 import DayView from "./components/DayView.vue"
 import WeekGrid from "./components/WeekGrid.vue"
 import TaskModal from "./components/TaskModal.vue"
 import TimerModal from "./components/TimerModal.vue"
 import {useTimesheetDate} from "./composables/useTimesheetDate"
-import type {TaskWithTimers} from "../../lib/timers/api"
-import type {Timer} from "../../lib/timers/types"
+import {weekdayNames, monthNames} from "./labels"
+import type {TaskWithTimers} from "@/lib/timers/api"
+import type {Timer} from "@/lib/timers/types"
 
-interface Labels {
-  day: string
-  week: string
-  today: string
-  addTimer: string
-  editTimer: string
-  addTask: string
-  dayShort: string[]
-  dayLong: string[]
-}
+const {t, locale} = useI18n()
 
-const props = defineProps<{
-  locale?: string
-  labels?: Labels
-  monthLabels?: string[]
-}>()
-
-const labels = computed<Labels>(() => ({
-  day: "Day",
-  week: "Week",
-  today: "Today",
-  addTimer: "Add timer",
-  editTimer: "Edit timer",
-  addTask: "Add task",
-  dayShort: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-  dayLong: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-  ...(props.labels ?? {}),
+const labels = computed(() => ({
+  day: t("timesheet.day"),
+  week: t("timesheet.week"),
+  today: t("timesheet.today"),
+  addTimer: t("timesheet.addTimer"),
+  editTimer: t("timesheet.editTimer"),
+  addTask: t("timesheet.addTask"),
+  dayShort: weekdayNames(locale.value, "short"),
+  dayLong: weekdayNames(locale.value, "long"),
 }))
 
-const monthLabels = computed<string[]>(() =>
-  props.monthLabels && props.monthLabels.length === 12
-    ? props.monthLabels
-    : [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-      ],
-)
+const monthLabels = computed<string[]>(() => monthNames(locale.value))
 
 const {date, view, weekStart, isToday, setView, prev, next, today, jump} = useTimesheetDate()
 
 // Week-view task-add modal. `/api/v1/tasks?weekDate=` only returns
 // tasks that already have timers in the week, so a task picked here
-// is held as an extra row until its first cell is filled in.
+// is held as an extra grid grid-cols-12 items-center gap-2 until its first cell is filled in.
 const showTaskModal = ref(false)
 const addedTasks = ref<TaskWithTimers[]>([])
 
@@ -103,7 +75,7 @@ function onTimerSaved() {
 </script>
 
 <template>
-  <div class="col-xs-12">
+  <div class="col-span-12">
     <DayNav
       :date="date"
       :view="view"

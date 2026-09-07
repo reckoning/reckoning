@@ -65,18 +65,18 @@ function onDateInput(e: Event) {
 </script>
 
 <template>
-  <div class="row">
-    <div class="col-xs-12 col-md-7">
+  <div class="grid grid-cols-12 items-center gap-2">
+    <div class="col-span-12 md:col-span-7">
       <h2>{{ heading }}</h2>
     </div>
-    <div class="col-xs-12 col-md-5">
-      <div class="pull-right resource-nav" style="display: flex; gap: 8px; flex-wrap: wrap">
+    <div class="col-span-12 md:col-span-5">
+      <div class="ml-auto resource-nav" style="display: flex; gap: 8px; flex-wrap: wrap">
         <div class="btn-group btn-group-justified-responsive resource-nav">
-          <a class="btn btn-default" role="button" @click.prevent="emit('prev')">
-            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+          <a class="rounded border border-field-border bg-surface px-3 py-1 text-sm hover:bg-control-hover disabled:opacity-60" role="button" @click.prevent="emit('prev')">
+            <span aria-hidden="true">‹</span>
           </a>
-          <a class="btn btn-default date-picker-trigger" role="button" @click.prevent="openPicker">
-            <i class="fa fa-calendar" aria-hidden="true"></i>
+          <a class="rounded border border-field-border bg-surface px-3 py-1 text-sm hover:bg-control-hover disabled:opacity-60 date-picker-trigger" role="button" @click.prevent="openPicker">
+            <span aria-hidden="true">📅</span>
             <input
               ref="hiddenInputRef"
               type="date"
@@ -88,20 +88,20 @@ function onDateInput(e: Event) {
             />
           </a>
           <a
-            class="btn btn-default"
+            class="rounded border border-field-border bg-surface px-3 py-1 text-sm hover:bg-control-hover disabled:opacity-60"
             role="button"
             :class="{disabled: isToday}"
             @click.prevent="!isToday && emit('today')"
           >
             {{ todayLabel }}
           </a>
-          <a class="btn btn-default" role="button" @click.prevent="emit('next')">
-            <i class="fa fa-chevron-right" aria-hidden="true"></i>
+          <a class="rounded border border-field-border bg-surface px-3 py-1 text-sm hover:bg-control-hover disabled:opacity-60" role="button" @click.prevent="emit('next')">
+            <span aria-hidden="true">›</span>
           </a>
         </div>
         <div class="btn-group">
           <a
-            class="btn btn-default"
+            class="rounded border border-field-border bg-surface px-3 py-1 text-sm hover:bg-control-hover disabled:opacity-60"
             role="button"
             :class="{active: view === 'day'}"
             @click.prevent="emit('view', 'day')"
@@ -109,7 +109,7 @@ function onDateInput(e: Event) {
             {{ dayLabel }}
           </a>
           <a
-            class="btn btn-default"
+            class="rounded border border-field-border bg-surface px-3 py-1 text-sm hover:bg-control-hover disabled:opacity-60"
             role="button"
             :class="{active: view === 'week'}"
             @click.prevent="emit('view', 'week')"

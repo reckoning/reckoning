@@ -20,9 +20,9 @@ defineExpose({refresh})
 </script>
 
 <template>
-  <div class="row" style="margin-top: 12px">
-    <div class="col-xs-12 col-md-9">
-      <div v-if="error" class="alert alert-danger">
+  <div class="grid grid-cols-12 items-center gap-2" style="margin-top: 12px">
+    <div class="col-span-12 md:col-span-9">
+      <div v-if="error" class="rounded border border-danger p-2 text-sm text-danger">
         Konnte Zeiten nicht laden. <a role="button" @click.prevent="refresh">Erneut laden</a>
       </div>
 
@@ -39,13 +39,13 @@ defineExpose({refresh})
         @edit="emit('edit', timer)"
       />
     </div>
-    <div class="col-xs-12 col-md-3">
+    <div class="col-span-12 md:col-span-3">
       <button
         type="button"
-        class="btn btn-primary btn-block"
+        class="rounded border border-brand-border bg-brand px-3 py-1 text-sm text-white hover:bg-brand-hover disabled:opacity-60 btn-block"
         @click="emit('add', date)"
       >
-        <i class="fa fa-plus" aria-hidden="true"></i>
+        <span aria-hidden="true">+</span>
         {{ addTimerLabel }}
       </button>
     </div>

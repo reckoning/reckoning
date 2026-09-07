@@ -12,7 +12,7 @@
     <%= link_to I18n.t(:"nav.header.projects"), projects_path %>
   </li>
   <li class="<%= active_nav?("timesheet") %>">
-    <a href="<%= timesheet_path %>#/day/" data-turbo="false" target="_self">
+    <a href="<%= timesheet_path %>" data-turbo="false" target="_self">
       <%= I18n.t(:"nav.header.timesheet") %>
     </a>
   </li>

@@ -21,7 +21,6 @@ import { configureMomentLocale } from "../lib/moment-locale"
 import { mountIslands } from "../lib/mount-islands"
 import Hello from "../islands/hello/Hello.vue"
 import TimersCalendar from "../islands/timers-calendar/TimersCalendar.vue"
-import Timesheet from "../islands/timesheet/Timesheet.vue"
 
 // PDF.js v4+ ships ESM-only. Lazy-loaded so the 1.5 MB pdfjs core +
 // worker don't ship on pages that never render a PDF (most of them).
@@ -141,17 +140,13 @@ if (i18nGlobal) {
 // + ISO week here, replacing what `App.Moment.init` used to do.
 configureMomentLocale()
 
-// Phase 6 — Vue 3 islands. The real timesheet + timers-calendar
-// ports live under `app/frontend/islands/<name>/`; for now we just
-// ship the foundation: Vue is installed, Vite knows how to compile
-// `.vue` SFCs, and the mounter walks `[data-island]` elements on
-// every Turbo navigation. The placeholder `hello` island acts as
-// a smoke test — drop `<div data-island="hello"></div>` into any
-// view and the SFC renders.
+// Vue islands on the server-rendered pages. The timesheet left in phase B3+
+// — it is an SPA page now — so what is left here is the timers calendar,
+// which goes the same way in B5, and the `hello` smoke test that retires with
+// the mounter itself in phase C.
 const islandRegistry = {
   hello: Hello,
   "timers-calendar": TimersCalendar,
-  timesheet: Timesheet,
 }
 mountIslands(islandRegistry)
 document.addEventListener("turbo:load", () => mountIslands(islandRegistry))

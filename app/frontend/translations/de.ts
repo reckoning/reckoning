@@ -5,7 +5,16 @@ export default {
     customers: "Kunden",
     security: "Sicherheit",
     legacy: "Klassische Ansicht",
+    timesheet: "Zeiterfassung",
     signOut: "Abmelden",
+  },
+  timesheet: {
+    day: "Tag",
+    week: "Woche",
+    today: "Heute",
+    addTimer: "Zeit erfassen",
+    editTimer: "Zeit bearbeiten",
+    addTask: "Aufgabe hinzufügen",
   },
   projects: {
     title: "Projekte",

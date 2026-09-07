@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// Week view spreadsheet grid: 7-column day header, one row per
+// Week view spreadsheet grid: 7-column day header, one grid grid-cols-12 items-center gap-2 per
 // task with editable per-day cells, footer with column + grand
 // totals. Mirrors `app/views/templates/timesheets/week.html.erb`.
 //
@@ -11,7 +11,7 @@
 //     existing timer (preserving older ones, same as the legacy
 //     `calculateTimerValue` rule) or create a new one if none.
 //   - `useWeekTasks.refresh()` re-fetches after the operation
-//     completes so the row + column totals reflect the truth.
+//     completes so the grid grid-cols-12 items-center gap-2 + column totals reflect the truth.
 
 import {computed, toRef} from "vue"
 import dayjs from "dayjs"
@@ -38,7 +38,7 @@ const weekDateRef = toRef(props, "weekDate")
 const {tasks, loading, error, refresh} = useWeekTasks(weekDateRef)
 
 // The API only returns tasks that already have timers in the week,
-// so a freshly added task has no row to type into. Rows added this
+// so a freshly added task has no grid grid-cols-12 items-center gap-2 to type into. Rows added this
 // session are carried alongside until a save gives them timers and
 // the fetch picks them up on its own.
 const rows = computed<TaskWithTimers[]>(() => {
@@ -123,21 +123,21 @@ async function onTaskRemove(task: TaskWithTimers) {
 </script>
 
 <template>
-  <div class="col-xs-12 timesheet-week-page" style="margin-top: 12px">
-    <div v-if="error" class="alert alert-danger">
+  <div class="col-span-12 timesheet-week-page" style="margin-top: 12px">
+    <div v-if="error" class="rounded border border-danger p-2 text-sm text-danger">
       Konnte Aufgaben nicht laden. <a role="button" @click.prevent="refresh">Erneut laden</a>
     </div>
 
-    <div class="timesheet-header row">
-      <div class="col-xs-12 col-md-4 timesheet-actions">
+    <div class="timesheet-header grid grid-cols-12 items-center gap-2">
+      <div class="col-span-12 md:col-span-4 timesheet-actions">
         <div class="btn-group btn-group-justified-responsive resource-nav">
-          <a class="btn btn-primary" role="button" @click.prevent="emit('addTask')">
-            <i class="fa fa-plus" aria-hidden="true"></i>
+          <a class="rounded border border-brand-border bg-brand px-3 py-1 text-sm text-white hover:bg-brand-hover disabled:opacity-60" role="button" @click.prevent="emit('addTask')">
+            <span aria-hidden="true">+</span>
             {{ addTaskLabel }}
           </a>
         </div>
       </div>
-      <div class="col-xs-12 col-md-6 timesheet-days">
+      <div class="col-span-12 md:col-span-6 timesheet-days">
         <div
           v-for="day in days"
           :key="day.date"
@@ -159,15 +159,15 @@ async function onTaskRemove(task: TaskWithTimers) {
       <p>Diese Woche keine Aufgaben.</p>
     </div>
 
-    <div v-for="task in rows" :key="task.id" class="panel panel-default">
-      <div class="panel-body row">
-        <div class="col-xs-12 col-md-4 timesheet-task">
+    <div v-for="task in rows" :key="task.id" data-test="task-row" class="rounded border border-rule bg-surface">
+      <div class="p-3 grid grid-cols-12 items-center gap-2">
+        <div class="col-span-12 md:col-span-4 timesheet-task">
           <a :href="`/projects/${task.projectId}`">{{ task.projectName }}</a>
           <small v-if="task.projectCustomerName"> | {{ task.projectCustomerName }}</small>
           <br />
           <span>{{ task.label }}</span>
         </div>
-        <div class="col-xs-12 col-md-6 timesheet-days">
+        <div class="col-span-12 md:col-span-6 timesheet-days">
           <WeekCell
             v-for="day in days"
             :key="day.date"
@@ -177,28 +177,28 @@ async function onTaskRemove(task: TaskWithTimers) {
             @save="onCellSave"
           />
         </div>
-        <div class="col-xs-3 col-xs-offset-7 col-md-offset-0 col-md-1">
+        <div class="col-span-3 col-start-8 md:col-start-auto md:col-span-1">
           <div class="text-right timesheet-row-sum">
             <span class="tabular-nums">{{ formatHHMM(taskTotal(task)) }}</span>
           </div>
         </div>
-        <div class="col-xs-2 col-md-1">
+        <div class="col-span-2 md:col-span-1">
           <div class="text-right timesheet-task-actions">
             <button
               type="button"
-              class="btn btn-link btn-lg default"
+              class="px-2 py-1 text-sm text-muted hover:text-ink"
               title="Aufgabe löschen"
               @click="onTaskRemove(task)"
             >
-              <i class="fa fa-close" aria-hidden="true"></i>
+              <span aria-hidden="true">×</span>
             </button>
           </div>
         </div>
       </div>
     </div>
 
-    <div v-if="rows.length > 0" class="timesheet-footer row">
-      <div class="col-xs-12 col-md-offset-4 col-md-6 timesheet-days">
+    <div v-if="rows.length > 0" class="timesheet-footer grid grid-cols-12 items-center gap-2">
+      <div class="col-span-12 md:col-start-5 md:col-span-6 timesheet-days">
         <div
           v-for="day in days"
           :key="day.date"
@@ -207,7 +207,7 @@ async function onTaskRemove(task: TaskWithTimers) {
           <span class="tabular-nums">{{ formatHHMM(columnTotal(day.date)) }}</span>
         </div>
       </div>
-      <div class="col-xs-12 col-md-1 timesheet-sum">
+      <div class="col-span-12 md:col-span-1 timesheet-sum">
         <div class="text-right">
           <span class="tabular-nums">{{ formatHHMM(grandTotal) }}</span>
         </div>

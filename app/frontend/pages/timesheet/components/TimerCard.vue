@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Mirrors one `.timesheet-timer-panel` from the legacy
 // `app/views/templates/timesheets/day.html.erb` — a Bootstrap 3
-// panel with project + customer header, task label / note body,
+// rounded border border-rule bg-surface with project + customer header, task label / note body,
 // and the timer value (or running spinner) on the right.
 
 import {computed, onBeforeUnmount, onMounted, ref} from "vue"
@@ -41,10 +41,10 @@ const display = computed(() => {
 </script>
 
 <template>
-  <div class="panel panel-default timesheet-timer" :class="variant">
-    <div class="panel-body">
-      <div class="row">
-        <div class="col-xs-12 col-md-9">
+  <div class="rounded border border-rule bg-surface timesheet-timer" :class="variant">
+    <div class="p-3">
+      <div class="grid grid-cols-12 items-center gap-2">
+        <div class="col-span-12 md:col-span-9">
           <h3 class="timesheet-timer-project">
             <a :href="timer.links?.project?.href ?? `/projects/${timer.projectId}`">
               {{ timer.projectName }}
@@ -54,19 +54,19 @@ const display = computed(() => {
           <div class="timesheet-timer-task">{{ timer.taskLabel }}</div>
           <div v-if="timer.note" class="timesheet-timer-note text-muted">{{ timer.note }}</div>
         </div>
-        <div class="col-xs-12 col-md-3 text-right">
+        <div class="col-span-12 md:col-span-3 text-right">
           <div class="timesheet-timer-value">
-            <i v-if="timer.started" class="fa fa-circle-o-notch fa-spin" aria-hidden="true"></i>
+            <span v-if="timer.started" class="inline-block animate-spin" aria-hidden="true">◌</span>
             <span class="tabular-nums">{{ display }}</span>
           </div>
           <button
             v-if="!timer.positionId"
             type="button"
-            class="btn btn-default btn-sm"
+            class="rounded border border-field-border bg-surface px-3 py-1 text-sm hover:bg-control-hover disabled:opacity-60 btn-sm"
             :title="'Edit'"
             @click="emit('edit')"
           >
-            <i class="fa fa-edit" aria-hidden="true"></i>
+            <span aria-hidden="true">✎</span>
           </button>
         </div>
       </div>
