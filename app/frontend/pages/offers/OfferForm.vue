@@ -56,6 +56,24 @@ const { data: project } = useProject(projectId, {
 
 const projectRate = computed(() => project.value?.rate ?? "")
 
+// `GET /projects` answers with the active ones. An offer whose project has
+// been archived since would open on a required select with no matching entry,
+// and could not be saved at all. Its own project therefore joins the list.
+const projectOptions = computed(() => {
+  const entries = (projects.value ?? []).map((entry) => ({
+    id: entry.id,
+    label: entry.label ?? entry.name,
+  }))
+
+  const own = offer.value?.projectId
+
+  if (own && !entries.some((entry) => entry.id === own)) {
+    entries.unshift({id: own, label: offer.value?.projectName ?? own})
+  }
+
+  return entries
+})
+
 // The ERB `new` action refused to render without an account address — the
 // offer's PDF carries it as the sender — and that guard lived in the action
 // that just went away. The model refuses the create either way.
@@ -247,8 +265,8 @@ async function save(): Promise<void> {
              out. -->
         <UiInput v-model="projectId" as="select" required data-test="project">
           <option v-if="!editing" value="">{{ t("offerForm.fields.noProject") }}</option>
-          <option v-for="entry in projects ?? []" :key="entry.id" :value="entry.id">
-            {{ entry.label ?? entry.name }}
+          <option v-for="entry in projectOptions" :key="entry.id" :value="entry.id">
+            {{ entry.label }}
           </option>
         </UiInput>
 

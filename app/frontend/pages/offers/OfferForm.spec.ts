@@ -244,6 +244,31 @@ describe("OfferForm", () => {
     expect(values).toContain(PROJECT_ID)
   })
 
+  // A project can be archived long after an offer was written against it, and
+  // `GET /projects` answers with the active ones.
+  it("keeps an archived project selectable on its own offer", async () => {
+    const ARCHIVED = "aaaaaaaa-0000-4000-8000-000000000099"
+    const {wrapper} = await mountForm(`/offers/${OFFER_ID}/edit`, {
+      offer: {
+        id: OFFER_ID,
+        state: "created",
+        date: "2026-03-01",
+        editable: true,
+        abilities: {update: true, destroy: true, transitions: ["bid"]},
+        projectId: ARCHIVED,
+        projectName: "Sternenbasis 12",
+        positions: [],
+        createdAt: "2026-01-01T00:00:00Z",
+        updatedAt: "2026-01-01T00:00:00Z",
+      },
+    })
+
+    const select = wrapper.get('[data-test="project"]')
+
+    expect(select.findAll("option").map((option) => option.attributes("value"))).toContain(ARCHIVED)
+    expect((select.element as HTMLSelectElement).value).toBe(ARCHIVED)
+  })
+
   it("marks a saved position for destruction rather than dropping it", async () => {
     const {wrapper, requests} = await mountForm(`/offers/${OFFER_ID}/edit`, {
       offer: {
