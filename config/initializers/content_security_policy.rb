@@ -21,20 +21,26 @@ Rails.application.config.content_security_policy do |policy|
     "https://ka-p.fontawesome.com", "https://www.gstatic.com"
   ]
 
+  # The Vite dev server is served from its own origin (skipProxy), so its assets,
+  # HMR socket and injected styles need to be allowed explicitly.
+  vite_hosts = []
   if Rails.env.development?
-    connect_src.concat [
-      "ws://localhost:3035", "http://localhost:3035",
-      "ws://reckoning.test:3035", "http://reckoning.test:3035", "ws://reckoning.test:3036"
-      # "ws://#{ViteRuby.config.host_with_port}"
-    ]
+    vite_hosts = [
+      ViteRuby.config.host, "localhost", "127.0.0.1",
+      Rails.configuration.app.domain.split(":").first
+    ].compact.uniq
   end
+  vite_http = vite_hosts.map { |host| "http://#{host}:#{ViteRuby.config.port}" }
+  vite_ws = vite_hosts.map { |host| "ws://#{host}:#{ViteRuby.config.port}" }
+
+  connect_src.concat(vite_http + vite_ws)
 
   script_src = [
     :self, :unsafe_inline, :unsafe_eval, :blob, "https://kit.fontawesome.com",
     "https://kit-pro.fontawesome.com", "https://kit-free.fontawesome.com",
     "https://www.gstatic.com"
   ]
-  # script_src << "http://#{ViteRuby.config.host_with_port}" if Rails.env.development?
+  script_src.concat(vite_http)
 
   worker_src = %i[self blob]
 
@@ -43,6 +49,7 @@ Rails.application.config.content_security_policy do |policy|
     "https://kit-pro.fontawesome.com", "https://kit-free.fontawesome.com",
     "https://ka-p.fontawesome.com"
   ]
+  style_src.concat(vite_http)
 
   img_src = [
     :self, :data, :blob, Rails.application.credentials.carrierwave_cloud_cdn_endpoint,
@@ -62,19 +69,13 @@ Rails.application.config.content_security_policy do |policy|
   policy.manifest_src :self
   policy.form_action :self
   policy.connect_src(*connect_src)
-  # Allow @vite/client to hot reload changes in development
-  #    policy.connect_src *policy.connect_src, "ws://#{ ViteRuby.config.host_with_port }" if Rails.env.development?
 
   policy.script_src(*script_src)
-  # Allow @vite/client to hot reload javascript changes in development
-  #    policy.script_src *policy.script_src, :unsafe_eval, "http://#{ ViteRuby.config.host_with_port }" if Rails.env.development?
 
   # You may need to enable this in production as well depending on your setup.
   #    policy.script_src *policy.script_src, :blob if Rails.env.test?
 
   policy.style_src(*style_src)
-  # Allow @vite/client to hot reload style changes in development
-  #    policy.style_src *policy.style_src, :unsafe_inline if Rails.env.development?
 
   policy.img_src(*img_src)
   policy.font_src(*font_src)
