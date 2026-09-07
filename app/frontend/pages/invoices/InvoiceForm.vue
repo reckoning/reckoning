@@ -87,6 +87,41 @@ watch(
   { immediate: true },
 )
 
+// Rows built from tracked time belong to the project they came from: the
+// invoice takes its customer and its rate from the project, and the server
+// refuses time from anywhere else. Switching projects drops them; hand-typed
+// rows stay. Editing cannot change the project, so this is the new form only.
+watch(projectId, (next, previous) => {
+  if (editing.value || previous === "" || next === previous) return
+
+  rows.value = rows.value.filter((row) => row.timerIds.length === 0)
+
+  if (rows.value.length === 0) rows.value = [emptyRow()]
+})
+
+// What the ERB did through `oldProjectRate`: a rate the old project filled in
+// follows the new one. A rate typed by hand does not.
+const filledRate = ref("")
+
+watch(projectRate, (next) => {
+  // The project query blanks out while the newly picked one loads, and that
+  // gap is not a rate: taking it would forget which rate was filled in.
+  const rate = String(next ?? "")
+  if (rate === "") return
+
+  const previous = filledRate.value
+  filledRate.value = rate
+
+  if (previous === "" || previous === rate) return
+
+  for (const row of rows.value) {
+    if (row.rate !== previous) continue
+
+    row.rate = rate
+    recalculate(row)
+  }
+})
+
 // A new invoice starts with one empty row, the way `new` did.
 watch(
   editing,
