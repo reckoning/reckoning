@@ -85,9 +85,8 @@ Rails.application.routes.draw do
     ["/app/invoices", request.query_string.presence].compact.join("?")
   }, as: :invoices
 
-  resources :invoices, except: [:index] do
+  resources :invoices, except: %i[index show] do
     member do
-      put :generate_positions
       put :charge
       put :pay
       put :send_mail
@@ -96,6 +95,13 @@ Rails.application.routes.draw do
       get "/timesheet-pdf/:pdf" => "invoices#timesheet", :as => :timesheet_pdf, :defaults => {format: :pdf}
     end
   end
+
+  # The SPA owns the detail page (phase B6). Unnamed: `invoice_path` already
+  # comes from the resource's update and destroy on this same path, and
+  # naming it again collides. Declared *after* the resource on purpose — ahead
+  # of it, `:id` swallows `/invoices/new`. `edit`, `new` and the PDF routes
+  # stay server-rendered, which is why the resource keeps them.
+  get "invoices/:id", to: redirect("/app/invoices/%{id}")
 
   resources :offers do
     member do
