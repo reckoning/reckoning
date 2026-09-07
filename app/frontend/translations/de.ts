@@ -20,6 +20,7 @@ export default {
     editTitle: "Rechnung bearbeiten",
     back: "Zur Übersicht",
     loading: "Wird geladen…",
+    loadFailed: "Rechnung konnte nicht geladen werden.",
     save: "Speichern",
     saved: "Rechnung gespeichert.",
     created: "Rechnung angelegt.",

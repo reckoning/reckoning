@@ -20,6 +20,7 @@ export default {
     editTitle: "Edit invoice",
     back: "Back to the list",
     loading: "Loading…",
+    loadFailed: "The invoice could not be loaded.",
     save: "Save",
     saved: "Invoice saved.",
     created: "Invoice created.",

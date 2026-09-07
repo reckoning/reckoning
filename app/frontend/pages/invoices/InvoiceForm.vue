@@ -16,7 +16,7 @@ const toasts = useToastsStore()
 const id = computed(() => (route.params.id ? String(route.params.id) : undefined))
 const editing = computed(() => id.value !== undefined)
 
-const { data: invoice, isPending } = useInvoice(id.value ?? "", {
+const { data: invoice, isPending, isError } = useInvoice(id.value ?? "", {
   query: { enabled: editing.value },
 })
 const { data: projects } = useProjects({}, { query: { enabled: !editing.value } })
@@ -280,6 +280,8 @@ async function save(): Promise<void> {
     </div>
 
     <p v-if="editing && isPending" data-test="loading">{{ t("invoiceForm.loading") }}</p>
+
+    <p v-else-if="editing && isError" data-test="load-failed">{{ t("invoiceForm.loadFailed") }}</p>
 
     <p v-else-if="missingAddress" class="max-w-2xl border border-warning-border bg-warning p-3 text-sm text-white" data-test="missing-address">
       {{ t("invoiceForm.missingAddress") }}

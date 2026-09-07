@@ -17,6 +17,7 @@ interface Options {
   invoice?: Record<string, unknown>
   account?: Record<string, unknown>
   uninvoiced?: Record<string, unknown>[]
+  invoiceStatus?: number
 }
 
 const PROJECT_RATES: Record<string, string> = {[PROJECT_ID]: "90.0", [OTHER_PROJECT_ID]: "50.0"}
@@ -40,6 +41,10 @@ function respond(requests: AxiosRequestConfig[], options: Options) {
         {id: OTHER_PROJECT_ID, name: "Outpost 6", label: "Outpost 6", workflowState: "active", tasks: []},
       ]
     } else if (url.includes("/invoices")) data = options.invoice ?? {}
+
+    if (url.includes("/invoices/") && options.invoiceStatus) {
+      throw Object.assign(new Error(`Request failed with status ${options.invoiceStatus}`), {config})
+    }
 
     return {data, status: 200, statusText: "OK", headers: {}, config}
   }
@@ -196,6 +201,18 @@ describe("InvoiceForm", () => {
     })
 
     expect(wrapper.get('[data-test="position-value-computed-0"]').text()).toBe("100")
+  })
+
+  // A failed load used to render an empty, editable form, which turned a read
+  // error into a confusing save error later on.
+  it("says so when the invoice cannot be loaded", async () => {
+    const {wrapper} = await mountForm(`/invoices/${INVOICE_ID}/edit`, {invoiceStatus: 500})
+
+    await vi.waitFor(() => {
+      expect(wrapper.find('[data-test="load-failed"]').exists()).toBe(true)
+    })
+
+    expect(wrapper.find("form").exists()).toBe(false)
   })
 
   it("marks a saved position for destruction rather than dropping it", async () => {
