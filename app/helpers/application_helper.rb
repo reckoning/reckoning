@@ -21,6 +21,20 @@ module ApplicationHelper
     end
   end
 
+  # The front-end monitoring key is an ingest-only credential that is meant to
+  # be public, so it travels to the browser in a meta tag rather than being
+  # baked into the Vite bundle — rotating it then needs no rebuild. Absent it,
+  # app/frontend/lib/appsignal.ts stays inert.
+  def appsignal_meta_tags
+    key = Rails.application.credentials.appsignal_frontend_key.presence ||
+      ENV["APPSIGNAL_FRONTEND_KEY"].presence
+    return if key.blank?
+
+    tags = [tag.meta(name: "appsignal-key", content: key)]
+    tags << tag.meta(name: "app-revision", content: Git.revision_short) if Git.revision_short.present?
+    safe_join(tags, "\n")
+  end
+
   def title(label = nil)
     [
       label,
