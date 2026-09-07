@@ -108,7 +108,9 @@ watch(
       hours: position.hours ?? "",
       value: position.value ?? "",
       timerIds: position.timerIds ?? [],
-      timerProjectId: loaded.projectId ?? undefined,
+      // Only a row built from tracked time is bound to a project. A
+      // hand-typed one belongs to the invoice, whichever project it moves to.
+      timerProjectId: (position.timerIds ?? []).length > 0 ? loaded.projectId ?? undefined : undefined,
       // A saved rate is data, whoever typed it.
       rateFromProject: false,
       destroyed: false,

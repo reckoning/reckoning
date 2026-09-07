@@ -332,6 +332,41 @@ describe("InvoiceForm", () => {
     expect((select.element as HTMLSelectElement).value).toBe(ARCHIVED)
   })
 
+  // Only time is bound to a project. A position someone typed belongs to the
+  // invoice and has to survive a project change — tagging it along with the
+  // generated ones deleted it on save.
+  it("keeps a hand-typed position through a project change", async () => {
+    const {wrapper, requests} = await mountForm(`/invoices/${INVOICE_ID}/edit`, {
+      invoice: {
+        id: INVOICE_ID,
+        state: "created",
+        date: "2026-03-01",
+        editable: true,
+        sendable: false,
+        abilities: {charge: true, pay: false, update: true, destroy: true, sendMail: false},
+        projectId: PROJECT_ID,
+        positions: [
+          {id: POSITION_ID, description: "Beratung", hours: "3.0", rate: "80.0", value: "240.0", timerIds: []},
+        ],
+        createdAt: "2026-01-01T00:00:00Z",
+        updatedAt: "2026-01-01T00:00:00Z",
+      },
+    })
+
+    await wrapper.get('[data-test="project"]').setValue(OTHER_PROJECT_ID)
+    await flushPromises()
+
+    expect((wrapper.get('[data-test="position-description-0"]').element as HTMLInputElement).value)
+      .toBe("Beratung")
+
+    await wrapper.get("form").trigger("submit")
+    const body = await submitted(requests, "patch")
+    const saved = body.positions_attributes.find((position: {id?: string}) => position.id === POSITION_ID)
+
+    expect(saved._destroy).toBeUndefined()
+    expect(saved.description).toBe("Beratung")
+  })
+
   // Switching the project is a choice, not a demolition: a row is only
   // decided about when the form is submitted, so passing through another
   // project on the way leaves the invoice as it was.
