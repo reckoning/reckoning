@@ -131,25 +131,23 @@ module Api
         current_account.invoices.find(params[:id])
       end
 
-      # The columns the server-rendered list let you sort by. Anything else
-      # falls back to the newest invoice first, which is what the endpoint did
-      # before it could sort at all.
-      SORTABLE = {
-        "ref" => "invoices.ref",
-        "date" => "invoices.date",
-        "value" => "invoices.value",
-        "state" => "invoices.workflow_state",
-        "customer" => "customers.name"
-      }.freeze
-
+      # The columns the server-rendered list let you sort by. Written as
+      # ActiveRecord order hashes rather than SQL: nothing is interpolated, so
+      # the parameter cannot reach the ORDER BY even in principle — and
+      # Brakeman does not have to take a whitelist's word for it. Anything
+      # else falls back to the newest invoice first, which is what this
+      # endpoint did before it could sort at all.
       private def order_clause
-        column = SORTABLE[params[:sort]]
+        direction = (params[:direction] == "asc") ? :asc : :desc
 
-        return {ref: :desc} unless column
-
-        direction = (params[:direction] == "asc") ? "asc" : "desc"
-
-        Arel.sql("#{column} #{direction}")
+        case params[:sort]
+        when "ref" then {ref: direction}
+        when "date" then {date: direction}
+        when "value" then {value: direction}
+        when "state" then {workflow_state: direction}
+        when "customer" then {customers: {name: direction}}
+        else {ref: :desc}
+        end
       end
 
       private def filter_params
