@@ -884,6 +884,26 @@ paths:
         required: false
         schema:
           type: integer
+      - name: sort
+        in: query
+        required: false
+        description: Column to order by. Anything else falls back to the newest first.
+        schema:
+          type: string
+          enum:
+          - ref
+          - date
+          - value
+          - state
+          - customer
+      - name: direction
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
       responses:
         '200':
           description: successful
@@ -934,6 +954,71 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/StandardError"
+  "/invoices/summary":
+    get:
+      summary: What the filtered invoices add up to
+      tags:
+      - Invoices
+      operationId: invoiceSummary
+      parameters:
+      - name: state
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - created
+          - charged
+          - paid
+      - name: year
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: quarter
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 4
+      - name: month
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 12
+      - name: paid_in_year
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: paid_in_quarter
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: paid_in_month
+        in: query
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/InvoiceSummary"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '400':
+          "$ref": "#/components/responses/SchemaValidationError"
   "/invoices/{id}":
     parameters:
     - name: id
@@ -2604,6 +2689,8 @@ components:
           type:
           - string
           - 'null'
+        invoiceLimitReached:
+          type: boolean
         country:
           type:
           - string
@@ -3614,6 +3701,26 @@ components:
       - createdAt
       - updatedAt
       title: InvoicePosition
+    InvoiceSummary:
+      type: object
+      properties:
+        count:
+          type: integer
+        value:
+          type: string
+        vat:
+          type: string
+        years:
+          type: array
+          items:
+            type: integer
+      additionalProperties: false
+      required:
+      - count
+      - value
+      - vat
+      - years
+      title: InvoiceSummary
     Invoices:
       type: array
       items:

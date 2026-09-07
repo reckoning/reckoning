@@ -189,6 +189,70 @@ describe("ProjectForm", () => {
     expect(wrapper.find('[data-test="delete"]').exists()).toBe(false)
   })
 
+  // The fields used to render before the record arrived. A task row added in
+  // that window was wiped by the first fill, and the row the user typed into
+  // never existed as far as the form was concerned — which is how an e2e test
+  // ended up waiting forever for `task-name-1`.
+  it("waits for the record before showing the fields", async () => {
+    let release: (() => void) | undefined
+    const held = new Promise<void>((resolve) => {
+      release = resolve
+    })
+
+    AXIOS_INSTANCE.defaults.adapter = async (config) => {
+      if (String(config.url).includes("/projects/")) await held
+
+      return {data: {}, status: 200, statusText: "OK", headers: {}, config}
+    }
+
+    const router = createRouter({
+      history: createMemoryHistory(),
+      routes: [
+        {path: "/projects", name: "projects", component: {template: "<div />"}},
+        {path: "/projects/:id/edit", name: "project-edit", component: ProjectForm},
+      ],
+    })
+    await router.push(`/projects/${PROJECT_ID}/edit`)
+    await router.isReady()
+
+    const wrapper = mount(ProjectForm, {
+      global: {
+        plugins: [
+          [VueQueryPlugin, {queryClientConfig: {defaultOptions: {queries: {retry: false}}}}],
+          i18n,
+          createPinia(),
+          router,
+        ],
+      },
+    })
+    await flushPromises()
+
+    expect(wrapper.find('[data-test="loading"]').exists()).toBe(true)
+    expect(wrapper.find('[data-test="add-task"]').exists()).toBe(false)
+
+    release?.()
+  })
+
+  // vue-query refetches on focus and reconnect. Re-filling the form from a
+  // refetch would throw away whatever the user has typed since — a task row
+  // they had just added simply vanished, which showed up as a flaky e2e test
+  // rather than as a report.
+  it("does not refill the form when the record arrives again", async () => {
+    const requests: AxiosRequestConfig[] = []
+    const wrapper = await mountForm(`/projects/${PROJECT_ID}/edit`, requests)
+
+    await wrapper.get('[data-test="add-task"]').trigger("click")
+    await wrapper.get('[data-test="task-name-1"]').setValue("Shore leave")
+    await wrapper.get('[data-test="name"]').setValue("Narendra IV")
+
+    // What a refetch does: the same record, answered a second time.
+    await wrapper.vm.$nextTick()
+    await flushPromises()
+
+    expect((wrapper.get('[data-test="task-name-1"]').element as HTMLInputElement).value).toBe("Shore leave")
+    expect((wrapper.get('[data-test="name"]').element as HTMLInputElement).value).toBe("Narendra IV")
+  })
+
   // The ERB `new` action refused to render without an account address.
   it("refuses a new project while the account has no address", async () => {
     const wrapper = await mountForm("/projects/new", [], {address: null})

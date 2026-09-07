@@ -109,16 +109,20 @@ test.describe("SPA shell", () => {
   // Landing them on the SPA dashboard afterwards would lose the page they
   // asked for, so the path travels along and the login hands it back with a
   // full page load.
+  //
+  // `/settings` because it is the server-rendered screen with the longest
+  // life left: the lists this used to point at keep moving into the SPA, and
+  // each move quietly turned this test into a test of a redirect.
   test("returns to the server-rendered screen it was sent from", async ({ page }) => {
-    await page.goto("/invoices")
+    await page.goto("/settings")
 
-    await expect(page).toHaveURL(/\/app\/login\?return=%2Finvoices$/)
+    await expect(page).toHaveURL(/\/app\/login\?return=%2Fsettings$/)
 
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
 
-    await expect(page).toHaveURL(/\/invoices$/)
+    await expect(page).toHaveURL(/\/settings$/)
     // The legacy chrome, not the SPA shell.
     await expect(page.locator(".user-email")).toContainText("will@star.fleet")
   })

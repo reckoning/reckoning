@@ -23,6 +23,7 @@ module V1
           defaultFrom: {type: [:string, :null]},
           signature: {type: [:string, :null]},
           address: {type: [:string, :null]},
+          invoiceLimitReached: {type: :boolean},
           country: {type: [:string, :null]},
           publicEmail: {type: [:string, :null]},
           telefon: {type: [:string, :null]},

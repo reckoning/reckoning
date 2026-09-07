@@ -27,3 +27,9 @@ json.feature_expenses account.feature_expenses
 json.feature_logbook account.feature_logbook
 json.created_at account.created_at
 json.updated_at account.updated_at
+# A demo deployment caps non-admins at two invoices
+# (`ApplicationController#invoice_limit_reached?`). The server-rendered list
+# greyed the button out; the SPA cannot know without being told, and being
+# bounced back with the flash it never renders is worse than a disabled link.
+json.invoice_limit_reached !current_user.admin? && Rails.configuration.app.demo &&
+  account.invoices.count >= 2

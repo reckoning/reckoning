@@ -15,9 +15,29 @@ module Api
         scope = current_account.invoices
           .filter_result(filter_params)
           .includes(:customer, :project)
-          .order(ref: :desc)
+          .references(:customers)
+          .order(*order_clause)
 
         @invoices = paginate(scope)
+      end
+
+      # The list shows what the filtered set adds up to, which paging cannot
+      # answer: page two knows nothing about page one's total. Same filters,
+      # so the numbers belong to the same set the list is showing.
+      def summary
+        authorize! :read, Invoice
+
+        scope = current_account.invoices.filter_result(filter_params)
+
+        @count = scope.count
+        @value = scope.sum(&:value)
+        @vat = scope.sum(&:vat)
+        # Deliberately unfiltered: this fills the year dropdown, so it has to
+        # offer the years you could switch to, not only the one you are on.
+        # Both dropdowns are fed from it, and `paid_in_year` filters on
+        # `pay_date` — an invoice dated in 2025 and paid in 2026 has to make
+        # 2026 selectable.
+        @years = (invoice_years(:date) + invoice_years(:pay_date)).uniq.sort.reverse
       end
 
       def show
@@ -110,6 +130,33 @@ module Api
 
       private def find_invoice
         current_account.invoices.find(params[:id])
+      end
+
+      # The columns the server-rendered list let you sort by. Written as
+      # ActiveRecord order hashes rather than SQL: nothing is interpolated, so
+      # the parameter cannot reach the ORDER BY even in principle — and
+      # Brakeman does not have to take a whitelist's word for it. Anything
+      # else falls back to the newest invoice first, which is what this
+      # endpoint did before it could sort at all.
+      private def invoice_years(column)
+        current_account.invoices.where.not(column => nil).distinct.pluck(column).map(&:year)
+      end
+
+      private def order_clause
+        direction = (params[:direction] == "asc") ? :asc : :desc
+
+        # `ref` closes every order: dates, values, states and customer names
+        # all repeat, and offset paging over a tie can show a row twice or
+        # skip it entirely. It is unique per account, so nothing is left
+        # undecided.
+        case params[:sort]
+        when "ref" then [{ref: direction}]
+        when "date" then [{date: direction}, {ref: :desc}]
+        when "value" then [{value: direction}, {ref: :desc}]
+        when "state" then [{workflow_state: direction}, {ref: :desc}]
+        when "customer" then [{customers: {name: direction}}, {ref: :desc}]
+        else [{ref: :desc}]
+        end
       end
 
       private def filter_params

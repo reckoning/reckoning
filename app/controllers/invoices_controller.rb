@@ -7,23 +7,6 @@ class InvoicesController < ApplicationController
   before_action :check_limit, only: %i[new create]
   before_action :check_dependencies, only: [:new]
 
-  def index
-    authorize! :read, Invoice
-
-    scope = current_account.invoices
-      .filter_result(filter_params)
-
-    @invoices_sum = scope.sum(&:value)
-
-    @invoices_vat_sum = scope.sum(&:vat)
-
-    @invoices = scope
-      .includes(:customer, :project).references(:customers)
-      .order("#{sort_column} #{sort_direction}")
-      .page(params.fetch(:page, nil))
-      .per(10)
-  end
-
   def show
     authorize! :read, invoice
   end

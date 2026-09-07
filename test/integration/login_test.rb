@@ -15,22 +15,22 @@ class LoginTest < ActionDispatch::IntegrationTest
   end
 
   it "hands over the screen a signed-out visitor asked for" do
-    get "/invoices"
+    get "/settings"
 
-    assert_redirected_to "/app/login?return=%2Finvoices"
+    assert_redirected_to "/app/login?return=%2Fsettings"
   end
 
   it "keeps the query of the screen it hands over" do
-    get "/invoices?page=2"
+    get "/settings?tab=address"
 
-    assert_redirected_to "/app/login?return=%2Finvoices%3Fpage%3D2"
+    assert_redirected_to "/app/login?return=%2Fsettings%3Ftab%3Daddress"
   end
 
   # The login ends in a page load, so a carried path is fetched with a GET
-  # whatever the request that failed was. `PATCH /customers/1` replayed as a
-  # GET is a route that does not exist.
+  # whatever the request that failed was. A PATCH replayed as a GET is a route
+  # that does not exist.
   it "does not carry a path that cannot be replayed" do
-    patch invoice_path(invoices(:january)), params: {invoice: {ref: "00042"}}
+    patch "/settings", params: {account: {name: "Renamed"}}
 
     assert_redirected_to "/signin"
     follow_redirect!
@@ -40,13 +40,13 @@ class LoginTest < ActionDispatch::IntegrationTest
   # An xhr request never reaches the handover at all: Devise answers it with
   # 401 before `redirect_url` is consulted (`http_authenticatable_on_xhr`).
   it "answers an xhr request instead of handing it over" do
-    get "/invoices", xhr: true
+    get "/settings", xhr: true
 
     assert_response :unauthorized
   end
 
   it "leaves no alert behind for the next server-rendered page" do
-    get "/invoices"
+    get "/settings"
     follow_redirect!
 
     # Devise flashes "you need to sign in" for a login screen that no longer
@@ -56,7 +56,7 @@ class LoginTest < ActionDispatch::IntegrationTest
   end
 
   it "still answers json with a 401 rather than a redirect" do
-    get "/invoices", headers: {"Accept" => "application/json"}
+    get "/settings", headers: {"Accept" => "application/json"}
 
     assert_response :unauthorized
     assert_equal "unauthorized", JSON.parse(response.body)["code"]
@@ -65,7 +65,7 @@ class LoginTest < ActionDispatch::IntegrationTest
   it "lets a signed-in user through untouched" do
     sign_in user
 
-    get "/invoices"
+    get "/settings"
 
     assert_response :success
   end
