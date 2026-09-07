@@ -58,6 +58,13 @@ module Api
       let(:data) { users :data }
       let(:offer) { offers :one }
       let(:project) { projects :narendra3 }
+      let(:account) { accounts :enterprise }
+
+      # `before_create :set_ref` numbers the offer, so the order the sorting
+      # tests check is the one the account would really produce.
+      def offer_dated(date)
+        account.offers.create!(project: project, date: date)
+      end
 
       describe "unauthorized" do
         it "does not list offers" do
@@ -74,6 +81,26 @@ module Api
 
             assert listed, "expected the offer in the list"
             assert_kind_of Array, listed["positions"]
+          end
+        end
+
+        # `filter_state` used to check the *invoice* workflow's state names,
+        # which share only `created` with the offer's — every other filter
+        # quietly returned the whole list.
+        it "filters by state" do
+          bided = offer_dated(Date.new(2026, 1, 5))
+          bided.bid!
+
+          assert_api_response :get, 200, params: {state: "bided"} do
+            ids = parsed_body.map { |item| item["id"] }
+
+            assert_equal [bided.id], ids
+          end
+
+          assert_api_response :get, 200, params: {state: "created"} do
+            ids = parsed_body.map { |item| item["id"] }
+
+            refute_includes ids, bided.id
           end
         end
 
