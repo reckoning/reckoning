@@ -15,6 +15,10 @@ class Invoice < ApplicationRecord
 
   validates :date, presence: true
   validates :ref, uniqueness: {scope: :account_id}
+  # The invoice carries the account's address as the sender, so there is no
+  # issuing one without it. The ERB `new` action refused to render, which left
+  # the API — and any client going straight to it — with no guard at all.
+  validate :account_address, on: :create
 
   accepts_nested_attributes_for :positions, allow_destroy: true
 
@@ -221,6 +225,10 @@ class Invoice < ApplicationRecord
 
   def vat
     (value * account.tax.to_d) / 100
+  end
+
+  private def account_address
+    errors.add(:base, I18n.t(:"messages.missing_address")) if account&.address.blank?
   end
 
   private def set_customer

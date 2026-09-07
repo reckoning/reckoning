@@ -168,6 +168,20 @@ module Api
             assert_equal "1000.0", parsed_body["value"]
           end
         end
+
+        # The invoice carries the account's address as the sender. The ERB
+        # `new` action refused to render without one; going straight to the
+        # API used to skip that guard entirely.
+        it "refuses an invoice from an account with no address" do
+          accounts(:enterprise).update!(address: nil)
+
+          assert_api_response :post, 400, body: {
+            project_id: project.id,
+            date: "2026-08-01",
+            positions_attributes: [{description: "Consulting", hours: "10.0", rate: "100.0"}]
+          }
+        end
+
       end
     end
   end

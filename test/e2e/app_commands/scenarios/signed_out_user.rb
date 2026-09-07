@@ -6,6 +6,9 @@
 # Account validations (plan, stripe) need real Stripe setup that
 # the e2e environment intentionally doesn't have.
 account = Account.find_or_initialize_by(name: "Enterprise")
+# The address is what an invoice carries as its sender, and an invoice cannot
+# be created without one — same as the Minitest fixture.
+account.address = "Sector 001"
 account.save(validate: false)
 
 email = "will@star.fleet"
