@@ -94,13 +94,10 @@ Rails.application.routes.draw do
   get "invoices/:id/edit", to: redirect("/app/invoices/%{id}/edit"), as: :edit_invoice
 
   # What is left of the server-rendered invoice: the PDFs, which the plan keeps
-  # server-rendered on purpose, and `send_test_mail` — the *offers* form posts
-  # to it, so it goes with that screen in B7 rather than with this one.
-  # Charging, paying, mailing, creating, updating and deleting all go through
-  # /api/v1 now, and their actions are gone.
+  # server-rendered on purpose. Charging, paying, mailing, creating, updating
+  # and deleting all go through /api/v1 now, and their actions are gone.
   resources :invoices, only: [] do
     member do
-      post :send_test_mail
       get "/pdf/:pdf" => "invoices#pdf", :as => :pdf, :defaults => {format: :pdf}
       get "/timesheet-pdf/:pdf" => "invoices#timesheet", :as => :timesheet_pdf, :defaults => {format: :pdf}
     end

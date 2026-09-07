@@ -4,21 +4,6 @@ class InvoicesController < ApplicationController
   include ResourceHelper
 
   before_action :set_active_nav
-  before_action :check_limit, only: %i[new create]
-  before_action :check_dependencies, only: [:new]
-
-  def send_test_mail
-    authorize! :send, invoice
-
-    @test_mail = TestMail.new(test_mail_params)
-    if test_mail.valid?
-      InvoiceTestMailerWorker.perform_async invoice.id, test_mail.email
-      redirect_to invoice_path(invoice), flash: {success: I18n.t(:"messages.invoice.send_test_mail.success")}
-    else
-      flash.now[:alert] = I18n.t(:"messages.invoice.send_test_mail.failure")
-      render "show"
-    end
-  end
 
   def pdf
     authorize! :read, invoice
@@ -52,67 +37,12 @@ class InvoicesController < ApplicationController
     end
   end
 
-  private def sort_column
-    @sort_column ||= if (Invoice.column_names + %w[customers.name]).include?(params[:sort])
-      params[:sort]
-    else
-      "ref"
-    end
-  end
-  helper_method :sort_column
-
   private def set_active_nav
     @active_nav = "invoices"
   end
 
-  private def projects
-    @projects ||= current_account.projects.includes(:customer).active.order("name ASC")
-  end
-  helper_method :projects
-
-  private def invoice_params
-    params.require(:invoice).permit(
-      :customer_id, :date, :delivery_date, :payment_due_date, :ref,
-      :project_id, positions_attributes: [
-        :id, :description, :hours, :rate, :value,
-        :invoice_id, {timer_ids: []}, :_destroy
-      ]
-    )
-  end
-
-  private def filter_params
-    params.permit(:state, :year, :quarter, :month, :paid_in_year, :paid_in_quarter, :paid_in_month)
-  end
-  helper_method :filter_params
-
-  private def project
-    @project ||= current_account.projects.find_by(id: params.fetch(:project_id, nil))
-  end
-
   private def invoice
     @invoice ||= current_account.invoices.find_by(id: params.fetch(:id, nil))
-    @invoice ||= current_account.invoices.new invoice_params
   end
   helper_method :invoice
-
-  private def check_limit
-    return unless invoice_limit_reached?
-
-    redirect_to invoices_path, alert: I18n.t(:"messages.demo_active")
-  end
-
-  private def test_mail
-    @test_mail ||= TestMail.new
-  end
-  helper_method :test_mail
-
-  private def test_mail_params
-    params.require(:test_mail).permit(:email)
-  end
-
-  private def check_dependencies
-    return if current_account.address.present?
-
-    redirect_to "#{edit_user_registration_path}#address", alert: I18n.t(:"messages.missing_address")
-  end
 end

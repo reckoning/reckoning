@@ -55,12 +55,12 @@ class InvoicesControllerTest < ActionDispatch::IntegrationTest
       assert_equal "application/pdf", response.media_type
     end
 
-    # The offers form posts here. It moves with that screen in B7, not with
-    # this one.
-    it "still takes a test mail" do
+    # The test mail moved to /api/v1 with the detail page. The one ERB form
+    # that posted here — the offers one — was never rendered by any view.
+    it "no longer takes a test mail" do
       post "/invoices/#{invoice.id}/send_test_mail", params: {test_mail: {email: "picard@star.fleet"}}
 
-      assert_response :found
+      assert_response :not_found
     end
   end
 
