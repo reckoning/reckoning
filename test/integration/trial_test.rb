@@ -5,7 +5,7 @@ require "test_helper"
 class TrialTest < ActionDispatch::IntegrationTest
   let(:user) { users(:will) }
   let(:account) { accounts(:enterprise) }
-  let(:offer) { offers(:one) }
+  let(:expense) { expenses(:one) }
 
   def trial_ending(when_)
     account.update_columns(plan: "basic", trial_used: true, trial_end_at: when_)
@@ -41,16 +41,18 @@ class TrialTest < ActionDispatch::IntegrationTest
   end
 
   describe "after the trial" do
+    # Any server-rendered write will do; expenses are simply the ones that
+    # have not moved to the SPA yet.
     it "explains a refused write instead of shrugging" do
       trial_ending(1.minute.ago)
       sign_in user
-      unchanged = offer.description
+      unchanged = expense.description
 
-      patch offer_path(offer), params: {offer: {description: "Renamed"}}
+      patch expense_path(expense), params: {expense: {description: "Renamed"}}
 
       assert_redirected_to root_url
       assert_equal I18n.t("trial.denied"), flash[:alert]
-      assert_equal unchanged, offer.reload.description
+      assert_equal unchanged, expense.reload.description
     end
 
     it "still serves the screens the data lives on" do
