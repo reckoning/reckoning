@@ -26,6 +26,20 @@ test.describe("Timers calendar", () => {
     await expect(page.getByTestId("timers-calendar")).toBeVisible()
   })
 
+  // The month heading renders whether or not the timers ever arrive, so this
+  // asserts the timer itself: the scenario books one hour on the first day of
+  // the current week.
+  test("shows the timers it loaded", async ({ page }) => {
+    const id = (await appEval(`Project.first.id`)) as string
+
+    await page.goto(`/projects/${id}`)
+
+    const calendar = page.getByTestId("timers-calendar")
+    await expect(calendar).toBeVisible()
+
+    await expect(calendar.locator(".timer-value")).toHaveText("1:00")
+  })
+
   test("shows the month the timers were tracked in", async ({ page }) => {
     const id = (await appEval(`Project.first.id`)) as string
     const month = (await appEval(`I18n.l(Time.zone.now.to_date, format: :month)`)) as string
