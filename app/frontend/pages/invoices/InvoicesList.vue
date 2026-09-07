@@ -4,6 +4,16 @@ import { useRoute, useRouter, RouterLink } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useInvoices, useInvoiceSummary } from "@/services/api/services/invoices/invoices"
 import { useAccount } from "@/services/api/services/account/account"
+import UiButton from "@/components/ui/UiButton.vue"
+import UiDropdown from "@/components/ui/UiDropdown.vue"
+import UiDropdownItem from "@/components/ui/UiDropdownItem.vue"
+import UiFilter from "@/components/ui/UiFilter.vue"
+import UiLabel from "@/components/ui/UiLabel.vue"
+import UiListGroup from "@/components/ui/UiListGroup.vue"
+import UiListGroupItem from "@/components/ui/UiListGroupItem.vue"
+import UiPagination from "@/components/ui/UiPagination.vue"
+import UiPanel from "@/components/ui/UiPanel.vue"
+import UiSortHeader from "@/components/ui/UiSortHeader.vue"
 
 const route = useRoute()
 const router = useRouter()
@@ -98,15 +108,30 @@ function sortBy(column: string): void {
 const money = computed(
   () => new Intl.NumberFormat(locale.value, {style: "currency", currency: "EUR"}),
 )
+// The server-rendered list printed `format: :month_year` — "%B %Y" — rather
+// than a full date.
+//
 // `date` arrives as a bare YYYY-MM-DD. `new Date("2026-03-01")` is UTC
-// midnight, and formatted in local time that is the 28th of February west of
-// Greenwich — so the anchor is read and printed in UTC.
+// midnight, and formatted in local time that is February west of Greenwich —
+// so the anchor is read and printed in UTC.
 const dates = computed(
-  () => new Intl.DateTimeFormat(locale.value, {dateStyle: "medium", timeZone: "UTC"}),
+  () => new Intl.DateTimeFormat(locale.value, {month: "long", year: "numeric", timeZone: "UTC"}),
 )
 
 function formatDate(value: string | null | undefined): string {
   return value ? dates.value.format(new Date(`${value.slice(0, 10)}T00:00:00Z`)) : ""
+}
+
+// `invoice_label` in `app/helpers/invoices_helper.rb`, which is what coloured
+// the state in the list.
+const STATE_VARIANTS: Record<string, "default" | "primary" | "success"> = {
+  created: "default",
+  charged: "primary",
+  paid: "success",
+}
+
+function stateVariant(state: string | null | undefined): "default" | "primary" | "success" {
+  return STATE_VARIANTS[state ?? ""] ?? "primary"
 }
 
 const monthOptions = computed(() => {
@@ -127,10 +152,14 @@ const yearOptions = computed(() =>
   (summary.value?.years ?? []).map((year) => ({value: String(year), label: String(year)})),
 )
 
-const stateOptions = ["created", "charged", "paid"].map((state) => ({
-  value: state,
-  label: state,
-}))
+// The filter names the states in the plural, the way `filter.invoice_state`
+// does; a row names one of them.
+const stateOptions = computed(() =>
+  ["created", "charged", "paid"].map((state) => ({
+    value: state,
+    label: t(`invoices.filters.states.${state}`),
+  })),
+)
 
 // The client cannot read the Link header through the generated mutator, so
 // the filtered total answers it instead: a full last page would otherwise
@@ -139,184 +168,218 @@ const hasNextPage = computed(() => page.value * PER_PAGE < (summary.value?.count
 </script>
 
 <template>
-  <div class="p-4">
-    <div class="mb-4 flex items-center justify-between">
-      <h1 class="text-[24px] font-medium">{{ t("invoices.title") }}</h1>
+  <div id="invoices">
+    <div class="flex flex-wrap items-start gap-4">
+      <h1 class="grow">
+        {{ t("invoices.title") }}
+        <br />
+        <small class="block text-[65%] text-muted" data-test="summary">
+          <span data-test="summary-value">
+            {{ t("invoices.sum", { sum: money.format(Number(summary?.value ?? 0)) }) }}
+          </span>
+          <br />
+          <span data-test="summary-vat">
+            {{ t("invoices.vatSum", { sum: money.format(Number(summary?.vat ?? 0)) }) }}
+          </span>
+        </small>
+      </h1>
 
-      <RouterLink
-        v-if="!limitReached"
-        :to="{ name: 'invoice-new' }"
-        class="rounded-md border border-brand-border bg-brand px-4 py-2 text-sm text-white hover:bg-brand-hover"
-        data-test="new-invoice"
-      >
-        {{ t("invoices.new") }}
-      </RouterLink>
-      <span
-        v-else
-        class="cursor-not-allowed rounded-md border border-field-border bg-surface-muted px-4 py-2 text-sm text-muted"
-        :title="t('invoices.limitReached')"
-        data-test="new-invoice-disabled"
-      >
-        {{ t("invoices.new") }}
-      </span>
+      <div class="max-md:w-full">
+        <RouterLink v-if="!limitReached" :to="{ name: 'invoice-new' }" data-test="new-invoice">
+          <UiButton variant="primary" class="max-md:w-full">+ {{ t("invoices.new") }}</UiButton>
+        </RouterLink>
+        <UiButton
+          v-else
+          variant="primary"
+          class="max-md:w-full"
+          disabled
+          :title="t('invoices.limitReached')"
+          data-test="new-invoice-disabled"
+        >
+          + {{ t("invoices.new") }}
+        </UiButton>
+      </div>
     </div>
 
-    <div class="mb-4 flex flex-wrap gap-2" data-test="filters">
-      <select
-        :value="queryValue('state')"
-        data-test="filter-state"
-        class="rounded border border-field-border p-2 text-sm"
-        @change="setFilter('state', ($event.target as HTMLSelectElement).value)"
-      >
-        <option value="">{{ t("invoices.filters.state") }}</option>
-        <option v-for="option in stateOptions" :key="option.value" :value="option.value">
-          {{ t(`invoices.states.${option.value}`) }}
-        </option>
-      </select>
+    <div class="mt-4 flex flex-wrap items-start justify-between gap-y-4">
+      <div class="flex flex-wrap gap-1.5" data-test="filters">
+        <UiFilter
+          :label="t('invoices.filters.state')"
+          :model-value="queryValue('state')"
+          :options="stateOptions"
+          :reset-title="t('invoices.filters.reset')"
+          test="filter-state"
+          @update:model-value="setFilter('state', $event)"
+        />
+        <UiFilter
+          :label="t('invoices.filters.year')"
+          :model-value="queryValue('year')"
+          :options="yearOptions"
+          :reset-title="t('invoices.filters.reset')"
+          test="filter-year"
+          @update:model-value="setFilter('year', $event)"
+        />
+        <UiFilter
+          :label="t('invoices.filters.quarter')"
+          :model-value="queryValue('quarter')"
+          :options="quarterOptions"
+          :reset-title="t('invoices.filters.reset')"
+          test="filter-quarter"
+          @update:model-value="setFilter('quarter', $event)"
+        />
+        <UiFilter
+          :label="t('invoices.filters.month')"
+          :model-value="queryValue('month')"
+          :options="monthOptions"
+          :reset-title="t('invoices.filters.reset')"
+          test="filter-month"
+          @update:model-value="setFilter('month', $event)"
+        />
+        <UiFilter
+          :label="t('invoices.filters.paidInYear')"
+          :model-value="queryValue('paid_in_year')"
+          :options="yearOptions"
+          :reset-title="t('invoices.filters.reset')"
+          test="filter-paid-in-year"
+          @update:model-value="setFilter('paid_in_year', $event)"
+        />
+        <UiFilter
+          :label="t('invoices.filters.paidInQuarter')"
+          :model-value="queryValue('paid_in_quarter')"
+          :options="quarterOptions"
+          :reset-title="t('invoices.filters.reset')"
+          test="filter-paid-in-quarter"
+          @update:model-value="setFilter('paid_in_quarter', $event)"
+        />
+        <UiFilter
+          :label="t('invoices.filters.paidInMonth')"
+          :model-value="queryValue('paid_in_month')"
+          :options="monthOptions"
+          :reset-title="t('invoices.filters.reset')"
+          align="right"
+          test="filter-paid-in-month"
+          @update:model-value="setFilter('paid_in_month', $event)"
+        />
+      </div>
 
-      <select
-        :value="queryValue('year')"
-        data-test="filter-year"
-        class="rounded border border-field-border p-2 text-sm"
-        @change="setFilter('year', ($event.target as HTMLSelectElement).value)"
-      >
-        <option value="">{{ t("invoices.filters.year") }}</option>
-        <option v-for="option in yearOptions" :key="option.value" :value="option.value">
-          {{ option.label }}
-        </option>
-      </select>
-
-      <select
-        :value="queryValue('quarter')"
-        data-test="filter-quarter"
-        class="rounded border border-field-border p-2 text-sm"
-        @change="setFilter('quarter', ($event.target as HTMLSelectElement).value)"
-      >
-        <option value="">{{ t("invoices.filters.quarter") }}</option>
-        <option v-for="option in quarterOptions" :key="option.value" :value="option.value">
-          {{ option.label }}
-        </option>
-      </select>
-
-      <select
-        :value="queryValue('month')"
-        data-test="filter-month"
-        class="rounded border border-field-border p-2 text-sm"
-        @change="setFilter('month', ($event.target as HTMLSelectElement).value)"
-      >
-        <option value="">{{ t("invoices.filters.month") }}</option>
-        <option v-for="option in monthOptions" :key="option.value" :value="option.value">
-          {{ option.label }}
-        </option>
-      </select>
-
-      <select
-        :value="queryValue('paid_in_year')"
-        data-test="filter-paid-in-year"
-        class="rounded border border-field-border p-2 text-sm"
-        @change="setFilter('paid_in_year', ($event.target as HTMLSelectElement).value)"
-      >
-        <option value="">{{ t("invoices.filters.paidInYear") }}</option>
-        <option v-for="option in yearOptions" :key="option.value" :value="option.value">
-          {{ option.label }}
-        </option>
-      </select>
-
-      <select
-        :value="queryValue('paid_in_quarter')"
-        data-test="filter-paid-in-quarter"
-        class="rounded border border-field-border p-2 text-sm"
-        @change="setFilter('paid_in_quarter', ($event.target as HTMLSelectElement).value)"
-      >
-        <option value="">{{ t("invoices.filters.paidInQuarter") }}</option>
-        <option v-for="option in quarterOptions" :key="option.value" :value="option.value">
-          {{ option.label }}
-        </option>
-      </select>
-
-      <select
-        :value="queryValue('paid_in_month')"
-        data-test="filter-paid-in-month"
-        class="rounded border border-field-border p-2 text-sm"
-        @change="setFilter('paid_in_month', ($event.target as HTMLSelectElement).value)"
-      >
-        <option value="">{{ t("invoices.filters.paidInMonth") }}</option>
-        <option v-for="option in monthOptions" :key="option.value" :value="option.value">
-          {{ option.label }}
-        </option>
-      </select>
+      <UiPagination
+        :page="page"
+        :has-next="hasNextPage"
+        :previous-label="t('invoices.previous')"
+        :next-label="t('invoices.next')"
+        class="max-md:w-full"
+        @go="go({ page: $event })"
+      />
     </div>
 
-    <p v-if="isPending" data-test="loading">{{ t("invoices.loading") }}</p>
-    <p v-else-if="isError" data-test="error">{{ t("invoices.loadFailed") }}</p>
-    <p v-else-if="invoices && invoices.length === 0" data-test="empty">{{ t("invoices.empty") }}</p>
+    <p v-if="isPending" class="mt-4" data-test="loading">{{ t("invoices.loading") }}</p>
+    <p v-else-if="isError" class="mt-4" data-test="error">{{ t("invoices.loadFailed") }}</p>
+    <p v-else-if="invoices && invoices.length === 0" class="mt-4" data-test="empty">
+      {{ t("invoices.empty") }}
+    </p>
 
-    <div v-else class="overflow-x-auto">
-      <table class="w-full border-collapse text-sm" data-test="invoices">
-        <thead>
-          <tr class="border-b border-rule-strong text-left">
-            <th v-for="column in ['ref', 'customer', 'date', 'value', 'state']" :key="column" class="px-2 py-2">
-              <button type="button" class="font-semibold underline" :data-test="`sort-${column}`" @click="sortBy(column)">
-                {{ t(`invoices.columns.${column}`) }}
-                <span v-if="sort === column" aria-hidden="true">{{ direction === "asc" ? "↑" : "↓" }}</span>
-              </button>
-            </th>
-          </tr>
-        </thead>
+    <UiPanel v-else class="mt-4" list data-test="invoices">
+      <template #heading>
+        <div class="hidden grid-cols-12 gap-2 md:grid">
+          <div class="col-span-1">
+            <UiSortHeader column="ref" :label="t('invoices.columns.ref')" :sort="sort" :direction="direction" @sort="sortBy" />
+          </div>
+          <div class="col-span-4">
+            <UiSortHeader column="customer" :label="t('invoices.columns.customer')" :sort="sort" :direction="direction" @sort="sortBy" />
+          </div>
+          <div class="col-span-2">
+            <UiSortHeader column="date" :label="t('invoices.columns.date')" :sort="sort" :direction="direction" @sort="sortBy" />
+          </div>
+          <div class="col-span-2 text-right">
+            <UiSortHeader column="value" :label="t('invoices.columns.value')" :sort="sort" :direction="direction" @sort="sortBy" />
+          </div>
+          <div class="col-span-1">
+            <UiSortHeader column="state" :label="t('invoices.columns.state')" :sort="sort" :direction="direction" @sort="sortBy" />
+          </div>
+        </div>
+      </template>
 
-        <tbody>
-          <tr v-for="invoice in invoices" :key="invoice.id" class="border-b border-rule" :data-test="`invoice-${invoice.id}`">
-            <td class="px-2 py-2 tabular-nums">
+      <UiListGroup>
+        <UiListGroupItem
+          v-for="invoice in invoices"
+          :key="invoice.id"
+          :data-test="`invoice-${invoice.id}`"
+        >
+          <div class="grid grid-cols-12 items-center gap-y-2 gap-x-2">
+            <div class="col-span-6 tabular-nums md:col-span-1">
+              {{ invoice.refNumber ?? invoice.ref }}
+            </div>
+
+            <!-- Below the grid's breakpoint the state moves up beside the
+                 number, the way the server-rendered row did it. -->
+            <div class="col-span-6 text-right md:hidden">
+              <UiLabel :variant="stateVariant(invoice.state)">
+                {{ invoice.state ? t(`invoices.states.${invoice.state}`) : "" }}
+              </UiLabel>
+            </div>
+
+            <div class="col-span-12 md:col-span-4">
               <RouterLink
                 :to="{ name: 'invoice', params: { id: invoice.id } }"
-                class="text-brand"
-              >{{ invoice.refNumber ?? invoice.ref }}</RouterLink>
-            </td>
-            <td class="px-2 py-2">{{ invoice.customerName }}</td>
-            <td class="px-2 py-2 tabular-nums">{{ formatDate(invoice.date) }}</td>
-            <td class="px-2 py-2 text-right tabular-nums">{{ money.format(Number(invoice.value ?? 0)) }}</td>
-            <td class="px-2 py-2">{{ invoice.state ? t(`invoices.states.${invoice.state}`) : "" }}</td>
-          </tr>
-        </tbody>
+                class="text-ink hover:text-ink"
+              >
+                <strong>{{ invoice.customerName }}</strong>
+                <span v-if="invoice.projectName"> - {{ invoice.projectName }}</span>
+              </RouterLink>
+            </div>
 
-        <tfoot v-if="summary">
-          <tr class="font-semibold" data-test="summary">
-            <td class="px-2 py-2" colspan="3">
-              {{ t("invoices.summary", { count: summary.count }) }}
-            </td>
-            <td class="px-2 py-2 text-right tabular-nums" data-test="summary-value">
-              {{ money.format(Number(summary.value)) }}
-            </td>
-            <td class="px-2 py-2 text-right tabular-nums" data-test="summary-vat">
-              {{ money.format(Number(summary.vat)) }}
-            </td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
+            <div class="col-span-6 md:col-span-2">{{ formatDate(invoice.date) }}</div>
 
-    <nav class="mt-4 flex items-center gap-3" data-test="pagination">
-      <button
-        type="button"
-        class="rounded border border-field-border px-3 py-1 text-sm disabled:opacity-50"
-        :disabled="page === 1"
-        data-test="prev-page"
-        @click="go({ page: page - 1 })"
-      >
-        {{ t("invoices.previous") }}
-      </button>
+            <div class="col-span-6 text-right tabular-nums md:col-span-2">
+              <b>{{ money.format(Number(invoice.value ?? 0)) }}</b>
+              <br />
+              {{ money.format(Number(invoice.vat ?? 0)) }}
+            </div>
 
-      <span class="text-sm text-muted" data-test="page">{{ page }}</span>
+            <div class="hidden md:col-span-1 md:block">
+              <UiLabel :variant="stateVariant(invoice.state)">
+                {{ invoice.state ? t(`invoices.states.${invoice.state}`) : "" }}
+              </UiLabel>
+            </div>
 
-      <button
-        type="button"
-        class="rounded border border-field-border px-3 py-1 text-sm disabled:opacity-50"
-        :disabled="!hasNextPage"
-        data-test="next-page"
-        @click="go({ page: page + 1 })"
-      >
-        {{ t("invoices.next") }}
-      </button>
-    </nav>
+            <div class="col-span-12 md:col-span-2 md:text-right">
+              <UiDropdown align="right" class="max-md:!flex max-md:w-full">
+                <template #toggle="{ toggle }">
+                  <UiButton
+                    class="max-md:w-full"
+                    :data-test="`actions-${invoice.id}`"
+                    @click="toggle"
+                  >
+                    {{ t("invoices.actions") }}
+                    <span class="ml-1 inline-block border-t-4 border-r-4 border-l-4 border-transparent border-t-current"></span>
+                  </UiButton>
+                </template>
+
+                <template #menu>
+                  <UiDropdownItem>
+                    <RouterLink :to="{ name: 'invoice', params: { id: invoice.id } }">
+                      {{ t("invoices.show") }}
+                    </RouterLink>
+                  </UiDropdownItem>
+                  <UiDropdownItem v-if="invoice.abilities?.update">
+                    <RouterLink :to="{ name: 'invoice-edit', params: { id: invoice.id } }">
+                      {{ t("invoices.edit") }}
+                    </RouterLink>
+                  </UiDropdownItem>
+                </template>
+              </UiDropdown>
+            </div>
+          </div>
+        </UiListGroupItem>
+      </UiListGroup>
+    </UiPanel>
+
+    <UiPagination
+      :page="page"
+      :has-next="hasNextPage"
+      :previous-label="t('invoices.previous')"
+      :next-label="t('invoices.next')"
+      @go="go({ page: $event })"
+    />
   </div>
 </template>

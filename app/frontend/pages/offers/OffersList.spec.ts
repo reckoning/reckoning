@@ -83,7 +83,7 @@ describe("OffersList", () => {
   it("names the state it was given", async () => {
     const {wrapper} = await mountList()
 
-    expect(wrapper.get('[data-test="offers"]').text()).toContain("Open")
+    expect(wrapper.get('[data-test="offers"]').text()).toContain("Sent")
   })
 
   // The total under a filtered table has to be the total of that table, which
@@ -94,13 +94,15 @@ describe("OffersList", () => {
     expect(wrapper.get('[data-test="summary-value"]').text()).toContain("350")
   })
 
+  // The filters are the dropdown buttons the server-rendered list used, not
+  // selects: a click opens the menu, a click picks the value.
   it("fills the year filter from the years the account has offers in", async () => {
     const {wrapper} = await mountList()
 
-    const years = wrapper.get('[data-test="filter-year"]').findAll("option").map((o) => o.text())
+    await wrapper.get('[data-test="filter-year"]').trigger("click")
 
-    expect(years).toContain("2026")
-    expect(years).toContain("2024")
+    expect(wrapper.find('[data-test="filter-year-2026"]').exists()).toBe(true)
+    expect(wrapper.find('[data-test="filter-year-2024"]').exists()).toBe(true)
   })
 
   // The query is the state, so a filtered, sorted page is a link.
@@ -108,7 +110,8 @@ describe("OffersList", () => {
     const requests: AxiosRequestConfig[] = []
     const {wrapper, router} = await mountList(requests)
 
-    await wrapper.get('[data-test="filter-state"]').setValue("accepted")
+    await wrapper.get('[data-test="filter-state"]').trigger("click")
+    await wrapper.get('[data-test="filter-state-accepted"]').trigger("click")
 
     await vi.waitFor(() => {
       expect(router.currentRoute.value.query.state).toBe("accepted")
@@ -135,7 +138,8 @@ describe("OffersList", () => {
 
     expect(wrapper.get('[data-test="page"]').text()).toBe("3")
 
-    await wrapper.get('[data-test="filter-state"]').setValue("accepted")
+    await wrapper.get('[data-test="filter-state"]').trigger("click")
+    await wrapper.get('[data-test="filter-state-accepted"]').trigger("click")
 
     await vi.waitFor(() => {
       expect(router.currentRoute.value.query.page).toBeUndefined()
