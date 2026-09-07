@@ -182,6 +182,18 @@ module Api
           }
         end
 
+        # The invoice takes its customer and its rate from the project, so a
+        # position built from another project's timers would bill that time to
+        # the wrong customer at the wrong rate.
+        it "refuses timers from another project" do
+          assert_api_response :post, 400, body: {
+            project_id: projects(:outpost6).id,
+            date: "2026-08-01",
+            positions_attributes: [
+              {description: "Consulting", hours: "2.0", timer_ids: [timers(:twohours).id]}
+            ]
+          }
+        end
       end
     end
   end
