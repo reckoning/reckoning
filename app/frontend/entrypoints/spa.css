@@ -337,6 +337,27 @@
     box-shadow: inset 0 -4px 0 var(--color-brand);
   }
 
+  /* `.label`: inline, so its padding never pushes the line it sits on, and
+     on the baseline of the text beside it. 75% of the size around it —
+     `application.scss` lifts it to 90% inside a list row, which is where
+     most of the states are read. */
+  .bs-label {
+    display: inline;
+    padding: 0.2em 0.6em 0.3em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    color: #ffffff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25em;
+  }
+
+  .bs-list-item .bs-label {
+    font-size: 90%;
+  }
+
   /* `partials/_loader.scss`: the ring the PDF viewer spins while pdf.js
      works — three sides in a faint grey, the fourth in the brand colour. */
   .bs-loader {

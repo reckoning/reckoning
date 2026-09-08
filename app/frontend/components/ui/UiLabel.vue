@@ -16,12 +16,10 @@ const FILLS = {
   danger: "bg-danger",
 } as const
 
-// `.label` is 75% of the body size, which `application.scss` lifts to 90%
-// inside a list row — the size the states are actually seen at.
-const classes = computed(() => [
-  "inline-block rounded-[0.25em] px-[0.6em] pt-[0.2em] pb-[0.3em] text-[90%] leading-none font-bold text-white",
-  FILLS[props.variant],
-])
+// The geometry lives in `.bs-label`: it is `display: inline` on the
+// baseline, and its size depends on whether it sits in a list row, which a
+// utility class cannot express.
+const classes = computed(() => ["bs-label", FILLS[props.variant]])
 </script>
 
 <template>
