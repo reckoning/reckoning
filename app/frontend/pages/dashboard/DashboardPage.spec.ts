@@ -184,6 +184,28 @@ describe("DashboardPage", () => {
     expect(wrapper.find('[data-test="budget-p2"]').exists()).toBe(false)
   })
 
+  // The panel and each of its rows hung on the year having expenses at all,
+  // which the API reports by leaving the sum out.
+  it("leaves out the expenses panel for a year without any", async () => {
+    const {wrapper} = await mountDashboard({
+      totals: {expensesSum: null, lastYearExpensesSum: null},
+    })
+
+    expect(wrapper.find('[data-test="expenses-panel"]').exists()).toBe(false)
+  })
+
+  it("shows only the year that has expenses", async () => {
+    const {wrapper} = await mountDashboard({
+      totals: {expensesSum: "300.0", lastYearExpensesSum: null},
+    })
+
+    const panel = wrapper.get('[data-test="expenses-panel"]')
+
+    expect(panel.find('[data-test="expenses-sum"]').exists()).toBe(true)
+    expect(panel.text()).toContain("This year")
+    expect(panel.text()).not.toContain("Last year")
+  })
+
   // The lists are shown in full — the server-rendered dashboard never paged
   // them either.
   it("asks for every invoice rather than a page", async () => {

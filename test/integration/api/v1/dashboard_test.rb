@@ -126,6 +126,28 @@ module Api
           end
         end
 
+        # The expenses panel and its rows hung on `@expenses.present?`, so a
+        # year with nothing in it has to be distinguishable from one that
+        # happens to add up to zero.
+        it "reports no expenses for a year without any" do
+          assert_api_response :get, 200 do
+            assert_nil parsed_body["expensesSum"]
+            assert_nil parsed_body["lastYearExpensesSum"]
+          end
+        end
+
+        it "sums the expenses of the year they fall in" do
+          account.expenses.create!(
+            expense_type: "gwg", value: 42, description: "Tricorder",
+            seller: "Daystrom Institute", date: Date.new(Time.zone.now.year, 3, 1)
+          )
+
+          assert_api_response :get, 200 do
+            assert_equal 42.0, parsed_body["expensesSum"].to_f
+            assert_nil parsed_body["lastYearExpensesSum"]
+          end
+        end
+
         # Two years, each as a running total and as sums per month — summed
         # here because the client would otherwise need both years' invoices.
         it "reports the chart series" do

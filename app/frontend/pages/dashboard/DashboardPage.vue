@@ -198,15 +198,19 @@ const chart = computed(() => totals.value?.chart)
           </UiListGroup>
         </UiPanel>
 
-        <UiPanel :title="t('dashboard.panels.expenses.title')" data-test="expenses-panel">
+        <UiPanel
+          v-if="totals?.expensesSum != null || totals?.lastYearExpensesSum != null"
+          :title="t('dashboard.panels.expenses.title')"
+          data-test="expenses-panel"
+        >
           <UiListGroup>
-            <UiListGroupItem>
+            <UiListGroupItem v-if="totals?.expensesSum != null">
               {{ t("dashboard.panels.expenses.current") }}
-              <strong class="float-right" data-test="expenses-sum">{{ amount(totals?.expensesSum) }}</strong>
+              <strong class="float-right" data-test="expenses-sum">{{ amount(totals.expensesSum) }}</strong>
             </UiListGroupItem>
-            <UiListGroupItem muted>
+            <UiListGroupItem v-if="totals?.lastYearExpensesSum != null" muted>
               {{ t("dashboard.panels.expenses.last") }}
-              <strong class="float-right">{{ amount(totals?.lastYearExpensesSum) }}</strong>
+              <strong class="float-right">{{ amount(totals.lastYearExpensesSum) }}</strong>
             </UiListGroupItem>
           </UiListGroup>
         </UiPanel>

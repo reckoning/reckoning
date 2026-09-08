@@ -48,11 +48,16 @@ module Api
           .where(date: 1.year.ago.beginning_of_year..Time.zone.now.end_of_year)
       end
 
+      # A year without expenses answers nil rather than zero: the panel and
+      # each of its two rows only appeared when the year behind them had
+      # something in it, which a sum of zero cannot express.
       private def expenses_sum_for(year)
         normalized = ::Expense.normalized(
           current_account.expenses.without_insurances.year(year).to_a,
           year: year
         )
+
+        return nil if normalized.empty?
 
         normalized.sum { |expense| expense.usable_value(year) }
       end
