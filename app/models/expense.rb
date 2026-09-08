@@ -182,8 +182,13 @@ class Expense < ApplicationRecord
     value / afa_type_value
   end
 
+  # The share stays nil until the account has entered both its office and
+  # the deductible part of it, and an expense whose share is unknown deducts
+  # nothing. Answering nil instead made `vat_value` and every sum over these
+  # expenses raise on the multiplication — which is what the expenses list
+  # did for any account that never filled in its office space.
   def home_office_value
-    return if account.deductible_office_percent.blank?
+    return 0.0 if account.deductible_office_percent.blank?
 
     (value * account.deductible_office_percent) / 100.0
   end
