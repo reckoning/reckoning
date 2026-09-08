@@ -60,10 +60,14 @@ module V1
                   properties: {
                     name: {type: [:string, :null]},
                     color: {type: [:string, :null]},
-                    data: {type: :array, items: {type: [:number, :string]}}
+                    data: {type: :array, items: {type: [:number, :string]}},
+                    zone: {
+                      type: [:integer, :null],
+                      description: "Index up to which the series is drawn solid; the rest is the year that has not happened yet."
+                    }
                   },
                   additionalProperties: false,
-                  required: %w[name color data]
+                  required: %w[name color data zone]
                 }
               }
             },

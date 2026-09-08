@@ -137,6 +137,8 @@ module Api
             assert_equal 12, chart["labels"].size
             assert_equal 4, chart["datasets"].size
             assert chart["datasets"].all? { |dataset| dataset.key?("color") && dataset.key?("data") }
+            # The running totals say where the year stops being real.
+            assert chart["datasets"].any? { |dataset| dataset["zone"].is_a?(Integer) }
           end
         end
 

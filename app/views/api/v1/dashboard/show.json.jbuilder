@@ -31,5 +31,8 @@ json.chart do
     json.name dataset[:name]
     json.color dataset[:color]
     json.data dataset[:data]
+    # Everything past this point is the part of the year that has not happened
+    # yet — the chart draws it as a dashed continuation.
+    json.zone dataset[:zone]
   end
 end
