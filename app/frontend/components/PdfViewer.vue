@@ -54,7 +54,7 @@ async function render(): Promise<void> {
       const canvas = document.createElement("canvas")
       canvas.height = viewport.height
       canvas.width = viewport.width
-      canvas.className = "mb-2 w-full border border-rule"
+      canvas.className = "bs-pdf-page"
 
       const context = canvas.getContext("2d")
       if (!context) throw new Error("no 2d context")
@@ -88,6 +88,6 @@ onBeforeUnmount(() => {
       {{ t("pdf.failed") }}
     </p>
 
-    <div ref="pages" data-test="pdf-pages"></div>
+    <div ref="pages" class="bs-pdf-preview" data-test="pdf-pages"></div>
   </div>
 </template>

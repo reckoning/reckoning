@@ -128,9 +128,7 @@ async function removeOffer(): Promise<void> {
         <div class="md:col-span-2">
           <UiNavTabs :tabs="tabs" active="offer" />
 
-          <div class="border border-t-0 border-rule-strong p-4">
-            <PdfViewer :src="offerPdf" data-test="offer-preview" />
-          </div>
+          <PdfViewer :src="offerPdf" data-test="offer-preview" />
         </div>
 
         <div class="md:pt-10">

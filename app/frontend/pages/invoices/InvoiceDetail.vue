@@ -193,10 +193,8 @@ async function removeInvoice(): Promise<void> {
         <div class="md:col-span-2">
           <UiNavTabs :tabs="tabs" :active="tab" @select="tab = $event as 'invoice' | 'timesheet'" />
 
-          <div class="border border-t-0 border-rule-strong p-4">
-            <PdfViewer v-if="tab === 'invoice'" :src="invoicePdf" data-test="invoice-preview" />
-            <PdfViewer v-else :src="timesheetPdf" data-test="timesheet-preview" />
-          </div>
+          <PdfViewer v-if="tab === 'invoice'" :src="invoicePdf" data-test="invoice-preview" />
+          <PdfViewer v-else :src="timesheetPdf" data-test="timesheet-preview" />
         </div>
 
         <div class="md:pt-10">

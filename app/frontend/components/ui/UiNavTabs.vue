@@ -16,7 +16,7 @@ const emit = defineEmits<{select: [string]}>()
     <li v-for="tab in tabs" :key="tab.key" class="-mb-px">
       <button
         type="button"
-        class="mr-0.5 block rounded-t-bs border border-transparent px-4 py-2.5 leading-[1.428571429]"
+        class="mr-0.5 block rounded-t-bs border border-transparent px-[15px] py-2.5 leading-[1.428571429]"
         :class="
           tab.key === active
             ? 'border-rule-strong border-b-surface bg-surface text-field'
