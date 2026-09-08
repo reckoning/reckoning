@@ -27,6 +27,7 @@ module Api
 
       let(:data) { users :data }
       let(:invoice) { invoices :january }
+      let(:account) { accounts :enterprise }
 
       it "is unauthorized when signed out" do
         assert_api_response :get, 401
@@ -67,6 +68,75 @@ module Api
 
           assert_api_response :get, 200 do
             assert_equal expected.to_f, parsed_body["chargedSum"].to_f
+          end
+        end
+
+        # The overtime panel: the hours this week, today, and what each
+        # employed customer is ahead or behind by.
+        it "reports the hours behind the overtime panel" do
+          assert_api_response :get, 200 do
+            overtime = parsed_body["overtime"]
+
+            assert overtime.key?("weeklyHours")
+            assert overtime.key?("dailyHours")
+            assert_kind_of Array, overtime["customers"]
+          end
+        end
+
+        # `Customer#overtime` answers nil unless the customer is employed and
+        # has workdays and weekly hours — those are left out rather than
+        # reported as zero, the way the server-rendered panel skips them.
+        it "leaves out a customer that has no schedule" do
+          assert_api_response :get, 200 do
+            names = parsed_body["overtime"]["customers"].map { |entry| entry["name"] }
+
+            assert_not_includes names, customers(:starfleet).name
+          end
+        end
+
+        it "reports an employed customer's overtime" do
+          # `workdays` counts the working days since the employment date, so a
+          # schedule is an employment date plus weekly hours.
+          customers(:starfleet).update!(
+            weekly_hours: 40, employment_date: 30.days.ago.to_date, employment_end_date: nil
+          )
+
+          assert_api_response :get, 200 do
+            entry = parsed_body["overtime"]["customers"].find { |item| item["name"] == "Starfleet" }
+
+            assert entry, "expected the employed customer in the panel"
+            assert entry.key?("hours")
+          end
+        end
+
+        # Without a provision rate both rows stay out of the summary.
+        it "reports no provision for an account without a rate" do
+          assert_api_response :get, 200 do
+            assert_nil parsed_body["provision"]
+            assert_nil parsed_body["lastYearProvision"]
+          end
+        end
+
+        it "reports the provision once the account carries a rate" do
+          account.update!(provision: "10")
+
+          assert_api_response :get, 200 do
+            assert_not_nil parsed_body["provision"]
+            assert_not_nil parsed_body["lastYearProvision"]
+          end
+        end
+
+        # Two years, each as a running total and as sums per month — summed
+        # here because the client would otherwise need both years' invoices.
+        it "reports the chart series" do
+          invoice.charge!
+
+          assert_api_response :get, 200 do
+            chart = parsed_body["chart"]
+
+            assert_equal 12, chart["labels"].size
+            assert_equal 4, chart["datasets"].size
+            assert chart["datasets"].all? { |dataset| dataset.key?("color") && dataset.key?("data") }
           end
         end
 
