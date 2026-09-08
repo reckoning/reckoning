@@ -200,37 +200,47 @@ async function removeInvoice(): Promise<void> {
         <div class="md:pt-10">
           <UiPanel :title="t('invoice.downloads')">
             <UiListGroup>
-              <UiListGroupItem interactive>
-                <a :href="invoicePdf" target="_blank" data-test="invoice-pdf">
-                  {{ t("invoice.downloadInvoice") }}
-                </a>
+              <UiListGroupItem :href="invoicePdf" target="_blank" data-test="invoice-pdf">
+                {{ t("invoice.downloadInvoice") }}
               </UiListGroupItem>
-              <UiListGroupItem v-if="hasTimesheet" interactive>
-                <a :href="timesheetPdf" target="_blank" data-test="timesheet-pdf">
-                  {{ t("invoice.downloadTimesheet") }}
-                </a>
+              <UiListGroupItem
+                v-if="hasTimesheet"
+                :href="timesheetPdf"
+                target="_blank"
+                data-test="timesheet-pdf"
+              >
+                {{ t("invoice.downloadTimesheet") }}
               </UiListGroupItem>
             </UiListGroup>
           </UiPanel>
 
           <UiPanel :title="t('invoice.actions')">
             <UiListGroup>
-              <UiListGroupItem v-if="abilities?.update" interactive>
-                <RouterLink :to="{ name: 'invoice-edit', params: { id } }" data-test="edit">
-                  {{ t("invoice.edit") }}
-                </RouterLink>
+              <UiListGroupItem
+                v-if="abilities?.update"
+                :to="{ name: 'invoice-edit', params: { id } }"
+                data-test="edit"
+              >
+                {{ t("invoice.edit") }}
               </UiListGroupItem>
 
-              <UiListGroupItem v-if="abilities?.sendMail" interactive>
-                <button type="button" :disabled="busy" data-test="send-mail" @click="mailInvoice">
-                  {{ t("invoice.sendMail") }}
-                </button>
+              <UiListGroupItem
+                v-if="abilities?.sendMail"
+                action
+                :disabled="busy"
+                data-test="send-mail"
+                @click="mailInvoice"
+              >
+                {{ t("invoice.sendMail") }}
               </UiListGroupItem>
 
-              <UiListGroupItem v-if="abilities?.destroy" interactive>
-                <button type="button" class="text-danger-text" data-test="delete" @click="removeInvoice">
-                  {{ t("invoice.delete") }}
-                </button>
+              <UiListGroupItem
+                v-if="abilities?.destroy"
+                action
+                data-test="delete"
+                @click="removeInvoice"
+              >
+                {{ t("invoice.delete") }}
               </UiListGroupItem>
             </UiListGroup>
           </UiPanel>

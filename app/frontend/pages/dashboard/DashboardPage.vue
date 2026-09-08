@@ -233,10 +233,14 @@ const chart = computed(() => totals.value?.chart)
           data-test="budgets-panel"
         >
           <UiListGroup>
-            <UiListGroupItem v-for="project in budgets" :key="project.id" interactive>
-              <a :href="`/projects/${project.id}`" class="text-ink hover:text-ink">
+            <UiListGroupItem
+              v-for="project in budgets"
+              :key="project.id"
+              :href="`/projects/${project.id}`"
+            >
+              <div>
                 {{ project.customerName ? `${project.name} (${project.customerName})` : project.name }}
-              </a>
+              </div>
               <UiProgress
                 class="mt-1"
                 :percent="Number(project.budgetPercent ?? 0)"
@@ -255,12 +259,14 @@ const chart = computed(() => totals.value?.chart)
           data-test="charged-invoices"
         >
           <UiListGroup>
-            <UiListGroupItem v-for="invoice in chargedInvoices ?? []" :key="invoice.id" interactive>
-              <RouterLink :to="{ name: 'invoice', params: { id: invoice.id } }" class="text-ink hover:text-ink">
-                {{ invoice.refNumber ?? invoice.ref }} |
-                <strong>{{ invoice.customerName }}</strong>
-                <span v-if="invoice.projectName"> - {{ invoice.projectName }}</span>
-              </RouterLink>
+            <UiListGroupItem
+              v-for="invoice in chargedInvoices ?? []"
+              :key="invoice.id"
+              :to="{ name: 'invoice', params: { id: invoice.id } }"
+            >
+              {{ invoice.refNumber ?? invoice.ref }} |
+              <strong>{{ invoice.customerName }}</strong>
+              <span v-if="invoice.projectName"> - {{ invoice.projectName }}</span>
               <div class="text-right">
                 <em>{{ formatMonth(invoice.date) }}</em>
               </div>
@@ -292,12 +298,14 @@ const chart = computed(() => totals.value?.chart)
           data-test="paid-invoices"
         >
           <UiListGroup>
-            <UiListGroupItem v-for="invoice in paidInvoices ?? []" :key="invoice.id" interactive>
-              <RouterLink :to="{ name: 'invoice', params: { id: invoice.id } }" class="text-ink hover:text-ink">
-                {{ invoice.refNumber ?? invoice.ref }} |
-                <strong>{{ invoice.customerName }}</strong>
-                <span v-if="invoice.projectName"> - {{ invoice.projectName }}</span>
-              </RouterLink>
+            <UiListGroupItem
+              v-for="invoice in paidInvoices ?? []"
+              :key="invoice.id"
+              :to="{ name: 'invoice', params: { id: invoice.id } }"
+            >
+              {{ invoice.refNumber ?? invoice.ref }} |
+              <strong>{{ invoice.customerName }}</strong>
+              <span v-if="invoice.projectName"> - {{ invoice.projectName }}</span>
               <div class="text-right">
                 <em>{{ formatMonth(invoice.date) }}</em>
               </div>
@@ -311,12 +319,14 @@ const chart = computed(() => totals.value?.chart)
           data-test="last-year-invoices"
         >
           <UiListGroup>
-            <UiListGroupItem v-for="invoice in lastYearInvoices ?? []" :key="invoice.id" interactive>
-              <RouterLink :to="{ name: 'invoice', params: { id: invoice.id } }" class="text-ink hover:text-ink">
-                {{ invoice.refNumber ?? invoice.ref }} |
-                <strong>{{ invoice.customerName }}</strong>
-                <span v-if="invoice.projectName"> - {{ invoice.projectName }}</span>
-              </RouterLink>
+            <UiListGroupItem
+              v-for="invoice in lastYearInvoices ?? []"
+              :key="invoice.id"
+              :to="{ name: 'invoice', params: { id: invoice.id } }"
+            >
+              {{ invoice.refNumber ?? invoice.ref }} |
+              <strong>{{ invoice.customerName }}</strong>
+              <span v-if="invoice.projectName"> - {{ invoice.projectName }}</span>
               <div class="text-right">
                 <em>{{ formatMonth(invoice.date) }}</em>
               </div>

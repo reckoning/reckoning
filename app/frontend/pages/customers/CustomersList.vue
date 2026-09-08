@@ -22,14 +22,13 @@ const { data: customers, isPending, isError } = useCustomers()
 
     <UiPanel v-else class="mt-4" list data-test="customers">
       <UiListGroup>
-        <UiListGroupItem v-for="customer in customers" :key="customer.id" interactive>
-          <RouterLink
-            :to="{ name: 'customer-edit', params: { id: customer.id } }"
-            class="text-ink hover:text-ink"
-            :data-test="`customer-${customer.id}`"
-          >
-            <b>{{ customer.name }}</b>
-          </RouterLink>
+        <UiListGroupItem
+          v-for="customer in customers"
+          :key="customer.id"
+          :to="{ name: 'customer-edit', params: { id: customer.id } }"
+          :data-test="`customer-${customer.id}`"
+        >
+          <b>{{ customer.name }}</b>
         </UiListGroupItem>
       </UiListGroup>
     </UiPanel>
