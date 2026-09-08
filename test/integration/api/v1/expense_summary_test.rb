@@ -155,6 +155,30 @@ module Api
           end
         end
 
+        # Month and quarter are separate dropdowns, so both can be set at
+        # once and the list intersects them. The total has to agree.
+        it "counts an interval where the month and the quarter meet" do
+          expense_worth(
+            10, date: nil, interval: "monthly",
+            started_at: Date.new(year, 1, 1), ended_at: Date.new(year, 12, 31)
+          )
+
+          assert_api_response :get, 200, params: {year: year, month: 3, quarter: 1} do
+            assert_equal 10.0, parsed_body["value"].to_f
+          end
+        end
+
+        it "counts nothing where the month and the quarter do not meet" do
+          expense_worth(
+            10, date: nil, interval: "monthly",
+            started_at: Date.new(year, 1, 1), ended_at: Date.new(year, 12, 31)
+          )
+
+          assert_api_response :get, 200, params: {year: year, month: 3, quarter: 4} do
+            assert_equal 0.0, parsed_body["value"].to_f
+          end
+        end
+
         # An AfA expense deducts one year's write-off rather than its value,
         # and that share does not repeat per period either.
         it "counts an afa expense at its yearly write-off" do

@@ -137,11 +137,18 @@ module Api
         month = filter_params[:month].presence.to_i
         quarter = filter_params[:quarter].presence.to_i
 
-        return Date.new(year, month, 1)..Date.new(year, month, -1) if (1..12).cover?(month)
-        return Date.new(year, quarter * 3 - 2, 1)..Date.new(year, quarter * 3, -1) if (1..4).cover?(quarter)
-        return Date.new(year, 1, 1)..Date.new(year, 12, 31) if filter_params[:year].present?
+        windows = []
+        windows << (Date.new(year, month, 1)..Date.new(year, month, -1)) if (1..12).cover?(month)
+        windows << (Date.new(year, quarter * 3 - 2, 1)..Date.new(year, quarter * 3, -1)) if (1..4).cover?(quarter)
+        windows << (Date.new(year, 1, 1)..Date.new(year, 12, 31)) if filter_params[:year].present?
 
-        nil
+        return nil if windows.empty?
+
+        # Month and quarter are separate dropdowns and can both be set, and
+        # `filter_result` chains them — so the window is where they overlap.
+        # Where they do not, the range comes out backwards and covers
+        # nothing, which is the same answer the list gives.
+        windows.map(&:first).max..windows.map(&:last).min
       end
 
       # An AfA expense deducts one year's write-off rather than its value, and
