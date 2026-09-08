@@ -120,7 +120,7 @@ async function regenerate(): Promise<void> {
           autocomplete="one-time-code"
           :placeholder="t('twoFactor.otpToken')"
           data-test="otp-token"
-          class="mb-3 block w-full rounded-bs border border-field-border px-3 py-1.5 text-field shadow-[inset_0_1px_1px_rgba(0,0,0,0.075)] placeholder:text-placeholder focus:border-field-focus focus:outline-none"
+          class="bs-input mb-3"
         />
         <button
           type="submit"
@@ -153,7 +153,7 @@ async function regenerate(): Promise<void> {
           autocomplete="one-time-code"
           :placeholder="t('twoFactor.otpToken')"
           data-test="otp-token"
-          class="mb-3 block w-full rounded-bs border border-field-border px-3 py-1.5 text-field shadow-[inset_0_1px_1px_rgba(0,0,0,0.075)] placeholder:text-placeholder focus:border-field-focus focus:outline-none"
+          class="bs-input mb-3"
         />
         <button
           type="submit"

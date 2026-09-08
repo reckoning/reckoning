@@ -244,7 +244,7 @@ const hasNextPage = computed(() => page.value * PER_PAGE < (summary.value?.count
                 <template #toggle="{ toggle }">
                   <UiButton class="max-md:w-full" :data-test="`actions-${offer.id}`" @click="toggle">
                     {{ t("offers.actions") }}
-                    <span class="ml-1 inline-block border-t-4 border-r-4 border-l-4 border-transparent border-t-current"></span>
+                    <span class="bs-caret"></span>
                   </UiButton>
                 </template>
 

@@ -15,7 +15,7 @@ const props = withDefaults(
 )
 
 const BORDERS = {
-  default: "border-rule-strong",
+  default: "",
   info: "border-alert-info-border",
   success: "border-alert-success-border",
   warning: "border-alert-warning-border",
@@ -23,7 +23,7 @@ const BORDERS = {
 } as const
 
 const HEADINGS = {
-  default: "border-rule-strong bg-surface-muted text-muted-strong",
+  default: "bg-surface-muted text-muted-strong",
   info: "border-alert-info-border bg-alert-info text-alert-info-text",
   success: "border-alert-success-border bg-alert-success text-alert-success-text",
   warning: "border-alert-warning-border bg-alert-warning text-alert-warning-text",
@@ -35,11 +35,11 @@ const heading = computed(() => HEADINGS[props.variant])
 </script>
 
 <template>
-  <div class="mb-5 rounded-bs border bg-surface" :class="border">
+  <div class="bs-panel" :class="border">
     <div
       v-if="title || $slots.heading"
-      class="rounded-t-bs border-b"
-      :class="[heading, list ? 'px-4 py-2' : 'px-4 py-2.5']"
+      class="bs-panel-heading"
+      :class="[heading, list ? 'bs-panel-heading-tight' : '']"
     >
       <slot name="heading">
         <strong class="text-[length:var(--text-h3)]">{{ title }}</strong>

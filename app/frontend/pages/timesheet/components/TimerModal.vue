@@ -216,7 +216,7 @@ function errorText(e: unknown): string {
       @click.self="emit('close')"
     >
       <div class="relative z-50 mt-10 w-full max-w-lg" role="document">
-        <div class="rounded-bs-lg border border-ink/20 bg-surface shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
+        <div class="bs-modal">
           <div class="flex items-center justify-between border-b border-rule px-4 py-3.5">
             <h3>{{ title }}</h3>
             <button

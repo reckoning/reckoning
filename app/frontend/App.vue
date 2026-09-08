@@ -48,7 +48,7 @@ const trial = computed(() => account.value?.trial)
       <!-- Below the aside's breakpoint the navigation collapses to a bar with
            a toggle, and the links slide in from the left. -->
       <div
-        class="fixed inset-x-0 top-0 z-100 flex h-[50px] items-center border-b border-nav-border bg-nav shadow-[0_1px_5px_var(--color-nav-shadow)] md:hidden"
+        class="bs-nav fixed inset-x-0 top-0 z-100 flex h-[50px] items-center border-b md:hidden"
       >
         <button
           type="button"
@@ -62,20 +62,20 @@ const trial = computed(() => account.value?.trial)
 
         <RouterLink
           :to="{ name: 'dashboard' }"
-          class="grow truncate pr-[50px] text-center font-brand text-lg text-nav-link"
+          class="bs-nav-brand grow truncate pr-[50px] text-center font-brand text-nav-link"
         >
           {{ t("nav.brand") }}
         </RouterLink>
       </div>
 
       <nav
-        class="fixed inset-y-0 left-0 z-100 flex w-[85vw] flex-col overflow-y-auto border-r border-nav-border bg-nav shadow-[0_1px_5px_var(--color-nav-shadow)] transition-[left] duration-500 md:left-0 md:w-1/6 min-[1800px]:w-[12.5%]"
+        class="bs-nav fixed inset-y-0 left-0 z-100 flex w-[85vw] flex-col overflow-y-auto border-r transition-[left] duration-500 md:left-0 md:w-1/6 min-[1800px]:w-[12.5%]"
         :class="drawerOpen ? 'left-0' : '-left-[85vw]'"
         data-test="main-nav"
       >
         <RouterLink
           :to="{ name: 'dashboard' }"
-          class="hidden h-[50px] items-center truncate px-4 font-brand text-lg text-nav-link hover:text-nav-link-hover md:flex"
+          class="bs-nav-brand hidden truncate font-brand text-nav-link hover:text-nav-link-hover md:block"
         >
           {{ t("nav.brand") }}
         </RouterLink>
@@ -86,7 +86,7 @@ const trial = computed(() => account.value?.trial)
           <template #toggle="{ toggle }">
             <button
               type="button"
-              class="flex w-full items-center gap-1.5 px-4 py-2.5 text-left text-nav-link hover:text-nav-link-hover"
+              class="bs-nav-user flex w-full items-center gap-1.5 text-left text-nav-link"
               data-test="user-menu"
               @click="toggle"
             >
@@ -99,7 +99,7 @@ const trial = computed(() => account.value?.trial)
                 />
               </span>
               <span class="grow truncate text-sm" data-test="account">{{ currentUser.user?.email }}</span>
-              <span class="inline-block border-t-4 border-r-4 border-l-4 border-transparent border-t-current"></span>
+              <span class="bs-caret"></span>
             </button>
           </template>
 
@@ -132,8 +132,8 @@ const trial = computed(() => account.value?.trial)
           <li v-for="link in LINKS" :key="link.name">
             <RouterLink
               :to="{ name: link.name }"
-              class="block px-4 py-2.5 text-nav-link hover:text-nav-link-hover hover:shadow-[inset_-4px_0_0_var(--color-brand)]"
-              active-class="text-nav-link-hover shadow-[inset_-4px_0_0_var(--color-brand)]"
+              class="bs-nav-link text-nav-link"
+              active-class="is-active"
               :data-test="link.test"
             >
               {{ t(link.label) }}

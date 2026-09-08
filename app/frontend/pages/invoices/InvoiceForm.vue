@@ -505,7 +505,7 @@ async function save(): Promise<void> {
     <div v-if="pickerOpen" class="fixed inset-0 z-40 bg-ink/50" @click="pickerOpen = false"></div>
     <div v-if="pickerOpen" class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4">
       <div
-        class="relative z-50 mt-10 w-full max-w-lg rounded-bs-lg border border-ink/20 bg-surface shadow-[0_5px_15px_rgba(0,0,0,0.5)]"
+        class="relative z-50 mt-10 w-full max-w-lg bs-modal"
         data-test="position-picker"
       >
         <div class="flex items-center justify-between border-b border-rule px-4 py-3.5">

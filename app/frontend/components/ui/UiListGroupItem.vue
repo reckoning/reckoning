@@ -21,7 +21,7 @@ const VARIANTS = {
 } as const
 
 const classes = computed(() => [
-  "px-4 py-2.5",
+  "bs-list-item",
   VARIANTS[props.variant],
   // `.list-group-item.disabled`: a row that is there for reference, not for
   // acting on — the dashboard greys out last year's numbers that way.

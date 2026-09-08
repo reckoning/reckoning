@@ -10,7 +10,7 @@ withDefaults(defineProps<{as?: "input" | "textarea" | "select"; modelValue?: str
 defineEmits<{"update:modelValue": [string]}>()
 
 const CLASSES =
-  "block w-full rounded-bs border border-field-border bg-surface px-3 py-1.5 text-base leading-[1.428571429] text-field shadow-[inset_0_1px_1px_rgba(0,0,0,0.075)] placeholder:text-placeholder focus:border-field-focus focus:shadow-[inset_0_1px_1px_rgba(0,0,0,0.075),0_0_8px_rgba(102,175,233,0.6)] focus:outline-none disabled:bg-surface-muted"
+  "bs-input"
 </script>
 
 <template>

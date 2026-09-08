@@ -21,7 +21,7 @@ const levelClasses: Record<string, string> = {
     <div
       v-for="toast in toasts.toasts"
       :key="toast.id"
-      class="flex items-start gap-3 px-4 py-3 text-white shadow-[0_2px_6px_rgba(0,0,0,0.2)]"
+      class="bs-toast flex items-start gap-3 px-4 py-3 text-white"
       :class="levelClasses[toast.level]"
       role="status"
     >

@@ -201,7 +201,7 @@ async function toggleArchive(project: Project): Promise<void> {
                       @click="toggle"
                     >
                       {{ t("projects.actions") }}
-                      <span class="ml-1 inline-block border-t-4 border-r-4 border-l-4 border-transparent border-t-current"></span>
+                      <span class="bs-caret"></span>
                     </UiButton>
                   </template>
 
