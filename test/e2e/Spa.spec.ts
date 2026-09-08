@@ -125,7 +125,9 @@ test.describe("SPA shell", () => {
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
 
-    await expect(page).toHaveURL(/\/settings$/)
+    // The tabs controller on the server-rendered settings screen appends a
+    // fragment once it takes over, so the assertion has to allow one.
+    await expect(page).toHaveURL(/\/settings(#.*)?$/)
     // The legacy chrome, not the SPA shell.
     await expect(page.locator(".user-email")).toContainText("will@star.fleet")
   })
