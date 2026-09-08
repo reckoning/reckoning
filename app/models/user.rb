@@ -48,8 +48,14 @@ class User < ApplicationRecord
     UserMailer.welcome_mail(self, token).deliver
   end
 
+  # `d=identicon` lets Gravatar draw the fallback itself. It used to point at
+  # identicons.github.com, a service GitHub retired, and the parameters after
+  # it were HTML-escaped in a URL that never passes through HTML — so the
+  # request carried a parameter named `amp;r`, `s` twice, and a fallback that
+  # no longer resolves. Nothing outside gravatar.com is fetched now, and the
+  # image policy already allows that host.
   def avatar(size = 24)
-    "https://www.gravatar.com/avatar/#{gravatar_hash}?s=#{size}&d=https%3A%2F%2Fidenticons.github.com%2F#{gravatar_hash}.png&amp;r=x&amp;s=#{size}"
+    "https://www.gravatar.com/avatar/#{gravatar_hash}?s=#{size}&d=identicon&r=x"
   end
 
   # override devise trackable to not save on every single request
