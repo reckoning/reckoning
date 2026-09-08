@@ -38,8 +38,15 @@ Rails.application.routes.draw do
   # link Devise sent last month is already sitting in someone's inbox and has
   # to keep working — including for a locked account, which has no other way
   # back in. The token travels in the query string, so it comes along.
-  spa_screen = ->(path) do
-    redirect { |_params, request| [path, request.query_string.presence].compact.join("?") }
+  #
+  # Every path below is built through this, because `redirect("/app/…")`
+  # drops the query string: a bookmarked filtered list, or a link that
+  # preselects a project for a new invoice, would arrive bare.
+  spa_screen = ->(pattern) do
+    redirect do |params, request|
+      path = pattern % params.to_h.symbolize_keys
+      [path, request.query_string.presence].compact.join("?")
+    end
   end
 
   get "/users/confirmation", to: spa_screen.call("/app/confirmation")
@@ -61,7 +68,7 @@ Rails.application.routes.draw do
     # The SPA renders the login. The name stays so the handful of
     # `new_user_session_path` callers keep working, and a bookmark on /signin
     # still lands somewhere sensible.
-    get "signin" => redirect("/app/login"), :as => :new_user_session
+    get "signin" => spa_screen.call("/app/login"), :as => :new_user_session
     delete "signout" => "sessions#destroy", :as => :destroy_user_session
   end
 
@@ -81,17 +88,13 @@ Rails.application.routes.draw do
   # navigation links `invoices_path`, and so do the redirects after charging
   # or paying an invoice. The query travels with it, so a filtered, sorted
   # link keeps working.
-  get "invoices", to: redirect { |_params, request|
-    ["/app/invoices", request.query_string.presence].compact.join("?")
-  }, as: :invoices
+  get "invoices", to: spa_screen.call("/app/invoices"), as: :invoices
 
   # The SPA owns the form too (phase B6). Declared before the resource so
   # `/invoices/new` reaches the SPA rather than the ERB screen, and named to
   # keep `new_invoice_path` — the dashboard and the project page link it.
-  get "invoices/new", to: redirect { |_params, request|
-    ["/app/invoices/new", request.query_string.presence].compact.join("?")
-  }, as: :new_invoice
-  get "invoices/:id/edit", to: redirect("/app/invoices/%{id}/edit"), as: :edit_invoice
+  get "invoices/new", to: spa_screen.call("/app/invoices/new"), as: :new_invoice
+  get "invoices/:id/edit", to: spa_screen.call("/app/invoices/%{id}/edit"), as: :edit_invoice
 
   # What is left of the server-rendered invoice: the PDFs, which the plan keeps
   # server-rendered on purpose. Charging, paying, mailing, creating, updating
@@ -107,20 +110,16 @@ Rails.application.routes.draw do
   # longer carries `update` and `destroy` to provide `invoice_path` — the
   # dashboard and project panels link it. Declared after the resource so its
   # `:id` cannot swallow the member routes above.
-  get "invoices/:id", to: redirect("/app/invoices/%{id}"), as: :invoice
+  get "invoices/:id", to: spa_screen.call("/app/invoices/%{id}"), as: :invoice
 
   # The SPA owns the offer screens (phase B7). The list keeps its query — the
   # main navigation links `offers_path` — and the name comes back here now
   # that the resource no longer carries `create` to provide it.
-  get "offers", to: redirect { |_params, request|
-    ["/app/offers", request.query_string.presence].compact.join("?")
-  }, as: :offers
+  get "offers", to: spa_screen.call("/app/offers"), as: :offers
 
   # `?project_id=` survives: the project page links a new offer for itself.
-  get "offers/new", to: redirect { |_params, request|
-    ["/app/offers/new", request.query_string.presence].compact.join("?")
-  }, as: :new_offer
-  get "offers/:id/edit", to: redirect("/app/offers/%{id}/edit"), as: :edit_offer
+  get "offers/new", to: spa_screen.call("/app/offers/new"), as: :new_offer
+  get "offers/:id/edit", to: spa_screen.call("/app/offers/%{id}/edit"), as: :edit_offer
 
   # What is left of the server-rendered offer: the PDF, which the plan keeps
   # server-rendered on purpose. Creating, updating, deleting and the state
@@ -133,13 +132,11 @@ Rails.application.routes.draw do
 
   # Named because the dashboard's offer panel links it. Declared after the
   # resource so its `:id` cannot swallow the member routes above.
-  get "offers/:id", to: redirect("/app/offers/%{id}"), as: :offer
+  get "offers/:id", to: spa_screen.call("/app/offers/%{id}"), as: :offer
 
   # The SPA owns the timesheet (phase B4). The name stays: the main
   # navigation links `timesheet_path`.
-  get "timesheet", to: redirect { |_params, request|
-    ["/app/timesheet", request.query_string.presence].compact.join("?")
-  }, as: :timesheet
+  get "timesheet", to: spa_screen.call("/app/timesheet"), as: :timesheet
 
   resource :template, only: [] do
     template "blank"
@@ -152,16 +149,16 @@ Rails.application.routes.draw do
   # The SPA owns the customer screens (phase B3). The name stays because the
   # project list still links here, and a bookmark on the old path should land
   # on the new screen rather than a 404.
-  get "customers/:id/edit", to: redirect("/app/customers/%{id}/edit"), as: :edit_customer
+  get "customers/:id/edit", to: spa_screen.call("/app/customers/%{id}/edit"), as: :edit_customer
 
   # The SPA owns the project list and the form (phase B3). The detail page
   # stays here: it renders the offers and invoices panels, which belong to B6
   # and B7 — porting it now would mean building those twice. The names are
   # kept, since the main navigation links `projects_path` and the detail links
   # `edit_project_path`.
-  get "projects", to: redirect("/app/projects"), as: :projects
-  get "projects/new", to: redirect("/app/projects/new"), as: :new_project
-  get "projects/:id/edit", to: redirect("/app/projects/%{id}/edit"), as: :edit_project
+  get "projects", to: spa_screen.call("/app/projects"), as: :projects
+  get "projects/new", to: spa_screen.call("/app/projects/new"), as: :new_project
+  get "projects/:id/edit", to: spa_screen.call("/app/projects/%{id}/edit"), as: :edit_project
 
   resources :projects, only: [:show] do
     # Untouched: these serve the legacy invoice screen, not the project
