@@ -107,9 +107,13 @@ function customerLevel(hoursOff: number | string | null | undefined, weekly: num
   return level(Number(hoursOff ?? 0), Number(weekly ?? 0) / 5)
 }
 
-// `projects.active.with_budget`, ordered as the panel had them.
+// `projects.active.with_budget`, which is a budget *and* the switch that
+// puts it on the dashboard — a project can carry one without wanting it
+// shown here.
 const budgets = computed(() =>
-  (projects.value ?? []).filter((project: Project) => Number(project.budget ?? 0) > 0),
+  (projects.value ?? []).filter(
+    (project: Project) => Number(project.budget ?? 0) > 0 && project.budgetOnDashboard === true,
+  ),
 )
 
 function overdue(invoice: Invoice): boolean {

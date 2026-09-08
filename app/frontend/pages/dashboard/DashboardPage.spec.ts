@@ -171,17 +171,20 @@ describe("DashboardPage", () => {
     expect(wrapper.find('[data-test="nothing-billed"]').exists()).toBe(true)
   })
 
-  // Only projects with a budget appear, the way `with_budget` scoped them.
-  it("shows a budget bar only for projects that have one", async () => {
+  // `with_budget` is `where.not(budget: 0).where(budget_on_dashboard: true)`,
+  // so a budget alone is not enough to put a project in the panel.
+  it("shows a budget bar only for projects that have one and asked for it", async () => {
     const {wrapper} = await mountDashboard({
       projects: [
-        {id: "p1", name: "Narendra 3", budget: "1000.0", budgetPercent: "40.0", workflowState: "active", tasks: []},
-        {id: "p2", name: "Wolf 359", budget: "0.0", budgetPercent: "0.0", workflowState: "active", tasks: []},
+        {id: "p1", name: "Narendra 3", budget: "1000.0", budgetPercent: "40.0", budgetOnDashboard: true, workflowState: "active", tasks: []},
+        {id: "p2", name: "Wolf 359", budget: "0.0", budgetPercent: "0.0", budgetOnDashboard: true, workflowState: "active", tasks: []},
+        {id: "p3", name: "Rura Penthe", budget: "2000.0", budgetPercent: "10.0", budgetOnDashboard: false, workflowState: "active", tasks: []},
       ],
     })
 
     expect(wrapper.find('[data-test="budget-p1"]').exists()).toBe(true)
     expect(wrapper.find('[data-test="budget-p2"]').exists()).toBe(false)
+    expect(wrapper.find('[data-test="budget-p3"]').exists()).toBe(false)
   })
 
   // The panel and each of its rows hung on the year having expenses at all,
