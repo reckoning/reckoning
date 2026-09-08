@@ -135,6 +135,7 @@ async function removeOffer(): Promise<void> {
           <UiPanel :title="t('offer.downloads')">
             <UiListGroup>
               <UiListGroupItem :href="offerPdf" target="_blank" data-test="offer-pdf">
+                <i class="fa fa-download"></i>
                 {{ t("offer.download") }}
               </UiListGroupItem>
             </UiListGroup>
@@ -147,6 +148,7 @@ async function removeOffer(): Promise<void> {
                 :to="{ name: 'offer-edit', params: { id } }"
                 data-test="edit"
               >
+                <i class="fa fa-edit"></i>
                 {{ t("offer.edit") }}
               </UiListGroupItem>
 
@@ -156,6 +158,7 @@ async function removeOffer(): Promise<void> {
                 data-test="delete"
                 @click="removeOffer"
               >
+                <i class="fa fa-trash"></i>
                 {{ t("offer.delete") }}
               </UiListGroupItem>
             </UiListGroup>

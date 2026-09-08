@@ -469,7 +469,7 @@ async function save(): Promise<void> {
                   :data-test="`position-remove-${index}`"
                   @click="removeRow(index)"
                 >
-                  ×
+                  <i class="fa fa-trash"></i>
                 </UiButton>
               </div>
             </div>
@@ -477,7 +477,7 @@ async function save(): Promise<void> {
 
           <div class="mt-4 flex flex-wrap items-center gap-2">
             <UiButton type="button" data-test="add-position" @click="addRow">
-              + {{ t("invoiceForm.addPosition") }}
+              <i class="fa fa-plus"></i> {{ t("invoiceForm.addPosition") }}
             </UiButton>
 
             <UiButton type="button" data-test="generate-positions" @click="openPicker">

@@ -36,7 +36,7 @@ function chosenLabel(): string {
       :data-test="test ? `${test}-reset` : undefined"
       @click="emit('update:modelValue', '')"
     >
-      ×
+      <i class="fa fa-times"></i>
     </button>
 
     <UiDropdown :align="align ?? 'left'">

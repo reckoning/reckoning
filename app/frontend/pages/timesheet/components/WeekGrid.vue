@@ -136,7 +136,7 @@ async function onTaskRemove(task: TaskWithTimers) {
     <div class="grid grid-cols-12 items-end gap-2 px-4 py-1.5">
       <div class="col-span-12 md:col-span-4">
         <UiButton variant="primary" class="max-md:w-full" @click="emit('addTask')">
-          + {{ addTaskLabel }}
+          <i class="fa fa-plus"></i> {{ addTaskLabel }}
         </UiButton>
       </div>
 

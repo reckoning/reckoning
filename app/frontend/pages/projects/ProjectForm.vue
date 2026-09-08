@@ -350,13 +350,13 @@ const FIELD = "bs-input"
               :data-test="`task-remove-${index}`"
               @click="removeTask(index)"
             >
-              ×
+              <i class="fa fa-trash"></i>
             </UiButton>
           </div>
         </div>
 
           <UiButton type="button" class="mt-4" data-test="add-task" @click="addTask">
-            + {{ t("project.addTask") }}
+            <i class="fa fa-plus"></i> {{ t("project.addTask") }}
           </UiButton>
         </template>
       </UiPanel>

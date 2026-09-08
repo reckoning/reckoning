@@ -167,6 +167,7 @@ async function removeInvoice(): Promise<void> {
             data-test="charge"
             @click="chargeInvoice"
           >
+            <i class="fa fa-envelope"></i>
             {{ t("invoice.charge") }}
           </UiButton>
 
@@ -177,6 +178,7 @@ async function removeInvoice(): Promise<void> {
             data-test="pay"
             @click="payInvoice"
           >
+            <i class="fa fa-check-square-o"></i>
             {{ t("invoice.pay") }}
           </UiButton>
 
@@ -201,6 +203,7 @@ async function removeInvoice(): Promise<void> {
           <UiPanel :title="t('invoice.downloads')">
             <UiListGroup>
               <UiListGroupItem :href="invoicePdf" target="_blank" data-test="invoice-pdf">
+                <i class="fa fa-download"></i>
                 {{ t("invoice.downloadInvoice") }}
               </UiListGroupItem>
               <UiListGroupItem
@@ -209,6 +212,7 @@ async function removeInvoice(): Promise<void> {
                 target="_blank"
                 data-test="timesheet-pdf"
               >
+                <i class="fa fa-download"></i>
                 {{ t("invoice.downloadTimesheet") }}
               </UiListGroupItem>
             </UiListGroup>
@@ -221,6 +225,7 @@ async function removeInvoice(): Promise<void> {
                 :to="{ name: 'invoice-edit', params: { id } }"
                 data-test="edit"
               >
+                <i class="fa fa-edit"></i>
                 {{ t("invoice.edit") }}
               </UiListGroupItem>
 
@@ -231,6 +236,7 @@ async function removeInvoice(): Promise<void> {
                 data-test="send-mail"
                 @click="mailInvoice"
               >
+                <i class="fa fa-paper-plane"></i>
                 {{ t("invoice.sendMail") }}
               </UiListGroupItem>
 
@@ -240,6 +246,7 @@ async function removeInvoice(): Promise<void> {
                 data-test="delete"
                 @click="removeInvoice"
               >
+                <i class="fa fa-trash"></i>
                 {{ t("invoice.delete") }}
               </UiListGroupItem>
             </UiListGroup>
