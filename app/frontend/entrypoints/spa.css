@@ -139,6 +139,19 @@
     font-size: var(--text-h3);
   }
 
+  /* `h1 small`: the subline under a headline — the sums under a list's
+     title, a state beside it. Inline and at a line-height of 1, so each of
+     its lines sits in the headline's own line box; as a block it would
+     bunch up at its own smaller line-height. */
+  h1 small,
+  h2 small,
+  h3 small {
+    font-size: 65%;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--color-muted);
+  }
+
   a {
     color: var(--color-brand);
   }

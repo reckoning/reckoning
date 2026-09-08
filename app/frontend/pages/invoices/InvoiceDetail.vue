@@ -149,10 +149,10 @@ async function removeInvoice(): Promise<void> {
       <div class="flex flex-wrap items-start gap-4">
         <h1 class="grow" data-test="invoice-title">
           {{ t("invoice.title", { ref: invoice.refNumber ?? invoice.ref }) }}
-          <small v-if="overdue" class="text-[65%]">
+          <small v-if="overdue">
             <UiLabel variant="danger" data-test="overdue">{{ t("invoice.overdue") }}</UiLabel>
           </small>
-          <small class="ml-1 text-[65%]">
+          <small class="ml-1">
             <UiLabel :variant="invoice.state === 'paid' ? 'success' : invoice.state === 'created' ? 'default' : 'primary'" data-test="state">
               {{ t(`invoices.states.${invoice.state}`) }}
             </UiLabel>
