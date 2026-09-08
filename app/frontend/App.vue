@@ -4,6 +4,7 @@ import { useRoute, useRouter, RouterLink, RouterView } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useCurrentUserStore } from "@/stores/currentUser"
 import { useAccount } from "@/services/api/services/account/account"
+import AppProgress from "@/components/AppProgress.vue"
 import ToastHost from "@/components/ToastHost.vue"
 import UiAlert from "@/components/ui/UiAlert.vue"
 import UiDropdown from "@/components/ui/UiDropdown.vue"
@@ -44,6 +45,8 @@ const trial = computed(() => account.value?.trial)
 
 <template>
   <div class="min-h-screen bg-surface text-ink">
+    <AppProgress />
+
     <template v-if="currentUser.signedIn">
       <!-- Below the aside's breakpoint the navigation collapses to a bar with
            a toggle, and the links slide in from the left. -->
