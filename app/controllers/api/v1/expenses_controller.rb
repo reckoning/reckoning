@@ -32,8 +32,11 @@ module Api
         year = (filter_params[:year].presence || Time.zone.now.year).to_i
 
         @count = scope.count
+        # Seeded with decimals: an empty set would otherwise sum to an
+        # integer zero and cross the wire as a number where the schema — and
+        # every non-empty answer — has a string.
         @value = deductible_sum(scope, year)
-        @vat = normalized(scope).sum(&:vat_value)
+        @vat = normalized(scope).sum(0.to_d, &:vat_value)
         @years = filter_years
       end
 
@@ -110,19 +113,44 @@ module Api
       # and social insurance sit outside the total unless that is what you
       # asked to see — they are not business expenses, and the panel that
       # reports them counts them separately.
-      private def normalized(scope, year = filter_params[:year].presence)
-        return ::Expense.normalized(scope.to_a, year: year) if filter_params[:type] == "insurances"
+      private def normalized(scope)
+        year = filter_params[:year].presence
+        entries = if filter_params[:type] == "insurances"
+          ::Expense.normalized(scope.to_a, year: year)
+        else
+          ::Expense.normalized(scope.without_insurances.to_a, year: year)
+        end
 
-        ::Expense.normalized(scope.without_insurances.to_a, year: year)
+        window = filter_window
+        return entries if window.nil?
+
+        entries.select { |entry| entry.date.present? && window.cover?(entry.date) }
+      end
+
+      # The sums have to belong to the set the list is showing, so the periods
+      # of an expense on an interval are counted only where the filter looks:
+      # a monthly expense filtered to March is one entry, not twelve.
+      # `filter_quarter` and `filter_month` read the year the same way, from
+      # the filter or from today.
+      private def filter_window
+        year = (filter_params[:year].presence || Time.zone.now.year).to_i
+        month = filter_params[:month].presence.to_i
+        quarter = filter_params[:quarter].presence.to_i
+
+        return Date.new(year, month, 1)..Date.new(year, month, -1) if (1..12).cover?(month)
+        return Date.new(year, quarter * 3 - 2, 1)..Date.new(year, quarter * 3, -1) if (1..4).cover?(quarter)
+        return Date.new(year, 1, 1)..Date.new(year, 12, 31) if filter_params[:year].present?
+
+        nil
       end
 
       # An AfA expense deducts one year's write-off rather than its value, and
       # that share does not repeat per period — so it is counted once from the
       # records instead of from the normalized entries.
       private def deductible_sum(scope, year)
-        write_offs = scope.filter_type(:afa).sum { |expense| expense.afa_value(year) }
+        write_offs = scope.filter_type(:afa).sum(0.to_d) { |expense| expense.afa_value(year) }
 
-        normalized(scope).sum { |expense|
+        normalized(scope).sum(0.to_d) { |expense|
           next 0 if expense.expense_type == "afa"
 
           expense.usable_value(year)
@@ -136,12 +164,20 @@ module Api
       # reach the year its expenses were in.
       private def filter_years
         current = (Time.zone.now.month == 12) ? 1.year.from_now.year : Time.zone.now.year
-        earliest = [
+        years = [
           current_account.expenses.minimum(:date)&.year,
-          current_account.expenses.minimum(:started_at)&.year
-        ].compact.min
+          current_account.expenses.minimum(:started_at)&.year,
+          current_account.expenses.maximum(:date)&.year,
+          current_account.expenses.maximum(:ended_at)&.year
+        ].compact
 
-        ((earliest || 1.year.ago.year)..current).to_a.reverse
+        # Clamped both ways: an expense dated ahead of today would otherwise
+        # leave the range empty and the dropdown with nothing in it, not even
+        # the year being looked at.
+        first = [years.min || 1.year.ago.year, current].min
+        last = [years.max || current, current].max
+
+        (first..last).to_a.reverse
       end
 
       # Expenses are behind an account feature flag, same as the web UI.

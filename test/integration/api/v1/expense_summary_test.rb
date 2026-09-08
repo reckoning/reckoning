@@ -131,6 +131,30 @@ module Api
           end
         end
 
+        # A filtered total has to belong to the filtered set: the periods of
+        # an expense on an interval only count where the filter looks.
+        it "counts an interval only for the periods inside the filtered month" do
+          expense_worth(
+            10, date: nil, interval: "monthly",
+            started_at: Date.new(year, 1, 1), ended_at: Date.new(year, 12, 31)
+          )
+
+          assert_api_response :get, 200, params: {year: year, month: 3} do
+            assert_equal 10.0, parsed_body["value"].to_f
+          end
+        end
+
+        it "counts an interval only for the periods inside the filtered quarter" do
+          expense_worth(
+            10, date: nil, interval: "monthly",
+            started_at: Date.new(year, 1, 1), ended_at: Date.new(year, 12, 31)
+          )
+
+          assert_api_response :get, 200, params: {year: year, quarter: 2} do
+            assert_equal 30.0, parsed_body["value"].to_f
+          end
+        end
+
         # An AfA expense deducts one year's write-off rather than its value,
         # and that share does not repeat per period either.
         it "counts an afa expense at its yearly write-off" do
@@ -164,6 +188,47 @@ module Api
 
           assert_api_response :get, 200, params: {year: year} do
             assert_equal [year, year - 1, year - 2], parsed_body["years"].first(3)
+          end
+        end
+
+        # `date` is only validated on a one-off, so an AfA expense on an
+        # interval is a record the model accepts with no date at all. Reading
+        # its year raised, and took this endpoint and the list down with it.
+        it "counts an afa expense on an interval from the day it starts" do
+          expense_worth(
+            1200, type: "afa", date: nil, interval: "monthly",
+            started_at: Date.new(year, 3, 1), afa_type: afa_types(:three_years)
+          )
+
+          assert_api_response :get, 200 do
+            assert_equal 400.0, parsed_body["value"].to_f
+          end
+        end
+
+        # Both are decimals, and decimals cross the wire as strings — an
+        # empty set used to sum to an integer and answer a bare number.
+        it "reports the money as strings, even with nothing to add up" do
+          assert_api_response :get, 200 do
+            assert_kind_of String, parsed_body["value"]
+            assert_kind_of String, parsed_body["vat"]
+          end
+
+          expense_worth(100)
+
+          assert_api_response :get, 200 do
+            assert_kind_of String, parsed_body["value"]
+          end
+        end
+
+        # An expense can be dated ahead of today, and the range used to come
+        # out empty — leaving the dropdown with nothing in it, not even the
+        # year being looked at.
+        it "offers a year an expense is dated ahead in" do
+          expense_worth(100, date: Date.new(year + 2, 7, 1))
+
+          assert_api_response :get, 200 do
+            assert_includes parsed_body["years"], year + 2
+            assert_includes parsed_body["years"], year
           end
         end
 

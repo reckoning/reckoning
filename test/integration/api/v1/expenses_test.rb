@@ -113,6 +113,11 @@ module Api
             row = parsed_body.find { |item| item["id"] == business.id }
 
             assert_equal false, row["needsReceipt"]
+            # The account has entered no office space, so there is no share
+            # to deduct — and a decimal zero, which crosses the wire as the
+            # string the schema declares, not as a number.
+            assert_kind_of String, row["usableValue"]
+            assert_equal 0.0, row["usableValue"].to_f
           end
         end
 
