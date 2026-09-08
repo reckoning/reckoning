@@ -3,14 +3,16 @@ import { computed } from "vue"
 
 // `.btn` with the three variants the screens use, plus `link` for the inline
 // text buttons in the action lists.
-// `as: "span"` für den Fall, dass das Ganze schon in einem Link steckt: ein
-// `<button>` in einem `<a>` ist ein zweites Bedienelement im ersten, was Fokus
-// und Auslösen für Tastatur und Screenreader unklar macht.
+// `as: "a"` for a button that navigates — the whole element is the link, so
+// nothing is nested inside anything. `as: "span"` is for the case where a
+// link is already wrapped around it: a `<button>` inside an `<a>` is a second
+// control inside the first, which leaves focus and activation unclear for the
+// keyboard and for a screen reader.
 const props = withDefaults(
   defineProps<{
     variant?: "default" | "primary" | "danger" | "link"
     size?: "default" | "large" | "small"
-    as?: "button" | "span"
+    as?: "button" | "span" | "a"
     block?: boolean
   }>(),
   {variant: "default", size: "default", as: "button", block: false},
