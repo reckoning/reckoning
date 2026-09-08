@@ -54,7 +54,7 @@ async function render(): Promise<void> {
       const canvas = document.createElement("canvas")
       canvas.height = viewport.height
       canvas.width = viewport.width
-      canvas.className = "bs-pdf-page"
+      canvas.className = "bs-pdf-page opacity-0 transition-opacity duration-[600ms]"
 
       const context = canvas.getContext("2d")
       if (!context) throw new Error("no 2d context")
@@ -64,6 +64,7 @@ async function render(): Promise<void> {
       if (mine !== generation) return
 
       host.append(canvas)
+      requestAnimationFrame(() => canvas.classList.remove("opacity-0"))
     }
 
     state.value = "ready"
@@ -80,10 +81,17 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div>
-    <p v-if="state === 'loading'" class="text-sm text-muted" data-test="pdf-loading">
-      {{ t("pdf.loading") }}
-    </p>
+  <div class="relative">
+    <!-- The ring the server-rendered viewer spun in the middle of the empty
+         preview while pdf.js worked. Outside `pages`, which is emptied on
+         every render. -->
+    <div
+      v-if="state === 'loading'"
+      class="bs-loader"
+      role="status"
+      :aria-label="t('pdf.loading')"
+      data-test="pdf-loading"
+    ></div>
     <p v-else-if="state === 'failed'" class="text-sm text-danger" data-test="pdf-failed">
       {{ t("pdf.failed") }}
     </p>

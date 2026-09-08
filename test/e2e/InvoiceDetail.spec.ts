@@ -59,6 +59,26 @@ test.describe("Invoice detail", () => {
     expect(target).toBe("edit")
   })
 
+  // The ring the server-rendered viewer spun over the empty preview. Held up
+  // on purpose, because a PDF that arrives at once never shows it.
+  test("spins while the preview is still loading", async ({ page }) => {
+    const id = (await appEval(`Invoice.first.id`)) as string
+
+    await page.route("**/pdf/**", async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 3000))
+      await route.continue()
+    })
+
+    await page.goto(`/app/invoices/${id}`)
+
+    await expect(page.getByTestId("pdf-loading")).toBeVisible()
+
+    await expect(page.locator('[data-test="pdf-pages"] canvas').first()).toBeVisible({
+      timeout: 60_000,
+    })
+    await expect(page.getByTestId("pdf-loading")).toHaveCount(0)
+  })
+
   // The point of porting the viewer rather than linking out: pdf.js has to
   // work inside the SPA bundle, worker and all.
   test("renders the invoice PDF inline", async ({ page }) => {
