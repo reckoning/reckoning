@@ -42,6 +42,15 @@ function clearTimers(): void {
 
 function start(): void {
   clearTimers()
+
+  // Work that starts again inside the completion fade finds the bar still
+  // sitting at the end: it goes away first, so the next delay starts from
+  // nothing rather than jumping back from full width.
+  if (done.value) {
+    visible.value = false
+    value.value = 0
+  }
+
   done.value = false
 
   delayTimer = setTimeout(() => {

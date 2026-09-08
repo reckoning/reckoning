@@ -72,6 +72,38 @@ describe("AppProgress", () => {
     expect(wrapper.get(bar).attributes("style")).not.toBe(first)
   })
 
+  // Otherwise the bar would still be at the end when the next request
+  // starts, and jump backwards to its starting width half a second later.
+  it("starts over from nothing when work returns during the fade", async () => {
+    const {wrapper, queryClient} = mountBar()
+
+    let answer: (value: string) => void = () => {}
+    queryClient.fetchQuery({
+      queryKey: ["first"],
+      queryFn: () => new Promise<string>((resolve) => (answer = resolve)),
+    })
+    await flushPromises()
+
+    vi.advanceTimersByTime(500)
+    await flushPromises()
+    answer("done")
+    await flushPromises()
+
+    expect(wrapper.get(bar).attributes("style")).toContain("width: 100%")
+
+    // Inside the 300ms fade, before the bar has left.
+    vi.advanceTimersByTime(100)
+    queryClient.fetchQuery({queryKey: ["second"], queryFn: () => new Promise<string>(() => {})})
+    await flushPromises()
+
+    expect(wrapper.find(bar).exists()).toBe(false)
+
+    vi.advanceTimersByTime(500)
+    await flushPromises()
+
+    expect(wrapper.get(bar).attributes("style")).toContain("width: 10%")
+  })
+
   it("runs to the end and leaves once the request is done", async () => {
     const {wrapper, queryClient} = mountBar()
 
