@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue"
+import { computed, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useQueryClient } from "@tanstack/vue-query"
@@ -102,6 +102,14 @@ function setFilter(filter: Filter, value: string): void {
 
 const search = ref(queryValue("query"))
 
+// The url is the state, and it also moves on its own — the back button, a
+// link someone opened. The field follows it rather than keeping whatever was
+// typed into it before.
+watch(
+  () => queryValue("query"),
+  (query) => (search.value = query),
+)
+
 function submitSearch(): void {
   setFilter("query", search.value.trim())
 }
@@ -172,6 +180,11 @@ const hasNextPage = computed(() => page.value * PER_PAGE < (summary.value?.count
 const paged = computed(() => page.value > 1 || hasNextPage.value)
 
 const selected = ref<string[]>([])
+
+// Dropped whenever the result set changes: a row ticked on page one, or
+// under another filter, is not on screen any more, and the bulk bar would
+// otherwise apply — or delete — what nobody can see.
+watch(params, () => (selected.value = []))
 
 function toggle(id: string, on: boolean): void {
   selected.value = on ? [...selected.value, id] : selected.value.filter((entry) => entry !== id)

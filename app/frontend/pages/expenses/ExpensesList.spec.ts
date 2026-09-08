@@ -251,6 +251,33 @@ describe("ExpensesList", () => {
     expect(requests.some((entry) => String(entry.url).includes("bulk_update"))).toBe(false)
   })
 
+  // A row ticked under one filter is not on screen under the next, and the
+  // bar would otherwise delete what nobody can see.
+  it("drops the selection when the filter changes", async () => {
+    const {wrapper} = await mountList()
+
+    await wrapper.get(`[data-test="select-${EXPENSE.id}"]`).setValue(true)
+    expect(wrapper.find('[data-test="bulk-bar"]').exists()).toBe(true)
+
+    await wrapper.get('[data-test="filter-type"]').trigger("click")
+    await wrapper.get('[data-test="filter-type-afa"]').trigger("click")
+
+    await vi.waitFor(() => expect(wrapper.find('[data-test="bulk-bar"]').exists()).toBe(false))
+  })
+
+  // The url moves on its own too — the back button, a link someone opened.
+  it("follows the url when the search in it changes", async () => {
+    const {wrapper, router} = await mountList({path: "/expenses?query=tric"})
+
+    expect((wrapper.get('[data-test="search"]').element as HTMLInputElement).value).toBe("tric")
+
+    await router.push("/expenses")
+
+    await vi.waitFor(() =>
+      expect((wrapper.get('[data-test="search"]').element as HTMLInputElement).value).toBe(""),
+    )
+  })
+
   // The exports are still rendered by the server, so the link has to carry
   // the filters the table is showing.
   it("carries the filters into the export links", async () => {
