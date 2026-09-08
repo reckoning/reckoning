@@ -176,8 +176,14 @@ class Expense < ApplicationRecord
     end
   end
 
+  # An AfA expense is a purchase written off over the years its type allows,
+  # counted from the day it was bought. `date` is only validated on a
+  # one-off, so an interval leaves it empty and the start of the interval is
+  # the day to count from — reading `date.year` there raised.
   def afa_value(year = Time.zone.now.year)
-    return 0.0 if afa_type_value.blank? || (date.year + afa_type_value) < year
+    bought_on = date || started_at
+    return 0.to_d if afa_type_value.blank? || bought_on.blank?
+    return 0.to_d if (bought_on.year + afa_type_value) < year
 
     value / afa_type_value
   end
@@ -188,7 +194,9 @@ class Expense < ApplicationRecord
   # expenses raise on the multiplication — which is what the expenses list
   # did for any account that never filled in its office space.
   def home_office_value
-    return 0.0 if account.deductible_office_percent.blank?
+    # A decimal rather than 0.0: every other branch answers one, and a float
+    # here would cross the wire as a JSON number where the rest are strings.
+    return 0.to_d if account.deductible_office_percent.blank?
 
     (value * account.deductible_office_percent) / 100.0
   end
