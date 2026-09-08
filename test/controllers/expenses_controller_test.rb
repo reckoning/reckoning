@@ -38,6 +38,24 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
       assert_select "input[name='expense_ids[]']"
     end
 
+    # Nothing asked for the csv, which is how a 500 sat in it unnoticed.
+    it "answers the csv export" do
+      valid_expense
+
+      get "/expenses.csv"
+
+      assert_response :ok
+      assert_equal "text/csv", response.media_type
+      assert_includes response.body, "description"
+      assert_includes response.body, "Test"
+    end
+
+    it "renders the form" do
+      get "/expenses/new"
+
+      assert_response :ok
+    end
+
     it "bulk updates only the selected rows and only the provided fields" do
       selected = valid_expense(vat_percent: 19)
       untouched = valid_expense(vat_percent: 19)

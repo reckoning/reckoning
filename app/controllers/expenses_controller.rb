@@ -14,7 +14,9 @@ class ExpensesController < ApplicationController
 
     respond_to do |format|
       format.csv do
-        send_data expenses.to_csv
+        # Named and typed like the pdf below it: without either, the download
+        # arrives as an unnamed octet-stream.
+        send_data expenses.to_csv, type: "text/csv", filename: "expenses.csv"
       end
       format.pdf do
         expense_pdf = ExpensePdf.new(current_account, expenses, filter_params)
