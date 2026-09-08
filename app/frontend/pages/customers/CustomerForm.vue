@@ -144,10 +144,9 @@ const tabs = computed(() => [
   { key: "offer" as const, label: t("customer.tabs.offer") },
 ])
 
-// The `.form-control` shape, inline because these fields carry VeeValidate's
-// own bindings rather than going through `UiInput`.
-const FIELD =
-  "block w-full rounded-bs border border-field-border bg-surface px-3 py-1.5 text-base leading-[1.428571429] text-field shadow-[inset_0_1px_1px_rgba(0,0,0,0.075)] placeholder:text-placeholder focus:border-field-focus focus:shadow-[inset_0_1px_1px_rgba(0,0,0,0.075),0_0_8px_rgba(102,175,233,0.6)] focus:outline-none"
+// These fields carry VeeValidate's own bindings rather than going through
+// `UiInput`, so they name the shape's class themselves.
+const FIELD = "bs-input"
 </script>
 
 <template>

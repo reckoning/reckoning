@@ -19,7 +19,7 @@ const fill = computed(() => {
 </script>
 
 <template>
-  <div class="h-3.5 overflow-hidden rounded-bs bg-surface-muted shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)]">
+  <div class="bs-progress">
     <div class="h-full" :class="fill" :style="{ width: `${width}%` }"></div>
   </div>
 </template>

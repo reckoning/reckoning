@@ -100,7 +100,7 @@ function onKeydown(e: KeyboardEvent) {
       <input
         v-model="text"
         type="text"
-        class="block w-full rounded-bs border border-field-border bg-surface px-2 py-1 text-right leading-[1.428571429] text-field shadow-[inset_0_1px_1px_rgba(0,0,0,0.075)] placeholder:text-placeholder focus:border-field-focus focus:outline-none"
+        class="bs-input !px-2 !py-1 text-right"
         :placeholder="'0:00'"
         @blur="onBlur"
         @keydown="onKeydown"

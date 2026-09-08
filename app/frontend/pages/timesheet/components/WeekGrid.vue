@@ -136,7 +136,7 @@ async function onTaskRemove(task: TaskWithTimers) {
     <div class="grid grid-cols-12 items-end gap-2 px-4 py-1.5">
       <div class="col-span-12 md:col-span-4">
         <UiButton variant="primary" class="max-md:w-full" @click="emit('addTask')">
-          + {{ addTaskLabel }}
+          <i class="fa fa-plus"></i> {{ addTaskLabel }}
         </UiButton>
       </div>
 
@@ -145,7 +145,7 @@ async function onTaskRemove(task: TaskWithTimers) {
           v-for="day in days"
           :key="day.date"
           class="px-px pb-1 pr-2 text-right"
-          :class="day.isToday ? 'shadow-[inset_0_-4px_0_var(--color-brand)]' : ''"
+          :class="day.isToday ? 'bs-today' : ''"
         >
           <a :href="`?date=${day.date}&view=day`">
             <span class="max-sm:hidden">{{ day.shortLabel }}</span>

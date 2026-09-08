@@ -7,8 +7,8 @@ withDefaults(defineProps<{active?: boolean}>(), {active: false})
 <template>
   <li>
     <div
-      class="block cursor-pointer px-5 py-0.5 text-ink hover:bg-surface-muted hover:shadow-[inset_4px_0_0_var(--color-brand)]"
-      :class="active ? 'bg-surface-muted shadow-[inset_4px_0_0_var(--color-brand)]' : ''"
+      class="bs-dropdown-item cursor-pointer"
+      :class="active ? 'is-active' : ''"
       role="menuitem"
     >
       <slot />

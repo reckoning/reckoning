@@ -110,7 +110,7 @@ async function toggleArchive(project: Project): Promise<void> {
 
       <div class="max-md:w-full">
         <RouterLink :to="{ name: 'project-new' }" data-test="new-project">
-          <UiButton as="span" variant="primary" class="max-md:w-full">+ {{ t("projects.new") }}</UiButton>
+          <UiButton as="span" variant="primary" class="max-md:w-full"><i class="fa fa-plus"></i> {{ t("projects.new") }}</UiButton>
         </RouterLink>
       </div>
     </div>
@@ -201,7 +201,7 @@ async function toggleArchive(project: Project): Promise<void> {
                       @click="toggle"
                     >
                       {{ t("projects.actions") }}
-                      <span class="ml-1 inline-block border-t-4 border-r-4 border-l-4 border-transparent border-t-current"></span>
+                      <span class="bs-caret"></span>
                     </UiButton>
                   </template>
 
@@ -213,7 +213,7 @@ async function toggleArchive(project: Project): Promise<void> {
                       <RouterLink
                         :to="{ name: 'invoice-new', query: { project_id: project.id } }"
                       >
-                        + {{ t("projects.addInvoice") }}
+                        <i class="fa fa-plus"></i> {{ t("projects.addInvoice") }}
                       </RouterLink>
                     </UiDropdownItem>
                     <UiDropdownItem>
@@ -221,6 +221,7 @@ async function toggleArchive(project: Project): Promise<void> {
                         :to="{ name: 'project-edit', params: { id: project.id } }"
                         :data-test="`edit-${project.id}`"
                       >
+                        <i class="fa fa-edit"></i>
                         {{ t("projects.edit") }}
                       </RouterLink>
                     </UiDropdownItem>
@@ -231,6 +232,7 @@ async function toggleArchive(project: Project): Promise<void> {
                         :data-test="`archive-${project.id}`"
                         @click="toggleArchive(project)"
                       >
+                        <i class="fa fa-archive"></i>
                         {{ project.workflowState === "archived" ? t("projects.unarchive") : t("projects.archive") }}
                       </button>
                     </UiDropdownItem>

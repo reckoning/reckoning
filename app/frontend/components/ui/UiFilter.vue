@@ -36,7 +36,7 @@ function chosenLabel(): string {
       :data-test="test ? `${test}-reset` : undefined"
       @click="emit('update:modelValue', '')"
     >
-      ×
+      <i class="fa fa-times"></i>
     </button>
 
     <UiDropdown :align="align ?? 'left'">
@@ -50,7 +50,7 @@ function chosenLabel(): string {
         >
           {{ label }}
           <strong v-if="modelValue">{{ chosenLabel() }}</strong>
-          <span class="ml-1 inline-block align-middle border-t-4 border-r-4 border-l-4 border-transparent border-t-current"></span>
+          <span class="bs-caret"></span>
         </button>
       </template>
 

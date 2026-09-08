@@ -167,6 +167,7 @@ async function removeInvoice(): Promise<void> {
             data-test="charge"
             @click="chargeInvoice"
           >
+            <i class="fa fa-envelope"></i>
             {{ t("invoice.charge") }}
           </UiButton>
 
@@ -177,6 +178,7 @@ async function removeInvoice(): Promise<void> {
             data-test="pay"
             @click="payInvoice"
           >
+            <i class="fa fa-check-square-o"></i>
             {{ t("invoice.pay") }}
           </UiButton>
 
@@ -193,46 +195,59 @@ async function removeInvoice(): Promise<void> {
         <div class="md:col-span-2">
           <UiNavTabs :tabs="tabs" :active="tab" @select="tab = $event as 'invoice' | 'timesheet'" />
 
-          <div class="border border-t-0 border-rule-strong p-4">
-            <PdfViewer v-if="tab === 'invoice'" :src="invoicePdf" data-test="invoice-preview" />
-            <PdfViewer v-else :src="timesheetPdf" data-test="timesheet-preview" />
-          </div>
+          <PdfViewer v-if="tab === 'invoice'" :src="invoicePdf" data-test="invoice-preview" />
+          <PdfViewer v-else :src="timesheetPdf" data-test="timesheet-preview" />
         </div>
 
         <div class="md:pt-10">
           <UiPanel :title="t('invoice.downloads')">
             <UiListGroup>
-              <UiListGroupItem interactive>
-                <a :href="invoicePdf" target="_blank" data-test="invoice-pdf">
-                  {{ t("invoice.downloadInvoice") }}
-                </a>
+              <UiListGroupItem :href="invoicePdf" target="_blank" data-test="invoice-pdf">
+                <i class="fa fa-download"></i>
+                {{ t("invoice.downloadInvoice") }}
               </UiListGroupItem>
-              <UiListGroupItem v-if="hasTimesheet" interactive>
-                <a :href="timesheetPdf" target="_blank" data-test="timesheet-pdf">
-                  {{ t("invoice.downloadTimesheet") }}
-                </a>
+              <UiListGroupItem
+                v-if="hasTimesheet"
+                :href="timesheetPdf"
+                target="_blank"
+                data-test="timesheet-pdf"
+              >
+                <i class="fa fa-download"></i>
+                {{ t("invoice.downloadTimesheet") }}
               </UiListGroupItem>
             </UiListGroup>
           </UiPanel>
 
           <UiPanel :title="t('invoice.actions')">
             <UiListGroup>
-              <UiListGroupItem v-if="abilities?.update" interactive>
-                <RouterLink :to="{ name: 'invoice-edit', params: { id } }" data-test="edit">
-                  {{ t("invoice.edit") }}
-                </RouterLink>
+              <UiListGroupItem
+                v-if="abilities?.update"
+                :to="{ name: 'invoice-edit', params: { id } }"
+                data-test="edit"
+              >
+                <i class="fa fa-edit"></i>
+                {{ t("invoice.edit") }}
               </UiListGroupItem>
 
-              <UiListGroupItem v-if="abilities?.sendMail" interactive>
-                <button type="button" :disabled="busy" data-test="send-mail" @click="mailInvoice">
-                  {{ t("invoice.sendMail") }}
-                </button>
+              <UiListGroupItem
+                v-if="abilities?.sendMail"
+                action
+                :disabled="busy"
+                data-test="send-mail"
+                @click="mailInvoice"
+              >
+                <i class="fa fa-paper-plane"></i>
+                {{ t("invoice.sendMail") }}
               </UiListGroupItem>
 
-              <UiListGroupItem v-if="abilities?.destroy" interactive>
-                <button type="button" class="text-danger-text" data-test="delete" @click="removeInvoice">
-                  {{ t("invoice.delete") }}
-                </button>
+              <UiListGroupItem
+                v-if="abilities?.destroy"
+                action
+                data-test="delete"
+                @click="removeInvoice"
+              >
+                <i class="fa fa-trash"></i>
+                {{ t("invoice.delete") }}
               </UiListGroupItem>
             </UiListGroup>
           </UiPanel>

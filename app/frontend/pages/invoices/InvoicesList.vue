@@ -186,7 +186,7 @@ const hasNextPage = computed(() => page.value * PER_PAGE < (summary.value?.count
 
       <div class="max-md:w-full">
         <RouterLink v-if="!limitReached" :to="{ name: 'invoice-new' }" data-test="new-invoice">
-          <UiButton as="span" variant="primary" class="max-md:w-full">+ {{ t("invoices.new") }}</UiButton>
+          <UiButton as="span" variant="primary" class="max-md:w-full"><i class="fa fa-plus"></i> {{ t("invoices.new") }}</UiButton>
         </RouterLink>
         <UiButton
           v-else
@@ -196,7 +196,7 @@ const hasNextPage = computed(() => page.value * PER_PAGE < (summary.value?.count
           :title="t('invoices.limitReached')"
           data-test="new-invoice-disabled"
         >
-          + {{ t("invoices.new") }}
+          <i class="fa fa-plus"></i> {{ t("invoices.new") }}
         </UiButton>
       </div>
     </div>
@@ -351,7 +351,7 @@ const hasNextPage = computed(() => page.value * PER_PAGE < (summary.value?.count
                     @click="toggle"
                   >
                     {{ t("invoices.actions") }}
-                    <span class="ml-1 inline-block border-t-4 border-r-4 border-l-4 border-transparent border-t-current"></span>
+                    <span class="bs-caret"></span>
                   </UiButton>
                 </template>
 
@@ -363,6 +363,7 @@ const hasNextPage = computed(() => page.value * PER_PAGE < (summary.value?.count
                   </UiDropdownItem>
                   <UiDropdownItem v-if="invoice.abilities?.update">
                     <RouterLink :to="{ name: 'invoice-edit', params: { id: invoice.id } }">
+                      <i class="fa fa-edit"></i>
                       {{ t("invoices.edit") }}
                     </RouterLink>
                   </UiDropdownItem>

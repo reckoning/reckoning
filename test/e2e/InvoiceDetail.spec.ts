@@ -36,6 +36,29 @@ test.describe("Invoice detail", () => {
     await expect(page.getByTestId("invoice-pdf")).toBeVisible()
   })
 
+  // Each action is the whole row, and the ones that navigate are real links:
+  // an `href` is what gives the row its pointer, its middle-click and its
+  // "open in a new tab".
+  test("makes every action row the control across its full width", async ({ page }) => {
+    const id = (await appEval(`Invoice.first.id`)) as string
+
+    await page.goto(`/app/invoices/${id}`)
+
+    const edit = page.getByTestId("edit")
+    await expect(edit).toHaveAttribute("href", `/app/invoices/${id}/edit`)
+
+    const box = await edit.boundingBox()
+    if (!box) throw new Error("the edit row has no box")
+
+    // The row's far edge, well past the label, still hits the control.
+    const target = await page.evaluate(
+      ([x, y]) => document.elementFromPoint(x, y)?.getAttribute("data-test"),
+      [box.x + box.width - 10, box.y + box.height / 2],
+    )
+
+    expect(target).toBe("edit")
+  })
+
   // The point of porting the viewer rather than linking out: pdf.js has to
   // work inside the SPA bundle, worker and all.
   test("renders the invoice PDF inline", async ({ page }) => {

@@ -8,6 +8,10 @@
 
     <link rel="shortcut icon" type="image/png" href="<%= asset_url("favicon.png") %>">
 
+    <%# The icon set the server-rendered screens use, from the same kit —
+        the CSP already allows its hosts for the other layout. %>
+    <script src="https://kit.fontawesome.com/80d0ee6c6c.js" crossorigin="anonymous"></script>
+
     <%# The brand face, same as the server-rendered layout. %>
     <%= stylesheet_link_tag "https://fonts.googleapis.com/css?family=Orbitron:400,500,700,900" %>
 

@@ -128,32 +128,38 @@ async function removeOffer(): Promise<void> {
         <div class="md:col-span-2">
           <UiNavTabs :tabs="tabs" active="offer" />
 
-          <div class="border border-t-0 border-rule-strong p-4">
-            <PdfViewer :src="offerPdf" data-test="offer-preview" />
-          </div>
+          <PdfViewer :src="offerPdf" data-test="offer-preview" />
         </div>
 
         <div class="md:pt-10">
           <UiPanel :title="t('offer.downloads')">
             <UiListGroup>
-              <UiListGroupItem interactive>
-                <a :href="offerPdf" target="_blank" data-test="offer-pdf">{{ t("offer.download") }}</a>
+              <UiListGroupItem :href="offerPdf" target="_blank" data-test="offer-pdf">
+                <i class="fa fa-download"></i>
+                {{ t("offer.download") }}
               </UiListGroupItem>
             </UiListGroup>
           </UiPanel>
 
           <UiPanel :title="t('offer.actions')">
             <UiListGroup>
-              <UiListGroupItem v-if="abilities?.update" interactive>
-                <RouterLink :to="{ name: 'offer-edit', params: { id } }" data-test="edit">
-                  {{ t("offer.edit") }}
-                </RouterLink>
+              <UiListGroupItem
+                v-if="abilities?.update"
+                :to="{ name: 'offer-edit', params: { id } }"
+                data-test="edit"
+              >
+                <i class="fa fa-edit"></i>
+                {{ t("offer.edit") }}
               </UiListGroupItem>
 
-              <UiListGroupItem v-if="abilities?.destroy" interactive>
-                <button type="button" class="text-danger-text" data-test="delete" @click="removeOffer">
-                  {{ t("offer.delete") }}
-                </button>
+              <UiListGroupItem
+                v-if="abilities?.destroy"
+                action
+                data-test="delete"
+                @click="removeOffer"
+              >
+                <i class="fa fa-trash"></i>
+                {{ t("offer.delete") }}
               </UiListGroupItem>
             </UiListGroup>
           </UiPanel>

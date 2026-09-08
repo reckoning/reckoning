@@ -30,7 +30,7 @@ defineExpose({close})
 
     <ul
       v-show="open"
-      class="absolute top-full z-50 mt-0.5 min-w-40 list-none rounded-bs border border-ink/15 bg-surface py-1 shadow-[0_6px_12px_rgba(0,0,0,0.175)]"
+      class="bs-dropdown-menu absolute top-full z-50 list-none"
       :class="align === 'right' ? 'right-0' : 'left-0'"
       role="menu"
       @click="close"

@@ -115,21 +115,28 @@
 
   /* `partials/_typography.scss`: the two largest headlines carry the brand
      face, everything below it stays in the body face. */
+  /* Bootstrap's `$headings-font-weight: 500` and the 10px below every
+     headline — measured against the server-rendered screens. */
+  h1,
+  h2,
+  h3 {
+    font-weight: 500;
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+
   h1 {
     font-family: var(--font-brand);
     font-size: var(--text-h1);
-    line-height: 1.1;
   }
 
   h2 {
     font-family: var(--font-brand);
     font-size: var(--text-h2);
-    line-height: 1.1;
   }
 
   h3 {
     font-size: var(--text-h3);
-    line-height: 1.1;
   }
 
   a {
@@ -138,5 +145,300 @@
 
   a:hover {
     color: var(--color-brand-hover-border);
+  }
+
+  /* Bootstrap put `cursor: pointer` on `.btn` and `not-allowed` on a
+     disabled one, and every control it styled was either that or a link.
+     Tailwind's reset leaves buttons at the browser default, so the rule
+     lives here rather than in each component, where the next one would
+     forget it. */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+}
+
+/*
+ * The shapes Bootstrap 3 gives these screens, in the measurements the
+ * server-rendered app actually renders (compared with `getComputedStyle` on
+ * both sides rather than read off the stylesheets). They live here rather than
+ * as utility classes because several of them are shadows and inner radii that
+ * arbitrary Tailwind values did not apply at all.
+ */
+@layer components {
+  .bs-panel {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-rule-strong);
+    border-radius: var(--radius-bs);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+  }
+
+  .bs-panel-heading {
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--color-rule-strong);
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+  }
+
+  .bs-panel-heading-tight {
+    padding: 8px 15px;
+  }
+
+  .bs-list-item {
+    padding: 10px 15px;
+    background-color: var(--color-surface);
+  }
+
+  .bs-list-item:first-child {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+  }
+
+  .bs-list-item:last-child {
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+  }
+
+  .bs-dropdown-menu {
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    text-align: left;
+    background-color: var(--color-surface);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: var(--radius-bs);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  }
+
+  .bs-dropdown-item {
+    display: block;
+    padding: 3px 20px;
+    color: var(--color-ink);
+    white-space: nowrap;
+    transition: all 0.3s;
+  }
+
+  .bs-dropdown-item:hover,
+  .bs-dropdown-item.is-active {
+    background-color: var(--color-surface-muted);
+    box-shadow: inset 4px 0 0 var(--color-brand);
+  }
+
+  /* `navbar-aside`: the fixed sidebar, its brand line and its links. */
+  .bs-nav {
+    background-color: var(--color-nav);
+    border-color: var(--color-nav-border);
+    box-shadow: 0 1px 5px var(--color-nav-shadow);
+  }
+
+  .bs-nav-brand {
+    padding: 15px;
+    font-size: 18px;
+    line-height: 20px;
+  }
+
+  /* `.navbar-nav > li > a`: 15px around, 20px line. The user menu is the
+     exception `partials/_nav.scss` makes — 10px and a 30px line, so the
+     gravatar fits. */
+  .bs-nav-link {
+    display: block;
+    padding: 15px;
+    line-height: 20px;
+    transition: all 0.3s;
+  }
+
+  .bs-nav-user {
+    display: block;
+    padding: 10px 15px;
+    line-height: 30px;
+    transition: all 0.3s;
+  }
+
+  .bs-nav-user:hover {
+    color: var(--color-nav-link-hover);
+  }
+
+  /* Hovering darkens the link to `#333`; the current one is `#555` on the
+     navbar's own fill — Bootstrap's `.navbar-default .navbar-nav > .active`. */
+  .bs-nav-link:hover {
+    color: var(--color-nav-link-hover) !important;
+  }
+
+  .bs-nav-link:hover,
+  .bs-nav-link.is-active {
+    background-color: var(--color-nav-border);
+    /* The marker sits on the inner edge of the aside. */
+    box-shadow: inset -4px 0 0 var(--color-brand);
+  }
+
+  .bs-nav-link.is-active {
+    color: var(--color-field) !important;
+  }
+
+  /* `.form-control`: 34px tall, an inset shadow, and the blue glow on focus.
+     As an arbitrary Tailwind shadow none of it arrived. */
+  .bs-input {
+    display: block;
+    width: 100%;
+    padding: 6px 12px;
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+    color: var(--color-field);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-field-border);
+    border-radius: var(--radius-bs);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  }
+
+  .bs-input:focus {
+    border-color: var(--color-field-focus);
+    outline: none;
+    box-shadow:
+      inset 0 1px 1px rgba(0, 0, 0, 0.075),
+      0 0 8px rgba(102, 175, 233, 0.6);
+  }
+
+  .bs-input:disabled {
+    background-color: var(--color-surface-muted);
+  }
+
+  .bs-input::placeholder {
+    color: var(--color-placeholder);
+  }
+
+  .bs-progress {
+    height: 14px;
+    overflow: hidden;
+    background-color: var(--color-surface-muted);
+    border-radius: var(--radius-bs);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  /* `.modal-content` and `.modal-dialog`. */
+  .bs-modal {
+    background-color: var(--color-surface);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-bs-lg);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  }
+
+  /* noty's notifications, top right. */
+  .bs-toast {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  /* The current day in the week view carries the marker on its lower edge. */
+  .bs-today {
+    box-shadow: inset 0 -4px 0 var(--color-brand);
+  }
+
+  /* `_pdf_preview.scss`: the pages are the document, so they carry a soft
+     shadow and rounded corners rather than a border, and the viewport holds
+     its height while pdf.js is still working. */
+  .bs-pdf-preview {
+    margin-bottom: 15px;
+    padding-top: 15px;
+    min-height: 1000px;
+  }
+
+  .bs-pdf-page {
+    width: 100%;
+    margin-bottom: 20px;
+    overflow: hidden;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0 0 15px;
+  }
+
+  .bs-pdf-page:last-child {
+    margin-bottom: 0;
+  }
+
+  .bs-caret {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top: 4px dashed;
+    border-top: 4px solid;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+  }
+}
+
+/* Verbatim from the server-rendered `partials/_chart.scss`: Highcharts emits
+   these class names itself, so the chart is styled by matching them rather
+   than by composing utilities. */
+.chart {
+  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  height: 400px;
+  overflow-y: hidden;
+}
+
+.chart .chart-inner {
+  min-width: 600px;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.highcharts-tooltip > span {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  box-shadow: #eeeeee 1px 1px 3px;
+  z-index: 9999 !important;
+  min-width: 220px;
+  display: block;
+  padding: 8px;
+}
+
+.highcharts-tooltip-header {
+  margin-bottom: 3px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+}
+
+.highcharts-xaxis-labels span {
+  display: block;
+  z-index: 1 !important;
+  min-width: 30px;
+  text-align: center;
+}
+
+.highcharts-xaxis-labels span.hover {
+  font-weight: bold;
+}
+
+/* The breakpoints `_pdf_preview.scss` steps the preview's height through, so
+   the page does not jump once the first canvas arrives. */
+@media (max-width: 1200px) {
+  .bs-pdf-preview {
+    min-height: 800px;
+  }
+}
+
+@media (max-width: 992px) {
+  .bs-pdf-preview {
+    min-height: 1000px;
+  }
+}
+
+@media (max-width: 768px) {
+  .bs-pdf-preview {
+    min-height: 600px;
+  }
+}
+
+@media (max-width: 480px) {
+  .bs-pdf-preview {
+    min-height: 500px;
   }
 }

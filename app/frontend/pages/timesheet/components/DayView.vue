@@ -50,7 +50,7 @@ defineExpose({refresh})
 
     <div class="col-span-12 md:col-span-3">
       <UiButton variant="primary" block @click="emit('add', date)">
-        + {{ addTimerLabel }}
+        <i class="fa fa-plus"></i> {{ addTimerLabel }}
       </UiButton>
     </div>
   </div>

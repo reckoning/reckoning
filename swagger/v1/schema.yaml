@@ -3243,10 +3243,106 @@ components:
           - 'null'
         openInvoicesCount:
           type: integer
+        provision:
+          type:
+          - number
+          - string
+          - 'null'
+        lastYearProvision:
+          type:
+          - number
+          - string
+          - 'null'
+        overtime:
+          type: object
+          properties:
+            weeklyHours:
+              type:
+              - number
+              - string
+              - 'null'
+            dailyHours:
+              type:
+              - number
+              - string
+              - 'null'
+            customers:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type:
+                    - string
+                    - 'null'
+                  hours:
+                    type:
+                    - number
+                    - string
+                    - 'null'
+                  weeklyHours:
+                    type:
+                    - number
+                    - string
+                    - 'null'
+                additionalProperties: false
+                required:
+                - name
+                - hours
+                - weeklyHours
+          additionalProperties: false
+          required:
+          - weeklyHours
+          - dailyHours
+          - customers
+        chart:
+          type: object
+          properties:
+            labels:
+              type: array
+              items:
+                type: string
+            datasets:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type:
+                    - string
+                    - 'null'
+                  color:
+                    type:
+                    - string
+                    - 'null'
+                  data:
+                    type: array
+                    items:
+                      type:
+                      - number
+                      - string
+                  zone:
+                    type:
+                    - integer
+                    - 'null'
+                    description: Index up to which the series is drawn solid; the
+                      rest is the year that has not happened yet.
+                additionalProperties: false
+                required:
+                - name
+                - color
+                - data
+                - zone
+          additionalProperties: false
+          required:
+          - labels
+          - datasets
       additionalProperties: false
       required:
       - year
       - openInvoicesCount
+      - overtime
+      - chart
       title: Dashboard
     Expense:
       type: object
