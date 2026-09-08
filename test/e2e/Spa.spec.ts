@@ -32,6 +32,30 @@ test.describe("SPA shell", () => {
     await expect(page.getByTestId("submit")).toBeVisible()
   })
 
+  // The bar the server-rendered pages get from Turbo Drive. It waits half a
+  // second first, so the request has to be held up to see it at all.
+  test("draws the loading bar while a request is in flight", async ({ page }) => {
+    await page.goto("/app/login")
+    await page.getByTestId("email").fill("will@star.fleet")
+    await page.getByTestId("password").fill("enterprise")
+    await page.getByTestId("submit").click()
+    await expect(page.getByTestId("dashboard-greeting")).toBeVisible()
+
+    await page.route("**/api/v1/invoices**", async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+      await route.continue()
+    })
+
+    await page.getByTestId("nav-invoices").click()
+
+    await expect(page.getByTestId("loading-bar")).toBeVisible()
+    await expect(page).toHaveURL(/\/app\/invoices$/)
+
+    // And it leaves again once the answer is in.
+    await expect(page.getByTestId("loading-bar")).toHaveCount(0, { timeout: 15_000 })
+    await expect(page.getByTestId("new-invoice")).toBeVisible()
+  })
+
   test("keeps the requested path through the login redirect", async ({ page }) => {
     await page.goto("/app/customers")
 
@@ -125,7 +149,9 @@ test.describe("SPA shell", () => {
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
 
-    await expect(page).toHaveURL(/\/settings$/)
+    // The tabs controller on the server-rendered settings screen appends a
+    // fragment once it takes over, so the assertion has to allow one.
+    await expect(page).toHaveURL(/\/settings(#.*)?$/)
     // The legacy chrome, not the SPA shell.
     await expect(page.locator(".user-email")).toContainText("will@star.fleet")
   })

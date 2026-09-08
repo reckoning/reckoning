@@ -337,6 +337,45 @@
     box-shadow: inset 0 -4px 0 var(--color-brand);
   }
 
+  /* `.label`: inline, so its padding never pushes the line it sits on, and
+     on the baseline of the text beside it. 75% of the size around it —
+     `application.scss` lifts it to 90% inside a list row, which is where
+     most of the states are read. */
+  .bs-label {
+    display: inline;
+    padding: 0.2em 0.6em 0.3em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    color: #ffffff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25em;
+  }
+
+  .bs-list-item .bs-label {
+    font-size: 90%;
+  }
+
+  /* `partials/_loader.scss`: the ring the PDF viewer spins while pdf.js
+     works — three sides in a faint grey, the fourth in the brand colour. */
+  .bs-loader {
+    position: absolute;
+    top: 200px;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    margin: 60px auto;
+    margin-left: -50px;
+    border-radius: 50%;
+    border-top: 11px solid rgba(204, 204, 204, 0.2);
+    border-right: 11px solid rgba(204, 204, 204, 0.2);
+    border-bottom: 11px solid rgba(204, 204, 204, 0.2);
+    border-left: 11px solid var(--color-brand);
+    animation: bs-spin 1.1s infinite linear;
+  }
+
   /* `_pdf_preview.scss`: the pages are the document, so they carry a soft
      shadow and rounded corners rather than a border, and the viewport holds
      its height while pdf.js is still working. */
@@ -440,5 +479,15 @@
 @media (max-width: 480px) {
   .bs-pdf-preview {
     min-height: 500px;
+  }
+}
+
+@keyframes bs-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
   }
 }
