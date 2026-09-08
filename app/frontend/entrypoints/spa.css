@@ -146,6 +146,20 @@
   a:hover {
     color: var(--color-brand-hover-border);
   }
+
+  /* Bootstrap put `cursor: pointer` on `.btn` and `not-allowed` on a
+     disabled one, and every control it styled was either that or a link.
+     Tailwind's reset leaves buttons at the browser default, so the rule
+     lives here rather than in each component, where the next one would
+     forget it. */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
 }
 
 /*
