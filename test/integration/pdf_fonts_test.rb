@@ -26,9 +26,30 @@ class PdfFontsTest < ActionDispatch::IntegrationTest
   # Until this was fixed the body named `Helvetica Neue, Helvetica, Arial` —
   # a wish list that resolved to Helvetica Neue on a developer's Mac and to
   # Liberation Sans in the container, so no two hosts agreed.
+  # Naming the face somewhere in the stylesheet is not enough: it sat on
+  # `#pagination` alone, an element the main document does not even have —
+  # Chrome renders the footer from its own template — so every line of every
+  # invoice was still set in whatever `sans-serif` resolved to.
   it "sets the body in the installed text face" do
-    assert_includes stylesheet, "Noto Sans"
+    assert_match(/body\s*\{[^}]*font-family:\s*"Noto Sans"/m, stylesheet)
     assert_not_includes stylesheet, "Helvetica"
+  end
+
+  # ERB escapes whatever `<%= %>` returns, and a `<style>` block decodes no
+  # entities, so `&quot;Noto Sans&quot;` is not a family name — the whole
+  # declaration is dropped and the document falls back to the generic
+  # sans-serif. That is why every invoice stayed in Helvetica after the face
+  # was installed, and why only `Orbitron`, which needs no quotes, came
+  # through.
+  it "inlines the stylesheet without escaping the quotes around a family" do
+    html = ApplicationController.new.render_to_string(
+      "invoices/pdf", invoices(:january).inline_pdf_options
+    )
+    style = html[/<style[^>]*>(.*?)<\/style>/m, 1]
+
+    assert style, "the layout inlines the stylesheet in a style block"
+    assert_includes style, 'font-family:"Noto Sans"'
+    assert_not_includes style, "&quot;"
   end
 
   it "sets the headlines in the brand face" do

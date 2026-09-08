@@ -7,8 +7,12 @@
         installiert (vendor/fonts). Ein Link erreicht die laufende Kopfzeile
         nicht, weil Chrome sie als eigenes Dokument rendert. %>
 
+    <%# `raw`, because ERB would escape the quotes around a font family and
+        a `<style>` block decodes no entities: `&quot;Noto Sans&quot;` is an
+        invalid declaration, so every document fell back to the generic
+        sans-serif while `Orbitron` — unquoted — came through. %>
     <style type="text/css">
-      <%= Rails.application.assets["pdf.css"].to_s %>
+      <%= raw Rails.application.assets["pdf.css"].to_s %>
     </style>
 
     <script>
