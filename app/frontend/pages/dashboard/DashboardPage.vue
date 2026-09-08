@@ -23,11 +23,14 @@ const year = computed(() => totals.value?.year ?? new Date().getUTCFullYear())
 
 // The three lists the server-rendered dashboard shows in full — it never
 // paged them either.
-const { data: chargedInvoices } = useInvoices({state: "charged", perPage: "all"})
-const { data: paidInvoices } = useInvoices(
+const { data: chargedInvoices, isSuccess: chargedLoaded } = useInvoices({
+  state: "charged",
+  perPage: "all",
+})
+const { data: paidInvoices, isSuccess: paidLoaded } = useInvoices(
   computed(() => ({paid_in_year: year.value, perPage: "all"})),
 )
-const { data: lastYearInvoices } = useInvoices(
+const { data: lastYearInvoices, isSuccess: lastYearLoaded } = useInvoices(
   computed(() => ({paid_in_year: year.value - 1, perPage: "all"})),
 )
 const { data: projects } = useProjects({state: "active"})
@@ -122,11 +125,16 @@ function overdue(invoice: Invoice): boolean {
   return invoice.state === "charged" && !!due && new Date(`${due.slice(0, 10)}T00:00:00Z`) < new Date()
 }
 
+// Only once all three lists have actually answered: a request still in
+// flight, or one that failed, is not an account without invoices.
 const nothingBilled = computed(
   () =>
-    (chargedInvoices.value?.length ?? 0) === 0 &&
-    (paidInvoices.value?.length ?? 0) === 0 &&
-    (lastYearInvoices.value?.length ?? 0) === 0,
+    chargedLoaded.value &&
+    paidLoaded.value &&
+    lastYearLoaded.value &&
+    chargedInvoices.value?.length === 0 &&
+    paidInvoices.value?.length === 0 &&
+    lastYearInvoices.value?.length === 0,
 )
 
 const chart = computed(() => totals.value?.chart)

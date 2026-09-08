@@ -56,6 +56,7 @@ interface Options {
   paid?: Record<string, unknown>[]
   lastYear?: Record<string, unknown>[]
   projects?: Record<string, unknown>[]
+  failInvoices?: boolean
 }
 
 async function mountDashboard(options: Options = {}) {
@@ -70,6 +71,8 @@ async function mountDashboard(options: Options = {}) {
     if (url.includes("/dashboard")) data = {...TOTALS, ...options.totals}
     else if (url.includes("/projects")) data = options.projects ?? []
     else if (url.includes("/invoices")) {
+      if (options.failInvoices) throw new Error("network is down")
+
       const params = config.params ?? {}
       if (params.state === "charged") data = options.charged ?? []
       else if (params.paid_in_year === 2026) data = options.paid ?? []
@@ -169,6 +172,15 @@ describe("DashboardPage", () => {
     const {wrapper} = await mountDashboard()
 
     expect(wrapper.find('[data-test="nothing-billed"]').exists()).toBe(true)
+  })
+
+  // A request that never answered says nothing about the account, so the
+  // empty state waits for all three lists rather than reading their absence
+  // as emptiness.
+  it("stays quiet about an empty account when the lists failed", async () => {
+    const {wrapper} = await mountDashboard({failInvoices: true})
+
+    expect(wrapper.find('[data-test="nothing-billed"]').exists()).toBe(false)
   })
 
   // `with_budget` is `where.not(budget: 0).where(budget_on_dashboard: true)`,
