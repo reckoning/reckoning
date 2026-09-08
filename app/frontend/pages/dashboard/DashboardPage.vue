@@ -55,6 +55,31 @@ function formatMonth(value: string | null | undefined): string {
   return value ? months.value.format(new Date(`${value.slice(0, 10)}T00:00:00Z`)) : ""
 }
 
+// The chart's own labels: `%b` along the axis, `%B` in the tooltip's header,
+// as `date.formats.month_short` and `month` gave Highcharts.
+const shortMonths = computed(
+  () => new Intl.DateTimeFormat(locale.value, {month: "short", timeZone: "UTC"}),
+)
+const longMonths = computed(
+  () => new Intl.DateTimeFormat(locale.value, {month: "long", year: "numeric", timeZone: "UTC"}),
+)
+
+function monthShort(label: string): string {
+  return shortMonths.value.format(new Date(`${label.slice(0, 10)}T00:00:00Z`))
+}
+
+function monthLong(label: string): string {
+  return longMonths.value.format(new Date(`${label.slice(0, 10)}T00:00:00Z`))
+}
+
+// `invoicesChart` formatted the axis as thousands: anything from 1000 up
+// reads as `1.5k €`.
+function axisAmount(value: number): string {
+  if (value < 1000) return money.value.format(value)
+
+  return `${new Intl.NumberFormat(locale.value, {maximumFractionDigits: 1}).format(value / 1000)}k €`
+}
+
 // `all_invoices` is the two sums added up, the way the ERB row did it.
 const allInvoices = computed(
   () => Number(totals.value?.chargedSum ?? 0) + Number(totals.value?.paidSum ?? 0),
@@ -236,6 +261,9 @@ const chart = computed(() => totals.value?.chart)
               :labels="chart.labels ?? []"
               :datasets="chart.datasets ?? []"
               :format-value="(value: number) => money.format(value)"
+              :format-axis="axisAmount"
+              :month-short="monthShort"
+              :month-long="monthLong"
             />
           </template>
         </UiPanel>

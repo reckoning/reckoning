@@ -47,8 +47,33 @@ test.describe("Dashboard", () => {
 
     const lines = page.getByTestId("invoices-chart").locator("path")
 
-    await expect(lines).toHaveCount(4)
+    // Four series, plus a dashed continuation for whichever of them stops at
+    // the month in progress.
+    expect(await lines.count()).toBeGreaterThanOrEqual(4)
     await expect(lines.first()).toHaveAttribute("d", /^M[\d.]+,[\d.]+ L/)
+    await expect(page.getByTestId("current-month")).toBeVisible()
+  })
+
+  // The chart is read by hovering it, the way the Highcharts one was.
+  test("answers the pointer with a crosshair and the month's figures", async ({ page }) => {
+    const chart = page.getByTestId("invoices-chart").locator("svg")
+    await expect(chart).toBeVisible()
+
+    const box = await chart.boundingBox()
+    if (!box) throw new Error("chart has no box")
+
+    await page.mouse.move(box.x + box.width * 0.3, box.y + box.height / 2)
+
+    // Not `toBeVisible`: a vertical line has no width, and Playwright counts
+    // that as invisible.
+    await expect(page.getByTestId("crosshair")).toHaveCount(1)
+
+    const tooltip = page.getByTestId("chart-tooltip")
+    await expect(tooltip).toBeVisible()
+    await expect(tooltip).toContainText("€")
+
+    await page.mouse.move(box.x + box.width / 2, box.y - 80)
+    await expect(tooltip).toHaveCount(0)
   })
 
   test("shows a budget bar for a project that has one", async ({ page }) => {

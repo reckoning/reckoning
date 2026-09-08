@@ -2,50 +2,148 @@ import {describe, it, expect} from "vitest"
 import {mount} from "@vue/test-utils"
 import UiChart from "./UiChart.vue"
 
-const LABELS = ["2026-01-01", "2026-02-01", "2026-03-01"]
+// A year of months, so the current-month band and the dashed continuation
+// have something to sit on.
+const LABELS = Array.from({length: 12}, (_, index) => {
+  const month = String(index + 1).padStart(2, "0")
 
-function mountChart(datasets: {name: string; color: string; data: (number | string)[]}[]) {
+  return `${new Date().getUTCFullYear()}-${month}-01`
+})
+
+interface Series {
+  name: string
+  color: string
+  data: (number | string)[]
+  zone?: number | null
+}
+
+function mountChart(datasets: Series[], labels = LABELS) {
   return mount(UiChart, {
-    props: {labels: LABELS, datasets, formatValue: (value: number) => String(Math.round(value))},
+    props: {
+      labels,
+      datasets,
+      formatValue: (value: number) => `${Math.round(value)} €`,
+      formatAxis: (value: number) => (value < 1000 ? `${value} €` : `${value / 1000}k €`),
+      monthShort: (label: string) => label.slice(5, 7),
+      monthLong: (label: string) => `Monat ${label.slice(5, 7)}`,
+    },
   })
 }
 
+const RUNNING: Series = {
+  name: "Summe",
+  color: "#428bca",
+  data: Array.from({length: 12}, (_, index) => (index + 1) * 100),
+  zone: 3,
+}
+
 describe("UiChart", () => {
+  // No legend: Highcharts had it switched off, and the series are named in
+  // the tooltip instead.
   it("draws one line per series, in the colour it was given", () => {
-    const wrapper = mountChart([
-      {name: "2026", color: "#428bca", data: [100, 200, 300]},
-      {name: "2025", color: "#dcdcdc", data: [50, 60, 70]},
+    const wrapper = mountChart([RUNNING, {name: "Monate", color: "#dcdcdc", data: [50, 60, 70]}])
+
+    expect(wrapper.findAll('path[stroke="#428bca"]').length).toBeGreaterThan(0)
+    expect(wrapper.findAll('path[stroke="#dcdcdc"]').length).toBeGreaterThan(0)
+    expect(wrapper.text()).not.toContain("Summe")
+  })
+
+  // Past `zone` the year has not happened yet, which the old chart drew as a
+  // dashed continuation.
+  it("dashes the part of the year that has not happened", () => {
+    const wrapper = mountChart([RUNNING])
+
+    const forecast = wrapper.get('[data-test="forecast-Summe"]')
+
+    expect(forecast.attributes("stroke-dasharray")).toBe("4 3")
+    // It starts where the solid part ends.
+    expect(forecast.attributes("d")?.startsWith("M")).toBe(true)
+  })
+
+  it("leaves a finished year solid", () => {
+    const wrapper = mountChart([{...RUNNING, zone: 11}])
+
+    expect(wrapper.find('[data-test="forecast-Summe"]').exists()).toBe(false)
+  })
+
+  // The band Highcharts drew over the month in progress.
+  it("marks the month in progress", () => {
+    const wrapper = mountChart([RUNNING])
+
+    expect(wrapper.find('[data-test="current-month"]').exists()).toBe(true)
+  })
+
+  it("marks nothing when every month is in the past", () => {
+    const wrapper = mountChart([{name: "Summe", color: "#428bca", data: [1, 2]}], [
+      "2020-01-01",
+      "2020-02-01",
     ])
 
-    const paths = wrapper.findAll("path")
-
-    expect(paths).toHaveLength(2)
-    expect(paths[0].attributes("stroke")).toBe("#428bca")
-    expect(wrapper.text()).toContain("2026")
+    expect(wrapper.find('[data-test="current-month"]').exists()).toBe(false)
   })
 
-  // The current year's series stops at the month it has reached; the line has
-  // to end there rather than fall to zero.
-  it("ends a short series where its data ends", () => {
-    const wrapper = mountChart([{name: "2026", color: "#428bca", data: [100, 200]}])
+  // The chart is read by hovering it: a crosshair, and every series' value at
+  // that month in one box.
+  it("shows a crosshair and every series at the month under the pointer", async () => {
+    const wrapper = mountChart([RUNNING, {name: "Monate", color: "#dcdcdc", data: [50, 60, 70]}])
 
-    const commands = wrapper.get("path").attributes("d")?.split(" ") ?? []
+    expect(wrapper.find('[data-test="chart-tooltip"]').exists()).toBe(false)
 
-    expect(commands).toHaveLength(2)
+    const svg = wrapper.get("svg")
+    svg.element.getBoundingClientRect = () => ({width: 640, left: 0, height: 240, top: 0}) as DOMRect
+    await svg.trigger("mousemove", {clientX: 58})
+
+    expect(wrapper.find('[data-test="crosshair"]').exists()).toBe(true)
+
+    const tooltip = wrapper.get('[data-test="chart-tooltip"]')
+
+    expect(tooltip.text()).toContain("Monat 01")
+    expect(tooltip.text()).toContain("Summe")
+    expect(tooltip.text()).toContain("100 €")
+    expect(tooltip.text()).toContain("50 €")
   })
 
-  // Decimals cross the wire as strings.
-  it("reads values that arrive as strings", () => {
-    const wrapper = mountChart([{name: "2026", color: "#428bca", data: ["100.0", "0.0", "50.0"]}])
+  // A series that stops early has no value at a later month, so it stays out
+  // of the box rather than reporting a zero it does not have.
+  it("leaves a series out of the box where it has no value", async () => {
+    const wrapper = mountChart([RUNNING, {name: "Monate", color: "#dcdcdc", data: [50, 60, 70]}])
 
-    expect(wrapper.get("path").attributes("d")).not.toContain("NaN")
+    const svg = wrapper.get("svg")
+    svg.element.getBoundingClientRect = () => ({width: 640, left: 0, height: 240, top: 0}) as DOMRect
+    await svg.trigger("mousemove", {clientX: 400})
+
+    const tooltip = wrapper.get('[data-test="chart-tooltip"]')
+
+    expect(tooltip.text()).toContain("Summe")
+    expect(tooltip.text()).not.toContain("Monate")
   })
 
-  // An empty account still has axes rather than a division by zero.
-  it("draws an empty chart without falling over", () => {
-    const wrapper = mountChart([{name: "2026", color: "#428bca", data: [0, 0, 0]}])
+  it("hides the box again when the pointer leaves", async () => {
+    const wrapper = mountChart([RUNNING])
+    const svg = wrapper.get("svg")
+    svg.element.getBoundingClientRect = () => ({width: 640, left: 0, height: 240, top: 0}) as DOMRect
 
-    expect(wrapper.get("path").attributes("d")).not.toContain("NaN")
-    expect(wrapper.findAll("line").length).toBeGreaterThan(0)
+    await svg.trigger("mousemove", {clientX: 100})
+    expect(wrapper.find('[data-test="chart-tooltip"]').exists()).toBe(true)
+
+    await svg.trigger("mouseleave")
+    expect(wrapper.find('[data-test="chart-tooltip"]').exists()).toBe(false)
+  })
+
+  // The axis reads in thousands, the way `invoicesChart` formatted it.
+  it("prints the axis through the formatter it was given", () => {
+    const wrapper = mountChart([{name: "Summe", color: "#428bca", data: [0, 4000]}])
+
+    expect(wrapper.text()).toContain("4k €")
+  })
+
+  // Decimals cross the wire as strings, and an empty account must not divide
+  // by zero.
+  it("reads string values and survives an empty account", () => {
+    const strings = mountChart([{name: "Summe", color: "#428bca", data: ["100.0", "0.0"]}])
+    expect(strings.get("path").attributes("d")).not.toContain("NaN")
+
+    const empty = mountChart([{name: "Summe", color: "#428bca", data: [0, 0]}])
+    expect(empty.get("path").attributes("d")).not.toContain("NaN")
   })
 })
