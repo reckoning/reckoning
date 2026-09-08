@@ -114,45 +114,6 @@ tr {
   page-break-inside: avoid;
 }
 
-#pagination {
-  font-size: 12px;
-  font-family: "Noto Sans", sans-serif;
-  text-align: right;
-}
-
-#pdf-footer {
-  border-top: 1px solid #cacaca;
-  bottom: 0;
-  width: 100%;
-  padding-top: 5px;
-
-  address,
-  .contact-information,
-  .bank-information {
-    display: inline-block;
-    font-size: 9pt;
-    line-height: 1.5em;
-
-    p {
-      font-size: 9pt;
-      line-height: 1.5em;
-    }
-  }
-
-  address {
-    width: 25%;
-  }
-
-  .contact-information {
-    width: 38%;
-    margin-top: 1.5em;
-  }
-
-  .bank-information {
-    width: 34%;
-  }
-}
-
 .headline {
   margin: 40px 0 20px 0;
   font-size: 11pt;
