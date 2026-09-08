@@ -61,7 +61,7 @@ const shortMonths = computed(
   () => new Intl.DateTimeFormat(locale.value, {month: "short", timeZone: "UTC"}),
 )
 const longMonths = computed(
-  () => new Intl.DateTimeFormat(locale.value, {month: "long", year: "numeric", timeZone: "UTC"}),
+  () => new Intl.DateTimeFormat(locale.value, {month: "long", timeZone: "UTC"}),
 )
 
 function monthShort(label: string): string {
@@ -72,12 +72,13 @@ function monthLong(label: string): string {
   return longMonths.value.format(new Date(`${label.slice(0, 10)}T00:00:00Z`))
 }
 
-// `invoicesChart` formatted the axis as thousands: anything from 1000 up
-// reads as `1.5k €`.
+// `invoicesChart`'s own formatter: whole euros below a thousand, thousands
+// above it — `0 €`, `500 €`, `1.5k €`, `8k €`. Deliberately not the currency
+// formatter, which would put two decimals on every line of the axis.
 function axisAmount(value: number): string {
-  if (value < 1000) return money.value.format(value)
+  if (value < 1000) return `${value} €`
 
-  return `${new Intl.NumberFormat(locale.value, {maximumFractionDigits: 1}).format(value / 1000)}k €`
+  return `${value / 1000}k €`
 }
 
 // `all_invoices` is the two sums added up, the way the ERB row did it.

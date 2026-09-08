@@ -474,6 +474,9 @@ export default {
     disable: "Deaktivieren",
     failed: "Der Token wurde nicht akzeptiert.",
   },
+  chart: {
+    noData: "Keine Daten vorhanden.",
+  },
   dashboard: {
     title: "Dashboard",
     greeting: "Angemeldet als {email}",

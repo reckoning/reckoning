@@ -8,6 +8,14 @@ import DashboardPage from "./DashboardPage.vue"
 import {AXIOS_INSTANCE} from "@/services/axiosClient"
 import {i18n} from "@/plugins/i18n"
 
+// The chart is stubbed below, but importing it would still pull in the
+// vendored Highcharts bundle, whose UMD wrapper exports itself instead of
+// registering a global under Vitest's transform. Its options are covered in
+// `lib/invoicesChart.spec.ts`.
+vi.mock("@/lib/highcharts", () => ({
+  Highcharts: {Chart: class {destroy() {}}, setOptions() {}},
+}))
+
 const TOTALS = {
   year: 2026,
   uninvoicedAmount: "1200.0",
@@ -78,7 +86,9 @@ async function mountDashboard(options: Options = {}) {
         i18n,
         createPinia(),
       ],
-      stubs: {RouterLink: RouterLinkStub},
+      // Highcharts measures real SVG, which happy-dom does not implement;
+      // the options it is handed are covered in `lib/invoicesChart.spec.ts`.
+      stubs: {RouterLink: RouterLinkStub, UiChart: true},
     },
   })
 

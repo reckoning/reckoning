@@ -37,43 +37,48 @@ test.describe("Dashboard", () => {
     await expect(page.getByTestId("paid-invoices")).toContainText("00002")
   })
 
-  // The chart the server-rendered dashboard drew with nvd3, as plain SVG: four
-  // series — a running total and the months, for this year and the last.
-  //
-  // Not `toBeVisible`: last year's series is a flat line at zero, and an
-  // element without height counts as invisible.
+  // The chart is the same Highcharts build and the same options the
+  // server-rendered dashboard uses: four series — a running total and the
+  // months, for this year and the last — with the month in progress banded.
   test("draws the invoice chart", async ({ page }) => {
-    await expect(page.getByTestId("invoices-chart").locator("svg")).toBeVisible()
+    const chart = page.getByTestId("invoices-chart")
 
-    const lines = page.getByTestId("invoices-chart").locator("path")
+    await expect(chart.locator("svg")).toBeVisible()
+    expect(await chart.locator(".highcharts-series path").count()).toBeGreaterThanOrEqual(4)
+    await expect(chart.locator(".highcharts-legend")).toHaveCount(0)
+    await expect(chart).toContainText("€")
 
-    // Four series, plus a dashed continuation for whichever of them stops at
-    // the month in progress.
-    expect(await lines.count()).toBeGreaterThanOrEqual(4)
-    await expect(lines.first()).toHaveAttribute("d", /^M[\d.]+,[\d.]+ L/)
-    await expect(page.getByTestId("current-month")).toBeVisible()
+    // This build hands out almost no class names, so the band over the month
+    // in progress is found by the colour it is drawn in.
+    await expect(chart.locator('path[fill="rgba(155, 200, 255, 0.2)"]')).toHaveCount(1)
   })
 
-  // The chart is read by hovering it, the way the Highcharts one was.
-  test("answers the pointer with a crosshair and the month's figures", async ({ page }) => {
+  // The chart is read by hovering it: one tooltip for every series at the
+  // month under the pointer, which Highcharts marks with a band.
+  test("answers the pointer with the month's figures", async ({ page }) => {
     const chart = page.getByTestId("invoices-chart").locator("svg")
     await expect(chart).toBeVisible()
 
     const box = await chart.boundingBox()
     if (!box) throw new Error("chart has no box")
 
-    await page.mouse.move(box.x + box.width * 0.3, box.y + box.height / 2)
+    // Two moves: Highcharts starts tracking on the first event over the
+    // container, and reads the position from the ones after it.
+    await page.mouse.move(box.x + box.width * 0.1, box.y + box.height / 2)
+    await page.mouse.move(box.x + box.width * 0.3, box.y + box.height / 2, { steps: 10 })
 
-    // Not `toBeVisible`: a vertical line has no width, and Playwright counts
-    // that as invisible.
-    await expect(page.getByTestId("crosshair")).toHaveCount(1)
-
-    const tooltip = page.getByTestId("chart-tooltip")
+    // The tooltip's own element has no size — the box belongs to the span
+    // inside it, which is what `.highcharts-tooltip > span` styles.
+    const tooltip = page.locator(".highcharts-tooltip > span")
     await expect(tooltip).toBeVisible()
     await expect(tooltip).toContainText("€")
+    await expect(tooltip.locator(".highcharts-tooltip-header")).toBeVisible()
 
-    await page.mouse.move(box.x + box.width / 2, box.y - 80)
-    await expect(tooltip).toHaveCount(0)
+    // The crosshair is a line as wide as the month, so it reads as a band
+    // across the whole category rather than a hairline.
+    const crosshair = page.locator('path[stroke="rgba(200, 200, 200, 0.2)"]')
+    await expect(crosshair).toHaveCount(1)
+    expect(Number(await crosshair.getAttribute("stroke-width"))).toBeGreaterThan(20)
   })
 
   test("shows a budget bar for a project that has one", async ({ page }) => {

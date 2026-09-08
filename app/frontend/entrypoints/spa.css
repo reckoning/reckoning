@@ -335,3 +335,50 @@
     border-left: 4px solid transparent;
   }
 }
+
+/* Verbatim from the server-rendered `partials/_chart.scss`: Highcharts emits
+   these class names itself, so the chart is styled by matching them rather
+   than by composing utilities. */
+.chart {
+  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  height: 400px;
+  overflow-y: hidden;
+}
+
+.chart .chart-inner {
+  min-width: 600px;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.highcharts-tooltip > span {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  box-shadow: #eeeeee 1px 1px 3px;
+  z-index: 9999 !important;
+  min-width: 220px;
+  display: block;
+  padding: 8px;
+}
+
+.highcharts-tooltip-header {
+  margin-bottom: 3px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+}
+
+.highcharts-xaxis-labels span {
+  display: block;
+  z-index: 1 !important;
+  min-width: 30px;
+  text-align: center;
+}
+
+.highcharts-xaxis-labels span.hover {
+  font-weight: bold;
+}
+

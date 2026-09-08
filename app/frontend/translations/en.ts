@@ -473,6 +473,9 @@ export default {
     disable: "Disable",
     failed: "That token was not accepted.",
   },
+  chart: {
+    noData: "No data available.",
+  },
   dashboard: {
     title: "Dashboard",
     greeting: "Signed in as {email}",
