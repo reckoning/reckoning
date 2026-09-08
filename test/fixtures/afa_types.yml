@@ -9,3 +9,9 @@ two:
   value: 1
   valid_from: 2022-09-18
   valid_until: 2022-09-18
+
+# Written off over three years, so a 1200 expense deducts 400 a year.
+three_years:
+  value: 3
+  valid_from: 2022-09-18
+  valid_until: 2032-09-18

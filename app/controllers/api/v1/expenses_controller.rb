@@ -16,9 +16,25 @@ module Api
 
         scope = current_account.expenses
           .filter_result(filter_params)
+          .with_attached_receipt
           .order(date: :desc, created_at: :desc)
 
         @expenses = paginate(scope)
+      end
+
+      # The list prints what the filtered set adds up to, which paging cannot
+      # answer: page two knows nothing about page one. Same filters, so the
+      # numbers belong to the set the list is showing.
+      def summary
+        authorize! :read, :expenses
+
+        scope = current_account.expenses.filter_result(filter_params)
+        year = (filter_params[:year].presence || Time.zone.now.year).to_i
+
+        @count = scope.count
+        @value = deductible_sum(scope, year)
+        @vat = normalized(scope).sum(&:vat_value)
+        @years = filter_years
       end
 
       def show
@@ -87,6 +103,45 @@ module Api
         destroyed = expenses.count { |expense| expense.destroy }
 
         render json: {count: destroyed, message: I18n.t(:"expenses.bulk.destroyed", count: destroyed)}
+      end
+
+      # An expense on an interval stands for one entry per period it covers,
+      # so the sums are taken over those rather than over the records. Health
+      # and social insurance sit outside the total unless that is what you
+      # asked to see — they are not business expenses, and the panel that
+      # reports them counts them separately.
+      private def normalized(scope, year = filter_params[:year].presence)
+        return ::Expense.normalized(scope.to_a, year: year) if filter_params[:type] == "insurances"
+
+        ::Expense.normalized(scope.without_insurances.to_a, year: year)
+      end
+
+      # An AfA expense deducts one year's write-off rather than its value, and
+      # that share does not repeat per period — so it is counted once from the
+      # records instead of from the normalized entries.
+      private def deductible_sum(scope, year)
+        write_offs = scope.filter_type(:afa).sum { |expense| expense.afa_value(year) }
+
+        normalized(scope).sum { |expense|
+          next 0 if expense.expense_type == "afa"
+
+          expense.usable_value(year)
+        } + write_offs
+      end
+
+      # The year dropdown offers a run of years, newest first, the way the
+      # server-rendered filter did. It reads the first year off the expenses
+      # themselves, where the helper behind the old screen read it off the
+      # first *invoice* — an account with expenses and no invoices could not
+      # reach the year its expenses were in.
+      private def filter_years
+        current = (Time.zone.now.month == 12) ? 1.year.from_now.year : Time.zone.now.year
+        earliest = [
+          current_account.expenses.minimum(:date)&.year,
+          current_account.expenses.minimum(:started_at)&.year
+        ].compact.min
+
+        ((earliest || 1.year.ago.year)..current).to_a.reverse
       end
 
       # Expenses are behind an account feature flag, same as the web UI.

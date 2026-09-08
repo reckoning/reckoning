@@ -88,6 +88,34 @@ module Api
           end
         end
 
+        # The row prints what the expense actually deducts — not its value —
+        # and whether its receipt is there.
+        it "reports the deductible value and the receipt state" do
+          assert_api_response :get, 200 do
+            row = parsed_body.find { |item| item["id"] == expense.id }
+
+            assert_equal expense.usable_value.to_f, row["usableValue"].to_f
+            assert_equal false, row["hasReceipt"]
+            assert_equal true, row["needsReceipt"]
+          end
+        end
+
+        # A business expense has no receipt to file, so the row must not ask
+        # for one.
+        it "asks for no receipt on a business expense" do
+          business = account.expenses.create!(
+            expense_type: "home_office", value: 100, description: "Desk",
+            seller: "Daystrom Institute", date: Date.new(Time.zone.now.year, 3, 1),
+            vat_percent: 0, private_use_percent: 0, interval: "once"
+          )
+
+          assert_api_response :get, 200 do
+            row = parsed_body.find { |item| item["id"] == business.id }
+
+            assert_equal false, row["needsReceipt"]
+          end
+        end
+
         it "creates an expense" do
           assert_api_response :post, 201, body: {
             expense_type: "other", description: "Tricorder", seller: "Starfleet Supply",
