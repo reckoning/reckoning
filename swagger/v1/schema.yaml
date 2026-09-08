@@ -732,6 +732,64 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/StandardError"
+  "/expenses/summary":
+    get:
+      summary: What the filtered expenses add up to
+      tags:
+      - Expenses
+      operationId: expenseSummary
+      parameters:
+      - name: year
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: quarter
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 4
+      - name: month
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 12
+      - name: type
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: query
+        in: query
+        required: false
+        description: Free-text search over the description.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ExpenseSummary"
+        '403':
+          description: expenses not enabled for this account
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '400':
+          "$ref": "#/components/responses/SchemaValidationError"
   "/expenses/{id}":
     parameters:
     - name: id
@@ -3369,6 +3427,10 @@ components:
           type:
           - string
           - 'null'
+        usableValue:
+          type:
+          - string
+          - 'null'
         vatPercent:
           type:
           - integer
@@ -3401,6 +3463,10 @@ components:
           - string
           - 'null'
           format: uuid
+        hasReceipt:
+          type: boolean
+        needsReceipt:
+          type: boolean
         createdAt:
           type: string
           format: date-time
@@ -3411,6 +3477,8 @@ components:
       required:
       - id
       - expenseType
+      - hasReceipt
+      - needsReceipt
       - createdAt
       - updatedAt
       title: Expense
@@ -3662,6 +3730,26 @@ components:
           format: date
       additionalProperties: false
       title: ExpenseInput
+    ExpenseSummary:
+      type: object
+      properties:
+        count:
+          type: integer
+        value:
+          type: string
+        vat:
+          type: string
+        years:
+          type: array
+          items:
+            type: integer
+      additionalProperties: false
+      required:
+      - count
+      - value
+      - vat
+      - years
+      title: ExpenseSummary
     Expenses:
       type: array
       items:

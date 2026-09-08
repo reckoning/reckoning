@@ -78,6 +78,7 @@ v1_api_routes = lambda do
 
   resources :expenses, only: %i[index show create update destroy] do
     collection do
+      get :summary
       post :bulk_update
       post :bulk_destroy
     end
