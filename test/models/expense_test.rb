@@ -53,6 +53,24 @@ class ExpenseTest < ActiveSupport::TestCase
     end
   end
 
+  # `CSV.generate` takes keywords: the hash was passed positionally, so it
+  # became the string to write into and raised a TypeError on Ruby 3.4 —
+  # which is a 500 on the export, not a broken column.
+  describe "the csv export" do
+    let(:account) { accounts :enterprise }
+
+    it "writes a header and a row for every expense" do
+      csv = account.expenses.to_csv
+
+      assert_includes csv.lines.first, "description"
+      assert_equal account.expenses.count + 1, csv.lines.size
+    end
+
+    it "takes the options csv takes" do
+      assert_includes account.expenses.to_csv(col_sep: ";").lines.first, "description;"
+    end
+  end
+
   describe "an afa expense" do
     let(:account) { accounts :enterprise }
 

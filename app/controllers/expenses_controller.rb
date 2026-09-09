@@ -6,6 +6,11 @@ class ExpensesController < ApplicationController
 
   before_action :set_active_nav
   before_action :store_current_params, only: [:index]
+  # The list belongs to the SPA now, so it is the SPA that knows which
+  # filters are on, and it hands them to the form in its url. They are
+  # remembered under the list's own key, which is where `create`, `update`
+  # and the CSV import look when they send you back to it.
+  before_action :store_list_filters, only: %i[new edit]
 
   def index
     authorize! :read, :expenses
@@ -14,7 +19,9 @@ class ExpensesController < ApplicationController
 
     respond_to do |format|
       format.csv do
-        send_data expenses.to_csv
+        # Named and typed like the pdf below it: without either, the download
+        # arrives as an unnamed octet-stream.
+        send_data expenses.to_csv, type: "text/csv", filename: "expenses.csv"
       end
       format.pdf do
         expense_pdf = ExpensePdf.new(current_account, expenses, filter_params)
@@ -133,6 +140,11 @@ class ExpensesController < ApplicationController
     params.permit(:year, :type, :quarter, :month, :query)
   end
   helper_method :filter_params
+
+  # Same key `store_current_params` would build for the list itself.
+  private def store_list_filters
+    session[:"#{params[:controller]}_index"] = filter_params.to_h.compact_blank
+  end
 
   private def sort_column
     Expense.column_names.include?(params[:sort]) ? params[:sort] : "expenses.date"

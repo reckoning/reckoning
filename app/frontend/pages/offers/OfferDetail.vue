@@ -99,7 +99,7 @@ async function removeOffer(): Promise<void> {
       <div class="flex flex-wrap items-start gap-4">
         <h1 class="grow" data-test="offer-title">
           {{ t("offer.title", { ref: offer.refNumber ?? offer.ref }) }}
-          <small class="ml-1 text-[65%]">
+          <small class="ml-1">
             <UiLabel :variant="offer.state === 'created' ? 'default' : 'primary'" data-test="state">
               {{ t(`offers.states.${offer.state}`) }}
             </UiLabel>

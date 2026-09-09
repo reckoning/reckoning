@@ -38,7 +38,15 @@ const LINKS = [
   { name: "projects", label: "nav.projects", test: "nav-projects" },
   { name: "customers", label: "nav.customers", test: "nav-customers" },
   { name: "timesheet", label: "nav.timesheet", test: "nav-timesheet" },
+  { name: "expenses", label: "nav.expenses", test: "nav-expenses", feature: "expenses" },
 ] as const
+
+// Expenses are an account feature, and `_links.html.erb` only prints the
+// link where the ability allows it. Until the account has answered, the
+// entry stays out rather than appearing and vanishing again.
+const links = computed(() =>
+  LINKS.filter((link) => !("feature" in link) || account.value?.featureExpenses === true),
+)
 
 const trial = computed(() => account.value?.trial)
 </script>
@@ -132,7 +140,7 @@ const trial = computed(() => account.value?.trial)
         </UiDropdown>
 
         <ul class="list-none">
-          <li v-for="link in LINKS" :key="link.name">
+          <li v-for="link in links" :key="link.name">
             <RouterLink
               :to="{ name: link.name }"
               class="bs-nav-link text-nav-link"

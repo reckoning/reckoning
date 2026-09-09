@@ -63,8 +63,10 @@ class ExpenseImportsControllerTest < ActionDispatch::IntegrationTest
       assert_equal I18n.t(:"resources.messages.import.success", resource: I18n.t(:"resources.expense")), flash[:success]
     end
 
+    # The list is the SPA's now, so the filters reach the import through the
+    # url it was opened with rather than through a visit to the old list.
     it "keeps the active list filter after importing" do
-      get "/expenses", params: {year: "2025", type: "licenses"}
+      get "/expense_imports/new", params: {year: "2025", type: "licenses"}
 
       post "/expense_imports", params: {
         expense_import: {

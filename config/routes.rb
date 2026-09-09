@@ -175,12 +175,23 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :expenses, except: [:show] do
+  # The SPA owns the list. What is left of the server-rendered screen is the
+  # form, the bulk actions behind it, and the two exports — which are the
+  # same path in another format, so the forward below has to let them past.
+  resources :expenses, except: %i[show index] do
     collection do
       post :bulk_update
       post :bulk_destroy
     end
   end
+
+  get "expenses", to: "expenses#index", constraints: ->(request) { request.format.csv? || request.format.pdf? }
+  # Unnamed: `expenses_path` already comes from the create route above, and
+  # every caller of it wants this. The query travels along, so the form's
+  # redirect after a save lands on the same filtered list it started from.
+  get "expenses", to: redirect { |_params, request|
+    ["/app/expenses", request.query_string.presence].compact.join("?")
+  }
   resources :expense_imports, only: %i[new create] do
     post :preview, on: :collection
   end

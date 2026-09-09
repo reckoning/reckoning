@@ -139,6 +139,19 @@
     font-size: var(--text-h3);
   }
 
+  /* `h1 small`: the subline under a headline — the sums under a list's
+     title, a state beside it. Inline and at a line-height of 1, so each of
+     its lines sits in the headline's own line box; as a block it would
+     bunch up at its own smaller line-height. */
+  h1 small,
+  h2 small,
+  h3 small {
+    font-size: 65%;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--color-muted);
+  }
+
   a {
     color: var(--color-brand);
   }
@@ -397,6 +410,39 @@
     margin-bottom: 0;
   }
 
+  /* `.btn-group`: buttons welded into one outline, which is how the
+     actions on every screen were printed. Below the aside's breakpoint they
+     stack to full width, the way `btn-group-responsive` had them. */
+  .bs-btn-group {
+    display: inline-flex;
+    vertical-align: middle;
+  }
+
+  .bs-btn-group > * {
+    position: relative;
+  }
+
+  .bs-btn-group > * + * {
+    margin-left: -1px;
+  }
+
+  .bs-btn-group > *:not(:first-child) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .bs-btn-group > *:not(:last-child) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  /* The button under the pointer draws its whole outline instead of having
+     the next one's border sit on top of it. */
+  .bs-btn-group > *:hover,
+  .bs-btn-group > *:focus {
+    z-index: 2;
+  }
+
   .bs-caret {
     display: inline-block;
     width: 0;
@@ -489,5 +535,24 @@
 
   100% {
     transform: rotate(360deg);
+  }
+}
+
+/* `btn-group-responsive`: below the aside's breakpoint the actions stack to
+   full width instead of sitting in a row. */
+@media (max-width: 992px) {
+  .bs-btn-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .bs-btn-group > * + * {
+    margin-top: 5px;
+    margin-left: 0;
+  }
+
+  .bs-btn-group > * {
+    border-radius: var(--radius-bs);
   }
 }

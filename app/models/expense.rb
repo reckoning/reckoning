@@ -36,8 +36,11 @@ class Expense < ApplicationRecord
     ]
   end
 
-  def self.to_csv(options = {})
-    CSV.generate(options) do |csv|
+  # `CSV.generate` takes its options as keywords; handing it the hash
+  # positionally makes it the string to write into, which has raised a
+  # TypeError — and answered the export with a 500 — since Ruby 3.4.
+  def self.to_csv(**options)
+    CSV.generate(**options) do |csv|
       csv << column_names
       all.find_each do |expense|
         csv << expense.attributes.values_at(*column_names)

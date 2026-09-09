@@ -173,7 +173,7 @@ const hasNextPage = computed(() => page.value * PER_PAGE < (summary.value?.count
       <h1 class="grow">
         {{ t("invoices.title") }}
         <br />
-        <small class="block text-[65%] text-muted" data-test="summary">
+        <small data-test="summary">
           <span data-test="summary-value">
             {{ t("invoices.sum", { sum: money.format(Number(summary?.value ?? 0)) }) }}
           </span>
