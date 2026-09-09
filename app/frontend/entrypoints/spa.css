@@ -443,6 +443,56 @@
     z-index: 2;
   }
 
+  /* `partials/_nav_tabs.scss`: the settings screens list their sections
+     down the side rather than across the top. The one being edited is the
+     one on white, and its icon darkens with it. */
+  .bs-nav-tabs-vertical {
+    padding: 15px 0 20px;
+  }
+
+  .bs-nav-tabs-vertical a {
+    display: block;
+    padding: 8px 15px;
+    margin: 5px 0;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    transition: box-shadow 0.3s, color 0.3s;
+  }
+
+  .bs-nav-tabs-vertical a i {
+    color: #808080;
+    transition: color 0.3s;
+  }
+
+  .bs-nav-tabs-vertical a:hover i {
+    color: var(--color-ink);
+  }
+
+  .bs-nav-tabs-vertical a.is-active {
+    color: var(--color-ink);
+    background-color: var(--color-surface);
+    border-color: #eeeeee;
+    font-weight: bold;
+  }
+
+  .bs-nav-tabs-vertical a.is-active i {
+    color: var(--color-ink);
+  }
+
+  /* `fieldset legend`: the section's own heading above its fields. */
+  .bs-legend {
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin-bottom: 20px;
+    font-size: 21px;
+    line-height: inherit;
+    color: var(--color-ink);
+    border-bottom: 1px solid var(--color-rule);
+  }
+
   .bs-caret {
     display: inline-block;
     width: 0;
