@@ -265,6 +265,11 @@ export default {
   taskModal: {
     add: "Add",
   },
+  timersCalendar: {
+    weekDays: "Working days",
+    today: "Today",
+    addTimer: "Track time",
+  },
   timerModal: {
     close: "Close",
     invoiced: "This time is on an invoice already and cannot be changed.",
@@ -333,11 +338,6 @@ export default {
       offers: "Offers",
       invoices: "Invoices",
       tasks: "Tasks",
-    },
-    timers: {
-      weekDays: "Working days",
-      today: "Today",
-      addTimer: "Track time",
     },
   },
   projects: {

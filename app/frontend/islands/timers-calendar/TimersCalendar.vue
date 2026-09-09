@@ -12,48 +12,32 @@ import type {Task, Timer} from "../../lib/timers/types"
 import UiAlert from "../../components/ui/UiAlert.vue"
 import UiButton from "../../components/ui/UiButton.vue"
 
-interface Labels {
-  weekDays: string
-  today: string
-  addTimer: string
-  dayShort: string[]
-}
-
-const props = defineProps<{
-  projectId: string
-  labels?: Labels
-  monthLabels?: string[]
-}>()
+const props = defineProps<{projectId: string}>()
 
 const emit = defineEmits<{changed: []}>()
 
-const {t} = useI18n()
+const {t, locale} = useI18n()
 
-const labels = computed<Labels>(() => ({
-  weekDays: "weekdays",
-  today: "Today",
-  addTimer: "Add timer",
-  dayShort: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-  ...(props.labels ?? {}),
+// The names of the days and the months come from the locale rather than from
+// the catalogues, and the calendar reads them itself — the screen used to
+// hand them in, from the days when a server-rendered page mounted this.
+const labels = computed(() => ({
+  weekDays: t("timersCalendar.weekDays"),
+  today: t("timersCalendar.today"),
+  addTimer: t("timersCalendar.addTimer"),
+  dayShort: Array.from({length: 7}, (_, index) =>
+    new Intl.DateTimeFormat(locale.value, {weekday: "short", timeZone: "UTC"}).format(
+      new Date(Date.UTC(2024, 0, 1 + index)),
+    ),
+  ),
 }))
 
-const monthLabels = computed<string[]>(() =>
-  props.monthLabels && props.monthLabels.length === 12
-    ? props.monthLabels
-    : [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-      ],
+const monthLabels = computed(() =>
+  Array.from({length: 12}, (_, index) =>
+    new Intl.DateTimeFormat(locale.value, {month: "long", timeZone: "UTC"}).format(
+      new Date(Date.UTC(2024, index, 1)),
+    ),
+  ),
 )
 
 const {month, prev, next, today, set: setMonth} = useMonth()

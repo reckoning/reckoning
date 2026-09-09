@@ -173,24 +173,6 @@ async function refresh(): Promise<void> {
   ])
 }
 
-const timerLabels = computed(() => ({
-  weekDays: t("projectDetail.timers.weekDays"),
-  today: t("projectDetail.timers.today"),
-  addTimer: t("projectDetail.timers.addTimer"),
-  dayShort: Array.from({ length: 7 }, (_, index) =>
-    new Intl.DateTimeFormat(locale.value, { weekday: "short", timeZone: "UTC" }).format(
-      new Date(Date.UTC(2024, 0, 1 + index)),
-    ),
-  ),
-}))
-
-const monthLabels = computed(() =>
-  Array.from({ length: 12 }, (_, index) =>
-    new Intl.DateTimeFormat(locale.value, { month: "long", timeZone: "UTC" }).format(
-      new Date(Date.UTC(2024, index, 1)),
-    ),
-  ),
-)
 </script>
 
 <template>
@@ -297,8 +279,6 @@ const monthLabels = computed(() =>
             v-if="active === 'timers'"
             :key="id"
             :project-id="id"
-            :labels="timerLabels"
-            :month-labels="monthLabels"
             data-test="timers-calendar"
             @changed="refresh"
           />
