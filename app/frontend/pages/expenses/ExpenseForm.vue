@@ -65,9 +65,14 @@ const toasts = useToastsStore()
 const id = computed(() => (route.params.id ? String(route.params.id) : undefined))
 const editing = computed(() => id.value !== undefined)
 
-const { data: expense, isPending, refetch } = useExpense(id.value ?? "", {
-  query: { enabled: editing.value },
-})
+// Both paths render this component, so the router hands the same instance
+// from an edit to a new form — the copy button does exactly that. The query
+// therefore follows the route rather than reading it once, or the copy would
+// still be showing the expense it came from, receipt and all.
+const { data: expense, isPending, refetch } = useExpense(
+  computed(() => id.value ?? ""),
+  { query: { enabled: computed(() => editing.value) } },
+)
 const { data: afaTypes } = useAfaTypes()
 const { mutateAsync: create } = useCreateExpense()
 const { mutateAsync: update } = useUpdateExpense()
@@ -135,7 +140,7 @@ const prefill = computed(() => {
   return values
 })
 
-const { defineField, handleSubmit, errors, setValues, values } = useForm({
+const { defineField, handleSubmit, errors, setValues, resetForm, values } = useForm({
   validationSchema: schema,
   initialValues: {
     interval: "once",
@@ -188,6 +193,27 @@ watch(
   },
   { immediate: true },
 )
+
+// A route change through the same instance starts the form over: the copy
+// button goes from an edit to a new form, and what was filled in belongs to
+// the expense that was left behind.
+watch(id, (current, previous) => {
+  if (current === previous) return
+
+  filledFrom.value = undefined
+  picked.value = undefined
+
+  if (!current) {
+    resetForm({
+      values: {
+        interval: "once",
+        private_use_percent: 0,
+        vat_percent: 0,
+        ...prefill.value,
+      },
+    })
+  }
+})
 
 const busy = ref(false)
 

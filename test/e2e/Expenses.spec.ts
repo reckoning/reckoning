@@ -216,6 +216,29 @@ test.describe("Expenses", () => {
     await expect.poll(async () => appEval(`Expense.where(description: "Tricorder").count`)).toBe(1)
   })
 
+  // The copy is a new expense: nothing of the original comes along that the
+  // query does not carry, and a receipt never does.
+  test("copies an expense without its receipt", async ({ page }) => {
+    const id = (await appEval(`Expense.find_by(description: "Tricorder").id`)) as string
+    await appEval(`
+      expense = Expense.find("${id}")
+      expense.receipt.attach(
+        io: File.open(Rails.root.join("test/fixtures/files/receipt.png")),
+        filename: "receipt.png", content_type: "image/png"
+      )
+    `)
+
+    await page.goto(`/app/expenses/${id}/edit`)
+    await expect(page.getByTestId("receipt-link")).toBeVisible()
+
+    await page.getByTestId("copy").click()
+
+    await expect(page).toHaveURL(/\/app\/expenses\/new\?/)
+    await expect(page.getByTestId("description")).toHaveValue("Tricorder")
+    await expect(page.getByTestId("receipt-missing")).toBeVisible()
+    await expect(page.getByTestId("receipt-link")).toHaveCount(0)
+  })
+
   test("deletes an expense from the form", async ({ page }) => {
     const id = (await appEval(`Expense.find_by(description: "Tricorder").id`)) as string
 
