@@ -2,43 +2,43 @@
 
 require "test_helper"
 
-# The list and the form are the SPA's since phase B3. What is left here is the
-# detail page — it renders the offers and invoices panels, which belong to B6
-# and B7 — plus the handover for the paths that moved.
+# Every project screen is the SPA's now. What is left here is the handover
+# for the paths the rest of the app links.
 class ProjectsControllerTest < ActionDispatch::IntegrationTest
   let(:will) { users :will }
   let(:project) { projects :narendra3 }
 
   describe "the paths that moved" do
-    it "sends the list to the spa" do
-      sign_in will
+    before { sign_in will }
 
+    it "sends the list to the spa" do
       get "/projects"
 
       assert_redirected_to "/app/projects"
     end
 
     it "sends the new form to the spa" do
-      sign_in will
-
       get "/projects/new"
 
       assert_redirected_to "/app/projects/new"
     end
 
     it "sends the edit form to the spa" do
-      sign_in will
-
       get "/projects/#{project.id}/edit"
 
       assert_redirected_to "/app/projects/#{project.id}/edit"
     end
 
+    # The panels around the app link a project, and so does the dashboard.
+    it "sends a project to the spa" do
+      get "/projects/#{project.id}"
+
+      assert_redirected_to "/app/projects/#{project.id}"
+    end
+
     # The SPA writes through the API, so the routes the ERB forms posted to
     # are gone rather than left dangling.
     it "no longer answers create or update" do
-      sign_in will
-
       post "/projects", params: {project: {name: "Wolf 359"}}
       assert_response :not_found
 
@@ -46,35 +46,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       assert_response :not_found
 
       assert_equal "Narendra 3", project.reload.name
-    end
-  end
-
-  describe "the detail page" do
-    it "is unreachable when signed out" do
-      get "/projects/#{project.id}"
-
-      assert_response :found
-      assert_equal I18n.t(:"devise.failure.unauthenticated"), flash[:alert]
-    end
-
-    it "renders for the account it belongs to" do
-      sign_in will
-
-      get "/projects/#{project.id}"
-
-      assert_response :ok
-    end
-
-    # The other half of the handover: crossing into `/app` has to be a full
-    # page load. A Turbo Drive head merge keeps Bootstrap's unlayered CSS
-    # around, and that beats Tailwind's `@layer` utilities.
-    it "marks the shared layout's assets as a full reload" do
-      sign_in will
-
-      get "/projects/#{project.id}"
-
-      assert_select "link[data-turbo-track=?]", "reload"
-      assert_select "script[data-turbo-track=?]", "reload"
     end
   end
 end

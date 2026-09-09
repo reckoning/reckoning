@@ -17,11 +17,22 @@ interface Labels {
   dayShort: string[]
 }
 
-const props = defineProps<{
-  projectId: string
-  labels?: Labels
-  monthLabels?: string[]
-}>()
+const props = withDefaults(
+  defineProps<{
+    projectId: string
+    labels?: Labels
+    monthLabels?: string[]
+    /**
+     * An island on a server-rendered screen reloads it after a change, since
+     * the numbers around it are rendered there. Inside the SPA the screen
+     * refreshes itself, so it asks for the event instead.
+     */
+    standalone?: boolean
+  }>(),
+  {labels: undefined, monthLabels: undefined, standalone: true},
+)
+
+const emit = defineEmits<{changed: []}>()
 
 const labels = computed<Labels>(() => ({
   weekDays: "weekdays",
@@ -93,6 +104,12 @@ function closeModal() {
 // shouldn't trigger a page refresh.
 function onModalChanged() {
   refresh()
+
+  if (!props.standalone) {
+    emit("changed")
+    return
+  }
+
   visit(window.location.href, {action: "replace"})
 }
 

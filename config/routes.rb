@@ -151,16 +151,15 @@ Rails.application.routes.draw do
   # on the new screen rather than a 404.
   get "customers/:id/edit", to: spa_screen.call("/app/customers/%{id}/edit"), as: :edit_customer
 
-  # The SPA owns the project list and the form (phase B3). The detail page
-  # stays here: it renders the offers and invoices panels, which belong to B6
-  # and B7 — porting it now would mean building those twice. The names are
-  # kept, since the main navigation links `projects_path` and the detail links
-  # `edit_project_path`.
+  # The SPA owns every project screen. The names are kept, since the
+  # navigation links `projects_path` and the panels around the app link the
+  # detail and the form.
   get "projects", to: spa_screen.call("/app/projects"), as: :projects
   get "projects/new", to: spa_screen.call("/app/projects/new"), as: :new_project
   get "projects/:id/edit", to: spa_screen.call("/app/projects/%{id}/edit"), as: :edit_project
+  get "projects/:id", to: spa_screen.call("/app/projects/%{id}"), as: :project
 
-  resources :projects, only: [:show] do
+  resources :projects, only: [] do
     # Untouched: these serve the legacy invoice screen, not the project
     # screens this phase replaces.
     resources :tasks, only: %i[index create]

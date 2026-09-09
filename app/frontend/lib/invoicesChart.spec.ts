@@ -56,7 +56,9 @@ describe("invoicesChartOptions", () => {
   it("labels the months in the caller's language", () => {
     const xAxis = options().xAxis as {categories: {short: string; long: string}[]}
 
-    expect(xAxis.categories[0]).toEqual({short: "M01", long: "Monat 01"})
+    // `date` is the tooltip's own heading, which the dashboard prints as the
+    // month and a project prints as a full date.
+    expect(xAxis.categories[0]).toEqual({short: "M01", long: "Monat 01", date: "Monat 01"})
   })
 
   it("marks the month in progress", () => {

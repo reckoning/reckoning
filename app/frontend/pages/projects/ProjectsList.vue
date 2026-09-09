@@ -172,9 +172,12 @@ async function toggleArchive(project: Project): Promise<void> {
           >
             <div class="grid grid-cols-12 items-center gap-y-2 gap-x-2">
               <div class="col-span-12 md:col-span-4">
-                <a :href="`/projects/${project.id}`" class="text-ink hover:text-ink">
+                <RouterLink
+                  :to="{ name: 'project', params: { id: project.id } }"
+                  class="text-ink hover:text-ink"
+                >
                   <b>{{ project.name }}</b>
-                </a>
+                </RouterLink>
               </div>
 
               <div class="col-span-6 tabular-nums md:col-span-2">
@@ -207,7 +210,9 @@ async function toggleArchive(project: Project): Promise<void> {
 
                   <template #menu>
                     <UiDropdownItem>
-                      <a :href="`/projects/${project.id}`">{{ t("projects.show") }}</a>
+                      <RouterLink :to="{ name: 'project', params: { id: project.id } }">
+                      {{ t("projects.show") }}
+                    </RouterLink>
                     </UiDropdownItem>
                     <UiDropdownItem v-if="project.workflowState === 'active'">
                       <RouterLink
