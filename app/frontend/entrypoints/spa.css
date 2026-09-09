@@ -52,6 +52,10 @@
 
   --color-success: #5cb85c;
   --color-success-border: #4cae4c;
+  /* `button-variant` again: the fill darkens by 10% on hover, the border
+     by 12%. */
+  --color-success-hover: #449d44;
+  --color-success-hover-border: #398439;
   --color-info: #5bc0de;
   --color-info-border: #46b8da;
   --color-warning: #f0ad4e;

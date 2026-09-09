@@ -10,7 +10,7 @@ import { computed } from "vue"
 // keyboard and for a screen reader.
 const props = withDefaults(
   defineProps<{
-    variant?: "default" | "primary" | "warning" | "danger" | "link"
+    variant?: "default" | "primary" | "success" | "warning" | "danger" | "link"
     size?: "default" | "large" | "small"
     as?: "button" | "span" | "a"
     block?: boolean
@@ -21,6 +21,8 @@ const props = withDefaults(
 const VARIANTS = {
   default: "border-field-border bg-surface text-ink hover:border-control-hover-border hover:bg-control-hover",
   primary: "border-brand-border bg-brand text-white hover:border-brand-hover-border hover:bg-brand-hover",
+  success:
+    "border-success-border bg-success text-white hover:border-success-hover-border hover:bg-success-hover",
   warning:
     "border-warning-border bg-warning text-white hover:border-warning-hover-border hover:bg-warning-hover",
   danger: "border-danger-border bg-danger text-white hover:border-danger-hover-border hover:bg-danger-hover",

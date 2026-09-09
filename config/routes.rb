@@ -63,8 +63,9 @@ Rails.application.routes.draw do
   as :user do
     get "signup" => "accounts#new", :as => :new_registration
     post "signup" => "accounts#create", :as => :registration
-    get "settings" => "registrations#edit", :as => :edit_user_registration
-    patch "settings" => "registrations#update", :as => :update_user_registration
+    # The SPA owns the profile; saving goes through /api/v1. The path stays
+    # because Devise's mails and the server-rendered screens link it.
+    get "settings" => spa_screen.call("/app/settings"), :as => :edit_user_registration
     # The SPA renders the login. The name stays so the handful of
     # `new_user_session_path` callers keep working, and a bookmark on /signin
     # still lands somewhere sensible.
@@ -72,19 +73,16 @@ Rails.application.routes.draw do
     delete "signout" => "sessions#destroy", :as => :destroy_user_session
   end
 
-  resource :me, controller: :current_user, only: [] do
-    get :otp
-    get :otp_qrcode
-    post :otp_backup_codes
-    post :enable_otp
-    post :disable_otp
-  end
+  # Two-factor is the SPA's: enrolling, the backup codes and turning it off
+  # all go through /api/v1. The path stays because it was linked from the
+  # profile and may sit in a bookmark.
+  get "me/otp", to: spa_screen.call("/app/settings/two-factor"), as: :otp_me
 
   # The SPA owns the account settings; saving goes through /api/v1. The path
   # stays because the user menu on the server-rendered screens links it.
   get "account/edit", to: spa_screen.call("/app/account"), as: :edit_account
 
-  resource :password, only: %i[edit update]
+  get "password/edit", to: spa_screen.call("/app/settings/password"), as: :edit_password
 
   # The SPA owns the invoice list (phase B6). The name stays: the main
   # navigation links `invoices_path`, and so do the redirects after charging
