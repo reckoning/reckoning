@@ -51,8 +51,11 @@ class Project < ApplicationRecord
     "#{customer.name} - #{name}"
   end
 
+  # Seeded with a decimal: these cross the wire as strings, and a project
+  # with nothing booked against it would otherwise answer a bare float where
+  # every other answer is a string.
   def timer_values
-    values = 0.0
+    values = 0.to_d
     timers.each do |timer|
       values += timer.value.to_d if timer.value.present?
     end
@@ -60,7 +63,7 @@ class Project < ApplicationRecord
   end
 
   def timer_values_billable
-    values = 0.0
+    values = 0.to_d
     timers.billable.each do |timer|
       values += timer.value.to_d if timer.value.present?
     end
@@ -68,7 +71,7 @@ class Project < ApplicationRecord
   end
 
   def timer_values_invoiced
-    values = 0.0
+    values = 0.to_d
     timers.each do |timer|
       values += timer.value.to_d if timer.value.present? && timer.position_id.present?
     end
@@ -76,7 +79,7 @@ class Project < ApplicationRecord
   end
 
   def timer_values_uninvoiced
-    values = 0.0
+    values = 0.to_d
     timers.billable.each do |timer|
       values += timer.value.to_d if timer.value.present? && timer.position_id.blank?
     end
@@ -84,7 +87,7 @@ class Project < ApplicationRecord
   end
 
   def invoice_values
-    values = 0.0
+    values = 0.to_d
     invoices.each do |invoice|
       values += invoice.value.to_d
     end
