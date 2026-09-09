@@ -155,6 +155,28 @@ module Api
           assert_not expense.reload.receipt.attached?
         end
 
+        # The type that counts is the one the file is stored under, which is
+        # what the model's validator compares — not what the upload claimed.
+        it "refuses a file whose contents are not what it says" do
+          mislabelled = Rack::Test::UploadedFile.new(
+            Rails.root.join("test/fixtures/files/adac_credit_card.csv"), "application/octet-stream",
+            original_filename: "receipt.csv"
+          )
+
+          assert_api_response :put, 400, params: {id: expense.id}, body: {receipt: mislabelled}
+
+          assert_not expense.reload.receipt.attached?
+        end
+
+        # Nothing of a refused upload is left behind, either on the expense
+        # or in storage.
+        it "keeps no blob of a refused upload" do
+          assert_no_difference "ActiveStorage::Blob.count" do
+            assert_api_response :put, 400, params: {id: expense.id},
+              body: {receipt: receipt("adac_credit_card.csv", "text/csv")}
+          end
+        end
+
         # Attaching to a saved record writes at once and pushes the previous
         # receipt out, so the upload has to be turned away before that — or a
         # rejected file takes a good receipt with it.

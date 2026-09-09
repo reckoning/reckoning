@@ -71,14 +71,26 @@ module Api
         @expense = find_expense
         authorize! :update, @expense
 
-        # Checked before the attachment is touched. Attaching to a saved
-        # record writes at once and pushes the previous receipt out, so a
-        # rejected upload would take the receipt that was already there with
-        # it — and that one cannot be put back, because replacing it has
-        # already queued its file for deletion.
-        return render json: ValidationError.new("expense.receipt"), status: :bad_request unless acceptable_receipt?
+        return render json: ValidationError.new("expense.receipt"), status: :bad_request if receipt_file.blank?
 
-        @expense.receipt.attach(receipt_file)
+        # Uploaded on its own first, so the type being checked is the one
+        # that ends up stored — `create_and_upload!` is where the file is
+        # identified, and the validator compares that. Only then is it
+        # attached: attaching to a saved record writes at once and pushes the
+        # previous receipt out, and that one cannot be put back, because
+        # replacing it has already queued its file for deletion.
+        blob = ::ActiveStorage::Blob.create_and_upload!(
+          io: receipt_file.tempfile,
+          filename: receipt_file.original_filename,
+          content_type: receipt_file.content_type
+        )
+
+        unless ::Expense::RECEIPT_CONTENT_TYPES.include?(blob.content_type)
+          blob.purge
+          return render json: ValidationError.new("expense.receipt"), status: :bad_request
+        end
+
+        @expense.receipt.attach(blob)
 
         render :show
       end
@@ -226,12 +238,6 @@ module Api
 
       private def receipt_file
         params[:receipt]
-      end
-
-      private def acceptable_receipt?
-        receipt_file.present? &&
-          receipt_file.respond_to?(:content_type) &&
-          ::Expense::RECEIPT_CONTENT_TYPES.include?(receipt_file.content_type)
       end
 
       private def find_expense
