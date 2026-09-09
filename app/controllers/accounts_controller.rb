@@ -3,9 +3,9 @@
 class AccountsController < ApplicationController
   include ResourceHelper
 
+  # Signing up is all that is left here: the account's own settings are the
+  # SPA's, and saving them goes through /api/v1.
   before_action :check_registration_setting, only: %i[new create]
-  before_action :set_active_nav, except: %i[new create]
-  before_action :authenticate_user!, except: %i[new create]
   skip_authorization_check only: %i[new create]
 
   def new
@@ -16,10 +16,6 @@ class AccountsController < ApplicationController
     render layout: "landing_page"
   end
 
-  def edit
-    authorize! :update, account
-  end
-
   def create
     @active_nav = "registration"
     if account.save
@@ -27,20 +23,6 @@ class AccountsController < ApplicationController
     else
       render "new", alert: resource_message(:account, :create, :failure), layout: "landing_page"
     end
-  end
-
-  def update
-    authorize! :update, account
-    if account.update(account_params)
-      redirect_to "#{edit_account_path}#{hash}", flash: {success: resource_message(:account, :update, :success)}
-    else
-      flash.now[:alert] = resource_message(:account, :update, :failure)
-      render "edit"
-    end
-  end
-
-  private def set_active_nav
-    @active_nav = "account"
   end
 
   private def account_params
@@ -57,10 +39,6 @@ class AccountsController < ApplicationController
     @account ||= Account.new account_params
   end
   helper_method :account
-
-  private def hash
-    params.fetch(:hash, "")
-  end
 
   private def check_registration_setting
     return if registration_enabled? || params[:stripe_test].present?

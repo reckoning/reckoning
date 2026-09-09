@@ -80,7 +80,9 @@ Rails.application.routes.draw do
     post :disable_otp
   end
 
-  resource :account, only: %i[edit update]
+  # The SPA owns the account settings; saving goes through /api/v1. The path
+  # stays because the user menu on the server-rendered screens links it.
+  get "account/edit", to: spa_screen.call("/app/account"), as: :edit_account
 
   resource :password, only: %i[edit update]
 

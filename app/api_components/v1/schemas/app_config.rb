@@ -15,10 +15,14 @@ module V1
           accountName: {
             type: [:string, :null],
             description: "Name of the account the subdomain resolves to, if any."
+          },
+          domain: {
+            type: :string,
+            description: "The host an account's subdomain sits under. Mirrors Rails.configuration.app.domain."
           }
         },
         additionalProperties: false,
-        required: %w[registrationEnabled]
+        required: %w[registrationEnabled domain]
       })
     end
   end
