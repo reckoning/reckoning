@@ -265,6 +265,11 @@ export default {
   taskModal: {
     add: "Add",
   },
+  timersCalendar: {
+    weekDays: "Working days",
+    today: "Today",
+    addTimer: "Track time",
+  },
   timerModal: {
     close: "Close",
     invoiced: "This time is on an invoice already and cannot be changed.",
@@ -284,6 +289,8 @@ export default {
     save: "Save",
     start: "Start",
     stop: "Stop",
+    confirmDelete: "Delete this time?",
+    failed: "Something went wrong.",
   },
   timesheet: {
     timersFailed: "The times could not be loaded.",
@@ -331,11 +338,6 @@ export default {
       offers: "Offers",
       invoices: "Invoices",
       tasks: "Tasks",
-    },
-    timers: {
-      weekDays: "Working days",
-      today: "Today",
-      addTimer: "Track time",
     },
   },
   projects: {

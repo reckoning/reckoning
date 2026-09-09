@@ -167,7 +167,7 @@ async function onStop() {
 
 async function onDelete() {
   if (!id.value) return
-  if (!(await confirmDialog("Diese Zeit löschen?"))) return
+  if (!(await confirmDialog(t("timerModal.confirmDelete")))) return
   saving.value = true
   try {
     await deleteTimer(id.value)
@@ -201,7 +201,7 @@ async function onCreateTaskInline() {
 }
 
 function errorText(e: unknown): string {
-  return e instanceof Error ? e.message : "Etwas ist schiefgelaufen."
+  return e instanceof Error ? e.message : t("timerModal.failed")
 }
 </script>
 
@@ -261,9 +261,14 @@ function errorText(e: unknown): string {
               </label>
 
               <div v-if="projectId && !isInvoiced" class="mb-4">
-                <a v-if="!showCreateTask" role="button" @click.prevent="showCreateTask = true">
+                <UiButton
+                  v-if="!showCreateTask"
+                  variant="link"
+                  class="px-0"
+                  @click="showCreateTask = true"
+                >
                   + {{ t("timerModal.newTask") }}
-                </a>
+                </UiButton>
                 <div v-else class="flex">
                   <UiInput
                     v-model="newTaskName"

@@ -85,6 +85,15 @@ const dates = computed(
       timeZone: "UTC",
     }),
 )
+// The chart's own labels: `%b` along the axis, `%B` behind it, as
+// `date.formats.month_short` and `month` gave Highcharts. The year is not in
+// them — a month's name has to fit the width of that month on the axis.
+const shortMonths = computed(
+  () => new Intl.DateTimeFormat(locale.value, { month: "short", timeZone: "UTC" }),
+)
+const longMonths = computed(
+  () => new Intl.DateTimeFormat(locale.value, { month: "long", timeZone: "UTC" }),
+)
 
 function amount(value: string | number | null | undefined): string {
   return money.value.format(Number(value ?? 0))
@@ -147,8 +156,8 @@ const build = computed(() => {
       formatValue: (value: number) => money.value.format(value),
       // `invoicesChart`'s formatter, which this chart shares.
       formatAxis: (value: number) => (value < 1000 ? `${value} €` : `${value / 1000}k €`),
-      monthShort: (label) => months.value.format(new Date(`${label.slice(0, 10)}T00:00:00Z`)),
-      monthLong: weekOf,
+      monthShort: (label) => shortMonths.value.format(new Date(`${label.slice(0, 10)}T00:00:00Z`)),
+      monthLong: (label) => longMonths.value.format(new Date(`${label.slice(0, 10)}T00:00:00Z`)),
       dateLabel: weekOf,
       budgetLabel: (formatted) => t("projectDetail.budgetEstimate", { amount: formatted }),
       onPointOver: highlight,
@@ -164,24 +173,6 @@ async function refresh(): Promise<void> {
   ])
 }
 
-const timerLabels = computed(() => ({
-  weekDays: t("projectDetail.timers.weekDays"),
-  today: t("projectDetail.timers.today"),
-  addTimer: t("projectDetail.timers.addTimer"),
-  dayShort: Array.from({ length: 7 }, (_, index) =>
-    new Intl.DateTimeFormat(locale.value, { weekday: "short", timeZone: "UTC" }).format(
-      new Date(Date.UTC(2024, 0, 1 + index)),
-    ),
-  ),
-}))
-
-const monthLabels = computed(() =>
-  Array.from({ length: 12 }, (_, index) =>
-    new Intl.DateTimeFormat(locale.value, { month: "long", timeZone: "UTC" }).format(
-      new Date(Date.UTC(2024, index, 1)),
-    ),
-  ),
-)
 </script>
 
 <template>
@@ -288,9 +279,6 @@ const monthLabels = computed(() =>
             v-if="active === 'timers'"
             :key="id"
             :project-id="id"
-            :labels="timerLabels"
-            :month-labels="monthLabels"
-            :standalone="false"
             data-test="timers-calendar"
             @changed="refresh"
           />

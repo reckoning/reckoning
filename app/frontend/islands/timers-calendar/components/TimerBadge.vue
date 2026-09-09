@@ -1,8 +1,6 @@
 <script setup lang="ts">
-// Renders the `<a class="timer">` chip from the legacy template
-// (`app/views/templates/timers/month.html.erb`). Variant classes
-// `billable` / `running` / `invoiced` are styled in
-// `app/assets/stylesheets/partials/_calendar.scss`.
+// The chip a booked timer becomes in a day of the calendar. What it is —
+// running, invoiced, billable — is the colour it carries.
 
 import {computed, onBeforeUnmount, onMounted, ref} from "vue"
 import {formatHHMM, runningDuration} from "../../../lib/timers/format"
@@ -11,10 +9,11 @@ import type {Timer} from "../../../lib/timers/types"
 const props = defineProps<{timer: Timer}>()
 defineEmits<{click: []}>()
 
-const variant = computed<"" | "billable" | "running" | "invoiced">(() => {
-  if (props.timer.started) return "running"
-  if (props.timer.positionId) return "invoiced"
-  if (props.timer.taskBillable) return "billable"
+const variant = computed(() => {
+  if (props.timer.started) return "is-running"
+  if (props.timer.positionId) return "is-invoiced"
+  if (props.timer.taskBillable) return "is-billable"
+
   return ""
 })
 
@@ -38,12 +37,17 @@ const display = computed(() => {
 </script>
 
 <template>
-  <a class="timer" role="button" :class="variant" @click.stop.prevent="$emit('click')">
+  <button
+    type="button"
+    class="bs-calendar-timer"
+    :class="variant"
+    @click.stop="$emit('click')"
+  >
     <span v-if="timer.started"
       ><i class="fa fa-circle-o-notch fa-spin" aria-hidden="true"></i> {{ display }}</span
     >
     <span v-else class="timer-value">{{ display }}</span>
     |
     <span class="timer-task" :title="timer.taskName">{{ timer.taskName }}</span>
-  </a>
+  </button>
 </template>

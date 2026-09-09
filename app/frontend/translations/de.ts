@@ -265,6 +265,11 @@ export default {
   taskModal: {
     add: "Hinzufügen",
   },
+  timersCalendar: {
+    weekDays: "Arbeitstage",
+    today: "Heute",
+    addTimer: "Zeit erfassen",
+  },
   timerModal: {
     close: "Schließen",
     invoiced: "Diese Zeit wurde bereits abgerechnet und kann nicht geändert werden.",
@@ -284,6 +289,8 @@ export default {
     save: "Speichern",
     start: "Start",
     stop: "Stopp",
+    confirmDelete: "Diese Zeit löschen?",
+    failed: "Etwas ist schiefgelaufen.",
   },
   timesheet: {
     timersFailed: "Zeiten konnten nicht geladen werden.",
@@ -331,11 +338,6 @@ export default {
       offers: "Angebote",
       invoices: "Rechnungen",
       tasks: "Aufgaben",
-    },
-    timers: {
-      weekDays: "Arbeitstage",
-      today: "Heute",
-      addTimer: "Zeit erfassen",
     },
   },
   projects: {

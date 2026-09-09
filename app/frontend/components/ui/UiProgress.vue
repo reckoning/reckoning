@@ -20,6 +20,6 @@ const fill = computed(() => {
 
 <template>
   <div class="bs-progress">
-    <div class="h-full" :class="fill" :style="{ width: `${width}%` }"></div>
+    <div class="bs-progress-bar" :class="fill" :style="{ width: `${width}%` }"></div>
   </div>
 </template>

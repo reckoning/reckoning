@@ -1,11 +1,9 @@
 <script setup lang="ts">
-// Markup mirrors `app/views/templates/timers/month.html.erb` so the
-// `_calendar.scss` partial applies. Classes used:
-//   .calendar > .header > .day  (header row)
-//   .calendar > .week  > .day { .current-month | .current-day }
-//   .day > .day-number, .day > .timers > .timer / .add-timer
+// A month as seven columns per week, styled by the `.bs-calendar` classes
+// `spa.css` measured out of `partials/_calendar.scss`.
 
 import {computed} from "vue"
+import {RouterLink} from "vue-router"
 import {buildWeeks} from "../calendar"
 import type {Timer} from "../../../lib/timers/types"
 import TimerBadge from "./TimerBadge.vue"
@@ -36,37 +34,40 @@ const byDate = computed(() => {
 </script>
 
 <template>
-  <div class="calendar">
-    <div class="header">
-      <div v-for="(day, i) in dayShortLabels" :key="i" class="day">
+  <div class="bs-calendar">
+    <div class="bs-calendar-header">
+      <div v-for="(day, i) in dayShortLabels" :key="i" class="bs-calendar-day">
         <span>{{ day }}</span>
       </div>
     </div>
-    <div v-for="(week, wi) in weeks" :key="wi" class="week">
+    <div v-for="(week, wi) in weeks" :key="wi" class="bs-calendar-week">
       <div
         v-for="cell in week.days"
         :key="cell.date"
-        class="day"
-        :class="{'current-month': cell.isCurrentMonth, 'current-day': cell.isCurrentDay}"
+        class="bs-calendar-day"
+        :class="{
+          'is-current-month': cell.isCurrentMonth,
+          'is-current-day': cell.isCurrentDay,
+        }"
       >
-        <a class="day-number" :href="`/timesheet?date=${cell.date}`" data-turbo="false">{{
-          cell.day
-        }}</a>
-        <div class="timers">
+        <RouterLink class="bs-calendar-day-number" :to="{name: 'timesheet', query: {date: cell.date}}">
+          {{ cell.day }}
+        </RouterLink>
+        <div>
           <TimerBadge
             v-for="timer in byDate.get(cell.date) ?? []"
             :key="timer.id"
             :timer="timer"
             @click="emit('edit', timer)"
           />
-          <a
-            class="add-timer"
-            role="button"
+          <button
+            type="button"
+            class="bs-calendar-add text-brand hover:text-brand-hover"
             :title="addTimerTitle"
-            @click.prevent="emit('add', cell.date)"
+            @click="emit('add', cell.date)"
           >
             <i class="fa fa-plus" aria-hidden="true"></i>
-          </a>
+          </button>
         </div>
       </div>
     </div>

@@ -1,9 +1,10 @@
 <script setup lang="ts">
-// Markup mirrors the legacy `app/views/templates/timers/month.html.erb`
-// so the existing Bootstrap 3 `.btn`/`.resource-nav` styles and the
-// `_calendar.scss` partial apply.
+// The month the calendar is showing, and the four buttons that move it: back,
+// a native month picker behind a calendar icon, today, forward.
 
 import {computed, ref} from "vue"
+import {useI18n} from "vue-i18n"
+import UiButton from "../../../components/ui/UiButton.vue"
 
 const props = defineProps<{
   month: string
@@ -12,6 +13,12 @@ const props = defineProps<{
   weekDaysLabel: string
   monthLabels: string[]
 }>()
+
+const {t} = useI18n()
+
+const previousLabel = computed(() => t("timesheet.previousDay"))
+const nextLabel = computed(() => t("timesheet.nextDay"))
+const pickMonthLabel = computed(() => t("timesheet.pickDate"))
 
 const emit = defineEmits<{
   prev: []
@@ -58,52 +65,47 @@ function onMonthInput(e: Event) {
 </script>
 
 <template>
-  <div class="row">
-    <div class="col-xs-12 col-md-6">
-      <h2>
-        <span>{{ monthLabel }}</span>
-        <small> ({{ businessDays }} {{ weekDaysLabel }}) </small>
-      </h2>
-    </div>
-    <div class="col-xs-12 col-md-6">
-      <div class="pull-right resource-nav">
-        <div class="btn-group btn-group-justified-responsive resource-nav">
-          <a class="btn btn-default" role="button" @click.prevent="emit('prev')">
-            <i class="fa fa-chevron-left" aria-hidden="true"></i>
-          </a>
-          <a class="btn btn-default month-picker-trigger" role="button" @click.prevent="openPicker">
-            <i class="fa fa-calendar" aria-hidden="true"></i>
-            <input
-              ref="hiddenInputRef"
-              type="month"
-              :value="monthInputValue"
-              class="month-picker-input"
-              tabindex="-1"
-              aria-hidden="true"
-              @change="onMonthInput"
-            />
-          </a>
-          <a
-            class="btn btn-default"
-            role="button"
-            :class="{disabled: isToday}"
-            @click.prevent="!isToday && emit('today')"
-          >
-            {{ todayLabel }}
-          </a>
-          <a class="btn btn-default" role="button" @click.prevent="emit('next')">
-            <i class="fa fa-chevron-right" aria-hidden="true"></i>
-          </a>
-        </div>
-      </div>
+  <div class="flex flex-wrap items-center justify-between gap-2">
+    <h2>
+      <span>{{ monthLabel }}</span>
+      <small> ({{ businessDays }} {{ weekDaysLabel }}) </small>
+    </h2>
+
+    <div class="bs-btn-group">
+      <UiButton :title="previousLabel" @click="emit('prev')">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+      </UiButton>
+
+      <!-- The input is a sibling rather than a child of the button: it is
+           what `showPicker()` opens, and a form control inside a button is a
+           second control inside the first. -->
+      <span class="relative inline-flex">
+        <UiButton class="rounded-none" :title="pickMonthLabel" @click="openPicker">
+          <i class="fa fa-calendar" aria-hidden="true"></i>
+        </UiButton>
+        <input
+          ref="hiddenInputRef"
+          type="month"
+          :value="monthInputValue"
+          class="month-picker-input"
+          tabindex="-1"
+          aria-hidden="true"
+          @change="onMonthInput"
+        />
+      </span>
+
+      <UiButton :disabled="isToday" @click="emit('today')">
+        {{ todayLabel }}
+      </UiButton>
+
+      <UiButton :title="nextLabel" @click="emit('next')">
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </UiButton>
     </div>
   </div>
 </template>
 
 <style scoped>
-.month-picker-trigger {
-  position: relative;
-}
 /* Hide the native `<input type="month">` UI but keep it functional
  * — the visible calendar icon triggers showPicker() programmatically.
  * Negative z-index + opacity:0 + pointer-events:none keeps it from

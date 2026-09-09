@@ -130,7 +130,9 @@ async function onTaskRemove(task: TaskWithTimers) {
   <div class="mt-3" data-test="week-grid">
     <div v-if="error" class="mb-2.5 rounded-bs border border-alert-danger-border bg-alert-danger px-4 py-3.5 text-alert-danger-text">
       {{ t("timesheet.tasksFailed") }}
-      <a role="button" @click.prevent="refresh">{{ t("timesheet.retry") }}</a>
+      <UiButton variant="link" class="px-0" @click="refresh">
+        {{ t("timesheet.retry") }}
+      </UiButton>
     </div>
 
     <div class="grid grid-cols-12 items-end gap-2 px-4 py-1.5">

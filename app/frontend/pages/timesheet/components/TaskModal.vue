@@ -156,9 +156,14 @@ function onSave() {
               </label>
 
               <div v-if="projectId" class="mb-4">
-                <a v-if="!showCreate" role="button" @click.prevent="showCreate = true">
+                <UiButton
+                  v-if="!showCreate"
+                  variant="link"
+                  class="px-0"
+                  @click="showCreate = true"
+                >
                   + {{ t("timerModal.newTask") }}
-                </a>
+                </UiButton>
                 <div v-else class="flex">
                   <UiInput
                     v-model="newTaskName"

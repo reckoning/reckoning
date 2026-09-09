@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed, onMounted, ref, shallowRef} from "vue"
-import {visit} from "@hotwired/turbo"
+import {useI18n} from "vue-i18n"
 import MonthGrid from "./components/MonthGrid.vue"
 import MonthNav from "./components/MonthNav.vue"
 import TimerModal from "./components/TimerModal.vue"
@@ -9,56 +9,35 @@ import {useTimers} from "./composables/useTimers"
 import {listProjects} from "../../lib/timers/api"
 import {businessDaysInMonth} from "../../lib/timers/format"
 import type {Task, Timer} from "../../lib/timers/types"
+import UiAlert from "../../components/ui/UiAlert.vue"
+import UiButton from "../../components/ui/UiButton.vue"
 
-interface Labels {
-  weekDays: string
-  today: string
-  addTimer: string
-  dayShort: string[]
-}
-
-const props = withDefaults(
-  defineProps<{
-    projectId: string
-    labels?: Labels
-    monthLabels?: string[]
-    /**
-     * An island on a server-rendered screen reloads it after a change, since
-     * the numbers around it are rendered there. Inside the SPA the screen
-     * refreshes itself, so it asks for the event instead.
-     */
-    standalone?: boolean
-  }>(),
-  {labels: undefined, monthLabels: undefined, standalone: true},
-)
+const props = defineProps<{projectId: string}>()
 
 const emit = defineEmits<{changed: []}>()
 
-const labels = computed<Labels>(() => ({
-  weekDays: "weekdays",
-  today: "Today",
-  addTimer: "Add timer",
-  dayShort: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-  ...(props.labels ?? {}),
+const {t, locale} = useI18n()
+
+// The names of the days and the months come from the locale rather than from
+// the catalogues, and the calendar reads them itself — the screen used to
+// hand them in, from the days when a server-rendered page mounted this.
+const labels = computed(() => ({
+  weekDays: t("timersCalendar.weekDays"),
+  today: t("timersCalendar.today"),
+  addTimer: t("timersCalendar.addTimer"),
+  dayShort: Array.from({length: 7}, (_, index) =>
+    new Intl.DateTimeFormat(locale.value, {weekday: "short", timeZone: "UTC"}).format(
+      new Date(Date.UTC(2024, 0, 1 + index)),
+    ),
+  ),
 }))
 
-const monthLabels = computed<string[]>(() =>
-  props.monthLabels && props.monthLabels.length === 12
-    ? props.monthLabels
-    : [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-      ],
+const monthLabels = computed(() =>
+  Array.from({length: 12}, (_, index) =>
+    new Intl.DateTimeFormat(locale.value, {month: "long", timeZone: "UTC"}).format(
+      new Date(Date.UTC(2024, index, 1)),
+    ),
+  ),
 )
 
 const {month, prev, next, today, set: setMonth} = useMonth()
@@ -104,20 +83,14 @@ function closeModal() {
 // shouldn't trigger a page refresh.
 function onModalChanged() {
   refresh()
-
-  if (!props.standalone) {
-    emit("changed")
-    return
-  }
-
-  visit(window.location.href, {action: "replace"})
+  emit("changed")
 }
 
 const businessDays = computed(() => businessDaysInMonth(month.value))
 </script>
 
 <template>
-  <div class="col-xs-12" data-test="timers-calendar">
+  <div data-test="timers-calendar">
     <MonthNav
       :month="month"
       :business-days="businessDays"
@@ -130,24 +103,20 @@ const businessDays = computed(() => businessDaysInMonth(month.value))
       @jump="setMonth"
     />
 
-    <div v-if="error" class="alert alert-danger">
-      Failed to load timers.
-      <a role="button" @click.prevent="refresh">Retry</a>
-    </div>
+    <UiAlert v-if="error" variant="danger">
+      {{ t("timesheet.timersFailed") }}
+      <UiButton variant="link" class="px-0" @click="refresh">{{ t("timesheet.retry") }}</UiButton>
+    </UiAlert>
 
-    <div class="row">
-      <div class="col-xs-12">
-        <MonthGrid
-          :month="month"
-          :timers="timers"
-          :day-short-labels="labels.dayShort"
-          :add-timer-title="labels.addTimer"
-          @add="openAdd"
-          @edit="openEdit"
-        />
-        <p v-if="loading" class="text-muted text-right" style="margin-top: 4px">Loading…</p>
-      </div>
-    </div>
+    <MonthGrid
+      :month="month"
+      :timers="timers"
+      :day-short-labels="labels.dayShort"
+      :add-timer-title="labels.addTimer"
+      @add="openAdd"
+      @edit="openEdit"
+    />
+    <p v-if="loading" class="mt-1 text-right text-muted">{{ t("timesheet.loading") }}</p>
 
     <TimerModal
       v-if="modalDraft && tasksLoaded"
