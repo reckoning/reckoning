@@ -41,7 +41,10 @@
   --color-rule-strong: #dddddd;
 
   --color-muted: #777777;
+  --color-muted-hover: #5e5e5e;
   --color-muted-strong: #666666;
+  /* `lighten($brand-primary, 30%)`, which marks today in the calendar. */
+  --color-brand-faint: #b9d4ec;
   --color-surface: #ffffff;
   --color-surface-muted: #f5f5f5;
   --color-surface-stripe: #f9f9f9;
@@ -58,6 +61,7 @@
   --color-success-hover-border: #398439;
   --color-info: #5bc0de;
   --color-info-border: #46b8da;
+  --color-info-hover: #31b0d5;
   --color-warning: #f0ad4e;
   --color-warning-border: #eea236;
   /* `button-variant` darkens the fill by 10% on hover and the border by 12%,
@@ -340,6 +344,12 @@
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
   }
 
+  .bs-progress-bar {
+    height: 100%;
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    transition: width 0.6s ease;
+  }
+
   /* `.modal-content` and `.modal-dialog`. */
   .bs-modal {
     background-color: var(--color-surface);
@@ -541,6 +551,143 @@
     background-color: var(--color-surface-muted);
     padding: 15px;
     margin-top: 15px;
+  }
+
+  /* `partials/_calendar.scss`: a month as seven inline-block columns per
+     week, each cell a hundred pixels tall with the timers booked on that day
+     stacked inside it. */
+  .bs-calendar {
+    border: 1px solid var(--color-rule-strong);
+    border-radius: var(--radius-bs-sm);
+    overflow-x: auto;
+  }
+
+  .bs-calendar-header,
+  .bs-calendar-week {
+    white-space: nowrap;
+  }
+
+  .bs-calendar-day {
+    display: inline-block;
+    width: calc(100% / 7);
+    min-width: 100px;
+    padding: 5px;
+    vertical-align: top;
+  }
+
+  .bs-calendar-header .bs-calendar-day {
+    font-weight: bold;
+    border-right: 1px solid var(--color-rule-strong);
+  }
+
+  .bs-calendar-header .bs-calendar-day:last-child {
+    border-right: none;
+  }
+
+  .bs-calendar-week .bs-calendar-day {
+    position: relative;
+    height: 100px;
+    border: 1px solid var(--color-rule-strong);
+    border-width: 1px 1px 0 0;
+    background-color: #e8e8e8;
+  }
+
+  .bs-calendar-week .bs-calendar-day:last-child {
+    border-width: 1px 0 0 0;
+  }
+
+  /* A day of the month being shown, rather than one of the days either side
+     of it the grid fills its first and last week with. */
+  .bs-calendar-week .bs-calendar-day.is-current-month {
+    background-color: var(--color-surface-muted);
+  }
+
+  .bs-calendar-week .bs-calendar-day.is-current-day {
+    background-color: var(--color-brand-faint);
+  }
+
+  .bs-calendar-week:first-child .bs-calendar-day:first-child {
+    border-radius: var(--radius-bs-sm) 0 0 0;
+  }
+
+  .bs-calendar-week:first-child .bs-calendar-day:last-child {
+    border-radius: 0 var(--radius-bs-sm) 0 0;
+  }
+
+  .bs-calendar-week:last-child .bs-calendar-day:first-child {
+    border-radius: 0 0 0 var(--radius-bs-sm);
+  }
+
+  .bs-calendar-week:last-child .bs-calendar-day:last-child {
+    border-radius: 0 0 var(--radius-bs-sm) 0;
+  }
+
+  .bs-calendar-day-number {
+    float: left;
+    margin-top: -2px;
+    margin-right: 5px;
+    color: var(--color-muted-strong);
+    text-decoration: none;
+  }
+
+  .bs-calendar-day-number:hover {
+    color: #1a1a1a;
+  }
+
+  .bs-calendar-add {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    cursor: pointer;
+  }
+
+  /* A booked timer, which is a label in everything but its width. */
+  .bs-calendar-timer {
+    display: block;
+    float: left;
+    max-width: 100%;
+    margin-bottom: 2px;
+    padding: 0.2em 0.6em 0.3em;
+    font-size: 80%;
+    font-weight: bold;
+    line-height: 1;
+    color: #ffffff;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    vertical-align: baseline;
+    border-radius: 0.25em;
+    background-color: var(--color-muted);
+    cursor: pointer;
+  }
+
+  .bs-calendar-timer:hover {
+    background-color: var(--color-muted-hover);
+    text-decoration: none;
+  }
+
+  .bs-calendar-timer.is-billable {
+    background-color: var(--color-info);
+  }
+
+  .bs-calendar-timer.is-billable:hover {
+    background-color: var(--color-info-hover);
+  }
+
+  .bs-calendar-timer.is-running {
+    background-color: var(--color-warning);
+  }
+
+  .bs-calendar-timer.is-running:hover {
+    background-color: var(--color-warning-hover);
+  }
+
+  .bs-calendar-timer.is-invoiced {
+    background-color: var(--color-success);
+  }
+
+  .bs-calendar-timer.is-invoiced:hover {
+    background-color: var(--color-success-hover);
   }
 
   .bs-caret {

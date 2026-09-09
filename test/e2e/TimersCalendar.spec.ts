@@ -16,9 +16,8 @@ test.describe("Timers calendar", () => {
     await expect(page.getByTestId("dashboard-greeting")).toBeVisible()
   })
 
-  // It lives on the project detail page, which is still server-rendered: the
-  // offers and invoices panels around it belong to B6 and B7.
-  test("renders on the server-rendered project page", async ({ page }) => {
+  // It lives on the project detail screen, which the old path forwards to.
+  test("renders on the project screen the old path forwards to", async ({ page }) => {
     const id = (await appEval(`Project.first.id`)) as string
 
     await page.goto(`/projects/${id}`)
@@ -38,6 +37,24 @@ test.describe("Timers calendar", () => {
     await expect(calendar).toBeVisible()
 
     await expect(calendar.locator(".timer-value")).toHaveText("1:00")
+  })
+
+  // The calendar was styled by the server-rendered bundle until the project
+  // screen moved; with only `spa.css` loaded its grid collapsed into one long
+  // column of day numbers.
+  test("lays a week out as seven columns", async ({ page }) => {
+    const id = (await appEval(`Project.first.id`)) as string
+
+    await page.goto(`/projects/${id}`)
+
+    const days = page.locator(".bs-calendar-week").first().locator(".bs-calendar-day")
+    await expect(days).toHaveCount(7)
+
+    const first = await days.first().boundingBox()
+    const last = await days.last().boundingBox()
+
+    expect(first?.y).toBe(last?.y)
+    expect(last?.x).toBeGreaterThan((first?.x ?? 0) + (first?.width ?? 0) * 5)
   })
 
   test("shows the month the timers were tracked in", async ({ page }) => {
