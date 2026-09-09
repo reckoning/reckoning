@@ -116,7 +116,15 @@ const trial = computed(() => account.value?.trial)
 
           <template #menu>
             <UiDropdownItem>
-              <a href="/settings" data-test="nav-account">{{ t("nav.account") }}</a>
+              <RouterLink :to="{ name: 'account-settings' }" data-test="nav-account">
+                {{ t("nav.account") }}
+              </RouterLink>
+            </UiDropdownItem>
+            <UiDropdownItem>
+              <!-- The profile is still the server-rendered screen; the menu
+                   had both entries all along, where this one was doing for
+                   the two of them. -->
+              <a href="/settings" data-test="nav-profile">{{ t("nav.profile") }}</a>
             </UiDropdownItem>
             <UiDropdownItem>
               <RouterLink :to="{ name: 'two-factor' }" data-test="nav-two-factor">
