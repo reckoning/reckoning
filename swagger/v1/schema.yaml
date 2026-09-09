@@ -3612,6 +3612,9 @@ components:
               - string
               - 'null'
           additionalProperties: false
+          required:
+          - url
+          - filename
         createdAt:
           type: string
           format: date-time

@@ -40,7 +40,8 @@ module V1
               filename: {type: :string},
               contentType: {type: [:string, :null]}
             },
-            additionalProperties: false
+            additionalProperties: false,
+            required: %w[url filename]
           },
           createdAt: {type: :string, format: "date-time"},
           updatedAt: {type: :string, format: "date-time"}
