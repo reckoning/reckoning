@@ -3,7 +3,9 @@ import { computed, reactive, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useAccount, useUpdateAccount } from "@/services/api/services/account/account"
+import { useAppConfig } from "@/services/api/services/config/config"
 import { useToastsStore } from "@/stores/toasts"
+import UiAlert from "@/components/ui/UiAlert.vue"
 import UiButton from "@/components/ui/UiButton.vue"
 import UiFormGroup from "@/components/ui/UiFormGroup.vue"
 import UiInput from "@/components/ui/UiInput.vue"
@@ -48,7 +50,8 @@ const router = useRouter()
 const { t } = useI18n()
 const toasts = useToastsStore()
 
-const { data: account, isPending } = useAccount()
+const { data: account, isPending, isError } = useAccount()
+const { data: config } = useAppConfig()
 const { mutateAsync: update } = useUpdateAccount()
 
 // The section is the hash, the way it was on the server-rendered screen: a
@@ -89,8 +92,10 @@ watch(
 const busy = ref(false)
 
 // The domain the subdomain sits under, which the form printed after the
-// field as an addon.
-const domain = computed(() => window.location.host.replace(/^[^.]+\./, ""))
+// field as an addon. It comes from the app's own configuration: the host in
+// the browser cannot be taken apart for it, because on an apex host like
+// `reckoning.test` the first label is the app rather than an account.
+const domain = computed(() => config.value?.domain ?? "")
 
 async function save(section: Section): Promise<void> {
   busy.value = true
@@ -125,6 +130,13 @@ async function save(section: Section): Promise<void> {
     <h1>{{ t("accountSettings.title") }}</h1>
 
     <p v-if="isPending" class="mt-4" data-test="loading">{{ t("accountSettings.loading") }}</p>
+
+    <!-- No fields until the account is actually here: they would render
+         empty, and saving a section would write those blanks over what is
+         stored. -->
+    <UiAlert v-else-if="isError || !account" variant="danger" class="mt-4" data-test="load-failed">
+      {{ t("accountSettings.loadFailed") }}
+    </UiAlert>
 
     <div v-else class="mt-4 flex flex-wrap gap-6 md:flex-nowrap">
       <div class="w-full md:w-3/4">

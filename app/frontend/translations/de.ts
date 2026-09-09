@@ -551,6 +551,7 @@ export default {
     save: "Speichern",
     saved: "Account gespeichert.",
     saveFailed: "Der Account konnte nicht gespeichert werden.",
+    loadFailed: "Der Account konnte nicht geladen werden.",
     nav: {
       basic: "Allgemein",
       address: "Adresse",

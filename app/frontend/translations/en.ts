@@ -550,6 +550,7 @@ export default {
     save: "Save",
     saved: "Account saved.",
     saveFailed: "The account could not be saved.",
+    loadFailed: "The account could not be loaded.",
     nav: {
       basic: "General",
       address: "Address",

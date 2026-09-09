@@ -34,6 +34,15 @@ module Api
         end
       end
 
+      # What a subdomain sits under, which the account settings print after
+      # the field. It cannot be read off the host in the browser: on an apex
+      # host like `reckoning.test` the first label is the app itself.
+      it "reports the host an account's subdomain sits under" do
+        assert_api_response :get, 200 do
+          assert_equal Rails.configuration.app.domain, parsed_body["domain"]
+        end
+      end
+
       # Without a resolvable subdomain there is no account to name, and the
       # login has nothing to brand itself with.
       it "has no account name off a subdomain" do

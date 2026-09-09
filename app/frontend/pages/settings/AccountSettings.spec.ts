@@ -32,11 +32,25 @@ const ACCOUNT = {
   updatedAt: "2026-01-01T00:00:00Z",
 }
 
-async function mountSettings(path = "/account") {
+async function mountSettings(path = "/account", options: {failAccount?: boolean} = {}) {
   const requests: AxiosRequestConfig[] = []
 
   AXIOS_INSTANCE.defaults.adapter = async (config) => {
     requests.push(config)
+
+    const url = String(config.url)
+
+    if (url.includes("/config")) {
+      return {
+        data: {registrationEnabled: true, accountName: null, domain: "reckoning.test"},
+        status: 200,
+        statusText: "OK",
+        headers: {},
+        config,
+      }
+    }
+
+    if (options.failAccount) throw {response: {status: 500, data: {}}}
 
     return {data: ACCOUNT, status: 200, statusText: "OK", headers: {}, config}
   }
@@ -165,9 +179,22 @@ describe("AccountSettings", () => {
     expect(await saved(requests)).toEqual({signature: "Kind regards"})
   })
 
-  it("prints the domain the subdomain sits under", async () => {
+  // The host in the browser cannot be taken apart for it: on an apex host
+  // like `reckoning.test` the first label is the app, not an account.
+  it("prints the domain the app is configured for", async () => {
     const {wrapper} = await mountSettings()
 
-    expect(wrapper.get('[data-test="section-basic"]').text()).toContain(".")
+    expect(wrapper.get('[data-test="section-basic"]').text()).toContain(".reckoning.test")
+  })
+
+  // Rendering the fields empty and letting a section be saved would write
+  // those blanks over what is stored.
+  it("offers no fields at all when the account could not be loaded", async () => {
+    const {wrapper} = await mountSettings("/account", {failAccount: true})
+
+    await vi.waitFor(() => expect(wrapper.find('[data-test="load-failed"]').exists()).toBe(true))
+
+    expect(wrapper.find('[data-test="section-basic"]').exists()).toBe(false)
+    expect(wrapper.find('[data-test="submit-basic"]').exists()).toBe(false)
   })
 })
