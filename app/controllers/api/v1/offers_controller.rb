@@ -123,7 +123,7 @@ module Api
       end
 
       private def filter_params
-        params.permit(:state, :year)
+        params.permit(:state, :year, :project_id)
       end
 
       private def offer_params

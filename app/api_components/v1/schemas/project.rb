@@ -29,6 +29,10 @@ module V1
           # client does not have to re-implement the arithmetic.
           timerValues: {type: :string},
           budgetPercent: {type: [:string, :null]},
+          # The rest of what the detail screen prints above the chart.
+          timerValuesBillable: {type: :string},
+          timerValuesUninvoiced: {type: :string},
+          invoiceValues: {type: :string},
           tasks: {type: :array, items: V1::Schemas::ProjectTask},
           createdAt: {type: :string, format: "date-time"},
           updatedAt: {type: :string, format: "date-time"},

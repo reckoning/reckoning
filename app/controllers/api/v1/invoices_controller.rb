@@ -160,7 +160,8 @@ module Api
       end
 
       private def filter_params
-        params.permit(:state, :year, :quarter, :month, :paid_in_year, :paid_in_quarter, :paid_in_month)
+        params.permit(:state, :year, :quarter, :month, :paid_in_year, :paid_in_quarter, :paid_in_month,
+          :project_id)
       end
 
       private def invoice_params

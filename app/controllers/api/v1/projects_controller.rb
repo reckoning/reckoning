@@ -34,6 +34,16 @@ module Api
         authorize! :read, @project
       end
 
+      # The budget chart, which is its own request rather than part of the
+      # project: the form reads the project too, and would be paying for a
+      # chart it never draws.
+      def chart
+        @project = current_account.projects.find(params[:id])
+        authorize! :read, @project
+
+        @chart = ::Charts::ProjectBudgetService.new(@project, @project.timers.billable).data
+      end
+
       def create
         @project = current_account.projects.new(project_params)
         authorize! :create, @project

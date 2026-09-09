@@ -1049,6 +1049,14 @@ paths:
         required: false
         schema:
           type: integer
+      - name: project_id
+        in: query
+        required: false
+        description: Only what belongs to this project, which is what its own screen
+          lists.
+        schema:
+          type: string
+          format: uuid
       - name: sort
         in: query
         required: false
@@ -1683,6 +1691,14 @@ paths:
         required: false
         schema:
           type: integer
+      - name: project_id
+        in: query
+        required: false
+        description: Only what belongs to this project, which is what its own screen
+          lists.
+        schema:
+          type: string
+          format: uuid
       - name: sort
         in: query
         required: false
@@ -2216,6 +2232,40 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/StandardError"
+  "/projects/{id}/chart":
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    get:
+      summary: What a project's budget chart is drawn from
+      tags:
+      - Projects
+      operationId: projectChart
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProjectChart"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '400':
+          "$ref": "#/components/responses/SchemaValidationError"
   "/projects/{id}/unarchive":
     parameters:
     - name: id
@@ -4553,6 +4603,12 @@ components:
           type:
           - string
           - 'null'
+        timerValuesBillable:
+          type: string
+        timerValuesUninvoiced:
+          type: string
+        invoiceValues:
+          type: string
         tasks:
           type: array
           items:
@@ -4583,6 +4639,61 @@ components:
       - createdAt
       - updatedAt
       title: Project
+    ProjectChart:
+      type: object
+      properties:
+        labels:
+          type: array
+          items:
+            type: string
+          description: The Monday of each week.
+        datasets:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type:
+                - string
+                - 'null'
+              color:
+                type:
+                - string
+                - 'null'
+              data:
+                type: array
+                items:
+                  type:
+                  - number
+                  - string
+              zone:
+                type:
+                - integer
+                - 'null'
+                description: Index up to which the series is drawn solid; past it
+                  are the weeks that have not happened yet.
+            additionalProperties: false
+            required:
+            - name
+            - color
+            - data
+            - zone
+        budget:
+          type:
+          - string
+          - 'null'
+          description: Drawn as the line the work is measured against.
+        ticks:
+          type: array
+          items:
+            type: integer
+          description: The weeks a month begins in, which is where the axis is labelled.
+      additionalProperties: false
+      required:
+      - labels
+      - datasets
+      - ticks
+      title: ProjectChart
     ProjectInput:
       type: object
       properties:
