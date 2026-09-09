@@ -64,14 +64,25 @@ export const axiosClient = <T>(config: AxiosRequestConfig): Promise<T> => {
   const method = config.method?.toLowerCase() ?? "get";
   const token = SAFE_METHODS.includes(method) ? undefined : csrfToken();
 
+  // An upload is multipart, and its content type carries the boundary that
+  // separates the parts. Declaring it here — or naming the type without a
+  // boundary, which is what the generated client does — leaves the body
+  // unparseable: the browser writes the header itself once nobody else has.
+  const isUpload =
+    typeof FormData !== "undefined" && config.data instanceof FormData;
+
+  const headers: AxiosRequestConfig["headers"] = {
+    ...config.headers,
+    Accept: "application/json",
+    ...(isUpload ? {} : { "Content-Type": "application/json" }),
+    ...(token ? { "X-CSRF-Token": token } : {}),
+  };
+
+  if (isUpload && headers) delete headers["Content-Type"];
+
   const promise = AXIOS_INSTANCE({
     ...config,
-    headers: {
-      ...config.headers,
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      ...(token ? { "X-CSRF-Token": token } : {}),
-    },
+    headers,
     cancelToken: source.token,
   }).then(({ data }) => data);
 

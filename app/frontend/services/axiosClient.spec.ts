@@ -157,4 +157,34 @@ describe("axiosClient", () => {
 
     expect(notified).toBe(0)
   })
+
+  // An upload is multipart, and its content type carries the boundary that
+  // separates the parts. Declaring `application/json` over it — or naming
+  // multipart without a boundary, which the generated client does — leaves
+  // the body unparseable at the other end.
+  it("lets an upload keep the content type the browser writes for it", async () => {
+    const { config } = captureRequest()
+    const data = new FormData()
+    data.append("receipt", new Blob(["x"], { type: "image/png" }), "receipt.png")
+
+    await axiosClient({
+      url: "/expenses/1/receipt",
+      method: "PUT",
+      headers: { "Content-Type": "multipart/form-data" },
+      data,
+    })
+
+    // Whatever axios fills in for the environment it runs in, it must not be
+    // the json this client puts on everything else.
+    expect(config()?.headers["Content-Type"]).not.toBe("application/json")
+    expect(config()?.headers["X-CSRF-Token"]).toBe("token-from-the-layout")
+  })
+
+  it("still says json for a body that is json", async () => {
+    const { config } = captureRequest()
+
+    await axiosClient({ url: "/expenses", method: "POST", data: { description: "x" } })
+
+    expect(config()?.headers["Content-Type"]).toBe("application/json")
+  })
 })
