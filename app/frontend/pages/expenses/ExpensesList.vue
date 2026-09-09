@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from "vue"
-import { useRoute, useRouter } from "vue-router"
+import { useRoute, useRouter, RouterLink } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useQueryClient } from "@tanstack/vue-query"
 import {
@@ -278,9 +278,9 @@ function exportPath(format: string): string {
   return `/expenses.${format}${exportQuery.value ? `?${exportQuery.value}` : ""}`
 }
 
-// The form and the import are still the server-rendered screens, and both
-// return to the list when they are done. They cannot see which filters are
-// on, so the link tells them, and they hand it back in the redirect.
+// The CSV import is still the server-rendered screen, and it returns to the
+// list when it is done. It cannot see which filters are on, so the link
+// tells it, and it hands them back in the redirect.
 function screenPath(path: string): string {
   return `${path}${exportQuery.value ? `?${exportQuery.value}` : ""}`
 }
@@ -306,14 +306,11 @@ function screenPath(path: string): string {
       <!-- One welded group, the way `btn-group-justified-responsive` had it.
            The form and the import are still the server-rendered screens. -->
       <div class="bs-btn-group max-md:w-full">
-        <UiButton
-          as="a"
-          :href="screenPath('/expenses/new')"
-          variant="primary"
-          data-test="new-expense"
-        >
-          <i class="fa fa-plus"></i> {{ t("expenses.new") }}
-        </UiButton>
+        <RouterLink :to="{ name: 'expense-new', query: filterParams }" data-test="new-expense">
+          <UiButton as="span" variant="primary">
+            <i class="fa fa-plus"></i> {{ t("expenses.new") }}
+          </UiButton>
+        </RouterLink>
         <UiButton as="a" :href="exportPath('pdf')" target="_blank" data-test="export-pdf">
           <i class="fa fa-down"></i> {{ t("expenses.exportPdf") }}
         </UiButton>
@@ -509,15 +506,13 @@ function screenPath(path: string): string {
               <div class="col-span-6 md:col-span-2">{{ period(expense) }}</div>
 
               <div class="col-span-6 md:col-span-3">
-                <!-- The form is still the server-rendered one; this turns
-                     into a router link when it moves over. -->
-                <a
-                  :href="screenPath(`/expenses/${expense.id}/edit`)"
+                <RouterLink
+                  :to="{ name: 'expense-edit', params: { id: expense.id }, query: filterParams }"
                   :title="t('expenses.edit')"
                   :data-test="`edit-${expense.id}`"
                 >
                   <b>{{ expense.description }}</b>
-                </a>
+                </RouterLink>
               </div>
 
               <div class="col-span-6 md:col-span-2">

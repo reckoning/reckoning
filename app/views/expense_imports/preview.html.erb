@@ -93,7 +93,7 @@
           <%= I18n.t(:"expenses.import.submit", count: @expenses.size) %>
         </button>
 
-        <%= link_to I18n.t(:"actions.cancel"), expenses_path(stored_params(:index)), class: "btn btn-default" %>
+        <%= link_to I18n.t(:"actions.cancel"), expenses_path(stored_params(:index, "expenses")), class: "btn btn-default" %>
       </div>
     <% end %>
   </div>

@@ -56,7 +56,13 @@ async function mountList(options: Options = {}) {
 
   const router = createRouter({
     history: createMemoryHistory(),
-    routes: [{path: "/expenses", name: "expenses", component: ExpensesList}],
+    routes: [
+      {path: "/expenses", name: "expenses", component: ExpensesList},
+      // The rows and the button link at the form; where it leads is the
+      // router's business, not this component's.
+      {path: "/expenses/new", name: "expense-new", component: {template: "<div />"}},
+      {path: "/expenses/:id/edit", name: "expense-edit", component: {template: "<div />"}},
+    ],
   })
   await router.push(options.path ?? "/expenses")
   await router.isReady()

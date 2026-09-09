@@ -13,7 +13,7 @@
 
       <div class="col-xs-12 col-md-4">
         <div class="btn-group-responsive pull-right resource-nav">
-          <%= link_to I18n.t(:"nav.subnav.back"), expenses_path(stored_params(:index)), class: "btn btn-default" %>
+          <%= link_to I18n.t(:"nav.subnav.back"), expenses_path(stored_params(:index, "expenses")), class: "btn btn-default" %>
         </div>
       </div>
     </div>
@@ -109,7 +109,7 @@
           <%= I18n.t(:"expenses.import.continue") %>
         </button>
 
-        <%= link_to I18n.t(:"actions.cancel"), expenses_path(stored_params(:index)), class: "btn btn-default" %>
+        <%= link_to I18n.t(:"actions.cancel"), expenses_path(stored_params(:index, "expenses")), class: "btn btn-default" %>
       </div>
     <% end %>
   </div>

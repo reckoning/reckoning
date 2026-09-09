@@ -118,6 +118,18 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true },
   },
   {
+    path: "/expenses/new",
+    name: "expense-new",
+    component: () => import("@/pages/expenses/ExpenseForm.vue"),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/expenses/:id/edit",
+    name: "expense-edit",
+    component: () => import("@/pages/expenses/ExpenseForm.vue"),
+    meta: { requiresAuth: true },
+  },
+  {
     path: "/invoices",
     name: "invoices",
     component: () => import("@/pages/invoices/InvoicesList.vue"),

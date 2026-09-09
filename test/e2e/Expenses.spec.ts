@@ -119,34 +119,123 @@ test.describe("Expenses", () => {
     await expect(page.getByTestId("expenses")).not.toContainText("Tricorder")
   })
 
-  // The form and the import are still the server-rendered screens, and both
-  // return to the list when they are done — to the one they were opened
-  // from, which the SPA tells them in the url.
-  test("hands the filters to the form and gets them back", async ({ page }) => {
+  // The list's filters travel with its links, so saving and cancelling both
+  // land back on the list that sent you to the form.
+  test("edits an expense and comes back to the list it started from", async ({ page }) => {
     await page.goto("/app/expenses?type=home_office")
 
-    await expect(page.getByTestId("new-expense")).toHaveAttribute(
-      "href",
-      "/expenses/new?type=home_office",
-    )
-
     const id = (await appEval(`Expense.find_by(description: "Ready room").id`)) as string
-    await expect(page.getByTestId(`edit-${id}`)).toHaveAttribute(
-      "href",
-      `/expenses/${id}/edit?type=home_office`,
-    )
+
+    await page.getByTestId(`edit-${id}`).click()
+
+    await expect(page).toHaveURL(new RegExp(`/app/expenses/${id}/edit\\?type=home_office`))
+    await expect(page.getByTestId("description")).toHaveValue("Ready room")
+
+    await page.getByTestId("description").fill("Ready room, refitted")
+    await page.getByTestId("submit").click()
+
+    await expect(page).toHaveURL(/\/app\/expenses\?type=home_office/)
+    await expect(page.getByTestId("expenses")).toContainText("Ready room, refitted")
+  })
+
+  test("creates an expense from the form", async ({ page }) => {
+    await page.goto("/app/expenses")
+    await page.getByTestId("new-expense").click()
+
+    await page.getByTestId("expense-type").selectOption("licenses")
+    await page.getByTestId("description").fill("Editor licence")
+    await page.getByTestId("seller").fill("JetBrains")
+    await page.getByTestId("value").fill("199")
+    await page.getByTestId("date").fill("2026-05-04")
+    await page.getByTestId("submit").click()
+
+    await expect(page).toHaveURL(/\/app\/expenses$/)
+    await expect(page.getByTestId("expenses")).toContainText("Editor licence")
+    await expect.poll(async () => appEval(`Expense.where(description: "Editor licence").count`)).toBe(1)
+  })
+
+  // Only an AfA expense is written off, so only it asks for a class — and
+  // the endpoint refuses one without it.
+  test("asks for a depreciation class once the type is afa", async ({ page }) => {
+    await page.goto("/app/expenses/new")
+
+    await expect(page.getByTestId("afa-type")).toHaveCount(0)
+
+    await page.getByTestId("expense-type").selectOption("afa")
+
+    await expect(page.getByTestId("afa-type")).toBeVisible()
+  })
+
+  // The interval decides which dates the form asks for, the way
+  // `expense-interval#toggle` did.
+  test("swaps the date for a span once it repeats", async ({ page }) => {
+    await page.goto("/app/expenses/new")
+
+    await expect(page.getByTestId("date")).toBeVisible()
+
+    await page.getByTestId("interval").selectOption("monthly")
+
+    await expect(page.getByTestId("date")).toHaveCount(0)
+    await expect(page.getByTestId("started-at")).toBeVisible()
+  })
+
+  test("uploads a receipt and takes it off again", async ({ page }) => {
+    const id = (await appEval(`Expense.find_by(description: "Tricorder").id`)) as string
+
+    await page.goto(`/app/expenses/${id}/edit`)
+    await expect(page.getByTestId("receipt-missing")).toBeVisible()
+
+    await page.getByTestId("receipt-file").setInputFiles("test/fixtures/files/receipt.png")
+    await page.getByTestId("submit").click()
+
+    await expect(page).toHaveURL(/\/app\/expenses$/)
+    await expect.poll(async () =>
+      appEval(`Expense.find_by(description: "Tricorder").receipt.attached?`),
+    ).toBe(true)
+
+    // The list says so too, with the icon that means a receipt is there.
+    await expect(page.getByTestId(`receipt-${id}`)).toBeVisible()
+
+    page.on("dialog", (dialog) => dialog.accept())
+    await page.goto(`/app/expenses/${id}/edit`)
+    await page.getByTestId("remove-receipt").click()
+
+    await expect(page.getByTestId("receipt-missing")).toBeVisible()
+  })
+
+  // `to_prefill_params`: the copy button opens a new form with everything
+  // filled in and nothing saved.
+  test("copies an expense into a new one", async ({ page }) => {
+    const id = (await appEval(`Expense.find_by(description: "Tricorder").id`)) as string
+
+    await page.goto(`/app/expenses/${id}/edit`)
+    await page.getByTestId("copy").click()
+
+    await expect(page).toHaveURL(/\/app\/expenses\/new\?/)
+    await expect(page.getByTestId("description")).toHaveValue("Tricorder")
+    await expect.poll(async () => appEval(`Expense.where(description: "Tricorder").count`)).toBe(1)
+  })
+
+  test("deletes an expense from the form", async ({ page }) => {
+    const id = (await appEval(`Expense.find_by(description: "Tricorder").id`)) as string
+
+    page.on("dialog", (dialog) => dialog.accept())
+    await page.goto(`/app/expenses/${id}/edit`)
+    await page.getByTestId("delete").click()
+
+    await expect(page).toHaveURL(/\/app\/expenses$/)
+    await expect.poll(async () => appEval(`Expense.where(description: "Tricorder").count`)).toBe(0)
+  })
+
+  // The import is still the server-rendered screen, and it returns to the
+  // list when it is done — so the link tells it which filters are on.
+  test("hands the filters to the import", async ({ page }) => {
+    await page.goto("/app/expenses?type=home_office")
+
     await expect(page.getByTestId("import")).toHaveAttribute(
       "href",
       "/expense_imports/new?type=home_office",
     )
-
-    // Saving from that form lands back on the same filtered list.
-    await page.getByTestId(`edit-${id}`).click()
-    await page.locator("#expense_description").fill("Ready room, refitted")
-    await page.locator("input[type=submit], button[type=submit]").first().click()
-
-    await expect(page).toHaveURL(/\/app\/expenses\?type=home_office/)
-    await expect(page.getByTestId("expenses")).toContainText("Ready room, refitted")
   })
 
   // The list is an account feature, and the navigation only offers it where
