@@ -41,18 +41,24 @@ class TrialTest < ActionDispatch::IntegrationTest
   end
 
   describe "after the trial" do
-    # Any server-rendered write will do; expenses are simply the ones that
-    # have not moved to the SPA yet.
+    # Any server-rendered write will do; the CSV import is simply the one
+    # that has not moved to the SPA yet — the expense form it used to be has.
     it "explains a refused write instead of shrugging" do
       trial_ending(1.minute.ago)
       sign_in user
-      unchanged = expense.description
 
-      patch expense_path(expense), params: {expense: {description: "Renamed"}}
+      assert_no_difference "Expense.count" do
+        post expense_imports_path, params: {
+          expense_import: {
+            rows: {"0" => {include: "1", date: "2025-07-03", value: "7.96", seller: "X",
+                           description: "Y", expense_type: "licenses", vat_percent: "19",
+                           private_use_percent: "0", interval: "once"}}
+          }
+        }
+      end
 
       assert_redirected_to root_url
       assert_equal I18n.t("trial.denied"), flash[:alert]
-      assert_equal unchanged, expense.reload.description
     end
 
     it "still serves the screens the data lives on" do

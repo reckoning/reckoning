@@ -174,23 +174,18 @@ Rails.application.routes.draw do
     end
   end
 
-  # The SPA owns the list. What is left of the server-rendered screen is the
-  # form, the bulk actions behind it, and the two exports — which are the
-  # same path in another format, so the forward below has to let them past.
-  resources :expenses, except: %i[show index] do
-    collection do
-      post :bulk_update
-      post :bulk_destroy
-    end
-  end
+  # The SPA owns the list, the form and the bulk actions; creating, updating
+  # and deleting go through /api/v1. What is left server-rendered are the two
+  # exports, which are the same path in another format — so they are declared
+  # before the forward, which would otherwise swallow them.
+  # Named apart from the forward below, which is what `expenses_path` means
+  # to everything that links the list.
+  get "expenses", to: "expenses#index", as: :expenses_export,
+    constraints: ->(request) { request.format.csv? || request.format.pdf? }
 
-  get "expenses", to: "expenses#index", constraints: ->(request) { request.format.csv? || request.format.pdf? }
-  # Unnamed: `expenses_path` already comes from the create route above, and
-  # every caller of it wants this. The query travels along, so the form's
-  # redirect after a save lands on the same filtered list it started from.
-  get "expenses", to: redirect { |_params, request|
-    ["/app/expenses", request.query_string.presence].compact.join("?")
-  }
+  get "expenses", to: spa_screen.call("/app/expenses"), as: :expenses
+  get "expenses/new", to: spa_screen.call("/app/expenses/new"), as: :new_expense
+  get "expenses/:id/edit", to: spa_screen.call("/app/expenses/%{id}/edit"), as: :edit_expense
   resources :expense_imports, only: %i[new create] do
     post :preview, on: :collection
   end

@@ -56,6 +56,10 @@
   --color-info-border: #46b8da;
   --color-warning: #f0ad4e;
   --color-warning-border: #eea236;
+  /* `button-variant` darkens the fill by 10% on hover and the border by 12%,
+     the way it does for every other button. */
+  --color-warning-hover: #ec971f;
+  --color-warning-hover-border: #d58512;
   --color-danger: #d9534f;
   --color-danger-border: #d43f3a;
   --color-danger-hover: #d2322d;

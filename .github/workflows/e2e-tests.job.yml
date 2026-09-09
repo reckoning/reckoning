@@ -12,6 +12,11 @@ jobs:
     env:
       DB_NAME: fleetyards_test
       DB_HOST: postgres
+      # The services answer by name, not on localhost: the job runs in its
+      # own container. Postgres is addressed that way above; without the
+      # same for redis the app falls back to localhost and every enqueue —
+      # which is what attaching a file does — fails.
+      REDIS_URL: redis://redis:6379
       DB_PORT: 5432
       DB_USER: root
       DB_PASSWORD: root
