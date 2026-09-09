@@ -284,6 +284,8 @@ export default {
     save: "Save",
     start: "Start",
     stop: "Stop",
+    confirmDelete: "Delete this time?",
+    failed: "Something went wrong.",
   },
   timesheet: {
     timersFailed: "The times could not be loaded.",

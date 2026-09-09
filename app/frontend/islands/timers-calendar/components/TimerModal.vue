@@ -138,7 +138,7 @@ async function onStop() {
 
 async function onDelete() {
   if (!id.value) return
-  if (!(await confirmDialog("Diese Zeit löschen?"))) return
+  if (!(await confirmDialog(t("timerModal.confirmDelete")))) return
   saving.value = true
   try {
     await deleteTimer(id.value)
@@ -169,7 +169,7 @@ async function onCreateTask() {
 }
 
 function errorText(e: unknown): string {
-  return e instanceof Error ? e.message : "Etwas ist schiefgelaufen."
+  return e instanceof Error ? e.message : t("timerModal.failed")
 }
 
 watch(

@@ -284,6 +284,8 @@ export default {
     save: "Speichern",
     start: "Start",
     stop: "Stopp",
+    confirmDelete: "Diese Zeit löschen?",
+    failed: "Etwas ist schiefgelaufen.",
   },
   timesheet: {
     timersFailed: "Zeiten konnten nicht geladen werden.",
