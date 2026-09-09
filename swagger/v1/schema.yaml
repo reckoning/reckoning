@@ -947,6 +947,12 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/ValidationError"
+        '403':
+          description: expenses not enabled for this account
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
         '404':
           description: not found
           content:
@@ -971,6 +977,12 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Expense"
+        '403':
+          description: expenses not enabled for this account
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
         '404':
           description: not found
           content:

@@ -71,16 +71,16 @@ module Api
         @expense = find_expense
         authorize! :update, @expense
 
-        return render json: ValidationError.new("expense.receipt"), status: :bad_request if receipt_file.blank?
+        # Checked before the attachment is touched. Attaching to a saved
+        # record writes at once and pushes the previous receipt out, so a
+        # rejected upload would take the receipt that was already there with
+        # it — and that one cannot be put back, because replacing it has
+        # already queued its file for deletion.
+        return render json: ValidationError.new("expense.receipt"), status: :bad_request unless acceptable_receipt?
 
         @expense.receipt.attach(receipt_file)
 
-        return render :show if @expense.valid?
-
-        # An attach on a persisted record writes immediately, so a file the
-        # validation rejects has to be taken back off again.
-        @expense.receipt.purge
-        render json: ValidationError.new("expense.receipt", @expense.errors), status: :bad_request
+        render :show
       end
 
       def destroy_receipt
@@ -226,6 +226,12 @@ module Api
 
       private def receipt_file
         params[:receipt]
+      end
+
+      private def acceptable_receipt?
+        receipt_file.present? &&
+          receipt_file.respond_to?(:content_type) &&
+          ::Expense::RECEIPT_CONTENT_TYPES.include?(receipt_file.content_type)
       end
 
       private def find_expense

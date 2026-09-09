@@ -18,7 +18,14 @@ class Expense < ApplicationRecord
 
   has_one_attached :receipt
 
-  validates :receipt, content_type: ["application/pdf", "image/jpeg", "image/png"]
+  # A receipt is the document itself or a picture of one. Named, because the
+  # API checks an upload against this list before it touches the attachment:
+  # attaching to a saved record writes at once and pushes the previous
+  # receipt out, so a file that would be rejected has to be turned away
+  # first.
+  RECEIPT_CONTENT_TYPES = %w[application/pdf image/jpeg image/png].freeze
+
+  validates :receipt, content_type: RECEIPT_CONTENT_TYPES
 
   validates :value, :description, :expense_type, :seller, :private_use_percent, :vat_percent, :interval, presence: true
   validates :afa_type, presence: true, if: ->(expense) { expense.expense_type == "afa" }
