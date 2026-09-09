@@ -4,6 +4,9 @@ class ExpenseImportsController < ApplicationController
   include ResourceHelper
 
   before_action :set_active_nav
+  # The SPA's list hands its filters to the import in the url, so the
+  # redirect at the end of it lands back on the same filtered list.
+  before_action :store_list_filters, only: [:new]
 
   def new
     authorize! :create, ExpenseImport
@@ -43,6 +46,12 @@ class ExpenseImportsController < ApplicationController
   private def create_params
     permitted = params.require(:expense_import)
     {rows: Array(permitted[:rows]&.values).map { |row| row.permit(:include, *ExpenseImport::ROW_ATTRIBUTES).to_h }}
+  end
+
+  # Under the expenses list's own key, which is where the redirect below
+  # reads it back from.
+  private def store_list_filters
+    session[:expenses_index] = params.permit(:year, :type, :quarter, :month, :query).to_h.compact_blank
   end
 
   private def set_active_nav

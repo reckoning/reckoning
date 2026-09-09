@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue"
+import { computed, nextTick, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useQueryClient } from "@tanstack/vue-query"
@@ -260,12 +260,29 @@ async function destroyBulk(): Promise<void> {
   }
 }
 
+// The form redirects back with the row it saved in the fragment, the way it
+// always has. The rows arrive after the browser has already looked for it,
+// so the scroll happens once they are there.
+watch(expenses, (rows) => {
+  const anchor = window.location.hash.slice(1)
+  if (!anchor || !rows?.length) return
+
+  nextTick(() => document.getElementById(anchor)?.scrollIntoView({block: "center"}))
+})
+
 // The PDF and the CSV are rendered by the server, filters and all, so the
 // buttons carry the same query across to the Rails route.
 const exportQuery = computed(() => new URLSearchParams(filterParams.value).toString())
 
 function exportPath(format: string): string {
   return `/expenses.${format}${exportQuery.value ? `?${exportQuery.value}` : ""}`
+}
+
+// The form and the import are still the server-rendered screens, and both
+// return to the list when they are done. They cannot see which filters are
+// on, so the link tells them, and they hand it back in the redirect.
+function screenPath(path: string): string {
+  return `${path}${exportQuery.value ? `?${exportQuery.value}` : ""}`
 }
 </script>
 
@@ -289,7 +306,12 @@ function exportPath(format: string): string {
       <!-- One welded group, the way `btn-group-justified-responsive` had it.
            The form and the import are still the server-rendered screens. -->
       <div class="bs-btn-group max-md:w-full">
-        <UiButton as="a" href="/expenses/new" variant="primary" data-test="new-expense">
+        <UiButton
+          as="a"
+          :href="screenPath('/expenses/new')"
+          variant="primary"
+          data-test="new-expense"
+        >
           <i class="fa fa-plus"></i> {{ t("expenses.new") }}
         </UiButton>
         <UiButton as="a" :href="exportPath('pdf')" target="_blank" data-test="export-pdf">
@@ -298,7 +320,7 @@ function exportPath(format: string): string {
         <UiButton as="a" :href="exportPath('csv')" target="_blank" data-test="export-csv">
           <i class="fa fa-down"></i> {{ t("expenses.exportCsv") }}
         </UiButton>
-        <UiButton as="a" href="/expense_imports/new" data-test="import">
+        <UiButton as="a" :href="screenPath('/expense_imports/new')" data-test="import">
           <i class="fa fa-upload"></i> {{ t("expenses.import") }}
         </UiButton>
       </div>
@@ -469,6 +491,7 @@ function exportPath(format: string): string {
       <UiListGroup>
         <UiListGroupItem
           v-for="expense in expenses"
+          :id="`expense-${expense.id}`"
           :key="expense.id"
           :data-test="`expense-${expense.id}`"
         >
@@ -489,7 +512,7 @@ function exportPath(format: string): string {
                 <!-- The form is still the server-rendered one; this turns
                      into a router link when it moves over. -->
                 <a
-                  :href="`/expenses/${expense.id}/edit`"
+                  :href="screenPath(`/expenses/${expense.id}/edit`)"
                   :title="t('expenses.edit')"
                   :data-test="`edit-${expense.id}`"
                 >

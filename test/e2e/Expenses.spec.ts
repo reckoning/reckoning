@@ -108,6 +108,47 @@ test.describe("Expenses", () => {
     await expect.poll(async () => appEval(`Expense.where(description: "Tricorder").count`)).toBe(0)
   })
 
+  test("forwards the old rails path to the spa, filters and all", async ({ page }) => {
+    await page.goto("/expenses")
+    await expect(page).toHaveURL(/\/app\/expenses$/)
+    await expect(page.getByTestId("expenses")).toContainText("Tricorder")
+
+    await page.goto("/expenses?type=home_office")
+    await expect(page).toHaveURL(/\/app\/expenses\?type=home_office$/)
+    await expect(page.getByTestId("expenses")).toContainText("Ready room")
+    await expect(page.getByTestId("expenses")).not.toContainText("Tricorder")
+  })
+
+  // The form and the import are still the server-rendered screens, and both
+  // return to the list when they are done — to the one they were opened
+  // from, which the SPA tells them in the url.
+  test("hands the filters to the form and gets them back", async ({ page }) => {
+    await page.goto("/app/expenses?type=home_office")
+
+    await expect(page.getByTestId("new-expense")).toHaveAttribute(
+      "href",
+      "/expenses/new?type=home_office",
+    )
+
+    const id = (await appEval(`Expense.find_by(description: "Ready room").id`)) as string
+    await expect(page.getByTestId(`edit-${id}`)).toHaveAttribute(
+      "href",
+      `/expenses/${id}/edit?type=home_office`,
+    )
+    await expect(page.getByTestId("import")).toHaveAttribute(
+      "href",
+      "/expense_imports/new?type=home_office",
+    )
+
+    // Saving from that form lands back on the same filtered list.
+    await page.getByTestId(`edit-${id}`).click()
+    await page.locator("#expense_description").fill("Ready room, refitted")
+    await page.locator("input[type=submit], button[type=submit]").first().click()
+
+    await expect(page).toHaveURL(/\/app\/expenses\?type=home_office/)
+    await expect(page.getByTestId("expenses")).toContainText("Ready room, refitted")
+  })
+
   // The list is an account feature, and the navigation only offers it where
   // the account has it.
   test("offers the navigation entry only with the feature on", async ({ page }) => {
