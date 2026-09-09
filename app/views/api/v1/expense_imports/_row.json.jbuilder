@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# A row parsed out of a Reckoning export names the record it came from, and
+# importing it back updates that record rather than adding one.
+json.id expense.id
 json.date expense.date
 json.started_at expense.started_at
 json.ended_at expense.ended_at

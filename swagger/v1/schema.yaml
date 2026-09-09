@@ -3779,6 +3779,11 @@ components:
                 type:
                 - boolean
                 - string
+              id:
+                type:
+                - string
+                - 'null'
+                format: uuid
               date:
                 type:
                 - string
@@ -3875,6 +3880,12 @@ components:
     ExpenseImportRow:
       type: object
       properties:
+        id:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: Set when the row matches an expense that already exists.
         date:
           type:
           - string

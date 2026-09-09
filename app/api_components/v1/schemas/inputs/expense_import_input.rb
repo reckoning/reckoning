@@ -18,6 +18,7 @@ module V1
                 type: :object,
                 properties: {
                   include: {type: [:boolean, :string]},
+                  id: {type: [:string, :null], format: :uuid},
                   date: {type: [:string, :null], format: :date},
                   started_at: {type: [:string, :null], format: :date},
                   ended_at: {type: [:string, :null], format: :date},

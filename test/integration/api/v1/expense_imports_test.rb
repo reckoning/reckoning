@@ -71,6 +71,22 @@ module Api
           end
         end
 
+        # What the hint on the first step promises: a row that names an
+        # expense updates it instead of adding a second one.
+        it "updates the expense a row names rather than creating one" do
+          existing = data.account.expenses.create!(
+            expense_type: "licenses", value: 10, date: Date.new(2026, 1, 1),
+            seller: "Old", description: "Old spares"
+          )
+
+          assert_no_difference "Expense.count" do
+            assert_api_response :post, 201, body: {rows: [row(id: existing.id, seller: "New")]}
+          end
+
+          assert_equal "New", existing.reload.seller
+          assert_equal 42.5, existing.value.to_f
+        end
+
         # The checkbox column drives this: rows without `include` are dropped.
         it "ignores rows that were not selected" do
           assert_difference "Expense.count", 1 do
