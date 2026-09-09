@@ -501,6 +501,48 @@
     border-bottom: 1px solid var(--color-rule);
   }
 
+  /* `partials/_panel.scss`: the row of numbers along the bottom of a
+     panel, and the progress bar above them. */
+  .bs-panel-box {
+    padding: 15px;
+    background-color: var(--color-surface-muted);
+    border-top: 1px solid var(--color-rule-strong);
+    border-right: 1px solid var(--color-rule-strong);
+    height: 122px;
+  }
+
+  .bs-panel-box:last-child {
+    border-right: none;
+  }
+
+  .bs-panel-box h2 {
+    font-size: 15px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: var(--color-muted-strong);
+  }
+
+  .bs-panel-box-highlight {
+    font-size: 26px;
+  }
+
+  /* Nothing to show, rather than a number that would be a guess. */
+  .bs-panel-box-highlight.is-blank {
+    color: var(--color-muted);
+  }
+
+  .bs-panel-box-subline {
+    margin-top: 10px;
+  }
+
+  .bs-panel-progress {
+    border-top: 1px solid var(--color-rule-strong);
+    background-color: var(--color-surface-muted);
+    padding: 15px;
+    margin-top: 15px;
+  }
+
   .bs-caret {
     display: inline-block;
     width: 0;
@@ -558,6 +600,16 @@
 
 .highcharts-xaxis-labels span.hover {
   font-weight: bold;
+}
+
+.highcharts-plotline-budget {
+  position: absolute;
+  display: inline-block;
+  z-index: 1 !important;
+  margin-top: -8px;
+  margin-left: -10px;
+  font-size: 90% !important;
+  line-height: 1.2;
 }
 
 /* The breakpoints `_pdf_preview.scss` steps the preview's height through, so
