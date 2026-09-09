@@ -8,10 +8,21 @@ import ProjectDetail from "./ProjectDetail.vue"
 import {AXIOS_INSTANCE} from "@/services/axiosClient"
 import {i18n} from "@/plugins/i18n"
 
-// Highcharts measures real SVG, which happy-dom does not implement; the
-// options it is handed are covered in `lib/projectBudgetChart.spec.ts`.
+// Highcharts measures real SVG, which happy-dom does not implement, so the
+// chart is a stub that keeps the options it was handed — what goes into them
+// is covered in `lib/projectBudgetChart.spec.ts`.
+let chartOptions: Record<string, unknown> | undefined
+
 vi.mock("@/lib/highcharts", () => ({
-  Highcharts: {Chart: class {destroy() {}}, setOptions() {}},
+  Highcharts: {
+    Chart: class {
+      constructor(options: Record<string, unknown>) {
+        chartOptions = options
+      }
+      destroy() {}
+    },
+    setOptions() {},
+  },
 }))
 
 const ID = "dddddddd-0000-4000-8000-000000000001"
@@ -186,6 +197,18 @@ describe("ProjectDetail", () => {
 
     expect(offers?.params?.project_id).toBe(ID)
     expect(invoices?.params?.project_id).toBe(ID)
+  })
+
+  // The axis is labelled with the month's short name and nothing else: the
+  // label has to fit the width of that month on the axis, and month plus year
+  // wrapped onto a second line that the chart then cut off.
+  it("labels the chart's axis with the short month", async () => {
+    await mountDetail()
+
+    const xAxis = chartOptions?.xAxis as {categories: {short: string; long: string}[]}
+
+    expect(xAxis.categories[0].short).toBe("Jan")
+    expect(xAxis.categories[0].long).toBe("January")
   })
 
   it("says so where a tab has nothing in it", async () => {
