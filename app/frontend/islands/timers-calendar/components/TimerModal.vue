@@ -1,13 +1,18 @@
 <script setup lang="ts">
-// Bootstrap 3 modal markup — mirrors the legacy
-// `app/views/templates/timesheets/modal/timer.html.erb` so the
-// existing `.modal-*` and `.btn-*` styles apply.
+// Add / edit dialog for one day of a project's calendar. The timesheet's
+// modal is the same dialog for a screen that spans every project, so it picks
+// one; here the project is the one whose calendar is open.
 
 import {computed, onBeforeUnmount, onMounted, ref, watch} from "vue"
+import {useI18n} from "vue-i18n"
 import {formatHHMM, parseHHMM, runningDuration} from "../../../lib/timers/format"
 import {createTask, createTimer, deleteTimer, startTimer, stopTimer, updateTimer} from "../../../lib/timers/api"
 import type {Task, Timer} from "../../../lib/timers/types"
 import {confirmDialog} from "../../../lib/confirm"
+import UiButton from "../../../components/ui/UiButton.vue"
+import UiInput from "../../../components/ui/UiInput.vue"
+
+const {t} = useI18n()
 
 const props = defineProps<{
   draft: Partial<Timer> & {date: string; projectId: string}
@@ -44,7 +49,9 @@ const canPlay = computed(
   () => !isInvoiced.value && !isRunning.value && !!taskId.value && !saving.value,
 )
 
-const title = computed(() => (isEdit.value ? "Edit timer" : "Add timer"))
+const title = computed(() =>
+  isEdit.value ? t("timesheet.editTimer") : t("timesheet.addTimer"),
+)
 
 const now = ref(Date.now())
 let tickId: number | null = null
@@ -131,7 +138,7 @@ async function onStop() {
 
 async function onDelete() {
   if (!id.value) return
-  if (!(await confirmDialog("Delete this timer?"))) return
+  if (!(await confirmDialog("Diese Zeit löschen?"))) return
   saving.value = true
   try {
     await deleteTimer(id.value)
@@ -162,8 +169,7 @@ async function onCreateTask() {
 }
 
 function errorText(e: unknown): string {
-  if (e instanceof Error) return e.message
-  return "Something went wrong."
+  return e instanceof Error ? e.message : "Etwas ist schiefgelaufen."
 }
 
 watch(
@@ -176,158 +182,128 @@ watch(
 
 <template>
   <div>
-    <div class="modal-backdrop fade in"></div>
+    <div class="fixed inset-0 z-40 bg-ink/50"></div>
     <div
-      class="modal fade in"
+      class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4"
       tabindex="-1"
       role="dialog"
       aria-modal="true"
-      style="display: block"
       @click.self="emit('close')"
     >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button class="close" type="button" aria-label="Close" @click="emit('close')">
+      <div class="relative z-50 mt-10 w-full max-w-lg" role="document">
+        <div class="bs-modal">
+          <div class="flex items-center justify-between border-b border-rule px-4 py-3.5">
+            <h3>{{ title }}</h3>
+            <button
+              type="button"
+              class="text-2xl leading-none opacity-20 hover:opacity-50"
+              :aria-label="t('timerModal.close')"
+              @click="emit('close')"
+            >
               <span aria-hidden="true">&times;</span>
             </button>
-            <h2 class="modal-title">{{ title }}</h2>
           </div>
 
-          <div class="modal-body">
-            <p v-if="isInvoiced" class="alert alert-success">
-              This timer is on an invoice and can't be changed.
+          <div class="px-4 py-3.5">
+            <p
+              v-if="isInvoiced"
+              class="mb-4 rounded-bs border border-alert-success-border bg-alert-success px-4 py-3.5 text-alert-success-text"
+            >
+              {{ t("timerModal.invoiced") }}
             </p>
 
-            <div class="row">
-              <div class="col-xs-12">
-                <select
-                  v-model="taskId"
-                  class="form-control"
-                  :disabled="isInvoiced"
+            <label class="mb-1 block">
+              <span class="mb-1 inline-block font-bold">{{ t("timerModal.task") }}</span>
+              <UiInput v-model="taskId" as="select" :disabled="isInvoiced">
+                <option value="">{{ t("timerModal.pickTask") }}</option>
+                <option v-for="task in localTasks" :key="task.id" :value="task.id">
+                  {{ task.name }}{{ task.billable ? ` (${t("timerModal.billable")})` : "" }}
+                </option>
+              </UiInput>
+            </label>
+
+            <div v-if="!isInvoiced" class="mb-4">
+              <a v-if="!showCreateTask" role="button" @click.prevent="showCreateTask = true">
+                + {{ t("timerModal.newTask") }}
+              </a>
+              <div v-else class="flex">
+                <UiInput
+                  v-model="newTaskName"
+                  class="rounded-r-none"
+                  :placeholder="t('timerModal.taskName')"
+                  @keydown.enter.prevent="onCreateTask"
+                />
+                <UiButton
+                  variant="primary"
+                  class="-ml-px rounded-none"
+                  :disabled="!newTaskName.trim() || saving"
+                  @click="onCreateTask"
                 >
-                  <option value="">— Select task —</option>
-                  <option v-for="task in localTasks" :key="task.id" :value="task.id">
-                    {{ task.name }}{{ task.billable ? " (billable)" : "" }}
-                  </option>
-                </select>
-
-                <div v-if="!isInvoiced" style="margin-top: 6px">
-                  <a v-if="!showCreateTask" role="button" @click.prevent="showCreateTask = true">
-                    <i class="fa fa-plus"></i> New task
-                  </a>
-                  <div v-else class="input-group">
-                    <input
-                      v-model="newTaskName"
-                      type="text"
-                      class="form-control"
-                      placeholder="New task name"
-                      @keydown.enter.prevent="onCreateTask"
-                    />
-                    <span class="input-group-btn">
-                      <button
-                        type="button"
-                        class="btn btn-primary"
-                        :disabled="!newTaskName.trim() || saving"
-                        @click="onCreateTask"
-                      >
-                        Create
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-default"
-                        @click="showCreateTask = false"
-                      >
-                        Cancel
-                      </button>
-                    </span>
-                  </div>
-                </div>
-
-                <hr />
+                  {{ t("timerModal.createTask") }}
+                </UiButton>
+                <UiButton class="-ml-px rounded-l-none" @click="showCreateTask = false">
+                  {{ t("timerModal.cancel") }}
+                </UiButton>
               </div>
             </div>
 
-            <div class="row">
-              <div class="col-xs-12 col-md-8">
-                <textarea
+            <div class="grid grid-cols-12 items-start gap-2">
+              <div class="col-span-12 md:col-span-8">
+                <UiInput
                   v-model="note"
-                  class="form-control"
+                  as="textarea"
                   rows="3"
-                  placeholder="Note"
+                  :placeholder="t('timerModal.note')"
                   :disabled="isInvoiced"
-                ></textarea>
+                />
               </div>
-              <div class="col-xs-12 col-md-4">
-                <br class="visible-sm visible-xs" />
-                <div v-if="isRunning" class="modal-timer">
+
+              <div class="col-span-12 md:col-span-4">
+                <div v-if="isRunning" class="text-right text-[28px] text-brand">
                   {{ runningDisplay }}
                 </div>
-                <input
+                <UiInput
                   v-else
                   v-model="valueText"
-                  type="text"
-                  class="input-lg form-control text-right"
+                  class="h-[46px] text-right text-lg"
                   placeholder="0:00"
                   :disabled="isInvoiced"
                 />
               </div>
             </div>
 
-            <div class="row" v-if="!isInvoiced">
-              <div class="col-xs-12" style="margin-top: 10px">
-                <label class="control-label">Date</label>
-                <input
-                  v-model="date"
-                  type="date"
-                  class="form-control"
-                  :disabled="isRunning"
-                />
-              </div>
-            </div>
+            <label v-if="!isInvoiced" class="mt-4 block">
+              <span class="mb-1 inline-block font-bold">{{ t("timerModal.date") }}</span>
+              <UiInput v-model="date" type="date" :disabled="isRunning" />
+            </label>
 
-            <p v-if="errorMessage" class="alert alert-danger" style="margin-top: 12px">
+            <p
+              v-if="errorMessage"
+              class="mt-4 rounded-bs border border-alert-danger-border bg-alert-danger px-4 py-3.5 text-alert-danger-text"
+            >
               {{ errorMessage }}
             </p>
           </div>
 
-          <div class="modal-footer">
-            <div class="pull-left" v-if="canDelete">
-              <button type="button" class="btn btn-danger" @click="onDelete">
-                Delete
-              </button>
-            </div>
-            <div class="pull-right">
-              <button type="button" class="btn btn-default btn-lg" @click="emit('close')">
-                Cancel
-              </button>
-              <button
-                v-if="canStop"
-                type="button"
-                class="btn btn-default btn-lg"
-                title="Stop"
-                @click="onStop"
-              >
-                <i class="fa fa-stop"></i>
-              </button>
-              <button
-                v-if="canPlay"
-                type="button"
-                class="btn btn-default btn-lg"
-                title="Play"
-                @click="onPlay"
-              >
-                <i class="fa fa-play"></i>
-              </button>
-              <button
-                v-if="!isInvoiced"
-                type="button"
-                class="btn btn-primary btn-lg"
-                :disabled="!canSave"
-                @click="onSave"
-              >
-                Save
-              </button>
+          <div class="flex flex-wrap items-center gap-2 border-t border-rule px-4 py-3.5">
+            <UiButton v-if="canDelete" variant="danger" @click="onDelete">
+              {{ t("timerModal.delete") }}
+            </UiButton>
+
+            <div class="ml-auto flex flex-wrap gap-2">
+              <UiButton @click="emit('close')">{{ t("timerModal.cancel") }}</UiButton>
+
+              <UiButton v-if="canStop" :title="t('timerModal.stop')" @click="onStop">
+                <span aria-hidden="true">■</span>
+              </UiButton>
+
+              <UiButton v-if="canPlay" :title="t('timerModal.start')" @click="onPlay">
+                <span aria-hidden="true">▶</span>
+              </UiButton>
+
+              <UiButton v-if="!isInvoiced" variant="primary" :disabled="!canSave" @click="onSave">
+                {{ t("timerModal.save") }}
+              </UiButton>
             </div>
           </div>
         </div>

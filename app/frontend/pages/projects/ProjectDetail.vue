@@ -290,7 +290,6 @@ const monthLabels = computed(() =>
             :project-id="id"
             :labels="timerLabels"
             :month-labels="monthLabels"
-            :standalone="false"
             data-test="timers-calendar"
             @changed="refresh"
           />
