@@ -21,6 +21,14 @@ module Api
         end
       end
 
+      # The columns a Reckoning-exported CSV may carry, which the first step
+      # of the import spells out. Read off the model so the two cannot drift.
+      def columns
+        authorize! :create, ExpenseImport
+
+        @columns = Expense.columns.select { |column| column.name.in?(["id", *Expense.accessible_attributes]) }
+      end
+
       def create
         authorize! :create, ExpenseImport
 

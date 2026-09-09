@@ -549,6 +549,31 @@ paths:
                 "$ref": "#/components/schemas/StandardError"
         '400':
           "$ref": "#/components/responses/SchemaValidationError"
+  "/expense_imports/columns":
+    get:
+      summary: The columns an imported CSV may carry
+      tags:
+      - ExpenseImports
+      operationId: expenseImportColumns
+      responses:
+        '200':
+          description: the columns
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ExpenseImportColumns"
+        '403':
+          description: expenses not enabled for this account
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
   "/expense_imports/preview":
     post:
       summary: Parse a bank statement into an editable preview
@@ -3720,6 +3745,27 @@ components:
       required:
       - expenseIds
       title: ExpenseBulkInput
+    ExpenseImportColumns:
+      type: object
+      properties:
+        columns:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              type:
+                type: string
+                description: The column's type, as the database has it.
+            additionalProperties: false
+            required:
+            - name
+            - type
+      additionalProperties: false
+      required:
+      - columns
+      title: ExpenseImportColumns
     ExpenseImportInput:
       type: object
       properties:
