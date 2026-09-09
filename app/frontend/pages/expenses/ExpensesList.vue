@@ -278,12 +278,6 @@ function exportPath(format: string): string {
   return `/expenses.${format}${exportQuery.value ? `?${exportQuery.value}` : ""}`
 }
 
-// The CSV import is still the server-rendered screen, and it returns to the
-// list when it is done. It cannot see which filters are on, so the link
-// tells it, and it hands them back in the redirect.
-function screenPath(path: string): string {
-  return `${path}${exportQuery.value ? `?${exportQuery.value}` : ""}`
-}
 </script>
 
 <template>
@@ -317,9 +311,15 @@ function screenPath(path: string): string {
         <UiButton as="a" :href="exportPath('csv')" target="_blank" data-test="export-csv">
           <i class="fa fa-down"></i> {{ t("expenses.exportCsv") }}
         </UiButton>
-        <UiButton as="a" :href="screenPath('/expense_imports/new')" data-test="import">
-          <i class="fa fa-upload"></i> {{ t("expenses.import") }}
-        </UiButton>
+        <RouterLink
+          v-slot="{ href, navigate }"
+          :to="{ name: 'expense-import', query: filterParams }"
+          custom
+        >
+          <UiButton as="a" :href="href" data-test="import" @click="navigate">
+            <i class="fa fa-upload"></i> {{ t("expenses.import") }}
+          </UiButton>
+        </RouterLink>
       </div>
     </div>
 

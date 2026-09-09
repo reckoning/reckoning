@@ -511,6 +511,43 @@ export default {
     disable: "Deaktivieren",
     failed: "Der Token wurde nicht akzeptiert.",
   },
+  expenseImport: {
+    title: "CSV-Import",
+    back: "Zurück zur Liste",
+    hintBank:
+      "Bankauszüge (z. B. ADAC-Kreditkarte) werden automatisch am Spaltenkopf erkannt. Die unten gewählten Werte werden als Vorschlag auf alle Zeilen angewendet und lassen sich in der Vorschau pro Zeile anpassen.",
+    hintColumns:
+      "Alternativ kann eine zuvor aus Reckoning exportierte CSV mit diesen Spalten hochgeladen werden:",
+    hintId: "Wird eine id angegeben, wird der passende Datensatz aktualisiert statt neu angelegt.",
+    defaultsTitle: "Standardwerte für importierte Bankzeilen",
+    continue: "Weiter zur Vorschau",
+    previewHint:
+      "Verkäufer, Beschreibung und Typ lassen sich vor dem Import anpassen. Zeilen ohne Häkchen werden übersprungen.",
+    submit: "1 Ausgabe importieren | {count} Ausgaben importieren",
+    cancel: "Abbrechen",
+    parsing: "Datei wird gelesen…",
+    importing: "Wird importiert…",
+    parseFailed: "Aus der Datei konnte keine Zeile gelesen werden.",
+    importFailed: "Der Import ist fehlgeschlagen.",
+    imported: "1 Ausgabe importiert | {count} Ausgaben importiert",
+    noRows: "Es wurde keine Zeile zum Importieren ausgewählt.",
+    fields: {
+      file: "CSV-Datei",
+      expenseType: "Standard-Typ",
+      interval: "Intervall",
+      vatPercent: "USt.",
+      privateUsePercent: "Private Nutzung",
+      skipCredits: "Gutschriften (positive Beträge) überspringen",
+    },
+    columns: {
+      include: "Import?",
+      date: "Datum",
+      value: "Betrag",
+      seller: "Verkäufer",
+      description: "Beschreibung",
+      expenseType: "Typ",
+    },
+  },
   expenseForm: {
     newTitle: "Neue Ausgabe",
     editTitle: "Ausgabe bearbeiten",

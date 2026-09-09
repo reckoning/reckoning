@@ -137,24 +137,22 @@ test.describe("SPA shell", () => {
   // asked for, so the path travels along and the login hands it back with a
   // full page load.
   //
-  // `/settings` because it is the server-rendered screen with the longest
-  // life left: the lists this used to point at keep moving into the SPA, and
-  // each move quietly turned this test into a test of a redirect.
-  // The CSV import is the screen used to show it: any server-rendered one
-  // that asks for a session will do, and that is the one still left. It used
-  // to be the profile, which is the SPA's now.
+  // The screen used to show it is the backend's user list: any
+  // server-rendered one that asks for a session will do, and the backend is
+  // what is left. Each screen that moves into the SPA quietly turned this
+  // into a test of a redirect, so it follows them.
   test("returns to the server-rendered screen it was sent from", async ({ page }) => {
-    await appEval(`Account.find_by(name: "Enterprise").update_columns(feature_expenses: true)`)
+    await appEval(`User.find_by(email: "will@star.fleet").update_columns(admin: true)`)
 
-    await page.goto("/expense_imports/new")
+    await page.goto("/backend/users")
 
-    await expect(page).toHaveURL(/\/app\/login\?return=%2Fexpense_imports%2Fnew$/)
+    await expect(page).toHaveURL(/\/app\/login\?return=%2Fbackend%2Fusers$/)
 
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
 
-    await expect(page).toHaveURL(/\/expense_imports\/new$/)
+    await expect(page).toHaveURL(/\/backend\/users$/)
     // The legacy chrome, not the SPA shell.
     await expect(page.locator(".user-email")).toContainText("will@star.fleet")
   })

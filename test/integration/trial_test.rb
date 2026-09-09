@@ -41,20 +41,15 @@ class TrialTest < ActionDispatch::IntegrationTest
   end
 
   describe "after the trial" do
-    # Any server-rendered write will do; the CSV import is simply the one
-    # that has not moved to the SPA yet — the expense form it used to be has.
+    # Any server-rendered write will do; the task the legacy invoice screen
+    # adds is simply the one still left — the CSV import that used to stand
+    # here has moved to the SPA.
     it "explains a refused write instead of shrugging" do
       trial_ending(1.minute.ago)
       sign_in user
 
-      assert_no_difference "Expense.count" do
-        post expense_imports_path, params: {
-          expense_import: {
-            rows: {"0" => {include: "1", date: "2025-07-03", value: "7.96", seller: "X",
-                           description: "Y", expense_type: "licenses", vat_percent: "19",
-                           private_use_percent: "0", interval: "once"}}
-          }
-        }
+      assert_no_difference "Task.count" do
+        post project_tasks_path(projects(:narendra3), params: {task: {name: "Refit"}})
       end
 
       assert_redirected_to root_url

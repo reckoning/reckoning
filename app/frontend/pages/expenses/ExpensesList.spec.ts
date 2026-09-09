@@ -62,6 +62,7 @@ async function mountList(options: Options = {}) {
       // router's business, not this component's.
       {path: "/expenses/new", name: "expense-new", component: {template: "<div />"}},
       {path: "/expenses/:id/edit", name: "expense-edit", component: {template: "<div />"}},
+      {path: "/expenses/import", name: "expense-import", component: {template: "<div />"}},
     ],
   })
   await router.push(options.path ?? "/expenses")
