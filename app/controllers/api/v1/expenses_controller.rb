@@ -71,7 +71,12 @@ module Api
         @expense = find_expense
         authorize! :update, @expense
 
-        return render json: ValidationError.new("expense.receipt"), status: :bad_request if receipt_file.blank?
+        # A file, not whatever else a client might send under that name:
+        # request bodies are not validated against the schema on the way in,
+        # so a plain string would otherwise reach `tempfile` and raise.
+        unless receipt_file.respond_to?(:tempfile)
+          return render json: ValidationError.new("expense.receipt"), status: :bad_request
+        end
 
         # Uploaded on its own first, so the type being checked is the one
         # that ends up stored — `create_and_upload!` is where the file is

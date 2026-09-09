@@ -155,6 +155,17 @@ module Api
           assert_not expense.reload.receipt.attached?
         end
 
+        # Nothing validates the body against the schema on the way in, so the
+        # endpoint has to survive a client sending something that is not a
+        # file at all.
+        it "is a bad request when what arrives is not a file" do
+          assert_api_response :put, 400, params: {id: expense.id}, body: {receipt: "not-a-file"} do
+            assert_equal "validation_error.expense.receipt", parsed_body["code"]
+          end
+
+          assert_not expense.reload.receipt.attached?
+        end
+
         # The type that counts is the one the file is stored under, which is
         # what the model's validator compares — not what the upload claimed.
         it "refuses a file whose contents are not what it says" do
