@@ -3,6 +3,7 @@ import { computed, reactive, ref, watch } from "vue"
 import { useRoute, useRouter, RouterLink } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useMe, useUpdateMe } from "@/services/api/services/me/me"
+import { useCurrentUserStore } from "@/stores/currentUser"
 import { useToastsStore } from "@/stores/toasts"
 import UiAlert from "@/components/ui/UiAlert.vue"
 import UiButton from "@/components/ui/UiButton.vue"
@@ -27,6 +28,7 @@ const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const toasts = useToastsStore()
+const currentUser = useCurrentUserStore()
 
 const { data: user, isPending, isError } = useMe()
 const { mutateAsync: update } = useUpdateMe()
@@ -69,6 +71,10 @@ async function save(section: Section): Promise<void> {
 
   try {
     await update({ data })
+    // The shell reads the email and the avatar from the store, and both are
+    // editable right here — without this it keeps showing who you were
+    // until the next full load.
+    await currentUser.refresh()
     toasts.push("success", t("profileSettings.saved"))
   } catch {
     toasts.push("error", t("profileSettings.saveFailed"))

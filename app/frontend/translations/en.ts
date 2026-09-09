@@ -609,6 +609,7 @@ export default {
     cancel: "Cancel",
     saved: "Password changed.",
     refused: "That is not the current password.",
+    failed: "The password could not be changed.",
     required: "Required",
     tooShort: "At least 8 characters.",
     mismatch: "The repeat does not match.",

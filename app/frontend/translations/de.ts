@@ -610,6 +610,7 @@ export default {
     cancel: "Abbrechen",
     saved: "Passwort geändert.",
     refused: "Das aktuelle Passwort stimmt nicht.",
+    failed: "Das Passwort konnte nicht geändert werden.",
     required: "Pflichtfeld",
     tooShort: "Mindestens 8 Zeichen.",
     mismatch: "Die Wiederholung stimmt nicht überein.",

@@ -122,6 +122,24 @@ describe("ProfileSettings", () => {
     expect(enabled.get('[data-test="two-factor-state"]').html()).toContain("fa-check")
   })
 
+  // The shell reads the email and the avatar from the store, and both are
+  // editable here — without a refresh it keeps showing who you were.
+  it("brings the shell's own copy of the user up to date", async () => {
+    const {wrapper, requests} = await mountProfile("/settings#security")
+
+    await wrapper.get('[data-test="email"]').setValue("riker@star.fleet")
+    await wrapper.get("form").trigger("submit")
+
+    await vi.waitFor(() => {
+      // The store reloads itself from /me once the save went through.
+      const reads = requests.filter(
+        (entry) => entry.method?.toLowerCase() === "get" && String(entry.url).includes("/me"),
+      )
+
+      expect(reads.length).toBeGreaterThan(1)
+    })
+  })
+
   it("leads to the two-factor screen and to the password change", async () => {
     const {wrapper} = await mountProfile("/settings#security")
 

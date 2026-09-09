@@ -5,6 +5,7 @@ import { useI18n } from "vue-i18n"
 import { useForm } from "vee-validate"
 import { toTypedSchema } from "@vee-validate/zod"
 import * as z from "zod"
+import type { AxiosError } from "axios"
 import { useUpdateMyPassword } from "@/services/api/services/me/me"
 import { useToastsStore } from "@/stores/toasts"
 import UiButton from "@/components/ui/UiButton.vue"
@@ -41,19 +42,29 @@ const [passwordConfirmation, passwordConfirmationAttrs] = defineField("password_
 
 const busy = ref(false)
 // The endpoint refuses a wrong current password, which is the one thing this
-// form cannot know in advance.
+// form cannot know in advance. Anything else that goes wrong — a session
+// that ran out, no network — is not that, and saying so would send someone
+// after a fix that cannot work.
 const refused = ref(false)
+const failed = ref(false)
 
 const save = handleSubmit(async (values) => {
   busy.value = true
   refused.value = false
+  failed.value = false
 
   try {
     await change({ data: values })
     toasts.push("success", t("passwordChange.saved"))
     await router.push({ name: "profile-settings", hash: "#security" })
-  } catch {
-    refused.value = true
+  } catch (error) {
+    const answered = (error as AxiosError<{errors?: Record<string, unknown>}>).response?.data
+
+    if (answered?.errors && "current_password" in answered.errors) {
+      refused.value = true
+    } else {
+      failed.value = true
+    }
   } finally {
     busy.value = false
   }
@@ -75,6 +86,9 @@ const FIELD = "bs-input"
     <form class="mt-4 max-w-lg" @submit="save">
       <p v-if="refused" class="mb-4 text-danger-text" data-test="refused">
         {{ t("passwordChange.refused") }}
+      </p>
+      <p v-else-if="failed" class="mb-4 text-danger-text" data-test="failed">
+        {{ t("passwordChange.failed") }}
       </p>
 
       <UiFormGroup :label="t('passwordChange.fields.currentPassword')">

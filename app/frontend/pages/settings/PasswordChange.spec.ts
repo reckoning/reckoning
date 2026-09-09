@@ -8,13 +8,27 @@ import PasswordChange from "./PasswordChange.vue"
 import {AXIOS_INSTANCE} from "@/services/axiosClient"
 import {i18n} from "@/plugins/i18n"
 
-async function mountForm(options: {refuse?: boolean} = {}) {
+async function mountForm(options: {refuse?: boolean; fail?: boolean} = {}) {
   const requests: AxiosRequestConfig[] = []
 
   AXIOS_INSTANCE.defaults.adapter = async (config) => {
     requests.push(config)
 
-    if (options.refuse) throw {response: {status: 400, data: {code: "validation_error.user.password"}}}
+    // What the endpoint answers when `update_with_password` refuses: the
+    // errors of the record, current_password among them.
+    if (options.refuse) {
+      throw {
+        response: {
+          status: 400,
+          data: {
+            code: "validation_error.password.update",
+            errors: {current_password: ["is invalid"]},
+          },
+        },
+      }
+    }
+
+    if (options.fail) throw {response: {status: 401, data: {code: "unauthorized"}}}
 
     return {data: {}, status: 200, statusText: "OK", headers: {}, config}
   }
@@ -123,6 +137,20 @@ describe("PasswordChange", () => {
     await vi.waitFor(() =>
       expect(wrapper.find('[data-test="current-password-error"]').exists()).toBe(true),
     )
+  })
+
+  // Anything else that goes wrong is not a wrong password, and saying it is
+  // would send someone after a fix that cannot work.
+  it("does not blame the current password for something else", async () => {
+    const {wrapper, router} = await mountForm({fail: true})
+
+    await fill(wrapper, {current: "enterprise", password: "warpcore9", confirmation: "warpcore9"})
+    await wrapper.get("form").trigger("submit")
+
+    await vi.waitFor(() => expect(wrapper.find('[data-test="failed"]').exists()).toBe(true))
+
+    expect(wrapper.find('[data-test="refused"]').exists()).toBe(false)
+    expect(router.currentRoute.value.name).toBe("password-change")
   })
 
   // The one thing the form cannot know in advance is whether the current
