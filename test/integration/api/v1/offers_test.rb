@@ -20,6 +20,9 @@ module Api
           parameter name: "state", in: :query, required: false,
             schema: {type: :string, enum: %w[created bided accepted declined canceled]}
           parameter name: "year", in: :query, required: false, schema: {type: :integer}
+          parameter name: "project_id", in: :query, required: false,
+            description: "Only what belongs to this project, which is what its own screen lists.",
+            schema: {type: :string, format: :uuid}
           parameter name: "sort", in: :query, required: false,
             description: "Column to order by. Anything else falls back to the newest first.",
             schema: {type: :string, enum: %w[ref date value state customer]}
@@ -79,6 +82,20 @@ module Api
 
       describe "signed in" do
         before { sign_in data }
+
+        # The project screen lists what belongs to the project it shows.
+        it "lists only what belongs to a project when asked" do
+          other = projects(:outpost6)
+          mine = account.offers.create!(
+            customer: customers(:starfleet), project: other, date: Date.new(2026, 5, 1),
+            ref: account.offers.maximum(:ref).to_i + 1
+          )
+
+          assert_api_response :get, 200, params: {project_id: other.id} do
+            assert_includes parsed_body.map { |item| item["id"] }, mine.id
+            assert_equal [other.id], parsed_body.map { |item| item["projectId"] }.uniq
+          end
+        end
 
         it "lists the account's offers with their positions" do
           assert_api_response :get, 200 do

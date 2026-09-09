@@ -57,6 +57,14 @@ class Offer < ApplicationRecord
   def self.filter_result(filter_params)
     filter_year(filter_params.fetch(:year, nil))
       .filter_state(filter_params.fetch(:state, nil))
+      .filter_project(filter_params.fetch(:project_id, nil))
+  end
+
+  # The project screen lists what belongs to the project it is showing.
+  def self.filter_project(project_id)
+    return all if project_id.blank?
+
+    where(project_id: project_id)
   end
 
   def self.filter_year(year)

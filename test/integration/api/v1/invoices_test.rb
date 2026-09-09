@@ -25,6 +25,9 @@ module Api
           parameter name: "paid_in_year", in: :query, required: false, schema: {type: :integer}
           parameter name: "paid_in_quarter", in: :query, required: false, schema: {type: :integer}
           parameter name: "paid_in_month", in: :query, required: false, schema: {type: :integer}
+          parameter name: "project_id", in: :query, required: false,
+            description: "Only what belongs to this project, which is what its own screen lists.",
+            schema: {type: :string, format: :uuid}
           parameter name: "sort", in: :query, required: false,
             description: "Column to order by. Anything else falls back to the newest first.",
             schema: {type: :string, enum: %w[ref date value state customer]}
@@ -154,6 +157,22 @@ module Api
         it "filters by state" do
           assert_api_response :get, 200, params: {state: "paid"} do
             refute_includes parsed_body.map { |item| item["id"] }, invoice.id
+          end
+        end
+
+        # The project screen lists what belongs to the project it shows.
+        it "lists only what belongs to a project when asked" do
+          other = projects(:outpost6)
+          mine = data.account.invoices.create!(
+            customer: customers(:starfleet), project: other, date: Date.new(2026, 5, 1),
+            ref: data.account.invoices.maximum(:ref).to_i + 1
+          )
+
+          assert_api_response :get, 200, params: {project_id: other.id} do
+            ids = parsed_body.map { |item| item["id"] }
+
+            assert_includes ids, mine.id
+            assert_equal [other.id], parsed_body.map { |item| item["projectId"] }.uniq
           end
         end
 

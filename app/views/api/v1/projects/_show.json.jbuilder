@@ -15,6 +15,12 @@ json.invoice_addition project.invoice_addition
 json.start_date project.start_date
 json.end_date project.end_date
 json.timer_values project.timer_values
+# What the four numbers above the chart are: the hours booked, the billable
+# part of them, the part not on an invoice yet, and what the invoices for
+# this project add up to.
+json.timer_values_billable project.timer_values_billable
+json.timer_values_uninvoiced project.timer_values_uninvoiced
+json.invoice_values project.invoice_values
 # Dividing by a budget of zero is what the ERB guarded against before it drew
 # the bar, so the client gets nothing to draw rather than an infinity.
 json.budget_percent((project.budget_hours.to_d.zero? && project.budget.to_d.zero?) ? nil : project.budget_percent)

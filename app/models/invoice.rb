@@ -104,6 +104,7 @@ class Invoice < ApplicationRecord
         filter_params.fetch(:paid_in_month, nil),
         filter_params.fetch(:paid_in_year, Time.current.year)
       )
+      .filter_project(filter_params.fetch(:project_id, nil))
   end
 
   def self.filter_year(year)
@@ -131,6 +132,13 @@ class Invoice < ApplicationRecord
       start_date: Date.new(year.to_i, month.to_i, 1),
       end_date: Date.new(year.to_i, month.to_i, -1)
     )
+  end
+
+  # The project screen lists what belongs to the project it is showing.
+  def self.filter_project(project_id)
+    return all if project_id.blank?
+
+    where(project_id: project_id)
   end
 
   def self.filter_state(state)

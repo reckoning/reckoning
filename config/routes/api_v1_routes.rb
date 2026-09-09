@@ -42,6 +42,7 @@ v1_api_routes = lambda do
 
   resources :projects, only: %i[index show create update destroy] do
     member do
+      get :chart
       put :archive
       put :unarchive
     end
