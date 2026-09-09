@@ -65,6 +65,50 @@ module Api
         render json: ValidationError.new("expense.update", @expense.errors), status: :bad_request
       end
 
+      # The receipt is a file: it is uploaded on its own rather than inside
+      # the expense's json, which is why this one is multipart.
+      def update_receipt
+        @expense = find_expense
+        authorize! :update, @expense
+
+        # A file, not whatever else a client might send under that name:
+        # request bodies are not validated against the schema on the way in,
+        # so a plain string would otherwise reach `tempfile` and raise.
+        unless receipt_file.respond_to?(:tempfile)
+          return render json: ValidationError.new("expense.receipt"), status: :bad_request
+        end
+
+        # Uploaded on its own first, so the type being checked is the one
+        # that ends up stored — `create_and_upload!` is where the file is
+        # identified, and the validator compares that. Only then is it
+        # attached: attaching to a saved record writes at once and pushes the
+        # previous receipt out, and that one cannot be put back, because
+        # replacing it has already queued its file for deletion.
+        blob = ::ActiveStorage::Blob.create_and_upload!(
+          io: receipt_file.tempfile,
+          filename: receipt_file.original_filename,
+          content_type: receipt_file.content_type
+        )
+
+        unless ::Expense::RECEIPT_CONTENT_TYPES.include?(blob.content_type)
+          blob.purge
+          return render json: ValidationError.new("expense.receipt"), status: :bad_request
+        end
+
+        @expense.receipt.attach(blob)
+
+        render :show
+      end
+
+      def destroy_receipt
+        @expense = find_expense
+        authorize! :update, @expense
+
+        @expense.receipt.purge
+
+        render :show
+      end
+
       def destroy
         @expense = find_expense
         authorize! :destroy, @expense
@@ -195,6 +239,10 @@ module Api
           code: "feature.disabled",
           message: I18n.t("validation_error.expense.feature_disabled")
         }, status: :forbidden
+      end
+
+      private def receipt_file
+        params[:receipt]
       end
 
       private def find_expense

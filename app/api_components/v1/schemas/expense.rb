@@ -31,6 +31,18 @@ module V1
           # needs a receipt and has none — a business expense never does.
           hasReceipt: {type: :boolean},
           needsReceipt: {type: :boolean},
+          # `hasReceipt` is the flag the list reads for its icon; this is the
+          # file itself, which the form links and previews.
+          receipt: {
+            type: [:object, :null],
+            properties: {
+              url: {type: :string},
+              filename: {type: :string},
+              contentType: {type: [:string, :null]}
+            },
+            additionalProperties: false,
+            required: %w[url filename]
+          },
           createdAt: {type: :string, format: "date-time"},
           updatedAt: {type: :string, format: "date-time"}
         },

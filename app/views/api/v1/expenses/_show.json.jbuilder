@@ -16,5 +16,17 @@ json.ended_at expense.ended_at
 json.afa_type_id expense.afa_type_id
 json.has_receipt expense.receipt.attached?
 json.needs_receipt expense.needs_receipt?
+
+# `has_receipt` is the flag the list reads for its icon; the form needs the
+# file itself, to link it and to decide whether it can be previewed.
+if expense.receipt.attached?
+  json.receipt do
+    json.url Rails.application.routes.url_helpers.rails_blob_path(expense.receipt, only_path: true)
+    json.filename expense.receipt.filename.to_s
+    json.content_type expense.receipt.content_type
+  end
+else
+  json.receipt nil
+end
 json.created_at expense.created_at
 json.updated_at expense.updated_at

@@ -82,7 +82,16 @@ v1_api_routes = lambda do
       post :bulk_update
       post :bulk_destroy
     end
+
+    # The receipt is a file, so it travels on its own rather than inside the
+    # expense's json.
+    member do
+      put :receipt, action: :update_receipt
+      delete :receipt, action: :destroy_receipt
+    end
   end
+
+  resources :afa_types, only: [:index]
 
   resources :timers, only: %i[index create update destroy] do
     collection do

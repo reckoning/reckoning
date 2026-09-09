@@ -97,6 +97,7 @@ module Api
             assert_equal expense.usable_value.to_f, row["usableValue"].to_f
             assert_equal false, row["hasReceipt"]
             assert_equal true, row["needsReceipt"]
+            assert_nil row["receipt"]
           end
         end
 

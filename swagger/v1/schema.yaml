@@ -56,6 +56,31 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/StandardError"
+  "/afa_types":
+    get:
+      summary: Depreciation classes
+      tags:
+      - Expenses
+      operationId: afaTypes
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/AfaTypes"
+        '403':
+          description: expenses not enabled for this account
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
   "/backend/users":
     get:
       summary: Users across every account
@@ -890,6 +915,88 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/StandardError"
+  "/expenses/{id}/receipt":
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    put:
+      summary: Attach a receipt to an expense
+      tags:
+      - Expenses
+      operationId: updateExpenseReceipt
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              "$ref": "#/components/schemas/ExpenseReceiptInput"
+      responses:
+        '200':
+          description: attached
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Expense"
+        '400':
+          description: no file, or one of a type the receipt does not take
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '403':
+          description: expenses not enabled for this account
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+    delete:
+      summary: Take the receipt off an expense
+      tags:
+      - Expenses
+      operationId: destroyExpenseReceipt
+      responses:
+        '200':
+          description: removed
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Expense"
+        '403':
+          description: expenses not enabled for this account
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '400':
+          "$ref": "#/components/responses/SchemaValidationError"
   "/invoices":
     get:
       summary: Invoices list
@@ -2964,6 +3071,30 @@ components:
           - 'null'
       additionalProperties: false
       title: AccountInput
+    AfaType:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - integer
+          - 'null'
+          description: Years the asset is written off over.
+      additionalProperties: false
+      required:
+      - id
+      title: AfaType
+    AfaTypes:
+      type: array
+      items:
+        "$ref": "#/components/schemas/AfaType"
+      title: AfaTypes
     AppConfig:
       type: object
       properties:
@@ -3467,6 +3598,23 @@ components:
           type: boolean
         needsReceipt:
           type: boolean
+        receipt:
+          type:
+          - object
+          - 'null'
+          properties:
+            url:
+              type: string
+            filename:
+              type: string
+            contentType:
+              type:
+              - string
+              - 'null'
+          additionalProperties: false
+          required:
+          - url
+          - filename
         createdAt:
           type: string
           format: date-time
@@ -3730,6 +3878,15 @@ components:
           format: date
       additionalProperties: false
       title: ExpenseInput
+    ExpenseReceiptInput:
+      type: object
+      properties:
+        receipt:
+          type: string
+          format: binary
+      required:
+      - receipt
+      title: ExpenseReceiptInput
     ExpenseSummary:
       type: object
       properties:
