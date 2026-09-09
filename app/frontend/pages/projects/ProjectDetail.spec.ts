@@ -47,6 +47,7 @@ interface Options {
   project?: Record<string, unknown>
   offers?: unknown[]
   invoices?: unknown[]
+  offersFail?: boolean
 }
 
 async function mountDetail(options: Options = {}) {
@@ -57,6 +58,8 @@ async function mountDetail(options: Options = {}) {
 
     const url = String(config.url)
     let data: unknown = {}
+
+    if (url.includes("/offers") && options.offersFail) throw {response: {status: 500, data: {}}}
 
     if (url.includes("/chart")) data = CHART
     else if (url.includes("/offers")) data = options.offers ?? []
@@ -189,6 +192,16 @@ describe("ProjectDetail", () => {
     const {wrapper} = await mountDetail({path: `/projects/${ID}#offers`})
 
     expect(wrapper.find('[data-test="offers-empty"]').exists()).toBe(true)
+  })
+
+  // A list that could not be loaded is not an empty one, and saying the
+  // project has no offers when it may well have some is worse than saying
+  // nothing.
+  it("tells a failed tab apart from an empty one", async () => {
+    const {wrapper} = await mountDetail({path: `/projects/${ID}#offers`, offersFail: true})
+
+    expect(wrapper.find('[data-test="offers-error"]').exists()).toBe(true)
+    expect(wrapper.find('[data-test="offers-empty"]').exists()).toBe(false)
   })
 
   it("offers no fields at all when the project could not be loaded", async () => {

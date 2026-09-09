@@ -41,8 +41,16 @@ const id = computed(() => String(route.params.id))
 
 const { data: project, isPending, isError } = useProject(id)
 const { data: chart } = useProjectChart(id)
-const { data: offers } = useOffers(computed(() => ({project_id: id.value, perPage: "all"})))
-const { data: invoices } = useInvoices(computed(() => ({project_id: id.value, perPage: "all"})))
+const {
+  data: offers,
+  isPending: offersPending,
+  isError: offersFailed,
+} = useOffers(computed(() => ({project_id: id.value, perPage: "all"})))
+const {
+  data: invoices,
+  isPending: invoicesPending,
+  isError: invoicesFailed,
+} = useInvoices(computed(() => ({project_id: id.value, perPage: "all"})))
 
 const active = computed<Tab>(() => {
   const hash = route.hash.replace("#", "")
@@ -301,7 +309,13 @@ const monthLabels = computed(() =>
                   <em>{{ month(offer.date) }}</em>
                 </div>
               </UiListGroupItem>
-              <UiListGroupItem v-if="(offers?.length ?? 0) === 0" data-test="offers-empty">
+              <UiListGroupItem v-if="offersPending" data-test="offers-loading">
+                {{ t("projectDetail.loading") }}
+              </UiListGroupItem>
+              <UiListGroupItem v-else-if="offersFailed" data-test="offers-error">
+                {{ t("offers.loadFailed") }}
+              </UiListGroupItem>
+              <UiListGroupItem v-else-if="(offers?.length ?? 0) === 0" data-test="offers-empty">
                 {{ t("projectDetail.noOffers") }}
               </UiListGroupItem>
             </UiListGroup>
@@ -321,7 +335,16 @@ const monthLabels = computed(() =>
                   <em>{{ month(invoice.date) }}</em>
                 </div>
               </UiListGroupItem>
-              <UiListGroupItem v-if="(invoices?.length ?? 0) === 0" data-test="invoices-empty">
+              <UiListGroupItem v-if="invoicesPending" data-test="invoices-loading">
+                {{ t("projectDetail.loading") }}
+              </UiListGroupItem>
+              <UiListGroupItem v-else-if="invoicesFailed" data-test="invoices-error">
+                {{ t("invoices.loadFailed") }}
+              </UiListGroupItem>
+              <UiListGroupItem
+                v-else-if="(invoices?.length ?? 0) === 0"
+                data-test="invoices-empty"
+              >
                 {{ t("projectDetail.noInvoices") }}
               </UiListGroupItem>
             </UiListGroup>
