@@ -121,10 +121,9 @@ const trial = computed(() => account.value?.trial)
               </RouterLink>
             </UiDropdownItem>
             <UiDropdownItem>
-              <!-- The profile is still the server-rendered screen; the menu
-                   had both entries all along, where this one was doing for
-                   the two of them. -->
-              <a href="/settings" data-test="nav-profile">{{ t("nav.profile") }}</a>
+              <RouterLink :to="{ name: 'profile-settings' }" data-test="nav-profile">
+                {{ t("nav.profile") }}
+              </RouterLink>
             </UiDropdownItem>
             <UiDropdownItem>
               <RouterLink :to="{ name: 'two-factor' }" data-test="nav-two-factor">

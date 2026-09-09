@@ -1,5 +1,5 @@
 import { test, expect } from "./support/commands"
-import { app, appScenario } from "./support/on-rails"
+import { app, appScenario, appEval } from "./support/on-rails"
 
 // Phase B1's exit criterion: the shell at /app does a full login → dashboard
 // → logout round-trip against the real API, not a mocked one.
@@ -140,18 +140,21 @@ test.describe("SPA shell", () => {
   // `/settings` because it is the server-rendered screen with the longest
   // life left: the lists this used to point at keep moving into the SPA, and
   // each move quietly turned this test into a test of a redirect.
+  // The CSV import is the screen used to show it: any server-rendered one
+  // that asks for a session will do, and that is the one still left. It used
+  // to be the profile, which is the SPA's now.
   test("returns to the server-rendered screen it was sent from", async ({ page }) => {
-    await page.goto("/settings")
+    await appEval(`Account.find_by(name: "Enterprise").update_columns(feature_expenses: true)`)
 
-    await expect(page).toHaveURL(/\/app\/login\?return=%2Fsettings$/)
+    await page.goto("/expense_imports/new")
+
+    await expect(page).toHaveURL(/\/app\/login\?return=%2Fexpense_imports%2Fnew$/)
 
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
 
-    // The tabs controller on the server-rendered settings screen appends a
-    // fragment once it takes over, so the assertion has to allow one.
-    await expect(page).toHaveURL(/\/settings(#.*)?$/)
+    await expect(page).toHaveURL(/\/expense_imports\/new$/)
     // The legacy chrome, not the SPA shell.
     await expect(page.locator(".user-email")).toContainText("will@star.fleet")
   })
