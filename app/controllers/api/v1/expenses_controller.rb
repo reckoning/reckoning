@@ -65,6 +65,33 @@ module Api
         render json: ValidationError.new("expense.update", @expense.errors), status: :bad_request
       end
 
+      # The receipt is a file: it is uploaded on its own rather than inside
+      # the expense's json, which is why this one is multipart.
+      def update_receipt
+        @expense = find_expense
+        authorize! :update, @expense
+
+        return render json: ValidationError.new("expense.receipt"), status: :bad_request if receipt_file.blank?
+
+        @expense.receipt.attach(receipt_file)
+
+        return render :show if @expense.valid?
+
+        # An attach on a persisted record writes immediately, so a file the
+        # validation rejects has to be taken back off again.
+        @expense.receipt.purge
+        render json: ValidationError.new("expense.receipt", @expense.errors), status: :bad_request
+      end
+
+      def destroy_receipt
+        @expense = find_expense
+        authorize! :update, @expense
+
+        @expense.receipt.purge
+
+        render :show
+      end
+
       def destroy
         @expense = find_expense
         authorize! :destroy, @expense
@@ -195,6 +222,10 @@ module Api
           code: "feature.disabled",
           message: I18n.t("validation_error.expense.feature_disabled")
         }, status: :forbidden
+      end
+
+      private def receipt_file
+        params[:receipt]
       end
 
       private def find_expense
