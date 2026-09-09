@@ -47,7 +47,7 @@ const ROWS = [
 interface Options {
   path?: string
   rows?: unknown[]
-  refusePreview?: boolean
+  refusePreview?: unknown
   refuseCreate?: unknown
 }
 
@@ -60,9 +60,7 @@ async function mountPage(options: Options = {}) {
     const url = String(config.url)
 
     if (url.includes("preview")) {
-      if (options.refusePreview) {
-        throw {response: {status: 422, data: {code: "validation_error.expense.import"}}}
-      }
+      if (options.refusePreview) throw options.refusePreview
 
       return {
         data: {rows: options.rows ?? ROWS},
@@ -203,8 +201,10 @@ describe("ExpenseImportPage", () => {
     expect(router.currentRoute.value.name).toBe("expenses")
   })
 
-  it("keeps the filters the list was showing", async () => {
-    const {wrapper, router} = await mountPage({path: "/expenses/import?year=2025&type=licenses"})
+  it("keeps the filters and the page the list was showing", async () => {
+    const {wrapper, router} = await mountPage({
+      path: "/expenses/import?year=2025&type=licenses&page=3",
+    })
 
     await pickFile(wrapper)
     await wrapper.get('form').trigger("submit")
@@ -212,11 +212,18 @@ describe("ExpenseImportPage", () => {
     await wrapper.get('form').trigger("submit")
     await flushPromises()
 
-    expect(router.currentRoute.value.query).toEqual({year: "2025", type: "licenses"})
+    expect(router.currentRoute.value.query).toEqual({year: "2025", type: "licenses", page: "3"})
   })
 
   it("says nothing could be read out of the file", async () => {
-    const {wrapper} = await mountPage({refusePreview: true})
+    const {wrapper} = await mountPage({
+      refusePreview: {
+        response: {
+          status: 422,
+          data: {code: "validation_error.expense.import", message: "Der Import ging nicht."},
+        },
+      },
+    })
 
     await pickFile(wrapper)
     await wrapper.get('form').trigger("submit")
@@ -224,6 +231,27 @@ describe("ExpenseImportPage", () => {
 
     expect(wrapper.get('[data-test="import-errors"]').text()).toContain("row")
     expect(wrapper.find('[data-test="preview-rows"]').exists()).toBe(false)
+  })
+
+  // A refusal that is not about the file's contents — expenses switched off
+  // while the screen was open, say — says what it is instead.
+  it("passes on a refusal that is not a parse failure", async () => {
+    const {wrapper} = await mountPage({
+      refusePreview: {
+        response: {
+          status: 403,
+          data: {code: "feature.disabled", message: "Ausgaben sind nicht freigeschaltet."},
+        },
+      },
+    })
+
+    await pickFile(wrapper)
+    await wrapper.get('form').trigger("submit")
+    await flushPromises()
+
+    expect(wrapper.get('[data-test="import-errors"]').text()).toContain(
+      "Ausgaben sind nicht freigeschaltet.",
+    )
   })
 
   // A row the server refuses names its line, and the preview stays put so it

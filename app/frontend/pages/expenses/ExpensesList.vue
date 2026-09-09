@@ -77,6 +77,12 @@ const filterParams = computed(() => {
 
 const params = computed(() => ({ ...filterParams.value, page: page.value, perPage: PER_PAGE }))
 
+// What the import and the form carry with them, so the way back lands on the
+// page of the list they were started from and not on its first one.
+const listQuery = computed(() =>
+  page.value > 1 ? { ...filterParams.value, page: String(page.value) } : filterParams.value,
+)
+
 const { data: expenses, isPending, isError } = useExpenses(params)
 // Same filters, minus paging: the total under a filtered table has to belong
 // to that table.
@@ -313,7 +319,7 @@ function exportPath(format: string): string {
         </UiButton>
         <RouterLink
           v-slot="{ href, navigate }"
-          :to="{ name: 'expense-import', query: filterParams }"
+          :to="{ name: 'expense-import', query: listQuery }"
           custom
         >
           <UiButton as="a" :href="href" data-test="import" @click="navigate">

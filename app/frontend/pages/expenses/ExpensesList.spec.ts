@@ -90,6 +90,16 @@ describe("ExpensesList", () => {
     vi.restoreAllMocks()
   })
 
+  // Starting an import from the third page and coming back has to land on
+  // the third page again, so the link carries it.
+  it("hands the import the page it was started from", async () => {
+    const {wrapper} = await mountList({path: "/expenses?type=licenses&page=3"})
+
+    expect(wrapper.get('[data-test="import"]').attributes("href")).toBe(
+      "/expenses/import?type=licenses&page=3",
+    )
+  })
+
   it("lists what the endpoint returns", async () => {
     const {wrapper} = await mountList()
 

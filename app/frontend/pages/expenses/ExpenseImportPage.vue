@@ -110,8 +110,16 @@ async function onPreview(): Promise<void> {
     })
 
     rows.value = (parsed.rows ?? []).map((row) => ({ ...row, include: true }))
-  } catch {
-    errors.value = [t("expenseImport.parseFailed")]
+  } catch (error: unknown) {
+    // Whatever the endpoint says, unless what it says is that it could not
+    // read the file — for which this screen has the better sentence.
+    const data = (error as {response?: {data?: {code?: string; message?: string}}}).response?.data
+
+    errors.value = [
+      data?.code === "validation_error.expense.import" || !data?.message
+        ? t("expenseImport.parseFailed")
+        : data.message,
+    ]
   } finally {
     busy.value = false
   }
