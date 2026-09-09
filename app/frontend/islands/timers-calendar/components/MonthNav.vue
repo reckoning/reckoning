@@ -3,6 +3,7 @@
 // a native month picker behind a calendar icon, today, forward.
 
 import {computed, ref} from "vue"
+import {useI18n} from "vue-i18n"
 import UiButton from "../../../components/ui/UiButton.vue"
 
 const props = defineProps<{
@@ -12,6 +13,12 @@ const props = defineProps<{
   weekDaysLabel: string
   monthLabels: string[]
 }>()
+
+const {t} = useI18n()
+
+const previousLabel = computed(() => t("timesheet.previousDay"))
+const nextLabel = computed(() => t("timesheet.nextDay"))
+const pickMonthLabel = computed(() => t("timesheet.pickDate"))
 
 const emit = defineEmits<{
   prev: []
@@ -65,11 +72,17 @@ function onMonthInput(e: Event) {
     </h2>
 
     <div class="bs-btn-group">
-      <UiButton as="a" role="button" @click.prevent="emit('prev')">
+      <UiButton :title="previousLabel" @click="emit('prev')">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
       </UiButton>
-      <UiButton as="a" role="button" class="month-picker-trigger" @click.prevent="openPicker">
-        <i class="fa fa-calendar" aria-hidden="true"></i>
+
+      <!-- The input is a sibling rather than a child of the button: it is
+           what `showPicker()` opens, and a form control inside a button is a
+           second control inside the first. -->
+      <span class="relative inline-flex">
+        <UiButton class="rounded-none" :title="pickMonthLabel" @click="openPicker">
+          <i class="fa fa-calendar" aria-hidden="true"></i>
+        </UiButton>
         <input
           ref="hiddenInputRef"
           type="month"
@@ -79,16 +92,13 @@ function onMonthInput(e: Event) {
           aria-hidden="true"
           @change="onMonthInput"
         />
-      </UiButton>
-      <UiButton
-        as="a"
-        role="button"
-        :class="{'pointer-events-none opacity-65': isToday}"
-        @click.prevent="!isToday && emit('today')"
-      >
+      </span>
+
+      <UiButton :disabled="isToday" @click="emit('today')">
         {{ todayLabel }}
       </UiButton>
-      <UiButton as="a" role="button" @click.prevent="emit('next')">
+
+      <UiButton :title="nextLabel" @click="emit('next')">
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </UiButton>
     </div>
@@ -96,9 +106,6 @@ function onMonthInput(e: Event) {
 </template>
 
 <style scoped>
-.month-picker-trigger {
-  position: relative;
-}
 /* Hide the native `<input type="month">` UI but keep it functional
  * — the visible calendar icon triggers showPicker() programmatically.
  * Negative z-index + opacity:0 + pointer-events:none keeps it from

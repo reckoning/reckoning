@@ -261,9 +261,14 @@ function errorText(e: unknown): string {
               </label>
 
               <div v-if="projectId && !isInvoiced" class="mb-4">
-                <a v-if="!showCreateTask" role="button" @click.prevent="showCreateTask = true">
+                <UiButton
+                  v-if="!showCreateTask"
+                  variant="link"
+                  class="px-0"
+                  @click="showCreateTask = true"
+                >
                   + {{ t("timerModal.newTask") }}
-                </a>
+                </UiButton>
                 <div v-else class="flex">
                   <UiInput
                     v-model="newTaskName"

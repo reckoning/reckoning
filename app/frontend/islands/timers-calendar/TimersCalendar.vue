@@ -10,6 +10,7 @@ import {listProjects} from "../../lib/timers/api"
 import {businessDaysInMonth} from "../../lib/timers/format"
 import type {Task, Timer} from "../../lib/timers/types"
 import UiAlert from "../../components/ui/UiAlert.vue"
+import UiButton from "../../components/ui/UiButton.vue"
 
 interface Labels {
   weekDays: string
@@ -120,7 +121,7 @@ const businessDays = computed(() => businessDaysInMonth(month.value))
 
     <UiAlert v-if="error" variant="danger">
       {{ t("timesheet.timersFailed") }}
-      <a role="button" @click.prevent="refresh">{{ t("timesheet.retry") }}</a>
+      <UiButton variant="link" class="px-0" @click="refresh">{{ t("timesheet.retry") }}</UiButton>
     </UiAlert>
 
     <MonthGrid

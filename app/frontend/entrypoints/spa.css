@@ -653,6 +653,7 @@
     line-height: 1;
     color: #ffffff;
     white-space: nowrap;
+    text-align: left;
     text-overflow: ellipsis;
     overflow: hidden;
     vertical-align: baseline;

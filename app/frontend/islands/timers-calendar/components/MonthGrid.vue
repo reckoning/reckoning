@@ -60,14 +60,14 @@ const byDate = computed(() => {
             :timer="timer"
             @click="emit('edit', timer)"
           />
-          <a
-            class="bs-calendar-add"
-            role="button"
+          <button
+            type="button"
+            class="bs-calendar-add text-brand hover:text-brand-hover"
             :title="addTimerTitle"
-            @click.prevent="emit('add', cell.date)"
+            @click="emit('add', cell.date)"
           >
             <i class="fa fa-plus" aria-hidden="true"></i>
-          </a>
+          </button>
         </div>
       </div>
     </div>

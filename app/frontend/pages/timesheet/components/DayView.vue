@@ -31,7 +31,9 @@ defineExpose({refresh})
         class="mb-2.5 rounded-bs border border-alert-danger-border bg-alert-danger px-4 py-3.5 text-alert-danger-text"
       >
         {{ t("timesheet.timersFailed") }}
-        <a role="button" @click.prevent="refresh">{{ t("timesheet.retry") }}</a>
+        <UiButton variant="link" class="px-0" @click="refresh">
+          {{ t("timesheet.retry") }}
+        </UiButton>
       </div>
 
       <p v-if="loading && timers.length === 0" class="text-muted">{{ t("timesheet.loading") }}</p>

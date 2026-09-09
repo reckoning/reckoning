@@ -37,12 +37,17 @@ const display = computed(() => {
 </script>
 
 <template>
-  <a class="bs-calendar-timer" role="button" :class="variant" @click.stop.prevent="$emit('click')">
+  <button
+    type="button"
+    class="bs-calendar-timer"
+    :class="variant"
+    @click.stop="$emit('click')"
+  >
     <span v-if="timer.started"
       ><i class="fa fa-circle-o-notch fa-spin" aria-hidden="true"></i> {{ display }}</span
     >
     <span v-else class="timer-value">{{ display }}</span>
     |
     <span class="timer-task" :title="timer.taskName">{{ timer.taskName }}</span>
-  </a>
+  </button>
 </template>
