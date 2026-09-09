@@ -115,7 +115,9 @@ describe("ExpenseForm", () => {
     expect((wrapper.get('[data-test="description"]').element as HTMLInputElement).value).toBe(
       "Tricorder",
     )
-    expect((wrapper.get('[data-test="value"]').element as HTMLInputElement).value).toBe("100")
+    // The decimal arrives as the record stores it, which is what the
+    // server-rendered number field showed too.
+    expect((wrapper.get('[data-test="value"]').element as HTMLInputElement).value).toBe("100.0")
     expect((wrapper.get('[data-test="vat-percent"]').element as HTMLInputElement).value).toBe("19")
   })
 
@@ -289,6 +291,39 @@ describe("ExpenseForm", () => {
     })
 
     expect(wrapper.find('[data-test="receipt-image"]').exists()).toBe(true)
+  })
+
+  // The vee-validate zod adapter throws on a union's issues instead of
+  // reporting them, which took the whole submit handler down with it.
+  it("reports a percentage out of range instead of throwing", async () => {
+    const {wrapper, requests} = await mountForm()
+
+    await wrapper.get('[data-test="expense-type"]').setValue("gwg")
+    await wrapper.get('[data-test="description"]').setValue("Tricorder")
+    await wrapper.get('[data-test="seller"]').setValue("ACME")
+    await wrapper.get('[data-test="value"]').setValue("100")
+    await wrapper.get('[data-test="date"]').setValue("2026-03-01")
+    await wrapper.get('[data-test="vat-percent"]').setValue("120")
+    await wrapper.get("form").trigger("submit")
+
+    await flushPromises()
+
+    expect(requests.some((entry) => entry.method?.toLowerCase() === "post")).toBe(false)
+  })
+
+  // A blank is not a zero: an expense worth nothing is one nobody meant.
+  it("refuses to save without an amount", async () => {
+    const {wrapper, requests} = await mountForm()
+
+    await wrapper.get('[data-test="expense-type"]').setValue("gwg")
+    await wrapper.get('[data-test="description"]').setValue("Tricorder")
+    await wrapper.get('[data-test="seller"]').setValue("ACME")
+    await wrapper.get('[data-test="date"]').setValue("2026-03-01")
+    await wrapper.get("form").trigger("submit")
+
+    await vi.waitFor(() => expect(wrapper.find('[data-test="value-error"]').exists()).toBe(true))
+
+    expect(requests.some((entry) => entry.method?.toLowerCase() === "post")).toBe(false)
   })
 
   // The amount an expense deducts is not what it cost, and the difference is

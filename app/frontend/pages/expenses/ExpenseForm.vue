@@ -82,12 +82,26 @@ const { mutateAsync: removeReceipt } = useDestroyExpenseReceipt()
 
 const loading = computed(() => editing.value && isPending.value)
 
-// `value` is NOT NULL and validated for presence, so it is required rather
-// than "leave it alone"; the two percentages default to zero the way the
-// columns do.
+// Deliberately not a `z.union`: `@vee-validate/zod` reads a union's issues
+// through a field this zod version does not set, and throws out of the
+// submit handler instead of reporting the error.
+//
+// A blank percentage is the zero the column defaults to; a blank amount is
+// not, because an expense worth nothing is one nobody meant.
 const percent = z
-  .union([z.literal("").transform(() => 0), z.coerce.number().min(0).max(100)])
-  .optional()
+  .any()
+  .transform((raw) => (raw === "" || raw === undefined || raw === null ? 0 : Number(raw)))
+  .refine((entered) => Number.isFinite(entered) && entered >= 0 && entered <= 100, {
+    message: "percent",
+  })
+
+const amount = z
+  .any()
+  .refine(
+    (raw) => raw !== "" && raw !== undefined && raw !== null && Number.isFinite(Number(raw)),
+    { message: "required" },
+  )
+  .transform(String)
 
 const schema = toTypedSchema(
   z
@@ -100,7 +114,7 @@ const schema = toTypedSchema(
       ended_at: z.string().optional(),
       description: z.string().min(1),
       seller: z.string().min(1),
-      value: z.coerce.number(),
+      value: amount,
       private_use_percent: percent,
       vat_percent: percent,
     })
@@ -186,7 +200,7 @@ watch(
       ended_at: loaded.endedAt ?? "",
       description: loaded.description ?? "",
       seller: loaded.seller ?? "",
-      value: Number(loaded.value ?? 0),
+      value: String(loaded.value ?? ""),
       private_use_percent: loaded.privateUsePercent ?? 0,
       vat_percent: loaded.vatPercent ?? 0,
     })
@@ -225,15 +239,21 @@ function pick(event: Event): void {
   picked.value = (event.target as HTMLInputElement).files?.[0] ?? undefined
 }
 
-async function attachPicked(expenseId: string): Promise<void> {
-  if (!picked.value) return
+// Answers whether the file made it, because a refused one keeps the form
+// open: it is still picked, and leaving would make the user find the expense
+// again to try the same file.
+async function attachPicked(expenseId: string): Promise<boolean> {
+  if (!picked.value) return true
 
   try {
     await uploadReceipt({ id: expenseId, data: { receipt: picked.value } })
     picked.value = undefined
+
+    return true
   } catch {
-    // The expense itself is saved; only the file was refused.
     toasts.push("error", t("expenseForm.receiptFailed"))
+
+    return false
   }
 }
 
@@ -249,17 +269,24 @@ const save = handleSubmit(async (submitted) => {
     started_at: submitted.interval === "once" ? null : submitted.started_at || null,
     ended_at: submitted.interval === "once" ? null : submitted.ended_at || null,
     afa_type_id: submitted.expense_type === "afa" ? submitted.afa_type_id : null,
-    value: String(submitted.value),
   }
 
   try {
-    const saved = editing.value
+    const wasEditing = editing.value
+    const saved = wasEditing
       ? await update({ id: id.value as string, data })
       : await create({ data })
 
-    await attachPicked(saved.id)
+    toasts.push("success", wasEditing ? t("expenseForm.saved") : t("expenseForm.created"))
 
-    toasts.push("success", editing.value ? t("expenseForm.saved") : t("expenseForm.created"))
+    // The expense is saved either way; a receipt that was refused keeps the
+    // form open on it, so the same file can go up again.
+    if (!(await attachPicked(saved.id))) {
+      if (!wasEditing) await router.push({ name: "expense-edit", params: { id: saved.id }, query: listQuery.value })
+
+      return
+    }
+
     await router.push({ name: "expenses", query: listQuery.value })
   } catch {
     toasts.push("error", t("expenseForm.saveFailed"))
