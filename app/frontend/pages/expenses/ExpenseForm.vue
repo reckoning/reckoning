@@ -215,9 +215,12 @@ watch(id, (current, previous) => {
   if (current === previous) return
 
   filledFrom.value = undefined
-  picked.value = undefined
 
   if (!current) {
+    // A new form starts blank; an edit reached from one does not, because
+    // that is where a refused receipt is waiting to be sent again.
+    picked.value = undefined
+
     resetForm({
       values: {
         interval: "once",

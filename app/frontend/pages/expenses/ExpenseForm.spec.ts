@@ -37,6 +37,7 @@ const AFA_TYPES = [{id: "bbbbbbbb-0000-4000-8000-000000000001", name: "Computer"
 interface Options {
   path?: string
   expense?: Record<string, unknown>
+  refuseReceipt?: boolean
 }
 
 async function mountForm(options: Options = {}) {
@@ -47,6 +48,10 @@ async function mountForm(options: Options = {}) {
 
     const url = String(config.url)
     let data: unknown = {}
+
+    if (url.includes("receipt") && options.refuseReceipt) {
+      throw {response: {status: 400, data: {code: "validation_error.expense.receipt"}}}
+    }
 
     if (url.includes("afa_types")) data = AFA_TYPES
     else if (config.method === "post" || config.method === "patch" || config.method === "put") {
@@ -324,6 +329,38 @@ describe("ExpenseForm", () => {
     await vi.waitFor(() => expect(wrapper.find('[data-test="value-error"]').exists()).toBe(true))
 
     expect(requests.some((entry) => entry.method?.toLowerCase() === "post")).toBe(false)
+  })
+
+  // The expense is saved either way, but the file is not — so the form stays
+  // on it with the same file still picked, and a second save sends it again.
+  it("holds the new expense open when its receipt is refused", async () => {
+    const {wrapper, router, requests} = await mountForm({refuseReceipt: true})
+
+    await wrapper.get('[data-test="expense-type"]').setValue("gwg")
+    await wrapper.get('[data-test="description"]').setValue("Tricorder")
+    await wrapper.get('[data-test="seller"]').setValue("ACME")
+    await wrapper.get('[data-test="value"]').setValue("100")
+    await wrapper.get('[data-test="date"]').setValue("2026-03-01")
+
+    const file = new File(["x"], "receipt.png", {type: "image/png"})
+    const input = wrapper.get('[data-test="receipt-file"]').element as HTMLInputElement
+    Object.defineProperty(input, "files", {value: [file], configurable: true})
+    await wrapper.get('[data-test="receipt-file"]').trigger("change")
+
+    await wrapper.get("form").trigger("submit")
+
+    // On the expense it just created, rather than back on the list.
+    await vi.waitFor(() => expect(router.currentRoute.value.name).toBe("expense-edit"))
+
+    const attempts = () =>
+      requests.filter((entry) => String(entry.url).includes("receipt")).length
+
+    expect(attempts()).toBe(1)
+
+    // The file is still picked, so saving again sends it again.
+    await wrapper.get("form").trigger("submit")
+
+    await vi.waitFor(() => expect(attempts()).toBe(2))
   })
 
   // The amount an expense deducts is not what it cost, and the difference is
