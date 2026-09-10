@@ -46,11 +46,6 @@ class ApplicationController < ActionController::Base
   end
   helper_method :sort_direction
 
-  private def backend?
-    self.class.to_s.split("::").first == "Backend"
-  end
-  helper_method :backend?
-
   private def registration_enabled?
     Rails.configuration.app.registration
   end
