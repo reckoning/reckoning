@@ -1,7 +1,7 @@
 import { test, expect } from "./support/commands"
 import { app, appScenario, appEval } from "./support/on-rails"
 
-// Phase B1's exit criterion: the shell at /app does a full login → dashboard
+// Phase B1's exit criterion: the shell does a full login → dashboard
 // → logout round-trip against the real API, not a mocked one.
 test.describe("SPA shell", () => {
   test.beforeEach(async () => {
@@ -10,32 +10,30 @@ test.describe("SPA shell", () => {
   })
 
   test("signs in, reaches the dashboard and signs back out", async ({ page }) => {
-    await page.goto("/app")
-
-    // The guard asks GET /me, gets a 401 and routes to login client-side,
-    // carrying the route it turned away as a redirect query.
-    await expect(page).toHaveURL(/\/app\/login\?redirect=\/$/)
+    // Not the root path: a signed-out visitor there is a visitor, and gets
+    // the welcome page. The dashboard behind it is what signing in reaches.
+    await page.goto("/login")
 
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
 
     await expect(page.getByTestId("dashboard-greeting")).toContainText("will@star.fleet")
-    await expect(page).toHaveURL(/\/app\/?$/)
+    await expect(page).toHaveURL(/^https?:\/\/[^/]+\/?$/)
 
     // Signing out lives in the user menu, the way the server-rendered aside
     // has it.
     await page.getByTestId("user-menu").click()
     await page.getByTestId("sign-out").click()
 
-    await expect(page).toHaveURL(/\/app\/login$/)
+    await expect(page).toHaveURL(/\/login$/)
     await expect(page.getByTestId("submit")).toBeVisible()
   })
 
   // The bar the server-rendered pages get from Turbo Drive. It waits half a
   // second first, so the request has to be held up to see it at all.
   test("draws the loading bar while a request is in flight", async ({ page }) => {
-    await page.goto("/app/login")
+    await page.goto("/login")
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
@@ -49,7 +47,7 @@ test.describe("SPA shell", () => {
     await page.getByTestId("nav-invoices").click()
 
     await expect(page.getByTestId("loading-bar")).toBeVisible()
-    await expect(page).toHaveURL(/\/app\/invoices$/)
+    await expect(page).toHaveURL(/\/invoices$/)
 
     // And it leaves again once the answer is in.
     await expect(page.getByTestId("loading-bar")).toHaveCount(0, { timeout: 15_000 })
@@ -57,31 +55,31 @@ test.describe("SPA shell", () => {
   })
 
   test("keeps the requested path through the login redirect", async ({ page }) => {
-    await page.goto("/app/customers")
+    await page.goto("/customers")
 
-    await expect(page).toHaveURL(/\/app\/login\?redirect=\/customers$/)
+    await expect(page).toHaveURL(/\/login\?redirect=\/customers$/)
 
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
 
-    await expect(page).toHaveURL(/\/app\/customers$/)
+    await expect(page).toHaveURL(/\/customers$/)
   })
 
   test("rejects bad credentials without leaving the login page", async ({ page }) => {
-    await page.goto("/app/login")
+    await page.goto("/login")
 
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("definitely-not-enterprise")
     await page.getByTestId("submit").click()
 
     await expect(page.getByTestId("login-failed")).toBeVisible()
-    await expect(page).toHaveURL(/\/app\/login$/)
+    await expect(page).toHaveURL(/\/login$/)
   })
 
   // The elements /signin has that the B1 skeleton was missing.
   test("offers remember me, password reset and signup", async ({ page }) => {
-    await page.goto("/app/login")
+    await page.goto("/login")
 
     await expect(page.getByTestId("remember-me")).toBeVisible()
     await expect(page.getByTestId("reset-password")).toBeVisible()
@@ -90,12 +88,12 @@ test.describe("SPA shell", () => {
     await expect(page.getByTestId("sign-up")).toHaveAttribute("href", "/signup")
 
     await page.getByTestId("reset-password").click()
-    await expect(page).toHaveURL(/\/app\/password\/new$/)
+    await expect(page).toHaveURL(/\/password\/new$/)
     await expect(page.getByTestId("submit")).toBeVisible()
   })
 
   test("keeps the session across a browser restart when remember me is checked", async ({ page }) => {
-    await page.goto("/app/login")
+    await page.goto("/login")
 
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
@@ -116,16 +114,16 @@ test.describe("SPA shell", () => {
   // bounce straight back to login — only reachable on a fresh load, so
   // clicking through from the login page never caught it.
   test("opens a public route directly without bouncing to login", async ({ page }) => {
-    await page.goto("/app/password/new")
+    await page.goto("/password/new")
 
-    await expect(page).toHaveURL(/\/app\/password\/new$/)
+    await expect(page).toHaveURL(/\/password\/new$/)
     await expect(page.getByTestId("email")).toBeVisible()
   })
 
   // The root path used to serve the server-rendered dashboard, and the menu
   // had a way across to it. It hands a signed-in visitor to the SPA now.
   test("takes a signed-in visitor from the root path into the spa", async ({ page }) => {
-    await page.goto("/app/login")
+    await page.goto("/login")
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
@@ -133,7 +131,7 @@ test.describe("SPA shell", () => {
 
     await page.goto("/")
 
-    await expect(page).toHaveURL(/\/app\/?$/)
+    await expect(page).toHaveURL(/^https?:\/\/[^/]+\/?$/)
     await expect(page.getByTestId("dashboard-title")).toBeVisible()
   })
 
@@ -141,7 +139,7 @@ test.describe("SPA shell", () => {
   // has run out, and redirects to the root path with the reason in the flash.
   // The root path now hands that to the SPA, which has to say it out loud.
   test("carries a server-rendered refusal into the spa", async ({ page }) => {
-    await page.goto("/app/login")
+    await page.goto("/login")
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
@@ -164,7 +162,7 @@ test.describe("SPA shell", () => {
       form.submit()
     }, id)
 
-    await expect(page).toHaveURL(/\/app\/?$/)
+    await expect(page).toHaveURL(/^https?:\/\/[^/]+\/?$/)
     await expect(page.getByTestId("toasts")).toContainText("Testphase")
   })
 
@@ -184,7 +182,7 @@ test.describe("SPA shell", () => {
 
     await page.goto("/expense_imports/new")
 
-    await expect(page).toHaveURL(/\/app\/login\?return=%2Fexpense_imports%2Fnew$/)
+    await expect(page).toHaveURL(/\/login\?return=%2Fexpense_imports%2Fnew$/)
 
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
@@ -196,7 +194,7 @@ test.describe("SPA shell", () => {
   })
 
   test("validates the form before calling the api", async ({ page }) => {
-    await page.goto("/app/login")
+    await page.goto("/login")
 
     await page.getByTestId("email").fill("not-an-email")
     await page.getByTestId("submit").click()

@@ -70,9 +70,8 @@ class TrialTest < ActionDispatch::IntegrationTest
 
       get root_path
 
-      assert_redirected_to spa_path
-      follow_redirect!
       assert_response :success
+      assert_select "div#spa"
     end
   end
 end

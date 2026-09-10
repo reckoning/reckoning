@@ -11,7 +11,7 @@ test.describe("Timesheet week view", () => {
   })
 
   async function signIn(page: Page) {
-    await page.goto("/app/login")
+    await page.goto("/login")
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
@@ -20,7 +20,7 @@ test.describe("Timesheet week view", () => {
 
   test("renders the seeded task row with its week total", async ({page}) => {
     await signIn(page)
-    await page.goto("/app/timesheet?view=week")
+    await page.goto("/timesheet?view=week")
 
     await expect(page.getByTestId("week-grid")).toBeVisible()
 
@@ -37,19 +37,19 @@ test.describe("Timesheet week view", () => {
   // where it now actually appears.
   // The main navigation and the running-timer widget still link
   // `timesheet_path`, and a bookmark carries a date with it.
-  test("forwards the old rails path, date and all", async ({ page }) => {
+  test("answers a page load with the date in the query", async ({ page }) => {
     await signIn(page)
 
     await page.goto("/timesheet?date=2026-06-10&view=week")
 
-    await expect(page).toHaveURL(/\/app\/timesheet\?date=2026-06-10&view=week$/)
+    await expect(page).toHaveURL(/\/timesheet\?date=2026-06-10&view=week$/)
     // A week with nothing tracked in it, so the page itself is the assertion.
     await expect(page.getByText("Heute")).toBeVisible()
   })
 
   test("removes a row only after the confirm is accepted", async ({page}) => {
     await signIn(page)
-    await page.goto("/app/timesheet?view=week")
+    await page.goto("/timesheet?view=week")
 
     const row = page.getByTestId("task-row").filter({hasText: "E2E Task"})
     await expect(row).toBeVisible()
@@ -66,7 +66,7 @@ test.describe("Timesheet week view", () => {
 
   test("autosaves a cell edit and recomputes the row total", async ({page}) => {
     await signIn(page)
-    await page.goto("/app/timesheet?view=week")
+    await page.goto("/timesheet?view=week")
 
     const row = page.getByTestId("task-row").filter({hasText: "E2E Task"})
     const inputs = row.getByTestId("week-cells").locator("input")

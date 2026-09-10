@@ -11,7 +11,7 @@ test.describe("Customers", () => {
       Customer.create!(account: account, name: "Starfleet", contact_information: {"email" => "ops@star.fleet"})
     `)
 
-    await page.goto("/app/login")
+    await page.goto("/login")
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
@@ -19,7 +19,7 @@ test.describe("Customers", () => {
   })
 
   test("edits a customer from the list", async ({ page }) => {
-    await page.goto("/app/customers")
+    await page.goto("/customers")
 
     await page.getByText("Starfleet").click()
 
@@ -38,7 +38,7 @@ test.describe("Customers", () => {
   test("keeps the three tabs the ERB form had", async ({ page }) => {
     const id = (await appEval(`Customer.find_by(name: "Starfleet").id`)) as string
 
-    await page.goto(`/app/customers/${id}/edit`)
+    await page.goto(`/customers/${id}/edit`)
 
     await expect(page.getByTestId("name")).toBeVisible()
 
@@ -52,7 +52,7 @@ test.describe("Customers", () => {
   test("refuses to save without a name", async ({ page }) => {
     const id = (await appEval(`Customer.find_by(name: "Starfleet").id`)) as string
 
-    await page.goto(`/app/customers/${id}/edit`)
+    await page.goto(`/customers/${id}/edit`)
     await page.getByTestId("name").fill("")
     await page.getByTestId("submit").click()
 
@@ -61,12 +61,12 @@ test.describe("Customers", () => {
   })
 
   // The project list still links to the old path, and so do bookmarks.
-  test("forwards the old rails path to the spa", async ({ page }) => {
+  test("answers a page load on the edit path", async ({ page }) => {
     const id = (await appEval(`Customer.find_by(name: "Starfleet").id`)) as string
 
     await page.goto(`/customers/${id}/edit`)
 
-    await expect(page).toHaveURL(new RegExp(`/app/customers/${id}/edit$`))
+    await expect(page).toHaveURL(new RegExp(`/customers/${id}/edit$`))
     await expect(page.getByTestId("customer-title")).toHaveText("Starfleet")
   })
 })

@@ -6,16 +6,19 @@ test.describe("Home", () => {
     await app("clean")
   })
 
-  test("home page loads and shows the brand", async ({ page }) => {
+  test("shows the welcome page to a visitor", async ({ page }) => {
     await page.goto("/")
+
     await expect(page.locator("body")).toContainText("Reckoning")
+    // The server-rendered welcome page, not the SPA shell behind it.
+    await expect(page.locator("#spa")).toHaveCount(0)
   })
 
   // The welcome page is for visitors; anyone with a session belongs in the app.
   test("sends a signed-in visitor into the spa", async ({ page }) => {
     await appScenario("signed_out_user")
 
-    await page.goto("/app/login")
+    await page.goto("/login")
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
@@ -23,6 +26,6 @@ test.describe("Home", () => {
 
     await page.goto("/")
 
-    await expect(page).toHaveURL(/\/app\/?$/)
+    await expect(page).toHaveURL(/^https?:\/\/[^/]+\/?$/)
   })
 })

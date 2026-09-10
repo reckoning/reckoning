@@ -2,27 +2,29 @@
 
 require "test_helper"
 
-# The customer screens are the SPA's since phase B3. What is left on the Rails
-# side is the handover: the old path still resolves, so the link on the
-# project list and any bookmark land on the new screen.
+# The customer screens are the SPA's since phase B3, and the SPA is mounted at
+# the root — so the path the project list links is served by the shell rather
+# than handed anywhere.
 class CustomersControllerTest < ActionDispatch::IntegrationTest
   let(:data) { users :data }
   let(:customer) { customers :starfleet }
 
-  it "sends the edit path to the spa" do
+  it "serves the edit path from the shell" do
     sign_in data
 
     get "/customers/#{customer.id}/edit"
 
-    assert_redirected_to "/app/customers/#{customer.id}/edit"
+    assert_response :success
+    assert_select "div#spa"
   end
 
   # No sign-in check of its own: the SPA route guard asks the API, and the
-  # redirect target is not worth protecting — it renders the shell either way.
-  it "sends a signed-out visitor there too" do
+  # shell is not worth protecting — it renders either way.
+  it "serves a signed-out visitor too" do
     get "/customers/#{customer.id}/edit"
 
-    assert_redirected_to "/app/customers/#{customer.id}/edit"
+    assert_response :success
+    assert_select "div#spa"
   end
 
   # The SPA writes through the API, so the route the ERB form posted to is

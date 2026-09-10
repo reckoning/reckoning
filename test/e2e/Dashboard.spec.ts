@@ -17,7 +17,7 @@ test.describe("Dashboard", () => {
       paid.update_columns(value: 250, workflow_state: "paid", pay_date: Date.current)
     `)
 
-    await page.goto("/app/login")
+    await page.goto("/login")
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
@@ -124,8 +124,8 @@ test.describe("Dashboard", () => {
     await expect(page.getByTestId("trial-banner")).toHaveCount(0)
   })
 
-  test("forwards the old rails path to the spa", async ({ page }) => {
-    await page.goto("/app/")
+  test("answers a page load on the root path", async ({ page }) => {
+    await page.goto("/")
 
     await expect(page.getByTestId("dashboard-title")).toBeVisible()
   })

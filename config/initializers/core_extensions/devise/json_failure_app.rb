@@ -43,5 +43,5 @@ class JSONFailureApp < Devise::FailureApp
     flash.discard(:alert)
   end
 
-  SPA_LOGIN_PATH = "/app/login"
+  SPA_LOGIN_PATH = "/login"
 end

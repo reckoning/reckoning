@@ -7,10 +7,9 @@ class BaseController < ApplicationController
   def index
     @active_nav = "home"
     if user_signed_in?
-      # Not a permanent redirect: which of the three this is depends on the
-      # session, and a browser that cached it would never see the welcome
-      # page again.
-      redirect_to spa_path
+      # The SPA's dashboard is the root path, so this renders the shell rather
+      # than sending the browser somewhere else for it.
+      render template: "spa/index", layout: "spa"
     elsif current_account.present?
       redirect_to new_user_session_path
     else

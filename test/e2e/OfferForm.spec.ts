@@ -13,7 +13,7 @@ test.describe("Offer form", () => {
       customer.projects.create!(name: "Narendra 3", rate: 90)
     `)
 
-    await page.goto("/app/login")
+    await page.goto("/login")
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
@@ -23,7 +23,7 @@ test.describe("Offer form", () => {
   test("writes an offer with a hand-typed position", async ({ page }) => {
     const projectId = (await appEval(`Project.first.id`)) as string
 
-    await page.goto(`/app/offers/new?project_id=${projectId}`)
+    await page.goto(`/offers/new?project_id=${projectId}`)
 
     await page.getByTestId("date").fill("2026-08-01")
     await page.getByTestId("description").fill("Sector survey")
@@ -50,7 +50,7 @@ test.describe("Offer form", () => {
     `)
     const id = (await appEval(`Offer.first.id`)) as string
 
-    await page.goto(`/app/offers/${id}/edit`)
+    await page.goto(`/offers/${id}/edit`)
 
     await expect(page.getByTestId("position-description-0")).toHaveValue("Away mission")
 
@@ -74,7 +74,7 @@ test.describe("Offer form", () => {
     const id = (await appEval(`Offer.first.id`)) as string
     const other = (await appEval(`Project.find_by(name: "Outpost 6").id`)) as string
 
-    await page.goto(`/app/offers/${id}/edit`)
+    await page.goto(`/offers/${id}/edit`)
 
     await expect(page.getByTestId("position-description-0")).toHaveValue("Design")
 
@@ -90,17 +90,17 @@ test.describe("Offer form", () => {
   test("refuses a new offer while the account has no address", async ({ page }) => {
     await appEval(`Account.find_by(name: "Enterprise").update_columns(contact_information: {})`)
 
-    await page.goto("/app/offers/new")
+    await page.goto("/offers/new")
 
     await expect(page.getByTestId("missing-address")).toBeVisible()
   })
 
-  test("forwards the old rails paths to the spa", async ({ page }) => {
+  test("answers a page load on the form paths", async ({ page }) => {
     const projectId = (await appEval(`Project.first.id`)) as string
 
     await page.goto(`/offers/new?project_id=${projectId}`)
 
-    await expect(page).toHaveURL(new RegExp(`/app/offers/new\\?project_id=${projectId}$`))
+    await expect(page).toHaveURL(new RegExp(`/offers/new\\?project_id=${projectId}$`))
     await expect(page.getByTestId("offer-form-title")).toBeVisible()
   })
 })

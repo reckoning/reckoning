@@ -33,28 +33,26 @@ Rails.application.routes.draw do
 
   mount ActionCable.server => "/cable"
 
-  # The SPA owns confirmation, unlock and password reset since phase B2.
-  # These paths stay rather than moving into the mail templates, because a
-  # link Devise sent last month is already sitting in someone's inbox and has
-  # to keep working — including for a locked account, which has no other way
-  # back in. The token travels in the query string, so it comes along.
+  # A handful of paths the SPA does not name the same way it is reached by:
+  # Devise's own URLs, which sit in mails already sent, and the two the user
+  # menu on the server-rendered layout links. Redirected rather than served,
+  # so the address bar ends up on the path the SPA knows.
   #
-  # Every path below is built through this, because `redirect("/app/…")`
-  # drops the query string: a bookmarked filtered list, or a link that
-  # preselects a project for a new invoice, would arrive bare.
-  spa_screen = ->(pattern) do
+  # Built through this rather than through `redirect("…")`, which drops the
+  # query string — and the query string is where the tokens are.
+  legacy_screen = ->(pattern) do
     redirect do |params, request|
       path = pattern % params.to_h.symbolize_keys
       [path, request.query_string.presence].compact.join("?")
     end
   end
 
-  get "/users/confirmation", to: spa_screen.call("/app/confirmation")
-  get "/users/confirmation/new", to: spa_screen.call("/app/confirmation")
-  get "/users/unlock", to: spa_screen.call("/app/unlock")
-  get "/users/unlock/new", to: spa_screen.call("/app/unlock")
-  get "/users/password/new", to: spa_screen.call("/app/password/new")
-  get "/users/password/edit", to: spa_screen.call("/app/password/edit")
+  get "/users/confirmation", to: legacy_screen.call("/confirmation")
+  get "/users/confirmation/new", to: legacy_screen.call("/confirmation")
+  get "/users/unlock", to: legacy_screen.call("/unlock")
+  get "/users/unlock/new", to: legacy_screen.call("/unlock")
+  get "/users/password/new", to: legacy_screen.call("/password/new")
+  get "/users/password/edit", to: legacy_screen.call("/password/edit")
 
   devise_for :users,
     skip: %i[sessions registrations],
@@ -65,36 +63,36 @@ Rails.application.routes.draw do
     post "signup" => "accounts#create", :as => :registration
     # The SPA owns the profile; saving goes through /api/v1. The path stays
     # because Devise's mails and the server-rendered screens link it.
-    get "settings" => spa_screen.call("/app/settings"), :as => :edit_user_registration
+    get "settings" => "spa#index", :as => :edit_user_registration
     # The SPA renders the login. The name stays so the handful of
     # `new_user_session_path` callers keep working, and a bookmark on /signin
     # still lands somewhere sensible.
-    get "signin" => spa_screen.call("/app/login"), :as => :new_user_session
+    get "signin" => legacy_screen.call("/login"), :as => :new_user_session
     delete "signout" => "sessions#destroy", :as => :destroy_user_session
   end
 
   # Two-factor is the SPA's: enrolling, the backup codes and turning it off
   # all go through /api/v1. The path stays because it was linked from the
   # profile and may sit in a bookmark.
-  get "me/otp", to: spa_screen.call("/app/settings/two-factor"), as: :otp_me
+  get "me/otp", to: legacy_screen.call("/settings/two-factor"), as: :otp_me
 
   # The SPA owns the account settings; saving goes through /api/v1. The path
   # stays because the user menu on the server-rendered screens links it.
-  get "account/edit", to: spa_screen.call("/app/account"), as: :edit_account
+  get "account/edit", to: legacy_screen.call("/account"), as: :edit_account
 
-  get "password/edit", to: spa_screen.call("/app/settings/password"), as: :edit_password
+  get "password/edit", to: legacy_screen.call("/settings/password"), as: :edit_password
 
   # The SPA owns the invoice list (phase B6). The name stays: the main
   # navigation links `invoices_path`, and so do the redirects after charging
   # or paying an invoice. The query travels with it, so a filtered, sorted
   # link keeps working.
-  get "invoices", to: spa_screen.call("/app/invoices"), as: :invoices
+  get "invoices", to: "spa#index", as: :invoices
 
   # The SPA owns the form too (phase B6). Declared before the resource so
   # `/invoices/new` reaches the SPA rather than the ERB screen, and named to
   # keep `new_invoice_path` — the dashboard and the project page link it.
-  get "invoices/new", to: spa_screen.call("/app/invoices/new"), as: :new_invoice
-  get "invoices/:id/edit", to: spa_screen.call("/app/invoices/%{id}/edit"), as: :edit_invoice
+  get "invoices/new", to: "spa#index", as: :new_invoice
+  get "invoices/:id/edit", to: "spa#index", as: :edit_invoice
 
   # What is left of the server-rendered invoice: the PDFs, which the plan keeps
   # server-rendered on purpose. Charging, paying, mailing, creating, updating
@@ -110,16 +108,16 @@ Rails.application.routes.draw do
   # longer carries `update` and `destroy` to provide `invoice_path` — the
   # dashboard and project panels link it. Declared after the resource so its
   # `:id` cannot swallow the member routes above.
-  get "invoices/:id", to: spa_screen.call("/app/invoices/%{id}"), as: :invoice
+  get "invoices/:id", to: "spa#index", as: :invoice
 
   # The SPA owns the offer screens (phase B7). The list keeps its query — the
   # main navigation links `offers_path` — and the name comes back here now
   # that the resource no longer carries `create` to provide it.
-  get "offers", to: spa_screen.call("/app/offers"), as: :offers
+  get "offers", to: "spa#index", as: :offers
 
   # `?project_id=` survives: the project page links a new offer for itself.
-  get "offers/new", to: spa_screen.call("/app/offers/new"), as: :new_offer
-  get "offers/:id/edit", to: spa_screen.call("/app/offers/%{id}/edit"), as: :edit_offer
+  get "offers/new", to: "spa#index", as: :new_offer
+  get "offers/:id/edit", to: "spa#index", as: :edit_offer
 
   # What is left of the server-rendered offer: the PDF, which the plan keeps
   # server-rendered on purpose. Creating, updating, deleting and the state
@@ -132,11 +130,11 @@ Rails.application.routes.draw do
 
   # Named because the dashboard's offer panel links it. Declared after the
   # resource so its `:id` cannot swallow the member routes above.
-  get "offers/:id", to: spa_screen.call("/app/offers/%{id}"), as: :offer
+  get "offers/:id", to: "spa#index", as: :offer
 
   # The SPA owns the timesheet (phase B4). The name stays: the main
   # navigation links `timesheet_path`.
-  get "timesheet", to: spa_screen.call("/app/timesheet"), as: :timesheet
+  get "timesheet", to: "spa#index", as: :timesheet
 
   resource :template, only: [] do
     template "blank"
@@ -149,15 +147,15 @@ Rails.application.routes.draw do
   # The SPA owns the customer screens (phase B3). The name stays because the
   # project list still links here, and a bookmark on the old path should land
   # on the new screen rather than a 404.
-  get "customers/:id/edit", to: spa_screen.call("/app/customers/%{id}/edit"), as: :edit_customer
+  get "customers/:id/edit", to: "spa#index", as: :edit_customer
 
   # The SPA owns every project screen. The names are kept, since the
   # navigation links `projects_path` and the panels around the app link the
   # detail and the form.
-  get "projects", to: spa_screen.call("/app/projects"), as: :projects
-  get "projects/new", to: spa_screen.call("/app/projects/new"), as: :new_project
-  get "projects/:id/edit", to: spa_screen.call("/app/projects/%{id}/edit"), as: :edit_project
-  get "projects/:id", to: spa_screen.call("/app/projects/%{id}"), as: :project
+  get "projects", to: "spa#index", as: :projects
+  get "projects/new", to: "spa#index", as: :new_project
+  get "projects/:id/edit", to: "spa#index", as: :edit_project
+  get "projects/:id", to: "spa#index", as: :project
 
   resources :projects, only: [] do
     # Untouched: these serve the legacy invoice screen, not the project
@@ -180,18 +178,12 @@ Rails.application.routes.draw do
   get "expenses", to: "expenses#index", as: :expenses_export,
     constraints: ->(request) { request.format.csv? || request.format.pdf? }
 
-  get "expenses", to: spa_screen.call("/app/expenses"), as: :expenses
-  get "expenses/new", to: spa_screen.call("/app/expenses/new"), as: :new_expense
-  get "expenses/:id/edit", to: spa_screen.call("/app/expenses/%{id}/edit"), as: :edit_expense
+  get "expenses", to: "spa#index", as: :expenses
+  get "expenses/new", to: "spa#index", as: :new_expense
+  get "expenses/:id/edit", to: "spa#index", as: :edit_expense
   resources :expense_imports, only: %i[new create] do
     post :preview, on: :collection
   end
-
-  # Vue SPA shell. Scoped to /app so vue-router owns everything beneath it and
-  # a reload of a client-side path still finds the shell. Deliberately not a
-  # global catch-all — the ERB screens keep their routes until Phase C.
-  get "app", to: "spa#index", as: :spa
-  get "app/*path", to: "spa#index"
 
   get "impressum" => "base#impressum"
   get "privacy" => "base#privacy"
@@ -202,4 +194,16 @@ Rails.application.routes.draw do
   match "500" => "errors#server_error", :via => :all
 
   root to: "base#index"
+
+  # The SPA owns the rest of the path space: it is the app now, so a path
+  # nothing above claims is one of its screens — or one of its screens'
+  # sub-paths, which it alone knows. Declared last so every route above wins,
+  # and narrowed to page loads: a missing asset or a stray `.json` has to stay
+  # a 404 rather than come back as a shell.
+  #
+  # `rails/` covers ActiveStorage's blob and representation URLs, which the
+  # framework draws after this file.
+  get "*path", to: "spa#index", constraints: lambda { |request|
+    request.format.html? && !request.path.start_with?("/rails/")
+  }
 end
