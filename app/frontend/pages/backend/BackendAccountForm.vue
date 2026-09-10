@@ -10,6 +10,7 @@ import {
 } from "@/services/api/services/backend/backend"
 import { useToastsStore } from "@/stores/toasts"
 import { confirmDialog } from "@/lib/confirm"
+import BackendNav from "./BackendNav.vue"
 import UiAlert from "@/components/ui/UiAlert.vue"
 import UiButton from "@/components/ui/UiButton.vue"
 import UiFormActions from "@/components/ui/UiFormActions.vue"
@@ -115,6 +116,8 @@ async function onDestroy(): Promise<void> {
 
 <template>
   <div id="backend-account-form">
+    <BackendNav />
+
     <div class="flex flex-wrap items-start gap-4">
       <h1 class="grow" data-test="account-form-title">
         {{ editing ? t("backend.accounts.edit", { name: account?.name ?? "" }) : t("backend.accounts.new") }}

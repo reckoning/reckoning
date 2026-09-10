@@ -36,6 +36,7 @@ export default {
     accountDeleted: "Account deleted.",
     accountDeleteFailed: "The account could not be deleted.",
     nav: {
+      dashboard: "Dashboard",
       users: "Users",
       accounts: "Accounts",
       backend: "Administration",

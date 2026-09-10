@@ -47,6 +47,8 @@ async function mountForm(options: Options = {}) {
   const router = createRouter({
     history: createMemoryHistory(),
     routes: [
+      {path: "/backend", name: "backend", component: {template: "<div />"}},
+      {path: "/backend/users", name: "backend-users", component: {template: "<div />"}},
       {path: "/backend/accounts", name: "backend-accounts", component: {template: "<div />"}},
       {path: "/backend/accounts/new", name: "backend-account-new", component: BackendAccountForm},
       {

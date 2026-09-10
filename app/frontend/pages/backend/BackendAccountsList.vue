@@ -3,6 +3,7 @@ import { computed } from "vue"
 import { useRoute, useRouter, RouterLink } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useBackendAccounts, useBackendStats } from "@/services/api/services/backend/backend"
+import BackendNav from "./BackendNav.vue"
 import UiButton from "@/components/ui/UiButton.vue"
 import UiPagination from "@/components/ui/UiPagination.vue"
 import UiPanel from "@/components/ui/UiPanel.vue"
@@ -43,6 +44,8 @@ function features(account: {featureExpenses?: boolean; featureLogbook?: boolean}
 
 <template>
   <div id="backend-accounts">
+    <BackendNav />
+
     <div class="flex flex-wrap items-start gap-4">
       <h1 class="grow" data-test="accounts-title">{{ t("backend.accounts.title") }}</h1>
 

@@ -13,6 +13,7 @@ import {
 } from "@/services/api/services/backend/backend"
 import { useToastsStore } from "@/stores/toasts"
 import { confirmDialog } from "@/lib/confirm"
+import BackendNav from "./BackendNav.vue"
 import UiButton from "@/components/ui/UiButton.vue"
 import UiPagination from "@/components/ui/UiPagination.vue"
 import UiPanel from "@/components/ui/UiPanel.vue"
@@ -114,6 +115,8 @@ async function onDestroy(id: string): Promise<void> {
 
 <template>
   <div id="backend-users">
+    <BackendNav />
+
     <div class="flex flex-wrap items-start gap-4">
       <h1 class="grow" data-test="users-title">{{ t("backend.users.title") }}</h1>
 

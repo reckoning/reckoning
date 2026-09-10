@@ -27,6 +27,22 @@ test.describe("Backend", () => {
     await expect(page.getByTestId("latest-users")).toContainText("will@star.fleet")
   })
 
+  // The server-rendered backend had its own navigation across the three
+  // areas, and reaching the accounts from the users should not have to go
+  // through the dashboard.
+  test("crosses between its three areas", async ({ page }) => {
+    await page.goto("/backend")
+
+    await page.getByTestId("nav-backend-users").click()
+    await expect(page).toHaveURL(/\/backend\/users$/)
+
+    await page.getByTestId("nav-backend-accounts").click()
+    await expect(page).toHaveURL(/\/backend\/accounts$/)
+
+    await page.getByTestId("nav-backend-dashboard").click()
+    await expect(page).toHaveURL(/\/backend$/)
+  })
+
   test("lists the users and sorts them by a column", async ({ page }) => {
     await appEval(`
       account = Account.find_by(name: "Enterprise")

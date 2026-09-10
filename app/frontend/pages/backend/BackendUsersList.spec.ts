@@ -63,6 +63,7 @@ async function mountList(options: Options = {}) {
     history: createMemoryHistory(),
     routes: [
       {path: "/backend", name: "backend", component: {template: "<div />"}},
+      {path: "/backend/accounts", name: "backend-accounts", component: {template: "<div />"}},
       {path: "/backend/users", name: "backend-users", component: BackendUsersList},
       {path: "/backend/users/new", name: "backend-user-new", component: {template: "<div />"}},
       {

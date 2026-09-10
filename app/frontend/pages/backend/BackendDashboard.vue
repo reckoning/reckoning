@@ -3,6 +3,7 @@ import { computed } from "vue"
 import { RouterLink } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useBackendStats, useBackendUsers } from "@/services/api/services/backend/backend"
+import BackendNav from "./BackendNav.vue"
 import UiButton from "@/components/ui/UiButton.vue"
 import UiPanel from "@/components/ui/UiPanel.vue"
 
@@ -26,6 +27,8 @@ function moment(value: string | null | undefined): string {
 
 <template>
   <div id="backend-dashboard">
+    <BackendNav />
+
     <h1 data-test="backend-title">{{ t("backend.title") }}</h1>
 
     <div class="mt-4 grid grid-cols-12 gap-4">
@@ -44,18 +47,6 @@ function moment(value: string | null | undefined): string {
             </div>
           </div>
 
-          <div class="mt-4 flex flex-wrap gap-2">
-            <RouterLink v-slot="{ href, navigate }" :to="{ name: 'backend-users' }" custom>
-              <UiButton as="a" :href="href" data-test="to-users" @click="navigate">
-                {{ t("backend.nav.users") }}
-              </UiButton>
-            </RouterLink>
-            <RouterLink v-slot="{ href, navigate }" :to="{ name: 'backend-accounts' }" custom>
-              <UiButton as="a" :href="href" data-test="to-accounts" @click="navigate">
-                {{ t("backend.nav.accounts") }}
-              </UiButton>
-            </RouterLink>
-          </div>
         </UiPanel>
       </div>
 
