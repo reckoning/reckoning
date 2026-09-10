@@ -270,6 +270,31 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/StandardError"
+  "/backend/stats":
+    get:
+      summary: How much there is of everything
+      tags:
+      - Backend
+      operationId: backendStats
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/BackendStats"
+        '403':
+          description: not an admin
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
   "/backend/users":
     get:
       summary: Users across every account
@@ -279,6 +304,27 @@ paths:
       parameters:
       - "$ref": "#/components/parameters/PageParameter"
       - "$ref": "#/components/parameters/PerPageParameter"
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - id
+          - email
+          - admin
+          - current_sign_in_at
+          - created_at
+        description: The columns the backend list sorts by. Anything else is the newest
+          first.
+      - name: direction
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
       responses:
         '200':
           description: successful
@@ -3458,6 +3504,18 @@ components:
       items:
         "$ref": "#/components/schemas/BackendAccount"
       title: BackendAccounts
+    BackendStats:
+      type: object
+      properties:
+        usersCount:
+          type: integer
+        accountsCount:
+          type: integer
+      additionalProperties: false
+      required:
+      - usersCount
+      - accountsCount
+      title: BackendStats
     BackendUser:
       type: object
       properties:
@@ -3483,6 +3541,11 @@ components:
         accountId:
           type: string
           format: uuid
+        currentSignInAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
         createdAt:
           type: string
           format: date-time

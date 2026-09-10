@@ -17,6 +17,7 @@ module V1
           enabled: {type: [:boolean, :null]},
           confirmed: {type: :boolean},
           accountId: {type: :string, format: :uuid},
+          currentSignInAt: {type: [:string, :null], format: "date-time"},
           createdAt: {type: :string, format: "date-time"},
           updatedAt: {type: :string, format: "date-time"}
         },
