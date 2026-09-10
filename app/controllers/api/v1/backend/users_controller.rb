@@ -18,12 +18,17 @@ module Api
           @user = ::User.find(params[:id])
         end
 
-        # Mirrors the web flow: the admin never sets a password, the user gets
-        # a confirmation mail and picks their own.
+        # The admin never sets a password: a random one goes in and the user is
+        # mailed a confirmation to pick their own. `created_via_admin` is what
+        # makes that mail say where the account came from.
+        #
+        # The notification used to be suppressed here, which left a created
+        # user with no way in at all until an admin remembered to press the
+        # button on the list — the list's button is for sending it *again*.
         def create
           password = Devise.friendly_token.first(30)
           @user = ::User.new(user_params.merge(password: password, password_confirmation: password))
-          @user.skip_confirmation_notification!
+          @user.created_via_admin = true
 
           if @user.save
             render :show, status: :created

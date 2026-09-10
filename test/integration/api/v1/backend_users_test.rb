@@ -95,15 +95,20 @@ module Api
         end
 
         # The admin never picks the password: a random one is set and the user
-        # is mailed a confirmation to choose their own.
-        it "creates a user without a password" do
+        # is mailed a confirmation to choose their own. Without that mail a
+        # created user has no way in.
+        it "creates a user without a password, and mails them" do
           assert_difference "User.count", 1 do
-            assert_api_response :post, 201, body: {
-              email: "barclay@star.fleet", name: "Reginald Barclay", account_id: admin.account_id
-            } do
-              refute parsed_body["confirmed"]
+            assert_emails 1 do
+              assert_api_response :post, 201, body: {
+                email: "barclay@star.fleet", name: "Reginald Barclay", account_id: admin.account_id
+              } do
+                refute parsed_body["confirmed"]
+              end
             end
           end
+
+          assert User.find_by(email: "barclay@star.fleet").created_via_admin
         end
 
         # The server-rendered list sorted by five columns; the endpoint takes
@@ -113,6 +118,38 @@ module Api
             emails = parsed_body.map { |user| user["email"] }
 
             assert_equal emails.sort, emails
+          end
+        end
+
+        # Every branch of the order clause, including the nullable timestamp
+        # and the id that closes each one.
+        it "sorts by the last sign-in, nulls and all" do
+          member.update_columns(current_sign_in_at: 2.days.ago)
+          users(:worf).update_columns(current_sign_in_at: nil)
+
+          assert_api_response :get, 200, params: {
+            sort: "current_sign_in_at", direction: "desc", perPage: "all"
+          } do
+            seen = parsed_body.filter_map { |user| user["currentSignInAt"] }
+
+            assert_equal seen.sort.reverse, seen
+          end
+        end
+
+        it "sorts by the admin flag" do
+          assert_api_response :get, 200, params: {sort: "admin", direction: "desc", perPage: "all"} do
+            assert parsed_body.first["admin"], "an admin sorts first descending"
+          end
+        end
+
+        # What it answers with nothing asked for, which is what it did before
+        # it could sort at all. An unknown column cannot get this far: the
+        # schema's enum refuses it.
+        it "falls back to the newest first" do
+          assert_api_response :get, 200, params: {perPage: "all"} do
+            created = parsed_body.map { |user| user["createdAt"] }
+
+            assert_equal created.sort.reverse, created
           end
         end
 
