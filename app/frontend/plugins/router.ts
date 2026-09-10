@@ -184,6 +184,48 @@ const routes: RouteRecordRaw[] = [
     component: () => import("@/pages/invoices/InvoiceForm.vue"),
     meta: { requiresAuth: true },
   },
+  {
+    path: "/backend",
+    name: "backend",
+    component: () => import("@/pages/backend/BackendDashboard.vue"),
+    meta: { requiresAuth: true, requiresAdmin: true },
+  },
+  {
+    path: "/backend/users",
+    name: "backend-users",
+    component: () => import("@/pages/backend/BackendUsersList.vue"),
+    meta: { requiresAuth: true, requiresAdmin: true },
+  },
+  {
+    path: "/backend/users/new",
+    name: "backend-user-new",
+    component: () => import("@/pages/backend/BackendUserForm.vue"),
+    meta: { requiresAuth: true, requiresAdmin: true },
+  },
+  {
+    path: "/backend/users/:id/edit",
+    name: "backend-user-edit",
+    component: () => import("@/pages/backend/BackendUserForm.vue"),
+    meta: { requiresAuth: true, requiresAdmin: true },
+  },
+  {
+    path: "/backend/accounts",
+    name: "backend-accounts",
+    component: () => import("@/pages/backend/BackendAccountsList.vue"),
+    meta: { requiresAuth: true, requiresAdmin: true },
+  },
+  {
+    path: "/backend/accounts/new",
+    name: "backend-account-new",
+    component: () => import("@/pages/backend/BackendAccountForm.vue"),
+    meta: { requiresAuth: true, requiresAdmin: true },
+  },
+  {
+    path: "/backend/accounts/:id/edit",
+    name: "backend-account-edit",
+    component: () => import("@/pages/backend/BackendAccountForm.vue"),
+    meta: { requiresAuth: true, requiresAdmin: true },
+  },
   // Rails hands every unclaimed page load to the shell, so a typo arrives
   // here rather than at a server-rendered 404.
   {
@@ -210,6 +252,12 @@ router.beforeEach(async (to) => {
   }
 
   if (to.name === "login" && currentUser.signedIn) {
+    return { name: "dashboard" };
+  }
+
+  // The backend answers a non-admin with 403, and a screen that renders only
+  // errors is worse than not offering it: the dashboard is where they belong.
+  if (to.meta.requiresAdmin === true && currentUser.user?.admin !== true) {
     return { name: "dashboard" };
   }
 

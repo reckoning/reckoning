@@ -130,6 +130,16 @@ const trial = computed(() => account.value?.trial)
                 {{ t("nav.security") }}
               </RouterLink>
             </UiDropdownItem>
+            <!-- The backend is an admin's own screen, and there is no other
+                 way to it now that the server-rendered navigation is gone. -->
+            <template v-if="currentUser.user?.admin">
+              <UiDropdownDivider />
+              <UiDropdownItem>
+                <RouterLink :to="{ name: 'backend' }" data-test="nav-backend">
+                  {{ t("backend.nav.backend") }}
+                </RouterLink>
+              </UiDropdownItem>
+            </template>
             <UiDropdownDivider />
             <UiDropdownItem>
               <button type="button" data-test="sign-out" @click="signOut">
