@@ -117,6 +117,18 @@ module Api
           assert account.reload.feature_expenses
         end
 
+        # A free plan has no trial, so the date a paid plan left behind has to
+        # go with it — `trial_expired?` reads that column alone.
+        it "drops the trial when an account is moved to the free plan" do
+          account.update_columns(plan: "basic", trial_used: true, trial_end_at: 1.minute.ago)
+
+          assert_api_response :patch, 200, path_params: {id: account.id}, body: {plan: "free"} do
+            assert_nil parsed_body["trialEndAt"]
+          end
+
+          refute account.reload.trial_expired?
+        end
+
         it "refuses a name that is not there" do
           assert_api_response :patch, 400, path_params: {id: account.id}, body: {name: ""} do
             assert_equal "validation_error.account.update", parsed_body["code"]

@@ -26,6 +26,7 @@ class Account < ApplicationRecord
   accepts_nested_attributes_for :users
 
   before_save :calculate_office_percent
+  before_save :clear_trial_on_free_plan
   before_create :start_trial
 
   def uninvoiced_amount
@@ -74,6 +75,18 @@ class Account < ApplicationRecord
 
     self.trial_used = true
     self.trial_end_at = TRIAL_LENGTH.from_now
+  end
+
+  # `trial_expired?` reads `trial_end_at` alone, so an account moved onto the
+  # free plan while carrying a date in the past would go read-only on a plan
+  # that is not supposed to have a trial at all. Moving the other way is
+  # deliberately not the mirror image: whether an upgrade grants a fresh
+  # fortnight is a decision, not a consequence.
+  private def clear_trial_on_free_plan
+    return unless on_plan?(:free)
+    return if trial_end_at.nil?
+
+    self.trial_end_at = nil
   end
 
   def trial?

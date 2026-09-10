@@ -42,6 +42,29 @@ class AccountTest < ActiveSupport::TestCase
     end
   end
 
+  # `trial_expired?` reads `trial_end_at` alone, so a date left behind on a
+  # free account turns every screen read-only on a plan that has no trial.
+  describe "moving onto the free plan" do
+    it "drops the trial the paid plan carried" do
+      account = build_account(plan: "basic")
+      account.save!
+      account.update!(plan: "free")
+
+      refute account.reload.trial?
+      refute account.trial_expired?
+    end
+
+    it "keeps a paid plan's trial where it is" do
+      account = build_account(plan: "basic")
+      account.save!
+      ending = account.trial_end_at
+
+      account.update!(name: "Stargazer II")
+
+      assert_in_delta ending, account.reload.trial_end_at, 1.second
+    end
+  end
+
   # The deploy window. `deploy.rb` migrates before it restarts, so for a
   # moment the old release is still serving — and its schema cache predates
   # these columns, so its INSERT does not name them. The column defaults are
