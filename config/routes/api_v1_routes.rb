@@ -75,6 +75,7 @@ v1_api_routes = lambda do
 
   resource :expense_imports, only: %i[create], controller: :expense_imports do
     post :preview
+    get :columns
   end
 
   resources :expenses, only: %i[index show create update destroy] do

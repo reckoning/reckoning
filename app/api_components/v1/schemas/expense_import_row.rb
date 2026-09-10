@@ -9,6 +9,11 @@ module V1
       schema({
         type: :object,
         properties: {
+          id: {
+            type: [:string, :null],
+            format: :uuid,
+            description: "Set when the row matches an expense that already exists."
+          },
           date: {type: [:string, :null], format: :date},
           startedAt: {type: [:string, :null], format: :date},
           endedAt: {type: [:string, :null], format: :date},

@@ -2,7 +2,6 @@ import { test, expect } from "./support/commands"
 import { app, appScenario, appEval } from "./support/on-rails"
 
 // The expenses list, the last main navigation entry that had no SPA screen.
-// The form and the CSV import are still server-rendered.
 test.describe("Expenses", () => {
   test.beforeEach(async ({ page }) => {
     await app("clean")
@@ -250,14 +249,14 @@ test.describe("Expenses", () => {
     await expect.poll(async () => appEval(`Expense.where(description: "Tricorder").count`)).toBe(0)
   })
 
-  // The import is still the server-rendered screen, and it returns to the
-  // list when it is done — so the link tells it which filters are on.
+  // The import returns to the list when it is done, so the link carries the
+  // filters that were on into it.
   test("hands the filters to the import", async ({ page }) => {
     await page.goto("/app/expenses?type=home_office")
 
     await expect(page.getByTestId("import")).toHaveAttribute(
       "href",
-      "/expense_imports/new?type=home_office",
+      "/app/expenses/import?type=home_office",
     )
   })
 

@@ -183,9 +183,7 @@ Rails.application.routes.draw do
   get "expenses", to: spa_screen.call("/app/expenses"), as: :expenses
   get "expenses/new", to: spa_screen.call("/app/expenses/new"), as: :new_expense
   get "expenses/:id/edit", to: spa_screen.call("/app/expenses/%{id}/edit"), as: :edit_expense
-  resources :expense_imports, only: %i[new create] do
-    post :preview, on: :collection
-  end
+  get "expense_imports/new", to: spa_screen.call("/app/expenses/import"), as: :new_expense_import
 
   # Vue SPA shell. Scoped to /app so vue-router owns everything beneath it and
   # a reload of a client-side path still finds the shell. Deliberately not a

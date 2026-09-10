@@ -512,6 +512,43 @@ export default {
     disable: "Disable",
     failed: "That token was not accepted.",
   },
+  expenseImport: {
+    title: "CSV import",
+    back: "Back to the list",
+    hintBank:
+      "Bank statements (an ADAC credit card, for instance) are recognised by their column headers. What you pick below is applied to every row as a suggestion, and can be changed row by row in the preview.",
+    hintColumns:
+      "A CSV exported from Reckoning earlier can be uploaded instead, with these columns:",
+    hintId: "A row that carries an id updates that record rather than adding one.",
+    defaultsTitle: "Defaults for imported bank rows",
+    continue: "On to the preview",
+    previewHint:
+      "Seller, description and type can be changed before importing. Rows without a tick are skipped.",
+    submit: "Import 1 expense | Import {count} expenses",
+    cancel: "Cancel",
+    parsing: "Reading the file…",
+    importing: "Importing…",
+    parseFailed: "Not a single row could be read from the file.",
+    importFailed: "The import failed.",
+    imported: "1 expense imported | {count} expenses imported",
+    noRows: "No row was picked to import.",
+    fields: {
+      file: "CSV file",
+      expenseType: "Default type",
+      interval: "Interval",
+      vatPercent: "VAT",
+      privateUsePercent: "Private use",
+      skipCredits: "Skip credits (positive amounts)",
+    },
+    columns: {
+      include: "Import?",
+      date: "Date",
+      value: "Amount",
+      seller: "Seller",
+      description: "Description",
+      expenseType: "Type",
+    },
+  },
   expenseForm: {
     newTitle: "New expense",
     editTitle: "Edit expense",
