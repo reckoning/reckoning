@@ -28,8 +28,16 @@ module Api
 
     check_authorization
 
+    # Everything is read-only once the trial runs out, and CanCan's generic
+    # "not authorized" would leave someone guessing what they did wrong. The
+    # server-rendered screens used to answer this with a flash; the API is
+    # the only writer now, so it is the only place left to say it.
     rescue_from CanCan::AccessDenied do |exception|
-      render json: {message: exception.message}, status: :forbidden
+      if current_account&.trial_expired?
+        render json: {code: "trial.expired", message: I18n.t("trial.denied")}, status: :forbidden
+      else
+        render json: {code: "forbidden", message: exception.message}, status: :forbidden
+      end
     end
 
     rescue_from Pagination::MaxPerPageReached do

@@ -135,35 +135,32 @@ test.describe("SPA shell", () => {
     await expect(page.getByTestId("dashboard-title")).toBeVisible()
   })
 
-  // What is left of the server-rendered app refuses a write once the trial
-  // has run out, and redirects to the root path with the reason in the flash.
-  // The root path now hands that to the SPA, which has to say it out loud.
+  // What is left of the server-rendered app — the two exports — refuses a
+  // request the account may not make, and redirects to the root path with
+  // the reason in the flash. That path hands it to the SPA, which has to say
+  // it out loud rather than answer with a dashboard and nothing.
   test("carries a server-rendered refusal into the spa", async ({ page }) => {
+    await appEval(`Account.find_by(name: "Enterprise").update_columns(feature_expenses: false)`)
+
     await page.goto("/login")
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
     await expect(page.getByTestId("dashboard-greeting")).toBeVisible()
 
-    const id = (await appEval(`Project.first&.id || Customer.create!(account: Account.find_by(name: "Enterprise"), name: "Starfleet").projects.create!(name: "Narendra 3").id`)) as string
-    await appEval(`
-      Account.find_by(name: "Enterprise")
-        .update_columns(plan: "basic", trial_used: true, trial_end_at: 1.minute.ago)
-    `)
+    // The flash lives in the session cookie, so a request still in flight
+    // from the dashboard can answer after the redirect and write the cookie
+    // back without it. Let the screen settle first, which is also when
+    // someone would reach for an export.
+    await page.waitForLoadState("networkidle")
 
-    // A plain form post, the way the legacy screen makes it. No token: this
-    // environment has forgery protection off, as the legacy specs rely on.
-    await page.evaluate((projectId) => {
-      const form = document.createElement("form")
-      form.method = "post"
-      form.action = `/projects/${projectId}/tasks`
-      form.innerHTML = `<input name="task[name]" value="Refit">`
-      document.body.appendChild(form)
-      form.submit()
-    }, id)
+    await page.goto("/expenses.csv")
 
     await expect(page).toHaveURL(/^https?:\/\/[^/]+\/?$/)
-    await expect(page.getByTestId("toasts")).toContainText("Testphase")
+    // The shell carries it on the mount point, and the SPA turns that into a
+    // toast on boot — both halves of the handover.
+    await expect(page.locator("#spa")).toHaveAttribute("data-flash-error", /\S/)
+    await expect(page.getByTestId("toasts")).toContainText(/\S/)
   })
 
   // A server-rendered screen turns a signed-out visitor away to this login.

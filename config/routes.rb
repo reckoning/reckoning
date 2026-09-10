@@ -136,14 +136,6 @@ Rails.application.routes.draw do
   # navigation links `timesheet_path`.
   get "timesheet", to: "spa#index", as: :timesheet
 
-  resource :template, only: [] do
-    template "blank"
-    template "datepicker"
-    template "index_logbooks"
-  end
-
-  resources :positions, only: %i[new destroy]
-
   # The SPA owns the customer screens (phase B3). The name stays because the
   # project list still links here, and a bookmark on the old path should land
   # on the new screen rather than a 404.
@@ -156,18 +148,6 @@ Rails.application.routes.draw do
   get "projects/new", to: "spa#index", as: :new_project
   get "projects/:id/edit", to: "spa#index", as: :edit_project
   get "projects/:id", to: "spa#index", as: :project
-
-  resources :projects, only: [] do
-    # Untouched: these serve the legacy invoice screen, not the project
-    # screens this phase replaces.
-    resources :tasks, only: %i[index create]
-  end
-
-  resources :timers, only: [] do
-    collection do
-      get :uninvoiced
-    end
-  end
 
   # The SPA owns the list, the form and the bulk actions; creating, updating
   # and deleting go through /api/v1. What is left server-rendered are the two

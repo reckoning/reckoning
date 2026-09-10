@@ -14,14 +14,7 @@
 //= require moment/moment
 //= require twix/dist/twix
 //= require nprogress
-//= require underscore
-//= require d3
-//= require nvd3
-//= require vendor/highcharts/highcharts
-//= require vendor/highcharts/no-data-to-display
 //= require app
 //= require_tree ./app
 //= require helper
 //= require_tree ./helpers
-//= require ./angular/init
-//= require_tree ./angular
