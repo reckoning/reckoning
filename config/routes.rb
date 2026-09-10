@@ -196,10 +196,11 @@ Rails.application.routes.draw do
 
   root to: "base#index"
 
-  # The path space the server keeps, whether or not a route above claims the
-  # exact path: a typo under any of these is a 404, not a screen. `rails/` is
-  # ActiveStorage's, which the framework draws after this file.
-  server_owned_paths = %w[/api/ /api-docs /backend/ /cable /rails/ /up]
+  # The first path segments the server keeps, whether or not a route above
+  # claims the exact path: a typo under any of them is a 404, not a screen.
+  # `rails` is ActiveStorage's, which the framework draws after this file.
+  # Compared segment by segment, so `/api` counts and `/apiary` does not.
+  server_owned_roots = %w[api api-docs backend cable rails up]
 
   # The SPA owns the rest: it is the app now, so a path nothing above claims
   # is one of its screens — or one of its screens' sub-paths, which it alone
@@ -215,6 +216,6 @@ Rails.application.routes.draw do
 
     (format.html? || format.to_s == "*/*") &&
       File.extname(request.path).empty? &&
-      server_owned_paths.none? { |prefix| request.path.start_with?(prefix) }
+      server_owned_roots.exclude?(request.path.split("/")[1])
   }
 end
