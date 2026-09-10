@@ -126,7 +126,7 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/BackendAccountInput"
+              "$ref": "#/components/schemas/BackendAccountCreateInput"
       responses:
         '201':
           description: successful
@@ -3366,7 +3366,9 @@ components:
           - string
           - 'null'
         plan:
-          type: string
+          type:
+          - string
+          - 'null'
         featureExpenses:
           type: boolean
         featureLogbook:
@@ -3395,12 +3397,28 @@ components:
       - createdAt
       - updatedAt
       title: BackendAccount
-    BackendAccountInput:
+    BackendAccountCreateInput:
       type: object
       properties:
         name:
           type: string
         email:
+          type: string
+        plan:
+          type: string
+        feature_expenses:
+          type: boolean
+        feature_logbook:
+          type: boolean
+      additionalProperties: false
+      required:
+      - name
+      - email
+      title: BackendAccountCreateInput
+    BackendAccountInput:
+      type: object
+      properties:
+        name:
           type: string
         plan:
           type: string

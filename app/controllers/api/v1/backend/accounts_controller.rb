@@ -22,7 +22,7 @@ module Api
         # first one comes with it and is mailed a confirmation to pick their
         # own password.
         def create
-          attributes = account_params
+          attributes = create_params
           @account = ::Account.new(attributes.except(:email).reverse_merge(plan: "free"))
           @account.users.build(email: attributes[:email], created_via_admin: true, password: generated_password)
 
@@ -36,7 +36,7 @@ module Api
         def update
           @account = ::Account.find(params[:id])
 
-          return render :show if @account.update(account_params.except(:email))
+          return render :show if @account.update(account_params)
 
           render json: ValidationError.new("account.update", @account.errors), status: :bad_request
         end
@@ -53,6 +53,10 @@ module Api
 
         private def generated_password
           @generated_password ||= Devise.friendly_token.first(16)
+        end
+
+        private def create_params
+          openapi_params(::V1::Schemas::Inputs::BackendAccountCreateInput)
         end
 
         private def account_params

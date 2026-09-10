@@ -13,7 +13,9 @@ module V1
           id: {type: :string, format: :uuid},
           name: {type: :string},
           subdomain: {type: [:string, :null]},
-          plan: {type: :string},
+          # The column is nullable — the presence validation covers what goes
+          # in through the app, not a row that predates it.
+          plan: {type: [:string, :null]},
           featureExpenses: {type: :boolean},
           featureLogbook: {type: :boolean},
           usersCount: {type: :integer},

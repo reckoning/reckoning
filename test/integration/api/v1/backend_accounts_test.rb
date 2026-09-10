@@ -39,7 +39,7 @@ module Api
           produces "application/json"
 
           request_body required: true, content: {
-            "application/json" => {schema: ::V1::Schemas::Inputs::BackendAccountInput}
+            "application/json" => {schema: ::V1::Schemas::Inputs::BackendAccountCreateInput}
           }
 
           response(201, "successful") do
@@ -100,9 +100,11 @@ module Api
           assert User.find_by(email: "spock@vulcan.gov").created_via_admin
         end
 
-        it "refuses an account without a user" do
+        # The schema asks for an address; an empty one gets as far as the
+        # model, which will not have an account without a user either.
+        it "refuses an account whose user has no address" do
           assert_no_difference "Account.count" do
-            assert_api_response :post, 400, body: {name: "Nowhere"} do
+            assert_api_response :post, 400, body: {name: "Nowhere", email: ""} do
               assert_equal "validation_error.account.create", parsed_body["code"]
             end
           end
