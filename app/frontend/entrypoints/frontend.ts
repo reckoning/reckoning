@@ -8,6 +8,7 @@ import { router } from "@/plugins/router";
 import { i18n } from "@/plugins/i18n";
 import { onUnauthorized } from "@/services/axiosClient";
 import { useCurrentUserStore } from "@/stores/currentUser";
+import { useToastsStore } from "@/stores/toasts";
 import { appsignal } from "@/lib/appsignal";
 
 const mountPoint = document.getElementById("spa");
@@ -37,6 +38,15 @@ if (mountPoint) {
       void router.replace({ name: "login" });
     }
   });
+
+  // A refusal from what is left of the server-rendered app redirects here
+  // with its reason in the flash, which the shell hands over on the mount
+  // point. Shown as a toast, or the SPA would answer with a screen and no
+  // explanation.
+  const flash = useToastsStore(pinia);
+
+  if (mountPoint.dataset.flashError) flash.push("error", mountPoint.dataset.flashError);
+  if (mountPoint.dataset.flashSuccess) flash.push("success", mountPoint.dataset.flashSuccess);
 
   app.mount(mountPoint);
 }

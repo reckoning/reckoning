@@ -132,13 +132,6 @@ const trial = computed(() => account.value?.trial)
             </UiDropdownItem>
             <UiDropdownDivider />
             <UiDropdownItem>
-              <!-- Most of the product is still server-rendered, and signing in
-                   now lands here rather than there. Until phase C folds the
-                   two navigations into one, this is the way across. -->
-              <a href="/" data-test="nav-legacy">{{ t("nav.legacy") }}</a>
-            </UiDropdownItem>
-            <UiDropdownDivider />
-            <UiDropdownItem>
               <button type="button" data-test="sign-out" @click="signOut">
                 {{ t("nav.signOut") }}
               </button>

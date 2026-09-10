@@ -95,6 +95,35 @@ test.describe("Dashboard", () => {
     await expect(page.getByTestId("daily-hours")).toBeVisible()
   })
 
+  // The banner is the SPA's own since the root path stopped serving the
+  // server-rendered dashboard, and it had no test of its own.
+  test("counts the trial down, and says when it has run out", async ({ page }) => {
+    await appEval(`
+      Account.find_by(name: "Enterprise")
+        .update_columns(plan: "basic", trial_used: true, trial_end_at: 5.days.from_now)
+    `)
+    await page.reload()
+
+    await expect(page.getByTestId("trial-banner")).toContainText("5")
+
+    await appEval(`
+      Account.find_by(name: "Enterprise")
+        .update_columns(plan: "basic", trial_used: true, trial_end_at: 1.minute.ago)
+    `)
+    await page.reload()
+
+    await expect(page.getByTestId("trial-banner")).toContainText("abgelaufen")
+  })
+
+  test("leaves the banner away from an account without a trial", async ({ page }) => {
+    await appEval(`
+      Account.find_by(name: "Enterprise").update_columns(trial_end_at: nil, trial_used: false)
+    `)
+    await page.reload()
+
+    await expect(page.getByTestId("trial-banner")).toHaveCount(0)
+  })
+
   test("forwards the old rails path to the spa", async ({ page }) => {
     await page.goto("/app/")
 

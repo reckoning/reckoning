@@ -12,7 +12,6 @@ export default {
     account: "Account",
     profile: "Profil",
     security: "Sicherheit",
-    legacy: "Klassische Ansicht",
     signOut: "Abmelden",
     toggle: "Navigation aufklappen",
   },

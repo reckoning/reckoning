@@ -29,6 +29,14 @@
     <%= csrf_meta_tags %>
   </head>
   <body>
-    <div id="spa"></div>
+    <%# What is left of the server-rendered app redirects here when it refuses
+        a request — an expired trial, a screen an account may not have — and
+        the reason travels in the flash. Without this the SPA would answer a
+        refusal with a dashboard and no explanation. %>
+    <div
+      id="spa"
+      data-flash-error="<%= flash[:error] || flash[:alert] %>"
+      data-flash-success="<%= flash[:success] || flash[:notice] %>"
+    ></div>
   </body>
 </html>

@@ -122,14 +122,50 @@ test.describe("SPA shell", () => {
     await expect(page.getByTestId("email")).toBeVisible()
   })
 
-  test("offers a way across to the server-rendered app", async ({ page }) => {
+  // The root path used to serve the server-rendered dashboard, and the menu
+  // had a way across to it. It hands a signed-in visitor to the SPA now.
+  test("takes a signed-in visitor from the root path into the spa", async ({ page }) => {
     await page.goto("/app/login")
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
-
     await expect(page.getByTestId("dashboard-greeting")).toBeVisible()
-    await expect(page.getByTestId("nav-legacy")).toHaveAttribute("href", "/")
+
+    await page.goto("/")
+
+    await expect(page).toHaveURL(/\/app\/?$/)
+    await expect(page.getByTestId("dashboard-title")).toBeVisible()
+  })
+
+  // What is left of the server-rendered app refuses a write once the trial
+  // has run out, and redirects to the root path with the reason in the flash.
+  // The root path now hands that to the SPA, which has to say it out loud.
+  test("carries a server-rendered refusal into the spa", async ({ page }) => {
+    await page.goto("/app/login")
+    await page.getByTestId("email").fill("will@star.fleet")
+    await page.getByTestId("password").fill("enterprise")
+    await page.getByTestId("submit").click()
+    await expect(page.getByTestId("dashboard-greeting")).toBeVisible()
+
+    const id = (await appEval(`Project.first&.id || Customer.create!(account: Account.find_by(name: "Enterprise"), name: "Starfleet").projects.create!(name: "Narendra 3").id`)) as string
+    await appEval(`
+      Account.find_by(name: "Enterprise")
+        .update_columns(plan: "basic", trial_used: true, trial_end_at: 1.minute.ago)
+    `)
+
+    // A plain form post, the way the legacy screen makes it. No token: this
+    // environment has forgery protection off, as the legacy specs rely on.
+    await page.evaluate((projectId) => {
+      const form = document.createElement("form")
+      form.method = "post"
+      form.action = `/projects/${projectId}/tasks`
+      form.innerHTML = `<input name="task[name]" value="Refit">`
+      document.body.appendChild(form)
+      form.submit()
+    }, id)
+
+    await expect(page).toHaveURL(/\/app\/?$/)
+    await expect(page.getByTestId("toasts")).toContainText("Testphase")
   })
 
   // A server-rendered screen turns a signed-out visitor away to this login.

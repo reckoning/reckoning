@@ -11,12 +11,15 @@ class TrialTest < ActionDispatch::IntegrationTest
     account.update_columns(plan: "basic", trial_used: true, trial_end_at: when_)
   end
 
+  # `/impressum` is the last screen on the server-rendered layout the banner
+  # lives in — the root path hands a signed-in user to the SPA now, which
+  # renders its own.
   describe "the banner" do
     it "counts the days down" do
       trial_ending(5.days.from_now)
       sign_in user
 
-      get root_path
+      get "/impressum"
 
       assert_select "[data-test=?]", "trial-banner", text: /noch 5 Tage/
     end
@@ -25,7 +28,7 @@ class TrialTest < ActionDispatch::IntegrationTest
       trial_ending(1.minute.ago)
       sign_in user
 
-      get root_path
+      get "/impressum"
 
       assert_select "[data-test=?]", "trial-banner", text: /abgelaufen/
     end
@@ -34,7 +37,7 @@ class TrialTest < ActionDispatch::IntegrationTest
       account.update_columns(trial_end_at: nil, trial_used: false)
       sign_in user
 
-      get root_path
+      get "/impressum"
 
       assert_select "[data-test=?]", "trial-banner", false
     end
@@ -62,6 +65,8 @@ class TrialTest < ActionDispatch::IntegrationTest
 
       get root_path
 
+      assert_redirected_to spa_path
+      follow_redirect!
       assert_response :success
     end
   end
