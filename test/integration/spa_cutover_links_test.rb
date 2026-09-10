@@ -2,65 +2,63 @@
 
 require "test_helper"
 
-# The paths the SPA took over still answer, because bookmarks and the links
-# on the screens that have not moved yet point at them. What they carry
-# matters as much as where they lead: a filtered list, a project preselected
-# for a new invoice and the screen to return to after signing in all travel
-# in the query string, which `redirect("/app/…")` drops on the floor.
+# The SPA is mounted at the root, so most of the paths it took over are simply
+# its own — the shell answers them. What still redirects is the handful the
+# SPA does not name the same way it is reached by: Devise's URLs, which sit in
+# mails already sent, and the two the server-rendered user menu links. Those
+# have to keep what they carry — a token, a screen to return to — because
+# `redirect("…")` drops the query string on the floor.
 class SpaCutoverLinksTest < ActionDispatch::IntegrationTest
   let(:id) { "aaaaaaaa-0000-4000-8000-000000000001" }
 
-  it "keeps a list's filters" do
+  it "serves a filtered list without sending the browser anywhere" do
     get "/projects?state=archived"
-    assert_redirected_to "/app/projects?state=archived"
+    assert_response :success
+    assert_select "div#spa"
 
     get "/invoices?year=2026&state=paid"
-    assert_redirected_to "/app/invoices?year=2026&state=paid"
+    assert_response :success
 
     get "/offers?year=2026"
-    assert_redirected_to "/app/offers?year=2026"
+    assert_response :success
   end
 
-  # `projects/show` links a new invoice for the project it is showing, and
-  # the form reads the project out of the query.
-  it "keeps the project a new invoice is for" do
-    get "/invoices/new?project_id=#{id}"
-    assert_redirected_to "/app/invoices/new?project_id=#{id}"
+  it "serves a record's own screen" do
+    ["/invoices/#{id}", "/invoices/#{id}/edit", "/offers/#{id}", "/offers/#{id}/edit",
+      "/customers/#{id}/edit", "/projects/#{id}/edit", "/projects/new", "/timesheet"].each do |path|
+      get path
 
-    get "/offers/new?project_id=#{id}"
-    assert_redirected_to "/app/offers/new?project_id=#{id}"
+      assert_response :success, "#{path} did not reach the shell"
+      assert_select "div#spa"
+    end
   end
 
   it "keeps the screen to come back to after signing in" do
     get "/signin?return=%2Fsettings"
-    assert_redirected_to "/app/login?return=%2Fsettings"
+
+    assert_redirected_to "/login?return=%2Fsettings"
   end
 
-  it "carries a record's id into its own screen" do
-    get "/invoices/#{id}"
-    assert_redirected_to "/app/invoices/#{id}"
+  # The paths Devise puts in its mails, and the two the legacy user menu links.
+  it "leads the paths the SPA names differently to the names it knows" do
+    {
+      "/signin" => "/login",
+      "/users/password/new" => "/password/new",
+      "/users/unlock" => "/unlock",
+      "/users/confirmation" => "/confirmation",
+      "/me/otp" => "/settings/two-factor",
+      "/account/edit" => "/account",
+      "/password/edit" => "/settings/password"
+    }.each do |from, to|
+      get from
 
-    get "/invoices/#{id}/edit"
-    assert_redirected_to "/app/invoices/#{id}/edit"
-
-    get "/offers/#{id}"
-    assert_redirected_to "/app/offers/#{id}"
-
-    get "/offers/#{id}/edit"
-    assert_redirected_to "/app/offers/#{id}/edit"
-
-    get "/customers/#{id}/edit"
-    assert_redirected_to "/app/customers/#{id}/edit"
-
-    get "/projects/#{id}/edit"
-    assert_redirected_to "/app/projects/#{id}/edit"
+      assert_redirected_to to
+    end
   end
 
-  it "leads to the screen itself where there is nothing to carry" do
-    get "/projects/new"
-    assert_redirected_to "/app/projects/new"
+  it "keeps a token on the way" do
+    get "/users/password/edit?reset_password_token=a-token"
 
-    get "/timesheet"
-    assert_redirected_to "/app/timesheet"
+    assert_redirected_to "/password/edit?reset_password_token=a-token"
   end
 end

@@ -1,5 +1,10 @@
 export default {
   brand: "Reckoning",
+  notFound: {
+    title: "No such page",
+    body: "This page could not be found.",
+    home: "To the dashboard",
+  },
   nav: {
     brand: "Reckoning",
     home: "Dashboard",

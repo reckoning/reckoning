@@ -11,29 +11,33 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   describe "the paths that moved" do
     before { sign_in will }
 
-    it "sends the list to the spa" do
+    it "serves the list from the shell" do
       get "/projects"
 
-      assert_redirected_to "/app/projects"
+      assert_response :success
+      assert_select "div#spa"
     end
 
-    it "sends the new form to the spa" do
+    it "serves the new form from the shell" do
       get "/projects/new"
 
-      assert_redirected_to "/app/projects/new"
+      assert_response :success
+      assert_select "div#spa"
     end
 
-    it "sends the edit form to the spa" do
+    it "serves the edit form from the shell" do
       get "/projects/#{project.id}/edit"
 
-      assert_redirected_to "/app/projects/#{project.id}/edit"
+      assert_response :success
+      assert_select "div#spa"
     end
 
     # The panels around the app link a project, and so does the dashboard.
-    it "sends a project to the spa" do
+    it "serves a project from the shell" do
       get "/projects/#{project.id}"
 
-      assert_redirected_to "/app/projects/#{project.id}"
+      assert_response :success
+      assert_select "div#spa"
     end
 
     # The SPA writes through the API, so the routes the ERB forms posted to

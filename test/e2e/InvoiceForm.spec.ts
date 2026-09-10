@@ -18,7 +18,7 @@ test.describe("Invoice form", () => {
       Timer.create!(user: user, task: task, date: Date.current - 1, value: 0.5)
     `)
 
-    await page.goto("/app/login")
+    await page.goto("/login")
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
@@ -28,7 +28,7 @@ test.describe("Invoice form", () => {
   test("writes an invoice with a hand-typed position", async ({ page }) => {
     const projectId = (await appEval(`Project.first.id`)) as string
 
-    await page.goto(`/app/invoices/new?project_id=${projectId}`)
+    await page.goto(`/invoices/new?project_id=${projectId}`)
 
     await page.getByTestId("date").fill("2026-03-01")
     await page.getByTestId("position-description-0").fill("Beratung")
@@ -52,7 +52,7 @@ test.describe("Invoice form", () => {
   test("generates a position from uninvoiced time", async ({ page }) => {
     const projectId = (await appEval(`Project.first.id`)) as string
 
-    await page.goto(`/app/invoices/new?project_id=${projectId}`)
+    await page.goto(`/invoices/new?project_id=${projectId}`)
     await page.getByTestId("date").fill("2026-03-01")
 
     await page.getByTestId("generate-positions").click()
@@ -86,7 +86,7 @@ test.describe("Invoice form", () => {
       position.timers << Timer.order(:date).last
     `)
 
-    await page.goto(`/app/invoices/new?project_id=${projectId}`)
+    await page.goto(`/invoices/new?project_id=${projectId}`)
     await page.getByTestId("generate-positions").click()
 
     const taskId = (await appEval(`Task.first.id`)) as string
@@ -105,7 +105,7 @@ test.describe("Invoice form", () => {
     `)
     const id = (await appEval(`Invoice.first.id`)) as string
 
-    await page.goto(`/app/invoices/${id}/edit`)
+    await page.goto(`/invoices/${id}/edit`)
 
     await expect(page.getByTestId("position-description-0")).toHaveValue("Alt")
 
@@ -118,11 +118,11 @@ test.describe("Invoice form", () => {
     expect(remaining).toEqual(["Bleibt"])
   })
 
-  test("forwards the old rails paths to the spa", async ({ page }) => {
+  test("answers a page load on the form paths", async ({ page }) => {
     const id = (await appEval(`Project.first.id`)) as string
 
     await page.goto(`/invoices/new?project_id=${id}`)
-    await expect(page).toHaveURL(new RegExp(`/app/invoices/new\\?project_id=${id}$`))
+    await expect(page).toHaveURL(new RegExp(`/invoices/new\\?project_id=${id}$`))
   })
 
   // The ERB form rendered the project select for `new` and `edit` alike. Time
@@ -141,7 +141,7 @@ test.describe("Invoice form", () => {
     const id = (await appEval(`Invoice.first.id`)) as string
     const other = (await appEval(`Project.find_by(name: "Outpost 6").id`)) as string
 
-    await page.goto(`/app/invoices/${id}/edit`)
+    await page.goto(`/invoices/${id}/edit`)
 
     await expect(page.getByTestId("position-description-0")).toHaveValue("Away mission")
 

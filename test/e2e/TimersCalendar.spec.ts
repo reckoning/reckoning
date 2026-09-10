@@ -9,7 +9,7 @@ test.describe("Timers calendar", () => {
     await app("clean")
     await appScenario("timesheet_week")
 
-    await page.goto("/app/login")
+    await page.goto("/login")
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()

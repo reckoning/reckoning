@@ -2,9 +2,10 @@ import { createRouter, createWebHistory } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
 import { useCurrentUserStore } from "@/stores/currentUser";
 
-// Rails mounts the shell under /app (config/routes.rb), so the history base
-// has to match or every push would leave the SPA's own mount point.
-export const SPA_BASE = "/app";
+// The SPA is the app: Rails hands it every page load it does not claim for
+// the API, an export or the admin (config/routes.rb), so it owns the whole
+// path space and needs no prefix of its own.
+export const SPA_BASE = "/";
 
 const routes: RouteRecordRaw[] = [
   {
@@ -182,6 +183,13 @@ const routes: RouteRecordRaw[] = [
     name: "invoice-edit",
     component: () => import("@/pages/invoices/InvoiceForm.vue"),
     meta: { requiresAuth: true },
+  },
+  // Rails hands every unclaimed page load to the shell, so a typo arrives
+  // here rather than at a server-rendered 404.
+  {
+    path: "/:path(.*)",
+    name: "not-found",
+    component: () => import("@/pages/NotFoundPage.vue"),
   },
 ];
 

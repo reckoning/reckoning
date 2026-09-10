@@ -19,7 +19,7 @@ test.describe("Offers", () => {
       open_one.update_columns(value: 250, aasm_state: "bided")
     `)
 
-    await page.goto("/app/login")
+    await page.goto("/login")
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
@@ -27,7 +27,7 @@ test.describe("Offers", () => {
   })
 
   test("lists the offers with what they add up to", async ({ page }) => {
-    await page.goto("/app/offers")
+    await page.goto("/offers")
 
     const table = page.getByTestId("offers")
     await expect(table).toContainText("00001")
@@ -40,7 +40,7 @@ test.describe("Offers", () => {
   })
 
   test("filters, and the total follows the filter", async ({ page }) => {
-    await page.goto("/app/offers")
+    await page.goto("/offers")
 
     await page.getByTestId("filter-state").click()
     await page.getByTestId("filter-state-accepted").click()
@@ -51,7 +51,7 @@ test.describe("Offers", () => {
   })
 
   test("sorts by a column and says which way", async ({ page }) => {
-    await page.goto("/app/offers")
+    await page.goto("/offers")
 
     await page.getByTestId("sort-value").click()
 
@@ -64,10 +64,10 @@ test.describe("Offers", () => {
 
   // The main navigation links `offers_path`, and so do the redirects after
   // creating or updating an offer.
-  test("forwards the old rails path with its query", async ({ page }) => {
+  test("answers a page load on the list, query and all", async ({ page }) => {
     await page.goto("/offers?state=accepted")
 
-    await expect(page).toHaveURL(/\/app\/offers\?state=accepted$/)
+    await expect(page).toHaveURL(/\/offers\?state=accepted$/)
     await expect(page.getByTestId("offers")).toContainText("00001")
   })
 })

@@ -23,7 +23,7 @@ test.describe("Expenses", () => {
       )
     `)
 
-    await page.goto("/app/login")
+    await page.goto("/login")
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
@@ -31,7 +31,7 @@ test.describe("Expenses", () => {
   })
 
   test("lists the expenses with what they add up to", async ({ page }) => {
-    await page.goto("/app/expenses")
+    await page.goto("/expenses")
 
     const list = page.getByTestId("expenses")
     await expect(list).toContainText("Tricorder")
@@ -45,7 +45,7 @@ test.describe("Expenses", () => {
   // The icon at the end of the row: a business expense files no receipt, a
   // low-value asset does.
   test("says which row is missing its receipt", async ({ page }) => {
-    await page.goto("/app/expenses")
+    await page.goto("/expenses")
 
     const gwg = (await appEval(`Expense.find_by(description: "Tricorder").id`)) as string
     const office = (await appEval(`Expense.find_by(description: "Ready room").id`)) as string
@@ -55,7 +55,7 @@ test.describe("Expenses", () => {
   })
 
   test("filters by type and keeps it in the url", async ({ page }) => {
-    await page.goto("/app/expenses")
+    await page.goto("/expenses")
 
     await page.getByTestId("filter-type").click()
     await page.getByTestId("filter-type-home_office").click()
@@ -66,7 +66,7 @@ test.describe("Expenses", () => {
   })
 
   test("searches the descriptions", async ({ page }) => {
-    await page.goto("/app/expenses")
+    await page.goto("/expenses")
 
     await page.getByTestId("search").fill("Tric")
     await page.getByTestId("search-submit").click()
@@ -78,7 +78,7 @@ test.describe("Expenses", () => {
 
   // The bar the server-rendered list slid out once a row was ticked.
   test("applies a change to the rows that were picked", async ({ page }) => {
-    await page.goto("/app/expenses")
+    await page.goto("/expenses")
 
     const id = (await appEval(`Expense.find_by(description: "Tricorder").id`)) as string
 
@@ -95,7 +95,7 @@ test.describe("Expenses", () => {
   })
 
   test("deletes the rows that were picked once the confirm is accepted", async ({ page }) => {
-    await page.goto("/app/expenses")
+    await page.goto("/expenses")
 
     const id = (await appEval(`Expense.find_by(description: "Tricorder").id`)) as string
 
@@ -107,13 +107,13 @@ test.describe("Expenses", () => {
     await expect.poll(async () => appEval(`Expense.where(description: "Tricorder").count`)).toBe(0)
   })
 
-  test("forwards the old rails path to the spa, filters and all", async ({ page }) => {
+  test("answers a page load on the list, filters and all", async ({ page }) => {
     await page.goto("/expenses")
-    await expect(page).toHaveURL(/\/app\/expenses$/)
+    await expect(page).toHaveURL(/\/expenses$/)
     await expect(page.getByTestId("expenses")).toContainText("Tricorder")
 
     await page.goto("/expenses?type=home_office")
-    await expect(page).toHaveURL(/\/app\/expenses\?type=home_office$/)
+    await expect(page).toHaveURL(/\/expenses\?type=home_office$/)
     await expect(page.getByTestId("expenses")).toContainText("Ready room")
     await expect(page.getByTestId("expenses")).not.toContainText("Tricorder")
   })
@@ -121,24 +121,24 @@ test.describe("Expenses", () => {
   // The list's filters travel with its links, so saving and cancelling both
   // land back on the list that sent you to the form.
   test("edits an expense and comes back to the list it started from", async ({ page }) => {
-    await page.goto("/app/expenses?type=home_office")
+    await page.goto("/expenses?type=home_office")
 
     const id = (await appEval(`Expense.find_by(description: "Ready room").id`)) as string
 
     await page.getByTestId(`edit-${id}`).click()
 
-    await expect(page).toHaveURL(new RegExp(`/app/expenses/${id}/edit\\?type=home_office`))
+    await expect(page).toHaveURL(new RegExp(`/expenses/${id}/edit\\?type=home_office`))
     await expect(page.getByTestId("description")).toHaveValue("Ready room")
 
     await page.getByTestId("description").fill("Ready room, refitted")
     await page.getByTestId("submit").click()
 
-    await expect(page).toHaveURL(/\/app\/expenses\?type=home_office/)
+    await expect(page).toHaveURL(/\/expenses\?type=home_office/)
     await expect(page.getByTestId("expenses")).toContainText("Ready room, refitted")
   })
 
   test("creates an expense from the form", async ({ page }) => {
-    await page.goto("/app/expenses")
+    await page.goto("/expenses")
     await page.getByTestId("new-expense").click()
 
     await page.getByTestId("expense-type").selectOption("licenses")
@@ -148,7 +148,7 @@ test.describe("Expenses", () => {
     await page.getByTestId("date").fill("2026-05-04")
     await page.getByTestId("submit").click()
 
-    await expect(page).toHaveURL(/\/app\/expenses$/)
+    await expect(page).toHaveURL(/\/expenses$/)
     await expect(page.getByTestId("expenses")).toContainText("Editor licence")
     await expect.poll(async () => appEval(`Expense.where(description: "Editor licence").count`)).toBe(1)
   })
@@ -156,7 +156,7 @@ test.describe("Expenses", () => {
   // Only an AfA expense is written off, so only it asks for a class — and
   // the endpoint refuses one without it.
   test("asks for a depreciation class once the type is afa", async ({ page }) => {
-    await page.goto("/app/expenses/new")
+    await page.goto("/expenses/new")
 
     await expect(page.getByTestId("afa-type")).toHaveCount(0)
 
@@ -168,7 +168,7 @@ test.describe("Expenses", () => {
   // The interval decides which dates the form asks for, the way
   // `expense-interval#toggle` did.
   test("swaps the date for a span once it repeats", async ({ page }) => {
-    await page.goto("/app/expenses/new")
+    await page.goto("/expenses/new")
 
     await expect(page.getByTestId("date")).toBeVisible()
 
@@ -181,13 +181,13 @@ test.describe("Expenses", () => {
   test("uploads a receipt and takes it off again", async ({ page }) => {
     const id = (await appEval(`Expense.find_by(description: "Tricorder").id`)) as string
 
-    await page.goto(`/app/expenses/${id}/edit`)
+    await page.goto(`/expenses/${id}/edit`)
     await expect(page.getByTestId("receipt-missing")).toBeVisible()
 
     await page.getByTestId("receipt-file").setInputFiles("test/fixtures/files/receipt.png")
     await page.getByTestId("submit").click()
 
-    await expect(page).toHaveURL(/\/app\/expenses$/)
+    await expect(page).toHaveURL(/\/expenses$/)
     await expect.poll(async () =>
       appEval(`Expense.find_by(description: "Tricorder").receipt.attached?`),
     ).toBe(true)
@@ -196,7 +196,7 @@ test.describe("Expenses", () => {
     await expect(page.getByTestId(`receipt-${id}`)).toBeVisible()
 
     page.on("dialog", (dialog) => dialog.accept())
-    await page.goto(`/app/expenses/${id}/edit`)
+    await page.goto(`/expenses/${id}/edit`)
     await page.getByTestId("remove-receipt").click()
 
     await expect(page.getByTestId("receipt-missing")).toBeVisible()
@@ -207,10 +207,10 @@ test.describe("Expenses", () => {
   test("copies an expense into a new one", async ({ page }) => {
     const id = (await appEval(`Expense.find_by(description: "Tricorder").id`)) as string
 
-    await page.goto(`/app/expenses/${id}/edit`)
+    await page.goto(`/expenses/${id}/edit`)
     await page.getByTestId("copy").click()
 
-    await expect(page).toHaveURL(/\/app\/expenses\/new\?/)
+    await expect(page).toHaveURL(/\/expenses\/new\?/)
     await expect(page.getByTestId("description")).toHaveValue("Tricorder")
     await expect.poll(async () => appEval(`Expense.where(description: "Tricorder").count`)).toBe(1)
   })
@@ -227,12 +227,12 @@ test.describe("Expenses", () => {
       )
     `)
 
-    await page.goto(`/app/expenses/${id}/edit`)
+    await page.goto(`/expenses/${id}/edit`)
     await expect(page.getByTestId("receipt-link")).toBeVisible()
 
     await page.getByTestId("copy").click()
 
-    await expect(page).toHaveURL(/\/app\/expenses\/new\?/)
+    await expect(page).toHaveURL(/\/expenses\/new\?/)
     await expect(page.getByTestId("description")).toHaveValue("Tricorder")
     await expect(page.getByTestId("receipt-missing")).toBeVisible()
     await expect(page.getByTestId("receipt-link")).toHaveCount(0)
@@ -242,28 +242,28 @@ test.describe("Expenses", () => {
     const id = (await appEval(`Expense.find_by(description: "Tricorder").id`)) as string
 
     page.on("dialog", (dialog) => dialog.accept())
-    await page.goto(`/app/expenses/${id}/edit`)
+    await page.goto(`/expenses/${id}/edit`)
     await page.getByTestId("delete").click()
 
-    await expect(page).toHaveURL(/\/app\/expenses$/)
+    await expect(page).toHaveURL(/\/expenses$/)
     await expect.poll(async () => appEval(`Expense.where(description: "Tricorder").count`)).toBe(0)
   })
 
   // The import returns to the list when it is done, so the link carries the
   // filters that were on into it.
   test("hands the filters to the import", async ({ page }) => {
-    await page.goto("/app/expenses?type=home_office")
+    await page.goto("/expenses?type=home_office")
 
     await expect(page.getByTestId("import")).toHaveAttribute(
       "href",
-      "/app/expenses/import?type=home_office",
+      "/expenses/import?type=home_office",
     )
   })
 
   // The list is an account feature, and the navigation only offers it where
   // the account has it.
   test("offers the navigation entry only with the feature on", async ({ page }) => {
-    await page.goto("/app/")
+    await page.goto("/")
     await expect(page.getByTestId("nav-expenses")).toBeVisible()
 
     await appEval(`Account.find_by(name: "Enterprise").update_columns(feature_expenses: false)`)

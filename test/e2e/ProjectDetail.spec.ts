@@ -22,7 +22,7 @@ test.describe("Project detail", () => {
       offer.update_columns(value: 900)
     `)
 
-    await page.goto("/app/login")
+    await page.goto("/login")
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
@@ -35,7 +35,7 @@ test.describe("Project detail", () => {
 
   test("draws the budget chart and the numbers under it", async ({ page }) => {
     const id = await projectId()
-    await page.goto(`/app/projects/${id}`)
+    await page.goto(`/projects/${id}`)
 
     await expect(page.getByTestId("project-title")).toContainText("Narendra 3")
 
@@ -56,7 +56,7 @@ test.describe("Project detail", () => {
 
   test("lists the project's offers, invoices and tasks in their tabs", async ({ page }) => {
     const id = await projectId()
-    await page.goto(`/app/projects/${id}`)
+    await page.goto(`/projects/${id}`)
 
     await page.getByTestId("tab-invoices").click()
     await expect(page).toHaveURL(/#invoices$/)
@@ -74,7 +74,7 @@ test.describe("Project detail", () => {
 
   test("opens the tab the url names", async ({ page }) => {
     const id = await projectId()
-    await page.goto(`/app/projects/${id}#tasks`)
+    await page.goto(`/projects/${id}#tasks`)
 
     await expect(page.getByTestId("tasks")).toContainText("Away mission")
   })
@@ -83,28 +83,28 @@ test.describe("Project detail", () => {
   // form reads the project out of the query.
   test("starts a new invoice for the project it is showing", async ({ page }) => {
     const id = await projectId()
-    await page.goto(`/app/projects/${id}`)
+    await page.goto(`/projects/${id}`)
 
     await page.getByTestId("add-invoice").click()
 
-    await expect(page).toHaveURL(new RegExp(`/app/invoices/new\\?project_id=${id}`))
+    await expect(page).toHaveURL(new RegExp(`/invoices/new\\?project_id=${id}`))
   })
 
-  test("forwards the old rails path to the spa", async ({ page }) => {
+  test("answers a page load on the detail path", async ({ page }) => {
     const id = await projectId()
 
     await page.goto(`/projects/${id}`)
 
-    await expect(page).toHaveURL(new RegExp(`/app/projects/${id}$`))
+    await expect(page).toHaveURL(new RegExp(`/projects/${id}$`))
     await expect(page.getByTestId("project-title")).toContainText("Narendra 3")
   })
 
   test("is reachable from the project list", async ({ page }) => {
-    await page.goto("/app/projects")
+    await page.goto("/projects")
 
     await page.getByText("Narendra 3").first().click()
 
-    await expect(page).toHaveURL(/\/app\/projects\/[0-9a-f-]+$/)
+    await expect(page).toHaveURL(/\/projects\/[0-9a-f-]+$/)
     await expect(page.getByTestId("budget-panel")).toBeVisible()
   })
 })
