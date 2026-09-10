@@ -81,6 +81,195 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/StandardError"
+  "/backend/accounts":
+    get:
+      summary: Every account
+      tags:
+      - Backend
+      operationId: backendAccounts
+      parameters:
+      - "$ref": "#/components/parameters/PageParameter"
+      - "$ref": "#/components/parameters/PerPageParameter"
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/BackendAccounts"
+          headers:
+            Link:
+              description: RFC 8288 pagination links.
+              schema:
+                type: string
+        '403':
+          description: not an admin
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '400':
+          "$ref": "#/components/responses/SchemaValidationError"
+    post:
+      summary: Create an account, with the user it cannot exist without
+      tags:
+      - Backend
+      operationId: createBackendAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/BackendAccountCreateInput"
+      responses:
+        '201':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/BackendAccount"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '403':
+          description: not an admin
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+  "/backend/accounts/{id}":
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: string
+        format: uuid
+      required: true
+    get:
+      summary: Get an account
+      tags:
+      - Backend
+      operationId: backendAccount
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/BackendAccount"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '403':
+          description: not an admin
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '400':
+          "$ref": "#/components/responses/SchemaValidationError"
+    patch:
+      summary: Update an account
+      tags:
+      - Backend
+      operationId: updateBackendAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/BackendAccountInput"
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/BackendAccount"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '403':
+          description: not an admin
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+    delete:
+      summary: Destroy an account
+      tags:
+      - Backend
+      operationId: destroyBackendAccount
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Message"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationError"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '403':
+          description: not an admin
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StandardError"
   "/backend/users":
     get:
       summary: Users across every account
@@ -3189,6 +3378,86 @@ components:
       - registrationEnabled
       - domain
       title: AppConfig
+    BackendAccount:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        subdomain:
+          type:
+          - string
+          - 'null'
+        plan:
+          type:
+          - string
+          - 'null'
+        featureExpenses:
+          type: boolean
+        featureLogbook:
+          type: boolean
+        usersCount:
+          type: integer
+        trialEndAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      additionalProperties: false
+      required:
+      - id
+      - name
+      - plan
+      - featureExpenses
+      - featureLogbook
+      - usersCount
+      - createdAt
+      - updatedAt
+      title: BackendAccount
+    BackendAccountCreateInput:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        plan:
+          type: string
+        feature_expenses:
+          type: boolean
+        feature_logbook:
+          type: boolean
+      additionalProperties: false
+      required:
+      - name
+      - email
+      title: BackendAccountCreateInput
+    BackendAccountInput:
+      type: object
+      properties:
+        name:
+          type: string
+        plan:
+          type: string
+        feature_expenses:
+          type: boolean
+        feature_logbook:
+          type: boolean
+      additionalProperties: false
+      title: BackendAccountInput
+    BackendAccounts:
+      type: array
+      items:
+        "$ref": "#/components/schemas/BackendAccount"
+      title: BackendAccounts
     BackendUser:
       type: object
       properties:

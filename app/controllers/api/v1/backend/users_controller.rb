@@ -11,7 +11,7 @@ module Api
         after_action -> { pagination_header(:users) }, only: [:index]
 
         def index
-          @users = paginate(::User.all.order(created_at: :desc))
+          @users = paginate(::User.all.order(created_at: :desc, id: :desc))
         end
 
         def show
