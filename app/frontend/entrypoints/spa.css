@@ -248,6 +248,23 @@
     transition: all 0.3s;
   }
 
+  /* Where the entry is a link or a button, that is what carries the padding:
+     the row is the control, so clicking beside the label does what clicking
+     the label does. Bootstrap's own `.dropdown-menu > li > a` was the anchor
+     all the way out to the edges. */
+  .bs-dropdown-item:has(> a, > button) {
+    padding: 0;
+  }
+
+  .bs-dropdown-item > a,
+  .bs-dropdown-item > button {
+    display: block;
+    width: 100%;
+    padding: 3px 20px;
+    color: inherit;
+    text-align: left;
+  }
+
   .bs-dropdown-item:hover,
   .bs-dropdown-item.is-active {
     background-color: var(--color-surface-muted);
