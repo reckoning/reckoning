@@ -15,19 +15,19 @@ class LoginTest < ActionDispatch::IntegrationTest
   it "sends /signin to the spa login" do
     get "/signin"
 
-    assert_redirected_to "/app/login"
+    assert_redirected_to "/login"
   end
 
   it "hands over the screen a signed-out visitor asked for" do
     get "/expense_imports/new"
 
-    assert_redirected_to "/app/login?return=%2Fexpense_imports%2Fnew"
+    assert_redirected_to "/login?return=%2Fexpense_imports%2Fnew"
   end
 
   it "keeps the query of the screen it hands over" do
     get "/expense_imports/new?year=2026"
 
-    assert_redirected_to "/app/login?return=%2Fexpense_imports%2Fnew%3Fyear%3D2026"
+    assert_redirected_to "/login?return=%2Fexpense_imports%2Fnew%3Fyear%3D2026"
   end
 
   # The login ends in a page load, so a carried path is fetched with a GET
@@ -38,7 +38,7 @@ class LoginTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to "/signin"
     follow_redirect!
-    assert_redirected_to "/app/login"
+    assert_redirected_to "/login"
   end
 
   # An xhr request never reaches the handover at all: Devise answers it with

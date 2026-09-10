@@ -16,7 +16,7 @@ test.describe("Projects", () => {
       project.tasks.create!(name: "Away mission", billable: true)
     `)
 
-    await page.goto("/app/login")
+    await page.goto("/login")
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
@@ -24,7 +24,7 @@ test.describe("Projects", () => {
   })
 
   test("lists projects under their customer and edits one", async ({ page }) => {
-    await page.goto("/app/projects")
+    await page.goto("/projects")
 
     await expect(page.getByTestId("customer-name")).toContainText("Starfleet")
     await expect(page.getByText("Narendra 3")).toBeVisible()
@@ -46,7 +46,7 @@ test.describe("Projects", () => {
   test("adds a task to a project", async ({ page }) => {
     const id = (await appEval(`Project.find_by(name: "Narendra 3").id`)) as string
 
-    await page.goto(`/app/projects/${id}/edit`)
+    await page.goto(`/projects/${id}/edit`)
     await page.getByTestId("add-task").click()
     await page.getByTestId("task-name-1").fill("Shore leave")
     await page.getByTestId("submit").click()
@@ -58,7 +58,7 @@ test.describe("Projects", () => {
   })
 
   test("archives a project and finds it under the archived filter", async ({ page }) => {
-    await page.goto("/app/projects")
+    await page.goto("/projects")
 
     await page.locator('[data-test^="actions-"]').first().click()
     page.once("dialog", (dialog) => dialog.accept())
@@ -72,12 +72,12 @@ test.describe("Projects", () => {
   })
 
   // The main navigation still links `projects_path`, and so do bookmarks.
-  test("forwards the old rails paths to the spa", async ({ page }) => {
+  test("answers a page load on the project paths", async ({ page }) => {
     await page.goto("/projects")
-    await expect(page).toHaveURL(/\/app\/projects$/)
+    await expect(page).toHaveURL(/\/projects$/)
 
     await page.goto("/projects/new")
-    await expect(page).toHaveURL(/\/app\/projects\/new$/)
+    await expect(page).toHaveURL(/\/projects\/new$/)
   })
 
   // Deleting the guard with the ERB screen would have let a project be created
@@ -85,7 +85,7 @@ test.describe("Projects", () => {
   test("refuses a new project while the account has no address", async ({ page }) => {
     await appEval(`Account.find_by(name: "Enterprise").update_columns(contact_information: {})`)
 
-    await page.goto("/app/projects/new")
+    await page.goto("/projects/new")
 
     await expect(page.getByTestId("missing-address")).toBeVisible()
     await expect(page.getByTestId("name")).toHaveCount(0)

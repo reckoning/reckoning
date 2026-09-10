@@ -12,30 +12,30 @@ class SpaAuthLinksTest < ActionDispatch::IntegrationTest
   it "forwards a confirmation link with its token" do
     get "/users/confirmation", params: {confirmation_token: "a-token"}
 
-    assert_redirected_to "/app/confirmation?confirmation_token=a-token"
+    assert_redirected_to "/confirmation?confirmation_token=a-token"
   end
 
   it "forwards an unlock link with its token" do
     get "/users/unlock", params: {unlock_token: "a-token"}
 
-    assert_redirected_to "/app/unlock?unlock_token=a-token"
+    assert_redirected_to "/unlock?unlock_token=a-token"
   end
 
   it "forwards a password reset link with its token" do
     get "/users/password/edit", params: {reset_password_token: "a-token"}
 
-    assert_redirected_to "/app/password/edit?reset_password_token=a-token"
+    assert_redirected_to "/password/edit?reset_password_token=a-token"
   end
 
   it "forwards the request forms that carry no token" do
     get "/users/password/new"
-    assert_redirected_to "/app/password/new"
+    assert_redirected_to "/password/new"
 
     get "/users/confirmation/new"
-    assert_redirected_to "/app/confirmation"
+    assert_redirected_to "/confirmation"
 
     get "/users/unlock/new"
-    assert_redirected_to "/app/unlock"
+    assert_redirected_to "/unlock"
   end
 
   # The promise is about the mails themselves, so follow a real one rather
@@ -47,7 +47,7 @@ class SpaAuthLinksTest < ActionDispatch::IntegrationTest
 
     get emailed_path(%r{/users/unlock\?unlock_token=[^"]+})
 
-    assert_match %r{/app/unlock\?unlock_token=.+\z}, response.location
+    assert_match %r{/unlock\?unlock_token=.+\z}, response.location
   end
 
   it "forwards the link a real confirmation mail carries" do
@@ -55,7 +55,7 @@ class SpaAuthLinksTest < ActionDispatch::IntegrationTest
 
     get emailed_path(%r{/users/confirmation\?confirmation_token=[^"]+})
 
-    assert_match %r{/app/confirmation\?confirmation_token=.+\z}, response.location
+    assert_match %r{/confirmation\?confirmation_token=.+\z}, response.location
   end
 
   private def emailed_path(pattern)

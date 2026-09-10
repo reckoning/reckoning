@@ -17,7 +17,7 @@ test.describe("Offer detail", () => {
       offer.save!
     `)
 
-    await page.goto("/app/login")
+    await page.goto("/login")
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
@@ -29,7 +29,7 @@ test.describe("Offer detail", () => {
   test("shows the offer, its state and its download", async ({ page }) => {
     const id = (await appEval(`Offer.first.id`)) as string
 
-    await page.goto(`/app/offers/${id}`)
+    await page.goto(`/offers/${id}`)
 
     await expect(page.getByTestId("offer-title")).toContainText("00001")
     await expect(page.getByTestId("state")).toContainText("Entwurf")
@@ -39,7 +39,7 @@ test.describe("Offer detail", () => {
   test("renders the offer PDF inline", async ({ page }) => {
     const id = (await appEval(`Offer.first.id`)) as string
 
-    await page.goto(`/app/offers/${id}`)
+    await page.goto(`/offers/${id}`)
 
     await expect(page.locator('[data-test="pdf-pages"] canvas').first()).toBeVisible({ timeout: 60_000 })
   })
@@ -49,7 +49,7 @@ test.describe("Offer detail", () => {
   test("walks the offer through its state machine", async ({ page }) => {
     const id = (await appEval(`Offer.first.id`)) as string
 
-    await page.goto(`/app/offers/${id}`)
+    await page.goto(`/offers/${id}`)
 
     page.once("dialog", (dialog) => dialog.accept())
     await page.getByTestId("transition-bid").click()
@@ -70,7 +70,7 @@ test.describe("Offer detail", () => {
   test("leaves the offer alone when the confirm is declined", async ({ page }) => {
     const id = (await appEval(`Offer.first.id`)) as string
 
-    await page.goto(`/app/offers/${id}`)
+    await page.goto(`/offers/${id}`)
 
     page.once("dialog", (dialog) => dialog.dismiss())
     await page.getByTestId("transition-bid").click()
@@ -91,7 +91,7 @@ test.describe("Offer detail", () => {
       offer.decline!
     `)
 
-    await page.goto(`/app/offers/${id}`)
+    await page.goto(`/offers/${id}`)
 
     await expect(page.getByTestId("state")).toContainText("Abgelehnt")
     await expect(page.getByTestId("transition-bid")).toBeVisible()
@@ -104,7 +104,7 @@ test.describe("Offer detail", () => {
         .update_columns(plan: "basic", trial_used: true, trial_end_at: 1.minute.ago)
     `)
 
-    await page.goto(`/app/offers/${id}`)
+    await page.goto(`/offers/${id}`)
 
     await expect(page.getByTestId("offer-title")).toContainText("00001")
     await expect(page.getByTestId("transition-bid")).toHaveCount(0)
@@ -112,12 +112,12 @@ test.describe("Offer detail", () => {
     await expect(page.getByTestId("delete")).toHaveCount(0)
   })
 
-  test("forwards the old rails path to the spa", async ({ page }) => {
+  test("answers a page load on the detail path", async ({ page }) => {
     const id = (await appEval(`Offer.first.id`)) as string
 
     await page.goto(`/offers/${id}`)
 
-    await expect(page).toHaveURL(new RegExp(`/app/offers/${id}$`))
+    await expect(page).toHaveURL(new RegExp(`/offers/${id}$`))
     await expect(page.getByTestId("offer-title")).toContainText("00001")
   })
 })

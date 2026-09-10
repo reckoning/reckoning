@@ -17,7 +17,7 @@ test.describe("SPA login security", () => {
       user.save(validate: false)
     `)
 
-    await page.goto("/app/login")
+    await page.goto("/login")
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
@@ -46,7 +46,7 @@ test.describe("SPA login security", () => {
       codes.first
     `)) as string
 
-    await page.goto("/app/login")
+    await page.goto("/login")
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("otp-token").fill(code)
@@ -63,7 +63,7 @@ test.describe("SPA login security", () => {
         .update_columns(failed_attempts: User.maximum_attempts - 1)
     `)
 
-    await page.goto("/app/login")
+    await page.goto("/login")
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("definitely-not-enterprise")
     await page.getByTestId("submit").click()
@@ -79,6 +79,6 @@ test.describe("SPA login security", () => {
     await page.getByTestId("submit").click()
 
     await expect(page.getByTestId("login-failed")).toBeVisible()
-    await expect(page).toHaveURL(/\/app\/login/)
+    await expect(page).toHaveURL(/\/login/)
   })
 })

@@ -10,38 +10,43 @@ class InvoicesControllerTest < ActionDispatch::IntegrationTest
   let(:invoice) { invoices :january }
 
   describe "the paths that moved" do
-    it "sends the list to the spa" do
+    it "serves the list from the shell" do
       get "/invoices"
 
-      assert_redirected_to "/app/invoices"
+      assert_response :success
+      assert_select "div#spa"
     end
 
     # A filtered, sorted link has to survive the handover, or every bookmark
     # and every redirect after an action lands on an unfiltered page.
-    it "carries the query into the spa" do
+    it "serves a filtered list from the shell" do
       get "/invoices?state=paid&sort=value&direction=asc"
 
-      assert_redirected_to "/app/invoices?state=paid&sort=value&direction=asc"
+      assert_response :success
+      assert_select "div#spa"
     end
 
-    it "sends the detail page to the spa" do
+    it "serves the detail page from the shell" do
       get "/invoices/#{invoice.id}"
 
-      assert_redirected_to "/app/invoices/#{invoice.id}"
+      assert_response :success
+      assert_select "div#spa"
     end
 
     # Declared before the resource's member routes for this reason: behind
     # them, `:id` matches "new" and the form is unreachable.
-    it "sends the new form to the spa, project and all" do
+    it "serves the new form from the shell, project and all" do
       get "/invoices/new?project_id=#{projects(:narendra3).id}"
 
-      assert_redirected_to "/app/invoices/new?project_id=#{projects(:narendra3).id}"
+      assert_response :success
+      assert_select "div#spa"
     end
 
-    it "sends the edit form to the spa" do
+    it "serves the edit form from the shell" do
       get "/invoices/#{invoice.id}/edit"
 
-      assert_redirected_to "/app/invoices/#{invoice.id}/edit"
+      assert_response :success
+      assert_select "div#spa"
     end
   end
 

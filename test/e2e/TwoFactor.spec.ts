@@ -9,7 +9,7 @@ test.describe("Two-factor settings", () => {
     await app("clean")
     await appScenario("signed_out_user")
 
-    await page.goto("/app/login")
+    await page.goto("/login")
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
@@ -22,7 +22,7 @@ test.describe("Two-factor settings", () => {
     await page.getByTestId("user-menu").click()
     await page.getByTestId("nav-two-factor").click()
 
-    await expect(page).toHaveURL(/\/app\/settings\/two-factor$/)
+    await expect(page).toHaveURL(/\/settings\/two-factor$/)
     await expect(page.getByTestId("two-factor-title")).toBeVisible()
 
     // POST /me/otp on mount generates the secret the URI encodes.
@@ -31,7 +31,7 @@ test.describe("Two-factor settings", () => {
   })
 
   test("serves the qr code as an svg", async ({ page }) => {
-    await page.goto("/app/settings/two-factor")
+    await page.goto("/settings/two-factor")
     await expect(page.getByTestId("provisioning-uri")).toBeVisible()
 
     const response = await page.request.get("/api/v1/me/otp/qrcode")
@@ -41,7 +41,7 @@ test.describe("Two-factor settings", () => {
   })
 
   test("rejects a token the authenticator did not produce", async ({ page }) => {
-    await page.goto("/app/settings/two-factor")
+    await page.goto("/settings/two-factor")
     await expect(page.getByTestId("provisioning-uri")).toBeVisible()
 
     await page.getByTestId("otp-token").fill("000000")

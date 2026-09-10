@@ -19,7 +19,7 @@ test.describe("Invoices", () => {
       open_one.update_columns(value: 250, workflow_state: "created")
     `)
 
-    await page.goto("/app/login")
+    await page.goto("/login")
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
@@ -27,7 +27,7 @@ test.describe("Invoices", () => {
   })
 
   test("lists the invoices with what they add up to", async ({ page }) => {
-    await page.goto("/app/invoices")
+    await page.goto("/invoices")
 
     const table = page.getByTestId("invoices")
     await expect(table).toContainText("00001")
@@ -39,7 +39,7 @@ test.describe("Invoices", () => {
   })
 
   test("filters, and the total follows the filter", async ({ page }) => {
-    await page.goto("/app/invoices")
+    await page.goto("/invoices")
 
     await page.getByTestId("filter-state").click()
     await page.getByTestId("filter-state-paid").click()
@@ -50,7 +50,7 @@ test.describe("Invoices", () => {
   })
 
   test("sorts by a column and says which way", async ({ page }) => {
-    await page.goto("/app/invoices")
+    await page.goto("/invoices")
 
     await page.getByTestId("sort-value").click()
 
@@ -63,10 +63,10 @@ test.describe("Invoices", () => {
 
   // The navigation links `invoices_path`, and so do the redirects after
   // charging or paying an invoice.
-  test("forwards the old rails path with its query", async ({ page }) => {
+  test("answers a page load on the list, query and all", async ({ page }) => {
     await page.goto("/invoices?state=paid")
 
-    await expect(page).toHaveURL(/\/app\/invoices\?state=paid$/)
+    await expect(page).toHaveURL(/\/invoices\?state=paid$/)
     await expect(page.getByTestId("invoices")).toContainText("00001")
   })
 })
