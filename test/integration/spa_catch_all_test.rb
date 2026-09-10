@@ -54,10 +54,32 @@ class SpaCatchAllTest < ActionDispatch::IntegrationTest
     assert_equal "text/csv", response.media_type
   end
 
-  # A missing asset is a missing asset, not a screen.
+  # A missing asset is a missing asset, not a screen — whatever it asks for.
   it "does not answer a request for something that is not a page" do
     get "/nope.json", headers: {"Accept" => "application/json"}
-
     assert_response :not_found
+
+    get "/vite/gone-abc123.js", headers: {"Accept" => "*/*"}
+    assert_response :not_found
+  end
+
+  # `*/*` is what a plain `curl` and a `fetch` without an Accept header send.
+  # A screen that only answers a browser is a screen that is hard to debug.
+  it "answers a client that asks for nothing in particular" do
+    get "/login", headers: {"Accept" => "*/*"}
+
+    assert_response :success
+    assert shell?
+  end
+
+  # The paths above are the server's whether or not it has a route for the
+  # one being asked for: a typo under them is a 404, not a screen.
+  it "leaves a typo under a server-owned path a typo" do
+    ["/api/v1/nope", "/api-docs/nope", "/backend/nope", "/cable/nope"].each do |path|
+      get path
+
+      assert_response :not_found, "#{path} came back as #{response.status}"
+      refute shell?, "#{path} came back as the shell"
+    end
   end
 end

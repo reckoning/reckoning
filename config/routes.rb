@@ -196,15 +196,25 @@ Rails.application.routes.draw do
 
   root to: "base#index"
 
-  # The SPA owns the rest of the path space: it is the app now, so a path
-  # nothing above claims is one of its screens — or one of its screens'
-  # sub-paths, which it alone knows. Declared last so every route above wins,
-  # and narrowed to page loads: a missing asset or a stray `.json` has to stay
-  # a 404 rather than come back as a shell.
+  # The path space the server keeps, whether or not a route above claims the
+  # exact path: a typo under any of these is a 404, not a screen. `rails/` is
+  # ActiveStorage's, which the framework draws after this file.
+  server_owned_paths = %w[/api/ /api-docs /backend/ /cable /rails/ /up]
+
+  # The SPA owns the rest: it is the app now, so a path nothing above claims
+  # is one of its screens — or one of its screens' sub-paths, which it alone
+  # knows. Declared last, so every route above wins.
   #
-  # `rails/` covers ActiveStorage's blob and representation URLs, which the
-  # framework draws after this file.
+  # A page load is one that asks for HTML or asks for nothing in particular:
+  # `*/*` is what a plain `curl` and any `fetch` without an Accept header
+  # send, and answering those with a 404 would leave a route that only works
+  # in a browser. Anything naming a file stays a 404, so a missing asset
+  # cannot come back as a shell.
   get "*path", to: "spa#index", constraints: lambda { |request|
-    request.format.html? && !request.path.start_with?("/rails/")
+    format = request.format
+
+    (format.html? || format.to_s == "*/*") &&
+      File.extname(request.path).empty? &&
+      server_owned_paths.none? { |prefix| request.path.start_with?(prefix) }
   }
 end
