@@ -157,10 +157,14 @@ test.describe("SPA shell", () => {
     await page.goto("/expenses.csv")
 
     await expect(page).toHaveURL(/^https?:\/\/[^/]+\/?$/)
-    // The shell carries it on the mount point, and the SPA turns that into a
-    // toast on boot — both halves of the handover.
+
+    // The shell carries it on the mount point, and the SPA turns *that* into
+    // the toast — the same sentence at both ends, or the handover is only
+    // half working.
     await expect(page.locator("#spa")).toHaveAttribute("data-flash-error", /\S/)
-    await expect(page.getByTestId("toasts")).toContainText(/\S/)
+    const refusal = await page.locator("#spa").getAttribute("data-flash-error")
+
+    await expect(page.getByTestId("toasts")).toContainText(String(refusal))
   })
 
   // A server-rendered screen turns a signed-out visitor away to this login.

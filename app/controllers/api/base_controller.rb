@@ -28,12 +28,19 @@ module Api
 
     check_authorization
 
+    # What an expired trial still allows. `Ability` hands such an account a
+    # read-only set, so a denied read has another cause — a feature that is
+    # off, a record from another account — and saying "your trial ran out"
+    # would send someone to the wrong remedy.
+    TRIAL_READ_ACTIONS = %i[read show index].freeze
+
     # Everything is read-only once the trial runs out, and CanCan's generic
     # "not authorized" would leave someone guessing what they did wrong. The
     # server-rendered screens used to answer this with a flash; the API is
     # the only writer now, so it is the only place left to say it.
     rescue_from CanCan::AccessDenied do |exception|
-      if current_account&.trial_expired?
+      if current_account&.trial_expired? && exception.action.present? &&
+          TRIAL_READ_ACTIONS.exclude?(exception.action.to_sym)
         render json: {code: "trial.expired", message: I18n.t("trial.denied")}, status: :forbidden
       else
         render json: {code: "forbidden", message: exception.message}, status: :forbidden
