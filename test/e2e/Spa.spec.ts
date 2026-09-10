@@ -30,6 +30,26 @@ test.describe("SPA shell", () => {
     await expect(page.getByTestId("submit")).toBeVisible()
   })
 
+  // A dropdown row is the control, not its label: the padding used to sit on
+  // the row while the link covered the text alone, so a click an inch to the
+  // right of "Account" did nothing.
+  test("answers a click anywhere on a menu row", async ({ page }) => {
+    await page.goto("/login")
+    await page.getByTestId("email").fill("will@star.fleet")
+    await page.getByTestId("password").fill("enterprise")
+    await page.getByTestId("submit").click()
+    await expect(page.getByTestId("dashboard-title")).toBeVisible()
+
+    await page.getByTestId("user-menu").click()
+
+    const row = page.getByTestId("nav-account")
+    const box = await row.boundingBox()
+
+    await page.mouse.click((box?.x ?? 0) + (box?.width ?? 0) - 6, (box?.y ?? 0) + (box?.height ?? 0) / 2)
+
+    await expect(page).toHaveURL(/\/account$/)
+  })
+
   // The bar the server-rendered pages get from Turbo Drive. It waits half a
   // second first, so the request has to be held up to see it at all.
   test("draws the loading bar while a request is in flight", async ({ page }) => {
