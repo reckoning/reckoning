@@ -73,10 +73,10 @@ module Api
       end
     end
 
-    # The SPA shell will read the token the same way the current app does —
-    # from the `csrf-token` meta tag Rails renders into the layout.
+    # The SPA reads the token the way the server-rendered app did — from the
+    # `csrf-token` meta tag Rails renders into the shell.
     private def csrf_token_from_page
-      get "/"
+      get "/app"
 
       css_select("meta[name=csrf-token]").first["content"]
     end

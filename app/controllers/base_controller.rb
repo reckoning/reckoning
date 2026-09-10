@@ -1,15 +1,16 @@
 # frozen_string_literal: true
 
 class BaseController < ApplicationController
-  include NumberHelper
-
   skip_authorization_check
   before_action :authenticate_user!, only: []
 
   def index
     @active_nav = "home"
     if user_signed_in?
-      dashboard
+      # Not a permanent redirect: which of the three this is depends on the
+      # session, and a browser that cached it would never see the welcome
+      # page again.
+      redirect_to spa_path
     elsif current_account.present?
       redirect_to new_user_session_path
     else
@@ -27,19 +28,6 @@ class BaseController < ApplicationController
 
   def terms
     @active_nav = "terms"
-  end
-
-  private def dashboard
-    @uninvoiced_amount = current_account.uninvoiced_amount
-    @charged_invoices = current_account.invoices.includes(:customer, :project).order("date DESC").charged
-    @paid_invoices = current_account.invoices.includes(:customer, :project).order("date DESC").paid_in_year(Time.zone.now.year)
-    @last_invoices = current_account.invoices.includes(:customer, :project).order("date DESC").paid_in_year(Time.zone.now.year - 1)
-    @budgets = current_account.projects.active.with_budget.includes(:customer, :tasks, :timers).order("tasks.updated_at DESC")
-    scope = current_account.invoices.paid_or_charged.where(date: 1.year.ago.beginning_of_year..Time.zone.now.end_of_year)
-    @invoices_chart_data = Charts::InvoicesService.new(scope).data
-    @expenses = Expense.normalized(current_account.expenses.without_insurances.year(Time.zone.now.year).to_a, year: Time.zone.now.year)
-    @last_expenses = Expense.normalized(current_account.expenses.without_insurances.year(Time.zone.now.year - 1).to_a, year: Time.zone.now.year - 1)
-    render "dashboard"
   end
 
   private def welcome
