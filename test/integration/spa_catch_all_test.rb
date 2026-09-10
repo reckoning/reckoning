@@ -75,7 +75,8 @@ class SpaCatchAllTest < ActionDispatch::IntegrationTest
   # The paths above are the server's whether or not it has a route for the
   # one being asked for: a typo under them is a 404, not a screen.
   it "leaves a typo under a server-owned path a typo" do
-    ["/api", "/api/v1/nope", "/api-docs/nope", "/backend/nope", "/cable/nope", "/rails/nope"].each do |path|
+    ["/api", "/api/v1/nope", "/api-docs/nope", "/backend/nope", "/cable/nope", "/rails/nope",
+      "/up/nope"].each do |path|
       get path
 
       assert_response :not_found, "#{path} came back as #{response.status}"
