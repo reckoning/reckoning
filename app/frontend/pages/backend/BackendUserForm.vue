@@ -30,7 +30,7 @@ const toasts = useToastsStore()
 const id = computed(() => (route.params.id ? String(route.params.id) : undefined))
 const editing = computed(() => id.value !== undefined)
 
-const { data: user, isPending } = useBackendUser(
+const { data: user, isPending, isError } = useBackendUser(
   computed(() => id.value ?? ""),
   { query: { enabled: computed(() => editing.value) } },
 )
@@ -60,6 +60,7 @@ watch(
 )
 
 const loading = computed(() => editing.value && isPending.value)
+const failed = computed(() => editing.value && isError.value)
 
 function refuse(error: unknown): void {
   const data = (error as {response?: {data?: {errors?: Record<string, string[]>; message?: string}}})
@@ -124,6 +125,9 @@ async function onDestroy(): Promise<void> {
     </div>
 
     <p v-if="loading" class="mt-4" data-test="loading">{{ t("backend.loading") }}</p>
+    <UiAlert v-else-if="failed" variant="danger" class="mt-4" data-test="error">
+      {{ t("backend.loadFailed") }}
+    </UiAlert>
 
     <form v-else class="mt-4" novalidate @submit.prevent="onSubmit">
       <UiAlert v-if="errors.length > 0" variant="danger" data-test="form-errors">

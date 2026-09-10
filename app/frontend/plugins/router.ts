@@ -257,8 +257,14 @@ router.beforeEach(async (to) => {
 
   // The backend answers a non-admin with 403, and a screen that renders only
   // errors is worse than not offering it: the dashboard is where they belong.
-  if (to.meta.requiresAdmin === true && currentUser.user?.admin !== true) {
-    return { name: "dashboard" };
+  //
+  // Asked again rather than read off the session: an admin can be demoted —
+  // by another admin, or on the very form these screens offer — and the
+  // cached answer would keep letting them in until a reload.
+  if (to.meta.requiresAdmin === true) {
+    const current = await currentUser.refresh();
+
+    if (current?.admin !== true) return { name: "dashboard" };
   }
 
   return true;
