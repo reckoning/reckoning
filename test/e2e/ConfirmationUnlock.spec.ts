@@ -24,7 +24,7 @@ test.describe("Confirmation and unlock", () => {
       user.confirmation_token
     `)) as string
 
-    await page.goto(`/app/confirmation?confirmation_token=${token}`)
+    await page.goto(`/confirmation?confirmation_token=${token}`)
 
     await expect(page.getByTestId("confirmation-message")).toBeVisible()
 
@@ -33,7 +33,7 @@ test.describe("Confirmation and unlock", () => {
   })
 
   test("rejects a confirmation token that was never issued", async ({ page }) => {
-    await page.goto("/app/confirmation?confirmation_token=not-a-real-token")
+    await page.goto("/confirmation?confirmation_token=not-a-real-token")
 
     await expect(page.getByTestId("confirmation-failed")).toBeVisible()
     // Falls back to the resend form rather than dead-ending.
@@ -47,7 +47,7 @@ test.describe("Confirmation and unlock", () => {
       user.send_unlock_instructions
     `)) as string
 
-    await page.goto(`/app/unlock?unlock_token=${token}`)
+    await page.goto(`/unlock?unlock_token=${token}`)
 
     await expect(page.getByTestId("unlock-message")).toBeVisible()
 
@@ -67,7 +67,7 @@ test.describe("Confirmation and unlock", () => {
 
     await page.goto(`/users/unlock?unlock_token=${token}`)
 
-    await expect(page).toHaveURL(new RegExp(`/app/unlock\\?unlock_token=${token}$`))
+    await expect(page).toHaveURL(new RegExp(`/unlock\\?unlock_token=${token}$`))
     await expect(page.getByTestId("unlock-message")).toBeVisible()
 
     const locked = await appEval(`User.find_by(email: "will@star.fleet").access_locked?`)
@@ -75,7 +75,7 @@ test.describe("Confirmation and unlock", () => {
   })
 
   test("offers a fresh unlock email when the link has expired", async ({ page }) => {
-    await page.goto("/app/unlock?unlock_token=stale")
+    await page.goto("/unlock?unlock_token=stale")
 
     await expect(page.getByTestId("unlock-failed")).toBeVisible()
 

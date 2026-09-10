@@ -32,20 +32,24 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
 
     # The query travels with it, so a bookmark on a filtered list opens the
     # same one.
-    it "forwards the list, the form and an edit to the spa" do
+    it "serves the list, the form and an edit from the shell" do
       expense = valid_expense
 
       get "/expenses"
-      assert_redirected_to "/app/expenses"
+      assert_response :success
+      assert_select "div#spa"
 
       get "/expenses?year=2025&type=licenses"
-      assert_redirected_to "/app/expenses?year=2025&type=licenses"
+      assert_response :success
+      assert_select "div#spa"
 
       get "/expenses/new?type=licenses"
-      assert_redirected_to "/app/expenses/new?type=licenses"
+      assert_response :success
+      assert_select "div#spa"
 
       get "/expenses/#{expense.id}/edit?year=2025"
-      assert_redirected_to "/app/expenses/#{expense.id}/edit?year=2025"
+      assert_response :success
+      assert_select "div#spa"
     end
 
     # Nothing asked for the csv, which is how a 500 sat in it unnoticed.

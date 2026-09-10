@@ -17,7 +17,7 @@ test.describe("Invoice detail", () => {
       invoice.save!
     `)
 
-    await page.goto("/app/login")
+    await page.goto("/login")
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
@@ -29,7 +29,7 @@ test.describe("Invoice detail", () => {
   test("shows the invoice, its state and its downloads", async ({ page }) => {
     const id = (await appEval(`Invoice.first.id`)) as string
 
-    await page.goto(`/app/invoices/${id}`)
+    await page.goto(`/invoices/${id}`)
 
     await expect(page.getByTestId("invoice-title")).toContainText("00001")
     await expect(page.getByTestId("state")).toContainText("Entwurf")
@@ -42,10 +42,10 @@ test.describe("Invoice detail", () => {
   test("makes every action row the control across its full width", async ({ page }) => {
     const id = (await appEval(`Invoice.first.id`)) as string
 
-    await page.goto(`/app/invoices/${id}`)
+    await page.goto(`/invoices/${id}`)
 
     const edit = page.getByTestId("edit")
-    await expect(edit).toHaveAttribute("href", `/app/invoices/${id}/edit`)
+    await expect(edit).toHaveAttribute("href", `/invoices/${id}/edit`)
 
     const box = await edit.boundingBox()
     if (!box) throw new Error("the edit row has no box")
@@ -69,7 +69,7 @@ test.describe("Invoice detail", () => {
       await route.continue()
     })
 
-    await page.goto(`/app/invoices/${id}`)
+    await page.goto(`/invoices/${id}`)
 
     await expect(page.getByTestId("pdf-loading")).toBeVisible()
 
@@ -84,7 +84,7 @@ test.describe("Invoice detail", () => {
   test("renders the invoice PDF inline", async ({ page }) => {
     const id = (await appEval(`Invoice.first.id`)) as string
 
-    await page.goto(`/app/invoices/${id}`)
+    await page.goto(`/invoices/${id}`)
 
     await expect(page.locator('[data-test="pdf-pages"] canvas').first()).toBeVisible({ timeout: 60_000 })
   })
@@ -92,7 +92,7 @@ test.describe("Invoice detail", () => {
   test("charges and then pays the invoice", async ({ page }) => {
     const id = (await appEval(`Invoice.first.id`)) as string
 
-    await page.goto(`/app/invoices/${id}`)
+    await page.goto(`/invoices/${id}`)
 
     page.once("dialog", (dialog) => dialog.accept())
     await page.getByTestId("charge").click()
@@ -109,7 +109,7 @@ test.describe("Invoice detail", () => {
   test("leaves the invoice alone when the charge confirm is declined", async ({ page }) => {
     const id = (await appEval(`Invoice.first.id`)) as string
 
-    await page.goto(`/app/invoices/${id}`)
+    await page.goto(`/invoices/${id}`)
 
     page.once("dialog", (dialog) => dialog.dismiss())
     await page.getByTestId("charge").click()
@@ -129,7 +129,7 @@ test.describe("Invoice detail", () => {
         .update_columns(plan: "basic", trial_used: true, trial_end_at: 1.minute.ago)
     `)
 
-    await page.goto(`/app/invoices/${id}`)
+    await page.goto(`/invoices/${id}`)
 
     await expect(page.getByTestId("invoice-title")).toContainText("00001")
     await expect(page.getByTestId("charge")).toHaveCount(0)
@@ -137,12 +137,12 @@ test.describe("Invoice detail", () => {
     await expect(page.getByTestId("delete")).toHaveCount(0)
   })
 
-  test("forwards the old rails path to the spa", async ({ page }) => {
+  test("answers a page load on the detail path", async ({ page }) => {
     const id = (await appEval(`Invoice.first.id`)) as string
 
     await page.goto(`/invoices/${id}`)
 
-    await expect(page).toHaveURL(new RegExp(`/app/invoices/${id}$`))
+    await expect(page).toHaveURL(new RegExp(`/invoices/${id}$`))
     await expect(page.getByTestId("invoice-title")).toContainText("00001")
   })
 })

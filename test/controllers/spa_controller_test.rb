@@ -8,7 +8,7 @@ class SpaControllerTest < ActionDispatch::IntegrationTest
   # The SPA renders its own login against /api/v1, so the shell has to reach an
   # anonymous visitor instead of being bounced to the ERB session screen.
   it "serves the shell to an anonymous visitor" do
-    get "/app"
+    get "/customers"
 
     assert_response :success
     assert_select "div#spa"
@@ -17,16 +17,17 @@ class SpaControllerTest < ActionDispatch::IntegrationTest
   it "serves the shell to a signed-in user" do
     sign_in data
 
-    get "/app"
+    get "/customers"
 
     assert_response :success
     assert_select "div#spa"
   end
 
-  # vue-router owns the paths beneath /app, so a reload of a client-side route
-  # has to find the shell rather than a 404.
-  it "serves the shell for a client-side path" do
-    get "/app/customers"
+  # vue-router owns the whole path space, so a reload of a client-side route
+  # has to find the shell rather than a 404 — including one no Rails route
+  # names, which is what the catch-all is for.
+  it "serves the shell for a client-side path nothing names" do
+    get "/settings/two-factor"
 
     assert_response :success
     assert_select "div#spa"
@@ -38,7 +39,7 @@ class SpaControllerTest < ActionDispatch::IntegrationTest
     original = ActionController::Base.allow_forgery_protection
     ActionController::Base.allow_forgery_protection = true
 
-    get "/app"
+    get "/customers"
 
     assert_select "meta[name=csrf-token]"
   ensure
@@ -49,7 +50,7 @@ class SpaControllerTest < ActionDispatch::IntegrationTest
   # Drive head merge keeps Bootstrap's unlayered CSS around, and that beats
   # Tailwind's `@layer` utilities — the SPA then renders unstyled.
   it "makes the shell's assets a full reload for turbo drive" do
-    get "/app"
+    get "/customers"
 
     assert_select "link[data-turbo-track=?]", "reload"
     assert_select "script[data-turbo-track=?]", "reload"
@@ -57,7 +58,7 @@ class SpaControllerTest < ActionDispatch::IntegrationTest
 
   # The shell must not drag in Bootstrap or the Sprockets bundle.
   it "does not load the legacy asset pipeline" do
-    get "/app"
+    get "/customers"
 
     assert_select "script[src*=?]", "application", count: 0
     assert_select "link[href*=?]", "application.css", count: 0
