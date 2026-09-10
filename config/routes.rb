@@ -14,21 +14,14 @@ Rails.application.routes.draw do
   # The interactive UI stays off (`config.ui_enabled`).
   mount OpenapiRuby::Engine => "/api-docs"
 
+  # The admin screens are the SPA's; what stays here are the two engines
+  # mounted under the same prefix, which are not screens at all. Declared
+  # before the shell's own paths, so they win.
   namespace :backend do
-    resources :accounts, except: [:show]
-
-    resources :users, except: [:show] do
-      member do
-        put "send_welcome"
-      end
-    end
-
     authenticate :user, ->(u) { u.admin? } do
       mount Sidekiq::Web => "/workers"
       mount Flipper::UI.app(Flipper) => "/flipper"
     end
-
-    root to: "base#dashboard"
   end
 
   mount ActionCable.server => "/cable"
@@ -200,7 +193,7 @@ Rails.application.routes.draw do
   # claims the exact path: a typo under any of them is a 404, not a screen.
   # `rails` is ActiveStorage's, which the framework draws after this file.
   # Compared segment by segment, so `/api` counts and `/apiary` does not.
-  server_owned_roots = %w[api api-docs backend cable rails up]
+  server_owned_roots = %w[api api-docs cable rails up]
 
   # The SPA owns the rest: it is the app now, so a path nothing above claims
   # is one of its screens — or one of its screens' sub-paths, which it alone
