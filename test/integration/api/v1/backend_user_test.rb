@@ -92,6 +92,36 @@ module Api
         end
       end
 
+      api_path "/backend/users/{id}/send_welcome" do
+        parameter name: "id", in: :path, schema: {type: :string, format: :uuid}, required: true
+
+        post("Mail a user their confirmation link again") do
+          operationId "sendWelcomeBackendUser"
+          tags "Backend"
+          produces "application/json"
+
+          response(200, "successful") do
+            schema ::V1::Schemas::Message
+          end
+
+          response(400, "bad request") do
+            schema ::V1::Schemas::ValidationError
+          end
+
+          response(404, "not found") do
+            schema ::V1::Schemas::StandardError
+          end
+
+          response(403, "not an admin") do
+            schema ::V1::Schemas::StandardError
+          end
+
+          response(401, "unauthorized") do
+            schema ::V1::Schemas::StandardError
+          end
+        end
+      end
+
       let(:admin) { users :jeanluc }
       let(:member) { users :data }
 
@@ -120,6 +150,21 @@ module Api
 
         it "is not found for an unknown id" do
           assert_api_response :get, 404, path_params: {id: SecureRandom.uuid}
+        end
+
+        # The button on the backend list: an account created by an admin
+        # cannot sign in until this mail arrives, and it is the only way to
+        # send it again.
+        it "mails a user their confirmation link again" do
+          member.update_columns(confirmed_at: nil)
+
+          assert_emails 1 do
+            assert_api_response :post, 200, path_params: {id: member.id}
+          end
+        end
+
+        it "is not found for an unknown id on the way out" do
+          assert_api_response :post, 404, path_params: {id: SecureRandom.uuid}
         end
       end
     end
