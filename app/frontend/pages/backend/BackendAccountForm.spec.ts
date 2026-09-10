@@ -26,6 +26,7 @@ const ACCOUNT = {
 interface Options {
   path?: string
   refuse?: unknown
+  refuseLoad?: boolean
 }
 
 async function mountForm(options: Options = {}) {
@@ -33,6 +34,10 @@ async function mountForm(options: Options = {}) {
 
   AXIOS_INSTANCE.defaults.adapter = async (config) => {
     requests.push(config)
+
+    if (config.method === "get" && options.refuseLoad) {
+      throw {response: {status: 404, data: {code: "not_found"}}}
+    }
 
     if (config.method !== "get" && options.refuse) throw options.refuse
 
@@ -130,6 +135,16 @@ describe("BackendAccountForm", () => {
     const {wrapper} = await mountForm({path: `/backend/accounts/${ID}/edit`})
 
     expect(wrapper.find('[data-test="plan"]').exists()).toBe(false)
+  })
+
+  // A record that could not be loaded is not an empty record: a form over
+  // nothing invites a save that cannot land.
+  it("says so instead of offering a form over nothing", async () => {
+    const {wrapper} = await mountForm({path: `/backend/accounts/${ID}/edit`, refuseLoad: true})
+
+    expect(wrapper.find('[data-test="error"]').exists()).toBe(true)
+    expect(wrapper.find("form").exists()).toBe(false)
+    expect(wrapper.find('[data-test="destroy"]').exists()).toBe(false)
   })
 
   it("keeps the form open with what the endpoint refused", async () => {

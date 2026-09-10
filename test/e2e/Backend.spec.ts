@@ -72,7 +72,9 @@ test.describe("Backend", () => {
     await expect(page.getByTestId("users")).toContainText("barclay@star.fleet")
 
     expect(await appEval(`User.find_by(email: "barclay@star.fleet").admin`)).toBe(true)
+    // Unconfirmed, but mailed: the confirmation is how they pick a password.
     expect(await appEval(`User.find_by(email: "barclay@star.fleet").confirmed?`)).toBe(false)
+    expect(await appEval(`User.find_by(email: "barclay@star.fleet").created_via_admin`)).toBe(true)
   })
 
   test("creates an account together with its first user", async ({ page }) => {
@@ -103,9 +105,18 @@ test.describe("Backend", () => {
     expect(await appEval(`Account.find_by(name: "Enterprise").feature_expenses`)).toBe(true)
   })
 
-  // The API answers a non-admin with 403, so the screen is not offered.
+  // The API answers a non-admin with 403, so the screen is not offered — and
+  // the guard asks again rather than trusting the session, so losing the
+  // flag takes effect without a reload.
   test("keeps a non-admin out", async ({ page }) => {
+    await page.goto("/backend/users")
+    await expect(page.getByTestId("users-title")).toBeVisible()
+
     await appEval(`User.find_by(email: "will@star.fleet").update_columns(admin: false)`)
+
+    await page.goto("/backend/accounts")
+    await expect(page).toHaveURL(/^https?:\/\/[^/]+\/?$/)
+
     await page.reload()
 
     await page.getByTestId("user-menu").click()
