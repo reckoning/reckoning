@@ -31,6 +31,8 @@ v1_api_routes = lambda do
   resource :dashboard, only: %i[show], controller: :dashboard
 
   namespace :backend do
+    resource :stats, only: [:show], controller: :stats
+
     resources :accounts, only: %i[index show create update destroy]
 
     resources :users, only: %i[index show create update destroy] do

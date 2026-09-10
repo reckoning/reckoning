@@ -18,6 +18,12 @@ module Api
           parameter "$ref": "#/components/parameters/PageParameter"
           parameter "$ref": "#/components/parameters/PerPageParameter"
 
+          parameter name: "sort", in: :query, required: false,
+            schema: {type: :string, enum: %w[id email admin current_sign_in_at created_at]},
+            description: "The columns the backend list sorts by. Anything else is the newest first."
+          parameter name: "direction", in: :query, required: false,
+            schema: {type: :string, enum: %w[asc desc]}
+
           response(200, "successful") do
             schema ::V1::Schemas::BackendUsers
             header "Link", schema: {type: :string}, description: "RFC 8288 pagination links."
@@ -97,6 +103,26 @@ module Api
             } do
               refute parsed_body["confirmed"]
             end
+          end
+        end
+
+        # The server-rendered list sorted by five columns; the endpoint takes
+        # the same set and falls back to the newest first.
+        it "sorts by the columns the list offers" do
+          assert_api_response :get, 200, params: {sort: "email", direction: "asc", perPage: "all"} do
+            emails = parsed_body.map { |user| user["email"] }
+
+            assert_equal emails.sort, emails
+          end
+        end
+
+        it "says when a user was last seen" do
+          member.update_columns(current_sign_in_at: Time.zone.parse("2026-03-04T10:00:00Z"))
+
+          assert_api_response :get, 200, params: {perPage: "all"} do
+            user = parsed_body.find { |entry| entry["id"] == member.id }
+
+            assert_equal member.reload.current_sign_in_at, Time.zone.parse(user["currentSignInAt"])
           end
         end
 

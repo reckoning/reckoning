@@ -7,5 +7,6 @@ json.admin user.admin
 json.enabled user.enabled
 json.confirmed user.confirmed_at.present?
 json.account_id user.account_id
+json.current_sign_in_at user.current_sign_in_at
 json.created_at user.created_at
 json.updated_at user.updated_at

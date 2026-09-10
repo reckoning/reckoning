@@ -11,7 +11,7 @@ module Api
         after_action -> { pagination_header(:users) }, only: [:index]
 
         def index
-          @users = paginate(::User.all.order(created_at: :desc, id: :desc))
+          @users = paginate(::User.all.order(*order_clause))
         end
 
         def show
@@ -57,6 +57,23 @@ module Api
             render json: {message: I18n.t(:"messages.user.send_welcome.success")}
           else
             render json: ValidationError.new("user.send_welcome", @user.errors), status: :bad_request
+          end
+        end
+
+        # The columns the server-rendered list let you sort by. Written as
+        # order hashes rather than SQL, so the parameter cannot reach the
+        # ORDER BY even in principle. `id` closes every order: emails and
+        # timestamps repeat, and offset paging over a tie can show a row
+        # twice or skip it.
+        private def order_clause
+          direction = (params[:direction] == "asc") ? :asc : :desc
+
+          case params[:sort]
+          when "id" then [{id: direction}]
+          when "email" then [{email: direction}, {id: :desc}]
+          when "admin" then [{admin: direction}, {id: :desc}]
+          when "current_sign_in_at" then [{current_sign_in_at: direction}, {id: :desc}]
+          else [{created_at: direction}, {id: :desc}]
           end
         end
 
