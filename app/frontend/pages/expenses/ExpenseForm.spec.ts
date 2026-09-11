@@ -38,6 +38,8 @@ interface Options {
   path?: string
   expense?: Record<string, unknown>
   refuseReceipt?: boolean
+  /** Leaves the record's request unanswered, as a slow network would. */
+  slow?: boolean
 }
 
 async function mountForm(options: Options = {}) {
@@ -45,6 +47,10 @@ async function mountForm(options: Options = {}) {
 
   AXIOS_INSTANCE.defaults.adapter = async (config) => {
     requests.push(config)
+
+    if (options.slow && String(config.url).includes(`/expenses/${ID}`)) {
+      await new Promise(() => {})
+    }
 
     const url = String(config.url)
     let data: unknown = {}
@@ -100,6 +106,16 @@ async function body(requests: AxiosRequestConfig[], method: "post" | "patch") {
 }
 
 describe("ExpenseForm", () => {
+  // The flake that led here: the copy link was offered while the record was
+  // still on its way, and `copyQuery` had nothing to copy — so "copy" opened
+  // an empty form that looked like one.
+  it("offers no copy until there is something to copy", async () => {
+    const pending = mountForm({path: `/expenses/${ID}/edit`, slow: true})
+    const {wrapper} = await pending
+
+    expect(wrapper.find('[data-test="copy"]').exists()).toBe(false)
+  })
+
   afterEach(() => {
     delete AXIOS_INSTANCE.defaults.adapter
     vi.restoreAllMocks()
