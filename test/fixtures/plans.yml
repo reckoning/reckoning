@@ -1,0 +1,17 @@
+# The plans the welcome page prices. `prefill_from_base_plan` only runs on
+# create through Stripe; fixtures carry the values it would have written.
+basic:
+  code: basic
+  base_price: 900
+  quantity: 1
+  interval: month
+  featured: false
+  stripe_plan_id: plan_basic
+
+plus:
+  code: plus
+  base_price: 1900
+  quantity: 1
+  interval: month
+  featured: true
+  stripe_plan_id: plan_plus
