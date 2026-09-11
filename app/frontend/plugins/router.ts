@@ -16,6 +16,14 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: false },
   },
   {
+    // Signing up is a form on an empty page, the way the server-rendered
+    // screen was — `accounts/new.html.erb` hid the landing bar.
+    path: "/signup",
+    name: "signup",
+    component: () => import("@/pages/sessions/SignupPage.vue"),
+    meta: { requiresAuth: false },
+  },
+  {
     path: "/password/new",
     name: "password-reset-request",
     component: () => import("@/pages/sessions/PasswordResetRequestPage.vue"),

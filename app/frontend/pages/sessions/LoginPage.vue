@@ -174,16 +174,13 @@ const onSubmit = handleSubmit(async (values) => {
       <template v-if="registrationEnabled">
         <hr class="my-5 border-t border-rule" />
         <p class="mb-[10px] text-center text-[14px]">{{ t("login.signUpPrompt") }}</p>
-        <!-- Still the server-rendered screen: signup picks a plan, and no
-             endpoint lists them yet. A full page load between old and new is
-             expected during the migration. -->
-        <a
-          href="/signup"
+        <RouterLink
+          :to="{ name: 'signup' }"
           data-test="sign-up"
           class="block w-full rounded border border-field-border bg-surface px-3 py-[6px] text-center text-[14px] text-ink hover:bg-control-hover"
         >
           {{ t("login.signUp") }}
-        </a>
+        </RouterLink>
       </template>
     </form>
   </div>

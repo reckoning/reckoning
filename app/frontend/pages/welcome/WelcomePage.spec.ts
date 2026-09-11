@@ -52,6 +52,7 @@ async function mountPage(plans: unknown[] | null = PLANS) {
     routes: [
       {path: "/", name: "dashboard", component: WelcomePage},
       {path: "/login", name: "login", component: {template: "<div />"}},
+      {path: "/signup", name: "signup", component: {template: "<div />"}},
     ],
   })
 

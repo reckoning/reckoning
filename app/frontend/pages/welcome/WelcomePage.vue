@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from "vue"
+import { RouterLink } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { usePlans } from "@/services/api/services/plans/plans"
 import { useAppConfig } from "@/composables/useAppConfig"
@@ -169,15 +170,13 @@ const basePrice = computed(() => {
           </p>
 
           <div class="text-center">
-            <!-- Still the server-rendered screen: signup picks a plan and
-                 talks to Stripe, which has not moved yet. -->
-            <a
-              href="/signup"
+            <RouterLink
+              :to="{ name: 'signup' }"
               data-test="sign-up"
               class="inline-block rounded-bs-lg border border-success-border bg-success px-[16px] py-[10px] text-[18px] text-white hover:bg-success-hover hover:no-underline"
             >
               {{ t("welcome.cta") }}
-            </a>
+            </RouterLink>
           </div>
         </div>
       </template>

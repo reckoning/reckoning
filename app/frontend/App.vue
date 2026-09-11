@@ -212,11 +212,9 @@ const version = computed(() =>
 
         <ul class="flex list-none">
           <li v-if="registrationEnabled">
-            <!-- Still the server-rendered screen: signup picks a plan and
-                 talks to Stripe, which has not moved yet. -->
-            <a href="/signup" class="bs-navbar-link" data-test="nav-sign-up">
+            <RouterLink :to="{ name: 'signup' }" class="bs-navbar-link" data-test="nav-sign-up">
               {{ t("welcome.signUp") }}
-            </a>
+            </RouterLink>
           </li>
           <li>
             <RouterLink :to="{ name: 'login' }" class="bs-navbar-link" data-test="nav-sign-in">
