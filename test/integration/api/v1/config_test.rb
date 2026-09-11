@@ -43,6 +43,14 @@ module Api
         end
       end
 
+      # The footer names the release.
+      it "reports the release it is running" do
+        assert_api_response :get, 200 do
+          assert_equal Reckoning::VERSION, parsed_body["version"]
+          assert_equal Reckoning::CODENAME, parsed_body["codename"]
+        end
+      end
+
       # Without a resolvable subdomain there is no account to name, and the
       # login has nothing to brand itself with.
       it "has no account name off a subdomain" do
