@@ -6,14 +6,13 @@ class BaseController < ApplicationController
 
   def index
     @active_nav = "home"
-    if user_signed_in?
-      # The SPA's dashboard is the root path, so this renders the shell rather
-      # than sending the browser somewhere else for it.
+    # The root path is the SPA's: the dashboard for whoever is signed in, the
+    # welcome page for everyone else. An account's own subdomain has no
+    # welcome page to show — it is one account's sign-in.
+    if user_signed_in? || current_account.blank?
       render template: "spa/index", layout: "spa"
-    elsif current_account.present?
-      redirect_to new_user_session_path
     else
-      welcome
+      redirect_to new_user_session_path
     end
   end
 
@@ -27,11 +26,6 @@ class BaseController < ApplicationController
 
   def terms
     @active_nav = "terms"
-  end
-
-  private def welcome
-    @active_nav = "welcome"
-    render "welcome", layout: "landing_page"
   end
 
   private def contact

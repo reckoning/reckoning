@@ -81,6 +81,34 @@ module Api
         end
       end
 
+      # The signup form asks for both, the way `accounts/new.html.erb` did.
+      it "takes the tax number and the subdomain the form asks for" do
+        assert_api_response :post, 201,
+          body: valid_body.merge(vat_id: "VU-1701", subdomain: "vulcan")
+
+        account = Account.find_by(name: "Vulcan Science Academy")
+
+        assert_equal "VU-1701", account.vat_id
+        assert_equal "vulcan", account.subdomain
+      end
+
+      # `www`, `app`, `api` and the rest belong to the app itself.
+      it "rejects a subdomain that is the app's own" do
+        assert_no_difference "Account.count" do
+          assert_api_response :post, 400, body: valid_body.merge(subdomain: "api") do
+            assert_equal "validation_error.account.create", parsed_body["code"]
+          end
+        end
+      end
+
+      it "rejects a subdomain another account answers on" do
+        accounts(:enterprise).update_column(:subdomain, "vulcan")
+
+        assert_no_difference "Account.count" do
+          assert_api_response :post, 400, body: valid_body.merge(subdomain: "vulcan")
+        end
+      end
+
       it "rejects a duplicate email" do
         body = valid_body.deep_dup
         body[:users_attributes][0][:email] = users(:data).email

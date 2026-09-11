@@ -11,6 +11,10 @@ module V1
           properties: {
             name: {type: :string, minLength: 1},
             plan: {type: :string},
+            vat_id: {type: [:string, :null]},
+            # Where the account answers, if it wants one of its own. Optional:
+            # most accounts live on the apex host.
+            subdomain: {type: [:string, :null]},
             users_attributes: {
               type: :array,
               minItems: 1,

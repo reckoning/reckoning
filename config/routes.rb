@@ -52,8 +52,6 @@ Rails.application.routes.draw do
     controllers: {registrations: "registrations"}
 
   as :user do
-    get "signup" => "accounts#new", :as => :new_registration
-    post "signup" => "accounts#create", :as => :registration
     # The SPA owns the profile; saving goes through /api/v1. The path stays
     # because Devise's mails and the server-rendered screens link it.
     get "settings" => "spa#index", :as => :edit_user_registration

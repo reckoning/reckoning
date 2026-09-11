@@ -695,14 +695,17 @@ Only once B8 has landed and stabilized.
 - [x] Catch-all route → SPA shell, and the `/app` prefix is gone: nothing had
       been deployed, so the SPA answers the paths the server-rendered screens
       had. The reserved first segments are listed beside the route.
+- [x] The welcome page: `/` is the SPA's for a visitor too, its screenshots
+      moved into the Vite bundle, and the pricing table reads `GET /plans`
+      rather than the `Plan` table. The three empty legal pages and `/signup`
+      are what is left of the landing layout.
 - [x] Delete `app/assets/javascripts/angular/`, `app/views/templates/`,
       `TemplatesController`, the vendored Highcharts copy, and the d3 / nvd3 /
       underscore requires from both manifests — the stylesheet kept its own
       `//= require nvd3` until the review of this note caught it.
-- [ ] The rest of `app/assets/` — blocked, not forgotten: the welcome page
-      needs jQuery and Bootstrap's modal, and `/signup` drives Stripe Checkout
-      from `signup.coffee.erb`. Those two, and the three empty legal pages,
-      are a product decision rather than a port.
+- [ ] The rest of `app/assets/` — blocked, not forgotten: `/signup` drives
+      Stripe Checkout from `signup.coffee.erb`. That one, and the three empty
+      legal pages, are a product decision rather than a port.
 - [ ] Delete what is left of `app/assets/javascripts/` and
       `app/assets/stylesheets/`, and the `vendor/` bower bundles.
 - [x] Delete `app/frontend/lib/mount-islands.ts` and the `hello` island —

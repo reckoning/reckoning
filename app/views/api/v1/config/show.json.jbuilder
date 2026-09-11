@@ -6,3 +6,7 @@ json.account_name current_account&.name
 # field: the host in the browser cannot be taken apart for it — on an apex
 # host like `reckoning.test` the first label *is* the app.
 json.domain Rails.configuration.app.domain
+
+# The footer names the release, the way `layouts/_footer` did.
+json.version Reckoning::VERSION
+json.codename Reckoning::CODENAME

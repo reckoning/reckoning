@@ -1,5 +1,55 @@
 export default {
   brand: "Reckoning",
+  footer: {
+    copyright: "Copyright © 2022",
+  },
+  welcome: {
+    headline: "Rechnungen schreiben einfach gemacht.",
+    subline:
+      "Vereinfache das Erstellen von Rechnungen und konzentriere dich auf die wichtigen Dinge!",
+    github: "Fork it on GitHub",
+    signIn: "Anmelden",
+    signUp: "Registrieren",
+    close: "Schließen",
+    shots: {
+      invoices: "Rechnungen erstellen (inkl. PDF)",
+      states: "Rechnungsstatus erfassen",
+      records: "Datenbank für Kunden & Projekte",
+    },
+    plansFailed: "Die Preise konnten gerade nicht geladen werden.",
+    featuresTitle: "Features",
+    features: {
+      invoices: {
+        title: "Rechnungen",
+        lines: [
+          "Rechnungen für Kunden und einzelne Projekte erfassen.",
+          "Rechnungen als PDF erstellen, downloaden und direkt an den Kunden verschicken.",
+          "E-Mail Templates für jeden Kunden.",
+        ],
+      },
+      timesheet: {
+        title: "Zeiterfassung",
+        lines: [
+          "Zeiten nachträglich in einer Wochenansicht oder für jeden Tag erfassen.",
+          "Zeiten direkt beim arbeiten erfassen in dem einfach ein Timer gestartet wird.",
+          "Stundenzettel werden automatisch generiert wenn Rechnungspositionen aus Einträgen der Zeiterfassung stammen.",
+        ],
+      },
+      projects: {
+        title: "Projekte & Kunden",
+        lines: [
+          "Erfassen sie alle ihre Kunden und die einzelnen Projekte.",
+          "Legen Sie Budgets für jedes Projekt fest und bekommen sie so Informationen über verbleibene Budgets.",
+        ],
+      },
+    },
+    per: {
+      month: "pro Monat",
+      year: "pro Jahr",
+    },
+    smallPrint: "* {price} € pro Monat für jeden weiteren Benutzer",
+    cta: "Reckoning für 30 Tage gratis testen",
+  },
   notFound: {
     title: "Seite nicht vorhanden",
     body: "Diese Seite konnte nicht gefunden werden.",
@@ -550,8 +600,19 @@ export default {
     failed: "Das hat nicht geklappt.",
   },
   signup: {
+    nameRequired: "Bitte geben Sie einen Namen an.",
+    planRequired: "Bitte wählen Sie einen Tarif.",
+    planOption: "{name} ({price} € {per})",
+    passwordTooShort: "Das Passwort braucht mindestens 8 Zeichen.",
+    passwordConfirmationRequired: "Bitte bestätigen Sie das Passwort.",
+    passwordMismatch: "Die Passwörter stimmen nicht überein.",
+    passwordConfirmation: "Passwort-Bestätigung",
+    vatId: "Steuernummer",
+    subdomain: "subdomain",
+    submitting: "Bitte warten...",
+    created: "Account erstellt. Bitte bestätigen Sie Ihre E-Mail-Adresse.",
     title: "Account erstellen",
-    name: "Name",
+    name: "Account Name",
     email: "E-Mail",
     password: "Passwort",
     submit: "Account erstellen",
