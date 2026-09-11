@@ -1,5 +1,53 @@
 export default {
   brand: "Reckoning",
+  footer: {
+    copyright: "Copyright © 2022",
+  },
+  welcome: {
+    headline: "Invoicing made simple.",
+    subline: "Spend less time on invoices and more on the work that matters.",
+    github: "Fork it on GitHub",
+    signIn: "Sign in",
+    signUp: "Sign up",
+    close: "Close",
+    shots: {
+      invoices: "Write invoices (PDF included)",
+      states: "Track invoice states",
+      records: "Customers and projects in one place",
+    },
+    featuresTitle: "Features",
+    features: {
+      invoices: {
+        title: "Invoices",
+        lines: [
+          "Invoice a customer or a single project.",
+          "Render an invoice as a PDF, download it, or mail it straight to the customer.",
+          "Mail templates per customer.",
+        ],
+      },
+      timesheet: {
+        title: "Time tracking",
+        lines: [
+          "Book hours afterwards, by week or by day.",
+          "Or track them as you work, by starting a timer.",
+          "Timesheets are generated from the entries an invoice position was built from.",
+        ],
+      },
+      projects: {
+        title: "Projects & customers",
+        lines: [
+          "Keep every customer and their projects on file.",
+          "Set a budget per project and see what is left of it.",
+        ],
+      },
+    },
+    per: {
+      month: "per month",
+      year: "per year",
+    },
+    smallPrint: "* {price} € per month for each additional user",
+    cta: "Try Reckoning free for 30 days",
+  },
   notFound: {
     title: "No such page",
     body: "This page could not be found.",

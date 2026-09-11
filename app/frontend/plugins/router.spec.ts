@@ -47,9 +47,19 @@ describe("router guard", () => {
   it("sends an anonymous visitor from a guarded route to login", async () => {
     startSession(respondUnauthorized)
 
-    await router.push("/")
+    await router.push("/invoices")
 
     expect(router.currentRoute.value.name).toBe("login")
+  })
+
+  // The root path is not one of them: a visitor gets the welcome page there,
+  // the way `BaseController#index` had it.
+  it("leaves an anonymous visitor on the root path", async () => {
+    startSession(respondUnauthorized)
+
+    await router.push("/")
+
+    expect(router.currentRoute.value.name).toBe("dashboard")
   })
 
   // Without this the visitor lands on the dashboard after signing in and loses

@@ -28,10 +28,13 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: false },
   },
   {
+    // Two screens at one path: the dashboard once signed in, the welcome page
+    // before that. `publicChrome` is what the welcome page is shown in — the
+    // landing bar and footer of `layouts/landing_page`.
     path: "/",
     name: "dashboard",
-    component: () => import("@/pages/dashboard/DashboardPage.vue"),
-    meta: { requiresAuth: true },
+    component: () => import("@/pages/HomePage.vue"),
+    meta: { requiresAuth: false, publicChrome: true },
   },
   {
     // Devise mails a link carrying confirmation_token as a query param.
