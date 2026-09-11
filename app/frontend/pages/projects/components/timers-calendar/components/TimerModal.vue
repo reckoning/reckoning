@@ -5,12 +5,12 @@
 
 import {computed, onBeforeUnmount, onMounted, ref, watch} from "vue"
 import {useI18n} from "vue-i18n"
-import {formatHHMM, parseHHMM, runningDuration} from "../../../lib/timers/format"
-import {createTask, createTimer, deleteTimer, startTimer, stopTimer, updateTimer} from "../../../lib/timers/api"
-import type {Task, Timer} from "../../../lib/timers/types"
-import {confirmDialog} from "../../../lib/confirm"
-import UiButton from "../../../components/ui/UiButton.vue"
-import UiInput from "../../../components/ui/UiInput.vue"
+import {formatHHMM, parseHHMM, runningDuration} from "@/lib/timers/format"
+import {createTask, createTimer, deleteTimer, startTimer, stopTimer, updateTimer} from "@/lib/timers/api"
+import type {Task, Timer} from "@/lib/timers/types"
+import {confirmDialog} from "@/lib/confirm"
+import UiButton from "@/components/ui/UiButton.vue"
+import UiInput from "@/components/ui/UiInput.vue"
 
 const {t} = useI18n()
 

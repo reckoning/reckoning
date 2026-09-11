@@ -6,11 +6,11 @@ import MonthNav from "./components/MonthNav.vue"
 import TimerModal from "./components/TimerModal.vue"
 import {useMonth} from "./composables/useMonth"
 import {useTimers} from "./composables/useTimers"
-import {listProjects} from "../../lib/timers/api"
-import {businessDaysInMonth} from "../../lib/timers/format"
-import type {Task, Timer} from "../../lib/timers/types"
-import UiAlert from "../../components/ui/UiAlert.vue"
-import UiButton from "../../components/ui/UiButton.vue"
+import {listProjects} from "@/lib/timers/api"
+import {businessDaysInMonth} from "@/lib/timers/format"
+import type {Task, Timer} from "@/lib/timers/types"
+import UiAlert from "@/components/ui/UiAlert.vue"
+import UiButton from "@/components/ui/UiButton.vue"
 
 const props = defineProps<{projectId: string}>()
 

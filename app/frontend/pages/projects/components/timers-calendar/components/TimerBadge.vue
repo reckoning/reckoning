@@ -3,8 +3,8 @@
 // running, invoiced, billable — is the colour it carries.
 
 import {computed, onBeforeUnmount, onMounted, ref} from "vue"
-import {formatHHMM, runningDuration} from "../../../lib/timers/format"
-import type {Timer} from "../../../lib/timers/types"
+import {formatHHMM, runningDuration} from "@/lib/timers/format"
+import type {Timer} from "@/lib/timers/types"
 
 const props = defineProps<{timer: Timer}>()
 defineEmits<{click: []}>()

@@ -4,7 +4,7 @@
 
 import {computed, ref} from "vue"
 import {useI18n} from "vue-i18n"
-import UiButton from "../../../components/ui/UiButton.vue"
+import UiButton from "@/components/ui/UiButton.vue"
 
 const props = defineProps<{
   month: string
