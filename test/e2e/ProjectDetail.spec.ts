@@ -72,6 +72,41 @@ test.describe("Project detail", () => {
     await expect(page.getByTestId("timers-calendar")).toBeVisible()
   })
 
+  // The chosen tab is a card: a border on three sides, joined to the row's
+  // own line. Two Tailwind utilities for one property resolve by their order
+  // in the stylesheet, not by the order they are written in, and the base's
+  // `border-transparent` was quietly winning — leaving a gap in the line
+  // where the card should be.
+  test("draws the chosen tab as a card", async ({ page }) => {
+    const id = await projectId()
+    await page.goto(`/projects/${id}`)
+
+    const chosen = page.getByTestId("tab-timers")
+    const colours = await chosen.evaluate((node) => {
+      const style = getComputedStyle(node)
+
+      return {top: style.borderTopColor, bottom: style.borderBottomColor}
+    })
+
+    expect(colours.top).toBe("rgb(221, 221, 221)")
+    // The lower edge paints over the row's line, so the card joins the page.
+    expect(colours.bottom).toBe("rgb(255, 255, 255)")
+
+    // Hovering an unchosen tab draws `#eee #eee #ddd`, which is the same
+    // order-sensitive pairing and would fail the same way.
+    const other = page.getByTestId("tab-offers")
+    await other.hover()
+
+    const hovered = await other.evaluate((node) => {
+      const style = getComputedStyle(node)
+
+      return {top: style.borderTopColor, bottom: style.borderBottomColor}
+    })
+
+    expect(hovered.top).toBe("rgb(238, 238, 238)")
+    expect(hovered.bottom).toBe("rgb(221, 221, 221)")
+  })
+
   test("opens the tab the url names", async ({ page }) => {
     const id = await projectId()
     await page.goto(`/projects/${id}#tasks`)
