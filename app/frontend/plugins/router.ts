@@ -238,6 +238,28 @@ const routes: RouteRecordRaw[] = [
     component: () => import("@/pages/backend/BackendAccountForm.vue"),
     meta: { requiresAuth: true, requiresAdmin: true, backend: true },
   },
+  // The three legal documents, on the paths they have always answered on.
+  {
+    path: "/impressum",
+    name: "impressum",
+    component: () => import("@/pages/legal/LegalPage.vue"),
+    props: { document: "impressum" },
+    meta: { requiresAuth: false, publicChrome: true },
+  },
+  {
+    path: "/privacy",
+    name: "privacy",
+    component: () => import("@/pages/legal/LegalPage.vue"),
+    props: { document: "privacy" },
+    meta: { requiresAuth: false, publicChrome: true },
+  },
+  {
+    path: "/terms",
+    name: "terms",
+    component: () => import("@/pages/legal/LegalPage.vue"),
+    props: { document: "terms" },
+    meta: { requiresAuth: false, publicChrome: true },
+  },
   // Rails hands every unclaimed page load to the shell, so a typo arrives
   // here rather than at a server-rendered 404.
   {

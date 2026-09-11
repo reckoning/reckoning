@@ -157,10 +157,6 @@ Rails.application.routes.draw do
   # there — it is what the list linked before the screen moved.
   get "expense_imports/new", to: legacy_screen.call("/expenses/import"), as: :new_expense_import
 
-  get "impressum" => "base#impressum"
-  get "privacy" => "base#privacy"
-  get "terms" => "base#terms"
-
   match "404" => "errors#not_found", :via => :all
   match "422" => "errors#server_error", :via => :all
   match "500" => "errors#server_error", :via => :all

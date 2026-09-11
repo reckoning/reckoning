@@ -54,6 +54,12 @@ const BACKEND_LINKS = [
 
 const inBackend = computed(() => route.meta.backend === true)
 
+const LEGAL_LINKS = [
+  { name: "impressum", label: "footer.impressum", test: "nav-impressum" },
+  { name: "privacy", label: "footer.privacy", test: "nav-privacy" },
+  { name: "terms", label: "footer.terms", test: "nav-terms" },
+] as const
+
 // Expenses are an account feature, and `_links.html.erb` only prints the
 // link where the ability allows it. Until the account has answered, the
 // entry stays out rather than appearing and vanishing again.
@@ -263,6 +269,20 @@ const version = computed(() =>
           Marten Klitzke
         </a>
       </div>
+
+      <!-- `.footer-links`: the three documents the footer is the only way to.
+           They were unreachable while they were empty ERB views. -->
+      <ul class="flex justify-center gap-4" data-test="footer-links">
+        <li v-for="link in LEGAL_LINKS" :key="link.name">
+          <RouterLink
+            :to="{ name: link.name }"
+            class="text-placeholder hover:text-brand"
+            :data-test="link.test"
+          >
+            {{ t(link.label) }}
+          </RouterLink>
+        </li>
+      </ul>
 
       <div class="text-center text-placeholder md:text-right" data-test="version">
         {{ version }}

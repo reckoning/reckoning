@@ -1,6 +1,9 @@
 export default {
   brand: "Reckoning",
   footer: {
+    impressum: "Impressum",
+    privacy: "Datenschutz",
+    terms: "AGB",
     copyright: "Copyright © 2022",
   },
   welcome: {
