@@ -563,18 +563,20 @@ Vue page + components, vue-query hooks from the generated client, VeeValidate
 for the flow, then **the Rails route is repointed at the SPA and the old ERB
 views + Angular/jQuery/Coffee for that screen are deleted in the same PR**.
 
-- [ ] **B2** Login / signup / password reset / 2FA. Confirmation and unlock
-      are part of this surface too — see the API gap note below.
-- [ ] **B3** Customers list + form; Projects list, detail, form; Tasks.
-- [ ] **B4** Timesheet (day/week/month) — reuses `app/frontend/islands/timesheet/`
+- [x] **B2** ✅ Login / password reset / 2FA, plus confirmation and unlock —
+      see the API gap note below. Signup stays server-rendered for now: it
+      drives Stripe Checkout.
+- [x] **B3** ✅ Customers list + form; Projects list, detail, form; Tasks.
+- [x] **B4** ✅ Timesheet (day/week/month) — reuses `app/frontend/islands/timesheet/`
       SFCs, promoted to `frontend/pages/timesheet/`; deletes
       `app/assets/javascripts/angular/timesheet/`.
-- [ ] **B5** Timers calendar — reuses `islands/timers-calendar/`; deletes
-      `angular/timers_calendar/`.
-- [ ] **B6** Invoices list + detail + **line-item editor** (the other
-      genuinely complex screen); PDF links point at the existing Rails routes.
-- [ ] **B7** Offers list + detail + line-item editor + state transitions.
-- [ ] **B8** Expenses + expense import wizard + dashboard + settings tabs +
+- [x] **B5** ✅ Timers calendar — the island is the project screen's now, and
+      moved into the SPA's own styling once nothing server-rendered mounted it.
+- [x] **B6** ✅ Invoices list + detail + line-item editor; PDF links point at
+      the existing Rails routes.
+- [x] **B7** ✅ Offers list + detail + line-item editor + state transitions —
+      see what it turned up, below.
+- [x] **B8** ✅ Expenses + expense import wizard + dashboard + settings tabs +
       backend admin.
 
 Exit per PR: the ported screen has no server-rendered ERB left, Playwright
@@ -657,13 +659,52 @@ changing a response shape:
   authorize `:transition` rather than `:update` — otherwise re-bidding a
   declined offer, which the machine allows, would be unreachable.
 
+#### What B8 turned up
+
+The one-line description said "expenses + import wizard + dashboard + settings
+tabs + backend admin". Four of those five hid something the screens did not
+advertise:
+
+- **The app had two dashboards.** The SPA's landed in B8, but `/` kept
+  rendering the server-rendered one — so signing in through the old form
+  reached the older of the two. Measured, not assumed: `GET /` with a session
+  answered 200 with `id="dashboard"`.
+- **The import dropped the `id` on both legs.** `ExpenseImport` has always
+  looked a row's id up and updated that expense, which is what the screen's own
+  hint promises about a CSV exported from Reckoning — but the API neither sent
+  it out of the preview nor took it back, so every import through it created
+  records.
+- **The backend's "new user" button could never work.** Its form asked for an
+  address and permitted no `account`, which `User` requires. And the endpoint
+  that replaced it suppressed the confirmation mail while the comment above it
+  said it was sending one, which left a created user with no way in at all.
+- **The backend dashboard's second panel printed
+  `Rails.application.credentials`**, with a translation naming one of those keys
+  "SMTP Passwort oder Token". It renders nothing today — flat keys, nested
+  filter — so it is a leak waiting for a rename rather than one in progress. It
+  is not ported.
+
+Two of those were only visible by comparing the screens against the code that
+served them. The lesson from B7 held: what a phase deletes reaches further than
+its one-line description.
+
 ### Phase C — legacy removal (multi-PR, ~1 week)
 
 Only once B8 has landed and stabilized.
 
-- [ ] Catch-all route → SPA shell; delete `SpaController`'s `/app` stub.
-- [ ] Delete `app/assets/javascripts/`, `app/assets/stylesheets/`,
-      `app/views/templates/`, `TemplatesController`, `vendor/` bower bundles.
+- [x] Catch-all route → SPA shell, and the `/app` prefix is gone: nothing had
+      been deployed, so the SPA answers the paths the server-rendered screens
+      had. The reserved first segments are listed beside the route.
+- [x] Delete `app/assets/javascripts/angular/`, `app/views/templates/`,
+      `TemplatesController`, the vendored Highcharts copy, and the d3 / nvd3 /
+      underscore requires from both manifests — the stylesheet kept its own
+      `//= require nvd3` until the review of this note caught it.
+- [ ] The rest of `app/assets/` — blocked, not forgotten: the welcome page
+      needs jQuery and Bootstrap's modal, and `/signup` drives Stripe Checkout
+      from `signup.coffee.erb`. Those two, and the three empty legal pages,
+      are a product decision rather than a port.
+- [ ] Delete what is left of `app/assets/javascripts/` and
+      `app/assets/stylesheets/`, and the `vendor/` bower bundles.
 - [ ] Delete `app/frontend/controllers/*_controller.ts` (Stimulus) and
       `app/frontend/lib/mount-islands.ts`.
 - [ ] Drop gems: `bower-rails`, `bootstrap-sass`, `bourbon`, `sass-rails`,

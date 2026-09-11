@@ -23,7 +23,9 @@ rendered as PDFs and emailed.
   `:redis_cache_store`
 - **Auth** Devise + devise-two-factor (v6 schema); JWT for API
 - **Authz** CanCanCan
-- **Templating** ERB (every view; haml + slim removed in Phase 3)
+- **Templating** Vue 3 SFCs for every screen; ERB for the shell, the
+  mailers, the PDF templates and the five public pages that have not
+  moved (`/`, `/signup`, `/impressum`, `/privacy`, `/terms`)
 - **PDF** Grover (puppeteer + Google Chrome)
 - **Monitoring** AppSignal — the Ruby agent covers Rails + Sidekiq
   (`config/appsignal.rb`), and `@appsignal/javascript` covers the Vue
@@ -31,12 +33,16 @@ rendered as PDFs and emailed.
 - **Storage** ActiveStorage on DigitalOcean Spaces (S3-compatible) in
   production
 - **Frontend toolchain** Vite (`vite_rails`) with TS entrypoints under
-  `app/frontend/`, alongside the legacy Sprockets + Terser bundle
-  which still ships jQuery / CoffeeScript / AngularJS until Phase 9.
-- **CSS** Tailwind 4 via `@tailwindcss/vite` (preflight off so it
-  coexists with Bootstrap 3 until Phase 9)
-- **JS framework** Hotwire — Turbo Drive owns navigation, Stimulus
-  controllers auto-register from `app/frontend/controllers/*_controller.ts`
+  `app/frontend/`. The legacy Sprockets bundle is still built, but only
+  the five remaining ERB pages load it — it is what keeps jQuery,
+  Bootstrap's JS and the last CoffeeScript alive.
+- **CSS** Tailwind 4 via `@tailwindcss/vite`. `spa.css` carries its own
+  preflight and a set of `bs-*` classes measured off the
+  server-rendered screens; `tailwind.css` omits preflight so it cannot
+  disturb Bootstrap 3 on the pages that still use it.
+- **JS framework** Vue 3 + vue-router, which owns the whole path space.
+  Turbo Drive and Stimulus are still loaded by the legacy bundle and
+  matter only on the five ERB pages.
 
 ### Migrating toward
 
@@ -47,63 +53,69 @@ rendered as PDFs and emailed.
 
 ### Frontend modernization in flight
 
-The frontend is legacy and being replaced. **Don't add new code to the
-legacy stack** — if you must touch a screen, prefer the smallest
-in-place change. New features go through Vite (TS + Tailwind +
-Hotwire). See `docs/frontend-migration-plan.md` for the phased plan.
+The app is a Vue SPA. Every screen behind a login has moved; what is left
+server-rendered is deliberate or not yet decided. `docs/vue-spa-migration-plan.md`
+is the plan of record — `docs/frontend-migration-plan.md` describes the
+phases that preceded it (Vite, Tailwind, ERB conversion, Turbo, Vue
+islands) and is history.
 
-Done (Phases 1–4 + Phase 5 in progress):
+**Where things are**
 
-- Phase 1 — Vite installed alongside Sprockets (#859)
-- Phase 2 — Tailwind 4 alongside Bootstrap 3, preflight off (#860)
-- Phase 3 — every haml/slim template converted to ERB; haml + slim
-  gems dropped (#861–#870)
-- Phase 4 — Turbo Drive + Stimulus baseline; Turbolinks gone
-  (#871, #872)
-- Phase 5 — Turbo Frames on CRUD index pages
-  (projects #873, offers #874, invoices #875) + customer edit
-  form (#888)
-- Phase 6a — Vue 3 islands foundation: `vue`, `@vitejs/plugin-vue`,
-  `app/frontend/islands/<name>/`, the `mountIslands(registry)`
-  helper, and a `hello` smoke-test SFC. Actual timesheet +
-  timers-calendar ports come next.
-- Phase 8 — Cypress 12 → Playwright + cypress-on-rails bridge;
-  cleared the last 11 dev-only npm vulns
+- `app/frontend/pages/<domain>/` — the screens, one folder per domain,
+  with their Vitest specs beside them.
+- `app/frontend/components/ui/` — the shared `Ui*` components. They are
+  measured ports of Bootstrap 3, not a new design system: `spa.css`
+  holds the values, with a comment naming the partial each came from.
+- `app/frontend/plugins/router.ts` — every route. `meta.requiresAuth`
+  gates a screen, `meta.requiresAdmin` re-reads who you are, and
+  `meta.backend` swaps the chrome for the admin's own.
+- `app/frontend/services/api/` — generated, gitignored, never edited.
 
-Still legacy (to be removed in later phases):
+**Still server-rendered, on purpose**
 
-- Bootstrap 3 (EOL 2019) + bootstrap-sass + bourbon — Phase 9
-- AngularJS (EOL 2021) under `app/assets/javascripts/angular/` —
-  Phase 7, after Vue islands (Phase 6) replace timesheet + project
-  timers calendar
-- jQuery + jquery_ujs — Phase 9 (after the remaining `[data-method]`
-  / `[data-notyConfirm]` flows move to Turbo + Stimulus)
-- CoffeeScript (`*.coffee` files, `coffee-rails` gem) — Phase 9
-- Sprockets `//= require` manifests — Phase 9
-- bower-rails — Phase 7
-- i18n-js v3 — Phase 10
+- The PDFs (`app/views/invoices/pdf`, `offers/pdf`, `expenses/index.pdf`)
+  and the CSV exports. The SPA links them.
+- The mailers.
+- Sidekiq (`/backend/workers`) and Flipper (`/backend/flipper`).
 
-### Hotwire conventions
+**Still server-rendered, undecided**
 
-- **Turbo Drive** is enabled globally. Opt out with `data-turbo="false"`
-  on a link or its container.
-- **Turbo Frames** wrap list/filter/pagination regions on index pages
-  (see `app/views/{projects,offers,invoices}/index.html.erb`). Frame
-  id matches the wrapper on both the initial render and the
-  subsequent partial response; the controller doesn't need a special
-  branch.
-- **`data-turbo-method`** is the Turbo replacement for the classic
-  Rails `link_to ..., method: :put|:delete`. Use `data: { turbo_method:
-  :put }` in `link_to` calls.
-- **`turbo:load → turbolinks:load` shim** in `application.ts` re-fires
-  the legacy event so existing CoffeeScript that listens for
-  `turbolinks:load` keeps working under Turbo navigation. Delegate
-  event handlers to `document` if they need to survive Turbo Frame
-  swaps (see `app/assets/javascripts/helpers/noty.coffee` for the
-  pattern).
-- **Stimulus controllers** live in `app/frontend/controllers/`. File
-  `tabs_controller.ts` exporting a default `Controller` subclass
-  auto-registers as `data-controller="tabs"`.
+- `/` for a signed-out visitor on the apex host — the welcome page, with
+  its pricing table from `Plan`.
+- `/signup`, which drives Stripe Checkout through
+  `app/assets/javascripts/app/signup.coffee.erb`.
+- `/impressum`, `/privacy`, `/terms` — empty views that answer 200 with
+  an empty body, linked from nowhere.
+
+Those five pages are what keeps the legacy pipeline alive. Until they are
+settled, **do not delete `app/assets/`**, and leave Tailwind's preflight
+off in `tailwind.css`. What they still rely on: Turbo Drive for
+navigation, the `turbo:load → turbolinks:load` shim in `application.ts`,
+and `data-turbo-method` in place of the classic `link_to ..., method:`.
+
+### SPA conventions
+
+- **The API comes first, and its schema is the tests.** Declare an
+  endpoint in a Minitest DSL spec under `test/integration/api/v1/`, then
+  `RAILS_ENV=test rake openapi_ruby:generate` writes `swagger/v1/schema.yaml`
+  and `pnpm run generate-api-client` turns it into the hooks under
+  `app/frontend/services/api/`. A route and an action without a DSL
+  declaration are unreachable from the SPA — that has bitten twice.
+- **Rails owns a path or the SPA does.** `config/routes.rb` ends in a
+  catch-all that hands every page load to the shell; the list of first
+  path segments above it (`api`, `api-docs`, `backend`'s two mounts,
+  `cable`, `rails`, `up`) is what the server keeps. A path that answers
+  a non-page request — an export, a PDF — is declared before it.
+- **A screen's state lives in the URL.** Filters, sorting and paging are
+  query parameters, so a filtered list is a link someone can send.
+- **Three test layers, and they do different jobs.** Vitest for a
+  component's logic against a stubbed adapter, the Minitest DSL specs
+  for the contract, Playwright for the flow through a real server. A
+  screen port lands with all three.
+- **Measure, do not guess, when porting a look.** The server-rendered
+  stylesheet is still built: render the old markup against
+  `application.css`, screenshot it, and match. Two bugs got through on a
+  guess — a chart whose labels wrapped and a tab that had no card.
 
 ## Project structure
 
@@ -112,13 +124,14 @@ reckoning/
 ├── app/
 │   ├── controllers/       # Rails controllers (API in api/v1/)
 │   ├── models/            # ActiveRecord models
-│   ├── views/             # ERB templates
+│   ├── views/             # ERB: the shell, mailers, PDFs, public pages
 │   ├── helpers/           # view helpers
 │   ├── mailers/           # mailers
 │   ├── workers/           # Sidekiq workers
 │   ├── services/          # service objects (invoice/offer/import logic)
 │   ├── validators/        # custom AR validators
-│   └── assets/            # legacy Sprockets pipeline (being replaced)
+│   ├── frontend/          # the Vue SPA (pages, components, stores, api)
+│   └── assets/            # legacy Sprockets, for the public pages only
 ├── config/
 │   ├── routes.rb          # main router (delegates to routes/*.rb)
 │   ├── routes/            # api_routes, etc.
