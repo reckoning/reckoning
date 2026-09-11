@@ -41,11 +41,24 @@ const LINKS = [
   { name: "expenses", label: "nav.expenses", test: "nav-expenses", feature: "expenses" },
 ] as const
 
+// `layouts/backend/_links`: inside the backend, its three areas are the
+// navigation — the server-rendered backend had a layout of its own and never
+// showed the app's.
+const BACKEND_LINKS = [
+  { name: "backend", label: "backend.nav.dashboard", test: "nav-backend-dashboard" },
+  { name: "backend-accounts", label: "backend.nav.accounts", test: "nav-backend-accounts" },
+  { name: "backend-users", label: "backend.nav.users", test: "nav-backend-users" },
+] as const
+
+const inBackend = computed(() => route.meta.backend === true)
+
 // Expenses are an account feature, and `_links.html.erb` only prints the
 // link where the ability allows it. Until the account has answered, the
 // entry stays out rather than appearing and vanishing again.
 const links = computed(() =>
-  LINKS.filter((link) => !("feature" in link) || account.value?.featureExpenses === true),
+  inBackend.value
+    ? BACKEND_LINKS
+    : LINKS.filter((link) => !("feature" in link) || account.value?.featureExpenses === true),
 )
 
 const trial = computed(() => account.value?.trial)
@@ -131,10 +144,17 @@ const trial = computed(() => account.value?.trial)
               </RouterLink>
             </UiDropdownItem>
             <!-- The backend is an admin's own screen, and there is no other
-                 way to it now that the server-rendered navigation is gone. -->
+                 way to it now that the server-rendered navigation is gone.
+                 From inside it, the menu is the way back — `_user_nav` had
+                 exactly this pair. -->
             <template v-if="currentUser.user?.admin">
               <UiDropdownDivider />
-              <UiDropdownItem>
+              <UiDropdownItem v-if="inBackend">
+                <RouterLink :to="{ name: 'dashboard' }" data-test="nav-frontend">
+                  {{ t("backend.nav.frontend") }}
+                </RouterLink>
+              </UiDropdownItem>
+              <UiDropdownItem v-else>
                 <RouterLink :to="{ name: 'backend' }" data-test="nav-backend">
                   {{ t("backend.nav.backend") }}
                 </RouterLink>

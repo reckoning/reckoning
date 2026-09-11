@@ -44,18 +44,6 @@ function moment(value: string | null | undefined): string {
             </div>
           </div>
 
-          <div class="mt-4 flex flex-wrap gap-2">
-            <RouterLink v-slot="{ href, navigate }" :to="{ name: 'backend-users' }" custom>
-              <UiButton as="a" :href="href" data-test="to-users" @click="navigate">
-                {{ t("backend.nav.users") }}
-              </UiButton>
-            </RouterLink>
-            <RouterLink v-slot="{ href, navigate }" :to="{ name: 'backend-accounts' }" custom>
-              <UiButton as="a" :href="href" data-test="to-accounts" @click="navigate">
-                {{ t("backend.nav.accounts") }}
-              </UiButton>
-            </RouterLink>
-          </div>
         </UiPanel>
       </div>
 

@@ -32,10 +32,10 @@ class LoginTest < ActionDispatch::IntegrationTest
   end
 
   # The login ends in a page load, so a carried path is fetched with a GET
-  # whatever the request that failed was. A PATCH replayed as a GET is a route
-  # that does not exist.
+  # whatever the request that failed was. Anything else replayed as a GET is
+  # a route that does not exist, so it travels with nothing.
   it "does not carry a path that cannot be replayed" do
-    post "/projects/#{projects(:narendra3).id}/tasks", params: {task: {name: "Refit"}}
+    post "/backend/workers"
 
     assert_redirected_to "/signin"
     follow_redirect!
