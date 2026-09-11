@@ -34,10 +34,11 @@ const { data: user, isPending, isError } = useBackendUser(
   computed(() => id.value ?? ""),
   { query: { enabled: computed(() => editing.value) } },
 )
-const { data: accounts } = useBackendAccounts(
-  { perPage: "all" },
-  { query: { enabled: computed(() => !editing.value) } },
-)
+const {
+  data: accounts,
+  isPending: accountsPending,
+  isError: accountsError,
+} = useBackendAccounts({ perPage: "all" }, { query: { enabled: computed(() => !editing.value) } })
 const { mutateAsync: create } = useCreateBackendUser()
 const { mutateAsync: update } = useUpdateBackendUser()
 const { mutateAsync: destroy } = useDestroyBackendUser()
@@ -59,8 +60,13 @@ watch(
   { immediate: true },
 )
 
-const loading = computed(() => editing.value && isPending.value)
-const failed = computed(() => editing.value && isError.value)
+// Creating needs the accounts as much as editing needs the user: without
+// them the select is empty, and a form that can only submit an account nobody
+// picked is worse than saying the list did not load.
+const loading = computed(() =>
+  editing.value ? isPending.value : accountsPending.value,
+)
+const failed = computed(() => (editing.value ? isError.value : accountsError.value))
 
 function refuse(error: unknown): void {
   const data = (error as {response?: {data?: {errors?: Record<string, string[]>; message?: string}}})
