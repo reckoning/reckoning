@@ -24,6 +24,25 @@ const respondWithUser: AxiosAdapter = () =>
 
 const respondUnauthorized: AxiosAdapter = () => Promise.reject(new Error("401"))
 
+// Signed out, but on an account's own subdomain — which is what /config
+// naming an account means.
+const respondOnSubdomain: AxiosAdapter = (config) =>
+  String(config.url).includes("/config")
+    ? Promise.resolve({
+        data: {
+          registrationEnabled: true,
+          accountName: "Enterprise",
+          domain: "reckoning.test",
+          version: "1.0.0",
+          codename: "pluto",
+        },
+        status: 200,
+        statusText: "",
+        headers: {},
+        config: {} as never,
+      })
+    : Promise.reject(new Error("401"))
+
 // The store caches its answer after the first /me, and the reset navigation
 // below already spends it — so each case installs its transport against a
 // pinia that has not resolved yet.
@@ -47,9 +66,19 @@ describe("router guard", () => {
   it("sends an anonymous visitor from a guarded route to login", async () => {
     startSession(respondUnauthorized)
 
-    await router.push("/")
+    await router.push("/invoices")
 
     expect(router.currentRoute.value.name).toBe("login")
+  })
+
+  // The root path is not one of them: a visitor gets the welcome page there,
+  // the way `BaseController#index` had it.
+  it("leaves an anonymous visitor on the root path", async () => {
+    startSession(respondUnauthorized)
+
+    await router.push("/")
+
+    expect(router.currentRoute.value.name).toBe("dashboard")
   })
 
   // Without this the visitor lands on the dashboard after signing in and loses
@@ -60,6 +89,15 @@ describe("router guard", () => {
     await router.push("/customers")
 
     expect(router.currentRoute.value.query.redirect).toBe("/customers")
+  })
+
+  // There is nothing to welcome anyone to on one account's subdomain.
+  it("sends an anonymous visitor on a subdomain to login from the root path", async () => {
+    startSession(respondOnSubdomain)
+
+    await router.push("/")
+
+    expect(router.currentRoute.value.name).toBe("login")
   })
 
   it("lets a signed-in visitor reach a guarded route", async () => {

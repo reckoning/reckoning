@@ -19,10 +19,12 @@ module V1
           domain: {
             type: :string,
             description: "The host an account's subdomain sits under. Mirrors Rails.configuration.app.domain."
-          }
+          },
+          version: {type: :string, description: "Reckoning::VERSION, which the footer prints."},
+          codename: {type: :string, description: "Reckoning::CODENAME, which the footer prints."}
         },
         additionalProperties: false,
-        required: %w[registrationEnabled domain]
+        required: %w[registrationEnabled domain version codename]
       })
     end
   end

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
 import { useCurrentUserStore } from "@/stores/currentUser";
+import { useAppConfig } from "@/composables/useAppConfig";
 
 // The SPA is the app: Rails hands it every page load it does not claim for
 // the API, an export or the admin (config/routes.rb), so it owns the whole
@@ -28,10 +29,13 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: false },
   },
   {
+    // Two screens at one path: the dashboard once signed in, the welcome page
+    // before that. `publicChrome` is what the welcome page is shown in — the
+    // landing bar and footer of `layouts/landing_page`.
     path: "/",
     name: "dashboard",
-    component: () => import("@/pages/dashboard/DashboardPage.vue"),
-    meta: { requiresAuth: true },
+    component: () => import("@/pages/HomePage.vue"),
+    meta: { requiresAuth: false, publicChrome: true },
   },
   {
     // Devise mails a link carrying confirmation_token as a query param.
@@ -249,6 +253,18 @@ router.beforeEach(async (to) => {
 
   if (to.meta.requiresAuth === true && !currentUser.signedIn) {
     return { name: "login", query: { redirect: to.fullPath } };
+  }
+
+  // An account's own subdomain is that one account's sign-in, and has no
+  // welcome page to show. `BaseController#index` sends a page load there to
+  // the login; a route change inside the SPA has to do the same, or the
+  // visitor reaches the welcome page by clicking the brand.
+  if (to.name === "dashboard" && !currentUser.signedIn) {
+    const { config, ready } = useAppConfig();
+
+    await ready;
+
+    if (config.value?.accountName) return { name: "login" };
   }
 
   if (to.name === "login" && currentUser.signedIn) {

@@ -3476,10 +3476,18 @@ components:
         domain:
           type: string
           description: The host an account's subdomain sits under. Mirrors Rails.configuration.app.domain.
+        version:
+          type: string
+          description: Reckoning::VERSION, which the footer prints.
+        codename:
+          type: string
+          description: Reckoning::CODENAME, which the footer prints.
       additionalProperties: false
       required:
       - registrationEnabled
       - domain
+      - version
+      - codename
       title: AppConfig
     BackendAccount:
       type: object

@@ -24,8 +24,8 @@ rendered as PDFs and emailed.
 - **Auth** Devise + devise-two-factor (v6 schema); JWT for API
 - **Authz** CanCanCan
 - **Templating** Vue 3 SFCs for every screen; ERB for the shell, the
-  mailers, the PDF templates and the five public pages that have not
-  moved (`/`, `/signup`, `/impressum`, `/privacy`, `/terms`)
+  mailers, the PDF templates and the public pages that have not moved
+  (`/signup`, `/impressum`, `/privacy`, `/terms`)
 - **PDF** Grover (puppeteer + Google Chrome)
 - **Monitoring** AppSignal — the Ruby agent covers Rails + Sidekiq
   (`config/appsignal.rb`), and `@appsignal/javascript` covers the Vue
@@ -83,14 +83,12 @@ islands) and is history.
 
 **Still server-rendered, undecided**
 
-- `/` for a signed-out visitor on the apex host — the welcome page, with
-  its pricing table from `Plan`.
 - `/signup`, which drives Stripe Checkout through
   `app/assets/javascripts/app/signup.coffee.erb`.
 - `/impressum`, `/privacy`, `/terms` — empty views that answer 200 with
   an empty body, linked from nowhere.
 
-Those five pages are what keeps the legacy pipeline alive. Until they are
+Those pages are what keeps the legacy pipeline alive. Until they are
 settled, **do not delete `app/assets/`**, and leave Tailwind's preflight
 off in `tailwind.css`. What they still rely on: Turbo Drive for
 navigation, the `turbo:load → turbolinks:load` shim in `application.ts`,
