@@ -91,6 +91,20 @@ test.describe("Project detail", () => {
     expect(colours.top).toBe("rgb(221, 221, 221)")
     // The lower edge paints over the row's line, so the card joins the page.
     expect(colours.bottom).toBe("rgb(255, 255, 255)")
+
+    // Hovering an unchosen tab draws `#eee #eee #ddd`, which is the same
+    // order-sensitive pairing and would fail the same way.
+    const other = page.getByTestId("tab-offers")
+    await other.hover()
+
+    const hovered = await other.evaluate((node) => {
+      const style = getComputedStyle(node)
+
+      return {top: style.borderTopColor, bottom: style.borderBottomColor}
+    })
+
+    expect(hovered.top).toBe("rgb(238, 238, 238)")
+    expect(hovered.bottom).toBe("rgb(221, 221, 221)")
   })
 
   test("opens the tab the url names", async ({ page }) => {
