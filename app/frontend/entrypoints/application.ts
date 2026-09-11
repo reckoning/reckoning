@@ -18,8 +18,6 @@ import { Application } from "@hotwired/stimulus"
 
 import { configureAccounting, installAccountingGlobal } from "../lib/accounting"
 import { configureMomentLocale } from "../lib/moment-locale"
-import { mountIslands } from "../lib/mount-islands"
-import Hello from "../islands/hello/Hello.vue"
 
 // PDF.js v4+ ships ESM-only. Lazy-loaded so the 1.5 MB pdfjs core +
 // worker don't ship on pages that never render a PDF (most of them).
@@ -106,10 +104,9 @@ const refireTurbolinksLoad = () => {
 
 // Body swap incoming — reset the fingerprint cache so the next
 // `turbo:render`/`turbo:load` re-fires `turbolinks:load` even when
-// the URL and flash are unchanged. Without this, `Turbo.visit` to
-// the current URL (e.g. refresh-after-save in the timers-calendar
-// island) silently dedups, leaves chart.coffee's Highcharts host
-// element empty, and visually the chart goes white.
+// the URL and flash are unchanged. Without this, a `Turbo.visit` to
+// the current URL silently dedups and whatever the page mounted on
+// that event never runs again.
 //
 // Turbo fires `turbo:before-render` before every body swap, both
 // for cached previews and for the fresh server response. The
@@ -139,15 +136,6 @@ if (i18nGlobal) {
 // + ISO week here, replacing what `App.Moment.init` used to do.
 configureMomentLocale()
 
-// Vue islands on the server-rendered pages. Both the timesheet and the
-// project screen the timers calendar was mounted on are SPA pages now, so
-// what is left is the `hello` smoke test that retires with the mounter itself
-// in phase C.
-const islandRegistry = {
-  hello: Hello,
-}
-mountIslands(islandRegistry)
-document.addEventListener("turbo:load", () => mountIslands(islandRegistry))
 
 const application = Application.start()
 

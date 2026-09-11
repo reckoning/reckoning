@@ -5,7 +5,7 @@
 import {computed} from "vue"
 import {RouterLink} from "vue-router"
 import {buildWeeks} from "../calendar"
-import type {Timer} from "../../../lib/timers/types"
+import type {Timer} from "@/lib/timers/types"
 import TimerBadge from "./TimerBadge.vue"
 
 const props = defineProps<{

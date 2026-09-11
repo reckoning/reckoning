@@ -705,8 +705,12 @@ Only once B8 has landed and stabilized.
       are a product decision rather than a port.
 - [ ] Delete what is left of `app/assets/javascripts/` and
       `app/assets/stylesheets/`, and the `vendor/` bower bundles.
-- [ ] Delete `app/frontend/controllers/*_controller.ts` (Stimulus) and
-      `app/frontend/lib/mount-islands.ts`.
+- [x] Delete `app/frontend/lib/mount-islands.ts` and the `hello` island —
+      nothing server-rendered mounts an island any more, and the timers
+      calendar moved to `pages/projects/components/`. Six of the eight
+      Stimulus controllers went with them.
+- [ ] The last two Stimulus controllers, `selectize` and `loading-button`:
+      `/signup` still uses both.
 - [ ] Drop gems: `bower-rails`, `bootstrap-sass`, `bourbon`, `sass-rails`,
       `coffee-rails`, `jquery-rails`, `uglifier`, `sprockets-rails`,
       `turbo-rails`, `i18n-js`.

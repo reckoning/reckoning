@@ -70,6 +70,9 @@ islands) and is history.
   gates a screen, `meta.requiresAdmin` re-reads who you are, and
   `meta.backend` swaps the chrome for the admin's own.
 - `app/frontend/services/api/` — generated, gitignored, never edited.
+- A component that belongs to one screen lives beside it, in that screen's
+  `components/`. `app/frontend/islands/` is gone: nothing server-rendered
+  mounts a Vue island any more.
 
 **Still server-rendered, on purpose**
 

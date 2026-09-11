@@ -4,7 +4,7 @@
 import dayjs, {Dayjs} from "dayjs"
 import isoWeek from "dayjs/plugin/isoWeek"
 import customParseFormat from "dayjs/plugin/customParseFormat"
-import {todayISO, ISO_DATE} from "../../lib/timers/format"
+import {todayISO, ISO_DATE} from "@/lib/timers/format"
 
 dayjs.extend(isoWeek)
 dayjs.extend(customParseFormat)
