@@ -703,9 +703,15 @@ Only once B8 has landed and stabilized.
       `TemplatesController`, the vendored Highcharts copy, and the d3 / nvd3 /
       underscore requires from both manifests — the stylesheet kept its own
       `//= require nvd3` until the review of this note caught it.
-- [ ] The rest of `app/assets/` — blocked, not forgotten: `/signup` drives
-      Stripe Checkout from `signup.coffee.erb`. That one, and the three empty
-      legal pages, are a product decision rather than a port.
+- [x] Signup, and with it the landing layout: the form is the SPA's and
+      Stripe Checkout did not come with it — the modal wrote a token to the
+      account that no code reads, and `start_trial` runs either way.
+- [x] The three legal pages. They were 0-byte views answering 200, linked
+      from nowhere; they are real documents now, and the footer reaches them.
+- [x] The server-rendered app layout, now that its last screens are gone —
+      with it the navigation, user menu, running timers and trial banner.
+- [ ] The rest of `app/assets/` — nothing renders it any more, so this is now
+      a deletion rather than a decision.
 - [ ] Delete what is left of `app/assets/javascripts/` and
       `app/assets/stylesheets/`, and the `vendor/` bower bundles.
 - [ ] Delete `app/frontend/controllers/*_controller.ts` (Stimulus) and
