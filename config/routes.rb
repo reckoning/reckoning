@@ -52,8 +52,6 @@ Rails.application.routes.draw do
     controllers: {registrations: "registrations"}
 
   as :user do
-    get "signup" => "accounts#new", :as => :new_registration
-    post "signup" => "accounts#create", :as => :registration
     # The SPA owns the profile; saving goes through /api/v1. The path stays
     # because Devise's mails and the server-rendered screens link it.
     get "settings" => "spa#index", :as => :edit_user_registration
@@ -158,10 +156,6 @@ Rails.application.routes.draw do
   # The import is the SPA's own screen at another path, so this one leads
   # there — it is what the list linked before the screen moved.
   get "expense_imports/new", to: legacy_screen.call("/expenses/import"), as: :new_expense_import
-
-  get "impressum" => "base#impressum"
-  get "privacy" => "base#privacy"
-  get "terms" => "base#terms"
 
   match "404" => "errors#not_found", :via => :all
   match "422" => "errors#server_error", :via => :all

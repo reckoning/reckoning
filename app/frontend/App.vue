@@ -4,6 +4,7 @@ import { useRoute, useRouter, RouterLink, RouterView } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useCurrentUserStore } from "@/stores/currentUser"
 import { useAccount } from "@/services/api/services/account/account"
+import { useAppConfig } from "@/composables/useAppConfig"
 import AppProgress from "@/components/AppProgress.vue"
 import ToastHost from "@/components/ToastHost.vue"
 import UiAlert from "@/components/ui/UiAlert.vue"
@@ -15,6 +16,7 @@ const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
 const currentUser = useCurrentUserStore()
+const { config } = useAppConfig()
 
 const { data: account } = useAccount({
   query: { enabled: computed(() => currentUser.signedIn) },
@@ -52,6 +54,12 @@ const BACKEND_LINKS = [
 
 const inBackend = computed(() => route.meta.backend === true)
 
+const LEGAL_LINKS = [
+  { name: "impressum", label: "footer.impressum", test: "nav-impressum" },
+  { name: "privacy", label: "footer.privacy", test: "nav-privacy" },
+  { name: "terms", label: "footer.terms", test: "nav-terms" },
+] as const
+
 // Expenses are an account feature, and `_links.html.erb` only prints the
 // link where the ability allows it. Until the account has answered, the
 // entry stays out rather than appearing and vanishing again.
@@ -62,6 +70,17 @@ const links = computed(() =>
 )
 
 const trial = computed(() => account.value?.trial)
+
+// `layouts/landing_page`: the public screens carry a bar of their own and the
+// footer. Signup and the sign-in screens hid both — they are a single form on
+// an empty page.
+const publicChrome = computed(() => !currentUser.signedIn && route.meta.publicChrome === true)
+
+const registrationEnabled = computed(() => config.value?.registrationEnabled === true)
+
+const version = computed(() =>
+  config.value ? `${config.value.codename} (${config.value.version})` : "",
+)
 </script>
 
 <template>
@@ -191,11 +210,34 @@ const trial = computed(() => account.value?.trial)
       ></div>
     </template>
 
+    <nav v-if="publicChrome" class="bs-nav border-b" data-test="public-nav">
+      <div class="mx-auto flex w-full max-w-[1170px] items-center justify-between px-[15px]">
+        <RouterLink :to="{ name: 'dashboard' }" class="bs-nav-brand font-brand text-nav-link">
+          {{ t("brand") }}
+        </RouterLink>
+
+        <ul class="flex list-none">
+          <li v-if="registrationEnabled">
+            <RouterLink :to="{ name: 'signup' }" class="bs-navbar-link" data-test="nav-sign-up">
+              {{ t("welcome.signUp") }}
+            </RouterLink>
+          </li>
+          <li>
+            <RouterLink :to="{ name: 'login' }" class="bs-navbar-link" data-test="nav-sign-in">
+              {{ t("welcome.signIn") }}
+            </RouterLink>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
     <div
       :class="
         currentUser.signedIn
           ? 'px-4 pt-[70px] pb-5 md:ml-[16.666667%] md:pt-5 min-[1800px]:ml-[12.5%]'
-          : 'px-4 py-5'
+          : publicChrome
+            ? 'mx-auto w-full max-w-[1170px] px-[15px] py-5'
+            : 'px-4 py-5'
       "
     >
       <!-- Hinter der Anmeldeprüfung: die Kontodaten bleiben nach dem Abmelden
@@ -213,6 +255,39 @@ const trial = computed(() => account.value?.trial)
 
       <RouterView />
     </div>
+
+    <!-- `layouts/_footer`: who holds the copyright, and which release is
+         running. -->
+    <footer
+      v-if="publicChrome"
+      class="mx-auto flex w-full max-w-[1170px] flex-col gap-1 px-[15px] pb-2.5 text-muted-strong md:flex-row md:justify-between"
+      data-test="public-footer"
+    >
+      <div class="text-center text-placeholder md:text-left">
+        {{ t("footer.copyright") }}
+        <a href="mailto:info@reckoning.me" class="text-placeholder hover:text-brand">
+          Marten Klitzke
+        </a>
+      </div>
+
+      <!-- `.footer-links`: the three documents the footer is the only way to.
+           They were unreachable while they were empty ERB views. -->
+      <ul class="flex justify-center gap-4" data-test="footer-links">
+        <li v-for="link in LEGAL_LINKS" :key="link.name">
+          <RouterLink
+            :to="{ name: link.name }"
+            class="text-placeholder hover:text-brand"
+            :data-test="link.test"
+          >
+            {{ t(link.label) }}
+          </RouterLink>
+        </li>
+      </ul>
+
+      <div class="text-center text-placeholder md:text-right" data-test="version">
+        {{ version }}
+      </div>
+    </footer>
 
     <ToastHost />
   </div>

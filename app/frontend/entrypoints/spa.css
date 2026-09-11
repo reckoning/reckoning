@@ -367,6 +367,52 @@
     transition: width 0.6s ease;
   }
 
+  /* `.navbar-default .navbar-nav > li > a` on the landing bar: the same
+     15px box as the aside's links, but the bar is horizontal and has no
+     marker to draw — only the darker ink on hover. */
+  .bs-navbar-link {
+    display: block;
+    padding: 15px;
+    line-height: 20px;
+    color: var(--color-nav-link);
+  }
+
+  .bs-navbar-link:hover {
+    color: var(--color-nav-link-hover);
+    text-decoration: none;
+  }
+
+  /* `.page-header`: the rule the welcome headline sits on. */
+  .bs-page-header {
+    padding-bottom: 9px;
+    margin: 40px 0 20px;
+    border-bottom: 1px solid var(--color-rule);
+  }
+
+  /* `.thumbnail`: the framed screenshot. */
+  .bs-thumbnail {
+    display: block;
+    padding: 4px;
+    line-height: var(--text-base--line-height);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-rule-strong);
+    border-radius: var(--radius-bs);
+    transition: border 0.2s ease-in-out;
+  }
+
+  a.bs-thumbnail:hover {
+    border-color: var(--color-brand);
+  }
+
+  /* `.panel-footer`, which the pricing table prints its price in. */
+  .bs-panel-footer {
+    padding: 10px 15px;
+    background-color: var(--color-surface-muted);
+    border-top: 1px solid var(--color-rule-strong);
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+  }
+
   /* `.modal-content` and `.modal-dialog`. */
   .bs-modal {
     background-color: var(--color-surface);

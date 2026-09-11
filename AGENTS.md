@@ -24,8 +24,7 @@ rendered as PDFs and emailed.
 - **Auth** Devise + devise-two-factor (v6 schema); JWT for API
 - **Authz** CanCanCan
 - **Templating** Vue 3 SFCs for every screen; ERB for the shell, the
-  mailers, the PDF templates and the five public pages that have not
-  moved (`/`, `/signup`, `/impressum`, `/privacy`, `/terms`)
+  mailers, the PDF templates and the error pages
 - **PDF** Grover (puppeteer + Google Chrome)
 - **Monitoring** AppSignal — the Ruby agent covers Rails + Sidekiq
   (`config/appsignal.rb`), and `@appsignal/javascript` covers the Vue
@@ -81,20 +80,13 @@ islands) and is history.
 - The mailers.
 - Sidekiq (`/backend/workers`) and Flipper (`/backend/flipper`).
 
-**Still server-rendered, undecided**
-
-- `/` for a signed-out visitor on the apex host — the welcome page, with
-  its pricing table from `Plan`.
-- `/signup`, which drives Stripe Checkout through
-  `app/assets/javascripts/app/signup.coffee.erb`.
-- `/impressum`, `/privacy`, `/terms` — empty views that answer 200 with
-  an empty body, linked from nowhere.
-
-Those five pages are what keeps the legacy pipeline alive. Until they are
-settled, **do not delete `app/assets/`**, and leave Tailwind's preflight
-off in `tailwind.css`. What they still rely on: Turbo Drive for
-navigation, the `turbo:load → turbolinks:load` shim in `application.ts`,
-and `data-turbo-method` in place of the classic `link_to ..., method:`.
+**No screens are left on the legacy pipeline.** The welcome page, signup
+and the three legal documents were the last of them, and the layout they
+rendered in is gone. What is still wired up but no longer reached by any
+screen — `app/assets/`, the bower bundles, the Turbo/Stimulus entry in
+`application.ts`, Tailwind's preflight staying off in `tailwind.css` —
+is Phase C's list in `docs/vue-spa-migration-plan.md`, and can now be
+deleted in one sweep rather than screen by screen.
 
 ### SPA conventions
 

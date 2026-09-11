@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
 import { useCurrentUserStore } from "@/stores/currentUser";
+import { useAppConfig } from "@/composables/useAppConfig";
 
 // The SPA is the app: Rails hands it every page load it does not claim for
 // the API, an export or the admin (config/routes.rb), so it owns the whole
@@ -12,6 +13,14 @@ const routes: RouteRecordRaw[] = [
     path: "/login",
     name: "login",
     component: () => import("@/pages/sessions/LoginPage.vue"),
+    meta: { requiresAuth: false },
+  },
+  {
+    // Signing up is a form on an empty page, the way the server-rendered
+    // screen was — `accounts/new.html.erb` hid the landing bar.
+    path: "/signup",
+    name: "signup",
+    component: () => import("@/pages/sessions/SignupPage.vue"),
     meta: { requiresAuth: false },
   },
   {
@@ -28,10 +37,13 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: false },
   },
   {
+    // Two screens at one path: the dashboard once signed in, the welcome page
+    // before that. `publicChrome` is what the welcome page is shown in — the
+    // landing bar and footer of `layouts/landing_page`.
     path: "/",
     name: "dashboard",
-    component: () => import("@/pages/dashboard/DashboardPage.vue"),
-    meta: { requiresAuth: true },
+    component: () => import("@/pages/HomePage.vue"),
+    meta: { requiresAuth: false, publicChrome: true },
   },
   {
     // Devise mails a link carrying confirmation_token as a query param.
@@ -226,6 +238,28 @@ const routes: RouteRecordRaw[] = [
     component: () => import("@/pages/backend/BackendAccountForm.vue"),
     meta: { requiresAuth: true, requiresAdmin: true, backend: true },
   },
+  // The three legal documents, on the paths they have always answered on.
+  {
+    path: "/impressum",
+    name: "impressum",
+    component: () => import("@/pages/legal/LegalPage.vue"),
+    props: { document: "impressum" },
+    meta: { requiresAuth: false, publicChrome: true },
+  },
+  {
+    path: "/privacy",
+    name: "privacy",
+    component: () => import("@/pages/legal/LegalPage.vue"),
+    props: { document: "privacy" },
+    meta: { requiresAuth: false, publicChrome: true },
+  },
+  {
+    path: "/terms",
+    name: "terms",
+    component: () => import("@/pages/legal/LegalPage.vue"),
+    props: { document: "terms" },
+    meta: { requiresAuth: false, publicChrome: true },
+  },
   // Rails hands every unclaimed page load to the shell, so a typo arrives
   // here rather than at a server-rendered 404.
   {
@@ -249,6 +283,18 @@ router.beforeEach(async (to) => {
 
   if (to.meta.requiresAuth === true && !currentUser.signedIn) {
     return { name: "login", query: { redirect: to.fullPath } };
+  }
+
+  // An account's own subdomain is that one account's sign-in, and has no
+  // welcome page to show. `BaseController#index` sends a page load there to
+  // the login; a route change inside the SPA has to do the same, or the
+  // visitor reaches the welcome page by clicking the brand.
+  if (to.name === "dashboard" && !currentUser.signedIn) {
+    const { config, ready } = useAppConfig();
+
+    await ready;
+
+    if (config.value?.accountName) return { name: "login" };
   }
 
   if (to.name === "login" && currentUser.signedIn) {
