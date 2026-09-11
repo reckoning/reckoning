@@ -2317,6 +2317,19 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/ValidationError"
+  "/plans":
+    get:
+      summary: The plans the welcome page prices
+      tags:
+      - Plans
+      operationId: plans
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Plans"
   "/projects":
     get:
       summary: Projects list
@@ -4975,6 +4988,51 @@ components:
       required:
       - email
       title: PasswordResetRequestInput
+    Plan:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        name:
+          type: string
+        price:
+          type: integer
+          description: In cents, discount already applied.
+        quantity:
+          type:
+          - integer
+          - 'null'
+        interval:
+          type:
+          - string
+          - 'null'
+          description: "`month` or `year`."
+        featured:
+          type:
+          - boolean
+          - 'null'
+        descriptions:
+          type: array
+          items:
+            type: string
+          description: What the plan includes, one line each, as the locale authored
+            them.
+      additionalProperties: false
+      required:
+      - id
+      - code
+      - name
+      - price
+      - descriptions
+      title: Plan
+    Plans:
+      type: array
+      items:
+        "$ref": "#/components/schemas/Plan"
+      title: Plans
     Project:
       type: object
       properties:

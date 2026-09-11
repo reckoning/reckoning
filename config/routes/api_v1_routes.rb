@@ -42,6 +42,8 @@ v1_api_routes = lambda do
     end
   end
 
+  resources :plans, only: [:index]
+
   resources :customers, only: %i[index show create update destroy]
 
   resources :projects, only: %i[index show create update destroy] do
