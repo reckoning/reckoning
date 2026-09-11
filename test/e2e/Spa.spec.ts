@@ -192,24 +192,26 @@ test.describe("SPA shell", () => {
   // asked for, so the path travels along and the login hands it back with a
   // full page load.
   //
-  // The screen used to show it is the backend's user list: any
-  // server-rendered one that asks for a session will do, and the backend is
-  // what is left. Each screen that moves into the SPA quietly turned this
-  // into a test of a redirect, so it follows them.
+  // The screen used to show it: any server-rendered one that asks for a
+  // session will do, and Sidekiq's
+  // dashboard under `/backend/workers` is what is left. Each screen that
+  // moves into the SPA quietly turned this into a test of a redirect, so it
+  // follows them.
   test("returns to the server-rendered screen it was sent from", async ({ page }) => {
     await appEval(`User.find_by(email: "will@star.fleet").update_columns(admin: true)`)
 
-    await page.goto("/backend/users")
+    await page.goto("/backend/workers")
 
-    await expect(page).toHaveURL(/\/login\?return=%2Fbackend%2Fusers$/)
+    await expect(page).toHaveURL(/\/login\?return=%2Fbackend%2Fworkers/)
 
     await page.getByTestId("email").fill("will@star.fleet")
     await page.getByTestId("password").fill("enterprise")
     await page.getByTestId("submit").click()
 
-    await expect(page).toHaveURL(/\/backend\/users$/)
-    // The legacy chrome, not the SPA shell.
-    await expect(page.locator(".user-email")).toContainText("will@star.fleet")
+    await expect(page).toHaveURL(/\/backend\/workers/)
+    // The engine's own page, not the SPA shell.
+    await expect(page.locator("#spa")).toHaveCount(0)
+    await expect(page.locator("body")).toContainText("Sidekiq")
   })
 
   test("validates the form before calling the api", async ({ page }) => {

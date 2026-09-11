@@ -34,13 +34,22 @@ class SpaCatchAllTest < ActionDispatch::IntegrationTest
     refute shell?
   end
 
-  it "leaves the admin to the admin" do
+  # The admin screens are the SPA's, but the two engines mounted under the
+  # same prefix are not screens at all.
+  it "leaves the mounted engines where they are" do
     sign_in admin
 
-    get "/backend/users"
+    get "/backend/workers"
 
     assert_response :success
     refute shell?
+  end
+
+  it "answers the admin screens with the shell" do
+    get "/backend/users"
+
+    assert_response :success
+    assert shell?
   end
 
   # Same path as the SPA's expenses list, in another format.
@@ -75,7 +84,7 @@ class SpaCatchAllTest < ActionDispatch::IntegrationTest
   # The paths above are the server's whether or not it has a route for the
   # one being asked for: a typo under them is a 404, not a screen.
   it "leaves a typo under a server-owned path a typo" do
-    ["/api", "/api/v1/nope", "/api-docs/nope", "/backend/nope", "/cable/nope", "/rails/nope",
+    ["/api", "/api/v1/nope", "/api-docs/nope", "/cable/nope", "/rails/nope",
       "/up/nope"].each do |path|
       get path
 

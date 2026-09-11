@@ -6,9 +6,10 @@ require "test_helper"
 # sending a visitor there, and telling it where they were going so they end up
 # back on the server-rendered screen rather than on the SPA dashboard.
 #
-# The screen used to show it is the backend's user list: any server-rendered
-# one that asks for a session will do, and the backend is what is left. It
-# used to be the CSV import, which is the SPA's now.
+# The screen used to show it is Sidekiq's dashboard: any server-rendered one
+# that asks for a session will do, and the two engines mounted under
+# `/backend` are what is left — the admin screens themselves are the SPA's
+# now.
 class LoginTest < ActionDispatch::IntegrationTest
   let(:user) { users(:will) }
 
@@ -19,22 +20,22 @@ class LoginTest < ActionDispatch::IntegrationTest
   end
 
   it "hands over the screen a signed-out visitor asked for" do
-    get "/backend/users"
+    get "/backend/workers"
 
-    assert_redirected_to "/login?return=%2Fbackend%2Fusers"
+    assert_redirected_to "/login?return=%2Fbackend%2Fworkers%2F"
   end
 
   it "keeps the query of the screen it hands over" do
-    get "/backend/users?page=2"
+    get "/backend/workers?page=2"
 
-    assert_redirected_to "/login?return=%2Fbackend%2Fusers%3Fpage%3D2"
+    assert_redirected_to "/login?return=%2Fbackend%2Fworkers%2F%3Fpage%3D2"
   end
 
   # The login ends in a page load, so a carried path is fetched with a GET
-  # whatever the request that failed was. A PATCH replayed as a GET is a route
-  # that does not exist.
+  # whatever the request that failed was. Anything else replayed as a GET is
+  # a route that does not exist, so it travels with nothing.
   it "does not carry a path that cannot be replayed" do
-    post "/backend/users", params: {user: {email: "q@continuum"}}
+    post "/backend/workers"
 
     assert_redirected_to "/signin"
     follow_redirect!
@@ -44,13 +45,13 @@ class LoginTest < ActionDispatch::IntegrationTest
   # An xhr request never reaches the handover at all: Devise answers it with
   # 401 before `redirect_url` is consulted (`http_authenticatable_on_xhr`).
   it "answers an xhr request instead of handing it over" do
-    get "/backend/users", xhr: true
+    get "/backend/workers", xhr: true
 
     assert_response :unauthorized
   end
 
   it "leaves no alert behind for the next server-rendered page" do
-    get "/backend/users"
+    get "/backend/workers"
     follow_redirect!
 
     # Devise flashes "you need to sign in" for a login screen that no longer
@@ -60,7 +61,7 @@ class LoginTest < ActionDispatch::IntegrationTest
   end
 
   it "still answers json with a 401 rather than a redirect" do
-    get "/backend/users", headers: {"Accept" => "application/json"}
+    get "/backend/workers", headers: {"Accept" => "application/json"}
 
     assert_response :unauthorized
     assert_equal "unauthorized", JSON.parse(response.body)["code"]
@@ -69,7 +70,7 @@ class LoginTest < ActionDispatch::IntegrationTest
   it "lets a signed-in user through untouched" do
     sign_in users(:jeanluc)
 
-    get "/backend/users"
+    get "/backend/workers"
 
     assert_response :success
   end
