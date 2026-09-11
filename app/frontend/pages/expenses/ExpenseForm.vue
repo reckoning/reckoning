@@ -396,7 +396,10 @@ const FIELD = "bs-input"
         <RouterLink :to="{ name: 'expenses', query: listQuery }" data-test="back">
           <UiButton as="span">{{ t("expenseForm.back") }}</UiButton>
         </RouterLink>
-        <template v-if="editing">
+        <!-- Not while the record is still on its way: `copyQuery` has nothing
+             to copy yet, so the link would open an empty form that looks like
+             a copy. -->
+        <template v-if="editing && expense">
           <RouterLink :to="{ name: 'expense-new', query: copyQuery }" data-test="copy">
             <UiButton as="span" variant="warning">
               <i class="fa fa-copy"></i>
