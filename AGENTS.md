@@ -24,8 +24,8 @@ rendered as PDFs and emailed.
 - **Auth** Devise + devise-two-factor (v6 schema); JWT for API
 - **Authz** CanCanCan
 - **Templating** Vue 3 SFCs for every screen; ERB for the shell, the
-  mailers, the PDF templates and the three public pages that have not
-  moved (welcome, signup, the legal pages)
+  mailers, the PDF templates and the five public pages that have not
+  moved (`/`, `/signup`, `/impressum`, `/privacy`, `/terms`)
 - **PDF** Grover (puppeteer + Google Chrome)
 - **Monitoring** AppSignal — the Ruby agent covers Rails + Sidekiq
   (`config/appsignal.rb`), and `@appsignal/javascript` covers the Vue
@@ -34,7 +34,7 @@ rendered as PDFs and emailed.
   production
 - **Frontend toolchain** Vite (`vite_rails`) with TS entrypoints under
   `app/frontend/`. The legacy Sprockets bundle is still built, but only
-  the three remaining ERB pages load it — it is what keeps jQuery,
+  the five remaining ERB pages load it — it is what keeps jQuery,
   Bootstrap's JS and the last CoffeeScript alive.
 - **CSS** Tailwind 4 via `@tailwindcss/vite`. `spa.css` carries its own
   preflight and a set of `bs-*` classes measured off the
@@ -42,7 +42,7 @@ rendered as PDFs and emailed.
   disturb Bootstrap 3 on the pages that still use it.
 - **JS framework** Vue 3 + vue-router, which owns the whole path space.
   Turbo Drive and Stimulus are still loaded by the legacy bundle and
-  matter only on the three ERB pages.
+  matter only on the five ERB pages.
 
 ### Migrating toward
 
@@ -87,7 +87,7 @@ islands) and is history.
 - `/impressum`, `/privacy`, `/terms` — empty views that answer 200 with
   an empty body, linked from nowhere.
 
-Those three are what keeps the legacy pipeline alive. Until they are
+Those five pages are what keeps the legacy pipeline alive. Until they are
 settled, **do not delete `app/assets/`**, and leave Tailwind's preflight
 off in `tailwind.css`. What they still rely on: Turbo Drive for
 navigation, the `turbo:load → turbolinks:load` shim in `application.ts`,

@@ -696,14 +696,15 @@ Only once B8 has landed and stabilized.
       been deployed, so the SPA answers the paths the server-rendered screens
       had. The reserved first segments are listed beside the route.
 - [x] Delete `app/assets/javascripts/angular/`, `app/views/templates/`,
-      `TemplatesController`, the vendored Highcharts copy and the d3 / nvd3 /
-      underscore requires.
+      `TemplatesController`, the vendored Highcharts copy, and the d3 / nvd3 /
+      underscore requires from both manifests — the stylesheet kept its own
+      `//= require nvd3` until the review of this note caught it.
 - [ ] The rest of `app/assets/` — blocked, not forgotten: the welcome page
       needs jQuery and Bootstrap's modal, and `/signup` drives Stripe Checkout
       from `signup.coffee.erb`. Those two, and the three empty legal pages,
       are a product decision rather than a port.
-- [ ] Delete `app/assets/javascripts/`, `app/assets/stylesheets/`,
-      `app/views/templates/`, `TemplatesController`, `vendor/` bower bundles.
+- [ ] Delete what is left of `app/assets/javascripts/` and
+      `app/assets/stylesheets/`, and the `vendor/` bower bundles.
 - [ ] Delete `app/frontend/controllers/*_controller.ts` (Stimulus) and
       `app/frontend/lib/mount-islands.ts`.
 - [ ] Drop gems: `bower-rails`, `bootstrap-sass`, `bourbon`, `sass-rails`,
