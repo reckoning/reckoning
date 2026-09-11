@@ -16,6 +16,7 @@ export default {
       states: "Rechnungsstatus erfassen",
       records: "Datenbank für Kunden & Projekte",
     },
+    plansFailed: "Die Preise konnten gerade nicht geladen werden.",
     featuresTitle: "Features",
     features: {
       invoices: {

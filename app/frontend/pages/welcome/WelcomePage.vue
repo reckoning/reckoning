@@ -18,7 +18,7 @@ const registrationEnabled = computed(() => config.value?.registrationEnabled ===
 
 // Everything below the screenshots is an offer, so it only exists where
 // signing up does — `welcome.html.erb` wrapped it in the same condition.
-const { data: plans } = usePlans({
+const { data: plans, isError: plansFailed } = usePlans({
   query: { enabled: registrationEnabled },
 })
 
@@ -54,9 +54,10 @@ function price(cents: number): string {
 }
 
 // `plans.small_print` prices each extra user at what the base plan costs, and
-// the base plan is the cheapest one — the API sorts them that way.
+// `Plan.base` is the one called `basic` — not whichever sorts first, which a
+// discount on another plan can change.
 const basePrice = computed(() => {
-  const base = plans.value?.[0]
+  const base = plans.value?.find((plan) => plan.code === "basic")
 
   return base ? price(base.price) : null
 })
@@ -114,12 +115,23 @@ const basePrice = computed(() => {
         </div>
       </div>
 
-      <template v-if="plans?.length">
+      <template v-if="plansFailed || plans?.length">
         <hr class="my-5 border-t border-rule" />
+
+        <!-- A page that quietly drops its prices reads like an app with
+             nothing to sell. The offer stands either way; only the table is
+             missing. -->
+        <p v-if="plansFailed" class="text-center text-muted" data-test="plans-failed">
+          {{ t("welcome.plansFailed") }}
+        </p>
 
         <!-- However many plans there are, they sit in the middle of the page
              — the server-rendered table was a fixed three-column row. -->
-        <div class="mx-auto flex max-w-[980px] flex-wrap justify-center gap-[30px]" data-test="plans">
+        <div
+          v-if="plans?.length"
+          class="mx-auto flex max-w-[980px] flex-wrap justify-center gap-[30px]"
+          data-test="plans"
+        >
           <div
             v-for="plan in plans"
             :key="plan.id"
@@ -176,12 +188,13 @@ const basePrice = computed(() => {
       class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-ink/50 p-4"
       role="dialog"
       aria-modal="true"
+      aria-labelledby="screenshot-modal-title"
       data-test="screenshot-modal"
       @click.self="zoomed = null"
     >
       <div class="bs-modal relative mt-10 w-full max-w-[80%]">
         <div class="flex items-center justify-between border-b border-rule px-4 py-3.5">
-          <h4>{{ zoomed.caption }}</h4>
+          <h4 id="screenshot-modal-title">{{ zoomed.caption }}</h4>
           <button
             type="button"
             class="text-2xl leading-none opacity-20 hover:opacity-50"

@@ -30,9 +30,16 @@ const PLANS = [
   },
 ]
 
-async function mountPage(plans: unknown[] = PLANS) {
+// `plans: null` stands for a request that failed rather than one that came
+// back empty.
+async function mountPage(plans: unknown[] | null = PLANS) {
   AXIOS_INSTANCE.defaults.adapter = async (config) => {
     const url = String(config.url)
+
+    if (url.includes("/plans") && plans === null) {
+      return Promise.reject(Object.assign(new Error("boom"), {isAxiosError: true, config}))
+    }
+
     const data = url.includes("/plans")
       ? plans
       : {registrationEnabled: true, accountName: null, domain: "reckoning.test", version: "1.0.0", codename: "pluto"}
@@ -104,9 +111,11 @@ describe("WelcomePage", () => {
     expect(plans[0].html()).toContain("<b>5</b> aktive Projekte")
   })
 
-  // `plans.small_print` prices an extra user at what the cheapest plan costs.
-  it("prices an extra user off the cheapest plan", async () => {
-    const wrapper = await mountPage()
+  // `plans.small_print` prices an extra user at what `Plan.base` costs, which
+  // is the plan called `basic` — not whichever happens to sort first.
+  it("prices an extra user off the base plan", async () => {
+    const discounted = [{...PLANS[1], price: 500}, {...PLANS[0], price: 900}]
+    const wrapper = await mountPage(discounted)
 
     expect(wrapper.get('[data-test="small-print"]').text()).toContain("9.00 €")
   })
@@ -117,5 +126,15 @@ describe("WelcomePage", () => {
 
     expect(wrapper.find('[data-test="plans"]').exists()).toBe(false)
     expect(wrapper.find('[data-test="sign-up"]').exists()).toBe(false)
+  })
+
+  // A request that failed is not an empty price list: the offer stands, and
+  // saying so beats a page that looks complete with nothing to sell.
+  it("keeps the offer up when the prices cannot be loaded", async () => {
+    const wrapper = await mountPage(null)
+
+    expect(wrapper.find('[data-test="plans"]').exists()).toBe(false)
+    expect(wrapper.find('[data-test="plans-failed"]').exists()).toBe(true)
+    expect(wrapper.find('[data-test="sign-up"]').exists()).toBe(true)
   })
 })

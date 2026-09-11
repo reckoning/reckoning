@@ -15,6 +15,7 @@ export default {
       states: "Track invoice states",
       records: "Customers and projects in one place",
     },
+    plansFailed: "The prices could not be loaded right now.",
     featuresTitle: "Features",
     features: {
       invoices: {

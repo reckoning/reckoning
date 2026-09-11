@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
 import { useCurrentUserStore } from "@/stores/currentUser";
+import { useAppConfig } from "@/composables/useAppConfig";
 
 // The SPA is the app: Rails hands it every page load it does not claim for
 // the API, an export or the admin (config/routes.rb), so it owns the whole
@@ -252,6 +253,18 @@ router.beforeEach(async (to) => {
 
   if (to.meta.requiresAuth === true && !currentUser.signedIn) {
     return { name: "login", query: { redirect: to.fullPath } };
+  }
+
+  // An account's own subdomain is that one account's sign-in, and has no
+  // welcome page to show. `BaseController#index` sends a page load there to
+  // the login; a route change inside the SPA has to do the same, or the
+  // visitor reaches the welcome page by clicking the brand.
+  if (to.name === "dashboard" && !currentUser.signedIn) {
+    const { config, ready } = useAppConfig();
+
+    await ready;
+
+    if (config.value?.accountName) return { name: "login" };
   }
 
   if (to.name === "login" && currentUser.signedIn) {
