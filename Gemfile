@@ -4,7 +4,7 @@ source "https://rubygems.org"
 
 ruby File.read(".tool-versions").match(/ruby (.*)\n/)[1].chomp
 
-gem "rails", "~> 8.1.0"
+gem "rails", "~> 8.1.4"
 
 # Ruby 3.4 removed these from the default gemset; Rails 7.0.x still
 # references them implicitly. Drop these lines after the Rails 7.1+ bump.
@@ -14,7 +14,7 @@ gem "csv"
 gem "drb"
 gem "mutex_m"
 
-gem "pg", "~> 1.0"
+gem "pg", "~> 1.7"
 
 gem "data_migrate"
 
@@ -106,7 +106,7 @@ gem "grover"
 
 gem "active_storage_validations"
 gem "aws-sdk-s3", require: false
-gem "image_processing", "~> 2.1"
+gem "image_processing", "~> 2.2"
 gem "ruby-vips", "~> 2.0"
 
 gem "nokogiri", ">= 1.7.1"
